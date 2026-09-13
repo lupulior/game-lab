@@ -85,6 +85,29 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .preview .shadow{width:180px;height:24px;margin:-16px auto 8px;border-radius:50%;background:rgba(0,0,0,.22)}
 .preview .name{font-size:34px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);margin-bottom:12px}
 
+/* ---------- CEO ---------- */
+#ceo{background:radial-gradient(ellipse at 50% 42%,#4a3a9a 0%,#1B2A4E 55%,#0b1230 100%)}
+#ceo .rays{position:absolute;left:50%;top:50%;width:1500px;height:1500px;transform:translate(-50%,-50%);border-radius:50%;
+  background:repeating-conic-gradient(rgba(255,212,71,.16) 0 8deg,transparent 8deg 16deg);animation:spin 50s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.ceo-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:2}
+.ceo-cup{font-size:118px;line-height:1.1;animation:cupbounce 1.6s ease-in-out infinite;filter:drop-shadow(0 12px 18px rgba(0,0,0,.5))}
+@keyframes cupbounce{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-16px) rotate(7deg)}}
+.gold{font-weight:900;line-height:1.15;padding:0 20px;
+  background:linear-gradient(100deg,#8a5a00 0%,#ffd447 22%,#fff7c2 42%,#ffd447 52%,#c98a00 72%,#ffe27a 100%);
+  background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  animation:shimmer 3s linear infinite;filter:drop-shadow(0 5px 0 #5a3a00) drop-shadow(0 14px 22px rgba(0,0,0,.55))}
+@keyframes shimmer{to{background-position:-200% 0}}
+.ceo-name{font-size:120px;letter-spacing:2px}
+.ceo-role{font-size:62px;margin-top:-8px}
+.ceo-tag{margin-top:22px;font-size:26px;font-weight:900;color:#fff;background:rgba(255,255,255,.12);border:3px solid rgba(255,212,71,.7);
+  padding:8px 28px;border-radius:30px;box-shadow:0 0 24px rgba(255,212,71,.35)}
+.spark{position:absolute;font-size:36px;animation:twinkle 1.6s ease-in-out infinite;pointer-events:none;z-index:2}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.5) rotate(0)}50%{opacity:1;transform:scale(1.25) rotate(25deg)}}
+#ceo-confetti{position:absolute;inset:0;width:1000px;height:620px;pointer-events:none;z-index:3}
+#btn-ceo-back{position:absolute;top:26px;left:34px;z-index:4}
+@media (prefers-reduced-motion:reduce){#ceo .rays,.ceo-cup,.gold,.spark{animation:none}}
+
 /* ---------- game ---------- */
 #fans{position:absolute;left:0;top:0;width:1000px;height:78px}
 #fans svg{width:100%;height:100%;display:block}
@@ -163,6 +186,7 @@ body.touch #touch{display:flex}
     <div class="side">
       <button class="btn blue" id="btn-chars">🧑 דמויות</button>
       <button class="btn red" id="btn-exit">🚪 צא</button>
+      <button class="btn purple" id="btn-ceo">👔 מנכ"ל המשחק</button>
     </div>
     <div class="hero">
       <div class="sprite" id="home-sprite"></div>
@@ -183,6 +207,25 @@ body.touch #touch{display:flex}
       <div class="name" id="preview-name"></div>
       <button class="btn yellow" id="btn-choose">✔ בחר</button>
     </div>
+  </section>
+
+  <!-- ===== CEO ===== -->
+  <section id="ceo" class="screen">
+    <div class="rays"></div>
+    <span class="spark" style="left:120px;top:90px">✨</span>
+    <span class="spark" style="left:860px;top:120px;animation-delay:.4s">✨</span>
+    <span class="spark" style="left:170px;top:470px;animation-delay:.8s">⭐</span>
+    <span class="spark" style="left:800px;top:500px;animation-delay:1.2s">✨</span>
+    <span class="spark" style="left:300px;top:40px;animation-delay:.6s">⭐</span>
+    <span class="spark" style="left:680px;top:560px;animation-delay:1s">⭐</span>
+    <div class="ceo-wrap">
+      <div class="ceo-cup">🏆</div>
+      <div class="gold ceo-name">ליאור לופו</div>
+      <div class="gold ceo-role">יוצר משחקים</div>
+      <div class="ceo-tag">👔 מנכ"ל המשחק</div>
+    </div>
+    <canvas id="ceo-confetti" width="1000" height="620"></canvas>
+    <button class="btn blue small" id="btn-ceo-back">➜ חזרה</button>
   </section>
 
   <!-- ===== GAME ===== -->
@@ -247,6 +290,12 @@ const CHARS = [
     jersey:'#8EC9F0', stripes:'#ffffff', numColor:'#1B2A4E', shorts:'#111111', socks:'#ffffff', number:10, beard:true, beardColor:'#5a3a1e', brows:'round' },
   { id:'ronaldo', name:'רונלדו', skin:'#E8B892', skinDark:'#b07a55', hair:'spiky', hairColor:'#1e1a17',
     jersey:'#C8102E', numColor:'#fff', shorts:'#0B5F3A', socks:'#C8102E', number:7, beard:false, brows:'sharp' },
+  { id:'neymar', name:'ניימאר', skin:'#D9A06B', skinDark:'#9c6a3f', hair:'mohawk', hairColor:'#F0D060', hairSide:'#2a1d14', browColor:'#2a1d14',
+    jersey:'#FFDC00', numColor:'#009C3B', shorts:'#1A3DA8', socks:'#ffffff', number:10, beard:false, brows:'round' },
+  { id:'haaland', name:'הולאנד', skin:'#F3D2B3', skinDark:'#c49a72', hair:'bun', hairColor:'#F2DC8A', browColor:'#c9a84a',
+    jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:9, beard:false, brows:'sharp' },
+  { id:'salah', name:'סלאח', skin:'#B9794F', skinDark:'#7d4d2c', hair:'curly', hairColor:'#1d1410',
+    jersey:'#C8102E', numColor:'#fff', shorts:'#C8102E', socks:'#C8102E', number:11, beard:true, beardColor:'#1d1410', brows:'round' },
 ];
 
 function playerSVG(c, mood='happy'){
@@ -256,12 +305,28 @@ function playerSVG(c, mood='happy'){
   else if(c.hair==='wavy')
     hair=`<path d="M17 46 Q13 4 50 4 Q87 4 83 46 Q80 26 68 22 Q50 18 32 22 Q20 26 17 46Z" fill="${c.hairColor}"/>
           <path d="M17 40 Q10 56 20 66 Q22 52 24 42Z" fill="${c.hairColor}"/><path d="M83 40 Q90 56 80 66 Q78 52 76 42Z" fill="${c.hairColor}"/>`;
+  else if(c.hair==='mohawk')   // shaved dark sides + blond curly crest (Neymar)
+    hair=`<path d="M19 40 Q19 14 50 10 Q81 14 81 40 Q70 26 50 26 Q30 26 19 40Z" fill="${c.hairSide}"/>
+          <path d="M32 24 Q34 12 42 10 Q46 2 50 4 Q54 2 58 10 Q66 12 68 24 Q60 18 50 18 Q40 18 32 24Z" fill="${c.hairColor}"/>
+          <circle cx="36" cy="16" r="6" fill="${c.hairColor}"/><circle cx="43" cy="9" r="6" fill="${c.hairColor}"/><circle cx="50" cy="6" r="6.5" fill="${c.hairColor}"/>
+          <circle cx="57" cy="9" r="6" fill="${c.hairColor}"/><circle cx="64" cy="16" r="6" fill="${c.hairColor}"/>`;
+  else if(c.hair==='bun')      // long blond hair slicked back into a top bun (Haaland)
+    hair=`<path d="M18 44 Q16 6 50 6 Q84 6 82 44 Q76 22 50 21 Q24 22 18 44Z" fill="${c.hairColor}"/>
+          <path d="M18 40 Q12 54 20 62 Q22 50 24 42Z" fill="${c.hairColor}"/><path d="M82 40 Q88 54 80 62 Q78 50 76 42Z" fill="${c.hairColor}"/>
+          <circle cx="50" cy="7" r="8" fill="${c.hairColor}"/><path d="M42 9 Q50 12 58 9" stroke="#8a6a1a" stroke-width="2" fill="none"/>
+          <path d="M34 20 Q50 14 66 20" stroke="#c9a84a" stroke-width="1.6" fill="none" opacity=".8"/>`;
+  else if(c.hair==='curly')    // big dark curls (Salah)
+    hair=`<path d="M17 46 Q14 8 50 6 Q86 8 83 46 Q76 24 50 22 Q24 24 17 46Z" fill="${c.hairColor}"/>
+          <circle cx="22" cy="30" r="8" fill="${c.hairColor}"/><circle cx="28" cy="18" r="8" fill="${c.hairColor}"/><circle cx="38" cy="10" r="8" fill="${c.hairColor}"/>
+          <circle cx="50" cy="7" r="8" fill="${c.hairColor}"/><circle cx="62" cy="10" r="8" fill="${c.hairColor}"/><circle cx="72" cy="18" r="8" fill="${c.hairColor}"/><circle cx="78" cy="30" r="8" fill="${c.hairColor}"/>
+          <circle cx="19" cy="42" r="6" fill="${c.hairColor}"/><circle cx="81" cy="42" r="6" fill="${c.hairColor}"/>`;
   else
     hair=`<path d="M19 40 Q19 16 32 12 L36 3 L43 11 L50 1 L57 11 L64 3 L68 12 Q81 16 81 40 Q70 24 50 24 Q30 24 19 40Z" fill="${c.hairColor}"/>`;
   const beard = c.beard ? `<path d="M23 44 Q24 74 50 76 Q76 74 77 44 Q72 60 50 60 Q28 60 23 44Z" fill="${c.beardColor}"/>` : '';
+  const bc = c.browColor || c.hairColor;
   const brows = c.brows==='sharp'
-    ? `<path d="M30 26 L44 31" stroke="${c.hairColor}" stroke-width="4" stroke-linecap="round"/><path d="M70 26 L56 31" stroke="${c.hairColor}" stroke-width="4" stroke-linecap="round"/>`
-    : `<path d="M32 29 Q38 24 44 29" stroke="${c.hairColor}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56 29 Q62 24 68 29" stroke="${c.hairColor}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+    ? `<path d="M30 26 L44 31" stroke="${bc}" stroke-width="4" stroke-linecap="round"/><path d="M70 26 L56 31" stroke="${bc}" stroke-width="4" stroke-linecap="round"/>`
+    : `<path d="M32 29 Q38 24 44 29" stroke="${bc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56 29 Q62 24 68 29" stroke="${bc}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
   const mouth = mood==='sad'
     ? `<path d="M38 62 Q50 50 62 62" stroke="#7a2a2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><ellipse cx="34" cy="48" rx="3" ry="5" fill="#7ED3FF"/>`
     : `<path d="M34 52 Q50 70 66 52 Z" fill="#7a2a2a"/><path d="M40 53 Q50 59 60 53 Z" fill="#fff"/>`;
@@ -378,6 +443,15 @@ $('#btn-exit').addEventListener('click', ()=>{
 });
 $('#btn-stay').addEventListener('click', ()=>{ sfx.click(); $('#exit-modal').classList.remove('show'); });
 
+/* ---------- CEO screen ---------- */
+let ceoTimer=0;
+$('#btn-ceo').addEventListener('click', ()=>{
+  sfx.win(); showScreen('ceo');
+  ceoConfetti.burst(260);
+  clearInterval(ceoTimer); ceoTimer=setInterval(()=>ceoConfetti.burst(90), 2600);
+});
+$('#btn-ceo-back').addEventListener('click', ()=>{ sfx.click(); clearInterval(ceoTimer); showScreen('home'); });
+
 /* ---------- levels ---------- */
 const LEVELS = [
   { name:'קל',    color:'green',  speed:.55, react:.65, kick:.15, jump:.12, err:130, power:.7 },
@@ -485,15 +559,13 @@ function goalParts(layer){
 }
 
 /* ---------- confetti ---------- */
-const confetti = (()=>{
-  const cv=$('#confetti'), ctx=cv.getContext('2d'); let parts=[]; let running=false;
-  const colors=['#FFD447','#FF7A3D','#3D8BFF','#3FC35F','#8E5CF6','#FF5FA2','#fff'];
+function makeConfetti(cv, colors){
+  const ctx=cv.getContext('2d'); let parts=[]; let running=false; let last=0;
   function burst(n=180){
     for(let i=0;i<n;i++) parts.push({x:Math.random()*1000, y:-20-Math.random()*200, w:8+Math.random()*8, h:5+Math.random()*6,
       vx:(Math.random()-.5)*120, vy:120+Math.random()*220, r:Math.random()*6.28, vr:(Math.random()-.5)*10, c:colors[i%colors.length]});
     if(!running){ running=true; last=performance.now(); requestAnimationFrame(tick); }
   }
-  let last=0;
   function tick(t){
     const dt=Math.min(.05,(t-last)/1000); last=t;
     ctx.clearRect(0,0,1000,620);
@@ -505,7 +577,9 @@ const confetti = (()=>{
     if(parts.length) requestAnimationFrame(tick); else { running=false; ctx.clearRect(0,0,1000,620); }
   }
   return { burst };
-})();
+}
+const confetti    = makeConfetti($('#confetti'),     ['#FFD447','#FF7A3D','#3D8BFF','#3FC35F','#8E5CF6','#FF5FA2','#fff']);
+const ceoConfetti = makeConfetti($('#ceo-confetti'), ['#FFD447','#FFE27A','#fff7c2','#C98A00','#fff','#FF7A3D','#FFD447']);
 
 /* ---------- game constants ---------- */
 const FIELD_W=1000, GROUND_Y=430, PW=72, PH=108, R=13, GOAL_W=70, GOAL_H=140;
