@@ -59,11 +59,12 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 /* ---------- multiplayer ---------- */
 #mp h2{position:absolute;top:22px;right:40px}
 #btn-mp-back{position:absolute;top:22px;left:34px;z-index:5}
-#mp-lobby{position:absolute;left:60px;right:60px;top:100px;bottom:60px;display:flex;gap:30px;justify-content:center}
-.mp-card{flex:1;max-width:400px;background:rgba(255,255,255,.88);border-radius:26px;padding:22px;text-align:center;box-shadow:0 8px 0 rgba(27,42,78,.2);
-  display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center}
-.mp-card h3{font-size:30px;font-weight:900}
-.mp-card p{font-size:19px;font-weight:700;color:#5b6a8a}
+#mp-lobby{position:absolute;left:30px;right:30px;top:100px;bottom:60px;display:flex;gap:18px;justify-content:center}
+.mp-card{flex:1;max-width:400px;min-width:0;background:rgba(255,255,255,.88);border-radius:26px;padding:16px 12px;text-align:center;box-shadow:0 8px 0 rgba(27,42,78,.2);
+  display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center}
+.mp-card h3{font-size:26px;font-weight:900}
+.mp-card p{font-size:17px;font-weight:700;color:#5b6a8a}
+.mp-card .btn{font-size:24px;padding:10px 24px}
 #mp-code .code{font-size:70px;font-weight:900;letter-spacing:12px;direction:ltr;color:var(--navy);background:#FFF0B3;border-radius:18px;padding:2px 12px 2px 24px;user-select:text;-webkit-user-select:text}
 #mp-code .wait{font-size:18px;font-weight:700;color:#5b6a8a;margin-top:6px}
 #mp-input{width:240px;font-size:46px;font-weight:900;text-align:center;letter-spacing:8px;direction:ltr;text-transform:uppercase;border:4px solid var(--blue);border-radius:16px;
@@ -167,6 +168,26 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #board-table tr.me td{background:#FFF0B3}
 #board-table td:first-child{text-align:start}
 #board-empty{margin-top:12px;text-align:center}
+/* ---------- friends ---------- */
+#friends h2{position:absolute;top:22px;right:40px}
+#btn-friends-back{position:absolute;top:22px;left:34px}
+.fr-add{position:absolute;left:40px;right:40px;top:92px;display:flex;gap:12px;justify-content:center;align-items:center}
+#friend-input{width:320px;font-size:26px;font-weight:900;padding:8px 14px;border:4px solid var(--green);border-radius:16px;font-family:inherit;color:var(--navy);background:#fff;user-select:text;-webkit-user-select:text;outline:none}
+.fr-me{position:absolute;left:40px;right:40px;top:158px;text-align:center;font-size:22px;font-weight:900;color:#fff;-webkit-text-stroke:1px var(--navy);text-shadow:0 3px 0 var(--navy)}
+.fr-list{position:absolute;left:40px;right:40px;top:200px;bottom:16px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px}
+.frow{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.9);border-radius:16px;padding:8px 14px;box-shadow:0 5px 0 rgba(27,42,78,.2)}
+.frow .dot{width:16px;height:16px;border-radius:50%;background:#b8c2d6;flex:none}
+.frow .dot.online{background:var(--green);box-shadow:0 0 8px var(--green)}
+.frow .dot.checking{background:var(--yellow)}
+.frow .fname{font-size:24px;font-weight:900;flex:1;text-align:start}
+.frow .fstat{font-size:17px;font-weight:900;color:#5b6a8a;white-space:nowrap}
+.frow .btn.small{font-size:18px;padding:7px 14px}
+.fm-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
+.fm-badges .bd{font-size:26px;width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(27,42,78,.2);filter:grayscale(1);opacity:.35}
+.fm-badges .bd.on{filter:none;opacity:1;background:#FFF6CF;box-shadow:0 3px 0 #C99A10}
+#fm-stats .stat{min-width:120px}
+.name-status{font-size:18px;font-weight:900;text-align:center;margin:-4px 0 6px}
+.name-status.on{color:#22883C}.name-status.taken{color:#A82C2C}.name-status.off,.name-status.connecting{color:#5b6a8a}
 #set-name{width:300px;font-size:24px;font-weight:900;padding:6px 12px;border:4px solid var(--blue);border-radius:14px;font-family:inherit;color:var(--navy);background:#fff;user-select:text;-webkit-user-select:text;outline:none}
 #daily-modal .panel{min-width:560px}
 #rotate{display:none;position:fixed;inset:0;background:var(--navy);color:#fff;z-index:999;align-items:center;justify-content:center;text-align:center;font-size:64px;font-weight:900;line-height:1.3}
@@ -543,6 +564,11 @@ body.touch #touch{display:block}
         <input id="mp-input" maxlength="4" placeholder="ABCD" autocomplete="off" spellcheck="false">
         <button class="btn orange" id="btn-mp-join">הצטרף</button>
       </div>
+      <div class="mp-card">
+        <h3 id="mp-friends-h">👥 חברים</h3>
+        <p id="mp-friends-p">הזמן חבר מהרשימה, בלי קוד</p>
+        <button class="btn pink" id="btn-mp-friends">לרשימת החברים</button>
+      </div>
     </div>
     <div id="mp-status"></div>
     <div id="mp-pick" hidden>
@@ -660,6 +686,7 @@ body.touch #touch{display:block}
       <div class="setrow"><span id="set-sfx-l">🔊 צלילי המשחק</span><input type="range" id="set-sfx" min="0" max="100"></div>
       <div class="setrow"><span id="set-music-l">🎵 עוצמת המוזיקה</span><input type="range" id="set-music" min="0" max="100"></div>
       <div class="setrow"><span id="set-name-l">👤 שם שחקן</span><input type="text" id="set-name" maxlength="14" placeholder="השם שלך" autocomplete="off" spellcheck="false"></div>
+      <div class="name-status off" id="name-status"></div>
       <div class="setrow" style="justify-content:center"><span id="set-lang-l">🌍 שפה</span></div>
       <div class="langs" id="set-langs"></div>
       <br><button class="btn small blue" id="btn-settings-close">חזרה</button>
@@ -674,12 +701,34 @@ body.touch #touch{display:block}
     <div class="ach-grid" id="ach-grid"></div>
   </section>
 
-  <!-- ===== LEADERBOARD ===== -->
-  <section id="board" class="screen">
-    <h2>📊 לוח שיאים</h2>
-    <button class="btn blue small" id="btn-board-back">➜ חזרה</button>
-    <div class="board-wrap"><table id="board-table"></table><div class="hint" id="board-empty"></div></div>
+  <!-- ===== FRIENDS ===== -->
+  <section id="friends" class="screen">
+    <h2 id="friends-title">👥 חברים</h2>
+    <button class="btn blue small" id="btn-friends-back">➜ חזרה</button>
+    <div class="fr-add"><input id="friend-input" maxlength="14" placeholder="שם החבר" autocomplete="off" spellcheck="false"><button class="btn green small" id="btn-friend-add">➕ הוסף חבר</button></div>
+    <div class="fr-me" id="fr-me"></div>
+    <div class="fr-list" id="fr-list"></div>
   </section>
+
+  <!-- ===== FRIEND DETAILS MODAL ===== -->
+  <div class="overlay" id="friend-modal">
+    <div class="panel" style="min-width:600px">
+      <h2 id="fm-name"></h2>
+      <div class="hint" id="fm-status"></div>
+      <div class="stats" id="fm-stats"></div>
+      <div class="fm-ach" id="fm-ach"></div>
+      <br><button class="btn green" id="btn-fm-invite">🎮 הזמן למשחק</button> <button class="btn small" id="btn-fm-close">חזרה</button>
+    </div>
+  </div>
+
+  <!-- ===== INVITE MODAL ===== -->
+  <div class="overlay" id="invite-modal">
+    <div class="panel">
+      <h2 id="invite-title">🎮 הזמנה למשחק</h2>
+      <div class="hint" id="invite-text" style="font-size:26px"></div>
+      <br><button class="btn green" id="btn-invite-accept">✔ קבל</button> <button class="btn red" id="btn-invite-decline">✖ דחה</button>
+    </div>
+  </div>
 
   <!-- ===== CODES MODAL ===== -->
   <div class="overlay" id="codes-modal">
@@ -898,6 +947,37 @@ const I18N_RAW={
  'board.you':['אתה','You','أنت','Ты'],
  'board.cols':['שחקן|ניצחונות|גולים|XP|גביעים','Player|Wins|Goals|XP|Cups','اللاعب|انتصارات|أهداف|XP|كؤوس','Игрок|Победы|Голы|XP|Кубки'],
  'board.empty':['שחקו אונליין עם חברים וכל חבר יופיע כאן עם השיאים שלו','Play online with friends and each one shows up here with their record','العب أونلاين مع أصدقاء وسيظهر كل صديق هنا مع أرقامه','Играй онлайн с друзьями, и каждый появится здесь со своими рекордами'],
+ 'stats.friends':['👥 חברים','👥 Friends','👥 الأصدقاء','👥 Друзья'],
+ 'friends.title':['👥 חברים','👥 Friends','👥 الأصدقاء','👥 Друзья'],
+ 'friends.add':['➕ הוסף חבר','➕ Add friend','➕ أضف صديقًا','➕ Добавить друга'],
+ 'friends.ph':['שם החבר במשחק','Friend\'s player name','اسم الصديق في اللعبة','Имя друга в игре'],
+ 'friends.online':['🟢 מחובר','🟢 Online','🟢 متصل','🟢 В сети'],
+ 'friends.offline':['⚪ לא מחובר','⚪ Not connected','⚪ غير متصل','⚪ Не в сети'],
+ 'friends.checking':['⏳ בודק…','⏳ Checking…','⏳ جارٍ التحقق…','⏳ Проверка…'],
+ 'friends.notConnected':['השחקן לא מחובר','The player is not connected','اللاعب غير متصل','Игрок не в сети'],
+ 'friends.view':['👀 הישגים','👀 Stats','👀 الإنجازات','👀 Достижения'],
+ 'friends.invite':['🎮 הזמן','🎮 Invite','🎮 دعوة','🎮 Пригласить'],
+ 'friends.inviteLong':['🎮 הזמן למשחק','🎮 Invite to a game','🎮 دعوة إلى لعبة','🎮 Пригласить в игру'],
+ 'friends.empty':['עוד אין חברים. הוסף חבר לפי השם שלו במשחק 👆','No friends yet. Add a friend by their player name 👆','لا أصدقاء بعد. أضف صديقًا باسمه في اللعبة 👆','Пока нет друзей. Добавь друга по его имени в игре 👆'],
+ 'friends.added':['{0} נוסף לחברים ✔','{0} added ✔','تمت إضافة {0} ✔','{0} добавлен ✔'],
+ 'friends.exists':['{0} כבר ברשימה','{0} is already on the list','{0} موجود بالفعل','{0} уже в списке'],
+ 'friends.self':['זה אתה 😄','That\'s you 😄','هذا أنت 😄','Это ты 😄'],
+ 'friends.needName':['קודם בחר שם שחקן בהגדרות ⚙️','First pick a player name in Settings ⚙️','اختر اسم لاعب في الإعدادات أولًا ⚙️','Сначала выбери имя игрока в настройках ⚙️'],
+ 'friends.lastSeen':['נראה לאחרונה: {0}','Last seen: {0}','آخر ظهور: {0}','Был в сети: {0}'],
+ 'friends.noData':['עוד לא התחברתם. ההישגים יופיעו כשהחבר מחובר','Not connected yet. Stats appear when your friend is online','لم تتصلا بعد. ستظهر الإنجازات عندما يكون الصديق متصلًا','Ещё не подключались. Данные появятся, когда друг будет в сети'],
+ 'invite.title':['🎮 הזמנה למשחק','🎮 Game invite','🎮 دعوة إلى لعبة','🎮 Приглашение в игру'],
+ 'invite.text':['{0} מזמין אותך למשחק!','{0} invites you to a game!','{0} يدعوك إلى لعبة!','{0} приглашает тебя сыграть!'],
+ 'invite.accept':['✔ קבל','✔ Accept','✔ قبول','✔ Принять'],
+ 'invite.decline':['✖ דחה','✖ Decline','✖ رفض','✖ Отклонить'],
+ 'invite.sent':['ההזמנה נשלחה ל-{0}… ⏳','Invite sent to {0}… ⏳','تم إرسال الدعوة إلى {0}… ⏳','Приглашение отправлено {0}… ⏳'],
+ 'invite.declined':['{0} דחה את ההזמנה','{0} declined','{0} رفض الدعوة','{0} отклонил приглашение'],
+ 'invite.busy':['{0} באמצע משחק','{0} is in a game','{0} في منتصف لعبة','{0} сейчас играет'],
+ 'name.taken':['השם "{0}" תפוס כרגע, בחר שם אחר','The name "{0}" is taken right now, pick another','الاسم "{0}" مستخدم حاليًا، اختر اسمًا آخر','Имя «{0}» сейчас занято, выбери другое'],
+ 'name.online':['🟢 מחובר בשם {0}','🟢 Online as {0}','🟢 متصل باسم {0}','🟢 В сети как {0}'],
+ 'name.offline':['⚪ לא מחובר','⚪ Not connected','⚪ غير متصل','⚪ Не в сети'],
+ 'mp.friendsCard':['👥 חברים','👥 Friends','👥 الأصدقاء','👥 Друзья'],
+ 'mp.friendsP':['הזמן חבר מהרשימה, בלי קוד','Invite a friend from your list, no code needed','ادعُ صديقًا من القائمة بدون رمز','Пригласи друга из списка без кода'],
+ 'mp.friendsBtn':['לרשימת החברים','Open friends list','قائمة الأصدقاء','Список друзей'],
  'set.name':['👤 שם שחקן','👤 Player name','👤 اسم اللاعب','👤 Имя игрока'],
  'set.namePh':['השם שלך','Your name','اسمك','Твоё имя'],
  'rotate':['סובבו את הטלפון 📱↻','Rotate your phone 📱↻','أدر هاتفك 📱↻','Поверни телефон 📱↻'],
@@ -1344,8 +1424,11 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#v2-title':'v2.title', '#v2-ai':'v2.ai', '#v2-human':'v2.human', '#v2-keys':'v2.keys', '#v2-pick-l':'v2.pickPartner', '#v2-go':'btn.play', '#v2-cancel':'btn.back2',
   '#goal-flash':'game.goal', '#btn-music':'btn.music', '#btn-settings':'btn.settings', '#btn-daily':'daily.btn',
   '#btn-codes':'btn.codes', '#codes-title':'codes.title', '#codes-hint':'codes.hint', '#btn-code-go':'codes.go', '#btn-codes-cancel':'btn.back2',
-  '#intro-tap':'intro.tap', '.intro-title small':'home.sub', '#btn-stats-ach':'stats.ach', '#btn-stats-board':'stats.board', '#ach h2':'ach.title', '#btn-ach-back':'btn.back',
-  '#board h2':'board.title', '#btn-board-back':'btn.back', '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
+  '#intro-tap':'intro.tap', '.intro-title small':'home.sub', '#btn-stats-ach':'stats.ach', '#btn-stats-board':'stats.friends', '#ach h2':'ach.title', '#btn-ach-back':'btn.back',
+  '#friends-title':'friends.title', '#btn-friends-back':'btn.back', '#btn-friend-add':'friends.add', '#btn-fm-invite':'friends.inviteLong', '#btn-fm-close':'btn.back2',
+  '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
+  '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
+  '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
   '#set-name-l':'set.name', '#rotate span':'rotate', '#replay-tag':'replay' };
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
@@ -1356,7 +1439,8 @@ function applyLang(){
   const ni=$('#set-name'); if(ni) ni.placeholder=T('set.namePh');
   refreshHome(); buildGallery(); refreshPreview();
   if($('#ach').classList.contains('active') && typeof buildAch==='function') buildAch();
-  if($('#board').classList.contains('active') && typeof buildBoard==='function') buildBoard();
+  if($('#friends').classList.contains('active') && typeof buildFriends==='function') buildFriends();
+  if(typeof updatePresenceUI==='function') updatePresenceUI();
   if(typeof buildTeams==='function') buildTeams();
   if(typeof cup!=='undefined' && cup) renderBracket();
   if(typeof mp!=='undefined' && mp && mp.connected) mpRefresh();
@@ -1372,7 +1456,8 @@ function setLang(l){ if(!LANGS[l]) return; lang=l; settings.lang=l; saveSettings
   sv.addEventListener('change', ()=>sfx.click());
   mv.addEventListener('input', ()=>{ settings.music=mv.value/100; music.setVolume(settings.music); saveSettings(); });
   const nameIn=$('#set-name'); nameIn.value=settings.name||'';
-  nameIn.addEventListener('input', ()=>{ settings.name=nameIn.value.slice(0,14); saveSettings(); });
+  let nameTimer=0;
+  nameIn.addEventListener('input', ()=>{ settings.name=nameIn.value.slice(0,14); saveSettings(); clearTimeout(nameTimer); nameTimer=setTimeout(registerPresence, 900); });
   nameIn.addEventListener('keydown', e=>e.stopPropagation());
   $('#btn-settings').addEventListener('click', ()=>{ sfx.click(); $('#settings-modal').classList.add('show'); });
   $('#btn-settings-close').addEventListener('click', ()=>{ sfx.click(); $('#settings-modal').classList.remove('show'); });
@@ -1489,18 +1574,147 @@ function buildAch(){
 }
 $('#btn-stats-ach').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); buildAch(); showScreen('ach'); });
 $('#btn-ach-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
-/* ---------- friends leaderboard ---------- */
-function buildBoard(){
-  const me=Object.assign({name:(settings.name||'').trim()||T('board.you'), me:true}, myStats());
-  const rows=[me].concat(Object.entries(prog.friends).map(([name,s])=>Object.assign({name},s)));
-  rows.sort((a,b)=>(b.w-a.w)||(b.xp-a.xp));
-  const cols=T('board.cols').split('|');
-  $('#board-table').innerHTML='<tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>'+
-    rows.map(r=>`<tr class="${r.me?'me':''}"><td>${r.me?'⭐ ':''}${r.name.replace(/[<>&]/g,'')}</td><td>${r.w|0}</td><td>${r.goals|0}</td><td>${r.xp|0}</td><td>${r.c|0}</td></tr>`).join('');
-  $('#board-empty').textContent = rows.length>1 ? '' : T('board.empty');
+/* =========================================================
+   FRIENDS – presence by player name over the peer network, live stats, invites
+   ========================================================= */
+let userPeer=null, presence='off';                   // 'off' | 'connecting' | 'on' | 'taken'
+const probes={};
+const esc = s => String(s).replace(/[<>&"]/g, ch=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]));
+const normName = n => (n||'').trim().replace(/\s+/g,' ').slice(0,14);
+const nameId = n => 'fsu-'+Array.from(new TextEncoder().encode(normName(n).toLowerCase())).map(b=>b.toString(16).padStart(2,'0')).join('');
+function updatePresenceUI(){
+  const el=$('#name-status'); if(!el) return;
+  const name=normName(settings.name);
+  el.textContent = presence==='on' ? T('name.online',name) : presence==='taken' ? T('name.taken',name) : presence==='connecting' ? T('mp.connecting') : T('name.offline');
+  el.className = 'name-status '+presence;
+  const me=$('#fr-me'); if(me) me.innerHTML = name ? `${presence==='on'?'🟢':'⚪'} <b>${esc(name)}</b> · ⭐ ${prog.xp} XP · 🏆 ${loadStats().w}` : T('friends.needName');
 }
-$('#btn-stats-board').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); buildBoard(); showScreen('board'); });
-$('#btn-board-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
+async function registerPresence(){
+  if(userPeer){ const old=userPeer; userPeer=null; try{ old.destroy(); }catch(e){} }   // detach first so its events are ignored
+  presence='off'; updatePresenceUI();
+  const name=normName(settings.name); if(!name) return;
+  try{ await loadPeerJS(); }catch(e){ return; }
+  if(normName(settings.name)!==name) return;          // name changed meanwhile
+  presence='connecting'; updatePresenceUI();
+  const p=new Peer(nameId(name)); userPeer=p;
+  p.on('open', ()=>{ if(userPeer!==p) return; presence='on'; updatePresenceUI(); });
+  p.on('connection', onIncoming);
+  p.on('error', e=>{
+    if(userPeer!==p) return;
+    if(e.type==='unavailable-id'){ userPeer=null; presence='taken'; updatePresenceUI(); toast(T('name.taken',name),'warn'); try{ p.destroy(); }catch(_){} }
+    else if(e.type==='peer-unavailable'){ const m=/peer\s+(\S+)/i.exec(e.message||''); const id=m&&m[1]; if(id&&probes[id]){ const pr=probes[id]; delete probes[id]; pr(null); } }
+    else if(e.type==='network'||e.type==='server-error'){ presence='off'; updatePresenceUI(); }
+  });
+  p.on('disconnected', ()=>{ if(userPeer!==p || p.destroyed) return; presence='off'; updatePresenceUI(); setTimeout(()=>{ if(userPeer===p && !p.destroyed && p.disconnected){ try{ p.reconnect(); }catch(_){} } }, 1500); });
+}
+/* try to reach a friend by name; resolves with an open connection or null (= not connected right now) */
+function reach(name, kind, timeout=5000){
+  return new Promise(res=>{
+    if(!userPeer || presence!=='on'){ res(null); return; }
+    const id=nameId(name); let done=false; const finish=v=>{ if(done) return; done=true; delete probes[id]; res(v); };
+    probes[id]=finish;
+    let c; try{ c=userPeer.connect(id,{metadata:{kind, from:normName(settings.name)}, serialization:'json', reliable:true}); }catch(e){ finish(null); return; }
+    c.on('open', ()=>finish(c)); c.on('error', ()=>finish(null));
+    setTimeout(()=>{ if(!done){ try{ c.close(); }catch(_){} finish(null); } }, timeout);
+  });
+}
+function onIncoming(conn){
+  const kind=(conn.metadata&&conn.metadata.kind)||'', from=normName(conn.metadata&&conn.metadata.from);
+  conn.on('open', ()=>{
+    if(kind==='probe'){ try{ conn.send({t:'pong'}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 400); }
+    else if(kind==='stats'){ try{ conn.send({t:'stats', name:normName(settings.name), s:myStats(), ach:Object.keys(prog.ach)}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 600); }
+    else if(kind==='invite'){ handleInvite(conn, from); }
+    else { try{ conn.close(); }catch(e){} }
+  });
+}
+/* ----- friends list ----- */
+function friendRow(name){
+  const f=prog.friends[name]||{}; const st=f.online==null?'checking':(f.online?'online':'offline');
+  return `<div class="frow" data-name="${esc(name)}"><span class="dot ${st}"></span><span class="fname">${esc(name)}</span>
+    <span class="fstat">${st==='checking'?T('friends.checking'):st==='online'?T('friends.online'):T('friends.offline')}</span>
+    <button class="btn small blue" data-act="view">${T('friends.view')}</button><button class="btn small green" data-act="invite">${T('friends.invite')}</button><button class="btn small red" data-act="remove">🗑</button></div>`;
+}
+function buildFriends(){
+  const names=Object.keys(prog.friends).sort((a,b)=>a.localeCompare(b));
+  $('#fr-list').innerHTML = names.length ? names.map(friendRow).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`;
+  $('#friend-input').placeholder=T('friends.ph'); updatePresenceUI();
+}
+async function refreshFriendStatuses(){
+  for(const name of Object.keys(prog.friends)){ prog.friends[name].online=null; }
+  buildFriends();
+  await Promise.all(Object.keys(prog.friends).map(async name=>{
+    const c=await reach(name,'probe',4000); prog.friends[name].online=!!c; if(c) setTimeout(()=>{ try{ c.close(); }catch(e){} },300);
+    const row=$(`#fr-list .frow[data-name="${CSS.escape(name)}"]`); if(row){ row.outerHTML=friendRow(name); }
+  }));
+}
+function addFriend(raw){
+  const name=normName(raw); if(!name) return;
+  if(!normName(settings.name)){ toast(T('friends.needName'),'warn'); return; }
+  if(name.toLowerCase()===normName(settings.name).toLowerCase()){ toast(T('friends.self'),'warn'); return; }
+  if(prog.friends[name]){ toast(T('friends.exists',name),'warn'); return; }
+  prog.friends[name]={w:0,d:0,l:0,c:0,xp:0,goals:0,ach:[],t:0,online:null}; saveProg(); $('#friend-input').value='';
+  toast(T('friends.added',name),'ach'); sfx.click(); buildFriends();
+  reach(name,'probe',4000).then(c=>{ prog.friends[name].online=!!c; if(c){ setTimeout(()=>{ try{ c.close(); }catch(e){} },300); } else toast(T('friends.notConnected'),'warn'); const row=$(`#fr-list .frow[data-name="${CSS.escape(name)}"]`); if(row) row.outerHTML=friendRow(name); });
+}
+async function viewFriend(name){
+  const c=await reach(name,'stats',5000);
+  if(c){
+    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; prog.friends[name]=Object.assign(prog.friends[name]||{}, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true}); saveProg(); res(); } }); setTimeout(res,3000); });
+    try{ c.close(); }catch(e){}
+  } else { toast(T('friends.notConnected'),'warn'); if(prog.friends[name]) prog.friends[name].online=false; }
+  const f=prog.friends[name]; if(!f) return;
+  $('#fm-name').textContent=(f.online?'🟢 ':'⚪ ')+name;
+  $('#fm-status').textContent = f.t ? (f.online ? T('friends.online') : T('friends.lastSeen', new Date(f.t).toLocaleDateString())) : T('friends.noData');
+  $('#fm-stats').innerHTML = `<div class="stat win"><div class="n">${f.w|0}</div><div class="l">${T('stats.w')}</div></div><div class="stat draw"><div class="n">${f.goals|0}</div><div class="l">⚽</div></div><div class="stat loss"><div class="n">${f.l|0}</div><div class="l">${T('stats.l')}</div></div><div class="stat cup"><div class="n">${f.xp|0}</div><div class="l">⭐ XP</div></div>`;
+  const ach=f.ach||[]; $('#fm-ach').innerHTML = `<div class="hint">${T('ach.count',ach.length,ACH.length,f.xp|0)}</div><div class="fm-badges">${ACH.map(([id])=>`<span class="bd ${ach.includes(id)?'on':''}" title="${esc(T('a.'+id))}">${ACH_ICON[id]||'🏅'}</span>`).join('')}</div>`;
+  $('#btn-fm-invite').dataset.name=name; $('#btn-fm-invite').hidden=!f.online;
+  $('#friend-modal').classList.add('show');
+}
+/* ----- invites ----- */
+let inviteConn=null;
+async function inviteFriend(name){
+  if(state!=='idle'){ return; }
+  const c=await reach(name,'invite',6000);
+  if(!c){ toast(T('friends.notConnected'),'warn'); return; }
+  toast(T('invite.sent',name),'xp');
+  const onData=m=>{
+    if(!m) return;
+    if(m.t==='accept'){ c.off('data',onData); startMpFromConn(c,'host'); }
+    else if(m.t==='decline'){ toast(T('invite.declined',name),'warn'); try{ c.close(); }catch(e){} }
+    else if(m.t==='busy'){ toast(T('invite.busy',name),'warn'); try{ c.close(); }catch(e){} }
+  };
+  c.on('data',onData);
+  setTimeout(()=>{ if(!(mp&&mp.conn===c)){ try{ c.close(); }catch(e){} } }, 40000);
+}
+function handleInvite(conn, from){
+  if(state!=='idle' || (mp&&mp.connected) || inviteConn){ try{ conn.send({t:'busy'}); setTimeout(()=>conn.close(),300); }catch(e){} return; }
+  inviteConn=conn; sfx.whistle();
+  $('#invite-text').textContent=T('invite.text',from||'?');
+  $('#invite-modal').classList.add('show');
+  conn.on('close', ()=>{ if(inviteConn===conn){ inviteConn=null; $('#invite-modal').classList.remove('show'); } });
+}
+$('#btn-invite-accept').addEventListener('click', ()=>{ sfx.click(); const c=inviteConn; inviteConn=null; $('#invite-modal').classList.remove('show'); if(!c) return; try{ c.send({t:'accept'}); }catch(e){ return; } startMpFromConn(c,'guest'); });
+$('#btn-invite-decline').addEventListener('click', ()=>{ sfx.click(); const c=inviteConn; inviteConn=null; $('#invite-modal').classList.remove('show'); if(c){ try{ c.send({t:'decline'}); setTimeout(()=>c.close(),300); }catch(e){} } });
+function startMpFromConn(conn, role){
+  mpTeardown();
+  mp={ role, conn, peer:null, code:'', connected:true, myPick:null, opPick:null, myReady:false, opReady:false, rin:{l:0,r:0,j:0,k:0,s:0}, ev:[], snap:null, lastKey:'', lastSent:0 };
+  mpWire(conn, true);
+  showScreen('mp');
+}
+/* ----- screen wiring ----- */
+$('#btn-stats-board').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); buildFriends(); showScreen('friends'); refreshFriendStatuses(); });
+$('#btn-friends-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
+$('#btn-friend-add').addEventListener('click', ()=>{ addFriend($('#friend-input').value); });
+$('#friend-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') addFriend(e.target.value); });
+$('#fr-list').addEventListener('click', e=>{
+  const b=e.target.closest('button[data-act]'); if(!b) return; const name=b.closest('.frow').dataset.name; sfx.click();
+  if(b.dataset.act==='remove'){ delete prog.friends[name]; saveProg(); buildFriends(); }
+  else if(b.dataset.act==='view'){ viewFriend(name); }
+  else if(b.dataset.act==='invite'){ inviteFriend(name); }
+});
+$('#btn-fm-close').addEventListener('click', ()=>{ sfx.click(); $('#friend-modal').classList.remove('show'); });
+$('#btn-fm-invite').addEventListener('click', ()=>{ sfx.click(); $('#friend-modal').classList.remove('show'); inviteFriend($('#btn-fm-invite').dataset.name); });
+$('#btn-mp-friends').addEventListener('click', ()=>{ sfx.click(); buildFriends(); showScreen('friends'); refreshFriendStatuses(); });
 /* ---------- daily match ---------- */
 $('#btn-daily').addEventListener('click', ()=>{
   sfx.click(); const d=dailyInfo(), c=CHARS[d.opp];
@@ -2200,8 +2414,9 @@ async function mpJoin(code){
   });
   peer.on('error', e=>{ if(!mp || !mp.connected){ mpStatus(e.type==='peer-unavailable' ? T('mp.notFound',code) : T('mp.err',e.type)); $('#btn-mp-join').disabled=false; } });
 }
-function mpWire(conn){
-  conn.on('open', ()=>{ mp.connected=true; sfx.win(); mpStatus(''); mpShowPick(); try{ conn.send({t:'hello', name:(settings.name||'').trim(), s:myStats()}); }catch(e){} });
+function mpWire(conn, alreadyOpen){
+  const onOpen=()=>{ mp.connected=true; sfx.win(); mpStatus(''); mpShowPick(); try{ conn.send({t:'hello', name:(settings.name||'').trim(), s:myStats()}); }catch(e){} };
+  if(alreadyOpen) onOpen(); else conn.on('open', onOpen);
   conn.on('data', mpOnMsg);
   conn.on('close', mpOnClose);
   conn.on('error', mpOnClose);
@@ -2218,7 +2433,7 @@ function mpOnClose(){
 function mpOnMsg(m){
   if(!mp || !m) return;
   switch(m.t){
-    case 'hello': { const name=(m.name||'').toString().slice(0,14) || (T('mp.friend')+' '+mp.code); if(m.s&&typeof m.s==='object'){ prog.friends[name]={w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,t:Date.now()}; saveProg(); } break; }
+    case 'hello': { const name=normName(m.name); if(name && m.s&&typeof m.s==='object'){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]},{w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,t:Date.now(),online:true}); saveProg(); } break; }
     case 'pick': mp.opPick=m.i; if(mp.myPick===m.i && mp.role==='guest'){ mp.myPick=null; } mpRefresh(); break;
     case 'ready': mp.opReady=!!m.v; mpRefresh(); break;
     case 'start': if(mp.role==='guest'){ mp.snap=null; beginMatch(CHARS[m.p1], CHARS[m.p2]); } break;
@@ -2775,6 +2990,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 
 /* ---------- init ---------- */
 buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang();
+setTimeout(registerPresence, 800);              // go online under your player name (if one is set)
 </script>
 </body>
 </html>
