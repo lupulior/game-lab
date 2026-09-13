@@ -255,10 +255,11 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 /* translucent on-screen controls (phones/tablets): ◀ ▶ bottom-left, jump/kick bottom-right */
 #touch{position:absolute;inset:0;display:none;pointer-events:none;direction:ltr}
 #touch .grp{position:absolute;bottom:20px;display:flex;gap:16px;pointer-events:auto;touch-action:none}
-#touch .grp.move{left:20px}
-#touch .grp.act{right:20px}
-#touch .tb{width:104px;height:104px;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:rgba(255,255,255,.18);
-  color:#fff;font-size:46px;font-weight:900;display:flex;align-items:center;justify-content:center;
+#touch .grp.move{left:16px}
+#touch .grp.move .tb{width:160px;height:160px;font-size:70px}       /* big move buttons: easy to hit and slide between */
+#touch .grp.act{right:16px}
+#touch .tb{width:126px;height:126px;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:rgba(255,255,255,.18);
+  color:#fff;font-size:54px;font-weight:900;display:flex;align-items:center;justify-content:center;
   text-shadow:0 2px 6px rgba(0,0,0,.5);user-select:none;-webkit-user-select:none;transition:background .08s,transform .08s}
 #touch .tb.jump{background:rgba(63,195,95,.3);border-color:rgba(63,195,95,.8)}
 #touch .tb.kick{background:rgba(255,122,61,.3);border-color:rgba(255,122,61,.85)}
@@ -430,6 +431,16 @@ body.touch #touch{display:block}
     </div>
   </div>
 
+  <!-- ===== PENALTY LEVEL MODAL ===== -->
+  <div class="overlay" id="pk-level-modal">
+    <div class="panel">
+      <h2>🥅 באיזו רמה לשחק פנדלים?</h2>
+      <div class="levels" id="pk-levels"></div>
+      <div class="hint">ברמה קשה יותר השוער מנחש טוב יותר, הכוונת זזה מהר יותר,<br>וכשאתה שוער יש לך פחות זמן להגיב</div>
+      <br><button class="btn small" id="btn-pk-level-cancel">חזרה</button>
+    </div>
+  </div>
+
   <!-- ===== EXIT MODAL ===== -->
   <div class="overlay" id="exit-modal">
     <div class="panel">
@@ -461,6 +472,16 @@ const CHARS = [
     jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:9, beard:false, brows:'sharp' },
   { id:'salah', name:'סלאח', skin:'#B9794F', skinDark:'#7d4d2c', hair:'curly', hairColor:'#1d1410',
     jersey:'#C8102E', numColor:'#fff', shorts:'#C8102E', socks:'#C8102E', number:11, beard:true, beardColor:'#1d1410', brows:'round' },
+  { id:'r9', name:'רונאלדו ברזיל', skin:'#D9A06B', skinDark:'#9c6a3f', hair:'tuft', hairColor:'#1e1a17',
+    jersey:'#FFDC00', numColor:'#009C3B', shorts:'#1A3DA8', socks:'#ffffff', number:9, beard:false, brows:'round' },
+  { id:'vini', name:'ויני', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'short', hairColor:'#161616',
+    jersey:'#ffffff', numColor:'#1B2A4E', shorts:'#ffffff', socks:'#ffffff', number:7, beard:false, brows:'round' },
+  { id:'dembele', name:'דמבלה', skin:'#6b4226', skinDark:'#452a17', hair:'short', hairColor:'#161616',
+    jersey:'#1B2A4E', band:'#E30613', numColor:'#fff', shorts:'#1B2A4E', socks:'#1B2A4E', number:10, beard:false, brows:'round' },
+  { id:'iniesta', name:'אינייסטה', skin:'#F1C9A5', skinDark:'#b8865f', hair:'bald', hairColor:'#3a2a1a',
+    jersey:'#A50044', stripes:'#004D98', numColor:'#FFD447', shorts:'#004D98', socks:'#004D98', number:8, beard:false, brows:'round' },
+  { id:'ronaldinho', name:'רונאלדיניו', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'longband', hairColor:'#1e1a17', bandColor:'#ffffff',
+    jersey:'#A50044', stripes:'#004D98', numColor:'#FFD447', shorts:'#004D98', socks:'#004D98', number:10, beard:false, brows:'round', teeth:true },
 ];
 
 function playerSVG(c, mood='happy'){
@@ -485,15 +506,27 @@ function playerSVG(c, mood='happy'){
           <circle cx="22" cy="30" r="8" fill="${c.hairColor}"/><circle cx="28" cy="18" r="8" fill="${c.hairColor}"/><circle cx="38" cy="10" r="8" fill="${c.hairColor}"/>
           <circle cx="50" cy="7" r="8" fill="${c.hairColor}"/><circle cx="62" cy="10" r="8" fill="${c.hairColor}"/><circle cx="72" cy="18" r="8" fill="${c.hairColor}"/><circle cx="78" cy="30" r="8" fill="${c.hairColor}"/>
           <circle cx="19" cy="42" r="6" fill="${c.hairColor}"/><circle cx="81" cy="42" r="6" fill="${c.hairColor}"/>`;
+  else if(c.hair==='tuft')     // buzzed head with the famous little front tuft (R9)
+    hair=`<path d="M19 40 Q19 8 50 6 Q81 8 81 40 Q70 22 50 22 Q30 22 19 40Z" fill="${c.hairColor}" opacity=".28"/>
+          <path d="M41 13 Q50 1 59 13 Q50 9 41 13Z" fill="${c.hairColor}"/>`;
+  else if(c.hair==='bald')     // very short, receding at the front (Iniesta)
+    hair=`<path d="M19 40 Q19 14 34 10 Q40 21 50 23 Q60 21 66 10 Q81 14 81 40 Q70 25 50 25 Q30 25 19 40Z" fill="${c.hairColor}" opacity=".5"/>`;
+  else if(c.hair==='longband') // long wavy hair to the shoulders with a headband (Ronaldinho)
+    hair=`<path d="M15 50 Q11 2 50 3 Q89 2 85 50 Q80 26 68 22 Q50 18 32 22 Q20 26 15 50Z" fill="${c.hairColor}"/>
+          <path d="M15 44 Q5 62 18 80 Q22 60 25 46Z" fill="${c.hairColor}"/><path d="M85 44 Q95 62 82 80 Q78 60 75 46Z" fill="${c.hairColor}"/>
+          <path d="M20 21 Q50 11 80 21 L80 28 Q50 18 20 28Z" fill="${c.bandColor}"/>`;
   else
     hair=`<path d="M19 40 Q19 16 32 12 L36 3 L43 11 L50 1 L57 11 L64 3 L68 12 Q81 16 81 40 Q70 24 50 24 Q30 24 19 40Z" fill="${c.hairColor}"/>`;
   const beard = c.beard ? `<path d="M23 44 Q24 74 50 76 Q76 74 77 44 Q72 60 50 60 Q28 60 23 44Z" fill="${c.beardColor}"/>` : '';
+  const band = c.band ? `<rect x="44" y="68" width="12" height="40" fill="${c.band}"/>` : '';
   const bc = c.browColor || c.hairColor;
   const brows = c.brows==='sharp'
     ? `<path d="M30 26 L44 31" stroke="${bc}" stroke-width="4" stroke-linecap="round"/><path d="M70 26 L56 31" stroke="${bc}" stroke-width="4" stroke-linecap="round"/>`
     : `<path d="M32 29 Q38 24 44 29" stroke="${bc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56 29 Q62 24 68 29" stroke="${bc}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
   const mouth = mood==='sad'
     ? `<path d="M38 62 Q50 50 62 62" stroke="#7a2a2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><ellipse cx="34" cy="48" rx="3" ry="5" fill="#7ED3FF"/>`
+    : c.teeth
+    ? `<path d="M30 50 Q50 76 70 50 Z" fill="#7a2a2a"/><path d="M35 51 Q50 64 65 51 Z" fill="#fff"/><path d="M50 51 V60 M43 51 V57 M57 51 V57" stroke="#d8d8d8" stroke-width="1.2"/>`
     : `<path d="M34 52 Q50 70 66 52 Z" fill="#7a2a2a"/><path d="M40 53 Q50 59 60 53 Z" fill="#fff"/>`;
   const stripes = c.stripes
     ? `<rect x="36" y="68" width="6" height="40" fill="${c.stripes}"/><rect x="47" y="68" width="6" height="40" fill="${c.stripes}"/><rect x="58" y="68" width="6" height="40" fill="${c.stripes}"/>`
@@ -505,7 +538,7 @@ function playerSVG(c, mood='happy'){
     <path d="M30 74 L17 100" stroke="${c.skin}" stroke-width="9" stroke-linecap="round"/>
     <path d="M70 74 L83 100" stroke="${c.skin}" stroke-width="9" stroke-linecap="round"/>
     <path d="M30 66 L22 82 L31 86 L31 108 L69 108 L69 86 L78 82 L70 66 Q50 74 30 66Z" fill="${c.jersey}"/>
-    ${stripes}
+    ${stripes}${band}
     <g class="num"><text x="50" y="99" font-size="20" font-weight="900" text-anchor="middle" fill="${c.numColor}" font-family="Arial Black,Arial,sans-serif">${c.number}</text></g>
     <rect x="44" y="58" width="12" height="12" fill="${c.skin}"/>
     <circle cx="50" cy="38" r="30" fill="${c.skin}"/>
@@ -1138,6 +1171,25 @@ function teamChar(t, keeper){                          // a generic player weari
            shorts:keeper?'#1B2A4E':(isLight(t.color)?'#1B2A4E':'#ffffff'), socks:jersey, number:keeper?1:10, brows:'round' };
 }
 
+/* difficulty: keeper reading, AI misses, how long the sight stays visible when you keep, sight/power speed */
+const PK_LEVELS=[
+  { name:'קל',    color:'green',  read:.12, miss:.16, window:1.5,  aimSpeed:.7,  powerSpeed:.7 },
+  { name:'בינוני',color:'blue',   read:.22, miss:.12, window:1.15, aimSpeed:.9,  powerSpeed:.9 },
+  { name:'קשה',   color:'orange', read:.34, miss:.09, window:.85,  aimSpeed:1.1, powerSpeed:1.1 },
+  { name:'מטורף', color:'pink',   read:.46, miss:.06, window:.62,  aimSpeed:1.35,powerSpeed:1.3 },
+  { name:'מאסטר', color:'purple', read:.6,  miss:.04, window:.45,  aimSpeed:1.6, powerSpeed:1.55 },
+];
+let pkLevel=PK_LEVELS[1];
+(function buildPkLevels(){
+  const box=$('#pk-levels');
+  PK_LEVELS.forEach(L=>{
+    const b=document.createElement('button'); b.className=`btn ${L.color}`; b.textContent=L.name;
+    b.addEventListener('click', ()=>{ sfx.click(); pkLevel=L; $('#pk-level-modal').classList.remove('show'); showTeamPick(); showScreen('cup'); });
+    box.appendChild(b);
+  });
+})();
+$('#btn-pk-level-cancel').addEventListener('click', ()=>{ sfx.click(); $('#pk-level-modal').classList.remove('show'); });
+
 let cup=null, pk=null;
 const cupConfetti = makeConfetti($('#cup-confetti'), ['#FFD447','#FFE27A','#fff','#3D8BFF','#F04E4E','#3FC35F']);
 const pkConfetti  = makeConfetti($('#pk-confetti'),  ['#FFD447','#FFE27A','#fff','#3D8BFF','#F04E4E','#3FC35F']);
@@ -1159,7 +1211,7 @@ function showTeamPick(){ $('#team-pick').hidden=false; $('#bracket').hidden=true
 function newCup(myIdx){
   const order=shuffle(TEAMS.map((t,i)=>i).filter(i=>i!==myIdx));
   order.splice(Math.floor(Math.random()*32),0,myIdx);
-  cup={ mine:myIdx, round:0, rounds:[[]], out:false, champion:null };
+  cup={ mine:myIdx, round:0, rounds:[[]], out:false, champion:null, level:pkLevel };
   for(let i=0;i<16;i++) cup.rounds[0].push({a:order[2*i], b:order[2*i+1], w:null, sa:0, sb:0});
   simulateRound(); renderBracket();
   $('#team-pick').hidden=true; $('#bracket').hidden=false;
@@ -1221,12 +1273,12 @@ function renderBracket(){
   const rl=$('#cup-round');
   if(cup.champion!==null) rl.textContent = cup.champion===cup.mine ? 'זכית בגביע העולם!!!' : 'הטורניר הסתיים';
   else if(cup.out) rl.textContent='הודחת מהטורניר';
-  else { const m=live, op=TEAMS[m.a===cup.mine?m.b:m.a]; rl.innerHTML=`${ROUND_NAMES[cup.round]}: נגד ${op.flag} ${op.name}`; }
+  else { const m=live, op=TEAMS[m.a===cup.mine?m.b:m.a]; rl.innerHTML=`${ROUND_NAMES[cup.round]}: נגד ${op.flag} ${op.name} · רמה: ${cup.level.name}`; }
   $('#btn-cup-play').hidden = !live;
 }
-$('#btn-pk').addEventListener('click', ()=>{ sfx.click(); if(!cup) showTeamPick(); showScreen('cup'); });
+$('#btn-pk').addEventListener('click', ()=>{ sfx.click(); if(cup) showScreen('cup'); else $('#pk-level-modal').classList.add('show'); });
 $('#btn-cup-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
-$('#btn-cup-new').addEventListener('click', ()=>{ sfx.click(); cup=null; showTeamPick(); });
+$('#btn-cup-new').addEventListener('click', ()=>{ sfx.click(); cup=null; showTeamPick(); $('#pk-level-modal').classList.add('show'); });
 $('#btn-cup-play').addEventListener('click', ()=>{ sfx.click(); const m=myLiveMatch(); if(m) startShootout(m); });
 
 /* ----- shootout ----- */
@@ -1236,8 +1288,8 @@ const randomZone = () => { const r=Math.random(); const col = r<.4?0:r<.8?2:1; r
 function startShootout(m){
   const opIdx = m.a===cup.mine ? m.b : m.a;
   pk={ m, me:TEAMS[cup.mine], op:TEAMS[opIdx], sMe:[], sOp:[], meFirst:Math.random()<.5, kick:0, phase:'idle', aim:null, pickZone:null, raf:0, t0:0, timer:0,
-       readP: clamp(.2+cup.round*.09+(TEAMS[opIdx].str-3)*.03, .15, .62),      // how often the AI keeper guesses right
-       missP: Math.max(.04, .12-cup.round*.015) };                              // how often the AI shooter misses
+       readP: clamp(cup.level.read+cup.round*.06+(TEAMS[opIdx].str-3)*.02, .05, .8),   // how often the AI keeper guesses right
+       missP: Math.max(.03, cup.level.miss-cup.round*.01) };                            // how often the AI shooter misses
   $('#pk-score .tm.a .f').innerHTML=pk.me.flag; $('#pk-score .tm.a .n').textContent=pk.me.code;
   $('#pk-score .tm.b .f').innerHTML=pk.op.flag; $('#pk-score .tm.b .n').textContent=pk.op.code;
   $('#pk-ball').innerHTML=BALL_SVG;
@@ -1264,7 +1316,7 @@ function nextKick(){
   const res=shootoutWinner(); if(res){ endShootout(res); return; }
   const meShoots = (pk.kick%2===0)===pk.meFirst; pk.kick++;
   const sudden = pk.sMe.length>=5 && pk.sOp.length>=5;
-  $('#pk-round').textContent=`${ROUND_NAMES[cup.round]} · בעיטה ${Math.ceil(pk.kick/2)}${sudden?' · מוות פתאומי!':''}`;
+  $('#pk-round').textContent=`${ROUND_NAMES[cup.round]} · ${cup.level.name} · בעיטה ${Math.ceil(pk.kick/2)}${sudden?' · מוות פתאומי!':''}`;
   $('#pk-score .tm.a').classList.toggle('turn',meShoots); $('#pk-score .tm.b').classList.toggle('turn',!meShoots);
   // reset positions and sprites
   const el=$('#pk'); el.classList.remove('shooting','keeping','locked');
@@ -1285,7 +1337,7 @@ function nextKick(){
     // the striker runs up; his sight flashes in the goal for a moment – click it in time to dive there
     pk.phase='keep'; el.classList.add('keeping');
     pk.shotZone=randomZone(); pk.shotMiss=Math.random()<pk.missP;
-    pk.window=clamp(1.15-cup.round*.14, .5, 1.15);
+    pk.window=Math.max(.35, cup.level.window-cup.round*.08);
     $('#pk-hint').textContent='🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר!';
     clearTimeout(pk.timer);
     pk.timer=setTimeout(()=>{
@@ -1299,8 +1351,8 @@ function nextKick(){
     }, 700+Math.random()*900);
   }
 }
-const aimAt   = t => ({ x:500+345*Math.sin(t*2.3), y:265+172*Math.sin(t*3.1+.8) });   // the sight's path (a bit beyond the frame)
-const powerAt = t => 50+50*Math.sin(t*4.4-Math.PI/2);                                  // 0 → 100 → 0, about 1.4s per cycle
+const aimAt   = t => { t*=cup.level.aimSpeed; return { x:500+345*Math.sin(t*2.3), y:265+172*Math.sin(t*3.1+.8) }; };   // the sight's path (a bit beyond the frame)
+const powerAt = t => 50+50*Math.sin(t*4.4*cup.level.powerSpeed-Math.PI/2);                                            // 0 → 100 → 0
 const sinceT0 = () => (performance.now()-pk.t0)/1000;
 function aimLoop(){
   if(!pk || pk.phase!=='aim') return;
