@@ -98,6 +98,11 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #btn-music{left:172px}
 #btn-settings{left:242px}
 #btn-daily{left:312px}
+#btn-codes{left:382px}
+#code-input{width:300px;font-size:34px;font-weight:900;text-align:center;letter-spacing:4px;direction:ltr;text-transform:uppercase;border:4px solid var(--purple);border-radius:16px;
+  padding:6px;font-family:inherit;color:var(--navy);background:#fff;user-select:text;-webkit-user-select:text;outline:none;margin:8px 0}
+#code-input.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
 
 /* ---------- intro ---------- */
 #intro{cursor:pointer}
@@ -438,6 +443,7 @@ body.touch #touch{display:block}
     <button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button>
     <button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button>
     <button class="icon-btn" id="btn-daily" title="משחק יומי">📅</button>
+    <button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
     <button class="btn pink small" id="btn-2v2">👥 2 על 2</button>
     <button class="btn orange small" id="btn-pk">🥅 פנדלים</button>
     <button class="btn yellow small" id="btn-stats">🏆 ניצחונות</button>
@@ -660,6 +666,16 @@ body.touch #touch{display:block}
     <button class="btn blue small" id="btn-board-back">➜ חזרה</button>
     <div class="board-wrap"><table id="board-table"></table><div class="hint" id="board-empty"></div></div>
   </section>
+
+  <!-- ===== CODES MODAL ===== -->
+  <div class="overlay" id="codes-modal">
+    <div class="panel">
+      <h2 id="codes-title">🎁 קודים</h2>
+      <div class="hint" id="codes-hint">קודים מיוחדים יתפרסמו בהמשך…</div>
+      <input id="code-input" maxlength="16" placeholder="הכנס קוד" autocomplete="off" spellcheck="false">
+      <br><button class="btn purple" id="btn-code-go">הפעל</button> <button class="btn small" id="btn-codes-cancel">חזרה</button>
+    </div>
+  </div>
 
   <!-- ===== DAILY MATCH MODAL ===== -->
   <div class="overlay" id="daily-modal">
@@ -906,6 +922,13 @@ const I18N_RAW={
  'a.cup_win':['אלוף העולם','World champion','بطل العالم','Чемпион мира'],
  'a.cup_master':['גביע העולם ברמת מאסטר','World Cup on Master','كأس العالم بمستوى خبير','Кубок мира на «Мастер»'],
  'a.daily_win':['ניצחון במשחק היומי','Daily match win','فوز في مباراة اليوم','Победа в матче дня'],
+ 'btn.codes':['קודים','Codes','أكواد','Коды'],
+ 'codes.title':['🎁 קודים','🎁 Codes','🎁 أكواد','🎁 Коды'],
+ 'codes.hint':['יש לך קוד? הכנס אותו כאן. קודים מיוחדים יתפרסמו בהמשך…','Got a code? Enter it here. Special codes will be published later…','لديك كود؟ أدخله هنا. ستُنشر أكواد خاصة لاحقًا…','Есть код? Введи его здесь. Специальные коды появятся позже…'],
+ 'codes.ph':['הכנס קוד','Enter code','أدخل الكود','Введи код'],
+ 'codes.go':['הפעל','Redeem','تفعيل','Активировать'],
+ 'codes.bad':['קוד לא תקין 😕','Invalid code 😕','كود غير صالح 😕','Неверный код 😕'],
+ 'codes.used':['הקוד הזה כבר הופעל','This code was already used','هذا الكود مستخدم بالفعل','Этот код уже использован'],
 };
 const LI={he:0,en:1,ar:2,ru:3};
 const T=(k,...a)=>{ const row=I18N_RAW[k]; let s=row ? (row[LI[lang]]||row[0]) : k; a.forEach((v,i)=>{ s=s.split('{'+i+'}').join(v); }); return s; };
@@ -931,8 +954,8 @@ const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,w
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
 const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id);
-const ACH=[['first_win',50],['hat_trick',40],['clean_sheet',60],['slide_goal',40],['header_goal',40],['win_hard',60],['win_crazy',100],['win_master',150],
-  ['streak3',80],['ten_wins',100],['comeback',70],['last_second',50],['online_win',80],['v2_win',60],['pk_perfect',60],['pk_saves',60],['cup_win',150],['cup_master',300],['daily_win',50]];
+const ACH=[['first_win',20],['hat_trick',15],['clean_sheet',25],['slide_goal',15],['header_goal',15],['win_hard',30],['win_crazy',50],['win_master',80],
+  ['streak3',30],['ten_wins',40],['comeback',25],['last_second',20],['online_win',30],['v2_win',25],['pk_perfect',25],['pk_saves',25],['cup_win',60],['cup_master',120],['daily_win',20]];
 const ACH_ICON={first_win:'🥇',hat_trick:'🎩',clean_sheet:'🧱',slide_goal:'🦵',header_goal:'🧠',win_hard:'🔥',win_crazy:'🤪',win_master:'👑',streak3:'3️⃣',ten_wins:'🔟',comeback:'🔄',last_second:'⏱️',online_win:'🌐',v2_win:'👥',pk_perfect:'🎯',pk_saves:'🧤',cup_win:'🏆',cup_master:'💎',daily_win:'📅'};
 function toast(msg, cls){
   const box=document.getElementById('toast'); if(!box) return;
@@ -946,7 +969,7 @@ function achieve(id){
   setTimeout(()=>{ toast(T('ach.new', T('a.'+id), a[1]), 'ach'); try{ sfx.win(); }catch(e){} }, 400);
 }
 const dayKey = () => new Date().toISOString().slice(0,10);
-function dailyInfo(){ const s=Math.floor(Date.now()/864e5); return { opp:(s*7)%21, lvl:s%5, done: prog.daily===dayKey(), xp:30 }; }
+function dailyInfo(){ const s=Math.floor(Date.now()/864e5); return { opp:(s*7)%21, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }
 const myStats = () => { const s=loadStats(); return {w:s.w,d:s.d,l:s.l,c:s.c,xp:prog.xp,goals:prog.goals}; };
 
 /* ---------- characters (cartoon caricatures) ---------- */
@@ -1254,6 +1277,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#set-title':'set.title', '#set-sfx-l':'set.sfx', '#set-music-l':'set.music', '#set-lang-l':'set.lang', '#btn-settings-close':'btn.back2',
   '#v2-title':'v2.title', '#v2-ai':'v2.ai', '#v2-human':'v2.human', '#v2-keys':'v2.keys', '#v2-pick-l':'v2.pickPartner', '#v2-go':'btn.play', '#v2-cancel':'btn.back2',
   '#goal-flash':'game.goal', '#btn-music':'btn.music', '#btn-settings':'btn.settings', '#btn-daily':'daily.btn',
+  '#btn-codes':'btn.codes', '#codes-title':'codes.title', '#codes-hint':'codes.hint', '#btn-code-go':'codes.go', '#btn-codes-cancel':'btn.back2',
   '#intro-tap':'intro.tap', '.intro-title small':'home.sub', '#btn-stats-ach':'stats.ach', '#btn-stats-board':'stats.board', '#ach h2':'ach.title', '#btn-ach-back':'btn.back',
   '#board h2':'board.title', '#btn-board-back':'btn.back', '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
   '#set-name-l':'set.name', '#rotate span':'rotate', '#replay-tag':'replay' };
@@ -1420,6 +1444,19 @@ $('#btn-daily').addEventListener('click', ()=>{
 });
 $('#btn-daily-cancel').addEventListener('click', ()=>{ sfx.click(); $('#daily-modal').classList.remove('show'); });
 $('#btn-daily-play').addEventListener('click', ()=>{ sfx.click(); const d=dailyInfo(); $('#daily-modal').classList.remove('show'); forcedOpp=d.opp; dailyMatch=!d.done; v2Pending=null; startGame(d.lvl); });
+/* ---------- promo codes (none active yet; add entries as CODE: fn) ---------- */
+const CODES={};
+function redeemCode(raw){
+  const code=(raw||'').trim().toUpperCase().replace(/\s+/g,''), inp=$('#code-input');
+  const bad=()=>{ sfx.lose(); toast(T('codes.bad'),'warn'); inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); };
+  if(!code || !CODES[code]) return bad();
+  prog.codes=prog.codes||[]; if(prog.codes.includes(code)){ sfx.lose(); toast(T('codes.used'),'warn'); return; }
+  prog.codes.push(code); saveProg(); CODES[code](); inp.value='';
+}
+$('#btn-codes').addEventListener('click', ()=>{ sfx.click(); $('#code-input').value=''; $('#code-input').placeholder=T('codes.ph'); $('#codes-modal').classList.add('show'); setTimeout(()=>$('#code-input').focus(),50); });
+$('#btn-codes-cancel').addEventListener('click', ()=>{ sfx.click(); $('#codes-modal').classList.remove('show'); });
+$('#btn-code-go').addEventListener('click', ()=>{ sfx.click(); redeemCode($('#code-input').value); });
+$('#code-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') redeemCode(e.target.value); });
 /* ---------- intro ---------- */
 (function buildIntro(){
   const box=$('#runners'); if(!box) return;
@@ -1755,13 +1792,13 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   else { t.textContent=T('end.draw'); sub.textContent=T(mp?'end.drawMp':'end.drawSub'); sfx.lose(); recordResult('d'); }
   // XP + achievements
   if(outcome==='win'){
-    prog.wins++; prog.streak++; addXP(10);
+    prog.wins++; prog.streak++; addXP(mp ? 5 : [2,3,5,7,10][level ? level.i : 1]);   // harder level = more XP
     achieve('first_win'); if(prog.streak>=3) achieve('streak3'); if(prog.wins>=10) achieve('ten_wins');
     if(score.op===0) achieve('clean_sheet'); if(wasBehind) achieve('comeback');
     if(mp) achieve('online_win'); if(v2) achieve('v2_win');
     if(!mp && level){ if(level.i===2) achieve('win_hard'); if(level.i===3) achieve('win_crazy'); if(level.i===4) achieve('win_master'); }
     if(dailyMatch && prog.daily!==dayKey()){ prog.daily=dayKey(); addXP(dailyInfo().xp); achieve('daily_win'); }
-  } else { prog.streak=0; if(outcome==='draw') addXP(3); }
+  } else { prog.streak=0; if(outcome==='draw') addXP(1); }
   dailyMatch=false; saveProg();
   updateTimer();
   $('#end').classList.add('show');
@@ -1784,7 +1821,7 @@ function scoreGoal(who){
   goalFx(); netEv('goal');
   say(who==='me' ? sayRandom(['c.goal1','c.goal2','c.goal3']) : sayRandom(['c.oppgoal1','c.oppgoal2']));
   if(who==='me'){
-    prog.goals++; addXP(2);
+    prog.goals++; addXP(1);
     if(score.me===3) achieve('hat_trick');
     if(timeLeft<=10) achieve('last_second');
     if(lastTouch.p && teamL.includes(lastTouch.p) && performance.now()-lastTouch.t<2500){ if(lastTouch.type==='slide') achieve('slide_goal'); if(lastTouch.type==='header') achieve('header_goal'); }
@@ -2175,7 +2212,7 @@ function applySnapshot(s){
     if(a[6] && !p.el.classList.contains('stunned')){ p.el.classList.add('stunned'); } else if(!a[6]) p.el.classList.remove('stunned');
   });
   ball.x=s.b[0]; ball.y=s.b[1]; ball.rot=s.b[2];
-  if(s.sc[1]>score.me){ prog.goals++; addXP(2); }              // my goal (guest is P2)
+  if(s.sc[1]>score.me){ prog.goals++; addXP(1); }              // my goal (guest is P2)
   if(s.sc[0]>score.op && s.sc[0]>s.sc[1]) wasBehind=true;
   score.me=s.sc[1]; score.op=s.sc[0]; updateScore();
   timeLeft=s.tl; if(state!=='end' && (s.st==='play'||s.st==='celebrate'||s.st==='replay')) state=s.st; updateTimer();
@@ -2629,8 +2666,8 @@ function endShootout(res){
   if(res==='me'){
     if(pk.sMe.length>=5 && pk.sMe.slice(0,5).every(Boolean)) achieve('pk_perfect');
     if((pk.saves|0)>=3) achieve('pk_saves');
-    addXP(5);
-    if(cup.round===4){ achieve('cup_win'); if(cup.level.i===4) achieve('cup_master'); addXP(40); }
+    addXP(2+cup.level.i);
+    if(cup.round===4){ achieve('cup_win'); if(cup.level.i===4) achieve('cup_master'); addXP(10+cup.level.i*5); }
   }
   const m=pk.m, iAmA=m.a===cup.mine, ga=pk.sMe.filter(Boolean).length, gb=pk.sOp.filter(Boolean).length;
   m.sa=iAmA?ga:gb; m.sb=iAmA?gb:ga; m.w = res==='me' ? cup.mine : (iAmA?m.b:m.a);
