@@ -333,7 +333,13 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .preview{position:absolute;right:70px;top:84px;width:400px;text-align:center}
 .preview .sprite{width:260px;height:390px;margin:0 auto}
 .preview .shadow{width:180px;height:24px;margin:-16px auto 8px;border-radius:50%;background:rgba(0,0,0,.22)}
-.preview .name{font-size:34px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);margin-bottom:12px}
+.preview .name{font-size:34px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);margin-bottom:6px}
+.preview .sprite{width:220px;height:330px}
+.pstats{width:300px;margin:0 auto 8px;background:rgba(255,255,255,.55);border-radius:14px;padding:6px 10px}
+.strow{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:900;margin:2px 0}
+.strow .sl{width:96px;text-align:start;white-space:nowrap}
+.strow .sb{flex:1;height:12px;background:rgba(27,42,78,.2);border-radius:6px;overflow:hidden;direction:ltr}
+.strow .sb i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--red));border-radius:6px}
 
 /* ---------- CEO ---------- */
 #ceo{background:radial-gradient(ellipse at 50% 42%,#4a3a9a 0%,#1B2A4E 55%,#0b1230 100%)}
@@ -350,6 +356,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 @keyframes shimmer{to{background-position:-200% 0}}
 .ceo-name{font-size:120px;letter-spacing:2px}
 .ceo-role{font-size:62px;margin-top:-8px}
+.ceo-wa{margin-top:16px;font-size:24px;font-weight:900;color:#fff;background:linear-gradient(#3FC35F,#22883C);padding:10px 26px;border-radius:24px;box-shadow:0 6px 0 #17602a,0 10px 18px rgba(0,0,0,.35);animation:tapPulse 1.4s ease-in-out infinite}
 .ceo-tag{margin-top:22px;font-size:26px;font-weight:900;color:#fff;background:rgba(255,255,255,.12);border:3px solid rgba(255,212,71,.7);
   padding:8px 28px;border-radius:30px;box-shadow:0 0 24px rgba(255,212,71,.35)}
 .spark{position:absolute;font-size:36px;animation:twinkle 1.6s ease-in-out infinite;pointer-events:none;z-index:2}
@@ -493,6 +500,7 @@ body.touch #touch{display:block}
       <div class="sprite" id="preview-sprite"></div>
       <div class="shadow"></div>
       <div class="name" id="preview-name"></div>
+      <div class="pstats" id="preview-stats"></div>
       <button class="btn yellow" id="btn-choose">✔ בחר</button>
       <div class="hint" id="shop-hint" style="margin-top:10px;font-size:17px"></div>
     </div>
@@ -512,6 +520,7 @@ body.touch #touch{display:block}
       <div class="gold ceo-name">ליאור לופו</div>
       <div class="gold ceo-role">יוצר משחקים</div>
       <div class="ceo-tag">👔 מנכ"ל המשחק</div>
+      <div class="ceo-wa" id="ceo-wa">📱 היכנסו לקבוצת הווצאפ שלנו ותקבלו קודים חינם!</div>
     </div>
     <canvas id="ceo-confetti" width="1000" height="620"></canvas>
     <button class="btn blue small" id="btn-ceo-back">➜ חזרה</button>
@@ -948,6 +957,8 @@ const I18N_RAW={
  'board.cols':['שחקן|ניצחונות|גולים|XP|גביעים','Player|Wins|Goals|XP|Cups','اللاعب|انتصارات|أهداف|XP|كؤوس','Игрок|Победы|Голы|XP|Кубки'],
  'board.empty':['שחקו אונליין עם חברים וכל חבר יופיע כאן עם השיאים שלו','Play online with friends and each one shows up here with their record','العب أونلاين مع أصدقاء وسيظهر كل صديق هنا مع أرقامه','Играй онлайн с друзьями, и каждый появится здесь со своими рекордами'],
  'stats.friends':['👥 חברים','👥 Friends','👥 الأصدقاء','👥 Друзья'],
+ 'ceo.wa':['📱 היכנסו לקבוצת הווצאפ שלנו ותקבלו קודים חינם!','📱 Join our WhatsApp group and get free codes!','📱 انضموا إلى مجموعة الواتساب لدينا واحصلوا على أكواد مجانية!','📱 Вступай в нашу группу WhatsApp и получай бесплатные коды!'],
+ 'st.speed':['מהירות','Speed','السرعة','Скорость'], 'st.power':['בעיטה','Kick','التسديد','Удар'], 'st.slide':['גליץ\'','Slide','الانزلاق','Подкат'], 'st.jump':['קפיצה','Jump','القفز','Прыжок'],
  'friends.title':['👥 חברים','👥 Friends','👥 الأصدقاء','👥 Друзья'],
  'friends.add':['➕ הוסף חבר','➕ Add friend','➕ أضف صديقًا','➕ Добавить друга'],
  'friends.ph':['שם החבר במשחק','Friend\'s player name','اسم الصديق في اللعبة','Имя друга в игре'],
@@ -1049,11 +1060,24 @@ const PROG_KEY='footballStar.progress';
 const FREE_CHARS=['mbappe','messi','ronaldo','neymar'];
 /* the bigger the legend, the higher the price */
 const PRICES={
-  pele:300, maradona:300, zidane:260, cruyff:240, ronaldinho:220, r9:200, beckham:200, henry:200, zlatan:190, iniesta:190,
+  pele:10000, maradona:5000, zidane:1000, ronaldinho:1000, cruyff:1000, r9:800, beckham:200, henry:200, zlatan:190, iniesta:190,
   kaka:180, modric:180, xavi:170, debruyne:170, bellingham:160, lewa:150, gerrard:140, rooney:140, drogba:140, suarez:140,
   benzema:130, kane:130, yamal:130, baggio:130, haaland:120, salah:120, lautaro:120, vandijk:120, aguero:120,
   griezmann:110, son:110, vini:110, mane:110, dembele:100, saka:100, musiala:100, foden:100 };
 const priceOf = c => PRICES[c.id] || 100;
+const fmtXp = n => Number(n).toLocaleString('en-US');
+/* play style per player: [speed, kick power, slide speed, jump] – 1 = average */
+const CHAR_ST={
+  mbappe:[1.18,1,1,1.05], messi:[1.08,.95,.95,.9], ronaldo:[1.02,1.12,1,1.18], neymar:[1.1,.95,1.12,1], haaland:[1.05,1.2,1,1.05], salah:[1.12,1,1,1],
+  r9:[1.12,1.12,1,1], vini:[1.18,.92,1.05,1], dembele:[1.18,.92,1,.95], iniesta:[.95,.9,1,.9], ronaldinho:[1.06,1.06,1.05,1.02],
+  lewa:[.95,1.15,1,1.05], benzema:[1,1.1,1,1], kane:[.9,1.18,1,1], suarez:[1,1.05,1.18,1], griezmann:[1,1,1.1,1], son:[1.12,1.05,1,1],
+  lautaro:[1,1.1,1.05,1.05], yamal:[1.12,.9,1,.95], zlatan:[.9,1.2,1,1.15], bellingham:[1.05,1.05,1.1,1.1],
+  pele:[1.15,1.15,1.05,1.15], maradona:[1.12,1.05,1.1,1], zidane:[.95,1.1,1,1.1], cruyff:[1.12,1,1,1], beckham:[.9,1.2,1,.95], henry:[1.15,1.05,1,1],
+  kaka:[1.12,1.05,1,1], modric:[.95,1,1.1,1], debruyne:[.95,1.15,1,1], xavi:[.9,.9,1,.9], rooney:[1,1.1,1.15,1], drogba:[.95,1.2,1,1.15],
+  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1] };
+const STAT_KEYS=['speed','power','slide','jump'];
+const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
+const st = p => charStats(p.ch);
 const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
@@ -1410,7 +1434,7 @@ function refreshHome(){
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
   '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
-  '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo',
+  '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn', '.mp-duo .who.me .tag':'mp.you',
   '#cup h2':'cup.title', '#btn-cup-back':'btn.back', '#team-pick .hint':'cup.pick', '#btn-cup-play':'btn.play', '#btn-cup-new':'cup.new',
@@ -1485,7 +1509,7 @@ function buildGallery(){
     const card = document.createElement('div');
     card.className='card'; card.tabIndex=0; card.dataset.i=i;
     const locked=!isUnlocked(c); if(locked) card.classList.add('locked');
-    card.innerHTML = `<div class="sprite">${playerSVG(c)}</div><div class="name">${nm(c)}</div>${locked?`<div class="lock">${T('shop.locked',priceOf(c))}</div>`:''}`;
+    card.innerHTML = `<div class="sprite">${playerSVG(c)}</div><div class="name">${nm(c)}</div>${locked?`<div class="lock">${T('shop.locked',fmtXp(priceOf(c)))}</div>`:''}`;
     const pick = ()=>{ sfx.click(); previewIdx=i; refreshPreview(); };
     card.addEventListener('click', pick);
     card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
@@ -1498,14 +1522,16 @@ function refreshPreview(){
   sprite($('#preview-sprite'), c);
   $('#preview-name').textContent = nm(c);
   $('#preview-sprite').style.filter = locked ? 'grayscale(1) brightness(.8)' : '';
-  const b=$('#btn-choose'); b.textContent = locked ? T('shop.unlock',priceOf(c)) : T('btn.choose');
+  const b=$('#btn-choose'); b.textContent = locked ? T('shop.unlock',fmtXp(priceOf(c))) : T('btn.choose');
+  const s=charStats(c), bar=(k,ic)=>`<div class="strow"><span class="sl">${ic} ${T('st.'+k)}</span><span class="sb"><i style="width:${Math.round(clamp((s[k]-.82)/.4,.08,1)*100)}%"></i></span></div>`;
+  $('#preview-stats').innerHTML = bar('speed','⚡')+bar('power','💥')+bar('slide','🦵')+bar('jump','🦘');
   b.classList.toggle('purple',locked); b.classList.toggle('yellow',!locked);
   const h=$('#shop-hint'); if(h) h.textContent=T('shop.hint',prog.xp);
 }
 function tryBuy(c){
   const price=priceOf(c);
-  if(prog.xp<price){ sfx.lose(); toast(T('shop.noXp',prog.xp,price),'warn'); return false; }
-  if(!confirm(T('shop.confirm',nm(c),price))) return false;
+  if(prog.xp<price){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(price)),'warn'); return false; }
+  if(!confirm(T('shop.confirm',nm(c),fmtXp(price)))) return false;
   prog.xp-=price; prog.unlocked.push(c.id); saveProg(); sfx.win(); toast(T('shop.bought',nm(c)),'ach'); updateXpBadge();
   buildGallery(); refreshPreview(); return true;
 }
@@ -1985,6 +2011,7 @@ function beginMatch(c1, c2, opts){
   players = v2 ? [P1,P2,P3,P4] : [P1,P2]; teamL = v2 ? [P1,P3] : [P1]; teamR = v2 ? [P2,P4] : [P2];
   for(const p of [P3,P4]){ p.el.hidden=!v2; p.sh.hidden=!v2; }
   myChar = localIsP1 ? c1 : c2; opChar = localIsP1 ? c2 : c1;
+  P1.ch=c1; P2.ch=c2; P3.ch=opts?opts.c3:null; P4.ch=opts?opts.c4:null;   // play styles (speed / power / slide / jump)
   sprite(P1.el.querySelector('.sprite'), c1);
   sprite(P2.el.querySelector('.sprite'), c2);
   P1.el.querySelector('.tag').textContent = localIsP1 ? T('game.me',nm(c1)) : nm(c1);
@@ -2038,7 +2065,7 @@ function updateSlides(dt){
     if(p.slideCd>0) p.slideCd-=dt;
     if(p.stunT>0){ p.stunT-=dt; p.vx=0; if(p.stunT<=0) p.el.classList.remove('stunned'); }
     if(p.slideT<=0) continue;
-    p.slideT-=dt; p.vx=p.slideDir*640;
+    p.slideT-=dt; p.vx=p.slideDir*640*st(p).slide;
     if(p.slideT<=0){ p.el.classList.remove('sliding'); continue; }
     if(p.slideHit) continue;
     if(inReach(p) && ball.y<70){                                     // sweep the ball away, low and hard
@@ -2164,8 +2191,8 @@ function movePlayer(p,dt,others){
 }
 function humanInput(p,k,q){                          // second keyboard player (2v2 with a friend)
   let d=0; if(k.left) d-=1; if(k.right) d+=1;
-  if(p.slideT<=0 && p.stunT<=0){ p.vx=d*MOVE; if(d) p.facing=d; }
-  if(q.jump && p.y===0 && p.slideT<=0 && p.stunT<=0) p.vy=JUMP;
+  if(p.slideT<=0 && p.stunT<=0){ p.vx=d*MOVE*st(p).speed; if(d) p.facing=d; }
+  if(q.jump && p.y===0 && p.slideT<=0 && p.stunT<=0) p.vy=JUMP*st(p).jump;
   q.jump=false;
   if(q.kick){ if(p.stunT<=0) doKick(p); q.kick=false; }
   if(q.slide){ doSlide(p); q.slide=false; }
@@ -2175,6 +2202,7 @@ function inReach(p){ return Math.hypot(ball.x-p.x, ball.y-(p.y+22))<REACH; }
 
 function doKick(p,power=1){
   if(p.kickT>0) return;
+  power*=st(p).power;
   p.kickT=.35; p.kicks=(p.kicks|0)+1;
   p.el.classList.remove('kicking'); void p.el.offsetWidth; p.el.classList.add('kicking');
   if(!inReach(p)) return;
@@ -2284,7 +2312,7 @@ function updateAI(dt, ai, side, opps, mate){
   }
   const diff=ai.targetX-ai.x, dir=Math.abs(diff)>6 ? Math.sign(diff) : 0;
   if(ai.slideT>0 || ai.stunT>0) return;           // mid-slide or knocked down: no control
-  ai.vx=dir*MOVE*L.speed;
+  ai.vx=dir*MOVE*L.speed*st(ai).speed;
   const cf = bx<ax ? -1 : 1; ai.facing=cv(cf);     // cf = canonical facing (-1 = toward the goal it attacks)
   const dx=bx-ax, adx=Math.abs(dx), near=inReach(ai);
   const aheadBall = ball.y<40 && adx>50 && adx<170 && Math.sign(dx)===cf;
@@ -2299,7 +2327,7 @@ function updateAI(dt, ai, side, opps, mate){
     const lobSetup = oppInWay && adx<90 && ball.y<60;
     if((blocked && Math.random()<L.jump*dt*8) || (ballHigh && Math.random()<L.jump*dt*10) ||
        (shotComing && Math.random()<L.jump*dt*12) || (hopOver && Math.random()<(.3+L.smart*.7)*dt*10) ||
-       (lobSetup && !support && Math.random()<(.4+L.smart*.6)*dt*9) || (adx<120 && !support && Math.random()<L.jump*dt*1.6)) ai.vy=JUMP;
+       (lobSetup && !support && Math.random()<(.4+L.smart*.6)*dt*9) || (adx<120 && !support && Math.random()<L.jump*dt*1.6)) ai.vy=JUMP*st(ai).jump;
   }
   if(near && bx<ax+8){                              // kick the moment it can (in the air too – that's the lob / header-kick)
     const airborne = ai.y>25, eager = ai.mode==='defend' && bx>600;
@@ -2315,8 +2343,8 @@ function loop(t){
   if(state==='play'){
     // player 1
     let d=0; if(keys.left) d-=1; if(keys.right) d+=1;
-    if(P1.slideT<=0 && P1.stunT<=0){ P1.vx=d*MOVE; if(d) P1.facing=d; }
-    if(jumpQueued && P1.y===0 && P1.slideT<=0 && P1.stunT<=0) P1.vy=JUMP;
+    if(P1.slideT<=0 && P1.stunT<=0){ P1.vx=d*MOVE*st(P1).speed; if(d) P1.facing=d; }
+    if(jumpQueued && P1.y===0 && P1.slideT<=0 && P1.stunT<=0) P1.vy=JUMP*st(P1).jump;
     jumpQueued=false;
     if(kickQueued){ if(P1.stunT<=0) doKick(P1); kickQueued=false; }
     if(slideQueued){ doSlide(P1); slideQueued=false; }
@@ -2473,8 +2501,8 @@ $('#btn-mp-play').addEventListener('click', ()=>{ if(!mp || mp.myPick==null) ret
 /* ----- in-match networking ----- */
 function applyRemote(){                          // host: drive P2 with the guest's inputs
   const r=mp.rin; let d=0; if(r.l) d-=1; if(r.r) d+=1;
-  if(P2.slideT<=0 && P2.stunT<=0){ P2.vx=d*MOVE; if(d) P2.facing=d; }
-  if(r.j){ if(P2.y===0 && P2.slideT<=0 && P2.stunT<=0) P2.vy=JUMP; r.j=0; }
+  if(P2.slideT<=0 && P2.stunT<=0){ P2.vx=d*MOVE*st(P2).speed; if(d) P2.facing=d; }
+  if(r.j){ if(P2.y===0 && P2.slideT<=0 && P2.stunT<=0) P2.vy=JUMP*st(P2).jump; r.j=0; }
   if(r.k){ if(P2.stunT<=0) doKick(P2); r.k=0; }
   if(r.s){ doSlide(P2); r.s=0; }
 }
