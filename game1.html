@@ -53,6 +53,12 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #home .side{position:absolute;top:128px;right:40px;display:flex;flex-direction:column;gap:18px;align-items:flex-end}
 #home .side .btn{min-width:210px}
 #btn-play{position:absolute;bottom:34px;left:40px}
+#btn-stats{position:absolute;bottom:162px;left:40px}
+.stats{display:flex;gap:18px;justify-content:center;margin:6px 0 14px}
+.stat{min-width:150px;padding:14px 10px;border-radius:22px;color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.2)}
+.stat .n{font-size:56px;font-weight:900;line-height:1}
+.stat .l{font-size:22px;font-weight:900;margin-top:4px}
+.stat.win{background:var(--green)}.stat.draw{background:var(--blue)}.stat.loss{background:var(--red)}
 .sun{position:absolute;top:26px;left:40px;width:110px;height:110px;border-radius:50%;background:var(--yellow);
   box-shadow:0 0 0 14px rgba(255,212,71,.35),0 0 0 30px rgba(255,212,71,.15)}
 .cloud{position:absolute;width:140px;height:44px;background:#fff;border-radius:40px;opacity:.95}
@@ -167,10 +173,18 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #end .sub{font-size:26px;font-weight:900;color:#5b6a8a}
 #exit-modal .sprite{width:180px;height:270px;margin:0 auto 10px}
 
-#touch{position:absolute;left:0;right:0;bottom:0;display:none;justify-content:space-between;padding:0 24px 24px;pointer-events:none}
-#touch .grp{display:flex;gap:14px;pointer-events:auto}
-#touch .btn{font-size:36px;padding:6px 26px;border-radius:50px;opacity:.9}
-body.touch #touch{display:flex}
+/* translucent on-screen controls (phones/tablets): ◀ ▶ bottom-left, jump/kick bottom-right */
+#touch{position:absolute;inset:0;display:none;pointer-events:none;direction:ltr}
+#touch .grp{position:absolute;bottom:20px;display:flex;gap:16px;pointer-events:auto;touch-action:none}
+#touch .grp.move{left:20px}
+#touch .grp.act{right:20px}
+#touch .tb{width:104px;height:104px;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:rgba(255,255,255,.18);
+  color:#fff;font-size:46px;font-weight:900;display:flex;align-items:center;justify-content:center;
+  text-shadow:0 2px 6px rgba(0,0,0,.5);user-select:none;-webkit-user-select:none;transition:background .08s,transform .08s}
+#touch .tb.jump{background:rgba(63,195,95,.3);border-color:rgba(63,195,95,.8)}
+#touch .tb.kick{background:rgba(255,122,61,.3);border-color:rgba(255,122,61,.85)}
+#touch .tb.pressed{background:rgba(255,255,255,.5);transform:scale(.92)}
+body.touch #touch{display:block}
 </style>
 </head>
 <body>
@@ -193,6 +207,7 @@ body.touch #touch{display:flex}
       <div class="shadow"></div>
       <div class="name" id="home-name"></div>
     </div>
+    <button class="btn yellow small" id="btn-stats">🏆 ניצחונות</button>
     <button class="btn green play" id="btn-play">שחק ▶</button>
   </section>
 
@@ -246,8 +261,8 @@ body.touch #touch{display:flex}
     <canvas id="confetti" width="1000" height="620"></canvas>
     <div id="goal-flash">גול!!!</div>
     <div id="touch">
-      <div class="grp"><button class="btn blue" data-k="left">◀</button><button class="btn blue" data-k="right">▶</button></div>
-      <div class="grp"><button class="btn green" data-k="jump">⤒</button><button class="btn orange" data-k="kick">⚽</button></div>
+      <div class="grp move" id="tmove"><div class="tb" data-k="left">◀</div><div class="tb" data-k="right">▶</div></div>
+      <div class="grp act"><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
     </div>
     <div class="overlay" id="end"><div class="panel"><h2 id="end-title"></h2><div class="sub" id="end-sub"></div></div></div>
   </section>
@@ -262,6 +277,21 @@ body.touch #touch{display:flex}
         נגיעה בכדור דוחפת אותו. 3 גולים או 4 דקות – ומי שמוביל מנצח!
       </div>
       <br><button class="btn small" id="btn-level-cancel">חזרה</button>
+    </div>
+  </div>
+
+  <!-- ===== STATS MODAL ===== -->
+  <div class="overlay" id="stats-modal">
+    <div class="panel">
+      <h2>🏆 הניצחונות שלי</h2>
+      <div class="stats">
+        <div class="stat win"><div class="n" id="st-w">0</div><div class="l">ניצחונות</div></div>
+        <div class="stat draw"><div class="n" id="st-d">0</div><div class="l">תיקו</div></div>
+        <div class="stat loss"><div class="n" id="st-l">0</div><div class="l">הפסדים</div></div>
+      </div>
+      <div class="hint" id="st-msg"></div>
+      <br><button class="btn small blue" id="btn-stats-close">חזרה</button>
+      <button class="btn small red" id="btn-stats-reset">איפוס</button>
     </div>
   </div>
 
@@ -454,11 +484,11 @@ $('#btn-ceo-back').addEventListener('click', ()=>{ sfx.click(); clearInterval(ce
 
 /* ---------- levels ---------- */
 const LEVELS = [
-  { name:'קל',    color:'green',  speed:.55, react:.65, kick:.15, jump:.12, err:130, power:.7 },
-  { name:'בינוני',color:'blue',   speed:.78, react:.42, kick:.35, jump:.28, err:80,  power:.8 },
-  { name:'קשה',   color:'orange', speed:.98, react:.25, kick:.6,  jump:.5,  err:40,  power:.9 },
-  { name:'מטורף', color:'pink',   speed:1.18,react:.12, kick:.85, jump:.75, err:15,  power:1 },
-  { name:'מאסטר', color:'purple', speed:1.38,react:.04, kick:1,   jump:.95, err:0,   power:1.05 },
+  { name:'קל',    color:'green',  speed:.55, react:.65, kick:.15, jump:.35, err:130, power:.7 },
+  { name:'בינוני',color:'blue',   speed:.78, react:.42, kick:.35, jump:.5,  err:80,  power:.8 },
+  { name:'קשה',   color:'orange', speed:.98, react:.25, kick:.6,  jump:.7,  err:40,  power:.9 },
+  { name:'מטורף', color:'pink',   speed:1.18,react:.12, kick:.85, jump:.85, err:15,  power:1 },
+  { name:'מאסטר', color:'purple', speed:1.38,react:.04, kick:1,   jump:1,   err:0,   power:1.05 },
 ];
 (function buildLevels(){
   const box=$('#levels');
@@ -470,6 +500,28 @@ const LEVELS = [
   });
 })();
 $('#btn-play').addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.add('show'); });
+
+/* ---------- wins record (saved in this browser) ---------- */
+const STATS_KEY='footballStar.stats';
+function loadStats(){
+  try{ const s=JSON.parse(localStorage.getItem(STATS_KEY)); if(s&&typeof s==='object') return {w:s.w|0, d:s.d|0, l:s.l|0}; }catch(e){}
+  return {w:0,d:0,l:0};
+}
+function saveStats(s){ try{ localStorage.setItem(STATS_KEY, JSON.stringify(s)); }catch(e){} }
+function recordResult(k){ const s=loadStats(); s[k]++; saveStats(s); }
+function showStats(){
+  const s=loadStats(), total=s.w+s.d+s.l;
+  $('#st-w').textContent=s.w; $('#st-d').textContent=s.d; $('#st-l').textContent=s.l;
+  $('#st-msg').textContent =
+    total===0 ? 'עוד לא שיחקת! לחץ על "שחק" ותתחיל לנצח 💪' :
+    s.w>s.l   ? `שיחקת ${total} משחקים – אתה מנצח יותר ממה שאתה מפסיד! 🔥` :
+    s.w===s.l ? `שיחקת ${total} משחקים – מאוזן בדיוק. עוד ניצחון אחד! ⚽` :
+                `שיחקת ${total} משחקים – ההפסדים מובילים בינתיים… תנצח אותם! 💪`;
+  $('#stats-modal').classList.add('show');
+}
+$('#btn-stats').addEventListener('click', ()=>{ sfx.click(); showStats(); });
+$('#btn-stats-close').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); });
+$('#btn-stats-reset').addEventListener('click', ()=>{ sfx.click(); if(confirm('לאפס את כל הניצחונות וההפסדים?')){ saveStats({w:0,d:0,l:0}); showStats(); } });
 $('#btn-level-cancel').addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.remove('show'); });
 
 /* ---------- fans ---------- */
@@ -508,7 +560,7 @@ function buildPitch(){
   const line='stroke="#fff" stroke-width="3.5" fill="none" stroke-linejoin="round" opacity=".92"';
   let s='<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg"><defs>'+
     '<pattern id="net" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0H7M0 0V7" stroke="rgba(255,255,255,.75)" stroke-width="1"/></pattern></defs>';
-  s+='<rect width="1000" height="620" fill="#3FB35B"/>';
+  s+='<rect y="78" width="1000" height="542" fill="#3FB35B"/>';   // starts below the fans so they stay visible
   // mown stripes converging toward the vanishing point
   for(let i=-4;i<14;i++){
     const x0=i*100, x1=x0+100;
@@ -582,8 +634,8 @@ const confetti    = makeConfetti($('#confetti'),     ['#FFD447','#FF7A3D','#3D8B
 const ceoConfetti = makeConfetti($('#ceo-confetti'), ['#FFD447','#FFE27A','#fff7c2','#C98A00','#fff','#FF7A3D','#FFD447']);
 
 /* ---------- game constants ---------- */
-const FIELD_W=1000, GROUND_Y=430, PW=72, PH=108, R=13, GOAL_W=70, GOAL_H=140;
-const MOVE=340, JUMP=800, G=2100, REACH=72, CEIL=330;
+const FIELD_W=1000, GROUND_Y=430, PW=72, PH=108, R=13, GOAL_W=70, GOAL_H=180;   // goal raised by 1.5 ball heights
+const MOVE=340, JUMP=800, G=2100, REACH=72, CEIL=400;
 const MINX=GOAL_W-16+PW/2, MAXX=FIELD_W-GOAL_W+16-PW/2;
 const MATCH_TIME=240;
 
@@ -614,12 +666,25 @@ window.addEventListener('keydown', e=>{
 window.addEventListener('keyup', e=>{ if(setKey(e.code,false)) e.preventDefault(); });
 window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=false; });
 
-document.querySelectorAll('#touch .btn').forEach(b=>{
-  const k=b.dataset.k;
-  const down=e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='kick') kickQueued=true; else keys[k]=true; };
-  const up=e=>{ e.preventDefault(); b.classList.remove('pressed'); if(k==='left'||k==='right') keys[k]=false; };
-  b.addEventListener('pointerdown',down); b.addEventListener('pointerup',up); b.addEventListener('pointercancel',up); b.addEventListener('pointerleave',up);
-});
+/* touch controls: slide a finger across ◀ ▶ without lifting to change direction; jump/kick are taps */
+(function setupTouch(){
+  const move=$('#tmove'), mb=[...move.querySelectorAll('.tb')];
+  let moveId=null;
+  const setMove=x=>{
+    const r=move.getBoundingClientRect(), left=x<r.left+r.width/2;
+    keys.left=left; keys.right=!left;
+    mb[0].classList.toggle('pressed',left); mb[1].classList.toggle('pressed',!left);
+  };
+  const clearMove=()=>{ keys.left=keys.right=false; mb.forEach(b=>b.classList.remove('pressed')); moveId=null; };
+  move.addEventListener('pointerdown', e=>{ e.preventDefault(); moveId=e.pointerId; try{ move.setPointerCapture(e.pointerId); }catch(_){} setMove(e.clientX); });
+  move.addEventListener('pointermove', e=>{ if(e.pointerId===moveId) setMove(e.clientX); });
+  ['pointerup','pointercancel'].forEach(t=>move.addEventListener(t, e=>{ if(e.pointerId===moveId) clearMove(); }));
+  document.querySelectorAll('#touch .act .tb').forEach(b=>{
+    const k=b.dataset.k;
+    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else kickQueued=true; });
+    ['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t, ()=>b.classList.remove('pressed')));
+  });
+})();
 
 /* ---------- game flow ---------- */
 let myChar, opChar;
@@ -673,9 +738,9 @@ function endGame(){
   state='end';
   const t=$('#end-title'), sub=$('#end-sub');
   let win;
-  if(score.me>score.op){ win=true; t.textContent='ניצחת! 🏆'; sub.textContent='כל הכבוד, כוכב אמיתי!'; sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); }
-  else if(score.me<score.op){ win=false; t.textContent='הפסדת 😢'; sub.textContent='נסה שוב – בפעם הבאה תנצח!'; sfx.lose(); }
-  else { win=false; t.textContent='תיקו 🤝'; sub.textContent='תיקו נחשב הפסד... כמעט! נסה שוב'; sfx.lose(); }
+  if(score.me>score.op){ win=true; t.textContent='ניצחת! 🏆'; sub.textContent='כל הכבוד, כוכב אמיתי!'; sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); recordResult('w'); }
+  else if(score.me<score.op){ win=false; t.textContent='הפסדת 😢'; sub.textContent='נסה שוב – בפעם הבאה תנצח!'; sfx.lose(); recordResult('l'); }
+  else { win=false; t.textContent='תיקו 🤝'; sub.textContent='תיקו נחשב הפסד... כמעט! נסה שוב'; sfx.lose(); recordResult('d'); }
   updateTimer();
   $('#end').classList.add('show');
   setTimeout(goHome, 3000);
@@ -719,7 +784,7 @@ function doKick(p,power=1){
   if(!inReach(p)) return;
   let d=ball.x-p.x; d=Math.abs(d)<10 ? p.facing : Math.sign(d);
   ball.vx=d*(900+Math.abs(p.vx)*.4)*power;
-  ball.vy=320+Math.random()*200;
+  ball.vy=720+Math.random()*330;            // high arc – a strong kick can sail over the goal and bounce back
   sfx.kick();
 }
 
@@ -731,12 +796,12 @@ function collideBall(p){
   if(d<0.001){ dx=ball.x<p.x?-1:1; dy=0; d=1; }
   const nx=dx/d, ny=dy/d;
   ball.x=cx+nx*R; ball.y=cy+ny*R;
-  if(Math.abs(nx)>Math.abs(ny)){                 // side hit → push forward
-    const push=Math.max(250, Math.abs(ball.vx)*.55);
-    ball.vx=nx*push+p.vx*.9;
-    if(ball.vy<110) ball.vy=110+Math.abs(p.vx)*.25;
+  if(Math.abs(nx)>Math.abs(ny)){                 // side hit → gentle nudge, the ball stays close
+    const push=Math.max(120, Math.abs(ball.vx)*.45);
+    ball.vx=nx*push+p.vx*.6;
+    if(ball.vy<80) ball.vy=80+Math.abs(p.vx)*.15;
   }else if(ny>0){                                 // header
-    ball.vy=Math.max(Math.abs(ball.vy)*.7, 300); ball.vx+=p.vx*.5+nx*120;
+    ball.vy=Math.max(Math.abs(ball.vy)*.6, 240); ball.vx+=p.vx*.4+nx*80;
   }else{ ball.vy=Math.min(ball.vy,-150); }
   sfx.bounce();
 }
@@ -787,8 +852,9 @@ function updateAI(dt){
   ai.facing = ball.x<ai.x ? -1 : 1;
   if(ai.y===0){
     const blocked = dir!==0 && overlaps(ai, ai.x+dir*12, P1);
-    const ballHigh = ball.y>60 && Math.abs(ball.x-ai.x)<80;
-    if((blocked && Math.random()<L.jump*dt*4) || (ballHigh && Math.random()<L.jump*dt*3)) ai.vy=JUMP;
+    const ballHigh = ball.y>50 && Math.abs(ball.x-ai.x)<140;
+    const ballNear = Math.abs(ball.x-ai.x)<90;
+    if((blocked && Math.random()<L.jump*dt*6) || (ballHigh && Math.random()<L.jump*dt*6) || (ballNear && Math.random()<L.jump*dt*1.5)) ai.vy=JUMP;
   }
   if(ai.wantKick && ball.x<ai.x+12 && inReach(ai) && Math.random()<L.kick*dt*9) doKick(ai,L.power);
 }
