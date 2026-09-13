@@ -474,7 +474,7 @@ body.touch #touch{display:block}
       <div class="levels" id="levels"></div>
       <div class="hint">
         <kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה<br>
-        נגיעה בכדור דוחפת אותו. 3 גולים או 4 דקות – ומי שמוביל מנצח!
+        נגיעה בכדור דוחפת אותו. הראשון שמבקיע 3 גולים מנצח, או מי שמוביל אחרי 4 דקות!
       </div>
       <br><button class="btn small" id="btn-level-cancel">חזרה</button>
     </div>
@@ -1011,7 +1011,7 @@ function scoreGoal(who){
   P1.el.classList.remove('running'); P2.el.classList.remove('running');
   goalFx(); netEv('goal');
   setTimeout(()=>{
-    if(score.me+score.op>=3){ endGame(); return; }
+    if(score.me>=3 || score.op>=3){ endGame(); return; }   // first to 3 goals wins
     resetPositions(); sfx.whistle(); netEv('whistle'); state='play'; lastT=performance.now();
   }, 1900);
 }
