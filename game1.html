@@ -99,6 +99,9 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #btn-settings{left:242px}
 #btn-daily{left:312px}
 #btn-codes{left:382px}
+#xp-badge{position:absolute;top:106px;left:172px;font-size:24px;font-weight:900;color:var(--navy);background:linear-gradient(#FFE27A,#F5C400);padding:6px 18px;border-radius:18px;
+  box-shadow:0 5px 0 #C99A10,0 8px 14px rgba(0,0,0,.2);direction:ltr;white-space:nowrap;transition:transform .15s}
+#xp-badge.pop{transform:scale(1.15)}
 #code-input{width:300px;font-size:34px;font-weight:900;text-align:center;letter-spacing:4px;direction:ltr;text-transform:uppercase;border:4px solid var(--purple);border-radius:16px;
   padding:6px;font-family:inherit;color:var(--navy);background:#fff;user-select:text;-webkit-user-select:text;outline:none;margin:8px 0}
 #code-input.shake{animation:shake .4s}
@@ -453,6 +456,7 @@ body.touch #touch{display:block}
     <button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button>
     <button class="icon-btn" id="btn-daily" title="משחק יומי">📅</button>
     <button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
+    <div id="xp-badge">⭐ 0 XP</div>
     <button class="btn pink small" id="btn-2v2">👥 2 על 2</button>
     <button class="btn orange small" id="btn-pk">🥅 פנדלים</button>
     <button class="btn yellow small" id="btn-stats">🏆 ניצחונות</button>
@@ -982,10 +986,11 @@ function toast(msg, cls){
   const d=document.createElement('div'); d.className='tst '+(cls||''); d.textContent=msg; box.appendChild(d);
   setTimeout(()=>d.classList.add('out'), 2600); setTimeout(()=>d.remove(), 3100);
 }
-function addXP(n){ if(!(n>0)) return; prog.xp+=n; saveProg(); toast(T('xp.gain',n),'xp'); }
+function updateXpBadge(){ const b=document.getElementById('xp-badge'); if(!b) return; b.textContent='⭐ '+prog.xp+' XP'; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(()=>b.classList.remove('pop'),200); }
+function addXP(n){ if(!(n>0)) return; prog.xp+=n; saveProg(); toast(T('xp.gain',n),'xp'); updateXpBadge(); }
 function achieve(id){
   if(prog.ach[id]) return; const a=ACH.find(x=>x[0]===id); if(!a) return;
-  prog.ach[id]=Date.now(); prog.xp+=a[1]; saveProg();
+  prog.ach[id]=Date.now(); prog.xp+=a[1]; saveProg(); updateXpBadge();
   setTimeout(()=>{ toast(T('ach.new', T('a.'+id), a[1]), 'ach'); try{ sfx.win(); }catch(e){} }, 400);
 }
 const dayKey = () => new Date().toISOString().slice(0,10);
@@ -1319,6 +1324,7 @@ let previewIdx = 0;     // highlighted in the characters screen
 function refreshHome(){
   sprite($('#home-sprite'), CHARS[selected]);
   $('#home-name').textContent = nm(CHARS[selected]);
+  updateXpBadge();
 }
 
 /* ---------- language switching ---------- */
@@ -1415,7 +1421,7 @@ function tryBuy(c){
   const price=priceOf(c);
   if(prog.xp<price){ sfx.lose(); toast(T('shop.noXp',prog.xp,price),'warn'); return false; }
   if(!confirm(T('shop.confirm',nm(c),price))) return false;
-  prog.xp-=price; prog.unlocked.push(c.id); saveProg(); sfx.win(); toast(T('shop.bought',nm(c)),'ach');
+  prog.xp-=price; prog.unlocked.push(c.id); saveProg(); sfx.win(); toast(T('shop.bought',nm(c)),'ach'); updateXpBadge();
   buildGallery(); refreshPreview(); return true;
 }
 
