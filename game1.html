@@ -88,8 +88,42 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #btn-mp-play.ready{background:var(--yellow);color:var(--navy);text-shadow:none;box-shadow:0 8px 0 #C99A10,0 14px 20px rgba(0,0,0,.22)}
 #btn-mp-play:disabled{opacity:.5;cursor:not-allowed}
 #btn-play{position:absolute;bottom:34px;left:40px}
-#btn-stats{position:absolute;bottom:162px;left:40px}
-#btn-pk{position:absolute;bottom:224px;left:40px}
+#btn-stats{position:absolute;bottom:176px;left:40px}
+#btn-pk{position:absolute;bottom:240px;left:40px}
+#btn-2v2{position:absolute;bottom:304px;left:40px}
+.icon-btn{position:absolute;top:34px;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;font-size:30px;background:#fff;color:var(--navy);
+  box-shadow:0 6px 0 rgba(27,42,78,.3),0 10px 16px rgba(0,0,0,.18);transition:transform .08s,box-shadow .08s;display:flex;align-items:center;justify-content:center}
+.icon-btn:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(27,42,78,.3)}
+#btn-music{left:172px}
+#btn-settings{left:242px}
+
+/* ---------- settings / music / 2v2 ---------- */
+.setrow{display:flex;align-items:center;gap:16px;margin:10px 0;font-size:24px;font-weight:900;justify-content:space-between}
+.setrow input[type=range]{width:300px;accent-color:var(--blue);height:28px;cursor:pointer}
+.langs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.langs .btn.on{outline:5px solid var(--yellow)}
+#music-screen h2{position:absolute;top:22px;right:40px}
+#btn-music-back{position:absolute;top:22px;left:34px}
+.music-cols{position:absolute;left:30px;right:30px;top:96px;display:flex;gap:24px}
+.music-col{flex:1;background:rgba(255,255,255,.4);border-radius:22px;padding:10px;max-height:462px;overflow-y:auto;scrollbar-width:thin}
+.music-col h3{font-size:24px;font-weight:900;text-align:center;margin-bottom:6px}
+.trk{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:3px 12px;margin-bottom:4px;cursor:pointer;font-size:17px;font-weight:900;border:3px solid #fff;box-shadow:0 3px 0 rgba(27,42,78,.2)}
+.trk:hover{transform:scale(1.02)}
+.trk.on{border-color:var(--yellow);background:#FFF6CF}
+.trk .ic{font-size:22px;width:30px;text-align:center}
+.trk .eq{margin-inline-start:auto;display:none;gap:2px;align-items:flex-end;height:18px}
+.trk.on .eq{display:flex}
+.trk .eq i{display:block;width:4px;background:var(--green);animation:eq .6s infinite alternate}
+.trk .eq i:nth-child(2){animation-delay:.2s}.trk .eq i:nth-child(3){animation-delay:.4s}
+@keyframes eq{from{height:4px}to{height:18px}}
+#music-now{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:22px;font-weight:900;color:#fff;-webkit-text-stroke:1px var(--navy);text-shadow:0 3px 0 var(--navy)}
+#btn-music-off{position:absolute;left:34px;bottom:14px}
+.v2opts{display:flex;gap:14px;justify-content:center;margin-bottom:12px}
+.v2opts .btn.on{outline:5px solid var(--yellow)}
+#v2-partner{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-height:230px;overflow-y:auto;padding:4px}
+#v2-partner .mpcard{width:66px;height:80px;font-size:11px}
+#v2-partner .mpcard .sprite{width:36px;height:54px}
+#v2-modal .panel{max-width:900px}
 .stats{display:flex;gap:14px;justify-content:center;margin:6px 0 14px}
 .stat{min-width:140px;padding:14px 10px;border-radius:22px;color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.2)}
 .stat .n{font-size:56px;font-weight:900;line-height:1}
@@ -102,7 +136,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #btn-cup-back{position:absolute;top:22px;left:34px;z-index:5}
 #team-pick{position:absolute;inset:0;padding-top:78px;text-align:center}
 #team-pick .hint{font-size:24px;font-weight:900;color:#fff;-webkit-text-stroke:1px var(--navy);text-shadow:0 3px 0 var(--navy);margin-bottom:10px}
-.teams{display:grid;grid-template-columns:repeat(8,1fr);gap:9px;padding:0 30px}
+.teams{display:grid;grid-template-columns:repeat(8,1fr);gap:9px;padding:0 30px 12px;max-height:492px;overflow-y:auto;scrollbar-width:thin}
 .team{background:#fff;border-radius:14px;padding:6px 4px;cursor:pointer;border:4px solid #fff;box-shadow:0 5px 0 rgba(27,42,78,.22);transition:transform .1s;font-weight:900;font-size:15px;line-height:1.15}
 .team:hover{transform:scale(1.06);border-color:var(--yellow)}
 .team .flag{font-size:32px;display:block;line-height:1.1}
@@ -331,6 +365,9 @@ body.touch #touch{display:block}
       <div class="shadow"></div>
       <div class="name" id="home-name"></div>
     </div>
+    <button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button>
+    <button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button>
+    <button class="btn pink small" id="btn-2v2">👥 2 על 2</button>
     <button class="btn orange small" id="btn-pk">🥅 פנדלים</button>
     <button class="btn yellow small" id="btn-stats">🏆 ניצחונות</button>
     <button class="btn green play" id="btn-play">שחק ▶</button>
@@ -373,6 +410,9 @@ body.touch #touch{display:block}
     <div id="fans"></div>
     <div id="pitch"></div>
     <div class="pshadow" id="sh1"></div><div class="pshadow" id="sh2"></div><div class="pshadow" id="shb"></div>
+    <div class="pshadow" id="sh3" hidden></div><div class="pshadow" id="sh4" hidden></div>
+    <div class="player" id="p3" hidden><div class="tag"></div><div class="sprite"></div></div>
+    <div class="player" id="p4" hidden><div class="tag"></div><div class="sprite"></div></div>
     <div class="player me" id="p1"><div class="tag">אני</div><div class="sprite"></div></div>
     <div class="player" id="p2"><div class="tag">יריב</div><div class="sprite"></div></div>
     <div id="ball"></div>
@@ -505,6 +545,42 @@ body.touch #touch{display:block}
     </div>
   </div>
 
+  <!-- ===== MUSIC SCREEN ===== -->
+  <section id="music-screen" class="screen">
+    <h2 id="music-title">🎵 מוזיקה</h2>
+    <button class="btn blue small" id="btn-music-back">➜ חזרה</button>
+    <div class="music-cols">
+      <div class="music-col"><h3 id="music-il-h">🎶 ישראלי</h3><div id="music-il"></div></div>
+      <div class="music-col"><h3 id="music-intl-h">🌍 בינלאומי</h3><div id="music-intl"></div></div>
+    </div>
+    <button class="btn red small" id="btn-music-off">🔇 בלי מוזיקה</button>
+    <div id="music-now"></div>
+  </section>
+
+  <!-- ===== SETTINGS MODAL ===== -->
+  <div class="overlay" id="settings-modal">
+    <div class="panel" style="min-width:560px">
+      <h2 id="set-title">⚙️ הגדרות</h2>
+      <div class="setrow"><span id="set-sfx-l">🔊 צלילי המשחק</span><input type="range" id="set-sfx" min="0" max="100"></div>
+      <div class="setrow"><span id="set-music-l">🎵 עוצמת המוזיקה</span><input type="range" id="set-music" min="0" max="100"></div>
+      <div class="setrow" style="justify-content:center"><span id="set-lang-l">🌍 שפה</span></div>
+      <div class="langs" id="set-langs"></div>
+      <br><button class="btn small blue" id="btn-settings-close">חזרה</button>
+    </div>
+  </div>
+
+  <!-- ===== 2v2 MODAL ===== -->
+  <div class="overlay" id="v2-modal">
+    <div class="panel">
+      <h2 id="v2-title">👥 עם מי לשחק 2 על 2?</h2>
+      <div class="v2opts"><button class="btn green on" id="v2-ai">🤖 שותף מחשב</button><button class="btn blue" id="v2-human">⌨️ חבר על המקלדת</button></div>
+      <div class="hint" id="v2-keys" hidden></div>
+      <div class="hint" id="v2-pick-l">בחרו את השותף שלכם:</div>
+      <div id="v2-partner"></div>
+      <br><button class="btn green" id="v2-go">שחק ▶</button> <button class="btn small" id="v2-cancel">חזרה</button>
+    </div>
+  </div>
+
   <!-- ===== PENALTY LEVEL MODAL ===== -->
   <div class="overlay" id="pk-level-modal">
     <div class="panel">
@@ -531,6 +607,153 @@ body.touch #touch{display:block}
    Football Star – single-file game
    ========================================================= */
 'use strict';
+
+/* =========================================================
+   SETTINGS + LANGUAGES (he / en / ar / ru)
+   ========================================================= */
+const SET_KEY='footballStar.settings';
+const settings=(()=>{ try{ const s=JSON.parse(localStorage.getItem(SET_KEY)); if(s&&typeof s==='object') return Object.assign({lang:'he',sfx:.8,music:.6,track:null},s); }catch(e){} return {lang:'he',sfx:.8,music:.6,track:null}; })();
+const saveSettings=()=>{ try{ localStorage.setItem(SET_KEY, JSON.stringify(settings)); }catch(e){} };
+const LANGS={ he:{dir:'rtl',name:'עברית'}, en:{dir:'ltr',name:'English'}, ar:{dir:'rtl',name:'العربية'}, ru:{dir:'ltr',name:'Русский'} };
+let lang = LANGS[settings.lang] ? settings.lang : 'he';
+/* every UI string: he / en / ar / ru */
+const I18N_RAW={
+ 'home.sub':['כוכב הכדורגל','Football Star','نجم كرة القدم','Звезда футбола'],
+ 'btn.chars':['🧑 דמויות','🧑 Characters','🧑 الشخصيات','🧑 Персонажи'],
+ 'btn.exit':['🚪 צא','🚪 Exit','🚪 خروج','🚪 Выход'],
+ 'btn.ceo':['👔 מנכ"ל המשחק','👔 Game CEO','👔 مدير اللعبة','👔 Директор игры'],
+ 'btn.mp':['👥 מרובה משתתפים','👥 Multiplayer','👥 لعب جماعي','👥 Мультиплеер'],
+ 'btn.2v2':['👥 2 על 2','👥 2 vs 2','👥 2 ضد 2','👥 2 на 2'],
+ 'btn.pk':['🥅 פנדלים','🥅 Penalties','🥅 ركلات ترجيح','🥅 Пенальти'],
+ 'btn.stats':['🏆 ניצחונות','🏆 Wins','🏆 الانتصارات','🏆 Победы'],
+ 'btn.play':['שחק ▶','Play ▶','العب ▶','Играть ▶'],
+ 'btn.back':['➜ חזרה','➜ Back','➜ رجوع','➜ Назад'],
+ 'btn.back2':['חזרה','Back','رجوع','Назад'],
+ 'btn.choose':['✔ בחר','✔ Choose','✔ اختر','✔ Выбрать'],
+ 'btn.music':['מוזיקה','Music','الموسيقى','Музыка'],
+ 'btn.settings':['הגדרות','Settings','الإعدادات','Настройки'],
+ 'chars.title':['בחרו דמות','Choose a character','اختر شخصية','Выбери персонажа'],
+ 'ceo.name':['ליאור לופו','Lior Lupu','ليئور لوبو','Лиор Лупу'],
+ 'ceo.role':['יוצר משחקים','Game Creator','صانع الألعاب','Создатель игр'],
+ 'mp.title':['👥 מרובה משתתפים','👥 Multiplayer','👥 لعب جماعي','👥 Мультиплеер'],
+ 'mp.host.h':['🔑 צור משחק','🔑 Create a game','🔑 أنشئ لعبة','🔑 Создать игру'],
+ 'mp.host.p':['קבל קוד ושלח אותו לחבר','Get a code and send it to a friend','احصل على رمز وأرسله لصديقك','Получи код и отправь другу'],
+ 'mp.host.btn':['קבל קוד','Get code','احصل على رمز','Получить код'],
+ 'mp.wait':['מחכה שהחבר יכניס את הקוד… ⏳','Waiting for your friend to enter the code… ⏳','بانتظار أن يدخل صديقك الرمز… ⏳','Ждём, пока друг введёт код… ⏳'],
+ 'mp.join.h':['🚀 הצטרף למשחק','🚀 Join a game','🚀 انضم إلى لعبة','🚀 Присоединиться'],
+ 'mp.join.p':['הכנס את הקוד שקיבלת מהחבר','Enter the code you got from your friend','أدخل الرمز الذي حصلت عليه من صديقك','Введи код, полученный от друга'],
+ 'mp.join.btn':['הצטרף','Join','انضم','Войти'],
+ 'mp.you':['אתה','You','أنت','Ты'],
+ 'mp.friend':['החבר','Friend','الصديق','Друг'],
+ 'mp.ready':[' · מוכן ✔',' · ready ✔',' · جاهز ✔',' · готов ✔'],
+ 'mp.pick':['בחר דמות 👆','Pick a character 👆','اختر شخصية 👆','Выбери персонажа 👆'],
+ 'mp.picking':['החבר בוחר…','Friend is choosing…','الصديق يختار…','Друг выбирает…'],
+ 'mp.readyWait':['✔ מוכן! מחכה לחבר…','✔ Ready! Waiting for friend…','✔ جاهز! بانتظار الصديق…','✔ Готов! Ждём друга…'],
+ 'mp.connecting':['מתחבר…','Connecting…','جارٍ الاتصال…','Подключение…'],
+ 'mp.offline':['אין חיבור לאינטרנט 😕','No internet connection 😕','لا يوجد اتصال بالإنترنت 😕','Нет подключения к интернету 😕'],
+ 'mp.sendCode':['שלח לחבר את הקוד {0}','Send your friend the code {0}','أرسل لصديقك الرمز {0}','Отправь другу код {0}'],
+ 'mp.err':['שגיאת חיבור 😕 ({0})','Connection error 😕 ({0})','خطأ في الاتصال 😕 ({0})','Ошибка подключения 😕 ({0})'],
+ 'mp.code4':['הקוד הוא 4 תווים','The code has 4 characters','الرمز مكوّن من 4 رموز','Код состоит из 4 символов'],
+ 'mp.connectingTo':['מתחבר ל-{0}…','Connecting to {0}…','جارٍ الاتصال بـ {0}…','Подключение к {0}…'],
+ 'mp.notFound':['לא נמצא משחק עם הקוד {0} 😕','No game found with code {0} 😕','لم يتم العثور على لعبة بالرمز {0} 😕','Игра с кодом {0} не найдена 😕'],
+ 'mp.left':['החבר התנתק 😢','Your friend disconnected 😢','انقطع اتصال صديقك 😢','Друг отключился 😢'],
+ 'cup.title':['🥅 גביע העולם בפנדלים','🥅 Penalty World Cup','🥅 كأس العالم للركلات الترجيحية','🥅 Кубок мира по пенальти'],
+ 'cup.pick':['בחר את הנבחרת שלך','Choose your team','اختر منتخبك','Выбери свою сборную'],
+ 'cup.new':['🔄 טורניר חדש','🔄 New tournament','🔄 بطولة جديدة','🔄 Новый турнир'],
+ 'cup.champ':['אלופת העולם','World champion','بطلة العالم','Чемпион мира'],
+ 'cup.youChamp':['🏆 אתה אלוף העולם! 🏆','🏆 You are the world champion! 🏆','🏆 أنت بطل العالم! 🏆','🏆 Ты чемпион мира! 🏆'],
+ 'cup.won':['זכית בגביע העולם!!!','You won the World Cup!!!','فزت بكأس العالم!!!','Ты выиграл Кубок мира!!!'],
+ 'cup.over':['הטורניר הסתיים','The tournament is over','انتهت البطولة','Турнир завершён'],
+ 'cup.out':['הודחת מהטורניר','You were knocked out','خرجت من البطولة','Ты выбыл из турнира'],
+ 'cup.vs':['{0}: נגד {1} · רמה: {2}','{0}: vs {1} · Level: {2}','{0}: ضد {1} · المستوى: {2}','{0}: против {1} · Уровень: {2}'],
+ 'round.0':['שלב 32 האחרונות','Round of 32','دور الـ32','1/16 финала'],
+ 'round.1':['שמינית גמר','Round of 16','دور الـ16','1/8 финала'],
+ 'round.2':['רבע גמר','Quarter-final','ربع النهائي','Четвертьфинал'],
+ 'round.3':['חצי גמר','Semi-final','نصف النهائي','Полуфинал'],
+ 'round.4':['הגמר הגדול','The Final','النهائي الكبير','Финал'],
+ 'lvl.0':['קל','Easy','سهل','Легко'], 'lvl.1':['בינוני','Medium','متوسط','Средне'], 'lvl.2':['קשה','Hard','صعب','Сложно'],
+ 'lvl.3':['מטורף','Crazy','مجنون','Безумно'], 'lvl.4':['מאסטר','Master','خبير','Мастер'],
+ 'level.title':['באיזו רמה לשחק?','Which level?','ما المستوى؟','Какой уровень?'],
+ 'level.keys':['<kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ\'<br>נגיעה בכדור דוחפת אותו. הראשון שמבקיע 3 גולים מנצח, או מי שמוביל אחרי 4 דקות!',
+   '<kbd>A</kbd> left &nbsp; <kbd>D</kbd> right &nbsp; <kbd>W</kbd> jump &nbsp; <kbd>Space</kbd> power kick &nbsp; <kbd>S</kbd> slide<br>Touching the ball nudges it. First to 3 goals wins, or whoever leads after 4 minutes!',
+   '<kbd>A</kbd> يسار &nbsp; <kbd>D</kbd> يمين &nbsp; <kbd>W</kbd> قفز &nbsp; <kbd>مسافة</kbd> تسديدة قوية &nbsp; <kbd>S</kbd> انزلاق<br>لمس الكرة يدفعها. أول من يسجل 3 أهداف يفوز، أو المتقدم بعد 4 دقائق!',
+   '<kbd>A</kbd> влево &nbsp; <kbd>D</kbd> вправо &nbsp; <kbd>W</kbd> прыжок &nbsp; <kbd>Пробел</kbd> сильный удар &nbsp; <kbd>S</kbd> подкат<br>Касание толкает мяч. Первый до 3 голов побеждает, или кто впереди через 4 минуты!'],
+ 'pklevel.title':['🥅 באיזו רמה לשחק פנדלים?','🥅 Penalty level?','🥅 ما مستوى ركلات الترجيح؟','🥅 Уровень пенальти?'],
+ 'pklevel.hint':['ברמה קשה יותר השוער מנחש טוב יותר, הכוונת זזה מהר יותר,<br>וכשאתה שוער יש לך פחות זמן להגיב','On harder levels the keeper guesses better, the sight moves faster,<br>and as keeper you get less time to react','في المستويات الأصعب يخمّن الحارس أفضل ويتحرك الهدف أسرع،<br>وكحارس يكون لديك وقت أقل للرد','На сложных уровнях вратарь угадывает лучше, прицел движется быстрее,<br>а как вратарю тебе даётся меньше времени'],
+ 'pk.hintAim':['🎯 לחץ (או רווח) כדי לנעול את הכיוון','🎯 Click (or Space) to lock the direction','🎯 انقر (أو مسافة) لتثبيت الاتجاه','🎯 Нажми (или пробел), чтобы зафиксировать направление'],
+ 'pk.hintPower':['💪 עצור את פס העוצמה בירוק! אדום = מעל השער','💪 Stop the power bar in the green! Red = over the bar','💪 أوقف شريط القوة في الأخضر! الأحمر = فوق المرمى','💪 Останови шкалу на зелёном! Красный = выше ворот'],
+ 'pk.hintKeep':['🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר!','🧤 When the sight appears in the goal, click it fast!','🧤 عندما يظهر الهدف في المرمى انقر عليه بسرعة!','🧤 Когда прицел появится в воротах, быстро нажми на него!'],
+ 'pk.power':['עוצמה {0}%','Power {0}%','القوة {0}%','Сила {0}%'],
+ 'pk.over':['מעל השער! 😬','Over the bar! 😬','فوق المرمى! 😬','Выше ворот! 😬'],
+ 'pk.wide':['פספוס! 😬','Wide! 😬','خارج المرمى! 😬','Мимо! 😬'],
+ 'pk.weak':['בעיטה חלשה… הצלה 🧤','Weak shot… saved 🧤','تسديدة ضعيفة… تصدٍّ 🧤','Слабый удар… сейв 🧤'],
+ 'pk.saved':['הצלה! 🧤','Saved! 🧤','تصدٍّ! 🧤','Сейв! 🧤'],
+ 'pk.goal':['גול!!! ⚽','GOAL!!! ⚽','هدف!!! ⚽','ГОЛ!!! ⚽'],
+ 'pk.missAI':['החמצה! 😅','Missed! 😅','أضاع! 😅','Промах! 😅'],
+ 'pk.goalAI':['גול 😢','Goal 😢','هدف 😢','Гол 😢'],
+ 'pk.noMove':['לא זזת… גול 😢','You didn\'t move… goal 😢','لم تتحرك… هدف 😢','Ты не двинулся… гол 😢'],
+ 'pk.kick':['בעיטה {0}','Kick {0}','ركلة {0}','Удар {0}'],
+ 'pk.sudden':['מוות פתאומי!','Sudden death!','الموت المفاجئ!','До первого промаха!'],
+ 'pk.exit':['✖ יציאה','✖ Exit','✖ خروج','✖ Выход'],
+ 'pk.champTitle':['אלוף העולם!!! 🏆🏆🏆','World champion!!! 🏆🏆🏆','بطل العالم!!! 🏆🏆🏆','Чемпион мира!!! 🏆🏆🏆'],
+ 'pk.champSub':['{0} זכתה בגביע העולם! {1}','{0} won the World Cup! {1}','{0} فاز بكأس العالم! {1}','{0} выиграла Кубок мира! {1}'],
+ 'pk.advTitle':['עלית שלב! 🎉','Through to the next round! 🎉','تأهلت للدور التالي! 🎉','Ты прошёл дальше! 🎉'],
+ 'pk.advSub':['ניצחת את {0} {1} בפנדלים','You beat {0} {1} on penalties','فزت على {0} {1} بركلات الترجيح','Ты победил {0} {1} по пенальти'],
+ 'pk.outTitle':['הודחת 😢','Knocked out 😢','خرجت 😢','Ты выбыл 😢'],
+ 'pk.outSub':['הפסדת ל{0} {1} בפנדלים','You lost to {0} {1} on penalties','خسرت أمام {0} {1} بركلات الترجيح','Ты проиграл {0} {1} по пенальти'],
+ 'pk.continue':['המשך ▶','Continue ▶','متابعة ▶','Продолжить ▶'],
+ 'stats.title':['🏆 הניצחונות שלי','🏆 My record','🏆 انتصاراتي','🏆 Мои победы'],
+ 'stats.w':['ניצחונות','Wins','انتصارات','Победы'], 'stats.d':['תיקו','Draws','تعادل','Ничьи'], 'stats.l':['הפסדים','Losses','هزائم','Поражения'], 'stats.c':['🏆 גביע העולם','🏆 World Cups','🏆 كأس العالم','🏆 Кубки мира'],
+ 'stats.none':['עוד לא שיחקת! לחץ על "שחק" ותתחיל לנצח 💪','You haven\'t played yet! Press "Play" and start winning 💪','لم تلعب بعد! اضغط "العب" وابدأ بالفوز 💪','Ты ещё не играл! Нажми «Играть» и начни побеждать 💪'],
+ 'stats.ahead':['שיחקת {0} משחקים – אתה מנצח יותר ממה שאתה מפסיד! 🔥','{0} games played – you win more than you lose! 🔥','لعبت {0} مباراة – تفوز أكثر مما تخسر! 🔥','Сыграно {0} игр – ты побеждаешь чаще, чем проигрываешь! 🔥'],
+ 'stats.even':['שיחקת {0} משחקים – מאוזן בדיוק. עוד ניצחון אחד! ⚽','{0} games played – perfectly even. One more win! ⚽','لعبت {0} مباراة – متعادل تمامًا. فوز آخر! ⚽','Сыграно {0} игр – ровно поровну. Ещё одна победа! ⚽'],
+ 'stats.behind':['שיחקת {0} משחקים – ההפסדים מובילים בינתיים… תנצח אותם! 💪','{0} games played – losses lead for now… beat them! 💪','لعبت {0} مباراة – الهزائم تتقدم حاليًا… تغلّب عليها! 💪','Сыграно {0} игр – пока больше поражений… переломи это! 💪'],
+ 'stats.reset':['איפוס','Reset','إعادة تعيين','Сброс'],
+ 'stats.confirm':['לאפס את כל הניצחונות וההפסדים?','Reset all wins and losses?','هل تريد إعادة تعيين كل الانتصارات والهزائم؟','Сбросить все победы и поражения?'],
+ 'exit.title':['אל תצא מהמשחק! 🥺','Don\'t leave the game! 🥺','لا تغادر اللعبة! 🥺','Не уходи из игры! 🥺'],
+ 'exit.stay':['בסדר, אני נשאר 😄','OK, I\'ll stay 😄','حسنًا، سأبقى 😄','Ладно, я остаюсь 😄'],
+ 'game.me':['אני – {0}','Me – {0}','أنا – {0}','Я – {0}'],
+ 'game.partner':['שותף – {0}','Partner – {0}','شريك – {0}','Партнёр – {0}'],
+ 'game.friend':['חבר – {0}','Friend – {0}','صديق – {0}','Друг – {0}'],
+ 'game.level':['רמה: {0}','Level: {0}','المستوى: {0}','Уровень: {0}'],
+ 'game.online':['👥 אונליין','👥 Online','👥 أونلاين','👥 Онлайн'],
+ 'game.goal':['גול!!!','GOAL!!!','هدف!!!','ГОЛ!!!'],
+ 'end.win':['ניצחת! 🏆','You won! 🏆','فزت! 🏆','Ты победил! 🏆'], 'end.lose':['הפסדת 😢','You lost 😢','خسرت 😢','Ты проиграл 😢'], 'end.draw':['תיקו 🤝','Draw 🤝','تعادل 🤝','Ничья 🤝'],
+ 'end.winSub':['כל הכבוד, כוכב אמיתי!','Well done, a real star!','أحسنت، نجم حقيقي!','Молодец, настоящая звезда!'],
+ 'end.winMp':['ניצחת את החבר! 🎉','You beat your friend! 🎉','فزت على صديقك! 🎉','Ты победил друга! 🎉'],
+ 'end.loseSub':['נסה שוב – בפעם הבאה תנצח!','Try again – next time you\'ll win!','حاول مجددًا – ستفوز في المرة القادمة!','Попробуй ещё – в следующий раз победишь!'],
+ 'end.loseMp':['החבר ניצח הפעם… נסו שוב!','Your friend won this time… play again!','فاز صديقك هذه المرة… العبا مجددًا!','На этот раз победил друг… сыграйте ещё!'],
+ 'end.drawSub':['תיקו נחשב הפסד... כמעט! נסה שוב','A draw is almost a loss… try again','التعادل يكاد يكون خسارة… حاول مجددًا','Ничья почти как поражение… попробуй ещё'],
+ 'end.drawMp':['שניכם באותה רמה! עוד משחק?','You\'re evenly matched! Another game?','أنتما في نفس المستوى! لعبة أخرى؟','Вы равны по силе! Ещё игру?'],
+ 'set.title':['⚙️ הגדרות','⚙️ Settings','⚙️ الإعدادات','⚙️ Настройки'],
+ 'set.sfx':['🔊 צלילי המשחק','🔊 Game sounds','🔊 أصوات اللعبة','🔊 Звуки игры'],
+ 'set.music':['🎵 עוצמת המוזיקה','🎵 Music volume','🎵 مستوى الموسيقى','🎵 Громкость музыки'],
+ 'set.lang':['🌍 שפה','🌍 Language','🌍 اللغة','🌍 Язык'],
+ 'music.title':['🎵 מוזיקה','🎵 Music','🎵 الموسيقى','🎵 Музыка'],
+ 'music.il':['🎶 ישראלי','🎶 Israeli','🎶 إسرائيلي','🎶 Израильские'],
+ 'music.intl':['🌍 בינלאומי','🌍 International','🌍 عالمي','🌍 Международные'],
+ 'music.off':['🔇 בלי מוזיקה','🔇 No music','🔇 بدون موسيقى','🔇 Без музыки'],
+ 'music.now':['מתנגן עכשיו: {0}','Now playing: {0}','يُشغَّل الآن: {0}','Сейчас играет: {0}'],
+ 'music.none':['אין מוזיקה','No music','لا موسيقى','Нет музыки'],
+ 'v2.title':['👥 עם מי לשחק 2 על 2?','👥 Who plays 2 vs 2 with you?','👥 مع من تلعب 2 ضد 2؟','👥 С кем играть 2 на 2?'],
+ 'v2.ai':['🤖 שותף מחשב','🤖 Computer partner','🤖 شريك حاسوب','🤖 Партнёр-компьютер'],
+ 'v2.human':['⌨️ חבר על המקלדת','⌨️ Friend on the keyboard','⌨️ صديق على لوحة المفاتيح','⌨️ Друг на клавиатуре'],
+ 'v2.pickPartner':['בחרו את השותף שלכם:','Pick your partner:','اختر شريكك:','Выбери партнёра:'],
+ 'v2.keys':['החבר: <kbd>←</kbd><kbd>→</kbd> לזוז &nbsp; <kbd>↑</kbd> קפיצה &nbsp; <kbd>↓</kbd> גליץ\' &nbsp; <kbd>Enter</kbd> בעיטה','Friend: <kbd>←</kbd><kbd>→</kbd> move &nbsp; <kbd>↑</kbd> jump &nbsp; <kbd>↓</kbd> slide &nbsp; <kbd>Enter</kbd> kick','الصديق: <kbd>←</kbd><kbd>→</kbd> حركة &nbsp; <kbd>↑</kbd> قفز &nbsp; <kbd>↓</kbd> انزلاق &nbsp; <kbd>Enter</kbd> تسديد','Друг: <kbd>←</kbd><kbd>→</kbd> движение &nbsp; <kbd>↑</kbd> прыжок &nbsp; <kbd>↓</kbd> подкат &nbsp; <kbd>Enter</kbd> удар'],
+ 'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
+};
+const LI={he:0,en:1,ar:2,ru:3};
+const T=(k,...a)=>{ const row=I18N_RAW[k]; let s=row ? (row[LI[lang]]||row[0]) : k; a.forEach((v,i)=>{ s=s.split('{'+i+'}').join(v); }); return s; };
+/* names of players and countries in en / ar / ru (Hebrew is in the data itself) */
+const CHAR_NAMES={
+ mbappe:['Mbappé','مبابي','Мбаппе'], messi:['Messi','ميسي','Месси'], ronaldo:['Ronaldo','رونالدو','Роналду'], neymar:['Neymar','نيمار','Неймар'],
+ haaland:['Haaland','هالاند','Холанд'], salah:['Salah','صلاح','Салах'], r9:['Ronaldo R9','رونالدو البرازيلي','Роналдо R9'], vini:['Vini Jr','فيني','Вини'],
+ dembele:['Dembélé','ديمبيلي','Дембеле'], iniesta:['Iniesta','إنييستا','Иньеста'], ronaldinho:['Ronaldinho','رونالدينيو','Роналдиньо'],
+ lewa:['Lewandowski','ليفاندوفسكي','Левандовски'], benzema:['Benzema','بنزيما','Бензема'], kane:['Kane','كين','Кейн'], suarez:['Suárez','سواريز','Суарес'],
+ griezmann:['Griezmann','غريزمان','Гризманн'], son:['Son','سون','Сон'], lautaro:['Lautaro','لاوتارو','Лаутаро'], yamal:['Yamal','يامال','Ямаль'],
+ zlatan:['Zlatan','زلاتان','Златан'], bellingham:['Bellingham','بيلينغهام','Беллингем'],
+};
+const nm = c => lang==='he' ? c.name : ((CHAR_NAMES[c.id]||[])[LI[lang]-1] || (CHAR_NAMES[c.id]||[])[0] || c.name);
 
 /* ---------- characters (cartoon caricatures) ---------- */
 const CHARS = [
@@ -683,11 +906,13 @@ const BALL_SVG = `<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
 </svg>`;
 
 /* ---------- sound (tiny WebAudio) ---------- */
+let audioCtx=null;
+const getAudio = () => audioCtx || (audioCtx = new (window.AudioContext||window.webkitAudioContext)());
 const sfx = (()=>{
-  let ctx;
-  const get = () => ctx || (ctx = new (window.AudioContext||window.webkitAudioContext)());
+  const get = getAudio;
   function tone(f,t,type='square',vol=.15,slide){
     try{
+      vol*=settings.sfx; if(vol<=0) return;
       const c=get(); if(c.state==='suspended') c.resume();
       const o=c.createOscillator(), g=c.createGain();
       o.type=type; o.frequency.setValueAtTime(f,c.currentTime);
@@ -710,6 +935,88 @@ const sfx = (()=>{
     miss:()=>tone(300,.4,'sawtooth',.1,90),
   };
 })();
+
+/* =========================================================
+   MUSIC – 20 original chiptune loops (10 Israeli-style, 10 international-style)
+   patterns: 16th-note steps, "C5" one step, "C5*2" two steps, "." rest
+   ========================================================= */
+const TRACKS=[
+ {id:'hafla', il:1, name:['חפלה','Hafla Party','حفلة','Хафла'], bpm:116, wave:'sawtooth',
+  lead:'E5 . D5 E5 F5*2 E5 D5 C5*2 B4*2 C5 D5 C5 B4 A4*2 G#4 A4 B4*2 C5 B4 A4 G#4 E4*2 . . . .', bass:'E3*2 E3 . E3*2 B2*2 E3*2 E3 . D3*2 C3*2', drums:'K.K.S.hKh.K.S.h.'},
+ {id:'mizrahi', il:1, name:['מזרחית שמחה','Happy Mizrahi','شرقية سعيدة','Весёлая мизрахи'], bpm:124, wave:'square',
+  lead:'A4 B4 C5 B4 A4*2 G4*2 F4 G4 A4 G4 F4*2 E4*2 A4 B4 C5 D5 E5*2 D5 C5 B4*2 A4*2 . . . .', bass:'A2*2 A2 . E3*2 A2*2 F2*2 F2 . G2*2 G2*2', drums:'K.hKS.h.K.hK.S.h'},
+ {id:'hora', il:1, name:['הורה','Hora','هورا','Хора'], bpm:150, wave:'square',
+  lead:'D5 D5 E5 F5 E5 D5 C5 D5 A4 A4 A#4 C5 A#4 A4 G4 A4 D5 D5 E5 F5 G5 F5 E5 D5 C5 A4 C5 D5*2 . . .', bass:'D3 . A2 . D3 . A2 . G2 . D3 . A2 . A2 .', drums:'K.S.K.S.K.S.K.SS'},
+ {id:'tlv', il:1, name:['טראנס תל אביב','Tel Aviv Trance','ترانس تل أبيب','Тель-Авив транс'], bpm:138, wave:'sawtooth',
+  lead:'E4 B4 E5 B4 G4 B4 E5 B4 E4 B4 E5 B4 G4 B4 E5 B4 C4 G4 C5 G4 E4 G4 C5 G4 D4 A4 D5 A4 F#4 A4 D5 A4', bass:'E2*4 E2*4 C2*4 D2*4', drums:'K.hhK.hhK.hhK.hh'},
+ {id:'darbuka', il:1, name:['דרבוקה','Darbuka Beat','دربكة','Дарбука'], bpm:110, wave:'triangle',
+  lead:'E5*2 E5 F5 E5 D5*2 . C5*2 D5 C5 B4 A4*2 . A4 B4 C5 D5 E5*2 D5 C5 B4*2 . . E5*2 . .', bass:'E3*2 . E3 E3*2 . E3 D3*2 . D3 C3*2 . C3', drums:'K.hK.hS.K.hK.S.h'},
+ {id:'yam', il:1, name:['ים תיכון','Mediterranean','البحر المتوسط','Средиземное море'], bpm:100, wave:'sine',
+  lead:'G4*2 A4*2 B4*2 D5*2 B4*2 A4*2 G4*4 E4*2 G4*2 A4*2 B4*2 A4*2 G4*2 E4*4', bass:'G2*4 D3*4 E2*4 C3*4', drums:'K...h...S...h...'},
+ {id:'chagiga', il:1, name:['חגיגה','Celebration','احتفال','Праздник'], bpm:128, wave:'square',
+  lead:'C5 C5 . C5 D5 E5*2 . G5 E5 D5 C5 D5*2 . . E5 E5 . E5 F5 G5*2 . A5 G5 F5 E5 C5*2 . .', bass:'C3 . C3 . G2 . G2 . F2 . F2 . G2 . G2 .', drums:'K.hKS.hKK.hKS.hK'},
+ {id:'midbar', il:1, name:['רוח מדבר','Desert Wind','ريح الصحراء','Ветер пустыни'], bpm:96, wave:'sawtooth',
+  lead:'E4*2 F4*2 G#4*2 A4*2 B4*4 A4*2 G#4*2 F4*2 E4*2 F4*2 G#4*2 E4*8', bass:'E2*8 E2*8', drums:'K.......S...h...'},
+ {id:'kadur', il:1, name:['כדורגל!','Football!','كرة قدم!','Футбол!'], bpm:132, wave:'square',
+  lead:'G4 G4 A4 G4 B4*2 . . G4 G4 A4 G4 D5*2 . . E5 E5 D5 B4 G4*2 . . D5 D5 B4 G4 A4*2 . .', bass:'G2*2 G2*2 D3*2 D3*2 E3*2 E3*2 D3*2 D3*2', drums:'K.K.S.S.K.K.S.S.'},
+ {id:'sheket', il:1, name:['שיר שקט','Quiet Song','أغنية هادئة','Тихая песня'], bpm:84, wave:'sine',
+  lead:'A4*2 C5*2 E5*4 D5*2 C5*2 B4*4 A4*2 C5*2 E5*2 A5*2 G5*2 E5*2 D5*4', bass:'A2*4 F2*4 C3*4 G2*4', drums:'K.......h.......'},
+ {id:'samba', il:0, name:['סמבה','Samba Rio','سامبا','Самба'], bpm:126, wave:'triangle',
+  lead:'C5 . E5 . G5 E5 C5 . D5 . F5 . A5 F5 D5 . E5 . G5 . B5 G5 E5 . D5 C5 B4 C5 D5*2 . .', bass:'C3 . C3 G2 . G2 . . F2 . F2 C3 . G2 . .', drums:'KhhKhKhhKhhKhKhS'},
+ {id:'rock', il:0, name:['רוק אצטדיון','Stadium Rock','روك الملاعب','Стадионный рок'], bpm:112, wave:'sawtooth',
+  lead:'E4*2 E4*2 G4*2 A4*2 E4*2 E4*2 D4*2 . . E4*2 G4*2 A4*2 B4*2 D5*2 B4*2 A4*4', bass:'E2 E2 E2 E2 G2 G2 A2 A2 E2 E2 E2 E2 D2 D2 D2 D2', drums:'K.K.S...K.K.S...'},
+ {id:'euro', il:0, name:['יורודאנס','Euro Dance','يورو دانس','Евродэнс'], bpm:140, wave:'square',
+  lead:'A4 . A4 . C5 . A4 . G4 . G4 . E4*2 . . A4 . A4 . C5 . D5 . E5*2 D5*2 C5*2 . .', bass:'A2 . A2 . F2 . F2 . C3 . C3 . G2 . G2 .', drums:'K.hhK.hhK.hhK.hh'},
+ {id:'latin', il:0, name:['לטינו','Latin Pop','لاتيني','Латино'], bpm:104, wave:'triangle',
+  lead:'D5*2 E5 F5 E5 D5*2 . A4*2 . A4 D5*2 . . F5*2 E5 D5 E5 F5*2 . E5*2 D5*2 A4*4', bass:'D3 . . D3 . A2 . . A#2 . . A#2 . A2 . .', drums:'K..K.hK..K.S.h.h'},
+ {id:'hiphop', il:0, name:['היפ הופ','Hip Hop Beat','هيب هوب','Хип-хоп'], bpm:92, wave:'square',
+  lead:'C4 . . C4 D#4 . . . G3*2 . . C4 . . . C4 . . C4 D#4 . F4 . D#4*2 C4*2 . . . .', bass:'C2*3 . C2*2 G1*2 C2*3 . D#2*2 C2*2', drums:'K..hS..hK.K.S..h'},
+ {id:'kpop', il:0, name:['פופ קוריאני','K-Pop Bounce','كي-بوب','K-pop'], bpm:128, wave:'square',
+  lead:'E5 E5 . E5 G5 . E5 . D5 . B4 . C5*2 . . E5 E5 . E5 G5 . A5 . G5*2 E5*2 D5*2 . .', bass:'C3 . C3 . G2 . G2 . A2 . A2 . F2 . F2 .', drums:'K.hSK.hSK.hSK.hS'},
+ {id:'reggaeton', il:0, name:['רגאטון','Reggaeton','ريغيتون','Реггетон'], bpm:96, wave:'sawtooth',
+  lead:'A4*2 . C5*2 . E5*2 D5 C5 B4*2 . . . . A4*2 . C5*2 . E5*2 G5 E5 D5*2 . . . .', bass:'A2*3 A2*2 . A2*2 F2*3 F2*2 . G2*2', drums:'K..S..SK..S..S.h'},
+ {id:'afro', il:0, name:['אפרוביט','Afrobeat','أفروبيت','Афробит'], bpm:108, wave:'triangle',
+  lead:'G4 . B4 . D5 . B4 . G4 . B4 . E5*2 . . A4 . C5 . E5 . C5 . A4 . C5 . D5*2 . .', bass:'G2 . . G2 . D3 . . C3 . . C3 . D3 . .', drums:'K.hK.hK.hKhS.hKh'},
+ {id:'synth', il:0, name:['סינת\'ווייב','Synthwave','سينثويف','Синтвейв'], bpm:100, wave:'sawtooth',
+  lead:'A4*4 C5*2 E5*2 D5*4 B4*2 G4*2 F4*4 A4*2 C5*2 E5*4 D5*2 B4*2', bass:'A2 A2 A2 A2 A2 A2 A2 A2 F2 F2 F2 F2 G2 G2 G2 G2', drums:'K.h.S.h.K.h.S.h.'},
+ {id:'anthem', il:0, name:['המנון האלופים','Champions Anthem','نشيد الأبطال','Гимн чемпионов'], bpm:76, wave:'triangle',
+  lead:'C5*4 G4*2 A4*2 F4*4 G4*4 C5*2 D5*2 E5*4 D5*4 C5*4', bass:'C3*4 A2*4 F2*4 G2*4', drums:'K.......S.......'},
+];
+const music=(()=>{
+  const NN={C:0,'C#':1,D:2,'D#':3,E:4,F:5,'F#':6,G:7,'G#':8,A:9,'A#':10,B:11};
+  const midi=s=>{ const m=s.match(/^([A-G]#?)(\d)$/); return 12*(+m[2]+1)+NN[m[1]]; };
+  const freq=m=>440*Math.pow(2,(m-69)/12);
+  function parse(str){ let at=0; const ev=[]; for(const tk of str.trim().split(/\s+/)){ const [n,len]=tk.split('*'); const L=+(len||1); if(n!=='.') ev.push({at, m:midi(n), len:L}); at+=L; } return {ev, len:at}; }
+  let master=null, cur=null, timer=0, step=0, nextT=0;
+  const ensure=()=>{ const c=getAudio(); if(!master){ master=c.createGain(); master.gain.value=settings.music; master.connect(c.destination); } if(c.state==='suspended') c.resume(); return c; };
+  function voice(c,t,m,dur,type,vol){ const o=c.createOscillator(), g=c.createGain(); o.type=type; o.frequency.value=freq(m); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.012); g.gain.exponentialRampToValueAtTime(.001,t+dur); o.connect(g).connect(master); o.start(t); o.stop(t+dur+.03); }
+  function drum(c,t,kind){
+    if(kind==='k'){ const o=c.createOscillator(), g=c.createGain(); o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(40,t+.12); g.gain.setValueAtTime(.8,t); g.gain.exponentialRampToValueAtTime(.001,t+.18); o.connect(g).connect(master); o.start(t); o.stop(t+.2); return; }
+    const len=kind==='s'?.14:.045, buf=c.createBuffer(1,Math.floor(c.sampleRate*len),c.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+    const s=c.createBufferSource(); s.buffer=buf; const g=c.createGain(); g.gain.value=kind==='s'?.45:.18;
+    const f=c.createBiquadFilter(); f.type='highpass'; f.frequency.value=kind==='s'?1600:6500; s.connect(f).connect(g).connect(master); s.start(t);
+  }
+  function tick(){
+    if(!cur) return; const c=ensure(), spb=60/cur.bpm/4;
+    while(nextT<c.currentTime+.3){
+      const s=step%cur.len, sb=step%cur.bassP.len, sd=step%cur.drums.length;
+      for(const e of cur.leadP.ev) if(e.at===s) voice(c,nextT,e.m,e.len*spb*.9,cur.wave,.11);
+      for(const e of cur.bassP.ev) if(e.at===sb) voice(c,nextT,e.m,e.len*spb*.95,'triangle',.17);
+      const d=cur.drums[sd]; if(d==='k'||d==='K') drum(c,nextT,'k'); if(d==='s'||d==='S') drum(c,nextT,'s'); if('hKS'.includes(d)) drum(c,nextT,'h');
+      nextT+=spb; step++;
+    }
+  }
+  function play(id){
+    const t=TRACKS.find(x=>x.id===id); stop(); if(!t) return;
+    try{ const c=ensure(); cur=Object.assign({}, t, {leadP:parse(t.lead), bassP:parse(t.bass)}); cur.len=cur.leadP.len; step=0; nextT=c.currentTime+.05; tick(); timer=setInterval(tick,100); }catch(e){ cur=null; }
+  }
+  function stop(){ clearInterval(timer); timer=0; cur=null; }
+  function setVolume(v){ if(master) master.gain.value=v; }
+  return { play, stop, setVolume, current:()=>cur&&cur.id };
+})();
+/* the browser only allows sound after a tap: start the chosen track on the first interaction */
+document.addEventListener('pointerdown', function startMusicOnce(){ if(settings.track && !music.current()) music.play(settings.track); document.removeEventListener('pointerdown', startMusicOnce); }, {capture:true});
 
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
@@ -734,8 +1041,64 @@ let previewIdx = 0;     // highlighted in the characters screen
 
 function refreshHome(){
   sprite($('#home-sprite'), CHARS[selected]);
-  $('#home-name').textContent = CHARS[selected].name;
+  $('#home-name').textContent = nm(CHARS[selected]);
 }
+
+/* ---------- language switching ---------- */
+const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo',
+  '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
+  '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn', '.mp-duo .who.me .tag':'mp.you',
+  '#cup h2':'cup.title', '#btn-cup-back':'btn.back', '#team-pick .hint':'cup.pick', '#btn-cup-play':'btn.play', '#btn-cup-new':'cup.new',
+  '#btn-pk-back':'pk.exit', '#btn-pk-continue':'pk.continue',
+  '#level-modal h2':'level.title', '#level-modal .hint':'level.keys', '#btn-level-cancel':'btn.back2',
+  '#pk-level-modal h2':'pklevel.title', '#pk-level-modal .hint':'pklevel.hint', '#btn-pk-level-cancel':'btn.back2',
+  '#stats-modal h2':'stats.title', '#st-w + .l':'stats.w', '#st-d + .l':'stats.d', '#st-l + .l':'stats.l', '#st-c + .l':'stats.c', '#btn-stats-close':'btn.back2', '#btn-stats-reset':'stats.reset',
+  '#exit-modal h2':'exit.title', '#btn-stay':'exit.stay',
+  '#music-title':'music.title', '#btn-music-back':'btn.back', '#music-il-h':'music.il', '#music-intl-h':'music.intl', '#btn-music-off':'music.off',
+  '#set-title':'set.title', '#set-sfx-l':'set.sfx', '#set-music-l':'set.music', '#set-lang-l':'set.lang', '#btn-settings-close':'btn.back2',
+  '#v2-title':'v2.title', '#v2-ai':'v2.ai', '#v2-human':'v2.human', '#v2-keys':'v2.keys', '#v2-pick-l':'v2.pickPartner', '#v2-go':'btn.play', '#v2-cancel':'btn.back2',
+  '#goal-flash':'game.goal', '#btn-music':'btn.music', '#btn-settings':'btn.settings' };
+function applyLang(){
+  document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
+  for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn')) el.title=T(key); else el.innerHTML=T(key); }
+  document.querySelectorAll('#levels .btn').forEach((b,i)=>b.textContent=T('lvl.'+i));
+  document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=T('lvl.'+i));
+  document.querySelectorAll('#set-langs .btn').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
+  refreshHome(); buildGallery(); refreshPreview();
+  if(typeof buildTeams==='function') buildTeams();
+  if(typeof cup!=='undefined' && cup) renderBracket();
+  if(typeof mp!=='undefined' && mp && mp.connected) mpRefresh();
+  if(typeof buildMusicList==='function') buildMusicList();
+}
+function setLang(l){ if(!LANGS[l]) return; lang=l; settings.lang=l; saveSettings(); applyLang(); }
+(function buildSettings(){
+  const box=$('#set-langs');
+  for(const [code,L] of Object.entries(LANGS)){ const b=document.createElement('button'); b.className='btn small blue'; b.dataset.lang=code; b.textContent=L.name; b.addEventListener('click',()=>{ sfx.click(); setLang(code); }); box.appendChild(b); }
+  const sv=$('#set-sfx'), mv=$('#set-music');
+  sv.value=Math.round(settings.sfx*100); mv.value=Math.round(settings.music*100);
+  sv.addEventListener('input', ()=>{ settings.sfx=sv.value/100; saveSettings(); });
+  sv.addEventListener('change', ()=>sfx.click());
+  mv.addEventListener('input', ()=>{ settings.music=mv.value/100; music.setVolume(settings.music); saveSettings(); });
+  $('#btn-settings').addEventListener('click', ()=>{ sfx.click(); $('#settings-modal').classList.add('show'); });
+  $('#btn-settings-close').addEventListener('click', ()=>{ sfx.click(); $('#settings-modal').classList.remove('show'); });
+})();
+/* ---------- music screen ---------- */
+function buildMusicList(){
+  const il=$('#music-il'), intl=$('#music-intl'); il.innerHTML=''; intl.innerHTML='';
+  TRACKS.forEach(t=>{
+    const d=document.createElement('div'); d.className='trk'+(settings.track===t.id?' on':''); d.dataset.id=t.id;
+    d.innerHTML=`<span class="ic">${t.il?'🎶':'🌍'}</span>${t.name[LI[lang]]}<span class="eq"><i></i><i></i><i></i></span>`;
+    d.addEventListener('click', ()=>{ settings.track=t.id; saveSettings(); music.play(t.id); buildMusicList(); });
+    (t.il?il:intl).appendChild(d);
+  });
+  const cur=TRACKS.find(t=>t.id===settings.track);
+  $('#music-now').textContent = cur ? T('music.now', cur.name[LI[lang]]) : T('music.none');
+}
+$('#btn-music').addEventListener('click', ()=>{ sfx.click(); buildMusicList(); showScreen('music-screen'); });
+$('#btn-music-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
+$('#btn-music-off').addEventListener('click', ()=>{ sfx.click(); settings.track=null; saveSettings(); music.stop(); buildMusicList(); });
 
 /* ---------- characters screen ---------- */
 function buildGallery(){
@@ -743,7 +1106,7 @@ function buildGallery(){
   CHARS.forEach((c,i)=>{
     const card = document.createElement('div');
     card.className='card'; card.tabIndex=0; card.dataset.i=i;
-    card.innerHTML = `<div class="sprite">${playerSVG(c)}</div><div class="name">${c.name}</div>`;
+    card.innerHTML = `<div class="sprite">${playerSVG(c)}</div><div class="name">${nm(c)}</div>`;
     const pick = ()=>{ sfx.click(); previewIdx=i; refreshPreview(); };
     card.addEventListener('click', pick);
     card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
@@ -753,7 +1116,7 @@ function buildGallery(){
 function refreshPreview(){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', +c.dataset.i===previewIdx));
   sprite($('#preview-sprite'), CHARS[previewIdx]);
-  $('#preview-name').textContent = CHARS[previewIdx].name;
+  $('#preview-name').textContent = nm(CHARS[previewIdx]);
 }
 
 $('#btn-chars').addEventListener('click', ()=>{ sfx.click(); previewIdx=selected; refreshPreview(); showScreen('chars'); });
@@ -786,13 +1149,14 @@ const LEVELS = [
 (function buildLevels(){
   const box=$('#levels');
   LEVELS.forEach((L,i)=>{
+    L.i=i;
     const b=document.createElement('button');
-    b.className=`btn ${L.color}`; b.textContent=L.name;
+    b.className=`btn ${L.color}`; b.textContent=T('lvl.'+i);
     b.addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.remove('show'); startGame(i); });
     box.appendChild(b);
   });
 })();
-$('#btn-play').addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.add('show'); });
+$('#btn-play').addEventListener('click', ()=>{ sfx.click(); v2Pending=null; $('#level-modal').classList.add('show'); });
 
 /* ---------- wins record (saved in this browser) ---------- */
 const STATS_KEY='footballStar.stats';
@@ -805,17 +1169,37 @@ function recordResult(k){ const s=loadStats(); s[k]++; saveStats(s); }
 function showStats(){
   const s=loadStats(), total=s.w+s.d+s.l;
   $('#st-w').textContent=s.w; $('#st-d').textContent=s.d; $('#st-l').textContent=s.l; $('#st-c').textContent=s.c;
-  $('#st-msg').textContent =
-    total===0 ? 'עוד לא שיחקת! לחץ על "שחק" ותתחיל לנצח 💪' :
-    s.w>s.l   ? `שיחקת ${total} משחקים – אתה מנצח יותר ממה שאתה מפסיד! 🔥` :
-    s.w===s.l ? `שיחקת ${total} משחקים – מאוזן בדיוק. עוד ניצחון אחד! ⚽` :
-                `שיחקת ${total} משחקים – ההפסדים מובילים בינתיים… תנצח אותם! 💪`;
+  $('#st-msg').textContent = total===0 ? T('stats.none') : s.w>s.l ? T('stats.ahead',total) : s.w===s.l ? T('stats.even',total) : T('stats.behind',total);
   $('#stats-modal').classList.add('show');
 }
 $('#btn-stats').addEventListener('click', ()=>{ sfx.click(); showStats(); });
 $('#btn-stats-close').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); });
-$('#btn-stats-reset').addEventListener('click', ()=>{ sfx.click(); if(confirm('לאפס את כל הניצחונות וההפסדים?')){ saveStats({w:0,d:0,l:0,c:0}); showStats(); } });
-$('#btn-level-cancel').addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.remove('show'); });
+$('#btn-stats-reset').addEventListener('click', ()=>{ sfx.click(); if(confirm(T('stats.confirm'))){ saveStats({w:0,d:0,l:0,c:0}); showStats(); } });
+$('#btn-level-cancel').addEventListener('click', ()=>{ sfx.click(); v2Pending=null; $('#level-modal').classList.remove('show'); });
+
+/* ---------- 2 vs 2 setup ---------- */
+let v2Partner='ai', v2Idx=null;
+function buildPartnerPick(){
+  const box=$('#v2-partner'); box.innerHTML='';
+  const rnd=document.createElement('div'); rnd.className='mpcard'+(v2Idx==null?' mine':''); rnd.innerHTML=`<div class="sprite" style="font-size:30px;display:flex;align-items:center;justify-content:center">🎲</div>${T('v2.random')}`;
+  rnd.addEventListener('click', ()=>{ sfx.click(); v2Idx=null; buildPartnerPick(); }); box.appendChild(rnd);
+  CHARS.forEach((c,i)=>{
+    if(i===selected) return;
+    const d=document.createElement('div'); d.className='mpcard'+(v2Idx===i?' mine':''); d.innerHTML=`<div class="sprite">${playerSVG(c)}</div>${nm(c)}`;
+    d.addEventListener('click', ()=>{ sfx.click(); v2Idx=i; buildPartnerPick(); }); box.appendChild(d);
+  });
+}
+function setV2Partner(k){ v2Partner=k; $('#v2-ai').classList.toggle('on',k==='ai'); $('#v2-human').classList.toggle('on',k==='human'); $('#v2-keys').hidden = k!=='human'; }
+$('#btn-2v2').addEventListener('click', ()=>{ sfx.click(); buildPartnerPick(); setV2Partner(v2Partner); $('#v2-modal').classList.add('show'); });
+$('#v2-ai').addEventListener('click', ()=>{ sfx.click(); setV2Partner('ai'); });
+$('#v2-human').addEventListener('click', ()=>{ sfx.click(); setV2Partner('human'); });
+$('#v2-cancel').addEventListener('click', ()=>{ sfx.click(); $('#v2-modal').classList.remove('show'); });
+$('#v2-go').addEventListener('click', ()=>{
+  sfx.click();
+  const idx = v2Idx!=null ? v2Idx : shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected))[0];
+  v2Pending={partner:v2Partner, idx};
+  $('#v2-modal').classList.remove('show'); $('#level-modal').classList.add('show');
+});
 
 /* ---------- fans ---------- */
 (function buildFans(){
@@ -938,8 +1322,11 @@ const MOVE=340, JUMP=800, G=2100, REACH=72, CEIL=400;
 const MINX=GOAL_W-16+PW/2, MAXX=FIELD_W-GOAL_W+16-PW/2;
 const MATCH_TIME=240;
 
-const P1={ el:$('#p1'), x:0,y:0,vx:0,vy:0, facing:1, kickT:0, slideT:0, slideCd:0, stunT:0, slideDir:1, slideHit:false };
-const P2={ el:$('#p2'), x:0,y:0,vx:0,vy:0, facing:-1, kickT:0, slideT:0, slideCd:0, stunT:0, slideDir:-1, slideHit:false, reactT:0, targetX:0, wantKick:false };
+const mkPlayer=(sel,sh,facing)=>({ el:$(sel), sh:$(sh), x:0,y:0,vx:0,vy:0, facing, kickT:0, slideT:0, slideCd:0, stunT:0, slideDir:facing, slideHit:false, reactT:0, targetX:0, wantKick:false, mode:'hunt', home:0 });
+const P1=mkPlayer('#p1','#sh1',1), P2=mkPlayer('#p2','#sh2',-1), P3=mkPlayer('#p3','#sh3',1), P4=mkPlayer('#p4','#sh4',-1);
+P1.home=230; P2.home=770; P3.home=130; P4.home=870;
+let players=[P1,P2], teamL=[P1], teamR=[P2], v2=null, v2Pending=null;   // v2 = {partner:'ai'|'human'} during a 2v2 match
+const keys2={left:false,right:false,jump:false,kick:false,slide:false}, q2={jump:false,kick:false,slide:false};   // second human (arrows + Enter)
 const ball={ el:$('#ball'), x:0,y:0,vx:0,vy:0, rot:0 };
 ball.el.innerHTML=BALL_SVG;
 
@@ -949,12 +1336,18 @@ let jumpQueued=false, kickQueued=false, slideQueued=false;
 
 /* ---------- input ---------- */
 function setKey(code,down){
+  const two = v2 && v2.partner==='human';           // 2v2 with a friend: arrows + Enter belong to the friend
   switch(code){
-    case 'KeyA': case 'ArrowLeft':  keys.left=down; return true;
-    case 'KeyD': case 'ArrowRight': keys.right=down; return true;
-    case 'KeyW': case 'ArrowUp':    if(down&&!keys.jump) jumpQueued=true; keys.jump=down; return true;
-    case 'Space':                   if(down&&!keys.kick) kickQueued=true; keys.kick=down; return true;
-    case 'KeyS': case 'ArrowDown':  if(down&&!keys.slide) slideQueued=true; keys.slide=down; return true;
+    case 'KeyA': keys.left=down; return true;
+    case 'KeyD': keys.right=down; return true;
+    case 'KeyW': if(down&&!keys.jump) jumpQueued=true; keys.jump=down; return true;
+    case 'Space': if(down&&!keys.kick) kickQueued=true; keys.kick=down; return true;
+    case 'KeyS': if(down&&!keys.slide) slideQueued=true; keys.slide=down; return true;
+    case 'ArrowLeft':  (two?keys2:keys).left=down; return true;
+    case 'ArrowRight': (two?keys2:keys).right=down; return true;
+    case 'ArrowUp':    if(two){ if(down&&!keys2.jump) q2.jump=true; keys2.jump=down; } else { if(down&&!keys.jump) jumpQueued=true; keys.jump=down; } return true;
+    case 'ArrowDown':  if(two){ if(down&&!keys2.slide) q2.slide=true; keys2.slide=down; } else { if(down&&!keys.slide) slideQueued=true; keys.slide=down; } return true;
+    case 'Enter':      if(two){ if(down&&!keys2.kick) q2.kick=true; keys2.kick=down; return true; } return false;
   }
   return false;
 }
@@ -967,7 +1360,7 @@ window.addEventListener('keydown', e=>{
   if(setKey(e.code,true)) e.preventDefault();
 });
 window.addEventListener('keyup', e=>{ if(setKey(e.code,false)) e.preventDefault(); });
-window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=false; });
+window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=false; keys2.left=keys2.right=keys2.jump=keys2.kick=false; });
 
 /* touch controls: slide a finger across ◀ ▶ without lifting to change direction; jump/kick are taps */
 (function setupTouch(){
@@ -994,25 +1387,40 @@ let myChar, opChar;
 
 function startGame(levelIdx){
   level=LEVELS[levelIdx];
-  const others=CHARS.filter((c,i)=>i!==selected);
-  beginMatch(CHARS[selected], others[Math.floor(Math.random()*others.length)]);
+  const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected && !(v2Pending && i===v2Pending.idx)));
+  if(v2Pending){
+    const opts={ c3:CHARS[v2Pending.idx], c4:CHARS[pool[1]], partner:v2Pending.partner }; v2Pending=null;
+    beginMatch(CHARS[selected], CHARS[pool[0]], opts);
+  } else beginMatch(CHARS[selected], CHARS[pool[0]]);
 }
-/* c1 plays on the left (P1), c2 on the right (P2). Offline and online-host: you are P1. Online guest: you are P2. */
-function beginMatch(c1, c2){
+/* c1 plays on the left (P1), c2 on the right (P2). Offline and online-host: you are P1. Online guest: you are P2.
+   opts (2v2): c3 = your partner (P3, left), c4 = second opponent (P4, right), partner = 'ai' | 'human' */
+function beginMatch(c1, c2, opts){
   const localIsP1 = !(mp && mp.role==='guest');
+  v2 = opts ? {partner:opts.partner} : null;
+  players = v2 ? [P1,P2,P3,P4] : [P1,P2]; teamL = v2 ? [P1,P3] : [P1]; teamR = v2 ? [P2,P4] : [P2];
+  for(const p of [P3,P4]){ p.el.hidden=!v2; p.sh.hidden=!v2; }
   myChar = localIsP1 ? c1 : c2; opChar = localIsP1 ? c2 : c1;
   sprite(P1.el.querySelector('.sprite'), c1);
   sprite(P2.el.querySelector('.sprite'), c2);
-  P1.el.querySelector('.tag').textContent = localIsP1 ? 'אני – '+c1.name : c1.name;
-  P2.el.querySelector('.tag').textContent = localIsP1 ? c2.name : 'אני – '+c2.name;
+  P1.el.querySelector('.tag').textContent = localIsP1 ? T('game.me',nm(c1)) : nm(c1);
+  P2.el.querySelector('.tag').textContent = localIsP1 ? nm(c2) : T('game.me',nm(c2));
   P1.el.classList.toggle('me', localIsP1); P2.el.classList.toggle('me', !localIsP1);
-  $('#n-me').textContent=myChar.name; $('#n-op').textContent=opChar.name;
-  $('#level-tag').textContent = mp ? '👥 אונליין' : 'רמה: '+level.name;
+  if(v2){
+    sprite(P3.el.querySelector('.sprite'), opts.c3); sprite(P4.el.querySelector('.sprite'), opts.c4);
+    P3.el.querySelector('.tag').textContent = T(v2.partner==='human' ? 'game.friend' : 'game.partner', nm(opts.c3));
+    P4.el.querySelector('.tag').textContent = nm(opts.c4);
+    P3.el.classList.add('me');
+  }
+  $('#n-me').textContent = v2 ? nm(myChar)+' + '+nm(opts.c3) : nm(myChar);
+  $('#n-op').textContent = v2 ? nm(opChar)+' + '+nm(opts.c4) : nm(opChar);
+  $('#level-tag').textContent = mp ? T('game.online') : T('game.level', T('lvl.'+level.i));
   score={me:0,op:0}; updateScore();
   timeLeft=MATCH_TIME; updateTimer();
   $('#end').classList.remove('show');
   $('#fans').classList.remove('cheer');
-  P1.kicks=0; P2.kicks=0;
+  for(const p of players) p.kicks=0;
+  keys2.left=keys2.right=false; q2.jump=q2.kick=q2.slide=false;
   resetPositions();
   showScreen('game');
   keys.left=keys.right=keys.jump=keys.kick=false; jumpQueued=kickQueued=false;
@@ -1023,10 +1431,11 @@ function beginMatch(c1, c2){
 }
 
 function resetPositions(){
-  P1.x=230; P1.y=0; P1.vx=P1.vy=0; P1.facing=1;
-  P2.x=770; P2.y=0; P2.vx=P2.vy=0; P2.facing=-1; P2.reactT=0; P2.targetX=P2.x;
+  for(const p of [P1,P2,P3,P4]){
+    p.x=p.home; p.y=0; p.vx=p.vy=0; p.facing = p.home<500 ? 1 : -1; p.reactT=0; p.targetX=p.x;
+    p.slideT=p.slideCd=p.stunT=0; p.slideHit=false; p.el.classList.remove('running','kicking','sliding','stunned');
+  }
   ball.x=500; ball.y=R; ball.vx=0; ball.vy=0;
-  for(const p of [P1,P2]){ p.slideT=p.slideCd=p.stunT=0; p.slideHit=false; p.el.classList.remove('running','kicking','sliding','stunned'); }
   render();
 }
 
@@ -1037,20 +1446,23 @@ function doSlide(p){
   p.el.classList.add('sliding'); sfx.slide();
 }
 function updateSlides(dt){
-  for(const [p,o] of [[P1,P2],[P2,P1]]){
+  for(const p of players){
     if(p.slideCd>0) p.slideCd-=dt;
     if(p.stunT>0){ p.stunT-=dt; p.vx=0; if(p.stunT<=0) p.el.classList.remove('stunned'); }
     if(p.slideT<=0) continue;
     p.slideT-=dt; p.vx=p.slideDir*640;
     if(p.slideT<=0){ p.el.classList.remove('sliding'); continue; }
-    if(!p.slideHit){
-      if(inReach(p) && ball.y<70){                                   // sweep the ball away, low and hard
-        p.slideHit=true; ball.vx=p.slideDir*860; ball.vy=150; sfx.kick();
-      }
-      if(o.y<50 && o.stunT<=0 && Math.abs(o.x-p.x)<PW+12 && Math.sign(o.x-p.x)===p.slideDir){   // tackle: the other one tumbles
+    if(p.slideHit) continue;
+    if(inReach(p) && ball.y<70){                                     // sweep the ball away, low and hard
+      p.slideHit=true; ball.vx=p.slideDir*860; ball.vy=150; sfx.kick();
+    }
+    for(const o of players){                                          // tackle: an opponent in the way tumbles (teammates are skipped)
+      if(o===p || teamL.includes(o)===teamL.includes(p)) continue;
+      if(o.y<50 && o.stunT<=0 && Math.abs(o.x-p.x)<PW+12 && Math.sign(o.x-p.x)===p.slideDir){
         p.slideHit=true; p.slideT=0; p.el.classList.remove('sliding');
         o.stunT=.75; o.vx=0; o.x=clamp(o.x+p.slideDir*46, MINX, MAXX); o.slides=(o.slides|0)+1;
         o.el.classList.remove('stunned'); void o.el.offsetWidth; o.el.classList.add('stunned'); sfx.tackle();
+        break;
       }
     }
   }
@@ -1073,9 +1485,9 @@ function goHome(){
 function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from the local player's point of view
   state='end';
   const t=$('#end-title'), sub=$('#end-sub');
-  if(outcome==='win'){ t.textContent='ניצחת! 🏆'; sub.textContent=mp?'ניצחת את החבר! 🎉':'כל הכבוד, כוכב אמיתי!'; sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); recordResult('w'); }
-  else if(outcome==='lose'){ t.textContent='הפסדת 😢'; sub.textContent=mp?'החבר ניצח הפעם… נסו שוב!':'נסה שוב – בפעם הבאה תנצח!'; sfx.lose(); recordResult('l'); }
-  else { t.textContent='תיקו 🤝'; sub.textContent=mp?'שניכם באותה רמה! עוד משחק?':'תיקו נחשב הפסד... כמעט! נסה שוב'; sfx.lose(); recordResult('d'); }
+  if(outcome==='win'){ t.textContent=T('end.win'); sub.textContent=T(mp?'end.winMp':'end.winSub'); sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); recordResult('w'); }
+  else if(outcome==='lose'){ t.textContent=T('end.lose'); sub.textContent=T(mp?'end.loseMp':'end.loseSub'); sfx.lose(); recordResult('l'); }
+  else { t.textContent=T('end.draw'); sub.textContent=T(mp?'end.drawMp':'end.drawSub'); sfx.lose(); recordResult('d'); }
   updateTimer();
   $('#end').classList.add('show');
   setTimeout(goHome, 3000);
@@ -1110,13 +1522,21 @@ function goalFx(){
 /* ---------- physics ---------- */
 function overlaps(p,nx,o){ return Math.abs(nx-o.x)<PW && p.y<o.y+PH && o.y<p.y+PH; }
 
-function movePlayer(p,dt,other){
+function movePlayer(p,dt,others){
   const nx=clamp(p.x+p.vx*dt, MINX, MAXX);
-  if(!(p.vx!==0 && overlaps(p,nx,other))) p.x=nx;
+  if(!(p.vx!==0 && others.some(o=>overlaps(p,nx,o)))) p.x=nx;
   p.vy-=G*dt; p.y+=p.vy*dt;
   if(p.y<=0){ p.y=0; p.vy=0; }
-  if(overlaps(p,p.x,other)){ const dir=p.x<other.x?-1:1; p.x=clamp(other.x+dir*PW, MINX, MAXX); }
+  for(const o of others) if(overlaps(p,p.x,o)){ const dir=p.x<o.x?-1:1; p.x=clamp(o.x+dir*PW, MINX, MAXX); }
   if(p.kickT>0) p.kickT-=dt;
+}
+function humanInput(p,k,q){                          // second keyboard player (2v2 with a friend)
+  let d=0; if(k.left) d-=1; if(k.right) d+=1;
+  if(p.slideT<=0 && p.stunT<=0){ p.vx=d*MOVE; if(d) p.facing=d; }
+  if(q.jump && p.y===0 && p.slideT<=0 && p.stunT<=0) p.vy=JUMP;
+  q.jump=false;
+  if(q.kick){ if(p.stunT<=0) doKick(p); q.kick=false; }
+  if(q.slide){ doSlide(p); q.slide=false; }
 }
 
 function inReach(p){ return Math.hypot(ball.x-p.x, ball.y-(p.y+22))<REACH; }
@@ -1207,45 +1627,47 @@ function predictBall(T){                          // where will the ball be in T
 }
 /* GoalHeads-style bot: always hunts the ball, kicks the moment it can, jumps a lot, heads high balls,
    and lobs the ball over you when you stand between it and your goal. Only drops back when the ball is behind it. */
-function updateAI(dt){
-  const ai=P2, L=level;
+/* side = +1: the bot defends the right goal and attacks left; side = -1: the mirror (a bot on the left team).
+   The logic runs in a "canonical" frame where the bot always defends the right goal. With a teammate, whoever is
+   nearer the ball hunts it and the other one hangs back to cover. */
+function updateAI(dt, ai, side, opps, mate){
+  const L=level, cx = x => side>0 ? x : FIELD_W-x, cv = v => side>0 ? v : -v;
+  const bx=cx(ball.x), bvx=cv(ball.vx), ax=cx(ai.x);
+  const opp = opps.reduce((a,b)=>Math.abs(a.x-ball.x)<Math.abs(b.x-ball.x)?a:b), ox=cx(opp.x);
+  const support = !!mate && Math.abs(mate.x-ball.x) < Math.abs(ai.x-ball.x)-10;
   ai.reactT-=dt;
   if(ai.reactT<=0){
     ai.reactT=L.react;
     const err=(Math.random()*2-1)*L.err, smart=Math.random()<L.smart;
-    const p = smart ? predictBall(ball.vx>150 ? .35 : .22) : ball;
-    let target;
-    if(ball.x>ai.x+20 && ball.x>560){             // ball slipped behind it, near its own goal: get goal-side fast
-      ai.mode='defend'; target = Math.max(p.x, ball.x) + 60;
-    }else{                                        // HUNT: run straight at the ball, slightly goal-side so every touch goes forward
-      ai.mode='hunt'; target = p.x + 26;
-    }
-    ai.targetX=clamp(target+err, MINX, MAXX);
+    const pw = smart ? predictBall(bvx>150 ? .35 : .22) : ball, px=cx(pw.x);
+    let t;
+    if(support){ ai.mode='support'; t = Math.min(Math.max(px, bx) + 150, MAXX-40); }     // cover behind the ball
+    else if(bx>ax+20 && bx>560){ ai.mode='defend'; t = Math.max(px, bx) + 60; }         // ball slipped behind it: get goal-side fast
+    else { ai.mode='hunt'; t = px + 26; }                                                // run straight at the ball, slightly goal-side
+    ai.targetX=clamp(cx(clamp(t, MINX, MAXX))+err, MINX, MAXX);
     ai.wantKick=Math.random()<Math.min(1, L.kick+.35);
   }
   const diff=ai.targetX-ai.x, dir=Math.abs(diff)>6 ? Math.sign(diff) : 0;
   if(ai.slideT>0 || ai.stunT>0) return;           // mid-slide or knocked down: no control
   ai.vx=dir*MOVE*L.speed;
-  ai.facing = ball.x<ai.x ? -1 : 1;
-  const dx=ball.x-ai.x, adx=Math.abs(dx), near=inReach(ai);
-  // slide tackle: ball rolling ahead of it, or the opponent right in front with the ball
-  const aheadBall = ball.y<40 && adx>50 && adx<170 && Math.sign(dx)===ai.facing;
-  const aheadOpp = P1.y<40 && Math.abs(P1.x-ai.x)<130 && Math.sign(P1.x-ai.x)===ai.facing && Math.abs(ball.x-P1.x)<80;
-  if(ai.y===0 && (aheadBall || aheadOpp) && Math.random()<(.15+L.kick*.5)*dt*3) doSlide(ai);
-  const oppInWay = P1.x<ball.x && ball.x-P1.x<230 && P1.x>GOAL_W+60;        // you're between the ball and your goal → lob it over you
+  const cf = bx<ax ? -1 : 1; ai.facing=cv(cf);     // cf = canonical facing (-1 = toward the goal it attacks)
+  const dx=bx-ax, adx=Math.abs(dx), near=inReach(ai);
+  const aheadBall = ball.y<40 && adx>50 && adx<170 && Math.sign(dx)===cf;
+  const aheadOpp = opp.y<40 && Math.abs(ox-ax)<130 && Math.sign(ox-ax)===cf && Math.abs(bx-ox)<80;
+  if(ai.y===0 && !support && (aheadBall || aheadOpp) && Math.random()<(.15+L.kick*.5)*dt*3) doSlide(ai);
+  const oppInWay = ox<bx && bx-ox<230 && ox>GOAL_W+60;                          // opponent between the ball and the goal → lob over
   if(ai.y===0){
-    const blocked = dir!==0 && overlaps(ai, ai.x+dir*12, P1);
-    const ballHigh = ball.y>45 && adx<150;                                     // go up and head it
-    const shotComing = ball.vx>300 && dx<0 && dx>-300 && ball.y>40;
-    const hopOver = ai.mode==='defend' && dx>0 && dx<110 && ball.y<45 && ai.x<MAXX-30;
-    const lobSetup = oppInWay && adx<90 && ball.y<60;                          // jump first, kick at the top = lob
+    const blocked = dir!==0 && players.some(o=>o!==ai && overlaps(ai, ai.x+dir*12, o));
+    const ballHigh = ball.y>45 && adx<150;
+    const shotComing = bvx>300 && dx<0 && dx>-300 && ball.y>40;
+    const hopOver = ai.mode==='defend' && dx>0 && dx<110 && ball.y<45 && ax<MAXX-30;
+    const lobSetup = oppInWay && adx<90 && ball.y<60;
     if((blocked && Math.random()<L.jump*dt*8) || (ballHigh && Math.random()<L.jump*dt*10) ||
        (shotComing && Math.random()<L.jump*dt*12) || (hopOver && Math.random()<(.3+L.smart*.7)*dt*10) ||
-       (lobSetup && Math.random()<(.4+L.smart*.6)*dt*9) || (adx<120 && Math.random()<L.jump*dt*1.6)) ai.vy=JUMP;
+       (lobSetup && !support && Math.random()<(.4+L.smart*.6)*dt*9) || (adx<120 && !support && Math.random()<L.jump*dt*1.6)) ai.vy=JUMP;
   }
-  if(near && ball.x<ai.x+8){                        // kick the moment it can (in the air too – that's the lob / header-kick)
-    const airborne = ai.y>25;
-    const eager = ai.mode==='defend' && ball.x>600;
+  if(near && bx<ax+8){                              // kick the moment it can (in the air too – that's the lob / header-kick)
+    const airborne = ai.y>25, eager = ai.mode==='defend' && bx>600;
     if(airborne ? Math.random()<(.5+L.kick*.5)*dt*18 : (eager && Math.random()<(.5+L.kick*.5)*dt*16) || (ai.wantKick && Math.random()<(.25+L.kick*.75)*dt*14))
       doKick(ai, L.power);
   }
@@ -1263,11 +1685,15 @@ function loop(t){
     jumpQueued=false;
     if(kickQueued){ if(P1.stunT<=0) doKick(P1); kickQueued=false; }
     if(slideQueued){ doSlide(P1); slideQueued=false; }
-    if(mp && mp.role==='host') applyRemote(); else updateAI(dt);
+    if(mp && mp.role==='host') applyRemote(); else updateAI(dt, P2, 1, teamL, v2?P4:null);
+    if(v2){
+      updateAI(dt, P4, 1, teamL, P2);
+      if(v2.partner==='ai') updateAI(dt, P3, -1, teamR, P1); else humanInput(P3, keys2, q2);
+    }
     updateSlides(dt);
-    movePlayer(P1,dt,P2); movePlayer(P2,dt,P1);
+    for(const p of players) movePlayer(p, dt, players.filter(o=>o!==p));
     updateBall(dt);
-    collideBall(P1); collideBall(P2);
+    for(const p of players) collideBall(p);
     timeLeft-=dt; updateTimer();
     if(timeLeft<=0){ timeLeft=0; endGame(); }
   }else if(state==='celebrate'){
@@ -1277,11 +1703,12 @@ function loop(t){
   if(mp && mp.role==='host') sendSnapshot();
 }
 
-const SH={P1:$('#sh1'),P2:$('#sh2'),B:$('#shb')};
+const SHB=$('#shb');
 function shadow(el,x,h,w){ const k=Math.max(.35,1-h/420); el.style.transform=`translate(${x-32}px,${GROUND_Y-7}px) scale(${(w*k).toFixed(3)},${k.toFixed(3)})`; el.style.opacity=(.3*k).toFixed(2); }
 function render(){
-  shadow(SH.P1,P1.x,P1.y,1.1); shadow(SH.P2,P2.x,P2.y,1.1); shadow(SH.B,ball.x,ball.y-R,.45);
-  for(const p of [P1,P2]){
+  shadow(SHB,ball.x,ball.y-R,.45);
+  for(const p of players){
+    shadow(p.sh,p.x,p.y,1.1);
     p.el.style.transform=`translate(${p.x-PW/2}px,${GROUND_Y-p.y-PH}px)`;
     p.el.querySelector('.sprite').classList.toggle('flip', p.facing<0);
     p.el.classList.toggle('running', state==='play' && p.vx!==0 && p.y===0);
@@ -1318,30 +1745,30 @@ function mpLobby(){
   $('#btn-mp-host').disabled=false; $('#btn-mp-join').disabled=false; $('#mp-input').value='';
 }
 async function mpHost(){
-  mpTeardown(); mpStatus('מתחבר…'); $('#btn-mp-host').disabled=true;
-  try{ await loadPeerJS(); }catch(e){ mpStatus('אין חיבור לאינטרנט 😕'); $('#btn-mp-host').disabled=false; return; }
+  mpTeardown(); mpStatus(T('mp.connecting')); $('#btn-mp-host').disabled=true;
+  try{ await loadPeerJS(); }catch(e){ mpStatus(T('mp.offline')); $('#btn-mp-host').disabled=false; return; }
   const code=makeCode();
   mp={ role:'host', code, connected:false, myPick:null, opPick:null, myReady:false, opReady:false, rin:{l:0,r:0,j:0,k:0}, ev:[] };
   const peer=new Peer(peerIdFor(code)); mp.peer=peer;
-  peer.on('open', ()=>{ $('#mp-code-text').textContent=code; $('#mp-code').hidden=false; mpStatus('שלח לחבר את הקוד '+code); });
+  peer.on('open', ()=>{ $('#mp-code-text').textContent=code; $('#mp-code').hidden=false; mpStatus(T('mp.sendCode',code)); });
   peer.on('connection', conn=>{ if(mp.conn){ conn.close(); return; } mp.conn=conn; mpWire(conn); });
   peer.on('error', e=>{
     if(e.type==='unavailable-id'){ peer.destroy(); mpHost(); }             // code already taken → new one
-    else if(!mp || !mp.connected){ mpStatus('שגיאת חיבור 😕 ('+e.type+')'); $('#btn-mp-host').disabled=false; }
+    else if(!mp || !mp.connected){ mpStatus(T('mp.err',e.type)); $('#btn-mp-host').disabled=false; }
   });
 }
 async function mpJoin(code){
   code=(code||'').trim().toUpperCase();
-  if(code.length!==4){ mpStatus('הקוד הוא 4 תווים'); return; }
-  mpTeardown(); mpStatus('מתחבר ל-'+code+'…'); $('#btn-mp-join').disabled=true;
-  try{ await loadPeerJS(); }catch(e){ mpStatus('אין חיבור לאינטרנט 😕'); $('#btn-mp-join').disabled=false; return; }
+  if(code.length!==4){ mpStatus(T('mp.code4')); return; }
+  mpTeardown(); mpStatus(T('mp.connectingTo',code)); $('#btn-mp-join').disabled=true;
+  try{ await loadPeerJS(); }catch(e){ mpStatus(T('mp.offline')); $('#btn-mp-join').disabled=false; return; }
   mp={ role:'guest', code, connected:false, myPick:null, opPick:null, myReady:false, opReady:false, snap:null, lastKey:'', lastSent:0 };
   const peer=new Peer(); mp.peer=peer;
   peer.on('open', ()=>{
     const conn=peer.connect(peerIdFor(code), {serialization:'json', reliable:true}); mp.conn=conn; mpWire(conn);
-    setTimeout(()=>{ if(mp && !mp.connected){ mpStatus('לא נמצא משחק עם הקוד '+code+' 😕'); $('#btn-mp-join').disabled=false; } }, 9000);
+    setTimeout(()=>{ if(mp && !mp.connected){ mpStatus(T('mp.notFound',code)); $('#btn-mp-join').disabled=false; } }, 9000);
   });
-  peer.on('error', e=>{ if(!mp || !mp.connected){ mpStatus(e.type==='peer-unavailable' ? 'לא נמצא משחק עם הקוד '+code+' 😕' : 'שגיאת חיבור 😕 ('+e.type+')'); $('#btn-mp-join').disabled=false; } });
+  peer.on('error', e=>{ if(!mp || !mp.connected){ mpStatus(e.type==='peer-unavailable' ? T('mp.notFound',code) : T('mp.err',e.type)); $('#btn-mp-join').disabled=false; } });
 }
 function mpWire(conn){
   conn.on('open', ()=>{ mp.connected=true; sfx.win(); mpStatus(''); mpShowPick(); });
@@ -1355,7 +1782,7 @@ function mpOnClose(){
   mpTeardown();
   state='idle'; cancelAnimationFrame(rafId);
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
-  mpLobby(); mpStatus('החבר התנתק 😢'); showScreen('mp');
+  mpLobby(); mpStatus(T('mp.left')); showScreen('mp');
   if(wasPlaying) sfx.lose();
 }
 function mpOnMsg(m){
@@ -1375,7 +1802,7 @@ function mpShowPick(){
   const g=$('#mp-gallery'); g.innerHTML='';
   CHARS.forEach((c,i)=>{
     const d=document.createElement('div'); d.className='mpcard'; d.dataset.i=i;
-    d.innerHTML=`<div class="sprite">${playerSVG(c)}</div>${c.name}`;
+    d.innerHTML=`<div class="sprite">${playerSVG(c)}</div>${nm(c)}`;
     d.addEventListener('click', ()=>{ if(!mp || mp.opPick===i || mp.myReady) return; sfx.click(); mp.myPick=i; mp.conn.send({t:'pick', i}); mpRefresh(); });
     g.appendChild(d);
   });
@@ -1385,11 +1812,11 @@ function mpRefresh(){
   if(!mp) return;
   document.querySelectorAll('.mpcard').forEach(d=>{ const i=+d.dataset.i; d.classList.toggle('mine', i===mp.myPick); d.classList.toggle('theirs', i===mp.opPick); });
   const me=$('#mp-me-sprite'), op=$('#mp-op-sprite');
-  if(mp.myPick!=null){ sprite(me, CHARS[mp.myPick]); $('#mp-me-name').textContent=CHARS[mp.myPick].name; } else { me.innerHTML=''; $('#mp-me-name').textContent='בחר דמות 👆'; }
-  if(mp.opPick!=null){ sprite(op, CHARS[mp.opPick]); $('#mp-op-name').textContent=CHARS[mp.opPick].name; } else { op.innerHTML=''; $('#mp-op-name').textContent='החבר בוחר…'; }
-  $('#mp-op-tag').textContent = 'החבר' + (mp.opReady ? ' · מוכן ✔' : '');
+  if(mp.myPick!=null){ sprite(me, CHARS[mp.myPick]); $('#mp-me-name').textContent=nm(CHARS[mp.myPick]); } else { me.innerHTML=''; $('#mp-me-name').textContent=T('mp.pick'); }
+  if(mp.opPick!=null){ sprite(op, CHARS[mp.opPick]); $('#mp-op-name').textContent=nm(CHARS[mp.opPick]); } else { op.innerHTML=''; $('#mp-op-name').textContent=T('mp.picking'); }
+  $('#mp-op-tag').textContent = T('mp.friend') + (mp.opReady ? T('mp.ready') : '');
   const b=$('#btn-mp-play'); b.classList.toggle('ready', mp.myReady);
-  b.textContent = mp.myReady ? '✔ מוכן! מחכה לחבר…' : 'שחק ▶'; b.disabled = mp.myPick==null;
+  b.textContent = mp.myReady ? T('mp.readyWait') : T('btn.play'); b.disabled = mp.myPick==null;
   if(mp.role==='host' && mp.myReady && mp.opReady && mp.myPick!=null && mp.opPick!=null && mp.myPick!==mp.opPick){
     mp.conn.send({t:'start', p1:mp.myPick, p2:mp.opPick});
     mp.rin={l:0,r:0,j:0,k:0}; mp.ev=[];
@@ -1500,31 +1927,99 @@ const TEAMS = [
   ['EGY','מצרים',2,'#F04E4E',[['h','#ce1126','#fff','#000'],['poly','#c09300','15,6 18,9 17,13.5 13,13.5 12,9']]],
   ['TUR','טורקיה',3,'#F04E4E',[['h','#e30a17'],['circle','#fff',11.5,10,5],['circle','#e30a17',13,10,4],['star','#fff',19,10,2.3]]],
   ['SRB','סרביה',3,'#F04E4E',[['h','#c6363c','#0c4076','#fff']]],
+  ['SCO','סקוטלנד',2,'#0065BD',[['h','#0065bd'],['poly','#fff','0,0 3,0 30,17 30,20 27,20 0,3'],['poly','#fff','27,0 30,0 30,3 3,20 0,20 0,17']]],
+  ['WAL','ויילס',2,'#D30731',[['h','#fff','#00ab39'],['poly','#d30731','8,6 14,4 18,7 23,6 22,10 19,12 21,15 15,14 10,15 11,11 7,9']]],
+  ['IRL','אירלנד',2,'#169B62',[['v','#169b62','#fff','#ff883e']]],
+  ['NOR','נורווגיה',3,'#EF2B2D',[['h','#ef2b2d'],['cross','#fff',11,10,5],['cross','#002868',11,10,2.4]]],
+  ['FIN','פינלנד',2,'#ffffff',[['h','#fff'],['cross','#003580',11,10,4.5]]],
+  ['ISL','איסלנד',2,'#02529C',[['h','#02529c'],['cross','#fff',11,10,5],['cross','#dc1e35',11,10,2.4]]],
+  ['AUT','אוסטריה',3,'#ED2939',[['h','#ed2939','#fff','#ed2939']]],
+  ['CZE','צ\'כיה',3,'#D7141A',[['h','#fff','#d7141a'],['poly','#11457e','0,0 15,10 0,20']]],
+  ['HUN','הונגריה',2,'#CE2939',[['h','#ce2939','#fff','#477050']]],
+  ['ROU','רומניה',2,'#FCD116',[['v','#002b7f','#fcd116','#ce1126']]],
+  ['GRE','יוון',2,'#0D5EAF',[['h','#0d5eaf','#fff','#0d5eaf','#fff','#0d5eaf','#fff','#0d5eaf','#fff','#0d5eaf'],['rect','#0d5eaf',0,0,11.2,11.2],['cross','#fff',5.6,5.6,2.2]]],
+  ['UKR','אוקראינה',3,'#FFD700',[['h','#0057b7','#ffd700']]],
+  ['BIH','בוסניה',2,'#002395',[['h','#002395'],['poly','#fecb00','8,0 24,0 24,20']]],
+  ['SVN','סלובניה',2,'#ffffff',[['h','#fff','#005da4','#ed1c24'],['poly','#005da4','6,4 10,10 2,10']]],
+  ['SVK','סלובקיה',2,'#ffffff',[['h','#fff','#0b4ea2','#ee1c25'],['poly','#ee1c25','6,6 12,6 12,12 9,15 6,12']]],
+  ['BUL','בולגריה',2,'#ffffff',[['h','#fff','#00966e','#d62612']]],
+  ['ALB','אלבניה',2,'#E41E20',[['h','#e41e20'],['poly','#000','15,4 19,7 22,5 21,10 24,13 18,13 15,17 12,13 6,13 9,10 8,5 11,7']]],
+  ['GEO','גאורגיה',2,'#ffffff',[['h','#fff'],['cross','#ff0000',15,10,3.5],['star','#ff0000',6,4.5,1.6],['star','#ff0000',24,4.5,1.6],['star','#ff0000',6,15.5,1.6],['star','#ff0000',24,15.5,1.6]]],
+  ['KAZ','קזחסטן',1,'#00AFCA',[['h','#00afca'],['circle','#fec50c',15,10,4.5]]],
+  ['RUS','רוסיה',2,'#ffffff',[['h','#fff','#0039a6','#d52b1e']]],
+  ['KSA','סעודיה',2,'#006C35',[['h','#006c35'],['rect','#fff',8,12,14,1.6],['rect','#fff',7,6,16,1.2]]],
+  ['QAT','קטאר',2,'#8A1538',[['vw',['#fff',1],['#8a1538',2]],['poly','#fff','10,0 12,1.1 10,2.2 12,3.3 10,4.4 12,5.5 10,6.6 12,7.7 10,8.8 12,9.9 10,11 12,12.1 10,13.2 12,14.3 10,15.4 12,16.5 10,17.6 12,18.7 10,20']]],
+  ['IRN','איראן',3,'#ffffff',[['h','#239f40','#fff','#da0000'],['circle','#da0000',15,10,2.6]]],
+  ['IRQ','עיראק',2,'#CE1126',[['h','#ce1126','#fff','#000'],['rect','#007a3d',11,8.5,8,3]]],
+  ['UAE','איחוד האמירויות',2,'#ffffff',[['h','#00732f','#fff','#000'],['rect','#ff0000',0,0,8,20]]],
+  ['CHN','סין',2,'#DE2910',[['h','#de2910'],['star','#ffde00',6,6,3.5],['star','#ffde00',12,3,1.2],['star','#ffde00',14,6,1.2],['star','#ffde00',14,9.5,1.2],['star','#ffde00',12,12.5,1.2]]],
+  ['IND','הודו',1,'#3D8BFF',[['h','#ff9933','#fff','#138808'],['circle','#000080',15,10,3],['circle','#fff',15,10,2.2]]],
+  ['IDN','אינדונזיה',1,'#ffffff',[['h','#ce1126','#fff']]],
+  ['THA','תאילנד',1,'#ffffff',[['hw',['#a51931',1],['#fff',1],['#2d2a4a',2],['#fff',1],['#a51931',1]]]],
+  ['VNM','וייטנאם',1,'#DA251D',[['h','#da251d'],['star','#ffff00',15,10,5.5]]],
+  ['UZB','אוזבקיסטן',2,'#ffffff',[['hw',['#0099b5',3],['#ce1126',.4],['#fff',3],['#ce1126',.4],['#1eb53a',3]],['circle','#fff',5,3.4,2]]],
+  ['CMR','קמרון',2,'#007A5E',[['v','#007a5e','#ce1126','#fcd116'],['star','#fcd116',15,10,3]]],
+  ['CIV','חוף השנהב',2,'#FF8200',[['v','#ff8200','#fff','#009a44']]],
+  ['ALG','אלג\'יריה',2,'#ffffff',[['v','#006233','#fff'],['circle','#d21034',15,10,5],['circle','#fff',16.5,10,4],['star','#d21034',18,10,2.2]]],
+  ['TUN','תוניסיה',2,'#E70013',[['h','#e70013'],['circle','#fff',15,10,6],['circle','#e70013',15,10,4.5],['circle','#fff',16.2,10,3.6],['star','#e70013',16.5,10,2.2]]],
+  ['RSA','דרום אפריקה',2,'#FFB612',[['h','#de3831','#fff','#007a4d','#fff','#002395'],['rect','#007a4d',0,7,30,6],['poly','#000','0,3 9,10 0,17'],['poly','#ffb612','0,1 11,10 0,19 0,17 8,10 0,3']]],
+  ['MLI','מאלי',1,'#14B53A',[['v','#14b53a','#fcd116','#ce1126']]],
+  ['COD','קונגו',1,'#007FFF',[['h','#007fff'],['poly','#ce1021','0,20 0,14 30,0 30,6'],['star','#f7d618',5,4.5,3]]],
+  ['PER','פרו',2,'#D91023',[['v','#d91023','#fff','#d91023']]],
+  ['ECU','אקוודור',2,'#FFDD00',[['hw',['#ffdd00',2],['#034ea2',1],['#ed1c24',1]],['circle','#8a5a2b',15,9,2.6]]],
+  ['PAR','פרגוואי',2,'#D52B1E',[['h','#d52b1e','#fff','#0038a8'],['circle','#fcd116',15,10,2.4]]],
+  ['VEN','ונצואלה',1,'#FFCC00',[['h','#ffcc00','#00247d','#cf142b'],['star','#fff',9,9,1.4],['star','#fff',12,7.8,1.4],['star','#fff',15,7.4,1.4],['star','#fff',18,7.8,1.4],['star','#fff',21,9,1.4]]],
+  ['BOL','בוליביה',1,'#007934',[['h','#d52b1e','#f9e300','#007934']]],
+  ['CRC','קוסטה ריקה',2,'#CE1126',[['hw',['#002b7f',1],['#fff',1],['#ce1126',2],['#fff',1],['#002b7f',1]]]],
+  ['PAN','פנמה',1,'#ffffff',[['h','#fff'],['rect','#005293',15,0,15,10],['rect','#d21034',0,10,15,10],['star','#005293',7.5,5,2.6],['star','#d21034',22.5,15,2.6]]],
+  ['JAM','ג\'מייקה',1,'#FED100',[['h','#009b3a'],['poly','#000','0,0 0,20 15,10'],['poly','#000','30,0 30,20 15,10'],['poly','#fed100','0,0 3,0 30,18 30,20 27,20 0,2'],['poly','#fed100','27,0 30,0 30,2 3,20 0,20 0,18']]],
+  ['HON','הונדורס',1,'#00BCE4',[['h','#00bce4','#fff','#00bce4'],['star','#00bce4',15,10,1.6],['star','#00bce4',10,8,1.4],['star','#00bce4',20,8,1.4],['star','#00bce4',10,12,1.4],['star','#00bce4',20,12,1.4]]],
+  ['NZL','ניו זילנד',1,'#ffffff',[['h','#00247d'],['star','#cc142b',20,6,2],['star','#cc142b',25,9.5,2],['star','#cc142b',20,14,2],['star','#cc142b',16,9,1.7],['rect','#fff',0,0,12,9],['cross','#cc142b',6,4.5,1.6]]],
 ].map(([code,name,str,color,spec])=>({code,name,str,color,flag:flagSVG(spec)}));
-const ROUND_NAMES=['שלב 32 האחרונות','שמינית גמר','רבע גמר','חצי גמר','הגמר הגדול'];
+const ROUND_NAMES={ get 0(){return T('round.0')}, get 1(){return T('round.1')}, get 2(){return T('round.2')}, get 3(){return T('round.3')}, get 4(){return T('round.4')} };
+/* country names in en / ar / ru (Hebrew is in TEAMS) */
+const TEAM_NAMES={
+ BRA:['Brazil','البرازيل','Бразилия'],ARG:['Argentina','الأرجنتين','Аргентина'],FRA:['France','فرنسا','Франция'],GER:['Germany','ألمانيا','Германия'],ESP:['Spain','إسبانيا','Испания'],
+ ENG:['England','إنجلترا','Англия'],ITA:['Italy','إيطاليا','Италия'],POR:['Portugal','البرتغال','Португалия'],NED:['Netherlands','هولندا','Нидерланды'],BEL:['Belgium','بلجيكا','Бельгия'],
+ CRO:['Croatia','كرواتيا','Хорватия'],URU:['Uruguay','الأوروغواي','Уругвай'],MEX:['Mexico','المكسيك','Мексика'],USA:['USA','الولايات المتحدة','США'],JPN:['Japan','اليابان','Япония'],
+ KOR:['South Korea','كوريا الجنوبية','Южная Корея'],MAR:['Morocco','المغرب','Марокко'],SEN:['Senegal','السنغال','Сенегал'],ISR:['Israel','إسرائيل','Израиль'],SUI:['Switzerland','سويسرا','Швейцария'],
+ DEN:['Denmark','الدنمارك','Дания'],SWE:['Sweden','السويد','Швеция'],POL:['Poland','بولندا','Польша'],COL:['Colombia','كولومبيا','Колумбия'],CHI:['Chile','تشيلي','Чили'],
+ AUS:['Australia','أستراليا','Австралия'],CAN:['Canada','كندا','Канада'],NGA:['Nigeria','نيجيريا','Нигерия'],GHA:['Ghana','غانا','Гана'],EGY:['Egypt','مصر','Египет'],
+ TUR:['Turkey','تركيا','Турция'],SRB:['Serbia','صربيا','Сербия'],SCO:['Scotland','اسكتلندا','Шотландия'],WAL:['Wales','ويلز','Уэльс'],IRL:['Ireland','أيرلندا','Ирландия'],
+ NOR:['Norway','النرويج','Норвегия'],FIN:['Finland','فنلندا','Финляндия'],ISL:['Iceland','آيسلندا','Исландия'],AUT:['Austria','النمسا','Австрия'],CZE:['Czechia','التشيك','Чехия'],
+ HUN:['Hungary','المجر','Венгрия'],ROU:['Romania','رومانيا','Румыния'],GRE:['Greece','اليونان','Греция'],UKR:['Ukraine','أوكرانيا','Украина'],BIH:['Bosnia','البوسنة','Босния'],
+ SVN:['Slovenia','سلوفينيا','Словения'],SVK:['Slovakia','سلوفاكيا','Словакия'],BUL:['Bulgaria','بلغاريا','Болгария'],ALB:['Albania','ألبانيا','Албания'],GEO:['Georgia','جورجيا','Грузия'],
+ KAZ:['Kazakhstan','كازاخستان','Казахстан'],RUS:['Russia','روسيا','Россия'],KSA:['Saudi Arabia','السعودية','Саудовская Аравия'],QAT:['Qatar','قطر','Катар'],IRN:['Iran','إيران','Иран'],
+ IRQ:['Iraq','العراق','Ирак'],UAE:['UAE','الإمارات','ОАЭ'],CHN:['China','الصين','Китай'],IND:['India','الهند','Индия'],IDN:['Indonesia','إندونيسيا','Индонезия'],
+ THA:['Thailand','تايلاند','Таиланд'],VNM:['Vietnam','فيتنام','Вьетнам'],UZB:['Uzbekistan','أوزبكستان','Узбекистан'],CMR:['Cameroon','الكاميرون','Камерун'],CIV:['Ivory Coast','ساحل العاج','Кот-д’Ивуар'],
+ ALG:['Algeria','الجزائر','Алжир'],TUN:['Tunisia','تونس','Тунис'],RSA:['South Africa','جنوب أفريقيا','ЮАР'],MLI:['Mali','مالي','Мали'],COD:['DR Congo','الكونغو','ДР Конго'],
+ PER:['Peru','بيرو','Перу'],ECU:['Ecuador','الإكوادور','Эквадор'],PAR:['Paraguay','باراغواي','Парагвай'],VEN:['Venezuela','فنزويلا','Венесуэла'],BOL:['Bolivia','بوليفيا','Боливия'],
+ CRC:['Costa Rica','كوستاريكا','Коста-Рика'],PAN:['Panama','بنما','Панама'],JAM:['Jamaica','جامايكا','Ямайка'],HON:['Honduras','هندوراس','Гондурас'],NZL:['New Zealand','نيوزيلندا','Новая Зеландия'],
+};
+const tn = t => lang==='he' ? t.name : ((TEAM_NAMES[t.code]||[])[LI[lang]-1] || (TEAM_NAMES[t.code]||[])[0] || t.name);
 const shuffle = a => { for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const isLight = hex => { const n=parseInt(hex.slice(1),16); return ((n>>16)*.3+((n>>8)&255)*.59+(n&255)*.11) > 150; };
 function teamChar(t, keeper){                          // a generic player wearing the team's colours
   const hairs=['short','wavy','spiky','curly'], skins=[['#F1C9A5','#b8865f'],['#E8B892','#b07a55'],['#C68642','#8a5a2a'],['#8D5A3B','#5e3a24']];
   const h=t.code.charCodeAt(0)+t.code.charCodeAt(2), sk=skins[h%skins.length];
   const jersey = keeper ? (isLight(t.color) ? '#3FC35F' : '#FFD447') : t.color;   // keepers wear a contrasting kit
-  return { name:t.name, skin:sk[0], skinDark:sk[1], hair:hairs[h%hairs.length], hairColor:'#1e1a17', jersey, numColor:isLight(jersey)?'#1B2A4E':'#fff',
+  return { id:'t'+t.code, name:t.name, skin:sk[0], skinDark:sk[1], hair:hairs[h%hairs.length], hairColor:'#1e1a17', jersey, numColor:isLight(jersey)?'#1B2A4E':'#fff',
            shorts:keeper?'#1B2A4E':(isLight(t.color)?'#1B2A4E':'#ffffff'), socks:jersey, number:keeper?1:10, brows:'round' };
 }
 
 /* difficulty: keeper reading, AI misses, how long the sight stays visible when you keep, sight/power speed */
 const PK_LEVELS=[
-  { name:'קל',    color:'green',  read:.12, miss:.16, window:1.5,  aimSpeed:.7,  powerSpeed:.7 },
-  { name:'בינוני',color:'blue',   read:.22, miss:.12, window:1.15, aimSpeed:.9,  powerSpeed:.9 },
-  { name:'קשה',   color:'orange', read:.34, miss:.09, window:.85,  aimSpeed:1.1, powerSpeed:1.1 },
-  { name:'מטורף', color:'pink',   read:.46, miss:.06, window:.62,  aimSpeed:1.35,powerSpeed:1.3 },
-  { name:'מאסטר', color:'purple', read:.6,  miss:.04, window:.45,  aimSpeed:1.6, powerSpeed:1.55 },
+  { i:0, color:'green',  read:.12, miss:.16, window:1.5,  aimSpeed:.7,  powerSpeed:.7 },
+  { i:1, color:'blue',   read:.22, miss:.12, window:1.15, aimSpeed:.9,  powerSpeed:.9 },
+  { i:2, color:'orange', read:.34, miss:.09, window:.85,  aimSpeed:1.1, powerSpeed:1.1 },
+  { i:3, color:'pink',   read:.46, miss:.06, window:.62,  aimSpeed:1.35,powerSpeed:1.3 },
+  { i:4, color:'purple', read:.6,  miss:.04, window:.45,  aimSpeed:1.6, powerSpeed:1.55 },
 ];
 let pkLevel=PK_LEVELS[1];
 (function buildPkLevels(){
   const box=$('#pk-levels');
   PK_LEVELS.forEach(L=>{
-    const b=document.createElement('button'); b.className=`btn ${L.color}`; b.textContent=L.name;
+    const b=document.createElement('button'); b.className=`btn ${L.color}`; b.textContent=T('lvl.'+L.i);
     b.addEventListener('click', ()=>{ sfx.click(); pkLevel=L; $('#pk-level-modal').classList.remove('show'); showTeamPick(); showScreen('cup'); });
     box.appendChild(b);
   });
@@ -1536,16 +2031,17 @@ const cupConfetti = makeConfetti($('#cup-confetti'), ['#FFD447','#FFE27A','#fff'
 const pkConfetti  = makeConfetti($('#pk-confetti'),  ['#FFD447','#FFE27A','#fff','#3D8BFF','#F04E4E','#3FC35F']);
 
 /* ----- team picker ----- */
-(function buildTeams(){
-  const box=$('#teams');
+function buildTeams(){
+  const box=$('#teams'); box.innerHTML='';
   TEAMS.forEach((t,i)=>{
     const d=document.createElement('div'); d.className='team'; d.tabIndex=0;
-    d.innerHTML=`<span class="flag">${t.flag}</span>${t.name}`;
+    d.innerHTML=`<span class="flag">${t.flag}</span>${tn(t)}`;
     const pick=()=>{ sfx.click(); newCup(i); };
     d.addEventListener('click',pick); d.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
     box.appendChild(d);
   });
-})();
+}
+buildTeams();
 function showTeamPick(){ $('#team-pick').hidden=false; $('#bracket').hidden=true; }
 
 /* ----- tournament state ----- */
@@ -1609,12 +2105,12 @@ function renderBracket(){
   const champ=$('#cup-champ');
   if(cup.champion!==null){
     const t=TEAMS[cup.champion];
-    champ.innerHTML = cup.champion===cup.mine ? `<span class="big">🏆 אתה אלוף העולם! 🏆</span>${t.flag} ${t.name}` : `<span class="big">🏆 ${t.flag} ${t.name}</span>אלופת העולם`;
+    champ.innerHTML = cup.champion===cup.mine ? `<span class="big">${T('cup.youChamp')}</span>${t.flag} ${tn(t)}` : `<span class="big">🏆 ${t.flag} ${tn(t)}</span>${T('cup.champ')}`;
   } else champ.innerHTML='<span class="big">🏆</span>';
   const rl=$('#cup-round');
-  if(cup.champion!==null) rl.textContent = cup.champion===cup.mine ? 'זכית בגביע העולם!!!' : 'הטורניר הסתיים';
-  else if(cup.out) rl.textContent='הודחת מהטורניר';
-  else { const m=live, op=TEAMS[m.a===cup.mine?m.b:m.a]; rl.innerHTML=`${ROUND_NAMES[cup.round]}: נגד ${op.flag} ${op.name} · רמה: ${cup.level.name}`; }
+  if(cup.champion!==null) rl.textContent = cup.champion===cup.mine ? T('cup.won') : T('cup.over');
+  else if(cup.out) rl.textContent=T('cup.out');
+  else { const m=live, op=TEAMS[m.a===cup.mine?m.b:m.a]; rl.innerHTML=T('cup.vs', ROUND_NAMES[cup.round], op.flag+' '+tn(op), T('lvl.'+cup.level.i)); }
   $('#btn-cup-play').hidden = !live;
 }
 $('#btn-pk').addEventListener('click', ()=>{ sfx.click(); if(cup) showScreen('cup'); else $('#pk-level-modal').classList.add('show'); });
@@ -1657,7 +2153,7 @@ function nextKick(){
   const res=shootoutWinner(); if(res){ endShootout(res); return; }
   const meShoots = (pk.kick%2===0)===pk.meFirst; pk.kick++;
   const sudden = pk.sMe.length>=5 && pk.sOp.length>=5;
-  $('#pk-round').textContent=`${ROUND_NAMES[cup.round]} · ${cup.level.name} · בעיטה ${Math.ceil(pk.kick/2)}${sudden?' · מוות פתאומי!':''}`;
+  $('#pk-round').textContent=`${ROUND_NAMES[cup.round]} · ${T('lvl.'+cup.level.i)} · ${T('pk.kick',Math.ceil(pk.kick/2))}${sudden?' · '+T('pk.sudden'):''}`;
   $('#pk-score .tm.a').classList.toggle('turn',meShoots); $('#pk-score .tm.b').classList.toggle('turn',!meShoots);
   // reset positions and sprites
   const el=$('#pk'); el.classList.remove('shooting','keeping','locked');
@@ -1672,14 +2168,14 @@ function nextKick(){
   if(meShoots){
     // step 1: the sight roams the goal – click to lock the direction; step 2: stop the power bar
     pk.phase='aim'; el.classList.add('shooting'); pk.t0=performance.now();
-    $('#pk-hint').textContent='🎯 לחץ (או רווח) כדי לנעול את הכיוון';
+    $('#pk-hint').textContent=T('pk.hintAim');
     cancelAnimationFrame(pk.raf); pk.raf=requestAnimationFrame(aimLoop);
   }else{
     // the striker runs up; his sight flashes in the goal for a moment – click it in time to dive there
     pk.phase='keep'; el.classList.add('keeping');
     pk.shotZone=randomZone(); pk.shotMiss=Math.random()<pk.missP;
     pk.window=Math.max(.35, cup.level.window-cup.round*.08);
-    $('#pk-hint').textContent='🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר!';
+    $('#pk-hint').textContent=T('pk.hintKeep');
     clearTimeout(pk.timer);
     pk.timer=setTimeout(()=>{
       if(!pk || pk.phase!=='keep') return;
@@ -1717,7 +2213,7 @@ function lockAim(){                                  // shooting step 1 → 2
   pk.aim=aimAt(sinceT0()); const c=$('#pk-cross'); c.style.left=pk.aim.x+'px'; c.style.top=pk.aim.y+'px';
   pk.phase='power'; cancelAnimationFrame(pk.raf);
   $('#pk').classList.remove('shooting'); $('#pk').classList.add('locked','power');
-  $('#pk-hint').textContent='💪 עצור את פס העוצמה בירוק! אדום = מעל השער';
+  $('#pk-hint').textContent=T('pk.hintPower');
   pk.t0=performance.now(); pk.power=0; sfx.click();
   pk.raf=requestAnimationFrame(powerLoop);
 }
@@ -1732,14 +2228,14 @@ function userShoot(){                                // shooting step 2: power c
   const zone=pointZone(x,pk.aim.y);
   const readP = weak ? Math.min(1, pk.readP+.55) : pk.readP;
   const kz = Math.random()<readP ? zone : randomZone();
-  $('#pk-hint').textContent = `עוצמה ${Math.round(power)}%`;
+  $('#pk-hint').textContent = T('pk.power', Math.round(power));
   sfx.kick(); setTimeout(()=>{ keeperDive(kz); ballTo({x, y: over ? PKG.y-50 : Math.min(y, PKG.y+PKG.h-24)}); }, 160);
   setTimeout(()=>{
     let goal;
-    if(over){ goal=false; flash('מעל השער! 😬'); sfx.miss(); }
-    else if(wide){ goal=false; flash('פספוס! 😬'); sfx.miss(); }
-    else if(kz.col===zone.col && kz.row===zone.row && Math.random()<(weak?.95:zone.row===1?.88:.66)){ goal=false; flash(weak?'בעיטה חלשה… הצלה 🧤':'הצלה! 🧤'); sfx.save(); ballTo({x:zoneCenter(kz).x, y:zoneCenter(kz).y+30}); }
-    else { goal=true; flash('גול!!! ⚽'); sfx.goal(); pkConfetti.burst(120); }
+    if(over){ goal=false; flash(T('pk.over')); sfx.miss(); }
+    else if(wide){ goal=false; flash(T('pk.wide')); sfx.miss(); }
+    else if(kz.col===zone.col && kz.row===zone.row && Math.random()<(weak?.95:zone.row===1?.88:.66)){ goal=false; flash(T(weak?'pk.weak':'pk.saved')); sfx.save(); ballTo({x:zoneCenter(kz).x, y:zoneCenter(kz).y+30}); }
+    else { goal=true; flash(T('pk.goal')); sfx.goal(); pkConfetti.burst(120); }
     pk.sMe.push(goal); renderPkScore();
     setTimeout(nextKick, 1900);
   }, 700);
@@ -1762,9 +2258,9 @@ function aiShoot(){
     let goal;
     const same = d && d.zone.col===z.col && d.zone.row===z.row;
     const saveP = !d ? 0 : d.onSight ? .92 : same ? (d.early ? .8 : .7) : 0;
-    if(miss){ goal=false; flash('החמצה! 😅'); sfx.miss(); }
-    else if(Math.random()<saveP){ goal=false; flash('הצלה! 🧤'); sfx.save(); pkConfetti.burst(100); ballTo({x:c.x, y:c.y+30}); }
-    else { goal=true; flash(d ? 'גול 😢' : 'לא זזת… גול 😢'); sfx.lose(); }
+    if(miss){ goal=false; flash(T('pk.missAI')); sfx.miss(); }
+    else if(Math.random()<saveP){ goal=false; flash(T('pk.saved')); sfx.save(); pkConfetti.burst(100); ballTo({x:c.x, y:c.y+30}); }
+    else { goal=true; flash(T(d ? 'pk.goalAI' : 'pk.noMove')); sfx.lose(); }
     pk.sOp.push(goal); renderPkScore();
     setTimeout(nextKick, 1900);
   }, 480);
@@ -1776,9 +2272,9 @@ function endShootout(res){
   m.sa=iAmA?ga:gb; m.sb=iAmA?gb:ga; m.w = res==='me' ? cup.mine : (iAmA?m.b:m.a);
   const t=$('#pk-end-title'), s=$('#pk-end-sub');
   if(res==='me'){
-    if(cup.round===4){ t.textContent='אלוף העולם!!! 🏆🏆🏆'; s.innerHTML=`${pk.me.flag} ${pk.me.name} זכתה בגביע העולם! ${ga}-${gb}`; recordResult('c'); sfx.win(); pkConfetti.burst(320); }
-    else { t.textContent='עלית שלב! 🎉'; s.innerHTML=`ניצחת את ${pk.op.flag} ${pk.op.name} ${ga}-${gb} בפנדלים`; sfx.win(); pkConfetti.burst(200); }
-  }else{ cup.out=true; t.textContent='הודחת 😢'; s.innerHTML=`הפסדת ל${pk.op.flag} ${pk.op.name} ${gb}-${ga} בפנדלים`; sfx.lose(); }
+    if(cup.round===4){ t.textContent=T('pk.champTitle'); s.innerHTML=T('pk.champSub', pk.me.flag+' '+tn(pk.me), ga+'-'+gb); recordResult('c'); sfx.win(); pkConfetti.burst(320); }
+    else { t.textContent=T('pk.advTitle'); s.innerHTML=T('pk.advSub', pk.op.flag+' '+tn(pk.op), ga+'-'+gb); sfx.win(); pkConfetti.burst(200); }
+  }else{ cup.out=true; t.textContent=T('pk.outTitle'); s.innerHTML=T('pk.outSub', pk.op.flag+' '+tn(pk.op), gb+'-'+ga); sfx.lose(); }
   $('#pk-hint').textContent=''; $('#pk-round').textContent='';
   setTimeout(()=>$('#pk-end').classList.add('show'), 1300);
 }
@@ -1803,7 +2299,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 });
 
 /* ---------- init ---------- */
-buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions();
+buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang();
 </script>
 </body>
 </html>
