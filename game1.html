@@ -187,6 +187,12 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .fm-badges .bd.on{filter:none;opacity:1;background:#FFF6CF;box-shadow:0 3px 0 #C99A10}
 #fm-stats .stat{min-width:120px}
 .name-status{font-size:18px;font-weight:900;text-align:center;margin:-4px 0 6px}
+.switch{position:relative;width:74px;height:38px;display:inline-block}
+.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;border-radius:20px;background:#b8c2d6;cursor:pointer;transition:.2s}
+.switch span::before{content:"";position:absolute;width:30px;height:30px;left:4px;top:4px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.switch input:checked+span{background:var(--green)}
+.switch input:checked+span::before{transform:translateX(36px)}
 .name-status.on{color:#22883C}.name-status.taken{color:#A82C2C}.name-status.off,.name-status.connecting{color:#5b6a8a}
 #set-name{width:300px;font-size:24px;font-weight:900;padding:6px 12px;border:4px solid var(--blue);border-radius:14px;font-family:inherit;color:var(--navy);background:#fff;user-select:text;-webkit-user-select:text;outline:none}
 #daily-modal .panel{min-width:560px}
@@ -696,6 +702,7 @@ body.touch #touch{display:block}
       <div class="setrow"><span id="set-music-l">🎵 עוצמת המוזיקה</span><input type="range" id="set-music" min="0" max="100"></div>
       <div class="setrow"><span id="set-name-l">👤 שם שחקן</span><input type="text" id="set-name" maxlength="14" placeholder="השם שלך" autocomplete="off" spellcheck="false"></div>
       <div class="name-status off" id="name-status"></div>
+      <div class="setrow"><span id="set-voice-l">🎙️ קריין מדבר</span><label class="switch"><input type="checkbox" id="set-voice"><span></span></label></div>
       <div class="setrow" style="justify-content:center"><span id="set-lang-l">🌍 שפה</span></div>
       <div class="langs" id="set-langs"></div>
       <br><button class="btn small blue" id="btn-settings-close">חזרה</button>
@@ -922,6 +929,33 @@ const I18N_RAW={
  'set.sfx':['🔊 צלילי המשחק','🔊 Game sounds','🔊 أصوات اللعبة','🔊 Звуки игры'],
  'set.music':['🎵 עוצמת המוזיקה','🎵 Music volume','🎵 مستوى الموسيقى','🎵 Громкость музыки'],
  'set.lang':['🌍 שפה','🌍 Language','🌍 اللغة','🌍 Язык'],
+ 'set.voice':['🎙️ קריין מדבר','🎙️ Voice commentary','🎙️ معلّق ناطق','🎙️ Голос комментатора'],
+ 'c.goalBy':['🎙️ גוווול! {0} מבקיע! איזה גול!','🎙️ GOOOAL! {0} scores! What a goal!','🎙️ هدددف! {0} يسجل! يا له من هدف!','🎙️ ГООООЛ! {0} забивает! Какой гол!'],
+ 'c.oppgoalBy':['🎙️ {0} מבקיע… גול ליריב 😬','🎙️ {0} scores… goal for the other side 😬','🎙️ {0} يسجل… هدف للخصم 😬','🎙️ {0} забивает… гол сопернику 😬'],
+ 'c.ownGoalMe':['🎙️ אוי לא! גול עצמי של {0}! לא יאומן!','🎙️ Oh no! Own goal by {0}! Unbelievable!','🎙️ يا للهول! هدف عكسي من {0}! لا يُصدَّق!','🎙️ О нет! Автогол от {0}! Невероятно!'],
+ 'c.ownGoalOp':['🎙️ גול עצמי של {0}! מתנה בשבילנו! 🎁','🎙️ Own goal by {0}! A gift for us! 🎁','🎙️ هدف عكسي من {0}! هدية لنا! 🎁','🎙️ Автогол {0}! Подарок для нас! 🎁'],
+ 'c.header':['🎙️ נגיחה של {0}!','🎙️ Header by {0}!','🎙️ رأسية من {0}!','🎙️ Удар головой от {0}!'],
+ 'c.tackle':['🎙️ {0} מפיל את {1}! תיקול!','🎙️ {0} brings down {1}! Tackle!','🎙️ {0} يسقط {1}! تدخل!','🎙️ {0} сбивает {1}! Подкат!'],
+ 'c.hasBall':['🎙️ {0} עם הכדור','🎙️ {0} on the ball','🎙️ {0} مع الكرة','🎙️ {0} с мячом'],
+ 'c.attack':['🎙️ {0} מוביל את ההתקפה!','🎙️ {0} leads the attack!','🎙️ {0} يقود الهجمة!','🎙️ {0} ведёт атаку!'],
+ 'c.oppAttack':['🎙️ {0} מתקדם, זהירות!','🎙️ {0} is coming forward, careful!','🎙️ {0} يتقدم، انتبه!','🎙️ {0} идёт вперёд, осторожно!'],
+ 'c.pressure':['🎙️ {0} לוחץ על השער!','🎙️ {0} is pressing the goal!','🎙️ {0} يضغط على المرمى!','🎙️ {0} давит на ворота!'],
+ 'c.shootNow':['🎙️ {0}, תבעט! עכשיו!','🎙️ {0}, shoot! Now!','🎙️ {0}، سدد! الآن!','🎙️ {0}, бей! Сейчас!'],
+ 'c.danger':['🎙️ סכנה ליד השער שלנו! {0} מאיים','🎙️ Danger near our goal! {0} threatens','🎙️ خطر قرب مرمانا! {0} يهدد','🎙️ Опасность у наших ворот! {0} угрожает'],
+ 'c.defend':['🎙️ צריך להגן עכשיו!','🎙️ Time to defend!','🎙️ يجب الدفاع الآن!','🎙️ Надо защищаться!'],
+ 'c.air':['🎙️ הכדור באוויר!','🎙️ The ball is in the air!','🎙️ الكرة في الهواء!','🎙️ Мяч в воздухе!'],
+ 'c.fast':['🎙️ הכדור טס!','🎙️ The ball is flying!','🎙️ الكرة تطير!','🎙️ Мяч летит!'],
+ 'c.loose':['🎙️ כדור חופשי, מי ייקח אותו?','🎙️ Loose ball, who gets there first?','🎙️ كرة حرة، من يصل أولًا؟','🎙️ Ничейный мяч, кто успеет?'],
+ 'c.leading':['🎙️ {0} מוביל {1}-{2}','🎙️ {0} leads {1}-{2}','🎙️ {0} يتقدم {1}-{2}','🎙️ {0} ведёт {1}-{2}'],
+ 'c.trailing':['🎙️ אנחנו בפיגור {0}-{1}, צריך להשוות!','🎙️ We\'re behind {0}-{1}, we need to equalize!','🎙️ نحن متأخرون {0}-{1}، يجب التعادل!','🎙️ Мы отстаём {0}-{1}, надо сравнять!'],
+ 'c.tight':['🎙️ תיקו, המשחק צמוד!','🎙️ It\'s level, a tight game!','🎙️ تعادل، المباراة متقاربة!','🎙️ Ничья, напряжённая игра!'],
+ 'c.timeLeft':['🎙️ עוד {0} דקות לסיום','🎙️ {0} minutes to go','🎙️ بقيت {0} دقائق','🎙️ Осталось {0} минут'],
+ 'c.flavor1':['🎙️ איזה משחק, רבותיי!','🎙️ What a game, folks!','🎙️ يا لها من مباراة!','🎙️ Какая игра, друзья!'],
+ 'c.flavor2':['🎙️ הקהל על הרגליים!','🎙️ The crowd is on its feet!','🎙️ الجمهور على أقدامه!','🎙️ Трибуны на ногах!'],
+ 'c.flavor3':['🎙️ מתח באצטדיון!','🎙️ Tension in the stadium!','🎙️ توتر في الملعب!','🎙️ Напряжение на стадионе!'],
+ 'c.endWin':['🎙️ שריקת סיום! ניצחון גדול {0}-{1}!','🎙️ Full time! A great win, {0}-{1}!','🎙️ صافرة النهاية! فوز كبير {0}-{1}!','🎙️ Финальный свисток! Отличная победа {0}-{1}!'],
+ 'c.endLose':['🎙️ שריקת סיום… הפסד {0}-{1}. בפעם הבאה!','🎙️ Full time… a {0}-{1} loss. Next time!','🎙️ صافرة النهاية… خسارة {0}-{1}. المرة القادمة!','🎙️ Финальный свисток… поражение {0}-{1}. В следующий раз!'],
+ 'c.endDraw':['🎙️ שריקת סיום, תיקו {0}-{1}!','🎙️ Full time, a {0}-{1} draw!','🎙️ صافرة النهاية، تعادل {0}-{1}!','🎙️ Финальный свисток, ничья {0}-{1}!'],
  'music.title':['🎵 מוזיקה','🎵 Music','🎵 الموسيقى','🎵 Музыка'],
  'music.il':['🎶 ישראלי','🎶 Israeli','🎶 إسرائيلي','🎶 Израильские'],
  'music.intl':['🌍 בינלאומי','🌍 International','🌍 عالمي','🌍 Международные'],
@@ -1453,7 +1487,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
-  '#set-name-l':'set.name', '#rotate span':'rotate', '#replay-tag':'replay' };
+  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#rotate span':'rotate', '#replay-tag':'replay' };
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
   for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn')) el.title=T(key); else el.innerHTML=T(key); }
@@ -1478,6 +1512,8 @@ function setLang(l){ if(!LANGS[l]) return; lang=l; settings.lang=l; saveSettings
   sv.value=Math.round(settings.sfx*100); mv.value=Math.round(settings.music*100);
   sv.addEventListener('input', ()=>{ settings.sfx=sv.value/100; saveSettings(); });
   sv.addEventListener('change', ()=>sfx.click());
+  const vc=$('#set-voice'); vc.checked = settings.voice!==false;
+  vc.addEventListener('change', ()=>{ settings.voice=vc.checked; saveSettings(); if(vc.checked) speak(T('c.kickoff'), true); else { try{ speechSynthesis.cancel(); }catch(e){} } });
   mv.addEventListener('input', ()=>{ settings.music=mv.value/100; music.setVolume(settings.music); saveSettings(); });
   const nameIn=$('#set-name'); nameIn.value=settings.name||'';
   let nameTimer=0;
@@ -2034,7 +2070,7 @@ function beginMatch(c1, c2, opts){
   $('#fans').classList.remove('cheer');
   for(const p of players) p.kicks=0;
   keys2.left=keys2.right=false; q2.jump=q2.kick=q2.slide=false;
-  rbuf.length=0; replay=null; wasBehind=false; said2=said1=said10=false; $('#replay-tag').hidden=true;
+  rbuf.length=0; replay=null; wasBehind=false; said2=said1=said10=false; $('#replay-tag').hidden=true; lastSayT=performance.now(); nextAmbient=5;
   resetPositions();
   setTimeout(()=>{ if(state==='play') say('c.kickoff'); }, 300);
   showScreen('game');
@@ -2077,6 +2113,7 @@ function updateSlides(dt){
         p.slideHit=true; p.slideT=0; p.el.classList.remove('sliding');
         o.stunT=.75; o.vx=0; o.x=clamp(o.x+p.slideDir*46, MINX, MAXX); o.slides=(o.slides|0)+1;
         o.el.classList.remove('stunned'); void o.el.offsetWidth; o.el.classList.add('stunned'); sfx.tackle();
+        if(performance.now()-lastTackleSay>3000){ lastTackleSay=performance.now(); say('c.tackle', pname(p), pname(o)); }
         // foul inside your own box → penalty for the other team (offline modes only)
         if(!mp){ const pL=teamL.includes(p); if((pL && o.x<205) || (!pL && o.x>795)) startMatchPenalty(pL ? 'R' : 'L'); }
         break;
@@ -2115,6 +2152,7 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
     if(dailyMatch && prog.daily!==dayKey()){ prog.daily=dayKey(); addXP(dailyInfo().xp); achieve('daily_win'); }
   } else { prog.streak=0; if(outcome==='draw') addXP(1); }
   dailyMatch=false; saveProg();
+  say(outcome==='win' ? 'c.endWin' : outcome==='lose' ? 'c.endLose' : 'c.endDraw', score.me, score.op);
   updateTimer();
   $('#end').classList.add('show');
   setTimeout(goHome, 3000);
@@ -2134,7 +2172,13 @@ function scoreGoal(who){
   ball.vx*=.2; ball.vy=0;
   for(const p of players) p.el.classList.remove('running');
   goalFx(); netEv('goal');
-  say(who==='me' ? sayRandom(['c.goal1','c.goal2','c.goal3']) : sayRandom(['c.oppgoal1','c.oppgoal2']));
+  {
+    const lt=lastTouch, fresh = lt.p && performance.now()-lt.t<2200, scorerTeamL = who==='me';
+    const ownGoal = fresh && (scorerTeamL ? teamR.includes(lt.p) : teamL.includes(lt.p));
+    if(ownGoal) say(who==='me' ? 'c.ownGoalOp' : 'c.ownGoalMe', pname(lt.p));
+    else if(fresh) say(who==='me' ? 'c.goalBy' : 'c.oppgoalBy', pname(lt.p));
+    else say(who==='me' ? sayRandom(['c.goal1','c.goal2','c.goal3']) : sayRandom(['c.oppgoal1','c.oppgoal2']));
+  }
   if(who==='me'){
     prog.goals++; addXP(1);
     if(score.me===3) achieve('hat_trick');
@@ -2163,13 +2207,53 @@ function afterGoal(){
   resetPositions(); sfx.whistle(); netEv('whistle'); state='play'; lastT=performance.now();
 }
 /* ---------- commentator ---------- */
-let sayTimer=0;
+let sayTimer=0, lastSayT=0, nextAmbient=6, lastHeaderSay=0, lastTackleSay=0;
 const sayRandom = arr => arr[Math.floor(Math.random()*arr.length)];
-function say(key){
+const PRIORITY_SAY=new Set(['c.goal1','c.goal2','c.goal3','c.goalBy','c.oppgoal1','c.oppgoal2','c.oppgoalBy','c.ownGoalMe','c.ownGoalOp','c.penalty','c.kickoff','c.endWin','c.endLose','c.endDraw','c.10s']);
+/* spoken commentary through the browser's speech engine, in the game's language */
+const VOICE_LANG={he:'he-IL',en:'en-US',ar:'ar-SA',ru:'ru-RU'};
+function speak(text, priority){
+  if(settings.voice===false || !('speechSynthesis' in window)) return;
+  const clean=text.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').replace(/[…]/g,'.').replace(/\s+/g,' ').trim();
+  if(!clean) return;
+  try{
+    if(speechSynthesis.speaking || speechSynthesis.pending){ if(!priority) return; speechSynthesis.cancel(); }
+    const u=new SpeechSynthesisUtterance(clean); u.lang=VOICE_LANG[lang]||'he-IL'; u.rate=1.1; u.pitch=1.05; u.volume=Math.max(.15, settings.sfx);
+    const vs=speechSynthesis.getVoices(); const v=vs.find(x=>x.lang && x.lang.toLowerCase().startsWith(lang)) || vs.find(x=>x.lang && x.lang.toLowerCase().startsWith(VOICE_LANG[lang].slice(0,2)));
+    if(v) u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+if('speechSynthesis' in window){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices(); }catch(e){} }
+function showLine(text, priority){
   const el=$('#commentary'); if(!el) return;
-  el.textContent=T(key); el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
-  clearTimeout(sayTimer); sayTimer=setTimeout(()=>el.classList.remove('show'), 2400);
-  netEv('say:'+key);
+  el.textContent=text; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  clearTimeout(sayTimer); sayTimer=setTimeout(()=>el.classList.remove('show'), 2600);
+  speak(text, priority); lastSayT=performance.now();
+}
+function say(key, ...args){
+  showLine(T(key,...args), PRIORITY_SAY.has(key));
+  netEv('say:'+[key].concat(args.map(a=>String(a).replace(/\|/g,' '))).join('|'));
+}
+/* who is nearest to the ball, and on which team */
+function ballHolder(){ let best=null,bd=1e9; for(const p of players){ const d=Math.hypot(p.x-ball.x,(p.y+50)-ball.y); if(d<bd){ bd=d; best=p; } } return bd<95 ? best : null; }
+const pname = p => p && p.ch ? nm(p.ch) : '';
+/* running play-by-play: picks a line that fits what is happening on the pitch */
+function ambient(){
+  const h=ballHolder(), mine = h && teamL.includes(h), lead = score.me-score.op, mins=Math.ceil(timeLeft/60);
+  const pool=[];
+  if(ball.y>150) pool.push(['c.air']);
+  if(h){
+    if(ball.x>720 && mine) pool.push(['c.pressure', pname(h)], ['c.shootNow', pname(h)]);
+    else if(ball.x<280 && !mine) pool.push(['c.danger', pname(h)], ['c.defend']);
+    else pool.push(['c.hasBall', pname(h)], mine ? ['c.attack', pname(h)] : ['c.oppAttack', pname(h)]);
+    if(Math.abs(ball.vx)>500) pool.push(['c.fast']);
+  } else pool.push(['c.loose']);
+  if(lead>0) pool.push(['c.leading', pname(P1), score.me, score.op]); else if(lead<0) pool.push(['c.trailing', score.op, score.me]); else pool.push(['c.tight']);
+  if(timeLeft>65 && Math.random()<.5) pool.push(['c.timeLeft', mins]);
+  pool.push(['c.flavor1'],['c.flavor2'],['c.flavor3']);
+  const line=sayRandom(pool); say(...line);
+  nextAmbient=5+Math.random()*4;
 }
 function goalFx(){
   sfx.goal(); confetti.burst(200);
@@ -2228,6 +2312,7 @@ function collideBall(p){
     if(ball.vy<80) ball.vy=80+Math.abs(p.vx)*.15;
   }else if(ny>0){                                 // header
     ball.vy=Math.max(Math.abs(ball.vy)*.6, 240); ball.vx+=p.vx*.4+nx*80; lastTouch={p,type:'header',t:performance.now()};
+    if(performance.now()-lastHeaderSay>4000){ lastHeaderSay=performance.now(); say('c.header', pname(p)); }
   }else{ ball.vy=Math.min(ball.vy,-150); }
   sfx.bounce();
 }
@@ -2369,6 +2454,7 @@ function loop(t){
     if(timeLeft<=120 && !said2){ said2=true; say('c.2min'); }
     if(timeLeft<=60 && !said1){ said1=true; say('c.1min'); }
     if(timeLeft<=10 && !said10){ said10=true; say('c.10s'); }
+    if(!(mp && mp.role==='guest') && performance.now()-lastSayT > nextAmbient*1000) ambient();
   }
   render();
   if(mp && mp.role==='host') sendSnapshot();
@@ -2537,7 +2623,7 @@ function applySnapshot(s){
     if(e==='kick') sfx.kick(); else if(e==='bounce') sfx.bounce(); else if(e==='whistle') sfx.whistle(); else if(e==='slide') sfx.slide(); else if(e==='tackle') sfx.tackle();
     else if(e==='goal') goalFx();
     else if(e==='replay') $('#replay-tag').hidden=false; else if(e==='replayEnd') $('#replay-tag').hidden=true;
-    else if(e.startsWith('say:')){ const el=$('#commentary'); el.textContent=T(e.slice(4)); el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); clearTimeout(sayTimer); sayTimer=setTimeout(()=>el.classList.remove('show'),2400); }
+    else if(e.startsWith('say:')){ const parts=e.slice(4).split('|'); showLine(T(parts[0],...parts.slice(1)), PRIORITY_SAY.has(parts[0])); }
     else if(e.startsWith('end:')){ const r=e.slice(4); showEnd(r==='p2'?'win':r==='p1'?'lose':'draw'); }
   }
   render();
