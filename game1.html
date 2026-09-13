@@ -580,8 +580,9 @@ const CHARS = [
 
 const mixW = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v+(255-v)*a); return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };   // toward white
 const mixK = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v*(1-a));       return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };   // toward black
+let svgSeq=0;
 function playerSVG(c, mood='happy'){
-  const OL='#2a1c12', ow=1.6, id=c.id;                       // cartoon outline colour/width
+  const OL='#2a1c12', ow=1.6, id=c.id+'-'+(svgSeq++);        // unique gradient ids per drawing: a gradient defined inside a hidden screen would not paint
   const defs=`<defs>
     <linearGradient id="sk-${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mixW(c.skin,.3)}"/><stop offset="1" stop-color="${c.skin}"/></linearGradient>
     <linearGradient id="js-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mixW(c.jersey,.25)}"/><stop offset="1" stop-color="${mixK(c.jersey,.14)}"/></linearGradient>
