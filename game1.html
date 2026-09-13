@@ -111,10 +111,19 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .intro-title small{display:block;font-size:34px;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);margin-top:14px}
 @keyframes introbob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-14px) rotate(1.5deg)}}
 .runners{position:absolute;left:0;right:0;bottom:70px;height:210px;overflow:hidden}
-.runners .rn{position:absolute;bottom:0;width:140px;height:210px;animation:run 7s linear infinite}
+.runners .rn{position:absolute;left:0;bottom:0;width:140px;height:210px;animation:run 7s linear infinite}
+/* daily match: evening stadium look – darker grass, gold boards, floodlight beams, gold frame */
+#daily-fx{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 8px rgba(201,154,16,.75),inset 0 0 90px rgba(0,0,30,.55);
+  background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 45%,rgba(0,0,40,.35) 100%)}
+#daily-fx .beam{position:absolute;top:0;width:520px;height:620px;opacity:.28;background:linear-gradient(to bottom,rgba(255,255,220,.9),rgba(255,255,220,0) 70%)}
+#daily-fx .beam.l{left:-120px;transform:skewX(22deg);transform-origin:top left}
+#daily-fx .beam.r{right:-120px;transform:skewX(-22deg);transform-origin:top right}
+#daily-fx .banner{position:absolute;left:50%;top:104px;transform:translateX(-50%);font-size:20px;font-weight:900;color:#1B2A4E;background:linear-gradient(#FFE27A,#E0A400);padding:3px 18px;border-radius:14px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+#game.daily #fans svg{filter:brightness(.72) saturate(.9)}
+#game.daily #pitch svg{filter:saturate(.9)}
 .runners .rn .leg-front{animation:legF .26s infinite alternate ease-in-out}
 .runners .rn .leg-back{animation:legB .26s infinite alternate ease-in-out}
-@keyframes run{from{transform:translateX(-200px)}to{transform:translateX(1200px)}}
+@keyframes run{from{transform:translateX(-260px)}to{transform:translateX(1100px)}}
 .tap{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:30px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);animation:tapPulse 1s ease-in-out infinite}
 @keyframes tapPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
@@ -487,6 +496,7 @@ body.touch #touch{display:block}
   <section id="game" class="screen">
     <div id="fans"></div>
     <div id="pitch"></div>
+    <div id="daily-fx" hidden><div class="beam l"></div><div class="beam r"></div><div class="banner">🏟️ המשחק היומי</div></div>
     <div class="pshadow" id="sh1"></div><div class="pshadow" id="sh2"></div><div class="pshadow" id="shb"></div>
     <div class="pshadow" id="sh3" hidden></div><div class="pshadow" id="sh4" hidden></div>
     <div class="player" id="p3" hidden><div class="tag"></div><div class="sprite"></div></div>
@@ -940,6 +950,11 @@ const CHAR_NAMES={
  lewa:['Lewandowski','ليفاندوفسكي','Левандовски'], benzema:['Benzema','بنزيما','Бензема'], kane:['Kane','كين','Кейн'], suarez:['Suárez','سواريز','Суарес'],
  griezmann:['Griezmann','غريزمان','Гризманн'], son:['Son','سون','Сон'], lautaro:['Lautaro','لاوتارو','Лаутаро'], yamal:['Yamal','يامال','Ямаль'],
  zlatan:['Zlatan','زلاتان','Златан'], bellingham:['Bellingham','بيلينغهام','Беллингем'],
+ pele:['Pelé','بيليه','Пеле'], maradona:['Maradona','مارادونا','Марадона'], zidane:['Zidane','زيدان','Зидан'], cruyff:['Cruyff','كرويف','Кройф'],
+ beckham:['Beckham','بيكهام','Бекхэм'], henry:['Henry','هنري','Анри'], kaka:['Kaká','كاكا','Кака'], modric:['Modrić','مودريتش','Модрич'],
+ debruyne:['De Bruyne','دي بروين','Де Брёйне'], xavi:['Xavi','تشافي','Хави'], rooney:['Rooney','روني','Руни'], drogba:['Drogba','دروغبا','Дрогба'],
+ gerrard:['Gerrard','جيرارد','Джеррард'], aguero:['Agüero','أغويرو','Агуэро'], vandijk:['Van Dijk','فان دايك','Ван Дейк'], baggio:['Baggio','باجيو','Баджо'],
+ mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'],
 };
 const nm = c => lang==='he' ? c.name : ((CHAR_NAMES[c.id]||[])[LI[lang]-1] || (CHAR_NAMES[c.id]||[])[0] || c.name);
 
@@ -948,7 +963,12 @@ const nm = c => lang==='he' ? c.name : ((CHAR_NAMES[c.id]||[])[LI[lang]-1] || (C
    ========================================================= */
 const PROG_KEY='footballStar.progress';
 const FREE_CHARS=['mbappe','messi','ronaldo','neymar'];
-const PRICES={haaland:60,salah:60,r9:80,vini:80,dembele:80,iniesta:100,ronaldinho:120,lewa:100,benzema:100,kane:100,suarez:120,griezmann:120,son:120,lautaro:150,yamal:150,zlatan:200,bellingham:250};
+/* the bigger the legend, the higher the price */
+const PRICES={
+  pele:300, maradona:300, zidane:260, cruyff:240, ronaldinho:220, r9:200, beckham:200, henry:200, zlatan:190, iniesta:190,
+  kaka:180, modric:180, xavi:170, debruyne:170, bellingham:160, lewa:150, gerrard:140, rooney:140, drogba:140, suarez:140,
+  benzema:130, kane:130, yamal:130, baggio:130, haaland:120, salah:120, lautaro:120, vandijk:120, aguero:120,
+  griezmann:110, son:110, vini:110, mane:110, dembele:100, saka:100, musiala:100, foden:100 };
 const priceOf = c => PRICES[c.id] || 100;
 const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
@@ -969,7 +989,7 @@ function achieve(id){
   setTimeout(()=>{ toast(T('ach.new', T('a.'+id), a[1]), 'ach'); try{ sfx.win(); }catch(e){} }, 400);
 }
 const dayKey = () => new Date().toISOString().slice(0,10);
-function dailyInfo(){ const s=Math.floor(Date.now()/864e5); return { opp:(s*7)%21, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }
+function dailyInfo(){ const s=Math.floor(Date.now()/864e5); return { opp:(s*7)%CHARS.length, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }
 const myStats = () => { const s=loadStats(); return {w:s.w,d:s.d,l:s.l,c:s.c,xp:prog.xp,goals:prog.goals}; };
 
 /* ---------- characters (cartoon caricatures) ---------- */
@@ -1016,6 +1036,46 @@ const CHARS = [
     jersey:'#FB090B', stripes:'#111111', numColor:'#fff', shorts:'#ffffff', socks:'#111111', number:11, beard:true, beardColor:'#2b1d14', brows:'sharp' },
   { id:'bellingham', name:'בלינגהאם', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'short', hairColor:'#161616',
     jersey:'#ffffff', numColor:'#1B2A4E', shorts:'#ffffff', socks:'#ffffff', number:5, beard:false, brows:'sharp' },
+  { id:'pele', name:'פלה', skin:'#6b4226', skinDark:'#452a17', hair:'short', hairColor:'#161616',
+    jersey:'#FFDC00', numColor:'#009C3B', shorts:'#1A3DA8', socks:'#ffffff', number:10, beard:false, brows:'round' },
+  { id:'maradona', name:'מראדונה', skin:'#D9A06B', skinDark:'#9c6a3f', hair:'curly', hairColor:'#1d1410',
+    jersey:'#75AADB', stripes:'#ffffff', numColor:'#1B2A4E', shorts:'#111111', socks:'#ffffff', number:10, beard:false, brows:'sharp' },
+  { id:'zidane', name:'זידאן', skin:'#E8B892', skinDark:'#b07a55', hair:'bald', hairColor:'#2a1c12',
+    jersey:'#1F4FD8', numColor:'#fff', shorts:'#ffffff', socks:'#F04E4E', number:10, beard:false, brows:'sharp' },
+  { id:'cruyff', name:'קרויף', skin:'#F3D2B3', skinDark:'#c49a72', hair:'wavy', hairColor:'#6B4423',
+    jersey:'#FF7A3D', numColor:'#fff', shorts:'#ffffff', socks:'#FF7A3D', number:14, beard:false, brows:'round' },
+  { id:'beckham', name:'בקהאם', skin:'#F3D2B3', skinDark:'#c49a72', hair:'spiky', hairColor:'#E9C55B', browColor:'#8a6a1a',
+    jersey:'#DA291C', numColor:'#fff', shorts:'#ffffff', socks:'#111111', number:7, beard:false, brows:'round' },
+  { id:'henry', name:'אנרי', skin:'#6b4226', skinDark:'#452a17', hair:'bald', hairColor:'#161616',
+    jersey:'#EF0107', numColor:'#fff', shorts:'#ffffff', socks:'#ffffff', number:14, beard:false, brows:'round' },
+  { id:'kaka', name:'קאקה', skin:'#E8B892', skinDark:'#b07a55', hair:'short', hairColor:'#5a3a1e',
+    jersey:'#FB090B', stripes:'#111111', numColor:'#fff', shorts:'#ffffff', socks:'#111111', number:22, beard:false, brows:'round' },
+  { id:'modric', name:'מודריץ\'', skin:'#F1C9A5', skinDark:'#b8865f', hair:'wavy', hairColor:'#8a6a3a',
+    jersey:'#ffffff', numColor:'#1B2A4E', shorts:'#ffffff', socks:'#ffffff', number:10, beard:false, brows:'round' },
+  { id:'debruyne', name:'דה בריינה', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#C8702A',
+    jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:17, beard:false, brows:'round' },
+  { id:'xavi', name:'צ\'אבי', skin:'#E8B892', skinDark:'#b07a55', hair:'short', hairColor:'#2a1c12',
+    jersey:'#A50044', stripes:'#004D98', numColor:'#FFD447', shorts:'#004D98', socks:'#004D98', number:6, beard:false, brows:'round' },
+  { id:'rooney', name:'רוני', skin:'#F3D2B3', skinDark:'#c49a72', hair:'bald', hairColor:'#5a3a1e',
+    jersey:'#DA291C', numColor:'#fff', shorts:'#ffffff', socks:'#111111', number:10, beard:false, brows:'sharp' },
+  { id:'drogba', name:'דרוגבה', skin:'#6b4226', skinDark:'#452a17', hair:'bald', hairColor:'#161616',
+    jersey:'#034694', numColor:'#fff', shorts:'#034694', socks:'#ffffff', number:11, beard:false, brows:'sharp' },
+  { id:'gerrard', name:'ג\'רארד', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#7a4a1e',
+    jersey:'#C8102E', numColor:'#fff', shorts:'#C8102E', socks:'#C8102E', number:8, beard:false, brows:'sharp' },
+  { id:'aguero', name:'אגוארו', skin:'#D9A06B', skinDark:'#9c6a3f', hair:'short', hairColor:'#1e1a17',
+    jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:10, beard:false, brows:'round' },
+  { id:'vandijk', name:'ואן דייק', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'bun', hairColor:'#161616', browColor:'#161616',
+    jersey:'#C8102E', numColor:'#fff', shorts:'#C8102E', socks:'#C8102E', number:4, beard:true, beardColor:'#161616', brows:'sharp' },
+  { id:'baggio', name:'באג\'ו', skin:'#E8B892', skinDark:'#b07a55', hair:'bun', hairColor:'#3a2a1a', browColor:'#3a2a1a',
+    jersey:'#1F5BC2', numColor:'#fff', shorts:'#ffffff', socks:'#1F5BC2', number:10, beard:false, brows:'round' },
+  { id:'mane', name:'מאנה', skin:'#6b4226', skinDark:'#452a17', hair:'short', hairColor:'#161616',
+    jersey:'#C8102E', numColor:'#fff', shorts:'#C8102E', socks:'#C8102E', number:10, beard:false, brows:'round' },
+  { id:'musiala', name:'מוסיאלה', skin:'#C68642', skinDark:'#8a5a2a', hair:'curly', hairColor:'#1d1410',
+    jersey:'#DC052D', numColor:'#fff', shorts:'#DC052D', socks:'#DC052D', number:42, beard:false, brows:'round' },
+  { id:'saka', name:'סאקה', skin:'#6b4226', skinDark:'#452a17', hair:'short', hairColor:'#161616',
+    jersey:'#EF0107', numColor:'#fff', shorts:'#ffffff', socks:'#ffffff', number:7, beard:false, brows:'round' },
+  { id:'foden', name:'פודן', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#E9C55B', browColor:'#8a6a1a',
+    jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:47, beard:false, brows:'round' },
 ];
 
 const mixW = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v+(255-v)*a); return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };   // toward white
@@ -1525,21 +1585,27 @@ const proj = (x,z,h=0) => { const f=fz(z); return [500+(x-500)*f, HOR+PA*f-h*f];
 const pts = arr => arr.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
 const ZP=.5, GZ1=ZP-.054, GZ2=ZP+.054;                // goal mouth depth span (7.3m of 68m)
 
-function buildPitch(){
+const PITCH_THEMES={
+  day:   { base:'#3FB35B', stripeA:'#3FB35B', stripeB:'#4CC76A', far:'#2E8F46', track:'#C9694A', boards:['#F04E4E','#3D8BFF','#FFD447','#8E5CF6','#FF7A3D','#3FC35F','#FF5FA2','#ffffff'] },
+  daily: { base:'#2C8C48', stripeA:'#2C8C48', stripeB:'#37A056', far:'#1F6B36', track:'#7A3E30', boards:['#C99A10','#1B2A4E','#C99A10','#1B2A4E','#C99A10','#1B2A4E','#C99A10','#1B2A4E'] },
+};
+let pitchTheme='day';
+function buildPitch(themeName){
+  pitchTheme = themeName || 'day'; const TH=PITCH_THEMES[pitchTheme];
   const line='stroke="#fff" stroke-width="3.5" fill="none" stroke-linejoin="round" opacity=".92"';
   let s='<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg"><defs>'+
     '<pattern id="net" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0H7M0 0V7" stroke="rgba(255,255,255,.75)" stroke-width="1"/></pattern></defs>';
-  s+='<rect y="78" width="1000" height="542" fill="#3FB35B"/>';   // starts below the fans so they stay visible
+  s+=`<rect y="78" width="1000" height="542" fill="${TH.base}"/>`;   // starts below the fans so they stay visible
   // mown stripes converging toward the vanishing point
   for(let i=-4;i<14;i++){
     const x0=i*100, x1=x0+100;
-    s+=`<polygon points="${pts([proj(x0,.1),proj(x1,.1),proj(x1,1),proj(x0,1)])}" fill="${i%2?'#3FB35B':'#4CC76A'}"/>`;
+    s+=`<polygon points="${pts([proj(x0,.1),proj(x1,.1),proj(x1,1),proj(x0,1)])}" fill="${i%2?TH.stripeA:TH.stripeB}"/>`;
   }
   // beyond the far touchline: out-of-bounds grass, running track, advertising boards
   const farY=proj(500,1)[1];
-  s+=`<rect x="0" y="78" width="1000" height="${farY-78}" fill="#2E8F46"/>`;
-  s+='<rect x="0" y="106" width="1000" height="42" fill="#C9694A"/><rect x="0" y="120" width="1000" height="2" fill="rgba(255,255,255,.6)"/><rect x="0" y="134" width="1000" height="2" fill="rgba(255,255,255,.6)"/>';
-  const bc=['#F04E4E','#3D8BFF','#FFD447','#8E5CF6','#FF7A3D','#3FC35F','#FF5FA2','#ffffff'];
+  s+=`<rect x="0" y="78" width="1000" height="${farY-78}" fill="${TH.far}"/>`;
+  s+=`<rect x="0" y="106" width="1000" height="42" fill="${TH.track}"/><rect x="0" y="120" width="1000" height="2" fill="rgba(255,255,255,.6)"/><rect x="0" y="134" width="1000" height="2" fill="rgba(255,255,255,.6)"/>`;
+  const bc=TH.boards;
   for(let i=0;i<8;i++) s+=`<rect x="${125*i+2}" y="80" width="121" height="24" rx="3" fill="${bc[i]}"/>`;
   // markings (world: x 70..930 is the pitch, z 0..1 its width)
   const L=70,Rr=930, circ=[];
@@ -1568,7 +1634,7 @@ function goalParts(layer){
       // solid grass-coloured block the goal stands on (top face, pitch-facing side, front face)
       s+=`<polygon points="${pts([proj(fx,GZ1,B),proj(fx,GZ2,B),proj(bx,GZ2,B),proj(bx,GZ1,B)])}" fill="#4CC76A"/>`;
       s+=`<polygon points="${pts([proj(fx,GZ1,0),proj(fx,GZ2,0),proj(fx,GZ2,B),proj(fx,GZ1,B)])}" fill="#36A652"/>`;
-      s+=`<polygon points="${pts([proj(fx,GZ1,0),proj(bx,GZ1,0),proj(bx,GZ1,B),proj(fx,GZ1,B)])}" fill="#2E8F46"/>`;
+      s+=`<polygon points="${pts([proj(fx,GZ1,0),proj(bx,GZ1,0),proj(bx,GZ1,B),proj(fx,GZ1,B)])}" fill="${PITCH_THEMES[pitchTheme].far}"/>`;
       s+=`<polyline points="${pts([proj(fx,GZ1,0),proj(fx,GZ1,B),proj(bx,GZ1,B),proj(bx,GZ1,0)])}" fill="none" stroke="#237A3A" stroke-width="2"/>`;
       s+=panel([proj(bx,GZ1,B),proj(bx,GZ2,B),proj(bx,GZ2,H),proj(bx,GZ1,H)],'net');      // back net
       s+=panel([proj(fx,GZ2,B),proj(bx,GZ2,B),proj(bx,GZ2,H),proj(fx,GZ2,H)],'net');      // far side net
@@ -1712,7 +1778,9 @@ function beginMatch(c1, c2, opts){
   }
   $('#n-me').textContent = v2 ? nm(myChar)+' + '+nm(opts.c3) : nm(myChar);
   $('#n-op').textContent = v2 ? nm(opChar)+' + '+nm(opts.c4) : nm(opChar);
-  $('#level-tag').textContent = mp ? T('game.online') : T('game.level', T('lvl.'+level.i));
+  $('#level-tag').textContent = mp ? T('game.online') : (dailyMatch ? T('daily.title')+' · ' : '') + T('game.level', T('lvl.'+level.i));
+  const wantTheme = dailyMatch ? 'daily' : 'day'; if(pitchTheme!==wantTheme) buildPitch(wantTheme);
+  $('#game').classList.toggle('daily', !!dailyMatch); $('#daily-fx').hidden=!dailyMatch; $('#daily-fx .banner').textContent='🏟️ '+T('daily.title').replace(/^📅\s*/,'');
   score={me:0,op:0}; updateScore();
   timeLeft=MATCH_TIME; updateTimer();
   $('#end').classList.remove('show');
