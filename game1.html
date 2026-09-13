@@ -1150,7 +1150,16 @@ function collideBall(p){
   sfx.bounce();
 }
 
-function collideRect(x1,y1,x2,y2){               // solid rect (crossbar / net roof)
+function collideRect(x1,y1,x2,y2){               // solid rect (goal block / crossbar / net roof)
+  if(ball.x>x1 && ball.x<x2 && ball.y>y1 && ball.y<y2){      // centre already inside (fast ball): push out through the nearest open side
+    const dl = x1<=0 ? Infinity : ball.x-x1, dr = x2>=FIELD_W ? Infinity : x2-ball.x, db = y1<=0 ? Infinity : ball.y-y1, dtop = y2-ball.y;
+    const m=Math.min(dl,dr,db,dtop);
+    if(m===dl){ ball.x=x1-R; ball.vx=-Math.abs(ball.vx)*.6; }
+    else if(m===dr){ ball.x=x2+R; ball.vx=Math.abs(ball.vx)*.6; }
+    else if(m===db){ ball.y=y1-R; ball.vy=-Math.abs(ball.vy)*.6; }
+    else { ball.y=y2+R; ball.vy=Math.abs(ball.vy)*.6; }
+    sfx.bounce(); return;
+  }
   const cx=clamp(ball.x,x1,x2), cy=clamp(ball.y,y1,y2);
   let dx=ball.x-cx, dy=ball.y-cy, d=Math.hypot(dx,dy);
   if(d>=R||d<0.001) return;
@@ -1160,7 +1169,11 @@ function collideRect(x1,y1,x2,y2){               // solid rect (crossbar / net r
   sfx.bounce();
 }
 
-function updateBall(dt){
+function updateBall(dt){                          // sub-step so a fast ball never jumps through the goal blocks
+  const n=clamp(Math.ceil(Math.max(Math.abs(ball.vx),Math.abs(ball.vy))*dt/7), 1, 8), sd=dt/n;
+  for(let i=0;i<n && state==='play';i++) stepBall(sd);
+}
+function stepBall(dt){
   ball.vy-=G*dt;
   ball.x+=ball.vx*dt; ball.y+=ball.vy*dt;
   ball.vx*=Math.pow(.88,dt);
