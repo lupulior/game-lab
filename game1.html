@@ -53,6 +53,40 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #home .title{position:absolute;top:26px;right:40px}
 #home .side{position:absolute;top:128px;right:40px;display:flex;flex-direction:column;gap:18px;align-items:flex-end}
 #home .side .btn{min-width:210px}
+#btn-mp{font-size:24px;padding:12px 26px}
+
+/* ---------- multiplayer ---------- */
+#mp h2{position:absolute;top:22px;right:40px}
+#btn-mp-back{position:absolute;top:22px;left:34px;z-index:5}
+#mp-lobby{position:absolute;left:60px;right:60px;top:100px;bottom:60px;display:flex;gap:30px;justify-content:center}
+.mp-card{flex:1;max-width:400px;background:rgba(255,255,255,.88);border-radius:26px;padding:22px;text-align:center;box-shadow:0 8px 0 rgba(27,42,78,.2);
+  display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center}
+.mp-card h3{font-size:30px;font-weight:900}
+.mp-card p{font-size:19px;font-weight:700;color:#5b6a8a}
+#mp-code .code{font-size:70px;font-weight:900;letter-spacing:12px;direction:ltr;color:var(--navy);background:#FFF0B3;border-radius:18px;padding:2px 12px 2px 24px;user-select:text;-webkit-user-select:text}
+#mp-code .wait{font-size:18px;font-weight:700;color:#5b6a8a;margin-top:6px}
+#mp-input{width:240px;font-size:46px;font-weight:900;text-align:center;letter-spacing:8px;direction:ltr;text-transform:uppercase;border:4px solid var(--blue);border-radius:16px;
+  padding:4px;font-family:inherit;color:var(--navy);background:#fff;user-select:text;-webkit-user-select:text;outline:none}
+#mp-input:focus{border-color:var(--yellow)}
+#mp-status{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:22px;font-weight:900;color:#fff;-webkit-text-stroke:1px var(--navy);text-shadow:0 3px 0 var(--navy);min-height:30px}
+#mp-pick{position:absolute;inset:0}
+.mp-gallery{position:absolute;left:20px;right:20px;top:84px;display:flex;gap:7px;justify-content:center}
+.mpcard{width:80px;height:100px;background:#fff;border:4px solid #fff;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 5px 0 rgba(27,42,78,.22);font-size:12px;font-weight:900;transition:transform .1s;white-space:nowrap;overflow:hidden}
+.mpcard:hover{transform:scale(1.06)}
+.mpcard .sprite{width:44px;height:66px}
+.mpcard.mine{border-color:var(--yellow);background:#FFF6CF}
+.mpcard.theirs{border-color:var(--blue);background:#DCEBFF;opacity:.7;cursor:not-allowed}
+.mp-duo{position:absolute;left:0;right:0;top:200px;display:flex;justify-content:center;align-items:flex-start;gap:50px}
+.mp-duo .who{width:230px;text-align:center}
+.mp-duo .who .sprite{width:170px;height:255px;margin:0 auto}
+.mp-duo .who .name{font-size:26px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy)}
+.mp-duo .who .tag{font-size:18px;font-weight:900;color:#fff;background:var(--blue);border-radius:12px;padding:2px 14px;display:inline-block;margin-bottom:4px}
+.mp-duo .who.op .tag{background:var(--red)}
+.mp-duo .vs{font-size:56px;font-weight:900;color:var(--yellow);-webkit-text-stroke:2px var(--navy);text-shadow:0 5px 0 var(--navy);padding-top:110px}
+#btn-mp-play{position:absolute;bottom:18px;left:50%;transform:translateX(-50%)}
+#btn-mp-play.ready{background:var(--yellow);color:var(--navy);text-shadow:none;box-shadow:0 8px 0 #C99A10,0 14px 20px rgba(0,0,0,.22)}
+#btn-mp-play:disabled{opacity:.5;cursor:not-allowed}
 #btn-play{position:absolute;bottom:34px;left:40px}
 #btn-stats{position:absolute;bottom:162px;left:40px}
 #btn-pk{position:absolute;bottom:224px;left:40px}
@@ -281,6 +315,7 @@ body.touch #touch{display:block}
       <button class="btn blue" id="btn-chars">🧑 דמויות</button>
       <button class="btn red" id="btn-exit">🚪 צא</button>
       <button class="btn purple" id="btn-ceo">👔 מנכ"ל המשחק</button>
+      <button class="btn pink" id="btn-mp">👥 מרובה משתתפים</button>
     </div>
     <div class="hero">
       <div class="sprite" id="home-sprite"></div>
@@ -346,6 +381,36 @@ body.touch #touch{display:block}
       <div class="grp act"><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
     </div>
     <div class="overlay" id="end"><div class="panel"><h2 id="end-title"></h2><div class="sub" id="end-sub"></div></div></div>
+  </section>
+
+  <!-- ===== MULTIPLAYER ===== -->
+  <section id="mp" class="screen">
+    <h2>👥 מרובה משתתפים</h2>
+    <button class="btn blue small" id="btn-mp-back">➜ חזרה</button>
+    <div id="mp-lobby">
+      <div class="mp-card">
+        <h3>🔑 צור משחק</h3>
+        <p>קבל קוד ושלח אותו לחבר</p>
+        <button class="btn green" id="btn-mp-host">קבל קוד</button>
+        <div id="mp-code" hidden><div class="code" id="mp-code-text"></div><div class="wait">מחכה שהחבר יכניס את הקוד… ⏳</div></div>
+      </div>
+      <div class="mp-card">
+        <h3>🚀 הצטרף למשחק</h3>
+        <p>הכנס את הקוד שקיבלת מהחבר</p>
+        <input id="mp-input" maxlength="4" placeholder="ABCD" autocomplete="off" spellcheck="false">
+        <button class="btn orange" id="btn-mp-join">הצטרף</button>
+      </div>
+    </div>
+    <div id="mp-status"></div>
+    <div id="mp-pick" hidden>
+      <div class="mp-gallery" id="mp-gallery"></div>
+      <div class="mp-duo">
+        <div class="who me"><div class="tag">אתה</div><div class="sprite" id="mp-me-sprite"></div><div class="name" id="mp-me-name"></div></div>
+        <div class="vs">VS</div>
+        <div class="who op"><div class="tag" id="mp-op-tag">החבר</div><div class="sprite" id="mp-op-sprite"></div><div class="name" id="mp-op-name"></div></div>
+      </div>
+      <button class="btn green" id="btn-mp-play">שחק ▶</button>
+    </div>
   </section>
 
   <!-- ===== PENALTY WORLD CUP: team pick + bracket ===== -->
@@ -870,26 +935,32 @@ let myChar, opChar;
 
 function startGame(levelIdx){
   level=LEVELS[levelIdx];
-  myChar=CHARS[selected];
   const others=CHARS.filter((c,i)=>i!==selected);
-  opChar=others[Math.floor(Math.random()*others.length)];
-  sprite(P1.el.querySelector('.sprite'), myChar);
-  sprite(P2.el.querySelector('.sprite'), opChar);
-  P1.el.querySelector('.tag').textContent='אני – '+myChar.name;
-  P2.el.querySelector('.tag').textContent=opChar.name;
+  beginMatch(CHARS[selected], others[Math.floor(Math.random()*others.length)]);
+}
+/* c1 plays on the left (P1), c2 on the right (P2). Offline and online-host: you are P1. Online guest: you are P2. */
+function beginMatch(c1, c2){
+  const localIsP1 = !(mp && mp.role==='guest');
+  myChar = localIsP1 ? c1 : c2; opChar = localIsP1 ? c2 : c1;
+  sprite(P1.el.querySelector('.sprite'), c1);
+  sprite(P2.el.querySelector('.sprite'), c2);
+  P1.el.querySelector('.tag').textContent = localIsP1 ? 'אני – '+c1.name : c1.name;
+  P2.el.querySelector('.tag').textContent = localIsP1 ? c2.name : 'אני – '+c2.name;
+  P1.el.classList.toggle('me', localIsP1); P2.el.classList.toggle('me', !localIsP1);
   $('#n-me').textContent=myChar.name; $('#n-op').textContent=opChar.name;
-  $('#level-tag').textContent='רמה: '+level.name;
+  $('#level-tag').textContent = mp ? '👥 אונליין' : 'רמה: '+level.name;
   score={me:0,op:0}; updateScore();
   timeLeft=MATCH_TIME; updateTimer();
   $('#end').classList.remove('show');
   $('#fans').classList.remove('cheer');
+  P1.kicks=0; P2.kicks=0;
   resetPositions();
   showScreen('game');
   keys.left=keys.right=keys.jump=keys.kick=false; jumpQueued=kickQueued=false;
   sfx.whistle();
   state='play';
   lastT=performance.now();
-  cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop);
+  cancelAnimationFrame(rafId); rafId=requestAnimationFrame(localIsP1 ? loop : guestLoop);
 }
 
 function resetPositions(){
@@ -910,19 +981,25 @@ function updateTimer(){
 function goHome(){
   state='idle'; cancelAnimationFrame(rafId);
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
-  showScreen('home');
+  if(mp && mp.connected){ mpShowPick(); showScreen('mp'); }   // online: back to the character screen for a rematch
+  else showScreen('home');
 }
 
-function endGame(){
+function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from the local player's point of view
   state='end';
   const t=$('#end-title'), sub=$('#end-sub');
-  let win;
-  if(score.me>score.op){ win=true; t.textContent='ניצחת! 🏆'; sub.textContent='כל הכבוד, כוכב אמיתי!'; sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); recordResult('w'); }
-  else if(score.me<score.op){ win=false; t.textContent='הפסדת 😢'; sub.textContent='נסה שוב – בפעם הבאה תנצח!'; sfx.lose(); recordResult('l'); }
-  else { win=false; t.textContent='תיקו 🤝'; sub.textContent='תיקו נחשב הפסד... כמעט! נסה שוב'; sfx.lose(); recordResult('d'); }
+  if(outcome==='win'){ t.textContent='ניצחת! 🏆'; sub.textContent=mp?'ניצחת את החבר! 🎉':'כל הכבוד, כוכב אמיתי!'; sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); recordResult('w'); }
+  else if(outcome==='lose'){ t.textContent='הפסדת 😢'; sub.textContent=mp?'החבר ניצח הפעם… נסו שוב!':'נסה שוב – בפעם הבאה תנצח!'; sfx.lose(); recordResult('l'); }
+  else { t.textContent='תיקו 🤝'; sub.textContent=mp?'שניכם באותה רמה! עוד משחק?':'תיקו נחשב הפסד... כמעט! נסה שוב'; sfx.lose(); recordResult('d'); }
   updateTimer();
   $('#end').classList.add('show');
   setTimeout(goHome, 3000);
+}
+function endGame(){
+  const o = score.me>score.op ? 'win' : score.me<score.op ? 'lose' : 'draw';
+  netEv('end:'+(o==='win'?'p1':o==='lose'?'p2':'draw'));
+  showEnd(o);
+  sendSnapshot();
 }
 
 function scoreGoal(who){
@@ -932,14 +1009,17 @@ function scoreGoal(who){
   updateScore();
   ball.vx*=.2; ball.vy=0;
   P1.el.classList.remove('running'); P2.el.classList.remove('running');
+  goalFx(); netEv('goal');
+  setTimeout(()=>{
+    if(score.me+score.op>=3){ endGame(); return; }
+    resetPositions(); sfx.whistle(); netEv('whistle'); state='play'; lastT=performance.now();
+  }, 1900);
+}
+function goalFx(){
   sfx.goal(); confetti.burst(200);
   $('#fans').classList.add('cheer');
   const f=$('#goal-flash'); f.classList.remove('show'); void f.offsetWidth; f.classList.add('show');
-  setTimeout(()=>{
-    $('#fans').classList.remove('cheer');
-    if(score.me+score.op>=3){ endGame(); return; }
-    resetPositions(); sfx.whistle(); state='play'; lastT=performance.now();
-  }, 1900);
+  setTimeout(()=>$('#fans').classList.remove('cheer'), 1900);
 }
 
 /* ---------- physics ---------- */
@@ -958,7 +1038,7 @@ function inReach(p){ return Math.hypot(ball.x-p.x, ball.y-(p.y+22))<REACH; }
 
 function doKick(p,power=1){
   if(p.kickT>0) return;
-  p.kickT=.35;
+  p.kickT=.35; p.kicks=(p.kicks|0)+1;
   p.el.classList.remove('kicking'); void p.el.offsetWidth; p.el.classList.add('kicking');
   if(!inReach(p)) return;
   let d=ball.x-p.x; d=Math.abs(d)<10 ? p.facing : Math.sign(d);
@@ -1027,45 +1107,44 @@ function predictBall(T){                          // where will the ball be in T
   }
   return {x,y};
 }
+/* GoalHeads-style bot: always hunts the ball, kicks the moment it can, jumps a lot, heads high balls,
+   and lobs the ball over you when you stand between it and your goal. Only drops back when the ball is behind it. */
 function updateAI(dt){
-  const ai=P2, L=level, goalX=FIELD_W-GOAL_W;
+  const ai=P2, L=level;
   ai.reactT-=dt;
   if(ai.reactT<=0){
     ai.reactT=L.react;
     const err=(Math.random()*2-1)*L.err, smart=Math.random()<L.smart;
-    const toMyGoal = ball.vx>150;
-    const danger = ball.x>500 || (toMyGoal && ball.x>330);
+    const p = smart ? predictBall(ball.vx>150 ? .35 : .22) : ball;
     let target;
-    if(danger){                                   // DEFEND: stand goal-side of where the ball is going to land
-      ai.mode='defend';
-      const T = toMyGoal ? clamp((goalX-ball.x)/Math.max(250,ball.vx), .08, .6) : .3;
-      const p = smart ? predictBall(T) : ball;
-      target = Math.max(p.x, ball.x) + 64;
-      if(target>MAXX-10) target = MAXX;           // ball right at the goal: stand on the line
-    }else{                                        // ATTACK: get behind the ball and drive it at the far goal
-      ai.mode='attack';
-      const p = smart ? predictBall(.3) : ball;
-      target = p.x + 30;
-      if(Math.abs(P1.x-ball.x)<90 && ball.y<40 && Math.random()<L.smart*.5) target = ball.x+44;   // opponent is on the ball: shield it
+    if(ball.x>ai.x+20 && ball.x>560){             // ball slipped behind it, near its own goal: get goal-side fast
+      ai.mode='defend'; target = Math.max(p.x, ball.x) + 60;
+    }else{                                        // HUNT: run straight at the ball, slightly goal-side so every touch goes forward
+      ai.mode='hunt'; target = p.x + 26;
     }
     ai.targetX=clamp(target+err, MINX, MAXX);
-    ai.wantKick=Math.random()<L.kick;
+    ai.wantKick=Math.random()<Math.min(1, L.kick+.35);
   }
   const diff=ai.targetX-ai.x, dir=Math.abs(diff)>6 ? Math.sign(diff) : 0;
   ai.vx=dir*MOVE*L.speed;
   ai.facing = ball.x<ai.x ? -1 : 1;
+  const dx=ball.x-ai.x, adx=Math.abs(dx), near=inReach(ai);
+  const oppInWay = P1.x<ball.x && ball.x-P1.x<230 && P1.x>GOAL_W+60;        // you're between the ball and your goal → lob it over you
   if(ai.y===0){
-    const dx=ball.x-ai.x, adx=Math.abs(dx);
     const blocked = dir!==0 && overlaps(ai, ai.x+dir*12, P1);
-    const ballHigh = ball.y>70 && adx<120;
-    const shotComing = ball.vx>320 && dx<0 && dx>-280 && ball.y>50;                       // shot on its goal: go up and head it away
-    const hopOver = ai.mode==='defend' && dx>0 && dx<110 && ball.y<45 && ai.x<MAXX-30;    // ball got behind it: jump over it to get goal-side
-    if((blocked && Math.random()<L.jump*dt*6) || (ballHigh && Math.random()<L.jump*dt*7) ||
-       (shotComing && Math.random()<L.jump*dt*12) || (hopOver && Math.random()<(.3+L.smart*.7)*dt*10)) ai.vy=JUMP;
+    const ballHigh = ball.y>45 && adx<150;                                     // go up and head it
+    const shotComing = ball.vx>300 && dx<0 && dx>-300 && ball.y>40;
+    const hopOver = ai.mode==='defend' && dx>0 && dx<110 && ball.y<45 && ai.x<MAXX-30;
+    const lobSetup = oppInWay && adx<90 && ball.y<60;                          // jump first, kick at the top = lob
+    if((blocked && Math.random()<L.jump*dt*8) || (ballHigh && Math.random()<L.jump*dt*10) ||
+       (shotComing && Math.random()<L.jump*dt*12) || (hopOver && Math.random()<(.3+L.smart*.7)*dt*10) ||
+       (lobSetup && Math.random()<(.4+L.smart*.6)*dt*9) || (adx<120 && Math.random()<L.jump*dt*1.6)) ai.vy=JUMP;
   }
-  if(ball.x<ai.x-2 && inReach(ai)){               // goal-side of the ball: clear it / shoot
-    const urgent = ai.mode==='defend' && ball.x>600;
-    if((urgent && Math.random()<(.4+L.kick*.6)*dt*16) || (ai.wantKick && Math.random()<L.kick*dt*9)) doKick(ai,L.power);
+  if(near && ball.x<ai.x+8){                        // kick the moment it can (in the air too – that's the lob / header-kick)
+    const airborne = ai.y>25;
+    const eager = ai.mode==='defend' && ball.x>600;
+    if(airborne ? Math.random()<(.5+L.kick*.5)*dt*18 : (eager && Math.random()<(.5+L.kick*.5)*dt*16) || (ai.wantKick && Math.random()<(.25+L.kick*.75)*dt*14))
+      doKick(ai, L.power);
   }
 }
 
@@ -1080,7 +1159,7 @@ function loop(t){
     if(jumpQueued && P1.y===0) P1.vy=JUMP;
     jumpQueued=false;
     if(kickQueued){ doKick(P1); kickQueued=false; }
-    updateAI(dt);
+    if(mp && mp.role==='host') applyRemote(); else updateAI(dt);
     movePlayer(P1,dt,P2); movePlayer(P2,dt,P1);
     updateBall(dt);
     collideBall(P1); collideBall(P2);
@@ -1090,6 +1169,7 @@ function loop(t){
     ball.vx*=Math.pow(.2,dt); ball.x+=ball.vx*dt;
   }
   render();
+  if(mp && mp.role==='host') sendSnapshot();
 }
 
 const SH={P1:$('#sh1'),P2:$('#sh2'),B:$('#shb')};
@@ -1103,6 +1183,159 @@ function render(){
   }
   ball.el.style.transform=`translate(${ball.x-R}px,${GROUND_Y-ball.y-R}px) rotate(${ball.rot}rad)`;
 }
+
+/* =========================================================
+   MULTIPLAYER – two devices, peer-to-peer (PeerJS), host runs the physics
+   ========================================================= */
+let mp=null;   // { role:'host'|'guest', peer, conn, code, connected, myPick, opPick, myReady, opReady, rin, ev, snap }
+const CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const makeCode = () => Array.from({length:4}, ()=>CODE_CHARS[Math.floor(Math.random()*CODE_CHARS.length)]).join('');
+const peerIdFor = code => 'footballstar-'+code.toLowerCase();
+const netEv = e => { if(mp && mp.role==='host' && mp.ev) mp.ev.push(e); };
+for(const k of ['kick','bounce']){ const f=sfx[k]; sfx[k]=()=>{ f(); netEv(k); }; }   // the guest hears what the host hears
+
+function loadPeerJS(){
+  if(window.Peer) return Promise.resolve();
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js';
+    s.onload=res; s.onerror=()=>rej(new Error('load'));
+    document.head.appendChild(s);
+  });
+}
+const mpStatus = t => { $('#mp-status').textContent=t; };
+function mpTeardown(){
+  if(mp){ try{ mp.conn && mp.conn.close(); }catch(e){} try{ mp.peer && mp.peer.destroy(); }catch(e){} }
+  mp=null;
+}
+function mpLobby(){
+  $('#mp-lobby').hidden=false; $('#mp-pick').hidden=true; $('#mp-code').hidden=true;
+  $('#btn-mp-host').disabled=false; $('#btn-mp-join').disabled=false; $('#mp-input').value='';
+}
+async function mpHost(){
+  mpTeardown(); mpStatus('מתחבר…'); $('#btn-mp-host').disabled=true;
+  try{ await loadPeerJS(); }catch(e){ mpStatus('אין חיבור לאינטרנט 😕'); $('#btn-mp-host').disabled=false; return; }
+  const code=makeCode();
+  mp={ role:'host', code, connected:false, myPick:null, opPick:null, myReady:false, opReady:false, rin:{l:0,r:0,j:0,k:0}, ev:[] };
+  const peer=new Peer(peerIdFor(code)); mp.peer=peer;
+  peer.on('open', ()=>{ $('#mp-code-text').textContent=code; $('#mp-code').hidden=false; mpStatus('שלח לחבר את הקוד '+code); });
+  peer.on('connection', conn=>{ if(mp.conn){ conn.close(); return; } mp.conn=conn; mpWire(conn); });
+  peer.on('error', e=>{
+    if(e.type==='unavailable-id'){ peer.destroy(); mpHost(); }             // code already taken → new one
+    else if(!mp || !mp.connected){ mpStatus('שגיאת חיבור 😕 ('+e.type+')'); $('#btn-mp-host').disabled=false; }
+  });
+}
+async function mpJoin(code){
+  code=(code||'').trim().toUpperCase();
+  if(code.length!==4){ mpStatus('הקוד הוא 4 תווים'); return; }
+  mpTeardown(); mpStatus('מתחבר ל-'+code+'…'); $('#btn-mp-join').disabled=true;
+  try{ await loadPeerJS(); }catch(e){ mpStatus('אין חיבור לאינטרנט 😕'); $('#btn-mp-join').disabled=false; return; }
+  mp={ role:'guest', code, connected:false, myPick:null, opPick:null, myReady:false, opReady:false, snap:null, lastKey:'', lastSent:0 };
+  const peer=new Peer(); mp.peer=peer;
+  peer.on('open', ()=>{
+    const conn=peer.connect(peerIdFor(code), {serialization:'json', reliable:true}); mp.conn=conn; mpWire(conn);
+    setTimeout(()=>{ if(mp && !mp.connected){ mpStatus('לא נמצא משחק עם הקוד '+code+' 😕'); $('#btn-mp-join').disabled=false; } }, 9000);
+  });
+  peer.on('error', e=>{ if(!mp || !mp.connected){ mpStatus(e.type==='peer-unavailable' ? 'לא נמצא משחק עם הקוד '+code+' 😕' : 'שגיאת חיבור 😕 ('+e.type+')'); $('#btn-mp-join').disabled=false; } });
+}
+function mpWire(conn){
+  conn.on('open', ()=>{ mp.connected=true; sfx.win(); mpStatus(''); mpShowPick(); });
+  conn.on('data', mpOnMsg);
+  conn.on('close', mpOnClose);
+  conn.on('error', mpOnClose);
+}
+function mpOnClose(){
+  if(!mp) return;
+  const wasPlaying = state!=='idle';
+  mpTeardown();
+  state='idle'; cancelAnimationFrame(rafId);
+  $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
+  mpLobby(); mpStatus('החבר התנתק 😢'); showScreen('mp');
+  if(wasPlaying) sfx.lose();
+}
+function mpOnMsg(m){
+  if(!mp || !m) return;
+  switch(m.t){
+    case 'pick': mp.opPick=m.i; if(mp.myPick===m.i && mp.role==='guest'){ mp.myPick=null; } mpRefresh(); break;
+    case 'ready': mp.opReady=!!m.v; mpRefresh(); break;
+    case 'start': if(mp.role==='guest'){ mp.snap=null; beginMatch(CHARS[m.p1], CHARS[m.p2]); } break;
+    case 'i': if(mp.role==='host' && mp.rin){ mp.rin.l=m.l; mp.rin.r=m.r; mp.rin.j=mp.rin.j||m.j; mp.rin.k=mp.rin.k||m.k; } break;
+    case 's': if(mp.role==='guest'){ if(mp.snap && mp.snap.ev && mp.snap.ev.length) m.ev=mp.snap.ev.concat(m.ev||[]); mp.snap=m; } break;   // never drop events
+  }
+}
+/* ----- character pick (both must pick, no duplicates, both press play) ----- */
+function mpShowPick(){
+  $('#mp-lobby').hidden=true; $('#mp-pick').hidden=false;
+  mp.myPick=null; mp.opPick=null; mp.myReady=false; mp.opReady=false;
+  const g=$('#mp-gallery'); g.innerHTML='';
+  CHARS.forEach((c,i)=>{
+    const d=document.createElement('div'); d.className='mpcard'; d.dataset.i=i;
+    d.innerHTML=`<div class="sprite">${playerSVG(c)}</div>${c.name}`;
+    d.addEventListener('click', ()=>{ if(!mp || mp.opPick===i || mp.myReady) return; sfx.click(); mp.myPick=i; mp.conn.send({t:'pick', i}); mpRefresh(); });
+    g.appendChild(d);
+  });
+  mpRefresh();
+}
+function mpRefresh(){
+  if(!mp) return;
+  document.querySelectorAll('.mpcard').forEach(d=>{ const i=+d.dataset.i; d.classList.toggle('mine', i===mp.myPick); d.classList.toggle('theirs', i===mp.opPick); });
+  const me=$('#mp-me-sprite'), op=$('#mp-op-sprite');
+  if(mp.myPick!=null){ sprite(me, CHARS[mp.myPick]); $('#mp-me-name').textContent=CHARS[mp.myPick].name; } else { me.innerHTML=''; $('#mp-me-name').textContent='בחר דמות 👆'; }
+  if(mp.opPick!=null){ sprite(op, CHARS[mp.opPick]); $('#mp-op-name').textContent=CHARS[mp.opPick].name; } else { op.innerHTML=''; $('#mp-op-name').textContent='החבר בוחר…'; }
+  $('#mp-op-tag').textContent = 'החבר' + (mp.opReady ? ' · מוכן ✔' : '');
+  const b=$('#btn-mp-play'); b.classList.toggle('ready', mp.myReady);
+  b.textContent = mp.myReady ? '✔ מוכן! מחכה לחבר…' : 'שחק ▶'; b.disabled = mp.myPick==null;
+  if(mp.role==='host' && mp.myReady && mp.opReady && mp.myPick!=null && mp.opPick!=null && mp.myPick!==mp.opPick){
+    mp.conn.send({t:'start', p1:mp.myPick, p2:mp.opPick});
+    mp.rin={l:0,r:0,j:0,k:0}; mp.ev=[];
+    beginMatch(CHARS[mp.myPick], CHARS[mp.opPick]);
+  }
+}
+$('#btn-mp-play').addEventListener('click', ()=>{ if(!mp || mp.myPick==null) return; sfx.click(); mp.myReady=!mp.myReady; mp.conn.send({t:'ready', v:mp.myReady}); mpRefresh(); });
+/* ----- in-match networking ----- */
+function applyRemote(){                          // host: drive P2 with the guest's inputs
+  const r=mp.rin; let d=0; if(r.l) d-=1; if(r.r) d+=1;
+  P2.vx=d*MOVE; if(d) P2.facing=d;
+  if(r.j){ if(P2.y===0) P2.vy=JUMP; r.j=0; }
+  if(r.k){ doKick(P2); r.k=0; }
+}
+function sendSnapshot(){
+  if(!mp || !mp.conn || !mp.connected || mp.role!=='host') return;
+  const P=p=>[Math.round(p.x),Math.round(p.y),Math.round(p.vx),p.facing,p.kicks|0];
+  try{ mp.conn.send({t:'s', p:[P(P1),P(P2)], b:[Math.round(ball.x),Math.round(ball.y),+ball.rot.toFixed(2)], sc:[score.me,score.op], tl:+timeLeft.toFixed(1), st:state, ev:mp.ev}); }catch(e){}
+  mp.ev=[];
+}
+function guestLoop(){                            // guest: send inputs, draw the host's latest snapshot
+  rafId=requestAnimationFrame(guestLoop);
+  if(!mp || !mp.conn || !mp.connected) return;
+  const msg={t:'i', l:keys.left?1:0, r:keys.right?1:0, j:jumpQueued?1:0, k:kickQueued?1:0};
+  const key=''+msg.l+msg.r, now=performance.now();
+  if(key!==mp.lastKey || msg.j || msg.k || now-mp.lastSent>120){ try{ mp.conn.send(msg); }catch(e){} mp.lastKey=key; mp.lastSent=now; }
+  jumpQueued=kickQueued=false;
+  if(mp.snap){ applySnapshot(mp.snap); mp.snap=null; }
+}
+function applySnapshot(s){
+  [P1,P2].forEach((p,i)=>{
+    const a=s.p[i]; p.x=a[0]; p.y=a[1]; p.vx=a[2]; p.facing=a[3];
+    if(a[4]!==(p.kicks|0)){ p.kicks=a[4]; p.el.classList.remove('kicking'); void p.el.offsetWidth; p.el.classList.add('kicking'); }
+  });
+  ball.x=s.b[0]; ball.y=s.b[1]; ball.rot=s.b[2];
+  score.me=s.sc[1]; score.op=s.sc[0]; updateScore();          // guest is P2
+  timeLeft=s.tl; if(state!=='end' && (s.st==='play'||s.st==='celebrate')) state=s.st; updateTimer();
+  for(const e of (s.ev||[])){
+    if(e==='kick') sfx.kick(); else if(e==='bounce') sfx.bounce(); else if(e==='whistle') sfx.whistle();
+    else if(e==='goal') goalFx();
+    else if(e.startsWith('end:')){ const r=e.slice(4); showEnd(r==='p2'?'win':r==='p1'?'lose':'draw'); }
+  }
+  render();
+}
+/* ----- screen wiring ----- */
+$('#btn-mp').addEventListener('click', ()=>{ sfx.click(); if(!(mp && mp.connected)){ mpTeardown(); mpLobby(); mpStatus(''); } showScreen('mp'); });
+$('#btn-mp-back').addEventListener('click', ()=>{ sfx.click(); mpTeardown(); showScreen('home'); });
+$('#btn-mp-host').addEventListener('click', ()=>{ sfx.click(); mpHost(); });
+$('#btn-mp-join').addEventListener('click', ()=>{ sfx.click(); mpJoin($('#mp-input').value); });
+$('#mp-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') mpJoin(e.target.value); });
+$('#mp-input').addEventListener('input', e=>{ e.target.value=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,''); });
 
 /* =========================================================
    PENALTY WORLD CUP – 32 teams, knockout bracket, shootouts
