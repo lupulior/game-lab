@@ -149,6 +149,12 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
   box-shadow:0 4px 0 rgba(0,0,0,.3);z-index:7;letter-spacing:-2px;display:flex;align-items:center;justify-content:center}
 #btn-pause:active,#btn-pk-pause:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
 #btn-pk-pause{left:118px;top:14px}
+#corner-ring{position:absolute;left:425px;top:205px;width:90px;height:90px;border:6px dashed var(--yellow);border-radius:50%;box-shadow:0 0 0 3px var(--navy),0 0 24px rgba(255,212,71,.8);z-index:4;pointer-events:none;animation:ringpulse .8s infinite alternate}
+@keyframes ringpulse{from{transform:scale(.92)}to{transform:scale(1.1)}}
+#pk.corner #pk-shooter{left:385px;top:190px;transition:none}
+#pk.corner #pk-shooter.headjump{animation:headjump .6s ease-out}
+@keyframes headjump{0%{transform:translateY(0)}45%{transform:translateY(-70px)}100%{transform:translateY(0)}}
+#pk.corner #pk-cross{display:none}
 #game.online #btn-pause{display:none}
 #replay-tag{position:absolute;top:120px;right:20px;font-size:26px;font-weight:900;color:#fff;background:var(--red);padding:4px 16px;border-radius:14px;animation:blinkRep .6s infinite alternate;z-index:6}
 @keyframes blinkRep{to{opacity:.55}}
@@ -651,6 +657,7 @@ body.touch #touch{display:block}
     <div id="pk-shooter"></div>
     <div id="pk-ball"></div>
     <div id="pk-cross"></div>
+    <div id="corner-ring" hidden></div>
     <div id="pk-round"></div>
     <button class="btn red small" id="btn-pk-back">✖ יציאה</button>
     <button id="btn-pk-pause" title="הפסקה">❚❚</button>
@@ -909,6 +916,15 @@ const I18N_RAW={
  'pause.resume':['▶ המשך','▶ Resume','▶ متابعة','▶ Продолжить'],
  'pause.home':['🏠 לדף הבית','🏠 Home','🏠 الصفحة الرئيسية','🏠 На главную'],
  'pause.btn':['הפסקה','Pause','توقف','Пауза'],
+ 'c.go':['יאללה!','Go!','هيا!','Поехали!'],
+ 'c.corner':['🎙️ מעל השער! קרן!','🎙️ Over the goal! Corner kick!','🎙️ فوق المرمى! ركلة ركنية!','🎙️ Выше ворот! Угловой!'],
+ 'corner.title':['קרן!','Corner!','ركنية!','Угловой!'],
+ 'corner.hintAtk':['🎯 לחץ כשהכדור בתוך העיגול כדי לנגוח!','🎯 Tap when the ball is inside the ring to head it!','🎯 انقر عندما تكون الكرة داخل الدائرة لتنفيذ الرأسية!','🎯 Нажми, когда мяч в кольце, чтобы пробить головой!'],
+ 'corner.hintDef':['🛡️ לחץ כשהכדור בעיגול כדי להרחיק!','🛡️ Tap when the ball is in the ring to clear it!','🛡️ انقر عندما تكون الكرة في الدائرة لإبعادها!','🛡️ Нажми, когда мяч в кольце, чтобы выбить его!'],
+ 'corner.goal':['נגיחה! גול!!! ⚽','Header! GOAL!!! ⚽','رأسية! هدف!!! ⚽','Головой! ГОЛ!!! ⚽'],
+ 'corner.miss':['פספסת את הכדור 😬','You missed the ball 😬','أخطأت الكرة 😬','Ты не попал по мячу 😬'],
+ 'corner.clear':['הרחקה! 💪','Cleared! 💪','إبعاد! 💪','Выбил! 💪'],
+ 'corner.oppGoal':['נגיחה של היריב… גול 😢','Opponent header… goal 😢','رأسية الخصم… هدف 😢','Удар головой соперника… гол 😢'],
  'pk.hintPower':['💪 עצור את פס העוצמה בירוק! אדום = מעל השער','💪 Stop the power bar in the green! Red = over the bar','💪 أوقف شريط القوة في الأخضر! الأحمر = فوق المرمى','💪 Останови шкалу на зелёном! Красный = выше ворот'],
  'pk.hintKeep':['🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר!','🧤 When the sight appears in the goal, click it fast!','🧤 عندما يظهر الهدف في المرمى انقر عليه بسرعة!','🧤 Когда прицел появится в воротах, быстро нажми на него!'],
  'pk.power':['עוצמה {0}%','Power {0}%','القوة {0}%','Сила {0}%'],
@@ -2023,7 +2039,7 @@ function setKey(code,down){
 }
 window.addEventListener('keydown', e=>{
   if(state!=='play'){
-    if(e.code==='Space'){ e.preventDefault(); if(pk && !e.repeat && pk.phase==='aim') startHold(); }
+    if(e.code==='Space'){ e.preventDefault(); if(pk && !e.repeat){ if(pk.corner) cornerTap(); else if(pk.phase==='aim') startHold(); } }
     if((e.code==='Escape'||e.code==='KeyP') && (state==='paused' || (pk && pk.phase==='paused'))) resumeGame();
     else if((e.code==='Escape'||e.code==='KeyP') && pk) pauseGame();
     return;
@@ -2113,7 +2129,7 @@ function beginMatch(c1, c2, opts){
   lastT=performance.now();
   cancelAnimationFrame(rafId); rafId=requestAnimationFrame(localIsP1 ? loop : guestLoop);
   if(localIsP1){
-    startCountdown(()=>{ if(state!=='countdown') return; sfx.whistle(); state='play'; lastT=performance.now(); setTimeout(()=>{ if(state==='play') say('c.kickoff'); }, 250); });
+    startCountdown(()=>{ if(state!=='countdown') return; sfx.whistle(); state='play'; lastT=performance.now(); setTimeout(()=>{ if(state==='play') say('c.kickoff'); }, 900); });
   } else state='countdown';                       // the guest follows the host's countdown events
 }
 /* ---------- 3-2-1 countdown before kick-off ---------- */
@@ -2122,6 +2138,7 @@ function showCount(n){
   const el=$('#countdown'); el.hidden=false; el.textContent = n>0 ? n : '⚽';
   el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
   if(n>0) sfx.count(n);
+  speak(n>0 ? String(n) : T('c.go'), true);           // the commentator counts down too
   if(n===0) setTimeout(()=>{ el.hidden=true; }, 700);
 }
 function startCountdown(done){
@@ -2130,7 +2147,7 @@ function startCountdown(done){
   step();
 }
 /* ---------- pause (match + penalties) ---------- */
-let pausedFrom=null;
+let pausedFrom=null, cornerCd=0;
 function pauseGame(){
   if(mp) return;                                     // no pausing an online match
   if(state==='play' && !pk){ pausedFrom='game'; state='paused'; cancelAnimationFrame(rafId); }
@@ -2447,6 +2464,11 @@ function stepBall(dt){
   // walls / goals
   if(ball.x-R<0){ ball.x=R; ball.vx=Math.abs(ball.vx)*.6; }
   if(ball.x+R>FIELD_W){ ball.x=FIELD_W-R; ball.vx=-Math.abs(ball.vx)*.6; }
+  // corner: the ball sails over a goal after a defender's touch (offline modes)
+  if(!mp && state==='play' && ball.y+R>GOAL_H && (ball.x<GOAL_W || ball.x>FIELD_W-GOAL_W) && performance.now()-cornerCd>4000){
+    const leftGoal=ball.x<GOAL_W, lt=lastTouch, fresh=lt.p && performance.now()-lt.t<3000;
+    if(fresh && (leftGoal ? teamL.includes(lt.p) : teamR.includes(lt.p))){ cornerCd=performance.now(); startCorner(leftGoal ? 'R' : 'L'); }
+  }
   if(ball.y-R>=GOAL_BOT-1 && ball.y+R<GOAL_H){
     if(ball.x<GOAL_W-22) scoreGoal('op');
     else if(ball.x>FIELD_W-GOAL_W+22) scoreGoal('me');
@@ -3154,6 +3176,67 @@ function startMatchPenalty(forTeam){
     showScreen('pk'); setTimeout(()=>{ if(pk && pk.single) setupKick(meShoots); }, 500);
   }, 900);
 }
+/* ---------- corner: header timing mini-game (offline modes) ---------- */
+const RING={x:470,y:250};
+const bez=(a,c,b,t)=>({ x:(1-t)*(1-t)*a.x+2*(1-t)*t*c.x+t*t*b.x, y:(1-t)*(1-t)*a.y+2*(1-t)*t*c.y+t*t*b.y });
+const crossPos = u => u<=1 ? bez({x:-60,y:330},{x:180,y:10},RING,u) : bez(RING,{x:760,y:150},{x:980,y:440},Math.min(1,u-1));
+function startCorner(forTeam){                       // 'L' = my team attacks (I head the ball), 'R' = opponent attacks (I clear it)
+  if(state!=='play') return;
+  state='corner'; cancelAnimationFrame(rafId); say('c.corner'); sfx.whistle();
+  const mine = forTeam==='L';
+  setTimeout(()=>{
+    if(state!=='corner') return;
+    pk={ corner:true, single:true, mine, lv:PK_LEVELS[level.i]||PK_LEVELS[1], phase:'wait', t0:0, raf:0, timer:0,
+         onResult:(goal, who)=>{
+           pk.phase='over'; cancelAnimationFrame(pk.raf);
+           setTimeout(()=>{
+             pk=null; $('#pk-score').hidden=false; $('#corner-ring').hidden=true; $('#pk').classList.remove('corner'); $('#pk-shooter').classList.remove('headjump');
+             showScreen('game'); lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play';
+             if(goal) scoreGoal(who); else { resetPositions(); sfx.whistle(); }
+           }, 1500);
+         } };
+    $('#pk-score').hidden=true; $('#pk-round').textContent=T('corner.title'); $('#pk-hint').textContent=T(mine?'corner.hintAtk':'corner.hintDef');
+    $('#pk-end').classList.remove('show'); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); $('#pk').classList.add('corner');
+    sprite($('#pk-keeper'), mine ? opChar : myChar); $('#pk-keeper').style.transform='none';
+    sprite($('#pk-shooter'), mine ? myChar : opChar); $('#pk-shooter').classList.remove('run','headjump');
+    const b=$('#pk-ball'); b.innerHTML=BALL_SVG; b.style.transition='none'; b.style.transform='translate(-600px,-170px) scale(.7)';
+    $('#corner-ring').hidden=false; showScreen('pk');
+    pk.timer=setTimeout(()=>{ if(pk&&pk.corner){ pk.phase='cross'; pk.t0=performance.now(); pk.raf=requestAnimationFrame(cornerLoop); } }, 800);
+  }, 900);
+}
+function cornerLoop(){
+  if(!pk||!pk.corner||pk.phase!=='cross') return;
+  const u=(performance.now()-pk.t0)/1500, p=crossPos(u);
+  $('#pk-ball').style.transform=`translate(${p.x-517}px,${p.y-500}px) scale(.7) rotate(${Math.round(u*540)}deg)`;
+  if(u>=1.5){ cornerResolve(null); return; }        // nobody got to it
+  pk.raf=requestAnimationFrame(cornerLoop);
+}
+function cornerTap(){
+  if(!pk||!pk.corner||pk.phase!=='cross') return;
+  const u=(performance.now()-pk.t0)/1500;
+  cornerResolve(Math.abs(u-1)*1.5);                 // seconds away from the perfect moment
+}
+function cornerResolve(err){
+  pk.phase='fly'; cancelAnimationFrame(pk.raf);
+  const b=$('#pk-ball'); b.style.transition='transform .45s ease-out';
+  const q = err==null ? 0 : err<.08 ? 1 : err<.16 ? .6 : err<.27 ? .3 : 0, lvl=level.i;
+  if(q>0) $('#pk-shooter').classList.add('headjump');
+  const z=randomZone(), c=zoneCenter(z), away={col:2-z.col,row:z.row};
+  if(pk.mine){
+    const goal = q>0 && Math.random() < q*(.92-lvl*.06);
+    if(q===0){ ballTo({x:960,y:470}); flash(T('corner.miss')); sfx.miss(); }
+    else if(goal){ keeperDive(away); ballTo(c); flash(T('corner.goal')); sfx.goal(); pkConfetti.burst(140); achieve('header_goal'); }
+    else { keeperDive(z); ballTo({x:c.x,y:c.y+30}); flash(T('pk.saved')); sfx.save(); }
+    setTimeout(()=>pk&&pk.onResult(goal,'me'), 1400);
+  } else {
+    const cleared = q>0 && Math.random() < q*.95;
+    if(cleared){ ballTo({x:-60,y:280}); flash(T('corner.clear')); sfx.kick(); setTimeout(()=>pk&&pk.onResult(false,'op'),1400); return; }
+    const goal = Math.random() < .35+lvl*.1;
+    if(goal){ keeperDive(away); ballTo(c); flash(T('corner.oppGoal')); sfx.lose(); }
+    else { keeperDive(z); ballTo({x:c.x,y:c.y+30}); flash(T('pk.saved')); sfx.save(); }
+    setTimeout(()=>pk&&pk.onResult(goal,'op'), 1400);
+  }
+}
 function endShootout(res){
   pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer);
   $('#pk').classList.remove('shooting','keeping','locked','power','sight');
@@ -3185,6 +3268,7 @@ $('#pk').addEventListener('pointerdown', e=>{
   if(e.target.closest('button') || e.target.closest('#pk-score')) return;
   if(!pk) return;
   e.preventDefault();
+  if(pk.corner){ cornerTap(); return; }
   if(pk.phase==='aim'){ startHold(); try{ $('#pk').setPointerCapture(e.pointerId); }catch(_){} }
   else if(pk.phase==='keep'){                        // screen → stage coordinates (the stage is scaled to fit)
     const r=$('#stage').getBoundingClientRect();
