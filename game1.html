@@ -340,9 +340,12 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .preview .sprite{width:260px;height:390px;margin:0 auto}
 .preview .shadow{width:180px;height:24px;margin:-16px auto 8px;border-radius:50%;background:rgba(0,0,0,.22)}
 .preview .name{font-size:34px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);margin-bottom:6px}
-.preview .sprite{width:220px;height:330px}
-.pstats{width:300px;margin:0 auto 8px;background:rgba(255,255,255,.55);border-radius:14px;padding:6px 10px}
-.strow{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:900;margin:2px 0}
+.preview{top:70px}
+.preview .sprite{width:180px;height:270px}
+.preview .name{margin-bottom:4px;font-size:30px}
+.pstats{width:300px;margin:0 auto 6px;background:rgba(255,255,255,.55);border-radius:14px;padding:4px 10px}
+.strow{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:900;margin:1px 0}
+#shop-hint{margin-top:6px!important;font-size:15px!important}
 .strow .sl{width:96px;text-align:start;white-space:nowrap}
 .strow .sb{flex:1;height:12px;background:rgba(27,42,78,.2);border-radius:6px;overflow:hidden;direction:ltr}
 .strow .sb i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--red));border-radius:6px}
@@ -1803,7 +1806,7 @@ $('#code-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key=
 (function buildIntro(){
   const box=$('#runners'); if(!box) return;
   [0,1,2,3,5].forEach((ci,k)=>{ const d=document.createElement('div'); d.className='rn'; d.style.animationDelay=(-k*1.4)+'s'; d.innerHTML=playerSVG(CHARS[ci]); box.appendChild(d); });
-  $('#intro').addEventListener('pointerdown', ()=>{ sfx.click(); showScreen('home'); });
+  $('#intro').addEventListener('pointerdown', ()=>{ sfx.click(); goFullscreen(); showScreen('home'); });
 })();
 $('#btn-stats-close').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); });
 $('#btn-stats-reset').addEventListener('click', ()=>{ sfx.click(); if(confirm(T('stats.confirm'))){ saveStats({w:0,d:0,l:0,c:0}); showStats(); } });
@@ -2026,12 +2029,15 @@ window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=f
 let myChar, opChar;
 
 let forcedOpp=null, dailyMatch=false;
+/* phones: fullscreen + landscape on the first tap (intro) and again when a match starts */
+function goFullscreen(){
+  if(!document.body.classList.contains('touch')) return;
+  try{ if(!document.fullscreenElement){ const el=document.documentElement; const r=(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el,{navigationUI:'hide'}); if(r&&r.catch) r.catch(()=>{}); } }catch(e){}
+  try{ if(screen.orientation && screen.orientation.lock){ const r=screen.orientation.lock('landscape'); if(r&&r.catch) r.catch(()=>{}); } }catch(e){}
+}
 function startGame(levelIdx){
   level=LEVELS[levelIdx];
-  if(document.body.classList.contains('touch')){                   // phones: go fullscreen + landscape when possible
-    try{ const r=document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); if(r&&r.catch) r.catch(()=>{}); }catch(e){}
-    try{ if(screen.orientation && screen.orientation.lock){ const r=screen.orientation.lock('landscape'); if(r&&r.catch) r.catch(()=>{}); } }catch(e){}
-  }
+  goFullscreen();
   const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected && !(v2Pending && i===v2Pending.idx) && i!==forcedOpp));
   const opp = forcedOpp!=null && forcedOpp!==selected ? forcedOpp : pool[0]; forcedOpp=null;
   if(v2Pending){
@@ -2214,15 +2220,31 @@ const PRIORITY_SAY=new Set(['c.goal1','c.goal2','c.goal3','c.goalBy','c.oppgoal1
 const VOICE_LANG={he:'he-IL',en:'en-US',ar:'ar-SA',ru:'ru-RU'};
 function speak(text, priority){
   if(settings.voice===false || !('speechSynthesis' in window)) return;
-  const clean=text.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').replace(/[…]/g,'.').replace(/\s+/g,' ').trim();
+  const clean=text.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'')
+    .replace(/[…]/g,'.').replace(/!{2,}/g,'!').replace(/\?{2,}/g,'?').replace(/(\d)-(\d)/g,'$1, $2').replace(/\s+/g,' ').trim();
   if(!clean) return;
   try{
     if(speechSynthesis.speaking || speechSynthesis.pending){ if(!priority) return; speechSynthesis.cancel(); }
-    const u=new SpeechSynthesisUtterance(clean); u.lang=VOICE_LANG[lang]||'he-IL'; u.rate=1.1; u.pitch=1.05; u.volume=Math.max(.15, settings.sfx);
-    const vs=speechSynthesis.getVoices(); const v=vs.find(x=>x.lang && x.lang.toLowerCase().startsWith(lang)) || vs.find(x=>x.lang && x.lang.toLowerCase().startsWith(VOICE_LANG[lang].slice(0,2)));
-    if(v) u.voice=v;
+    const u=new SpeechSynthesisUtterance(clean); u.lang=VOICE_LANG[lang]||'he-IL'; u.rate=.95; u.pitch=1; u.volume=Math.max(.2, settings.sfx);
+    const v=bestVoice(); if(v) u.voice=v;
     speechSynthesis.speak(u);
   }catch(e){}
+}
+/* pick the clearest voice installed for the current language: neural / online / premium voices first */
+function bestVoice(){
+  const vs=speechSynthesis.getVoices(); if(!vs.length) return null;
+  const code=lang, full=(VOICE_LANG[lang]||'').toLowerCase();
+  const score=v=>{
+    const l=(v.lang||'').toLowerCase().replace('_','-'), n=(v.name||'').toLowerCase();
+    if(!l.startsWith(code)) return -1;
+    let s = l===full ? 10 : 5;
+    if(/natural|neural|online|premium|enhanced|wavenet|google/.test(n)) s+=20;
+    if(/microsoft/.test(n)) s+=3;
+    if(v.localService===false) s+=4;                 // cloud voices are usually the clearest
+    if(/espeak|compact/.test(n)) s-=10;
+    return s;
+  };
+  return vs.map(v=>[score(v),v]).filter(x=>x[0]>=0).sort((a,b)=>b[0]-a[0]).map(x=>x[1])[0] || null;
 }
 if('speechSynthesis' in window){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices(); }catch(e){} }
 function showLine(text, priority){
