@@ -45,6 +45,10 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .btn.purple{background:var(--purple);box-shadow:0 8px 0 #5B34B5,0 14px 20px rgba(0,0,0,.22)}
 .btn.purple:active{box-shadow:0 2px 0 #5B34B5}
 .btn.pink{background:var(--pink);box-shadow:0 8px 0 #B7326B,0 14px 20px rgba(0,0,0,.22)}
+.btn.doom{background:linear-gradient(#3a0d0d,#0d0d0d);color:#ff4d4d;text-shadow:0 0 10px #ff2a2a;box-shadow:0 8px 0 #000,0 0 26px rgba(255,40,40,.7);border:3px solid #ff4d4d;animation:doomPulse 1.1s ease-in-out infinite alternate}
+.btn.doom:active{box-shadow:0 2px 0 #000}
+@keyframes doomPulse{from{box-shadow:0 8px 0 #000,0 0 14px rgba(255,40,40,.5)}to{box-shadow:0 8px 0 #000,0 0 34px rgba(255,40,40,.95)}}
+.doom-sep{flex-basis:100%;text-align:center;font-size:18px;font-weight:900;color:#c0392b;margin-top:6px;border-top:3px dashed rgba(192,57,43,.5);padding-top:8px}
 .btn.pink:active{box-shadow:0 2px 0 #B7326B}
 .btn.small{font-size:22px;padding:10px 24px;border-radius:18px}
 .btn.play{font-size:66px;padding:18px 70px 22px;border-radius:44px}
@@ -382,9 +386,10 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
   background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
   animation:shimmer 3s linear infinite;filter:drop-shadow(0 5px 0 #5a3a00) drop-shadow(0 14px 22px rgba(0,0,0,.55))}
 @keyframes shimmer{to{background-position:-200% 0}}
-.ceo-name{font-size:120px;letter-spacing:2px}
-.ceo-role{font-size:62px;margin-top:-8px}
-.ceo-wa{margin-top:16px;font-size:24px;font-weight:900;color:#fff;background:linear-gradient(#3FC35F,#22883C);padding:10px 26px;border-radius:24px;box-shadow:0 6px 0 #17602a,0 10px 18px rgba(0,0,0,.35);animation:tapPulse 1.4s ease-in-out infinite}
+.ceo-name{font-size:72px;letter-spacing:1px}
+.ceo-role{font-size:44px;margin-top:-4px}
+.ceo-wa-none{margin-top:8px;font-size:18px;font-weight:900;color:rgba(255,255,255,.75)}
+.ceo-wa{margin-top:18px;font-size:36px;font-weight:900;color:#fff;background:linear-gradient(#3FC35F,#22883C);padding:10px 26px;border-radius:24px;box-shadow:0 6px 0 #17602a,0 10px 18px rgba(0,0,0,.35);animation:tapPulse 1.4s ease-in-out infinite}
 .ceo-tag{margin-top:22px;font-size:26px;font-weight:900;color:#fff;background:rgba(255,255,255,.12);border:3px solid rgba(255,212,71,.7);
   padding:8px 28px;border-radius:30px;box-shadow:0 0 24px rgba(255,212,71,.35)}
 .spark{position:absolute;font-size:36px;animation:twinkle 1.6s ease-in-out infinite;pointer-events:none;z-index:2}
@@ -553,6 +558,7 @@ body.touch #touch{display:block}
       <div class="gold ceo-role">יוצר משחקים</div>
       <div class="ceo-tag">👔 מנכ"ל המשחק</div>
       <div class="ceo-wa" id="ceo-wa">📱 היכנסו לקבוצת הווצאפ שלנו ותקבלו קודים חינם!</div>
+      <div class="ceo-wa-none" id="ceo-wa-none">(עוד אין קבוצת ווצאפ)</div>
     </div>
     <canvas id="ceo-confetti" width="1000" height="620"></canvas>
     <button class="btn blue small" id="btn-ceo-back">➜ חזרה</button>
@@ -1132,6 +1138,10 @@ const I18N_RAW={
  'a.cup_win':['אלוף העולם','World champion','بطل العالم','Чемпион мира'],
  'a.cup_master':['גביע העולם ברמת מאסטר','World Cup on Master','كأس العالم بمستوى خبير','Кубок мира на «Мастер»'],
  'a.daily_win':['ניצחון במשחק היומי','Daily match win','فوز في مباراة اليوم','Победа в матче дня'],
+ 'a.win_impossible':['ניצחון ברמה בלתי אפשרי','Win on Impossible','فوز بالمستوى المستحيل','Победа на «Невозможно»'],
+ 'lvl.5':['בלתי אפשרי','Impossible','مستحيل','Невозможно'],
+ 'level.doom':['☠️ הרמה הקשה ביותר שיש ☠️','☠️ The hardest level there is ☠️','☠️ أصعب مستوى على الإطلاق ☠️','☠️ Самый сложный уровень ☠️'],
+ 'ceo.waNone':['(עוד אין קבוצת ווצאפ)','(no WhatsApp group yet)','(لا توجد مجموعة واتساب بعد)','(группы WhatsApp пока нет)'],
  'btn.codes':['קודים','Codes','أكواد','Коды'],
  'codes.title':['🎁 קודים','🎁 Codes','🎁 أكواد','🎁 Коды'],
  'codes.hint':['יש לך קוד? הכנס אותו כאן. קודים מיוחדים יתפרסמו בהמשך…','Got a code? Enter it here. Special codes will be published later…','لديك كود؟ أدخله هنا. ستُنشر أكواد خاصة لاحقًا…','Есть код? Введи его здесь. Специальные коды появятся позже…'],
@@ -1188,8 +1198,8 @@ const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
 const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id);
 const ACH=[['first_win',20],['hat_trick',15],['clean_sheet',25],['slide_goal',15],['header_goal',15],['win_hard',30],['win_crazy',50],['win_master',80],
-  ['streak3',30],['ten_wins',40],['comeback',25],['last_second',20],['online_win',30],['v2_win',25],['pk_perfect',25],['pk_saves',25],['cup_win',60],['cup_master',120],['daily_win',20]];
-const ACH_ICON={first_win:'🥇',hat_trick:'🎩',clean_sheet:'🧱',slide_goal:'🦵',header_goal:'🧠',win_hard:'🔥',win_crazy:'🤪',win_master:'👑',streak3:'3️⃣',ten_wins:'🔟',comeback:'🔄',last_second:'⏱️',online_win:'🌐',v2_win:'👥',pk_perfect:'🎯',pk_saves:'🧤',cup_win:'🏆',cup_master:'💎',daily_win:'📅'};
+  ['streak3',30],['ten_wins',40],['comeback',25],['last_second',20],['online_win',30],['v2_win',25],['pk_perfect',25],['pk_saves',25],['cup_win',60],['cup_master',120],['daily_win',20],['win_impossible',300]];
+const ACH_ICON={win_impossible:'☠️',first_win:'🥇',hat_trick:'🎩',clean_sheet:'🧱',slide_goal:'🦵',header_goal:'🧠',win_hard:'🔥',win_crazy:'🤪',win_master:'👑',streak3:'3️⃣',ten_wins:'🔟',comeback:'🔄',last_second:'⏱️',online_win:'🌐',v2_win:'👥',pk_perfect:'🎯',pk_saves:'🧤',cup_win:'🏆',cup_master:'💎',daily_win:'📅'};
 function toast(msg, cls){
   const box=document.getElementById('toast'); if(!box) return;
   const d=document.createElement('div'); d.className='tst '+(cls||''); d.textContent=msg; box.appendChild(d);
@@ -1203,7 +1213,7 @@ function achieve(id){
   setTimeout(()=>{ toast(T('ach.new', T('a.'+id), a[1]), 'ach'); try{ sfx.win(); }catch(e){} }, 400);
 }
 const dayKey = () => new Date().toISOString().slice(0,10);
-function dailyInfo(){ const s=Math.floor(Date.now()/864e5); return { opp:(s*7)%CHARS.length, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }
+function dailyInfo(){ const s=Math.floor(Date.now()/864e5); return { opp:(s*7)%CHARS.length, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }   // daily stays within the 5 normal levels
 const myStats = () => { const s=loadStats(); return {w:s.w,d:s.d,l:s.l,c:s.c,xp:prog.xp,goals:prog.goals}; };
 
 /* ---------- characters (cartoon caricatures) ---------- */
@@ -1540,7 +1550,7 @@ function refreshHome(){
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
   '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
-  '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa',
+  '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa', '#ceo-wa-none':'ceo.waNone',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn', '.mp-duo .who.me .tag':'mp.you',
   '#cup h2':'cup.title', '#btn-cup-back':'btn.back', '#team-pick .hint':'cup.pick', '#btn-cup-play':'btn.play', '#btn-cup-new':'cup.new',
@@ -1565,8 +1575,9 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
   for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn') || el.id==='btn-pause' || el.id==='btn-pk-pause') el.title=T(key); else el.innerHTML=T(key); }
-  document.querySelectorAll('#levels .btn').forEach((b,i)=>b.innerHTML=`${T('lvl.'+i)}<small>${LEVELS[i].goals} ⚽</small>`);
-  document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=T('lvl.'+i));
+  document.querySelectorAll('#levels .btn').forEach((b,i)=>b.innerHTML=`${LEVELS[i].color==='doom'?'☠️ ':''}${T('lvl.'+i)}<small>${LEVELS[i].goals} ⚽</small>`);
+  document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=(PK_LEVELS[i].color==='doom'?'☠️ ':'')+T('lvl.'+i));
+  document.querySelectorAll('.doom-sep').forEach(d=>d.textContent=T('level.doom'));
   document.querySelectorAll('#set-langs .btn').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
   const ni=$('#set-name'); if(ni) ni.placeholder=T('set.namePh');
   refreshHome(); buildGallery(); refreshPreview();
@@ -1672,13 +1683,15 @@ const LEVELS = [
   { name:'קשה',   color:'orange', speed:1,   react:.22, kick:.65, jump:.75, err:35,  power:.9,  smart:.75, goals:4 },
   { name:'מטורף', color:'pink',   speed:1.18,react:.12, kick:.85, jump:.9,  err:15,  power:1,   smart:.9,  goals:5 },
   { name:'מאסטר', color:'purple', speed:1.38,react:.05, kick:1,   jump:1,   err:0,   power:1.05,smart:1,   goals:7 },
+  { name:'בלתי אפשרי', color:'doom', speed:1.65,react:.02, kick:1,   jump:1,   err:0,   power:1.18,smart:1,   goals:10 },   // nearly impossible
 ];
 (function buildLevels(){
   const box=$('#levels');
   LEVELS.forEach((L,i)=>{
     L.i=i;
     const b=document.createElement('button');
-    b.className=`btn ${L.color}`; b.innerHTML=`${T('lvl.'+i)}<small>${L.goals} ⚽</small>`;
+    if(L.color==='doom'){ const sep=document.createElement('div'); sep.className='doom-sep'; sep.textContent=T('level.doom'); box.appendChild(sep); }
+    b.className=`btn ${L.color}`; b.innerHTML=`${L.color==='doom'?'☠️ ':''}${T('lvl.'+i)}<small>${L.goals} ⚽</small>`;
     b.addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.remove('show'); startGame(i); });
     box.appendChild(b);
   });
@@ -2273,11 +2286,11 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   else { t.textContent=T('end.draw'); sub.textContent=T(mp?'end.drawMp':'end.drawSub'); sfx.lose(); recordResult('d'); }
   // XP + achievements
   if(outcome==='win'){
-    prog.wins++; prog.streak++; addXP(mp ? 5 : [2,3,5,7,10][level ? level.i : 1]);   // harder level = more XP
+    prog.wins++; prog.streak++; addXP(mp ? 5 : [2,3,5,7,10,25][level ? level.i : 1]);   // harder level = more XP
     achieve('first_win'); if(prog.streak>=3) achieve('streak3'); if(prog.wins>=10) achieve('ten_wins');
     if(score.op===0) achieve('clean_sheet'); if(wasBehind) achieve('comeback');
     if(mp) achieve('online_win'); if(v2) achieve('v2_win');
-    if(!mp && level){ if(level.i===2) achieve('win_hard'); if(level.i===3) achieve('win_crazy'); if(level.i===4) achieve('win_master'); }
+    if(!mp && level){ if(level.i===2) achieve('win_hard'); if(level.i===3) achieve('win_crazy'); if(level.i===4) achieve('win_master'); if(level.i===5) achieve('win_impossible'); }
     if(dailyMatch && prog.daily!==dayKey()){ prog.daily=dayKey(); addXP(dailyInfo().xp); achieve('daily_win'); }
   } else { prog.streak=0; if(outcome==='draw') addXP(1); }
   dailyMatch=false; saveProg();
@@ -2932,11 +2945,13 @@ const PK_LEVELS=[
   { i:2, color:'orange', read:.34, miss:.09, window:.85,  aimSpeed:1.1, powerSpeed:1.1 },
   { i:3, color:'pink',   read:.46, miss:.06, window:.62,  aimSpeed:1.35,powerSpeed:1.3 },
   { i:4, color:'purple', read:.6,  miss:.04, window:.45,  aimSpeed:1.6, powerSpeed:1.55 },
+  { i:5, color:'doom',   read:.82, miss:.02, window:.3,   aimSpeed:2.1, powerSpeed:1.9 },
 ];
 let pkLevel=PK_LEVELS[1];
 (function buildPkLevels(){
   const box=$('#pk-levels');
   PK_LEVELS.forEach(L=>{
+    if(L.color==='doom'){ const sep=document.createElement('div'); sep.className='doom-sep'; sep.textContent=T('level.doom'); box.appendChild(sep); }
     const b=document.createElement('button'); b.className=`btn ${L.color}`; b.textContent=T('lvl.'+L.i);
     b.addEventListener('click', ()=>{ sfx.click(); pkLevel=L; $('#pk-level-modal').classList.remove('show'); showTeamPick(); showScreen('cup'); });
     box.appendChild(b);
@@ -3313,7 +3328,7 @@ function endShootout(res){
     if(pk.sMe.length>=5 && pk.sMe.slice(0,5).every(Boolean)) achieve('pk_perfect');
     if((pk.saves|0)>=3) achieve('pk_saves');
     addXP(2+cup.level.i);
-    if(cup.round===4){ achieve('cup_win'); if(cup.level.i===4) achieve('cup_master'); addXP(10+cup.level.i*5); }
+    if(cup.round===4){ achieve('cup_win'); if(cup.level.i>=4) achieve('cup_master'); addXP(10+cup.level.i*5); }
   }
   const m=pk.m, iAmA=m.a===cup.mine, ga=pk.sMe.filter(Boolean).length, gb=pk.sOp.filter(Boolean).length;
   m.sa=iAmA?ga:gb; m.sb=iAmA?gb:ga; m.w = res==='me' ? cup.mine : (iAmA?m.b:m.a);
