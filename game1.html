@@ -156,6 +156,10 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 @keyframes headjump{0%{transform:translateY(0)}45%{transform:translateY(-70px)}100%{transform:translateY(0)}}
 #pk.corner #pk-cross{display:none}
 #game.online #btn-pause{display:none}
+#game.training #timer{display:none}
+#home .side .btn{font-size:24px;padding:12px 26px}
+#home .side{top:118px;gap:12px}
+#btn-pause,#btn-pk-pause{width:60px;height:52px;font-size:22px}
 #replay-tag{position:absolute;top:120px;right:20px;font-size:26px;font-weight:900;color:#fff;background:var(--red);padding:4px 16px;border-radius:14px;animation:blinkRep .6s infinite alternate;z-index:6}
 @keyframes blinkRep{to{opacity:.55}}
 
@@ -498,6 +502,7 @@ body.touch #touch{display:block}
       <button class="btn red" id="btn-exit">🚪 צא</button>
       <button class="btn purple" id="btn-ceo">👔 מנכ"ל המשחק</button>
       <button class="btn pink" id="btn-mp">👥 מרובה משתתפים</button>
+      <button class="btn orange" id="btn-train">🏋️ אימון</button>
     </div>
     <div class="hero">
       <div class="sprite" id="home-sprite"></div>
@@ -768,6 +773,16 @@ body.touch #touch{display:block}
     </div>
   </div>
 
+  <!-- ===== TRAINING MODAL ===== -->
+  <div class="overlay" id="train-modal">
+    <div class="panel">
+      <h2 id="train-title">🏋️ אימון</h2>
+      <div class="hint" id="train-hint">בלי שעון ובלי לחץ. לחץ ❚❚ כדי לסיים</div>
+      <div class="levels"><button class="btn green" id="btn-train-shoot">⚽ בעיטות לשער</button><button class="btn blue" id="btn-train-pk">🥅 פנדלים</button><button class="btn purple" id="btn-train-corner">🚩 קרנות</button></div>
+      <br><button class="btn small" id="btn-train-cancel">חזרה</button>
+    </div>
+  </div>
+
   <!-- ===== PAUSE MODAL ===== -->
   <div class="overlay" id="pause-modal">
     <div class="panel">
@@ -917,6 +932,15 @@ const I18N_RAW={
  'pause.home':['🏠 לדף הבית','🏠 Home','🏠 الصفحة الرئيسية','🏠 На главную'],
  'pause.btn':['הפסקה','Pause','توقف','Пауза'],
  'c.go':['יאללה!','Go!','هيا!','Поехали!'],
+ 'train.btn':['🏋️ אימון','🏋️ Training','🏋️ تدريب','🏋️ Тренировка'],
+ 'train.title':['🏋️ אימון','🏋️ Training','🏋️ تدريب','🏋️ Тренировка'],
+ 'train.hint':['בלי שעון ובלי לחץ. לחץ ❚❚ כדי לסיים','No clock, no pressure. Press ❚❚ to finish','بدون ساعة وبدون ضغط. اضغط ❚❚ للإنهاء','Без часов и давления. Нажми ❚❚, чтобы закончить'],
+ 'train.shoot':['⚽ בעיטות לשער','⚽ Shooting','⚽ تسديدات','⚽ Удары по воротам'],
+ 'train.pk':['🥅 פנדלים','🥅 Penalties','🥅 ركلات جزاء','🥅 Пенальти'],
+ 'train.corner':['🚩 קרנות','🚩 Corners','🚩 ركنيات','🚩 Угловые'],
+ 'train.shootTag':['🏋️ אימון בעיטות · גולים: {0}','🏋️ Shooting practice · goals: {0}','🏋️ تدريب تسديد · أهداف: {0}','🏋️ Тренировка ударов · голы: {0}'],
+ 'train.pkTag':['🏋️ אימון פנדלים · {0}/{1}','🏋️ Penalty practice · {0}/{1}','🏋️ تدريب ركلات جزاء · {0}/{1}','🏋️ Тренировка пенальти · {0}/{1}'],
+ 'train.cornerTag':['🏋️ אימון קרנות · {0}/{1}','🏋️ Corner practice · {0}/{1}','🏋️ تدريب ركنيات · {0}/{1}','🏋️ Тренировка угловых · {0}/{1}'],
  'c.corner':['🎙️ מעל השער! קרן!','🎙️ Over the goal! Corner kick!','🎙️ فوق المرمى! ركلة ركنية!','🎙️ Выше ворот! Угловой!'],
  'corner.title':['קרן!','Corner!','ركنية!','Угловой!'],
  'corner.hintAtk':['🎯 לחץ כשהכדור בתוך העיגול כדי לנגוח!','🎯 Tap when the ball is inside the ring to head it!','🎯 انقر عندما تكون الكرة داخل الدائرة لتنفيذ الرأسية!','🎯 Нажми, когда мяч в кольце, чтобы пробить головой!'],
@@ -1533,7 +1557,8 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
   '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#rotate span':'rotate', '#replay-tag':'replay',
-  '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn' };
+  '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn',
+  '#btn-train':'train.btn', '#train-title':'train.title', '#train-hint':'train.hint', '#btn-train-shoot':'train.shoot', '#btn-train-pk':'train.pk', '#btn-train-corner':'train.corner', '#btn-train-cancel':'btn.back2' };
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
   for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn') || el.id==='btn-pause' || el.id==='btn-pk-pause') el.title=T(key); else el.innerHTML=T(key); }
@@ -2096,8 +2121,10 @@ function startGame(levelIdx){
 function beginMatch(c1, c2, opts){
   const localIsP1 = !(mp && mp.role==='guest');
   v2 = opts ? {partner:opts.partner} : null;
-  players = v2 ? [P1,P2,P3,P4] : [P1,P2]; teamL = v2 ? [P1,P3] : [P1]; teamR = v2 ? [P2,P4] : [P2];
+  const solo = training==='shoot';                  // shooting practice: just you and an empty goal
+  players = v2 ? [P1,P2,P3,P4] : solo ? [P1] : [P1,P2]; teamL = v2 ? [P1,P3] : [P1]; teamR = v2 ? [P2,P4] : solo ? [] : [P2];
   for(const p of [P3,P4]){ p.el.hidden=!v2; p.sh.hidden=!v2; }
+  P2.el.hidden=solo; P2.sh.hidden=solo; $('#game').classList.toggle('training', solo);
   myChar = localIsP1 ? c1 : c2; opChar = localIsP1 ? c2 : c1;
   P1.ch=c1; P2.ch=c2; P3.ch=opts?opts.c3:null; P4.ch=opts?opts.c4:null;   // play styles (speed / power / slide / jump)
   sprite(P1.el.querySelector('.sprite'), c1);
@@ -2113,7 +2140,7 @@ function beginMatch(c1, c2, opts){
   }
   $('#n-me').textContent = v2 ? nm(myChar)+' + '+nm(opts.c3) : nm(myChar);
   $('#n-op').textContent = v2 ? nm(opChar)+' + '+nm(opts.c4) : nm(opChar);
-  $('#level-tag').textContent = mp ? T('game.online') : (dailyMatch ? T('daily.title')+' · ' : '') + T('game.level', T('lvl.'+level.i));
+  $('#level-tag').textContent = mp ? T('game.online') : solo ? trainTag() : (dailyMatch ? T('daily.title')+' · ' : '') + T('game.level', T('lvl.'+level.i));
   const wantTheme = dailyMatch ? 'daily' : 'day'; if(pitchTheme!==wantTheme) buildPitch(wantTheme);
   $('#game').classList.toggle('daily', !!dailyMatch); $('#daily-fx').hidden=!dailyMatch; $('#game').classList.toggle('online', !!mp); $('#daily-fx .banner').textContent='🏟️ '+T('daily.title').replace(/^📅\s*/,'');
   score={me:0,op:0}; updateScore();
@@ -2148,10 +2175,13 @@ function startCountdown(done){
 }
 /* ---------- pause (match + penalties) ---------- */
 let pausedFrom=null, cornerCd=0;
+let pausePending=false;
 function pauseGame(){
-  if(mp) return;                                     // no pausing an online match
+  if(mp && mp.connected) return;                     // no pausing an online match
+  if(!pk && (state==='celebrate'||state==='replay'||state==='countdown')){ pausePending=true; return; }   // pause as soon as play resumes
   if(state==='play' && !pk){ pausedFrom='game'; state='paused'; cancelAnimationFrame(rafId); }
-  else if(pk && ['aim','hold','power','keep'].includes(pk.phase)){ pausedFrom='pk'; pk.pausedPhase=pk.phase; pk.phase='paused'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); }
+  else if(pk && !pk.corner && ['aim','hold','power','keep'].includes(pk.phase)){ pausedFrom='pk'; pk.pausedPhase=pk.phase; pk.phase='paused'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); }
+  else if(pk && pk.corner && (pk.phase==='cross'||pk.phase==='wait')){ pausedFrom='corner'; pk.phase='paused'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); }
   else return;
   try{ speechSynthesis.cancel(); }catch(e){}
   sfx.click(); $('#pause-modal').classList.add('show');
@@ -2160,11 +2190,13 @@ function resumeGame(){
   $('#pause-modal').classList.remove('show'); sfx.click();
   if(pausedFrom==='game'){ state='play'; lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); }
   else if(pausedFrom==='pk' && pk){ setupKick(pk.curMeShoots); }
+  else if(pausedFrom==='corner' && pk){ const b=$('#pk-ball'); b.style.transition='none'; b.style.transform='translate(-600px,-170px) scale(.7)'; pk.phase='wait'; pk.timer=setTimeout(()=>{ if(pk&&pk.corner){ pk.phase='cross'; pk.t0=performance.now(); pk.raf=requestAnimationFrame(cornerLoop); } }, 600); }
   pausedFrom=null;
 }
 function quitToHome(){
   $('#pause-modal').classList.remove('show'); sfx.click();
-  if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); pk=null; $('#pk-score').hidden=false; }
+  if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); pk=null; clearCornerUI(); }
+  endTraining(); pausePending=false;
   state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer'); dailyMatch=false; pausedFrom=null;
   showScreen('home');
@@ -2223,7 +2255,7 @@ function updateTimer(){
 }
 
 function goHome(){
-  state='idle'; cancelAnimationFrame(rafId);
+  state='idle'; cancelAnimationFrame(rafId); endTraining();
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
   if(mp && mp.connected){ mpShowPick(); showScreen('mp'); }   // online: back to the character screen for a rematch
   else showScreen('home');
@@ -2296,6 +2328,7 @@ function stepReplay(){
   ball.x=f.b[0]; ball.y=f.b[1]; ball.rot=f.b[2]; replay.i++;
 }
 function afterGoal(){
+  if(training==='shoot'){ $('#level-tag').textContent=trainTag(); resetPositions(); state='play'; lastT=performance.now(); return; }
   if(score.me>=3 || score.op>=3){ state='celebrate'; endGame(); return; }   // first to 3 goals wins
   resetPositions(); sfx.whistle(); netEv('whistle'); state='play'; lastT=performance.now();
 }
@@ -2547,7 +2580,8 @@ function loop(t){
     jumpQueued=false;
     if(kickQueued){ if(P1.stunT<=0) doKick(P1); kickQueued=false; }
     if(slideQueued){ doSlide(P1); slideQueued=false; }
-    if(mp && mp.role==='host') applyRemote(); else updateAI(dt, P2, 1, teamL, v2?P4:null);
+    if(pausePending){ pausePending=false; pauseGame(); return; }
+    if(mp && mp.role==='host') applyRemote(); else if(training!=='shoot') updateAI(dt, P2, 1, teamL, v2?P4:null);
     if(v2){
       updateAI(dt, P4, 1, teamL, P2);
       if(v2.partner==='ai') updateAI(dt, P3, -1, teamR, P1); else humanInput(P3, keys2, q2);
@@ -2556,7 +2590,7 @@ function loop(t){
     for(const p of players) movePlayer(p, dt, players.filter(o=>o!==p));
     updateBall(dt);
     for(const p of players) collideBall(p);
-    timeLeft-=dt; updateTimer();
+    if(training!=='shoot'){ timeLeft-=dt; updateTimer(); }
     if(timeLeft<=0){ timeLeft=0; endGame(); }
   }else if(state==='celebrate'){
     ball.vx*=Math.pow(.2,dt); ball.x+=ball.vx*dt;
@@ -3160,21 +3194,24 @@ function startMatchPenalty(forTeam){
   const lv=PK_LEVELS[level.i]||PK_LEVELS[1];
   setTimeout(()=>{
     if(state!=='penalty') return;
-    pk={ single:true, lv, rnd:0, phase:'idle', sMe:[], sOp:[], kick:0, meFirst:meShoots, aim:null, raf:0, t0:0, timer:0, saves:0,
-         readP: clamp(lv.read+.1,.05,.8), missP: Math.max(.03, lv.miss),
-         chars:{ shooter: meShoots ? myChar : opChar, keeper: meShoots ? opChar : myChar },
-         onResult: goal=>{
-           pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer);
-           setTimeout(()=>{
-             pk=null; $('#pk-score').hidden=false; showScreen('game');
-             lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play';
-             if(goal) scoreGoal(meShoots ? 'me' : 'op'); else { resetPositions(); sfx.whistle(); }
-           }, 1500);
-         } };
-    $('#pk-score').hidden=true; $('#pk-round').textContent=T('pen.title'); $('#pk-hint').textContent='';
-    $('#pk-end').classList.remove('show'); $('#pk-ball').innerHTML=BALL_SVG;
-    showScreen('pk'); setTimeout(()=>{ if(pk && pk.single) setupKick(meShoots); }, 500);
+    setupPenalty(meShoots, lv, goal=>{
+      pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer);
+      setTimeout(()=>{
+        pk=null; $('#pk-score').hidden=false; showScreen('game');
+        lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play';
+        if(goal) scoreGoal(meShoots ? 'me' : 'op'); else { resetPositions(); sfx.whistle(); }
+      }, 1500);
+    });
   }, 900);
+}
+/* one penalty kick on the shootout screen (in-match penalties and training) */
+function setupPenalty(meShoots, lv, onResult, title){
+  pk={ single:true, lv, rnd:0, phase:'idle', sMe:[], sOp:[], kick:0, meFirst:meShoots, aim:null, raf:0, t0:0, timer:0, saves:0,
+       readP: clamp(lv.read+.1,.05,.8), missP: Math.max(.03, lv.miss),
+       chars:{ shooter: meShoots ? myChar : opChar, keeper: meShoots ? opChar : myChar }, onResult };
+  $('#pk-score').hidden=true; $('#pk-round').textContent=title||T('pen.title'); $('#pk-hint').textContent='';
+  $('#pk-end').classList.remove('show'); $('#pk-ball').innerHTML=BALL_SVG;
+  showScreen('pk'); setTimeout(()=>{ if(pk && pk.single && !pk.corner) setupKick(meShoots); }, 500);
 }
 /* ---------- corner: header timing mini-game (offline modes) ---------- */
 const RING={x:470,y:250};
@@ -3186,24 +3223,51 @@ function startCorner(forTeam){                       // 'L' = my team attacks (I
   const mine = forTeam==='L';
   setTimeout(()=>{
     if(state!=='corner') return;
-    pk={ corner:true, single:true, mine, lv:PK_LEVELS[level.i]||PK_LEVELS[1], phase:'wait', t0:0, raf:0, timer:0,
-         onResult:(goal, who)=>{
-           pk.phase='over'; cancelAnimationFrame(pk.raf);
-           setTimeout(()=>{
-             pk=null; $('#pk-score').hidden=false; $('#corner-ring').hidden=true; $('#pk').classList.remove('corner'); $('#pk-shooter').classList.remove('headjump');
-             showScreen('game'); lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play';
-             if(goal) scoreGoal(who); else { resetPositions(); sfx.whistle(); }
-           }, 1500);
-         } };
-    $('#pk-score').hidden=true; $('#pk-round').textContent=T('corner.title'); $('#pk-hint').textContent=T(mine?'corner.hintAtk':'corner.hintDef');
-    $('#pk-end').classList.remove('show'); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); $('#pk').classList.add('corner');
-    sprite($('#pk-keeper'), mine ? opChar : myChar); $('#pk-keeper').style.transform='none';
-    sprite($('#pk-shooter'), mine ? myChar : opChar); $('#pk-shooter').classList.remove('run','headjump');
-    const b=$('#pk-ball'); b.innerHTML=BALL_SVG; b.style.transition='none'; b.style.transform='translate(-600px,-170px) scale(.7)';
-    $('#corner-ring').hidden=false; showScreen('pk');
-    pk.timer=setTimeout(()=>{ if(pk&&pk.corner){ pk.phase='cross'; pk.t0=performance.now(); pk.raf=requestAnimationFrame(cornerLoop); } }, 800);
+    setupCorner(mine, (goal, who)=>{
+      pk.phase='over'; cancelAnimationFrame(pk.raf);
+      setTimeout(()=>{
+        clearCornerUI(); pk=null;
+        showScreen('game'); lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play';
+        if(goal) scoreGoal(who); else { resetPositions(); sfx.whistle(); }
+      }, 1500);
+    });
   }, 900);
 }
+function clearCornerUI(){ $('#pk-score').hidden=false; $('#corner-ring').hidden=true; $('#pk').classList.remove('corner'); $('#pk-shooter').classList.remove('headjump'); }
+/* one corner (cross + header timing) on the shootout screen (in-match corners and training) */
+function setupCorner(mine, onResult, title){
+  pk={ corner:true, single:true, mine, lv:PK_LEVELS[level.i]||PK_LEVELS[1], phase:'wait', t0:0, raf:0, timer:0, onResult, train: pk&&pk.train };
+  $('#pk-score').hidden=true; $('#pk-round').textContent=title||T('corner.title'); $('#pk-hint').textContent=T(mine?'corner.hintAtk':'corner.hintDef');
+  $('#pk-end').classList.remove('show'); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); $('#pk').classList.add('corner');
+  sprite($('#pk-keeper'), mine ? opChar : myChar); $('#pk-keeper').style.transform='none';
+  sprite($('#pk-shooter'), mine ? myChar : opChar); $('#pk-shooter').classList.remove('run','headjump');
+  const b=$('#pk-ball'); b.innerHTML=BALL_SVG; b.style.transition='none'; b.style.transform='translate(-600px,-170px) scale(.7)';
+  $('#corner-ring').hidden=false; showScreen('pk');
+  pk.timer=setTimeout(()=>{ if(pk&&pk.corner){ pk.phase='cross'; pk.t0=performance.now(); pk.raf=requestAnimationFrame(cornerLoop); } }, 800);
+}
+/* ---------- training: shooting / penalties / corners ---------- */
+let training=null, trainStats={g:0,n:0};
+function trainTag(){
+  if(training==='pk') return T('train.pkTag', trainStats.g, trainStats.n);
+  if(training==='corner') return T('train.cornerTag', trainStats.g, trainStats.n);
+  return T('train.shootTag', score.me);
+}
+function startTraining(kind){
+  $('#train-modal').classList.remove('show'); sfx.click(); trainStats={g:0,n:0}; training=kind; level=LEVELS[1];
+  const opp=CHARS[shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected))[0]];
+  myChar=CHARS[selected]; opChar=opp;
+  if(kind==='shoot'){ beginMatch(CHARS[selected], opp); return; }
+  state='training'; cancelAnimationFrame(rafId); showScreen('pk');
+  const again=()=>{ if(training!==kind) return; if(kind==='pk') setupPenalty(true, PK_LEVELS[1], onRes, trainTag()); else setupCorner(true, onRes, trainTag()); pk.train=kind; };
+  const onRes=goal=>{ trainStats.n++; if(goal) trainStats.g++; pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk-round').textContent=trainTag(); setTimeout(()=>{ if(training===kind && pk && pk.train){ if(kind==='corner') clearCornerUI(); again(); } }, 1600); };
+  again();
+}
+function endTraining(){ training=null; trainStats={g:0,n:0}; $('#game').classList.remove('training'); }
+$('#btn-train').addEventListener('click', ()=>{ sfx.click(); $('#train-modal').classList.add('show'); });
+$('#btn-train-cancel').addEventListener('click', ()=>{ sfx.click(); $('#train-modal').classList.remove('show'); });
+$('#btn-train-shoot').addEventListener('click', ()=>startTraining('shoot'));
+$('#btn-train-pk').addEventListener('click', ()=>startTraining('pk'));
+$('#btn-train-corner').addEventListener('click', ()=>startTraining('corner'));
 function cornerLoop(){
   if(!pk||!pk.corner||pk.phase!=='cross') return;
   const u=(performance.now()-pk.t0)/1500, p=crossPos(u);
@@ -3263,7 +3327,7 @@ $('#btn-pk-continue').addEventListener('click', ()=>{
   pk=null; renderBracket(); showScreen('cup');
   if(wonCup) cupConfetti.burst(300);
 });
-$('#btn-pk-back').addEventListener('click', e=>{ e.stopPropagation(); sfx.click(); if(pk && pk.single){ if(pk.phase!=='over') pk.onResult(false); return; } if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); } pk=null; showScreen('cup'); });
+$('#btn-pk-back').addEventListener('click', e=>{ e.stopPropagation(); sfx.click(); if(pk && pk.train){ quitToHome(); return; } if(pk && pk.single){ if(pk.phase!=='over') pk.onResult(false); return; } if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); } pk=null; showScreen('cup'); });
 $('#pk').addEventListener('pointerdown', e=>{
   if(e.target.closest('button') || e.target.closest('#pk-score')) return;
   if(!pk) return;
