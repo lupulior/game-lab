@@ -454,6 +454,8 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .panel{background:#fff;border-radius:34px;padding:30px 44px;text-align:center;box-shadow:0 16px 0 rgba(0,0,0,.25);max-width:760px}
 .panel h2{color:var(--navy);-webkit-text-stroke:0;text-shadow:none;margin-bottom:16px}
 .panel .levels{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:18px}
+#levels .btn{flex-direction:column;gap:0;line-height:1.05;padding:10px 30px}
+#levels .btn small{font-size:15px;font-weight:900;opacity:.9}
 .panel .hint{font-size:20px;font-weight:700;color:#5b6a8a;line-height:1.6}
 .panel kbd{display:inline-block;background:var(--navy);color:#fff;border-radius:8px;padding:2px 10px;font-family:inherit;font-size:18px;margin:0 3px;direction:ltr}
 #end .panel h2{font-size:80px;line-height:1.1;margin-bottom:6px}
@@ -470,7 +472,8 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
   color:#fff;font-size:54px;font-weight:900;display:flex;align-items:center;justify-content:center;
   text-shadow:0 2px 6px rgba(0,0,0,.5);user-select:none;-webkit-user-select:none;transition:background .08s,transform .08s}
 #touch .tb.jump{background:rgba(63,195,95,.3);border-color:rgba(63,195,95,.8)}
-#touch .tb.kick{background:rgba(255,122,61,.3);border-color:rgba(255,122,61,.85)}
+#touch .tb.kick{background:rgba(255,122,61,.3);border-color:rgba(255,122,61,.85);width:189px;height:189px;font-size:78px}   /* 1.5× – the most used button */
+#touch .grp.act{align-items:flex-end}
 #touch .tb.slide{background:rgba(142,92,246,.3);border-color:rgba(142,92,246,.85);font-size:46px}
 #touch .tb.pressed{background:rgba(255,255,255,.5);transform:scale(.92)}
 body.touch #touch{display:block}
@@ -919,10 +922,10 @@ const I18N_RAW={
  'lvl.0':['קל','Easy','سهل','Легко'], 'lvl.1':['בינוני','Medium','متوسط','Средне'], 'lvl.2':['קשה','Hard','صعب','Сложно'],
  'lvl.3':['מטורף','Crazy','مجنون','Безумно'], 'lvl.4':['מאסטר','Master','خبير','Мастер'],
  'level.title':['באיזו רמה לשחק?','Which level?','ما المستوى؟','Какой уровень?'],
- 'level.keys':['<kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ\'<br>נגיעה בכדור דוחפת אותו. הראשון שמבקיע 3 גולים מנצח, או מי שמוביל אחרי 4 דקות!',
-   '<kbd>A</kbd> left &nbsp; <kbd>D</kbd> right &nbsp; <kbd>W</kbd> jump &nbsp; <kbd>Space</kbd> power kick &nbsp; <kbd>S</kbd> slide<br>Touching the ball nudges it. First to 3 goals wins, or whoever leads after 4 minutes!',
-   '<kbd>A</kbd> يسار &nbsp; <kbd>D</kbd> يمين &nbsp; <kbd>W</kbd> قفز &nbsp; <kbd>مسافة</kbd> تسديدة قوية &nbsp; <kbd>S</kbd> انزلاق<br>لمس الكرة يدفعها. أول من يسجل 3 أهداف يفوز، أو المتقدم بعد 4 دقائق!',
-   '<kbd>A</kbd> влево &nbsp; <kbd>D</kbd> вправо &nbsp; <kbd>W</kbd> прыжок &nbsp; <kbd>Пробел</kbd> сильный удар &nbsp; <kbd>S</kbd> подкат<br>Касание толкает мяч. Первый до 3 голов побеждает, или кто впереди через 4 минуты!'],
+ 'level.keys':['<kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ\'<br>נגיעה בכדור דוחפת אותו. מנצח מי שמגיע ראשון למספר הגולים של הרמה, או מי שמוביל אחרי 4 דקות!',
+   '<kbd>A</kbd> left &nbsp; <kbd>D</kbd> right &nbsp; <kbd>W</kbd> jump &nbsp; <kbd>Space</kbd> power kick &nbsp; <kbd>S</kbd> slide<br>Touching the ball nudges it. First to reach the level\'s goal count wins, or whoever leads after 4 minutes!',
+   '<kbd>A</kbd> يسار &nbsp; <kbd>D</kbd> يمين &nbsp; <kbd>W</kbd> قفز &nbsp; <kbd>مسافة</kbd> تسديدة قوية &nbsp; <kbd>S</kbd> انزلاق<br>لمس الكرة يدفعها. يفوز من يصل أولًا إلى عدد أهداف المستوى، أو المتقدم بعد 4 دقائق!',
+   '<kbd>A</kbd> влево &nbsp; <kbd>D</kbd> вправо &nbsp; <kbd>W</kbd> прыжок &nbsp; <kbd>Пробел</kbd> сильный удар &nbsp; <kbd>S</kbd> подкат<br>Касание толкает мяч. Побеждает тот, кто первым набирает число голов уровня, или кто впереди через 4 минуты!'],
  'pklevel.title':['🥅 באיזו רמה לשחק פנדלים?','🥅 Penalty level?','🥅 ما مستوى ركلات الترجيح؟','🥅 Уровень пенальти?'],
  'pklevel.hint':['ברמה קשה יותר השוער מנחש טוב יותר, הכוונת זזה מהר יותר,<br>וכשאתה שוער יש לך פחות זמן להגיב','On harder levels the keeper guesses better, the sight moves faster,<br>and as keeper you get less time to react','في المستويات الأصعب يخمّن الحارس أفضل ويتحرك الهدف أسرع،<br>وكحارس يكون لديك وقت أقل للرد','На сложных уровнях вратарь угадывает лучше, прицел движется быстрее,<br>а как вратарю тебе даётся меньше времени'],
  'pk.hintAim':['🎯 לחץ והחזק כדי להרים את הבעיטה, שחרר כדי לבעוט','🎯 Press and hold to lift the shot, release to kick','🎯 اضغط مطولًا لرفع التسديدة، وأفلت للتسديد','🎯 Нажми и держи, чтобы поднять удар, отпусти для удара'],
@@ -1562,7 +1565,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
   for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn') || el.id==='btn-pause' || el.id==='btn-pk-pause') el.title=T(key); else el.innerHTML=T(key); }
-  document.querySelectorAll('#levels .btn').forEach((b,i)=>b.textContent=T('lvl.'+i));
+  document.querySelectorAll('#levels .btn').forEach((b,i)=>b.innerHTML=`${T('lvl.'+i)}<small>${LEVELS[i].goals} ⚽</small>`);
   document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=T('lvl.'+i));
   document.querySelectorAll('#set-langs .btn').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
   const ni=$('#set-name'); if(ni) ni.placeholder=T('set.namePh');
@@ -1664,18 +1667,18 @@ $('#btn-ceo-back').addEventListener('click', ()=>{ sfx.click(); clearInterval(ce
 
 /* ---------- levels ---------- */
 const LEVELS = [
-  { name:'קל',    color:'green',  speed:.6,  react:.55, kick:.25, jump:.4,  err:110, power:.7,  smart:.45 },
-  { name:'בינוני',color:'blue',   speed:.82, react:.36, kick:.45, jump:.55, err:70,  power:.8,  smart:.6 },
-  { name:'קשה',   color:'orange', speed:1,   react:.22, kick:.65, jump:.75, err:35,  power:.9,  smart:.75 },
-  { name:'מטורף', color:'pink',   speed:1.18,react:.12, kick:.85, jump:.9,  err:15,  power:1,   smart:.9 },
-  { name:'מאסטר', color:'purple', speed:1.38,react:.05, kick:1,   jump:1,   err:0,   power:1.05,smart:1 },
+  { name:'קל',    color:'green',  speed:.6,  react:.55, kick:.25, jump:.4,  err:110, power:.7,  smart:.45, goals:3 },
+  { name:'בינוני',color:'blue',   speed:.82, react:.36, kick:.45, jump:.55, err:70,  power:.8,  smart:.6,  goals:3 },
+  { name:'קשה',   color:'orange', speed:1,   react:.22, kick:.65, jump:.75, err:35,  power:.9,  smart:.75, goals:4 },
+  { name:'מטורף', color:'pink',   speed:1.18,react:.12, kick:.85, jump:.9,  err:15,  power:1,   smart:.9,  goals:5 },
+  { name:'מאסטר', color:'purple', speed:1.38,react:.05, kick:1,   jump:1,   err:0,   power:1.05,smart:1,   goals:7 },
 ];
 (function buildLevels(){
   const box=$('#levels');
   LEVELS.forEach((L,i)=>{
     L.i=i;
     const b=document.createElement('button');
-    b.className=`btn ${L.color}`; b.textContent=T('lvl.'+i);
+    b.className=`btn ${L.color}`; b.innerHTML=`${T('lvl.'+i)}<small>${L.goals} ⚽</small>`;
     b.addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.remove('show'); startGame(i); });
     box.appendChild(b);
   });
@@ -1985,10 +1988,11 @@ function goalParts(layer){
     const bar=(a,b,w)=>`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" stroke="#fff" stroke-width="${w}" stroke-linecap="round"/>`;
     if(layer==='back'){
       // solid grass-coloured block the goal stands on (top face, pitch-facing side, front face)
-      s+=`<polygon points="${pts([proj(fx,GZ1,B),proj(fx,GZ2,B),proj(bx,GZ2,B),proj(bx,GZ1,B)])}" fill="#4CC76A"/>`;
-      s+=`<polygon points="${pts([proj(fx,GZ1,0),proj(fx,GZ2,0),proj(fx,GZ2,B),proj(fx,GZ1,B)])}" fill="#36A652"/>`;
-      s+=`<polygon points="${pts([proj(fx,GZ1,0),proj(bx,GZ1,0),proj(bx,GZ1,B),proj(fx,GZ1,B)])}" fill="${PITCH_THEMES[pitchTheme].far}"/>`;
-      s+=`<polyline points="${pts([proj(fx,GZ1,0),proj(fx,GZ1,B),proj(bx,GZ1,B),proj(bx,GZ1,0)])}" fill="none" stroke="#237A3A" stroke-width="2"/>`;
+      // solid block: bright top, shaded sides, dark outline – clearly a wall, not grass
+      s+=`<polygon points="${pts([proj(fx,GZ1,B),proj(fx,GZ2,B),proj(bx,GZ2,B),proj(bx,GZ1,B)])}" fill="#6FDD8A" stroke="#1B5E2E" stroke-width="2.5" stroke-linejoin="round"/>`;
+      s+=`<polygon points="${pts([proj(fx,GZ1,0),proj(fx,GZ2,0),proj(fx,GZ2,B),proj(fx,GZ1,B)])}" fill="#2F9E52" stroke="#1B5E2E" stroke-width="2.5" stroke-linejoin="round"/>`;
+      s+=`<polygon points="${pts([proj(fx,GZ1,0),proj(bx,GZ1,0),proj(bx,GZ1,B),proj(fx,GZ1,B)])}" fill="#1F7A3A" stroke="#1B5E2E" stroke-width="2.5" stroke-linejoin="round"/>`;
+      { const y0=proj(fx,GZ1,0)[1], y1=proj(fx,GZ1,B)[1]; for(let k=1;k<=2;k++){ const yy=y0+(y1-y0)*k/3; s+=`<line x1="${proj(fx,GZ1,0)[0].toFixed(1)}" y1="${yy.toFixed(1)}" x2="${proj(bx,GZ1,0)[0].toFixed(1)}" y2="${yy.toFixed(1)}" stroke="rgba(0,0,0,.18)" stroke-width="2"/>`; } }
       s+=panel([proj(bx,GZ1,B),proj(bx,GZ2,B),proj(bx,GZ2,H),proj(bx,GZ1,H)],'net');      // back net
       s+=panel([proj(fx,GZ2,B),proj(bx,GZ2,B),proj(bx,GZ2,H),proj(fx,GZ2,H)],'net');      // far side net
       s+=panel([proj(fx,GZ1,H),proj(fx,GZ2,H),proj(bx,GZ2,H),proj(bx,GZ1,H)],'net');      // roof
@@ -2028,7 +2032,7 @@ const ceoConfetti = makeConfetti($('#ceo-confetti'), ['#FFD447','#FFE27A','#fff7
 
 /* ---------- game constants ---------- */
 const FIELD_W=1000, GROUND_Y=430, PW=72, PH=108, R=13, GOAL_W=70;
-const GOAL_BOT=Math.round(2*R*1.5), GOAL_H=GOAL_BOT+140;   // goal floats 1.5 ball heights above the grass on a solid block
+const GOAL_BOT=58, GOAL_H=GOAL_BOT+140;                 // goal floats on a solid block (raised a little more than 2 ball heights)
 const MOVE=340, JUMP=800, G=2100, REACH=72, CEIL=400;
 const MINX=GOAL_W-16+PW/2, MAXX=FIELD_W-GOAL_W+16-PW/2;
 const MATCH_TIME=240;
@@ -2329,7 +2333,8 @@ function stepReplay(){
 }
 function afterGoal(){
   if(training==='shoot'){ $('#level-tag').textContent=trainTag(); resetPositions(); state='play'; lastT=performance.now(); return; }
-  if(score.me>=3 || score.op>=3){ state='celebrate'; endGame(); return; }   // first to 3 goals wins
+  const target = mp ? 3 : (level && level.goals) || 3;                       // goals needed to win: 3 / 3 / 4 / 5 / 7 by level
+  if(score.me>=target || score.op>=target){ state='celebrate'; endGame(); return; }
   resetPositions(); sfx.whistle(); netEv('whistle'); state='play'; lastT=performance.now();
 }
 /* ---------- commentator ---------- */
