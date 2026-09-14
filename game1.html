@@ -428,6 +428,24 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .player.sliding .sprite.flip{transform:scaleX(-1) rotate(-62deg) translate(-6px,4px)}
 .player.sliding .leg-front{animation:none;transform:rotate(-40deg)}
 .player.stunned .sprite{animation:tumble .75s ease-out}
+.player.frozen .sprite{filter:hue-rotate(160deg) saturate(1.6) brightness(1.15) drop-shadow(0 0 12px #7ED3FF);animation:shiver .12s infinite alternate}
+.player.frozen::after{content:"❄️";position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:34px;animation:tapPulse .5s infinite}
+@keyframes shiver{from{transform:translateX(-2px)}to{transform:translateX(2px)}}
+.player.frozen .sprite.flip{animation:shiverF .12s infinite alternate}
+@keyframes shiverF{from{transform:scaleX(-1) translateX(-2px)}to{transform:scaleX(-1) translateX(2px)}}
+#ice-hud{position:absolute;top:70px;left:16px;width:74px;height:74px;border-radius:50%;background:#fff;box-shadow:0 5px 0 rgba(27,42,78,.3);display:flex;align-items:center;justify-content:center;z-index:7;cursor:pointer;user-select:none}
+#ice-hud .ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(rgba(27,42,78,.55) var(--cd,0%),transparent 0)}
+#ice-hud .ic{font-size:36px;position:relative;z-index:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+#ice-hud .cd{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);z-index:2;pointer-events:none}
+#ice-hud .key{position:absolute;bottom:-6px;right:-4px;background:var(--navy);color:#fff;font-size:13px;font-weight:900;border-radius:8px;padding:1px 6px;z-index:3}
+#ice-hud.ready{box-shadow:0 5px 0 rgba(27,42,78,.3),0 0 22px #7ED3FF;animation:tapPulse 1.2s infinite}
+#ice-hud.ready .cd{display:none}
+#touch .tb.ice{background:rgba(126,211,255,.35);border-color:#7ED3FF}
+#touch .tb.ice.cool{opacity:.45}
+.card.icecard{background:linear-gradient(#e8f7ff,#bfe8ff);border-color:#7ED3FF}
+.card.icecard .ico{font-size:70px;line-height:1.2}
+.card.icecard .desc{font-size:13px;font-weight:900;color:#1B2A4E;padding:0 6px;line-height:1.2}
+.card.icecard.owned{border-color:var(--yellow)}
 .player.stunned .sprite.flip{animation:tumbleF .75s ease-out}
 @keyframes tumble{0%{transform:rotate(0)}40%{transform:rotate(200deg) translateY(-18px)}100%{transform:rotate(360deg)}}
 @keyframes tumbleF{0%{transform:scaleX(-1) rotate(0)}40%{transform:scaleX(-1) rotate(200deg) translateY(-18px)}100%{transform:scaleX(-1) rotate(360deg)}}
@@ -583,6 +601,7 @@ body.touch #touch{display:block}
     <div id="replay-tag" hidden>🎬 ריפליי</div>
     <div id="countdown" hidden>3</div>
     <button id="btn-pause" title="הפסקה">❚❚</button>
+    <div id="ice-hud" hidden><div class="ring"></div><span class="ic">❄️</span><span class="cd"></span><span class="key">E</span></div>
     <div id="scoreboard">
       <div class="score"><span class="me" id="s-me">0</span><span>-</span><span class="op" id="s-op">0</span></div>
       <div class="names"><span class="me" id="n-me"></span><span>|</span><span class="op" id="n-op"></span></div>
@@ -591,7 +610,7 @@ body.touch #touch{display:block}
     <div id="goal-flash">גול!!!</div>
     <div id="touch">
       <div class="grp move" id="tmove"><div class="tb" data-k="left">◀</div><div class="tb" data-k="right">▶</div></div>
-      <div class="grp act"><div class="tb slide" data-k="slide">🦵</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
+      <div class="grp act"><div class="tb ice" data-k="ice" hidden>❄️</div><div class="tb slide" data-k="slide">🦵</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
     </div>
     <div class="overlay" id="end"><div class="panel"><h2 id="end-title"></h2><div class="sub" id="end-sub"></div></div></div>
   </section>
@@ -1141,6 +1160,12 @@ const I18N_RAW={
  'a.win_impossible':['ניצחון ברמה בלתי אפשרי','Win on Impossible','فوز بالمستوى المستحيل','Победа на «Невозможно»'],
  'lvl.5':['בלתי אפשרי','Impossible','مستحيل','Невозможно'],
  'level.doom':['☠️ הרמה הקשה ביותר שיש ☠️','☠️ The hardest level there is ☠️','☠️ أصعب مستوى على الإطلاق ☠️','☠️ Самый сложный уровень ☠️'],
+ 'ice.name':['❄️ כוח קרח','❄️ Ice Power','❄️ قوة الجليد','❄️ Сила льда'],
+ 'ice.desc':['מקפיא את היריב לשנייה. E במקלדת. טעינה 15 שניות. לתמיד!','Freezes the opponent for 1s. Press E. 15s cooldown. Yours forever!','يجمّد الخصم لثانية. زر E. إعادة تعبئة 15 ث. ملكك للأبد!','Замораживает соперника на 1 с. Клавиша E. Перезарядка 15 с. Навсегда!'],
+ 'ice.confirm':['לקנות את כוח הקרח תמורת {0} XP? (לתמיד)','Buy the Ice Power for {0} XP? (permanent)','شراء قوة الجليد مقابل {0} XP؟ (دائمة)','Купить Силу льда за {0} XP? (навсегда)'],
+ 'ice.bought':['❄️ כוח הקרח שלך! לחץ E במשחק','❄️ Ice Power is yours! Press E in a match','❄️ قوة الجليد لك! اضغط E في المباراة','❄️ Сила льда твоя! Нажми E в матче'],
+ 'ice.owned':['✔ נקנה','✔ Owned','✔ تم الشراء','✔ Куплено'],
+ 'c.ice':['🎙️ ❄️ קרח! היריב קפוא!','🎙️ ❄️ Ice! The opponent is frozen!','🎙️ ❄️ جليد! الخصم متجمد!','🎙️ ❄️ Лёд! Соперник замёрз!'],
  'ceo.waNone':['(עוד אין קבוצת ווצאפ)','(no WhatsApp group yet)','(لا توجد مجموعة واتساب بعد)','(группы WhatsApp пока нет)'],
  'btn.codes':['קודים','Codes','أكواد','Коды'],
  'codes.title':['🎁 קודים','🎁 Codes','🎁 أكواد','🎁 Коды'],
@@ -1175,11 +1200,12 @@ const PROG_KEY='footballStar.progress';
 const FREE_CHARS=['mbappe','messi','ronaldo','neymar'];
 /* the bigger the legend, the higher the price */
 const PRICES={
-  pele:10000, maradona:5000, zidane:1000, ronaldinho:1000, cruyff:1000, r9:800, beckham:200, henry:200, zlatan:190, iniesta:190,
-  kaka:180, modric:180, xavi:170, debruyne:170, bellingham:160, lewa:150, gerrard:140, rooney:140, drogba:140, suarez:140,
-  benzema:130, kane:130, yamal:130, baggio:130, haaland:120, salah:120, lautaro:120, vandijk:120, aguero:120,
-  griezmann:110, son:110, vini:110, mane:110, dembele:100, saka:100, musiala:100, foden:100 };
-const priceOf = c => PRICES[c.id] || 100;
+  pele:10000, maradona:7000, zidane:7000, ronaldinho:7000, cruyff:5000, r9:5000, beckham:5000, henry:4000, zlatan:4000, iniesta:4000,
+  kaka:3500, modric:3500, xavi:3000, debruyne:3000, bellingham:3000, lewa:2500, gerrard:2500, rooney:2500, drogba:2500, suarez:2500,
+  benzema:2000, kane:2000, yamal:2000, baggio:2000, haaland:1500, salah:1500, lautaro:1500, vandijk:1500, aguero:1500,
+  griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000 };
+const priceOf = c => PRICES[c.id] || 1000;
+const ICE_PRICE=10000, ICE_CD=15, ICE_DUR=1;        // ice power: permanent once bought, 15s cooldown, freezes opponents for 1s
 const fmtXp = n => Number(n).toLocaleString('en-US');
 /* play style per player: [speed, kick power, slide speed, jump] – 1 = average */
 const CHAR_ST={
@@ -1193,7 +1219,7 @@ const CHAR_ST={
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
 const st = p => charStats(p.ch);
-const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0};
+const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
 const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id);
@@ -1433,6 +1459,7 @@ const sfx = (()=>{
     save:()=>{ tone(880,.12,'square',.12,440); setTimeout(()=>tone(660,.18,'square',.1,330),120); },
     slide:()=>tone(180,.3,'sawtooth',.1,60),
     tackle:()=>{ tone(120,.12,'square',.2,40); setTimeout(()=>tone(90,.2,'sawtooth',.14,30),60); },
+    ice:()=>{ tone(1800,.5,'sine',.12,2600); setTimeout(()=>tone(2400,.35,'triangle',.1,3200),120); setTimeout(()=>tone(600,.25,'square',.08,300),260); },
     miss:()=>tone(300,.4,'sawtooth',.1,90),
     count:(n)=>{ tone(n===1?880:660,.16,'square',.16); if(n===1) setTimeout(()=>tone(1100,.12,'square',.12),90); },
   };
@@ -1626,6 +1653,11 @@ $('#btn-music-off').addEventListener('click', ()=>{ sfx.click(); settings.track=
 /* ---------- characters screen ---------- */
 function buildGallery(){
   const g = $('#gallery'); g.innerHTML='';
+  // ice power card (permanent power-up) at the top of the shop
+  const ice=document.createElement('div'); ice.className='card icecard'+(prog.ice?' owned':''); ice.tabIndex=0;
+  ice.innerHTML=`<div class="ico">❄️</div><div class="name">${T('ice.name')}</div><div class="desc">${T('ice.desc')}</div>${prog.ice?`<div class="lock" style="background:var(--green);color:#fff">${T('ice.owned')}</div>`:`<div class="lock">${T('shop.locked',fmtXp(ICE_PRICE))}</div>`}`;
+  ice.addEventListener('click', ()=>{ sfx.click(); if(!prog.ice) tryBuyIce(); else toast(T('ice.owned'),'xp'); });
+  g.appendChild(ice);
   CHARS.forEach((c,i)=>{
     const card = document.createElement('div');
     card.className='card'; card.tabIndex=0; card.dataset.i=i;
@@ -2059,7 +2091,8 @@ const ball={ el:$('#ball'), x:0,y:0,vx:0,vy:0, rot:0 };
 ball.el.innerHTML=BALL_SVG;
 
 let level=LEVELS[0], state='idle', score={me:0,op:0}, timeLeft=MATCH_TIME, lastT=0, rafId=0;
-const keys={left:false,right:false,jump:false,kick:false,slide:false};
+const keys={left:false,right:false,jump:false,kick:false,slide:false,ice:false};
+let iceQueued=false, iceCd=0;
 let jumpQueued=false, kickQueued=false, slideQueued=false;
 
 /* ---------- input ---------- */
@@ -2071,6 +2104,7 @@ function setKey(code,down){
     case 'KeyW': if(down&&!keys.jump) jumpQueued=true; keys.jump=down; return true;
     case 'Space': if(down&&!keys.kick) kickQueued=true; keys.kick=down; return true;
     case 'KeyS': if(down&&!keys.slide) slideQueued=true; keys.slide=down; return true;
+    case 'KeyE': case 'KeyQ': if(down&&!keys.ice) iceQueued=true; keys.ice=down; return true;
     case 'ArrowLeft':  (two?keys2:keys).left=down; return true;
     case 'ArrowRight': (two?keys2:keys).right=down; return true;
     case 'ArrowUp':    if(two){ if(down&&!keys2.jump) q2.jump=true; keys2.jump=down; } else { if(down&&!keys.jump) jumpQueued=true; keys.jump=down; } return true;
@@ -2108,7 +2142,7 @@ window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=f
   ['pointerup','pointercancel'].forEach(t=>move.addEventListener(t, e=>{ if(e.pointerId===moveId) clearMove(); }));
   document.querySelectorAll('#touch .act .tb').forEach(b=>{
     const k=b.dataset.k;
-    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else kickQueued=true; });
+    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else if(k==='ice') iceQueued=true; else kickQueued=true; });
     ['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t, ()=>b.classList.remove('pressed')));
   });
 })();
@@ -2165,7 +2199,7 @@ function beginMatch(c1, c2, opts){
   $('#end').classList.remove('show');
   $('#fans').classList.remove('cheer');
   for(const p of players) p.kicks=0;
-  keys2.left=keys2.right=false; q2.jump=q2.kick=q2.slide=false;
+  keys2.left=keys2.right=false; q2.jump=q2.kick=q2.slide=false; iceQueued=false; setupIceUI();
   rbuf.length=0; replay=null; wasBehind=false; said2=said1=said10=false; $('#replay-tag').hidden=true; lastSayT=performance.now(); nextAmbient=5;
   resetPositions();
   showScreen('game');
@@ -2189,6 +2223,34 @@ function startCountdown(done){
   state='countdown'; clearTimeout(cdTimer); let n=3;
   const step=()=>{ showCount(n); netEv('count:'+n); if(n>0){ n--; cdTimer=setTimeout(step, 1000); } else cdTimer=setTimeout(done, 650); };
   step();
+}
+/* ---------- ice power ---------- */
+function iceAvailable(){ return !!prog.ice && !mp; }              // bought once, offline modes only
+function useIce(){
+  if(!iceAvailable() || state!=='play' || iceCd>0) return;
+  iceCd=ICE_CD;
+  for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.el.classList.add('frozen'); }
+  sfx.ice(); say('c.ice'); updateIceHud();
+}
+function updateIce(dt){ if(iceCd>0){ iceCd=Math.max(0,iceCd-dt); updateIceHud(); } }
+function updateIceHud(){
+  const h=$('#ice-hud'); if(!h) return;
+  const ready=iceCd<=0; h.classList.toggle('ready',ready);
+  h.style.setProperty('--cd', Math.round(iceCd/ICE_CD*100)+'%');
+  h.querySelector('.cd').textContent = ready ? '' : Math.ceil(iceCd);
+  const tb=document.querySelector('#touch .tb.ice'); if(tb) tb.classList.toggle('cool',!ready);
+}
+function setupIceUI(){
+  const on=iceAvailable();
+  $('#ice-hud').hidden=!on; const tb=document.querySelector('#touch .tb.ice'); if(tb) tb.hidden=!on;
+  iceCd=0; updateIceHud(); for(const p of [P1,P2,P3,P4]){ p.frozenT=0; p.el.classList.remove('frozen'); }
+}
+$('#ice-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); iceQueued=true; });
+function tryBuyIce(){
+  if(prog.ice) return;
+  if(prog.xp<ICE_PRICE){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(ICE_PRICE)),'warn'); return; }
+  if(!confirm(T('ice.confirm',fmtXp(ICE_PRICE)))) return;
+  prog.xp-=ICE_PRICE; prog.ice=true; saveProg(); sfx.ice(); toast(T('ice.bought'),'ach'); updateXpBadge(); buildGallery(); refreshPreview();
 }
 /* ---------- pause (match + penalties) ---------- */
 let pausedFrom=null, cornerCd=0;
@@ -2242,6 +2304,7 @@ function updateSlides(dt){
   for(const p of players){
     if(p.slideCd>0) p.slideCd-=dt;
     if(p.stunT>0){ p.stunT-=dt; p.vx=0; if(p.stunT<=0) p.el.classList.remove('stunned'); }
+    if(p.frozenT>0){ p.frozenT-=dt; p.vx=0; if(p.frozenT<=0) p.el.classList.remove('frozen'); }
     if(p.slideT<=0) continue;
     p.slideT-=dt; p.vx=p.slideDir*640*st(p).slide;
     if(p.slideT<=0){ p.el.classList.remove('sliding'); continue; }
@@ -2561,7 +2624,7 @@ function updateAI(dt, ai, side, opps, mate){
     ai.wantKick=Math.random()<Math.min(1, L.kick+.35);
   }
   const diff=ai.targetX-ai.x, dir=Math.abs(diff)>6 ? Math.sign(diff) : 0;
-  if(ai.slideT>0 || ai.stunT>0) return;           // mid-slide or knocked down: no control
+  if(ai.slideT>0 || ai.stunT>0 || ai.frozenT>0) return;   // mid-slide, knocked down or frozen: no control
   ai.vx=dir*MOVE*L.speed*st(ai).speed;
   const cf = bx<ax ? -1 : 1; ai.facing=cv(cf);     // cf = canonical facing (-1 = toward the goal it attacks)
   const dx=bx-ax, adx=Math.abs(dx), near=inReach(ai);
@@ -2598,6 +2661,8 @@ function loop(t){
     jumpQueued=false;
     if(kickQueued){ if(P1.stunT<=0) doKick(P1); kickQueued=false; }
     if(slideQueued){ doSlide(P1); slideQueued=false; }
+    if(iceQueued){ useIce(); iceQueued=false; }
+    updateIce(dt);
     if(pausePending){ pausePending=false; pauseGame(); return; }
     if(mp && mp.role==='host') applyRemote(); else if(training!=='shoot') updateAI(dt, P2, 1, teamL, v2?P4:null);
     if(v2){
