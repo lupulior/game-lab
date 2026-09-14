@@ -141,6 +141,15 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 @keyframes tstIn{from{transform:translateY(-30px) scale(.8);opacity:0}to{transform:none;opacity:1}}
 #commentary{position:absolute;top:62px;left:50%;transform:translateX(-50%) scale(0);font-size:22px;font-weight:900;color:var(--navy);background:rgba(255,255,255,.92);padding:6px 20px;border-radius:16px;white-space:nowrap;box-shadow:0 4px 0 rgba(0,0,0,.25);z-index:6;transition:transform .2s;pointer-events:none}
 #commentary.show{transform:translateX(-50%) scale(1)}
+#countdown{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-size:170px;font-weight:900;color:var(--yellow);-webkit-text-stroke:5px var(--navy);
+  text-shadow:0 12px 0 var(--navy),0 20px 40px rgba(0,0,0,.35);pointer-events:none;z-index:7;line-height:1}
+#countdown.pop{animation:cdpop .9s ease-out}
+@keyframes cdpop{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}25%{transform:translate(-50%,-50%) scale(1.2);opacity:1}60%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1);opacity:.9}}
+#btn-pause,#btn-pk-pause{position:absolute;top:12px;left:calc(50% + 96px);width:52px;height:46px;border:0;border-radius:14px;background:#fff;color:var(--navy);font-size:20px;font-weight:900;cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.3);z-index:7;letter-spacing:-2px;display:flex;align-items:center;justify-content:center}
+#btn-pause:active,#btn-pk-pause:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+#btn-pk-pause{left:118px;top:14px}
+#game.online #btn-pause{display:none}
 #replay-tag{position:absolute;top:120px;right:20px;font-size:26px;font-weight:900;color:#fff;background:var(--red);padding:4px 16px;border-radius:14px;animation:blinkRep .6s infinite alternate;z-index:6}
 @keyframes blinkRep{to{opacity:.55}}
 
@@ -552,6 +561,8 @@ body.touch #touch{display:block}
     <div id="timer">4:00</div>
     <div id="commentary"></div>
     <div id="replay-tag" hidden>🎬 ריפליי</div>
+    <div id="countdown" hidden>3</div>
+    <button id="btn-pause" title="הפסקה">❚❚</button>
     <div id="scoreboard">
       <div class="score"><span class="me" id="s-me">0</span><span>-</span><span class="op" id="s-op">0</span></div>
       <div class="names"><span class="me" id="n-me"></span><span>|</span><span class="op" id="n-op"></span></div>
@@ -642,12 +653,13 @@ body.touch #touch{display:block}
     <div id="pk-cross"></div>
     <div id="pk-round"></div>
     <button class="btn red small" id="btn-pk-back">✖ יציאה</button>
+    <button id="btn-pk-pause" title="הפסקה">❚❚</button>
     <div id="pk-score">
       <div class="tm a"><span class="f"></span><span class="n"></span><div class="dots"></div></div>
       <div class="num" id="pk-num">0 - 0</div>
       <div class="tm b"><div class="dots"></div><span class="n"></span><span class="f"></span></div>
     </div>
-    <div id="pk-power"><i></i></div>
+    <div id="pk-power" hidden><i></i></div>
     <div id="pk-hint"></div>
     <div id="pk-msg"></div>
     <canvas id="pk-confetti" width="1000" height="620"></canvas>
@@ -746,6 +758,14 @@ body.touch #touch{display:block}
       <h2 id="invite-title">🎮 הזמנה למשחק</h2>
       <div class="hint" id="invite-text" style="font-size:26px"></div>
       <br><button class="btn green" id="btn-invite-accept">✔ קבל</button> <button class="btn red" id="btn-invite-decline">✖ דחה</button>
+    </div>
+  </div>
+
+  <!-- ===== PAUSE MODAL ===== -->
+  <div class="overlay" id="pause-modal">
+    <div class="panel">
+      <h2 id="pause-title">❚❚ הפסקה</h2>
+      <br><button class="btn green" id="btn-resume">▶ המשך</button> <button class="btn red" id="btn-quit-home">🏠 לדף הבית</button>
     </div>
   </div>
 
@@ -883,7 +903,12 @@ const I18N_RAW={
    '<kbd>A</kbd> влево &nbsp; <kbd>D</kbd> вправо &nbsp; <kbd>W</kbd> прыжок &nbsp; <kbd>Пробел</kbd> сильный удар &nbsp; <kbd>S</kbd> подкат<br>Касание толкает мяч. Первый до 3 голов побеждает, или кто впереди через 4 минуты!'],
  'pklevel.title':['🥅 באיזו רמה לשחק פנדלים?','🥅 Penalty level?','🥅 ما مستوى ركلات الترجيح؟','🥅 Уровень пенальти?'],
  'pklevel.hint':['ברמה קשה יותר השוער מנחש טוב יותר, הכוונת זזה מהר יותר,<br>וכשאתה שוער יש לך פחות זמן להגיב','On harder levels the keeper guesses better, the sight moves faster,<br>and as keeper you get less time to react','في المستويات الأصعب يخمّن الحارس أفضل ويتحرك الهدف أسرع،<br>وكحارس يكون لديك وقت أقل للرد','На сложных уровнях вратарь угадывает лучше, прицел движется быстрее,<br>а как вратарю тебе даётся меньше времени'],
- 'pk.hintAim':['🎯 לחץ (או רווח) כדי לנעול את הכיוון','🎯 Click (or Space) to lock the direction','🎯 انقر (أو مسافة) لتثبيت الاتجاه','🎯 Нажми (или пробел), чтобы зафиксировать направление'],
+ 'pk.hintAim':['🎯 לחץ והחזק כדי להרים את הבעיטה, שחרר כדי לבעוט','🎯 Press and hold to lift the shot, release to kick','🎯 اضغط مطولًا لرفع التسديدة، وأفلت للتسديد','🎯 Нажми и держи, чтобы поднять удар, отпусти для удара'],
+ 'pk.hintHold':['⬆️ מחזיק… שחרר לבעוט! גבוה מדי = מעל השער','⬆️ Holding… release to shoot! Too high = over the bar','⬆️ استمر… أفلت للتسديد! عالٍ جدًا = فوق المرمى','⬆️ Держишь… отпусти для удара! Слишком высоко = выше ворот'],
+ 'pause.title':['❚❚ הפסקה','❚❚ Paused','❚❚ توقف','❚❚ Пауза'],
+ 'pause.resume':['▶ המשך','▶ Resume','▶ متابعة','▶ Продолжить'],
+ 'pause.home':['🏠 לדף הבית','🏠 Home','🏠 الصفحة الرئيسية','🏠 На главную'],
+ 'pause.btn':['הפסקה','Pause','توقف','Пауза'],
  'pk.hintPower':['💪 עצור את פס העוצמה בירוק! אדום = מעל השער','💪 Stop the power bar in the green! Red = over the bar','💪 أوقف شريط القوة في الأخضر! الأحمر = فوق المرمى','💪 Останови шкалу на зелёном! Красный = выше ворот'],
  'pk.hintKeep':['🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר!','🧤 When the sight appears in the goal, click it fast!','🧤 عندما يظهر الهدف في المرمى انقر عليه بسرعة!','🧤 Когда прицел появится в воротах, быстро нажми на него!'],
  'pk.power':['עוצמה {0}%','Power {0}%','القوة {0}%','Сила {0}%'],
@@ -1356,6 +1381,7 @@ const sfx = (()=>{
     slide:()=>tone(180,.3,'sawtooth',.1,60),
     tackle:()=>{ tone(120,.12,'square',.2,40); setTimeout(()=>tone(90,.2,'sawtooth',.14,30),60); },
     miss:()=>tone(300,.4,'sawtooth',.1,90),
+    count:(n)=>{ tone(n===1?880:660,.16,'square',.16); if(n===1) setTimeout(()=>tone(1100,.12,'square',.12),90); },
   };
 })();
 
@@ -1490,10 +1516,11 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
-  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#rotate span':'rotate', '#replay-tag':'replay' };
+  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#rotate span':'rotate', '#replay-tag':'replay',
+  '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn' };
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
-  for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn')) el.title=T(key); else el.innerHTML=T(key); }
+  for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn') || el.id==='btn-pause' || el.id==='btn-pk-pause') el.title=T(key); else el.innerHTML=T(key); }
   document.querySelectorAll('#levels .btn').forEach((b,i)=>b.textContent=T('lvl.'+i));
   document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=T('lvl.'+i));
   document.querySelectorAll('#set-langs .btn').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
@@ -1996,13 +2023,16 @@ function setKey(code,down){
 }
 window.addEventListener('keydown', e=>{
   if(state!=='play'){
-    if(e.code==='Space'){ e.preventDefault(); if(pk && !e.repeat){ if(pk.phase==='aim') lockAim(); else if(pk.phase==='power') userShoot(); } }
+    if(e.code==='Space'){ e.preventDefault(); if(pk && !e.repeat && pk.phase==='aim') startHold(); }
+    if((e.code==='Escape'||e.code==='KeyP') && (state==='paused' || (pk && pk.phase==='paused'))) resumeGame();
+    else if((e.code==='Escape'||e.code==='KeyP') && pk) pauseGame();
     return;
   }
+  if(e.code==='Escape'||e.code==='KeyP'){ pauseGame(); return; }
   if(e.repeat){ if(setKey(e.code,true)) e.preventDefault(); return; }
   if(setKey(e.code,true)) e.preventDefault();
 });
-window.addEventListener('keyup', e=>{ if(setKey(e.code,false)) e.preventDefault(); });
+window.addEventListener('keyup', e=>{ if(e.code==='Space' && pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); return; } if(setKey(e.code,false)) e.preventDefault(); });
 window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=false; keys2.left=keys2.right=keys2.jump=keys2.kick=false; });
 
 /* touch controls: slide a finger across ◀ ▶ without lifting to change direction; jump/kick are taps */
@@ -2069,7 +2099,7 @@ function beginMatch(c1, c2, opts){
   $('#n-op').textContent = v2 ? nm(opChar)+' + '+nm(opts.c4) : nm(opChar);
   $('#level-tag').textContent = mp ? T('game.online') : (dailyMatch ? T('daily.title')+' · ' : '') + T('game.level', T('lvl.'+level.i));
   const wantTheme = dailyMatch ? 'daily' : 'day'; if(pitchTheme!==wantTheme) buildPitch(wantTheme);
-  $('#game').classList.toggle('daily', !!dailyMatch); $('#daily-fx').hidden=!dailyMatch; $('#daily-fx .banner').textContent='🏟️ '+T('daily.title').replace(/^📅\s*/,'');
+  $('#game').classList.toggle('daily', !!dailyMatch); $('#daily-fx').hidden=!dailyMatch; $('#game').classList.toggle('online', !!mp); $('#daily-fx .banner').textContent='🏟️ '+T('daily.title').replace(/^📅\s*/,'');
   score={me:0,op:0}; updateScore();
   timeLeft=MATCH_TIME; updateTimer();
   $('#end').classList.remove('show');
@@ -2078,14 +2108,54 @@ function beginMatch(c1, c2, opts){
   keys2.left=keys2.right=false; q2.jump=q2.kick=q2.slide=false;
   rbuf.length=0; replay=null; wasBehind=false; said2=said1=said10=false; $('#replay-tag').hidden=true; lastSayT=performance.now(); nextAmbient=5;
   resetPositions();
-  setTimeout(()=>{ if(state==='play') say('c.kickoff'); }, 300);
   showScreen('game');
   keys.left=keys.right=keys.jump=keys.kick=false; jumpQueued=kickQueued=false;
-  sfx.whistle();
-  state='play';
   lastT=performance.now();
   cancelAnimationFrame(rafId); rafId=requestAnimationFrame(localIsP1 ? loop : guestLoop);
+  if(localIsP1){
+    startCountdown(()=>{ if(state!=='countdown') return; sfx.whistle(); state='play'; lastT=performance.now(); setTimeout(()=>{ if(state==='play') say('c.kickoff'); }, 250); });
+  } else state='countdown';                       // the guest follows the host's countdown events
 }
+/* ---------- 3-2-1 countdown before kick-off ---------- */
+let cdTimer=0;
+function showCount(n){
+  const el=$('#countdown'); el.hidden=false; el.textContent = n>0 ? n : '⚽';
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  if(n>0) sfx.count(n);
+  if(n===0) setTimeout(()=>{ el.hidden=true; }, 700);
+}
+function startCountdown(done){
+  state='countdown'; clearTimeout(cdTimer); let n=3;
+  const step=()=>{ showCount(n); netEv('count:'+n); if(n>0){ n--; cdTimer=setTimeout(step, 1000); } else cdTimer=setTimeout(done, 650); };
+  step();
+}
+/* ---------- pause (match + penalties) ---------- */
+let pausedFrom=null;
+function pauseGame(){
+  if(mp) return;                                     // no pausing an online match
+  if(state==='play' && !pk){ pausedFrom='game'; state='paused'; cancelAnimationFrame(rafId); }
+  else if(pk && ['aim','hold','power','keep'].includes(pk.phase)){ pausedFrom='pk'; pk.pausedPhase=pk.phase; pk.phase='paused'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); }
+  else return;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  sfx.click(); $('#pause-modal').classList.add('show');
+}
+function resumeGame(){
+  $('#pause-modal').classList.remove('show'); sfx.click();
+  if(pausedFrom==='game'){ state='play'; lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); }
+  else if(pausedFrom==='pk' && pk){ setupKick(pk.curMeShoots); }
+  pausedFrom=null;
+}
+function quitToHome(){
+  $('#pause-modal').classList.remove('show'); sfx.click();
+  if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); pk=null; $('#pk-score').hidden=false; }
+  state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
+  $('#end').classList.remove('show'); $('#fans').classList.remove('cheer'); dailyMatch=false; pausedFrom=null;
+  showScreen('home');
+}
+$('#btn-pause').addEventListener('click', e=>{ e.stopPropagation(); pauseGame(); });
+$('#btn-pk-pause').addEventListener('click', e=>{ e.stopPropagation(); pauseGame(); });
+$('#btn-resume').addEventListener('click', resumeGame);
+$('#btn-quit-home').addEventListener('click', quitToHome);
 
 function resetPositions(){
   for(const p of [P1,P2,P3,P4]){
@@ -2640,11 +2710,12 @@ function applySnapshot(s){
   if(s.sc[1]>score.me){ prog.goals++; addXP(1); }              // my goal (guest is P2)
   if(s.sc[0]>score.op && s.sc[0]>s.sc[1]) wasBehind=true;
   score.me=s.sc[1]; score.op=s.sc[0]; updateScore();
-  timeLeft=s.tl; if(state!=='end' && (s.st==='play'||s.st==='celebrate'||s.st==='replay')) state=s.st; updateTimer();
+  timeLeft=s.tl; if(state!=='end' && (s.st==='play'||s.st==='celebrate'||s.st==='replay'||s.st==='countdown')) state=s.st; updateTimer();
   for(const e of (s.ev||[])){
     if(e==='kick') sfx.kick(); else if(e==='bounce') sfx.bounce(); else if(e==='whistle') sfx.whistle(); else if(e==='slide') sfx.slide(); else if(e==='tackle') sfx.tackle();
     else if(e==='goal') goalFx();
     else if(e==='replay') $('#replay-tag').hidden=false; else if(e==='replayEnd') $('#replay-tag').hidden=true;
+    else if(e.startsWith('count:')) showCount(+e.slice(6));
     else if(e.startsWith('say:')){ const parts=e.slice(4).split('|'); showLine(T(parts[0],...parts.slice(1)), PRIORITY_SAY.has(parts[0])); }
     else if(e.startsWith('end:')){ const r=e.slice(4); showEnd(r==='p2'?'win':r==='p1'?'lose':'draw'); }
   }
@@ -2946,6 +3017,7 @@ function nextKick(){
   setupKick(meShoots);
 }
 function setupKick(meShoots){                    // reset positions and sprites, then start the aim or the keep phase
+  pk.curMeShoots=meShoots;
   const el=$('#pk'); el.classList.remove('shooting','keeping','locked');
   const keeperC  = pk.single ? pk.chars.keeper  : (meShoots ? teamChar(pk.op,true)  : CHARS[selected]);
   const shooterC = pk.single ? pk.chars.shooter : (meShoots ? CHARS[selected] : teamChar(pk.op,false));
@@ -2953,7 +3025,7 @@ function setupKick(meShoots){                    // reset positions and sprites,
   sprite($('#pk-shooter'), shooterC);
   $('#pk-keeper').style.transform='none';
   const ball=$('#pk-ball'); ball.style.transition='none'; ball.style.transform='none'; void ball.offsetWidth; ball.style.transition='';
-  el.classList.remove('power','sight');
+  el.classList.remove('power','sight','hold');
   $('#pk-shooter').classList.remove('run');
   $('#pk-cross').classList.remove('sight');
   pk.pickZone=null; pk.aim=null; pk.dive=null; pk.sightAt=0;
@@ -2980,18 +3052,18 @@ function setupKick(meShoots){                    // reset positions and sprites,
     }, 700+Math.random()*900);
   }
 }
-const aimAt   = t => { t*=pk.lv.aimSpeed; return { x:500+345*Math.sin(t*2.3), y:265+172*Math.sin(t*3.1+.8) }; };   // the sight's path (a bit beyond the frame)
-const powerAt = t => 50+50*Math.sin(t*4.4*pk.lv.powerSpeed-Math.PI/2);                                            // 0 → 100 → 0
+/* aiming: the sight sweeps left-right along the ground line; press and hold to raise it, release to shoot */
+const AIM_Y0=392;
+const aimAt   = t => ({ x:500+345*Math.sin(t*2.3*pk.lv.aimSpeed), y:AIM_Y0 });
+const riseAt  = t => Math.max(40, AIM_Y0 - t*290*pk.lv.powerSpeed);          // held time → sight height (goes above the bar if held too long)
 const sinceT0 = () => (performance.now()-pk.t0)/1000;
+function placeCross(){ const c=$('#pk-cross'); c.style.left=pk.aim.x+'px'; c.style.top=pk.aim.y+'px'; }
 function aimLoop(){
-  if(!pk || pk.phase!=='aim') return;
-  pk.aim=aimAt(sinceT0()); const c=$('#pk-cross'); c.style.left=pk.aim.x+'px'; c.style.top=pk.aim.y+'px';
+  if(!pk) return;
+  if(pk.phase==='aim'){ pk.aim=aimAt(sinceT0()); placeCross(); }
+  else if(pk.phase==='hold'){ pk.aim.y=riseAt((performance.now()-pk.holdT0)/1000); placeCross(); }
+  else return;
   pk.raf=requestAnimationFrame(aimLoop);
-}
-function powerLoop(){
-  if(!pk || pk.phase!=='power') return;
-  pk.power=powerAt(sinceT0()); $('#pk-power i').style.left=pk.power+'%';
-  pk.raf=requestAnimationFrame(powerLoop);
 }
 function keeperDive(z){
   const tx=(z.col-1)*185, ty=z.row===0?-84:8, rot=(z.col-1)*32;
@@ -3000,27 +3072,24 @@ function keeperDive(z){
 function ballTo(p){ $('#pk-ball').style.transform=`translate(${p.x-517}px,${p.y-500}px) scale(.55)`; }
 function flash(txt){ const f=$('#pk-msg'); f.textContent=txt; f.classList.remove('show'); void f.offsetWidth; f.classList.add('show'); }
 const pointZone = (x,y) => ({col:clamp(Math.floor((x-PKG.x)/200),0,2), row:y<265?0:1});
-function lockAim(){                                  // shooting step 1 → 2
+function startHold(){                                // press: lock the direction, start raising the sight
   if(!pk || pk.phase!=='aim') return;
-  pk.aim=aimAt(sinceT0()); const c=$('#pk-cross'); c.style.left=pk.aim.x+'px'; c.style.top=pk.aim.y+'px';
-  pk.phase='power'; cancelAnimationFrame(pk.raf);
-  $('#pk').classList.remove('shooting'); $('#pk').classList.add('locked','power');
-  $('#pk-hint').textContent=T('pk.hintPower');
-  pk.t0=performance.now(); pk.power=0; sfx.click();
-  pk.raf=requestAnimationFrame(powerLoop);
+  pk.aim=aimAt(sinceT0()); placeCross();
+  pk.phase='hold'; pk.holdT0=performance.now(); sfx.click();
+  $('#pk').classList.remove('shooting'); $('#pk').classList.add('locked','hold');
+  $('#pk-hint').textContent=T('pk.hintHold');
 }
-function userShoot(){                                // shooting step 2: power chosen
-  if(!pk || pk.phase!=='power') return;
-  pk.power=powerAt(sinceT0()); $('#pk-power i').style.left=pk.power+'%';
-  pk.phase='fly'; cancelAnimationFrame(pk.raf); $('#pk').classList.remove('power');
+function userShoot(){                                // release: shoot at the sight
+  if(!pk || pk.phase!=='hold') return;
+  pk.aim.y=riseAt((performance.now()-pk.holdT0)/1000); placeCross();
+  pk.phase='fly'; cancelAnimationFrame(pk.raf); $('#pk').classList.remove('hold');
   $('#pk-shooter').classList.add('run');
-  const {x}=pk.aim, power=pk.power;
-  const y = pk.aim.y - Math.max(0,power-60)*3;         // more power lifts the ball – too much and it sails over
-  const over = y<PKG.y+8, wide = x<PKG.x+10 || x>PKG.x+PKG.w-10, weak = power<32;
-  const zone=pointZone(x,pk.aim.y);
+  const x=pk.aim.x, y=pk.aim.y;
+  const over = y<PKG.y+8, wide = x<PKG.x+10 || x>PKG.x+PKG.w-10, weak = y>AIM_Y0-40;   // barely lifted = weak roller
+  const zone=pointZone(x,y);
   const readP = weak ? Math.min(1, pk.readP+.55) : pk.readP;
   const kz = Math.random()<readP ? zone : randomZone();
-  $('#pk-hint').textContent = T('pk.power', Math.round(power));
+  $('#pk-hint').textContent='';
   sfx.kick(); setTimeout(()=>{ keeperDive(kz); ballTo({x, y: over ? PKG.y-50 : Math.min(y, PKG.y+PKG.h-24)}); }, 160);
   setTimeout(()=>{
     let goal;
@@ -3116,13 +3185,13 @@ $('#pk').addEventListener('pointerdown', e=>{
   if(e.target.closest('button') || e.target.closest('#pk-score')) return;
   if(!pk) return;
   e.preventDefault();
-  if(pk.phase==='aim') lockAim();
-  else if(pk.phase==='power') userShoot();
+  if(pk.phase==='aim'){ startHold(); try{ $('#pk').setPointerCapture(e.pointerId); }catch(_){} }
   else if(pk.phase==='keep'){                        // screen → stage coordinates (the stage is scaled to fit)
     const r=$('#stage').getBoundingClientRect();
     userDive((e.clientX-r.left)/r.width*1000, (e.clientY-r.top)/r.height*620);
   }
 });
+['pointerup','pointercancel'].forEach(t=>$('#pk').addEventListener(t, e=>{ if(pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); } }));
 
 /* ---------- init ---------- */
 buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang();
