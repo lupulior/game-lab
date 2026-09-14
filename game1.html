@@ -429,7 +429,20 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .player.sliding .leg-front{animation:none;transform:rotate(-40deg)}
 .player.stunned .sprite{animation:tumble .75s ease-out}
 .player.frozen .sprite{filter:hue-rotate(160deg) saturate(1.6) brightness(1.15) drop-shadow(0 0 12px #7ED3FF);animation:shiver .12s infinite alternate}
-.player.frozen::after{content:"❄️";position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:34px;animation:tapPulse .5s infinite}
+/* the ice block: a translucent crystal around the frozen player, with facets, shine and sparkles */
+.player .ice{display:none;position:absolute;left:-14px;right:-14px;top:-12px;bottom:-4px;border-radius:14px;z-index:3;pointer-events:none;
+  background:linear-gradient(135deg,rgba(235,250,255,.92) 0%,rgba(160,225,255,.55) 35%,rgba(90,185,255,.45) 60%,rgba(220,245,255,.85) 100%);
+  border:3px solid rgba(240,252,255,.95);box-shadow:0 0 0 2px rgba(120,200,255,.6),0 0 26px rgba(126,211,255,.9),inset 0 0 22px rgba(255,255,255,.7)}
+.player .ice::before{content:"";position:absolute;inset:0;border-radius:12px;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.75) 34%,transparent 38%,transparent 62%,rgba(255,255,255,.55) 66%,transparent 70%),
+  linear-gradient(25deg,transparent 45%,rgba(255,255,255,.5) 47%,transparent 49%)}
+.player .ice::after{content:"✦ ✧ ✦";position:absolute;left:0;right:0;top:4px;text-align:center;color:#fff;font-size:15px;letter-spacing:8px;text-shadow:0 0 6px #7ED3FF;animation:sparkle .7s infinite alternate}
+@keyframes sparkle{from{opacity:.35;transform:translateY(0)}to{opacity:1;transform:translateY(3px)}}
+.player.frozen .ice{display:block;animation:iceIn .18s ease-out}
+@keyframes iceIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.player.frozen::after{content:"❄️";position:absolute;left:50%;top:-40px;transform:translateX(-50%);font-size:34px;animation:tapPulse .5s infinite;z-index:4}
+.player.thaw .ice{display:block;animation:shatter .45s ease-out forwards;border-style:dashed}
+@keyframes shatter{0%{transform:scale(1);opacity:1}40%{transform:scale(1.15) rotate(3deg);opacity:.8}100%{transform:scale(1.5) rotate(-6deg);opacity:0}}
 @keyframes shiver{from{transform:translateX(-2px)}to{transform:translateX(2px)}}
 .player.frozen .sprite.flip{animation:shiverF .12s infinite alternate}
 @keyframes shiverF{from{transform:scaleX(-1) translateX(-2px)}to{transform:scaleX(-1) translateX(2px)}}
@@ -589,10 +602,10 @@ body.touch #touch{display:block}
     <div id="daily-fx" hidden><div class="beam l"></div><div class="beam r"></div><div class="banner">🏟️ המשחק היומי</div></div>
     <div class="pshadow" id="sh1"></div><div class="pshadow" id="sh2"></div><div class="pshadow" id="shb"></div>
     <div class="pshadow" id="sh3" hidden></div><div class="pshadow" id="sh4" hidden></div>
-    <div class="player" id="p3" hidden><div class="tag"></div><div class="sprite"></div></div>
-    <div class="player" id="p4" hidden><div class="tag"></div><div class="sprite"></div></div>
-    <div class="player me" id="p1"><div class="tag">אני</div><div class="sprite"></div></div>
-    <div class="player" id="p2"><div class="tag">יריב</div><div class="sprite"></div></div>
+    <div class="player" id="p3" hidden><div class="tag"></div><div class="sprite"></div><div class="ice"></div></div>
+    <div class="player" id="p4" hidden><div class="tag"></div><div class="sprite"></div><div class="ice"></div></div>
+    <div class="player me" id="p1"><div class="tag">אני</div><div class="sprite"></div><div class="ice"></div></div>
+    <div class="player" id="p2"><div class="tag">יריב</div><div class="sprite"></div><div class="ice"></div></div>
     <div id="ball"></div>
     <div id="front"></div>
     <div id="level-tag"></div>
@@ -2304,7 +2317,7 @@ function updateSlides(dt){
   for(const p of players){
     if(p.slideCd>0) p.slideCd-=dt;
     if(p.stunT>0){ p.stunT-=dt; p.vx=0; if(p.stunT<=0) p.el.classList.remove('stunned'); }
-    if(p.frozenT>0){ p.frozenT-=dt; p.vx=0; if(p.frozenT<=0) p.el.classList.remove('frozen'); }
+    if(p.frozenT>0){ p.frozenT-=dt; p.vx=0; if(p.frozenT<=0){ p.el.classList.remove('frozen'); p.el.classList.add('thaw'); sfx.miss(); setTimeout(()=>p.el.classList.remove('thaw'),500); } }
     if(p.slideT<=0) continue;
     p.slideT-=dt; p.vx=p.slideDir*640*st(p).slide;
     if(p.slideT<=0){ p.el.classList.remove('sliding'); continue; }
@@ -2672,7 +2685,10 @@ function loop(t){
     updateSlides(dt);
     for(const p of players) movePlayer(p, dt, players.filter(o=>o!==p));
     updateBall(dt);
-    for(const p of players) collideBall(p);
+    for(const p of players){
+      if(p.frozenT>0){ const hit=Math.hypot(ball.x-clamp(ball.x,p.x-PW/2-12,p.x+PW/2+12), ball.y-clamp(ball.y,p.y,p.y+PH+14))<R; collideRect(p.x-PW/2-12, p.y, p.x+PW/2+12, p.y+PH+14); if(hit) sfx.bounce(); }   // ice block = solid wall
+      else collideBall(p);
+    }
     if(training!=='shoot'){ timeLeft-=dt; updateTimer(); }
     if(timeLeft<=0){ timeLeft=0; endGame(); }
   }else if(state==='celebrate'){
