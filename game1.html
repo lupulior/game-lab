@@ -897,7 +897,7 @@ body.touch #touch{display:block}
     <div class="panel">
       <h2 id="codes-title">🎁 קודים</h2>
       <div class="hint" id="codes-hint">קודים מיוחדים יתפרסמו בהמשך…</div>
-      <input id="code-input" maxlength="16" placeholder="הכנס קוד" autocomplete="off" spellcheck="false">
+      <input id="code-input" maxlength="24" placeholder="הכנס קוד" autocomplete="off" spellcheck="false">
       <br><button class="btn purple" id="btn-code-go">הפעל</button> <button class="btn small" id="btn-codes-cancel">חזרה</button>
     </div>
   </div>
@@ -1247,7 +1247,7 @@ const I18N_RAW={
  'adm.unban':['✔ בטל','✔ Undo','✔ Undo','✔ Отменить'],
  'adm.leave':['🚪 צא ממצב אדמין','🚪 Leave admin mode','🚪 Leave admin mode','🚪 Выйти из режима админа'],
  'ban.title':['🚫 הורחקת מהמשחק','🚫 You were kicked from the game','🚫 You were kicked from the game','🚫 Тебя исключили из игры'],
- 'ban.text':['{0} הרחיק אותך. תוכל לחזור בעוד {1}','{0} kicked you. You can come back in {1}','{0} kicked you. You can come back in {1}','{0} исключил тебя. Вернуться можно через {1}'],
+ 'ban.text':['האדמין חסם אותך. תוכל לחזור בעוד {1}','The admin blocked you. You can come back in {1}','The admin blocked you. You can come back in {1}','Админ заблокировал тебя. Вернуться можно через {1}'],
  'ban.minutes':['{0} דקות','{0} minutes','{0} minutes','{0} минут'],
  'ban.hours':['{0} שעות','{0} hours','{0} hours','{0} часов'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
@@ -2278,7 +2278,7 @@ $('#btn-codes-cancel').addEventListener('click', ()=>{ sfx.click(); $('#codes-mo
 $('#btn-code-go').addEventListener('click', ()=>{ sfx.click(); redeemCode($('#code-input').value); });
 $('#code-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') redeemCode(e.target.value); });
 /* ---------- admin: unlocked by a secret code (only its SHA-256 lives in the file) ---------- */
-const ADMIN_HASH='ecdd124e2f3badc860d97392618406385398734191d79de637803a736d86e3f8';
+const ADMIN_HASH='c7cf842f397aa3cf3c2ab58d80b3aadb9b95e3ce92731f5d06e12f4d0bde6e3f';
 const isAdmin = () => !!prog.admin;
 const superOn = () => isAdmin() && !!prog.superOn && !mp && !spectating;   // super powers: offline matches only
 const crown = (name, adm) => (adm ? '👑 ' : '') + name;
