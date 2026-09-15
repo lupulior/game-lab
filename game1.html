@@ -153,14 +153,21 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
   box-shadow:0 4px 0 rgba(0,0,0,.3);z-index:7;letter-spacing:-2px;display:flex;align-items:center;justify-content:center}
 #btn-pause:active,#btn-pk-pause:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
 #btn-pk-pause{left:118px;top:14px}
-#corner-ring{position:absolute;left:425px;top:205px;width:90px;height:90px;border:6px dashed var(--yellow);border-radius:50%;box-shadow:0 0 0 3px var(--navy),0 0 24px rgba(255,212,71,.8);z-index:4;pointer-events:none;animation:ringpulse .8s infinite alternate}
+#corner-ring{position:absolute;left:259px;top:236px;width:90px;height:90px;border:6px dashed var(--yellow);border-radius:50%;box-shadow:0 0 0 3px var(--navy),0 0 24px rgba(255,212,71,.8);z-index:4;pointer-events:none;animation:ringpulse .8s infinite alternate}
 @keyframes ringpulse{from{transform:scale(.92)}to{transform:scale(1.1)}}
-#pk.corner #pk-shooter{left:385px;top:190px;transition:none}
+#pk.corner #pk-shooter{left:250px;top:326px;transition:none}      /* the header stands on the ground and jumps for the ball */
 #pk.corner #pk-shooter.headjump{animation:headjump .6s ease-out}
-@keyframes headjump{0%{transform:translateY(0)}45%{transform:translateY(-70px)}100%{transform:translateY(0)}}
+@keyframes headjump{0%{transform:translateY(0)}45%{transform:translateY(-82px)}100%{transform:translateY(0)}}
 #pk.corner #pk-cross{display:none}
 #game.online #btn-pause{display:none}
-#game.training #timer{display:none}
+#game.training #timer,#game.training #scoreboard,#game.training #commentary{display:none}
+/* the world holds everything that lives in pitch coordinates; in 2v2 it is wider and scaled down to fit the stage (a bigger stadium) */
+#world{position:absolute;left:0;top:0;width:1000px;height:620px;transform-origin:0 0;overflow:hidden}
+#arena{position:absolute;left:0;bottom:0;width:100%;height:620px}
+#game.v2 #world{background:
+  radial-gradient(circle at 12% 6%,rgba(255,250,200,.55),transparent 18%),radial-gradient(circle at 88% 6%,rgba(255,250,200,.55),transparent 18%),
+  repeating-linear-gradient(180deg,rgba(255,255,255,.07) 0 2px,transparent 2px 24px),linear-gradient(#141c3d,#1c2750 55%,#26345f)}
+#game.v2 #fans svg{filter:brightness(.88)}
 #home .side .btn{font-size:24px;padding:12px 26px}
 #home .side{top:118px;gap:12px}
 #btn-pause,#btn-pk-pause{width:60px;height:52px;font-size:22px}
@@ -429,20 +436,18 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .player.sliding .leg-front{animation:none;transform:rotate(-40deg)}
 .player.stunned .sprite{animation:tumble .75s ease-out}
 .player.frozen .sprite{filter:hue-rotate(160deg) saturate(1.6) brightness(1.15) drop-shadow(0 0 12px #7ED3FF);animation:shiver .12s infinite alternate}
-/* the ice block: a translucent crystal around the frozen player, with facets, shine and sparkles */
-.player .ice{display:none;position:absolute;left:-14px;right:-14px;top:-12px;bottom:-4px;border-radius:14px;z-index:3;pointer-events:none;
-  background:linear-gradient(135deg,rgba(235,250,255,.92) 0%,rgba(160,225,255,.55) 35%,rgba(90,185,255,.45) 60%,rgba(220,245,255,.85) 100%);
-  border:3px solid rgba(240,252,255,.95);box-shadow:0 0 0 2px rgba(120,200,255,.6),0 0 26px rgba(126,211,255,.9),inset 0 0 22px rgba(255,255,255,.7)}
-.player .ice::before{content:"";position:absolute;inset:0;border-radius:12px;
-  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.75) 34%,transparent 38%,transparent 62%,rgba(255,255,255,.55) 66%,transparent 70%),
-  linear-gradient(25deg,transparent 45%,rgba(255,255,255,.5) 47%,transparent 49%)}
-.player .ice::after{content:"✦ ✧ ✦";position:absolute;left:0;right:0;top:4px;text-align:center;color:#fff;font-size:15px;letter-spacing:8px;text-shadow:0 0 6px #7ED3FF;animation:sparkle .7s infinite alternate}
-@keyframes sparkle{from{opacity:.35;transform:translateY(0)}to{opacity:1;transform:translateY(3px)}}
-.player.frozen .ice{display:block;animation:iceIn .18s ease-out}
-@keyframes iceIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
-.player.frozen::after{content:"❄️";position:absolute;left:50%;top:-40px;transform:translateX(-50%);font-size:34px;animation:tapPulse .5s infinite;z-index:4}
-.player.thaw .ice{display:block;animation:shatter .45s ease-out forwards;border-style:dashed}
-@keyframes shatter{0%{transform:scale(1);opacity:1}40%{transform:scale(1.15) rotate(3deg);opacity:.8}100%{transform:scale(1.5) rotate(-6deg);opacity:0}}
+/* the ice block: a randomly generated jagged crystal (SVG built per freeze in iceSVG()) with shards around it */
+.player .ice{display:none;position:absolute;left:-30px;right:-30px;top:-30px;bottom:-8px;z-index:3;pointer-events:none;
+  filter:drop-shadow(0 0 14px rgba(126,211,255,.95));transform-origin:50% 60%}
+.player .ice svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.player .ice .shard{transform-origin:center;transform-box:fill-box}   /* static while frozen (cheap to draw); they fly apart on the shatter */
+.player.frozen .ice{display:block;animation:iceIn .2s cubic-bezier(.2,1.4,.4,1)}
+@keyframes iceIn{from{transform:scale(.5) rotate(-12deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.player.frozen::after{content:"❄️";position:absolute;left:50%;top:-52px;transform:translateX(-50%);font-size:34px;animation:tapPulse .5s infinite;z-index:4}
+.player.thaw .ice{display:block;animation:shatter .5s ease-out forwards}
+.player.thaw .ice .shard{animation:shardFly .5s ease-out forwards}
+@keyframes shatter{0%{transform:scale(1);opacity:1}35%{transform:scale(1.12) rotate(4deg);opacity:.85}100%{transform:scale(1.55) rotate(-8deg);opacity:0}}
+@keyframes shardFly{to{transform:translate(var(--fx,0),var(--fy,-40px)) rotate(200deg);opacity:0}}
 @keyframes shiver{from{transform:translateX(-2px)}to{transform:translateX(2px)}}
 .player.frozen .sprite.flip{animation:shiverF .12s infinite alternate}
 @keyframes shiverF{from{transform:scaleX(-1) translateX(-2px)}to{transform:scaleX(-1) translateX(2px)}}
@@ -597,6 +602,7 @@ body.touch #touch{display:block}
 
   <!-- ===== GAME ===== -->
   <section id="game" class="screen">
+    <div id="world"><div id="arena">
     <div id="fans"></div>
     <div id="pitch"></div>
     <div id="daily-fx" hidden><div class="beam l"></div><div class="beam r"></div><div class="banner">🏟️ המשחק היומי</div></div>
@@ -608,6 +614,7 @@ body.touch #touch{display:block}
     <div class="player" id="p2"><div class="tag">יריב</div><div class="sprite"></div><div class="ice"></div></div>
     <div id="ball"></div>
     <div id="front"></div>
+    </div></div>
     <div id="level-tag"></div>
     <div id="timer">4:00</div>
     <div id="commentary"></div>
@@ -856,7 +863,10 @@ body.touch #touch{display:block}
   <div class="overlay" id="v2-modal">
     <div class="panel">
       <h2 id="v2-title">👥 עם מי לשחק 2 על 2?</h2>
+      <div class="hint" id="v2-my-l">השותף שלי:</div>
       <div class="v2opts"><button class="btn green on" id="v2-ai">🤖 שותף מחשב</button><button class="btn blue" id="v2-human">⌨️ חבר על המקלדת</button></div>
+      <div class="hint" id="v2-opp-l">היריבים:</div>
+      <div class="v2opts"><button class="btn small purple on" id="v2-opp0">🤖🤖 שני מחשבים</button><button class="btn small purple" id="v2-opp1">⌨️🤖 חבר + מחשב</button><button class="btn small purple" id="v2-opp2">⌨️⌨️ שני חברים</button></div>
       <div class="hint" id="v2-keys" hidden></div>
       <div class="hint" id="v2-pick-l">בחרו את השותף שלכם:</div>
       <div id="v2-partner"></div>
@@ -979,7 +989,7 @@ const I18N_RAW={
  'train.shoot':['⚽ בעיטות לשער','⚽ Shooting','⚽ تسديدات','⚽ Удары по воротам'],
  'train.pk':['🥅 פנדלים','🥅 Penalties','🥅 ركلات جزاء','🥅 Пенальти'],
  'train.corner':['🚩 קרנות','🚩 Corners','🚩 ركنيات','🚩 Угловые'],
- 'train.shootTag':['🏋️ אימון בעיטות · גולים: {0}','🏋️ Shooting practice · goals: {0}','🏋️ تدريب تسديد · أهداف: {0}','🏋️ Тренировка ударов · голы: {0}'],
+ 'train.shootTag':['🏋️ אימון בעיטות','🏋️ Shooting practice','🏋️ تدريب تسديد','🏋️ Тренировка ударов'],
  'train.pkTag':['🏋️ אימון פנדלים · {0}/{1}','🏋️ Penalty practice · {0}/{1}','🏋️ تدريب ركلات جزاء · {0}/{1}','🏋️ Тренировка пенальти · {0}/{1}'],
  'train.cornerTag':['🏋️ אימון קרנות · {0}/{1}','🏋️ Corner practice · {0}/{1}','🏋️ تدريب ركنيات · {0}/{1}','🏋️ Тренировка угловых · {0}/{1}'],
  'c.corner':['🎙️ מעל השער! קרן!','🎙️ Over the goal! Corner kick!','🎙️ فوق المرمى! ركلة ركنية!','🎙️ Выше ворот! Угловой!'],
@@ -1075,7 +1085,17 @@ const I18N_RAW={
  'v2.ai':['🤖 שותף מחשב','🤖 Computer partner','🤖 شريك حاسوب','🤖 Партнёр-компьютер'],
  'v2.human':['⌨️ חבר על המקלדת','⌨️ Friend on the keyboard','⌨️ صديق على لوحة المفاتيح','⌨️ Друг на клавиатуре'],
  'v2.pickPartner':['בחרו את השותף שלכם:','Pick your partner:','اختر شريكك:','Выбери партнёра:'],
- 'v2.keys':['החבר: <kbd>←</kbd><kbd>→</kbd> לזוז &nbsp; <kbd>↑</kbd> קפיצה &nbsp; <kbd>↓</kbd> גליץ\' &nbsp; <kbd>Enter</kbd> בעיטה','Friend: <kbd>←</kbd><kbd>→</kbd> move &nbsp; <kbd>↑</kbd> jump &nbsp; <kbd>↓</kbd> slide &nbsp; <kbd>Enter</kbd> kick','الصديق: <kbd>←</kbd><kbd>→</kbd> حركة &nbsp; <kbd>↑</kbd> قفز &nbsp; <kbd>↓</kbd> انزلاق &nbsp; <kbd>Enter</kbd> تسديد','Друг: <kbd>←</kbd><kbd>→</kbd> движение &nbsp; <kbd>↑</kbd> прыжок &nbsp; <kbd>↓</kbd> подкат &nbsp; <kbd>Enter</kbd> удар'],
+ 'v2.keys':['{0}: {1} לזוז &nbsp; {2} קפיצה &nbsp; {3} גליץ\' &nbsp; {4} בעיטה','{0}: {1} move &nbsp; {2} jump &nbsp; {3} slide &nbsp; {4} kick','{0}: {1} حركة &nbsp; {2} قفز &nbsp; {3} انزلاق &nbsp; {4} تسديد','{0}: {1} движение &nbsp; {2} прыжок &nbsp; {3} подкат &nbsp; {4} удар'],
+ 'v2.myTeam':['השותף שלי:','My partner:','شريكي:','Мой партнёр:'],
+ 'v2.opps':['היריבים:','The opponents:','الخصوم:','Соперники:'],
+ 'v2.opp0':['🤖🤖 שני מחשבים','🤖🤖 Two computers','🤖🤖 حاسوبان','🤖🤖 Два компьютера'],
+ 'v2.opp1':['⌨️🤖 חבר + מחשב','⌨️🤖 Friend + computer','⌨️🤖 صديق + حاسوب','⌨️🤖 Друг + компьютер'],
+ 'v2.opp2':['⌨️⌨️ שני חברים','⌨️⌨️ Two friends','⌨️⌨️ صديقان','⌨️⌨️ Два друга'],
+ 'v2.roleMe':['אני','Me','أنا','Я'],
+ 'v2.rolePartner':['השותף שלי','My partner','شريكي','Мой партнёр'],
+ 'v2.roleOpp1':['יריב 1','Opponent 1','الخصم 1','Соперник 1'],
+ 'v2.roleOpp2':['יריב 2','Opponent 2','الخصم 2','Соперник 2'],
+ 'game.opp':['יריב – {0}','Opponent – {0}','خصم – {0}','Соперник – {0}'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1601,7 +1621,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#exit-modal h2':'exit.title', '#btn-stay':'exit.stay',
   '#music-title':'music.title', '#btn-music-back':'btn.back', '#music-il-h':'music.il', '#music-intl-h':'music.intl', '#btn-music-off':'music.off',
   '#set-title':'set.title', '#set-sfx-l':'set.sfx', '#set-music-l':'set.music', '#set-lang-l':'set.lang', '#btn-settings-close':'btn.back2',
-  '#v2-title':'v2.title', '#v2-ai':'v2.ai', '#v2-human':'v2.human', '#v2-keys':'v2.keys', '#v2-pick-l':'v2.pickPartner', '#v2-go':'btn.play', '#v2-cancel':'btn.back2',
+  '#v2-title':'v2.title', '#v2-ai':'v2.ai', '#v2-human':'v2.human', '#v2-my-l':'v2.myTeam', '#v2-opp-l':'v2.opps', '#v2-opp0':'v2.opp0', '#v2-opp1':'v2.opp1', '#v2-opp2':'v2.opp2', '#v2-pick-l':'v2.pickPartner', '#v2-go':'btn.play', '#v2-cancel':'btn.back2',
   '#goal-flash':'game.goal', '#btn-music':'btn.music', '#btn-settings':'btn.settings', '#btn-daily':'daily.btn',
   '#btn-codes':'btn.codes', '#codes-title':'codes.title', '#codes-hint':'codes.hint', '#btn-code-go':'codes.go', '#btn-codes-cancel':'btn.back2',
   '#intro-tap':'intro.tap', '.intro-title small':'home.sub', '#btn-stats-ach':'stats.ach', '#btn-stats-board':'stats.friends', '#ach h2':'ach.title', '#btn-ach-back':'btn.back',
@@ -1955,27 +1975,37 @@ function buildPartnerPick(){
     box.appendChild(d);
   });
 }
-function setV2Partner(k){ v2Partner=k; $('#v2-ai').classList.toggle('on',k==='ai'); $('#v2-human').classList.toggle('on',k==='human'); $('#v2-keys').hidden = k!=='human'; }
-$('#btn-2v2').addEventListener('click', ()=>{ sfx.click(); buildPartnerPick(); setV2Partner(v2Partner); $('#v2-modal').classList.add('show'); });
+let v2Opp=0;                                          // how many of the two opponents are friends on the keyboard
+/* which human sits on which key set: partner first, then opponent 1, then opponent 2 */
+function v2Humans(partner, opp){ const h=[]; if(partner==='human') h.push('partner'); if(opp>=1) h.push('opp1'); if(opp>=2) h.push('opp2'); return h; }
+function renderV2Keys(){
+  const hs=v2Humans(v2Partner, v2Opp), el=$('#v2-keys'); el.hidden=!hs.length; if(!hs.length) return;
+  const me=T('v2.keys', T('v2.roleMe'), '<kbd>A</kbd><kbd>D</kbd>', '<kbd>W</kbd>', '<kbd>S</kbd>', '<kbd>Space</kbd>');
+  el.innerHTML=[me].concat(hs.map((r,i)=>{ const ks=KEYSETS[i].keys; return T('v2.keys', T(r==='partner'?'v2.rolePartner':r==='opp1'?'v2.roleOpp1':'v2.roleOpp2'), ks[0], ks[1], ks[2], ks[3]); })).join('<br>');
+}
+function setV2Partner(k){ v2Partner=k; $('#v2-ai').classList.toggle('on',k==='ai'); $('#v2-human').classList.toggle('on',k==='human'); renderV2Keys(); }
+function setV2Opp(n){ v2Opp=n; for(let i=0;i<3;i++) $('#v2-opp'+i).classList.toggle('on', i===n); renderV2Keys(); }
+$('#btn-2v2').addEventListener('click', ()=>{ sfx.click(); buildPartnerPick(); setV2Partner(v2Partner); setV2Opp(v2Opp); $('#v2-modal').classList.add('show'); });
 $('#v2-ai').addEventListener('click', ()=>{ sfx.click(); setV2Partner('ai'); });
 $('#v2-human').addEventListener('click', ()=>{ sfx.click(); setV2Partner('human'); });
+for(let i=0;i<3;i++) $('#v2-opp'+i).addEventListener('click', ()=>{ sfx.click(); setV2Opp(i); });
 $('#v2-cancel').addEventListener('click', ()=>{ sfx.click(); $('#v2-modal').classList.remove('show'); });
 $('#v2-go').addEventListener('click', ()=>{
   sfx.click();
   const idx = v2Idx!=null ? v2Idx : shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected && isUnlocked(CHARS[i])))[0];
-  v2Pending={partner:v2Partner, idx};
+  v2Pending={partner:v2Partner, opp:v2Opp, idx};
   $('#v2-modal').classList.remove('show'); $('#level-modal').classList.add('show');
 });
 
 /* ---------- fans ---------- */
-(function buildFans(){
+function buildFans(W){
   const colors=['#F04E4E','#3D8BFF','#FFD447','#3FC35F','#8E5CF6','#FF7A3D','#ffffff','#FF5FA2'];
   const skins=['#F1C9A5','#C68642','#8D5A3B','#E8B892','#6b4226'];
-  let s='<svg viewBox="0 0 1000 78" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">';
-  s+='<rect width="1000" height="78" fill="#2b3a6b"/><rect y="44" width="1000" height="34" fill="#22305a"/>';
-  [[22,32,10],[25,66,0]].forEach(([n,y,off],row)=>{
+  let s=`<svg viewBox="0 0 ${W} 78" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">`;
+  s+=`<rect width="${W}" height="78" fill="#2b3a6b"/><rect y="44" width="${W}" height="34" fill="#22305a"/>`;
+  [[22,32,10],[25,66,0]].forEach(([n0,y,off],row)=>{ const n=Math.round(n0*W/1000);
     for(let i=0;i<n;i++){
-      const x=(i+.5)*1000/n+off, c=colors[(i*3+row*5)%colors.length], skin=skins[(i+row*2)%skins.length];
+      const x=(i+.5)*W/n+off, c=colors[(i*3+row*5)%colors.length], skin=skins[(i+row*2)%skins.length];
       const delay=((i*37)%10)/25;
       s+=`<g class="fan" style="animation-delay:${delay}s">
         <rect x="${x-12}" y="${y-8}" width="24" height="24" rx="6" fill="${c}"/>
@@ -1989,45 +2019,48 @@ $('#v2-go').addEventListener('click', ()=>{
   });
   s+='</svg>';
   $('#fans').innerHTML=s;
-})();
+}
+buildFans(1000);
 
 
 /* ---------- perspective pitch ---------- */
 const HOR=-570, PA=1000, ZA=.75, ZB=.5;              // high camera: player line (z=.5) at y=430, far touchline at y=230, near one below the screen
 const fz = z => 1/(ZA+ZB*z);                          // perspective scale at depth z (0 near, 1 far); 1 at the player line (z=.5)
-const proj = (x,z,h=0) => { const f=fz(z); return [500+(x-500)*f, HOR+PA*f-h*f]; };
+const proj = (x,z,h=0) => { const f=fz(z), mid=FIELD_W/2; return [mid+(x-mid)*f, HOR+PA*f-h*f]; };
 const pts = arr => arr.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
 const ZP=.5, GZ1=ZP-.054, GZ2=ZP+.054;                // goal mouth depth span (7.3m of 68m)
 
 const PITCH_THEMES={
   day:   { base:'#3FB35B', stripeA:'#3FB35B', stripeB:'#4CC76A', far:'#2E8F46', track:'#C9694A', boards:['#F04E4E','#3D8BFF','#FFD447','#8E5CF6','#FF7A3D','#3FC35F','#FF5FA2','#ffffff'] },
   daily: { base:'#2C8C48', stripeA:'#2C8C48', stripeB:'#37A056', far:'#1F6B36', track:'#7A3E30', boards:['#C99A10','#1B2A4E','#C99A10','#1B2A4E','#C99A10','#1B2A4E','#C99A10','#1B2A4E'] },
+  night: { base:'#2F9A50', stripeA:'#2F9A50', stripeB:'#3AAE5E', far:'#1E6E36', track:'#4A4F7A', boards:['#FF4E9B','#3D8BFF','#FFD447','#00D3A7','#FF7A3D','#8E5CF6','#3FC35F','#ffffff','#FF4E9B','#3D8BFF'] },   // 2v2: floodlit big stadium
 };
+let pitchW=0;                                          // width the pitch was last drawn for
 let pitchTheme='day';
 function buildPitch(themeName){
-  pitchTheme = themeName || 'day'; const TH=PITCH_THEMES[pitchTheme];
+  pitchTheme = themeName || 'day'; const TH=PITCH_THEMES[pitchTheme]; const W=FIELD_W, M=W/2; pitchW=W;
   const line='stroke="#fff" stroke-width="3.5" fill="none" stroke-linejoin="round" opacity=".92"';
-  let s='<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg"><defs>'+
+  let s=`<svg viewBox="0 0 ${W} 620" xmlns="http://www.w3.org/2000/svg"><defs>`+
     '<pattern id="net" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0H7M0 0V7" stroke="rgba(255,255,255,.75)" stroke-width="1"/></pattern></defs>';
-  s+=`<rect y="78" width="1000" height="542" fill="${TH.base}"/>`;   // starts below the fans so they stay visible
+  s+=`<rect y="78" width="${W}" height="542" fill="${TH.base}"/>`;   // starts below the fans so they stay visible
   // mown stripes converging toward the vanishing point
-  for(let i=-4;i<14;i++){
+  for(let i=-4;i<W/100+4;i++){
     const x0=i*100, x1=x0+100;
     s+=`<polygon points="${pts([proj(x0,.1),proj(x1,.1),proj(x1,1),proj(x0,1)])}" fill="${i%2?TH.stripeA:TH.stripeB}"/>`;
   }
   // beyond the far touchline: out-of-bounds grass, running track, advertising boards
-  const farY=proj(500,1)[1];
-  s+=`<rect x="0" y="78" width="1000" height="${farY-78}" fill="${TH.far}"/>`;
-  s+=`<rect x="0" y="106" width="1000" height="42" fill="${TH.track}"/><rect x="0" y="120" width="1000" height="2" fill="rgba(255,255,255,.6)"/><rect x="0" y="134" width="1000" height="2" fill="rgba(255,255,255,.6)"/>`;
+  const farY=proj(M,1)[1];
+  s+=`<rect x="0" y="78" width="${W}" height="${farY-78}" fill="${TH.far}"/>`;
+  s+=`<rect x="0" y="106" width="${W}" height="42" fill="${TH.track}"/><rect x="0" y="120" width="${W}" height="2" fill="rgba(255,255,255,.6)"/><rect x="0" y="134" width="${W}" height="2" fill="rgba(255,255,255,.6)"/>`;
   const bc=TH.boards;
-  for(let i=0;i<8;i++) s+=`<rect x="${125*i+2}" y="80" width="121" height="24" rx="3" fill="${bc[i]}"/>`;
-  // markings (world: x 70..930 is the pitch, z 0..1 its width)
-  const L=70,Rr=930, circ=[];
-  for(let t=0;t<=64;t++){ const a=t/64*Math.PI*2; circ.push(proj(500+75*Math.cos(a), ZP+.1346*Math.sin(a))); }
+  for(let i=0;i<W/125;i++) s+=`<rect x="${125*i+2}" y="80" width="121" height="24" rx="3" fill="${bc[i%bc.length]}"/>`;
+  // markings (world: x 70..W-70 is the pitch, z 0..1 its width)
+  const L=70,Rr=W-70, circ=[];
+  for(let t=0;t<=64;t++){ const a=t/64*Math.PI*2; circ.push(proj(M+75*Math.cos(a), ZP+.1346*Math.sin(a))); }
   s+=`<polyline points="${pts([proj(L,0),proj(L,1),proj(Rr,1),proj(Rr,0)])}" ${line}/>`;
-  s+=`<line x1="${proj(500,0)[0]}" y1="${proj(500,0)[1]}" x2="${proj(500,1)[0]}" y2="${proj(500,1)[1]}" ${line}/>`;
+  s+=`<line x1="${proj(M,0)[0]}" y1="${proj(M,0)[1]}" x2="${proj(M,1)[0]}" y2="${proj(M,1)[1]}" ${line}/>`;
   s+=`<polygon points="${pts(circ)}" ${line}/>`;
-  s+=`<circle cx="${proj(500,ZP)[0]}" cy="${proj(500,ZP)[1]}" r="4" fill="#fff"/>`;
+  s+=`<circle cx="${proj(M,ZP)[0]}" cy="${proj(M,ZP)[1]}" r="4" fill="#fff"/>`;
   for(const [gx,dir] of [[L,1],[Rr,-1]]){
     s+=`<polyline points="${pts([proj(gx,.2035),proj(gx+dir*135,.2035),proj(gx+dir*135,.7965),proj(gx,.7965)])}" ${line}/>`;
     s+=`<polyline points="${pts([proj(gx,.3655),proj(gx+dir*45,.3655),proj(gx+dir*45,.6345),proj(gx,.6345)])}" ${line}/>`;
@@ -2036,7 +2069,7 @@ function buildPitch(themeName){
   // goals – back parts (net back, roof, far side)
   s+=goalParts('back'); s+='</svg>';
   $('#pitch').innerHTML=s;
-  $('#front').innerHTML='<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg"><defs>'+
+  $('#front').innerHTML=`<svg viewBox="0 0 ${W} 620" xmlns="http://www.w3.org/2000/svg"><defs>`+
     '<pattern id="net2" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0H7M0 0V7" stroke="rgba(255,255,255,.75)" stroke-width="1"/></pattern></defs>'+goalParts('front')+'</svg>';
 }
 function goalParts(layer){
@@ -2089,17 +2122,35 @@ const confetti    = makeConfetti($('#confetti'),     ['#FFD447','#FF7A3D','#3D8B
 const ceoConfetti = makeConfetti($('#ceo-confetti'), ['#FFD447','#FFE27A','#fff7c2','#C98A00','#fff','#FF7A3D','#FFD447']);
 
 /* ---------- game constants ---------- */
-const FIELD_W=1000, GROUND_Y=430, PW=72, PH=108, R=13, GOAL_W=70;
+let FIELD_W=1000; const GROUND_Y=430, PW=72, PH=108, R=13, GOAL_W=70;
 const GOAL_BOT=58, GOAL_H=GOAL_BOT+140;                 // goal floats on a solid block (raised a little more than 2 ball heights)
 const MOVE=340, JUMP=800, G=2100, REACH=72, CEIL=400;
-const MINX=GOAL_W-16+PW/2, MAXX=FIELD_W-GOAL_W+16-PW/2;
+let MINX=GOAL_W-16+PW/2, MAXX=FIELD_W-GOAL_W+16-PW/2;
 const MATCH_TIME=240;
 
 const mkPlayer=(sel,sh,facing)=>({ el:$(sel), sh:$(sh), x:0,y:0,vx:0,vy:0, facing, kickT:0, slideT:0, slideCd:0, stunT:0, slideDir:facing, slideHit:false, reactT:0, targetX:0, wantKick:false, mode:'hunt', home:0 });
 const P1=mkPlayer('#p1','#sh1',1), P2=mkPlayer('#p2','#sh2',-1), P3=mkPlayer('#p3','#sh3',1), P4=mkPlayer('#p4','#sh4',-1);
 P1.home=230; P2.home=770; P3.home=130; P4.home=870;
-let players=[P1,P2], teamL=[P1], teamR=[P2], v2=null, v2Pending=null;   // v2 = {partner:'ai'|'human'} during a 2v2 match
-const keys2={left:false,right:false,jump:false,kick:false,slide:false}, q2={jump:false,kick:false,slide:false};   // second human (arrows + Enter)
+let players=[P1,P2], teamL=[P1], teamR=[P2], v2=null, v2Pending=null;   // v2 = {partner:'ai'|'human', opp:0|1|2 humans, kp:[...]} during a 2v2 match
+/* extra keyboard players (2v2): up to three friends share the keyboard, each with their own key set */
+const KEYSETS=[
+  { map:{ArrowLeft:'left',ArrowRight:'right',ArrowUp:'jump',ArrowDown:'slide',Enter:'kick'}, keys:['<kbd>←</kbd><kbd>→</kbd>','<kbd>↑</kbd>','<kbd>↓</kbd>','<kbd>Enter</kbd>'] },
+  { map:{KeyJ:'left',KeyL:'right',KeyI:'jump',KeyK:'slide',KeyU:'kick'},                         keys:['<kbd>J</kbd><kbd>L</kbd>','<kbd>I</kbd>','<kbd>K</kbd>','<kbd>U</kbd>'] },
+  { map:{Numpad4:'left',Numpad6:'right',Numpad8:'jump',Numpad5:'slide',Numpad2:'slide',Numpad0:'kick'}, keys:['<kbd>4</kbd><kbd>6</kbd>','<kbd>8</kbd>','<kbd>5</kbd>','<kbd>0</kbd>'] },
+];
+const KP=KEYSETS.map(()=>({ k:{left:false,right:false,jump:false,kick:false,slide:false}, q:{jump:false,kick:false,slide:false} }));
+const keys2=KP[0].k, q2=KP[0].q;
+function clearKP(){ for(const c of KP){ c.k.left=c.k.right=c.k.jump=c.k.kick=c.k.slide=false; c.q.jump=c.q.kick=c.q.slide=false; } }
+/* the pitch width: 1000 for 1v1, wider for 2v2 (the world is scaled down to fit the stage, so the stadium looks bigger) */
+function setField(w){
+  FIELD_W=w; MINX=GOAL_W-16+PW/2; MAXX=FIELD_W-GOAL_W+16-PW/2;
+  P1.home=230; P3.home=130; P2.home=w-230; P4.home=w-130;
+  const k=1000/w, FH=Math.round(620/k);
+  const wd=$('#world'); wd.style.width=w+'px'; wd.style.height=FH+'px'; wd.style.transform=k===1?'none':`scale(${k})`;
+  for(const id of ['#arena','#fans','#pitch','#front']) $(id).style.width=w+'px';
+  $('#game').classList.toggle('v2', w!==1000);
+  buildFans(w);
+}
 const ball={ el:$('#ball'), x:0,y:0,vx:0,vy:0, rot:0 };
 ball.el.innerHTML=BALL_SVG;
 
@@ -2110,7 +2161,14 @@ let jumpQueued=false, kickQueued=false, slideQueued=false;
 
 /* ---------- input ---------- */
 function setKey(code,down){
-  const two = v2 && v2.partner==='human';           // 2v2 with a friend: arrows + Enter belong to the friend
+  if(v2){                                             // 2v2 with friends: each key set in use belongs to one of them
+    for(let i=0;i<KEYSETS.length;i++){
+      const act=KEYSETS[i].map[code]; if(!act || !v2.kp[i]) continue;
+      const k=KP[i].k, q=KP[i].q;
+      if(act==='left'||act==='right') k[act]=down; else { if(down&&!k[act]) q[act]=true; k[act]=down; }
+      return true;
+    }
+  }
   switch(code){
     case 'KeyA': keys.left=down; return true;
     case 'KeyD': keys.right=down; return true;
@@ -2118,11 +2176,10 @@ function setKey(code,down){
     case 'Space': if(down&&!keys.kick) kickQueued=true; keys.kick=down; return true;
     case 'KeyS': if(down&&!keys.slide) slideQueued=true; keys.slide=down; return true;
     case 'KeyE': case 'KeyQ': if(down&&!keys.ice) iceQueued=true; keys.ice=down; return true;
-    case 'ArrowLeft':  (two?keys2:keys).left=down; return true;
-    case 'ArrowRight': (two?keys2:keys).right=down; return true;
-    case 'ArrowUp':    if(two){ if(down&&!keys2.jump) q2.jump=true; keys2.jump=down; } else { if(down&&!keys.jump) jumpQueued=true; keys.jump=down; } return true;
-    case 'ArrowDown':  if(two){ if(down&&!keys2.slide) q2.slide=true; keys2.slide=down; } else { if(down&&!keys.slide) slideQueued=true; keys.slide=down; } return true;
-    case 'Enter':      if(two){ if(down&&!keys2.kick) q2.kick=true; keys2.kick=down; return true; } return false;
+    case 'ArrowLeft':  keys.left=down; return true;
+    case 'ArrowRight': keys.right=down; return true;
+    case 'ArrowUp':    if(down&&!keys.jump) jumpQueued=true; keys.jump=down; return true;
+    case 'ArrowDown':  if(down&&!keys.slide) slideQueued=true; keys.slide=down; return true;
   }
   return false;
 }
@@ -2138,7 +2195,7 @@ window.addEventListener('keydown', e=>{
   if(setKey(e.code,true)) e.preventDefault();
 });
 window.addEventListener('keyup', e=>{ if(e.code==='Space' && pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); return; } if(setKey(e.code,false)) e.preventDefault(); });
-window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=false; keys2.left=keys2.right=keys2.jump=keys2.kick=false; });
+window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=false; clearKP(); });
 
 /* touch controls: slide a finger across ◀ ▶ without lifting to change direction; jump/kick are taps */
 (function setupTouch(){
@@ -2176,7 +2233,7 @@ function startGame(levelIdx){
   const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected && !(v2Pending && i===v2Pending.idx) && i!==forcedOpp));
   const opp = forcedOpp!=null && forcedOpp!==selected ? forcedOpp : pool[0]; forcedOpp=null;
   if(v2Pending){
-    const opts={ c3:CHARS[v2Pending.idx], c4:CHARS[pool[1]], partner:v2Pending.partner }; v2Pending=null;
+    const opts={ c3:CHARS[v2Pending.idx], c4:CHARS[pool[1]], partner:v2Pending.partner, opp:v2Pending.opp||0 }; v2Pending=null;
     beginMatch(CHARS[selected], CHARS[opp], opts);
   } else beginMatch(CHARS[selected], CHARS[opp]);
 }
@@ -2184,7 +2241,13 @@ function startGame(levelIdx){
    opts (2v2): c3 = your partner (P3, left), c4 = second opponent (P4, right), partner = 'ai' | 'human' */
 function beginMatch(c1, c2, opts){
   const localIsP1 = !(mp && mp.role==='guest');
-  v2 = opts ? {partner:opts.partner} : null;
+  v2 = opts ? {partner:opts.partner, opp:opts.opp||0, kp:[null,null,null]} : null;
+  setField(v2 ? 1250 : 1000);                       // 2v2 is played in a bigger stadium
+  clearKP(); for(const p of [P1,P2,P3,P4]) p.ctl=null;
+  if(v2){                                           // hand a key set to every friend on the keyboard: partner, then opponent 1, then opponent 2
+    const hs=v2Humans(v2.partner, v2.opp), who={partner:P3, opp1:P2, opp2:P4};
+    hs.forEach((r,i)=>{ v2.kp[i]=KP[i]; who[r].ctl=KP[i]; });
+  }
   const solo = training==='shoot';                  // shooting practice: just you and an empty goal
   players = v2 ? [P1,P2,P3,P4] : solo ? [P1] : [P1,P2]; teamL = v2 ? [P1,P3] : [P1]; teamR = v2 ? [P2,P4] : solo ? [] : [P2];
   for(const p of [P3,P4]){ p.el.hidden=!v2; p.sh.hidden=!v2; }
@@ -2194,18 +2257,18 @@ function beginMatch(c1, c2, opts){
   sprite(P1.el.querySelector('.sprite'), c1);
   sprite(P2.el.querySelector('.sprite'), c2);
   P1.el.querySelector('.tag').textContent = localIsP1 ? T('game.me',nm(c1)) : nm(c1);
-  P2.el.querySelector('.tag').textContent = localIsP1 ? nm(c2) : T('game.me',nm(c2));
+  P2.el.querySelector('.tag').textContent = localIsP1 ? (P2.ctl ? T('game.friend',nm(c2)) : nm(c2)) : T('game.me',nm(c2));
   P1.el.classList.toggle('me', localIsP1); P2.el.classList.toggle('me', !localIsP1);
   if(v2){
     sprite(P3.el.querySelector('.sprite'), opts.c3); sprite(P4.el.querySelector('.sprite'), opts.c4);
     P3.el.querySelector('.tag').textContent = T(v2.partner==='human' ? 'game.friend' : 'game.partner', nm(opts.c3));
-    P4.el.querySelector('.tag').textContent = nm(opts.c4);
+    P4.el.querySelector('.tag').textContent = P4.ctl ? T('game.friend',nm(opts.c4)) : nm(opts.c4);
     P3.el.classList.add('me');
   }
   $('#n-me').textContent = v2 ? nm(myChar)+' + '+nm(opts.c3) : nm(myChar);
   $('#n-op').textContent = v2 ? nm(opChar)+' + '+nm(opts.c4) : nm(opChar);
   $('#level-tag').textContent = mp ? T('game.online') : solo ? trainTag() : (dailyMatch ? T('daily.title')+' · ' : '') + T('game.level', T('lvl.'+level.i));
-  const wantTheme = dailyMatch ? 'daily' : 'day'; if(pitchTheme!==wantTheme) buildPitch(wantTheme);
+  const wantTheme = dailyMatch ? 'daily' : v2 ? 'night' : 'day'; if(pitchTheme!==wantTheme || pitchW!==FIELD_W) buildPitch(wantTheme);
   $('#game').classList.toggle('daily', !!dailyMatch); $('#daily-fx').hidden=!dailyMatch; $('#game').classList.toggle('online', !!mp); $('#daily-fx .banner').textContent='🏟️ '+T('daily.title').replace(/^📅\s*/,'');
   score={me:0,op:0}; updateScore();
   timeLeft=MATCH_TIME; updateTimer();
@@ -2229,7 +2292,7 @@ function showCount(n){
   const el=$('#countdown'); el.hidden=false; el.textContent = n>0 ? n : '⚽';
   el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
   if(n>0) sfx.count(n);
-  speak(n>0 ? String(n) : T('c.go'), true);           // the commentator counts down too
+  if(!training) speak(n>0 ? String(n) : T('c.go'), true);   // the commentator counts down too (not in training)
   if(n===0) setTimeout(()=>{ el.hidden=true; }, 700);
 }
 function startCountdown(done){
@@ -2239,10 +2302,47 @@ function startCountdown(done){
 }
 /* ---------- ice power ---------- */
 function iceAvailable(){ return !!prog.ice && !mp; }              // bought once, offline modes only
+let iceSeq=0;
+// builds a fresh random jagged crystal: an irregular polygon body with facets, loose shards floating around it and sparkles
+function iceSVG(){
+  const W=132, H=146, cx=66, cy=80, rnd=(a,b)=>a+Math.random()*(b-a);
+  const id='ig'+(iceSeq++);
+  const n=12+Math.floor(Math.random()*5), pts=[];
+  for(let i=0;i<n;i++){
+    const a=(i/n)*Math.PI*2 + rnd(-.18,.18);
+    const spike = Math.random()<.35 ? rnd(1.05,1.22) : rnd(.78,.98);   // some vertices poke out as spikes
+    pts.push([cx+Math.cos(a)*50*spike, cy+Math.sin(a)*64*spike]);
+  }
+  const P=a=>a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  // facet lines: from a few random vertices towards a jittered centre
+  let facets='';
+  for(let i=0;i<4;i++){ const v=pts[Math.floor(Math.random()*n)]; facets+=`<line x1="${v[0].toFixed(1)}" y1="${v[1].toFixed(1)}" x2="${(cx+rnd(-14,14)).toFixed(1)}" y2="${(cy+rnd(-18,18)).toFixed(1)}"/>`; }
+  // a couple of lighter inner planes
+  let planes='';
+  for(let k=0;k<2;k++){ const a0=rnd(0,Math.PI*2), q=[]; for(let i=0;i<4;i++){ const a=a0+i*1.6+rnd(-.3,.3), r=rnd(.35,.7); q.push([cx+Math.cos(a)*50*r, cy+Math.sin(a)*64*r]); } planes+=`<polygon points="${P(q)}"/>`; }
+  // shards: small triangles floating just outside the body, each with its own fly-away direction for the shatter
+  let shards='';
+  const ns=5+Math.floor(Math.random()*4);
+  for(let i=0;i<ns;i++){
+    const a=(i/ns)*Math.PI*2+rnd(-.4,.4), d=rnd(1.08,1.3), s=rnd(5,13);
+    const x=cx+Math.cos(a)*50*d, y=cy+Math.sin(a)*66*d, t=rnd(0,Math.PI*2);
+    const tri=[0,2.1,4.2].map((o,j)=>[x+Math.cos(t+o)*s*(j?1:1.6), y+Math.sin(t+o)*s*(j?1:1.6)]);
+    shards+=`<polygon class="shard" style="--fx:${(Math.cos(a)*60).toFixed(0)}px;--fy:${(Math.sin(a)*60-30).toFixed(0)}px" points="${P(tri)}"/>`;
+  }
+  let sparks='';
+  for(let i=0;i<4;i++) sparks+=`<text x="${(cx+rnd(-30,30)).toFixed(0)}" y="${(cy+rnd(-40,40)).toFixed(0)}" font-size="${rnd(9,15).toFixed(0)}">${Math.random()<.5?'✦':'✧'}<animate attributeName="opacity" values=".25;1;.25" dur="${rnd(.7,1.3).toFixed(2)}s" begin="${(-rnd(0,1)).toFixed(2)}s" repeatCount="indefinite"/></text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><defs>
+    <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2fcff" stop-opacity=".95"/><stop offset=".35" stop-color="#a6e3ff" stop-opacity=".6"/><stop offset=".65" stop-color="#5cb8ff" stop-opacity=".5"/><stop offset="1" stop-color="#e2f6ff" stop-opacity=".9"/></linearGradient></defs>
+    <g fill="url(#${id})" stroke="#f4fcff" stroke-width="2" stroke-linejoin="round">${shards}</g>
+    <polygon points="${P(pts)}" fill="url(#${id})" stroke="#f6fdff" stroke-width="3" stroke-linejoin="round"/>
+    <g fill="rgba(255,255,255,.45)" stroke="rgba(255,255,255,.7)" stroke-width="1">${planes}</g>
+    <g stroke="rgba(255,255,255,.8)" stroke-width="1.5">${facets}</g>
+    <g fill="#fff" text-anchor="middle" style="text-shadow:0 0 6px #7ED3FF">${sparks}</g></svg>`;
+}
 function useIce(){
   if(!iceAvailable() || state!=='play' || iceCd>0) return;
   iceCd=ICE_CD;
-  for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.el.classList.add('frozen'); }
+  for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.el.classList.add('frozen'); const ic=o.el.querySelector('.ice'); if(ic) ic.innerHTML=iceSVG(); }
   sfx.ice(); say('c.ice'); updateIceHud();
 }
 function updateIce(dt){ if(iceCd>0){ iceCd=Math.max(0,iceCd-dt); updateIceHud(); } }
@@ -2300,10 +2400,10 @@ $('#btn-quit-home').addEventListener('click', quitToHome);
 
 function resetPositions(){
   for(const p of [P1,P2,P3,P4]){
-    p.x=p.home; p.y=0; p.vx=p.vy=0; p.facing = p.home<500 ? 1 : -1; p.reactT=0; p.targetX=p.x;
+    p.x=p.home; p.y=0; p.vx=p.vy=0; p.facing = p.home<FIELD_W/2 ? 1 : -1; p.reactT=0; p.targetX=p.x;
     p.slideT=p.slideCd=p.stunT=0; p.slideHit=false; p.el.classList.remove('running','kicking','sliding','stunned');
   }
-  ball.x=500; ball.y=R; ball.vx=0; ball.vy=0;
+  ball.x=FIELD_W/2; ball.y=R; ball.vx=0; ball.vy=0;
   render();
 }
 
@@ -2385,6 +2485,11 @@ function endGame(){
 function scoreGoal(who){
   if(state!=='play') return;
   state='celebrate';
+  if(training==='shoot'){                             // practice: no score, no own goals, no XP, no commentary – just the celebration and a reset
+    ball.vx*=.2; ball.vy=0; for(const p of players) p.el.classList.remove('running');
+    if(who==='me') goalFx();
+    setTimeout(()=>{ if(state==='celebrate') afterGoal(); }, who==='me' ? 1300 : 400); return;
+  }
   if(who==='me') score.me++; else score.op++;
   updateScore();
   ball.vx*=.2; ball.vy=0;
@@ -2462,6 +2567,7 @@ function bestVoice(){
 }
 if('speechSynthesis' in window){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices(); }catch(e){} }
 function showLine(text, priority){
+  if(training) return;                                // no commentator in training
   const el=$('#commentary'); if(!el) return;
   el.textContent=text; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
   clearTimeout(sayTimer); sayTimer=setTimeout(()=>el.classList.remove('show'), 2600);
@@ -2480,7 +2586,7 @@ function ambient(){
   const pool=[];
   if(ball.y>150) pool.push(['c.air']);
   if(h){
-    if(ball.x>720 && mine) pool.push(['c.pressure', pname(h)], ['c.shootNow', pname(h)]);
+    if(ball.x>FIELD_W-280 && mine) pool.push(['c.pressure', pname(h)], ['c.shootNow', pname(h)]);
     else if(ball.x<280 && !mine) pool.push(['c.danger', pname(h)], ['c.defend']);
     else pool.push(['c.hasBall', pname(h)], mine ? ['c.attack', pname(h)] : ['c.oppAttack', pname(h)]);
     if(Math.abs(ball.vx)>500) pool.push(['c.fast']);
@@ -2509,7 +2615,8 @@ function movePlayer(p,dt,others){
   for(const o of others) if(overlaps(p,p.x,o)){ const dir=p.x<o.x?-1:1; p.x=clamp(o.x+dir*PW, MINX, MAXX); }
   if(p.kickT>0) p.kickT-=dt;
 }
-function humanInput(p,k,q){                          // second keyboard player (2v2 with a friend)
+function humanInput(p,k,q){                          // extra keyboard player (2v2 with friends)
+  if(p.frozenT>0){ q.jump=q.kick=q.slide=false; return; }
   let d=0; if(k.left) d-=1; if(k.right) d+=1;
   if(p.slideT<=0 && p.stunT<=0){ p.vx=d*MOVE*st(p).speed; if(d) p.facing=d; }
   if(q.jump && p.y===0 && p.slideT<=0 && p.stunT<=0) p.vy=JUMP*st(p).jump;
@@ -2631,7 +2738,7 @@ function updateAI(dt, ai, side, opps, mate){
     const pw = smart ? predictBall(bvx>150 ? .35 : .22) : ball, px=cx(pw.x);
     let t;
     if(support){ ai.mode='support'; t = Math.min(Math.max(px, bx) + 150, MAXX-40); }     // cover behind the ball
-    else if(bx>ax+20 && bx>560){ ai.mode='defend'; t = Math.max(px, bx) + 60; }         // ball slipped behind it: get goal-side fast
+    else if(bx>ax+20 && bx>FIELD_W/2+60){ ai.mode='defend'; t = Math.max(px, bx) + 60; }         // ball slipped behind it: get goal-side fast
     else { ai.mode='hunt'; t = px + 26; }                                                // run straight at the ball, slightly goal-side
     ai.targetX=clamp(cx(clamp(t, MINX, MAXX))+err, MINX, MAXX);
     ai.wantKick=Math.random()<Math.min(1, L.kick+.35);
@@ -2656,7 +2763,7 @@ function updateAI(dt, ai, side, opps, mate){
        (lobSetup && !support && Math.random()<(.4+L.smart*.6)*dt*9) || (adx<120 && !support && Math.random()<L.jump*dt*1.6)) ai.vy=JUMP*st(ai).jump;
   }
   if(near && bx<ax+8){                              // kick the moment it can (in the air too – that's the lob / header-kick)
-    const airborne = ai.y>25, eager = ai.mode==='defend' && bx>600;
+    const airborne = ai.y>25, eager = ai.mode==='defend' && bx>FIELD_W/2+100;
     if(airborne ? Math.random()<(.5+L.kick*.5)*dt*18 : (eager && Math.random()<(.5+L.kick*.5)*dt*16) || (ai.wantKick && Math.random()<(.25+L.kick*.75)*dt*14))
       doKick(ai, L.power);
   }
@@ -2677,10 +2784,10 @@ function loop(t){
     if(iceQueued){ useIce(); iceQueued=false; }
     updateIce(dt);
     if(pausePending){ pausePending=false; pauseGame(); return; }
-    if(mp && mp.role==='host') applyRemote(); else if(training!=='shoot') updateAI(dt, P2, 1, teamL, v2?P4:null);
+    if(mp && mp.role==='host') applyRemote(); else if(training!=='shoot'){ if(P2.ctl) humanInput(P2, P2.ctl.k, P2.ctl.q); else updateAI(dt, P2, 1, teamL, v2?P4:null); }
     if(v2){
-      updateAI(dt, P4, 1, teamL, P2);
-      if(v2.partner==='ai') updateAI(dt, P3, -1, teamR, P1); else humanInput(P3, keys2, q2);
+      if(P4.ctl) humanInput(P4, P4.ctl.k, P4.ctl.q); else updateAI(dt, P4, 1, teamL, P2);
+      if(P3.ctl) humanInput(P3, P3.ctl.k, P3.ctl.q); else updateAI(dt, P3, -1, teamR, P1);
     }
     updateSlides(dt);
     for(const p of players) movePlayer(p, dt, players.filter(o=>o!==p));
@@ -3315,7 +3422,9 @@ function setupPenalty(meShoots, lv, onResult, title){
   showScreen('pk'); setTimeout(()=>{ if(pk && pk.single && !pk.corner) setupKick(meShoots); }, 500);
 }
 /* ---------- corner: header timing mini-game (offline modes) ---------- */
-const RING={x:470,y:250};
+const RING={x:304,y:281};                            // where the cross arrives: head height of the jumping header
+/* corner difficulty follows the match level: faster crosses and a tighter timing window as the level rises */
+const CORNER_LV=[ {dur:2000,tol:1.7}, {dur:1650,tol:1.35}, {dur:1400,tol:1.05}, {dur:1200,tol:.85}, {dur:1050,tol:.7}, {dur:900,tol:.55} ];
 const bez=(a,c,b,t)=>({ x:(1-t)*(1-t)*a.x+2*(1-t)*t*c.x+t*t*b.x, y:(1-t)*(1-t)*a.y+2*(1-t)*t*c.y+t*t*b.y });
 const crossPos = u => u<=1 ? bez({x:-60,y:330},{x:180,y:10},RING,u) : bez(RING,{x:760,y:150},{x:980,y:440},Math.min(1,u-1));
 function startCorner(forTeam){                       // 'L' = my team attacks (I head the ball), 'R' = opponent attacks (I clear it)
@@ -3337,8 +3446,8 @@ function startCorner(forTeam){                       // 'L' = my team attacks (I
 function clearCornerUI(){ $('#pk-score').hidden=false; $('#corner-ring').hidden=true; $('#pk').classList.remove('corner'); $('#pk-shooter').classList.remove('headjump'); }
 /* one corner (cross + header timing) on the shootout screen (in-match corners and training) */
 function setupCorner(mine, onResult, title){
-  pk={ corner:true, single:true, mine, lv:PK_LEVELS[level.i]||PK_LEVELS[1], phase:'wait', t0:0, raf:0, timer:0, onResult, train: pk&&pk.train };
-  $('#pk-score').hidden=true; $('#pk-round').textContent=title||T('corner.title'); $('#pk-hint').textContent=T(mine?'corner.hintAtk':'corner.hintDef');
+  pk={ corner:true, single:true, mine, lv:PK_LEVELS[level.i]||PK_LEVELS[1], clv:CORNER_LV[level.i]||CORNER_LV[1], phase:'wait', t0:0, raf:0, timer:0, onResult, train: pk&&pk.train };
+  $('#pk-score').hidden=true; $('#pk-round').textContent=title||(T('corner.title')+' · '+T('lvl.'+level.i)); $('#pk-hint').textContent=T(mine?'corner.hintAtk':'corner.hintDef');
   $('#pk-end').classList.remove('show'); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); $('#pk').classList.add('corner');
   sprite($('#pk-keeper'), mine ? opChar : myChar); $('#pk-keeper').style.transform='none';
   sprite($('#pk-shooter'), mine ? myChar : opChar); $('#pk-shooter').classList.remove('run','headjump');
@@ -3371,15 +3480,16 @@ $('#btn-train-pk').addEventListener('click', ()=>startTraining('pk'));
 $('#btn-train-corner').addEventListener('click', ()=>startTraining('corner'));
 function cornerLoop(){
   if(!pk||!pk.corner||pk.phase!=='cross') return;
-  const u=(performance.now()-pk.t0)/1500, p=crossPos(u);
+  const u=(performance.now()-pk.t0)/pk.clv.dur, p=crossPos(u);
   $('#pk-ball').style.transform=`translate(${p.x-517}px,${p.y-500}px) scale(.7) rotate(${Math.round(u*540)}deg)`;
   if(u>=1.5){ cornerResolve(null); return; }        // nobody got to it
   pk.raf=requestAnimationFrame(cornerLoop);
 }
 function cornerTap(){
   if(!pk||!pk.corner||pk.phase!=='cross') return;
-  const u=(performance.now()-pk.t0)/1500;
-  cornerResolve(Math.abs(u-1)*1.5);                 // seconds away from the perfect moment
+  const u=(performance.now()-pk.t0)/pk.clv.dur;
+  $('#pk-shooter').classList.add('headjump');       // always jump for it; whether the head meets the ball is the timing
+  cornerResolve(Math.abs(u-1)*pk.clv.dur/1000/pk.clv.tol);   // seconds off the perfect moment, scaled by the level's tolerance
 }
 function cornerResolve(err){
   pk.phase='fly'; cancelAnimationFrame(pk.raf);
