@@ -212,6 +212,25 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .frow .fname{font-size:24px;font-weight:900;flex:1;text-align:start}
 .frow .fstat{font-size:17px;font-weight:900;color:#5b6a8a;white-space:nowrap}
 .frow .btn.small{font-size:18px;padding:7px 14px}
+.frow .dot.match{background:var(--purple,#8E5CF6);box-shadow:0 0 8px #8E5CF6}.frow .dot.watch{background:var(--blue)}.frow .dot.none{background:var(--red)}.frow.result{background:#FFF6CF;border:3px solid var(--yellow)}.frow.top .rank{font-size:24px;font-weight:900;width:44px;text-align:center;flex:none}.frow.top.mine{background:#DCEBFF;border:3px solid var(--blue)}.frow .fname small{font-size:14px;color:#5b6a8a}.fr-tabs{position:absolute;left:40px;right:40px;top:196px;display:flex;gap:10px;justify-content:center}.fr-tabs .btn.on{outline:4px solid var(--yellow)}.fr-result{position:absolute;left:40px;right:40px;top:246px;z-index:2}.fr-result:not([hidden])+.fr-list,.fr-result:not([hidden])+.fr-list+.fr-list{top:318px}.fr-list{top:246px}#mp-pick-code{position:absolute;right:24px;bottom:14px;font-size:24px;font-weight:900;color:var(--navy);background:#FFF0B3;border-radius:14px;padding:4px 16px;direction:ltr;box-shadow:0 5px 0 rgba(0,0,0,.15)}.mp-duo.four{gap:18px;top:300px}.mp-duo.four .who{width:160px}.mp-duo.four .who .sprite{width:84px;height:126px}.mp-duo.four .who .name{font-size:20px}.mp-duo.four .who .tag{font-size:15px;padding:2px 10px;max-width:156px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mp-duo .who.me .tag{background:var(--yellow);color:var(--navy)}
+/* the pick screen: a compact 3-row gallery on top, the seats below it */
+#mp-gallery{gap:4px}
+#mp-gallery .mpcard{width:57px;height:70px;font-size:9px;border-width:3px}
+#mp-gallery .mpcard .sprite{width:30px;height:46px}
+.mp-duo{top:332px;gap:36px}
+.mp-duo .who .sprite{width:104px;height:156px}
+.mp-duo .who .name{font-size:22px}
+.mp-duo.four{top:332px;gap:16px}
+.mp-duo .vs{padding-top:40px}.v2opts .btn.small{font-size:19px;padding:8px 16px}.v2opts{margin-bottom:0}
+.v2row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px}
+.v2lbl{font-size:20px;font-weight:900;color:var(--navy);min-width:110px;text-align:end}
+.v2opts .btn.small{font-size:16px;padding:5px 12px}
+#v2-modal .hint{font-size:15px;margin:2px 0}
+#v2-modal h2{margin-bottom:8px}
+#v2-partner{max-height:100px}
+#v2-modal .panel{padding-top:10px;padding-bottom:12px;max-height:596px;overflow-y:auto;box-sizing:border-box}
+#v2-modal .v2row{margin-bottom:4px}
+#v2-modal .panel h2{font-size:34px}#watch-bar{position:absolute;left:14px;top:70px;z-index:8;display:flex;align-items:center;gap:8px;direction:ltr}#watch-tag{font-size:20px;font-weight:900;color:#fff;background:var(--purple,#8E5CF6);border-radius:12px;padding:4px 14px;box-shadow:0 4px 0 rgba(0,0,0,.25)}#game.watching #btn-pause,#game.watching #touch,#game.watching #ice-hud{display:none!important}#game.watching #watch-bar{display:flex}#end-actions{margin-top:10px}
 .fm-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .fm-badges .bd{font-size:26px;width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(27,42,78,.2);filter:grayscale(1);opacity:.35}
 .fm-badges .bd.on{filter:none;opacity:1;background:#FFF6CF;box-shadow:0 3px 0 #C99A10}
@@ -616,6 +635,7 @@ body.touch #touch{display:block}
     <div id="front"></div>
     </div></div>
     <div id="level-tag"></div>
+    <div id="watch-bar" hidden><span id="watch-tag"></span><button class="btn red small" id="btn-watch-exit">✖</button></div>
     <div id="timer">4:00</div>
     <div id="commentary"></div>
     <div id="replay-tag" hidden>🎬 ריפליי</div>
@@ -632,7 +652,7 @@ body.touch #touch{display:block}
       <div class="grp move" id="tmove"><div class="tb" data-k="left">◀</div><div class="tb" data-k="right">▶</div></div>
       <div class="grp act"><div class="tb ice" data-k="ice" hidden>❄️</div><div class="tb slide" data-k="slide">🦵</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
     </div>
-    <div class="overlay" id="end"><div class="panel"><h2 id="end-title"></h2><div class="sub" id="end-sub"></div></div></div>
+    <div class="overlay" id="end"><div class="panel"><h2 id="end-title"></h2><div class="sub" id="end-sub"></div><div id="end-actions" hidden><button class="btn green" id="btn-end-invite">🎮 הזמן למשחק</button> <button class="btn small blue" id="btn-end-home">חזרה</button></div></div></div>
   </section>
 
   <!-- ===== MULTIPLAYER ===== -->
@@ -661,11 +681,8 @@ body.touch #touch{display:block}
     <div id="mp-status"></div>
     <div id="mp-pick" hidden>
       <div class="mp-gallery" id="mp-gallery"></div>
-      <div class="mp-duo">
-        <div class="who me"><div class="tag">אתה</div><div class="sprite" id="mp-me-sprite"></div><div class="name" id="mp-me-name"></div></div>
-        <div class="vs">VS</div>
-        <div class="who op"><div class="tag" id="mp-op-tag">החבר</div><div class="sprite" id="mp-op-sprite"></div><div class="name" id="mp-op-name"></div></div>
-      </div>
+      <div class="mp-duo" id="mp-duo"></div>
+      <div id="mp-pick-code" hidden></div>
       <button class="btn green" id="btn-mp-play">שחק ▶</button>
     </div>
   </section>
@@ -796,9 +813,12 @@ body.touch #touch{display:block}
   <section id="friends" class="screen">
     <h2 id="friends-title">👥 חברים</h2>
     <button class="btn blue small" id="btn-friends-back">➜ חזרה</button>
-    <div class="fr-add"><input id="friend-input" maxlength="14" placeholder="שם החבר" autocomplete="off" spellcheck="false"><button class="btn green small" id="btn-friend-add">➕ הוסף חבר</button></div>
+    <div class="fr-add"><input id="friend-input" maxlength="14" placeholder="שם החבר" autocomplete="off" spellcheck="false"><button class="btn blue small" id="btn-friend-search">🔍 חפש</button><button class="btn green small" id="btn-friend-add">➕ הוסף חבר</button></div>
     <div class="fr-me" id="fr-me"></div>
+    <div class="fr-tabs"><button class="btn small blue on" id="fr-tab-list">👥 החברים שלי</button><button class="btn small purple" id="fr-tab-top">🏆 המובילים</button></div>
+    <div class="fr-result" id="fr-result" hidden></div>
     <div class="fr-list" id="fr-list"></div>
+    <div class="fr-list" id="fr-top" hidden></div>
   </section>
 
   <!-- ===== FRIEND DETAILS MODAL ===== -->
@@ -808,7 +828,7 @@ body.touch #touch{display:block}
       <div class="hint" id="fm-status"></div>
       <div class="stats" id="fm-stats"></div>
       <div class="fm-ach" id="fm-ach"></div>
-      <br><button class="btn green" id="btn-fm-invite">🎮 הזמן למשחק</button> <button class="btn small" id="btn-fm-close">חזרה</button>
+      <br><button class="btn green" id="btn-fm-invite">🎮 הזמן למשחק</button> <button class="btn purple" id="btn-fm-watch">👁 צפה במשחק</button> <button class="btn small" id="btn-fm-close">חזרה</button>
     </div>
   </div>
 
@@ -863,14 +883,14 @@ body.touch #touch{display:block}
   <div class="overlay" id="v2-modal">
     <div class="panel">
       <h2 id="v2-title">👥 עם מי לשחק 2 על 2?</h2>
-      <div class="hint" id="v2-my-l">השותף שלי:</div>
-      <div class="v2opts"><button class="btn green on" id="v2-ai">🤖 שותף מחשב</button><button class="btn blue" id="v2-human">⌨️ חבר על המקלדת</button></div>
-      <div class="hint" id="v2-opp-l">היריבים:</div>
-      <div class="v2opts"><button class="btn small purple on" id="v2-opp0">🤖🤖 שני מחשבים</button><button class="btn small purple" id="v2-opp1">⌨️🤖 חבר + מחשב</button><button class="btn small purple" id="v2-opp2">⌨️⌨️ שני חברים</button></div>
+      <div class="v2row"><span class="v2lbl" id="v2-my-l">השותף שלי:</span><div class="v2opts" data-slot="P3"><button class="btn small green on" data-src="ai">🤖 מחשב</button><button class="btn small blue" data-src="key">⌨️ מקלדת אצלי</button><button class="btn small purple" data-src="net">🌐 מחשב אחר</button></div></div>
+      <div class="v2row"><span class="v2lbl" id="v2-opp1-l">יריב 1:</span><div class="v2opts" data-slot="P2"><button class="btn small green on" data-src="ai">🤖 מחשב</button><button class="btn small blue" data-src="key">⌨️ מקלדת אצלי</button><button class="btn small purple" data-src="net">🌐 מחשב אחר</button></div></div>
+      <div class="v2row"><span class="v2lbl" id="v2-opp2-l">יריב 2:</span><div class="v2opts" data-slot="P4"><button class="btn small green on" data-src="ai">🤖 מחשב</button><button class="btn small blue" data-src="key">⌨️ מקלדת אצלי</button><button class="btn small purple" data-src="net">🌐 מחשב אחר</button></div></div>
+      <div class="hint" id="v2-net-hint" hidden></div>
       <div class="hint" id="v2-keys" hidden></div>
       <div class="hint" id="v2-pick-l">בחרו את השותף שלכם:</div>
       <div id="v2-partner"></div>
-      <br><button class="btn green" id="v2-go">שחק ▶</button> <button class="btn small" id="v2-cancel">חזרה</button>
+      <div style="margin-top:8px"><button class="btn green" id="v2-go">שחק ▶</button> <button class="btn small" id="v2-cancel">חזרה</button></div>
     </div>
   </div>
 
@@ -899,6 +919,9 @@ body.touch #touch{display:block}
 <div id="rotate">📱↻<br><span>סובבו את הטלפון</span></div>
 
 <script>
+/* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
+   With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
+const FB_URL='';
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1096,6 +1119,36 @@ const I18N_RAW={
  'v2.roleOpp1':['יריב 1','Opponent 1','الخصم 1','Соперник 1'],
  'v2.roleOpp2':['יריב 2','Opponent 2','الخصم 2','Соперник 2'],
  'game.opp':['יריב – {0}','Opponent – {0}','خصم – {0}','Соперник – {0}'],
+ 'v2.src.ai':['🤖 מחשב','🤖 Computer','🤖 حاسوب','🤖 Компьютер'],
+ 'v2.src.key':['⌨️ מקלדת אצלי','⌨️ My keyboard','⌨️ لوحة المفاتيح عندي','⌨️ Моя клавиатура'],
+ 'v2.src.net':['🌐 מחשב אחר','🌐 Another computer','🌐 حاسوب آخر','🌐 Другой компьютер'],
+ 'v2.opp1L':['יריב 1:','Opponent 1:','الخصم 1:','Соперник 1:'],
+ 'v2.opp2L':['יריב 2:','Opponent 2:','الخصم 2:','Соперник 2:'],
+ 'v2.netHint':['🌐 {0} חברים במחשבים אחרים יצטרפו עם קוד שתקבל אחרי בחירת הרמה','🌐 {0} friend(s) on other computers will join with a code you get after picking the level','🌐 {0} أصدقاء على حواسيب أخرى سينضمون برمز تحصل عليه بعد اختيار المستوى','🌐 {0} друзей на других компьютерах присоединятся по коду, который ты получишь после выбора уровня'],
+ 'mp.full':['החדר מלא 😕','The room is full 😕','الغرفة ممتلئة 😕','Комната заполнена 😕'],
+ 'mp.waitCode':['מחכה לחבר עם הקוד…','Waiting for a friend with the code…','بانتظار صديق مع الرمز…','Ждём друга с кодом…'],
+ 'mp.keyFriend':['חבר על המקלדת','Friend on the keyboard','صديق على لوحة المفاتيح','Друг на клавиатуре'],
+ 'mp.computer':['מחשב','Computer','حاسوب','Компьютер'],
+ 'mp.you':['אתה','You','أنت','Ты'],
+ 'mp.host':['המארח','Host','المضيف','Хост'],
+ 'mp.codeIs':['🔑 קוד: {0}','🔑 Code: {0}','🔑 الرمز: {0}','🔑 Код: {0}'],
+ 'friends.search':['🔍 חפש','🔍 Search','🔍 بحث','🔍 Поиск'],
+ 'friends.inMatch':['🎮 במשחק','🎮 In a match','🎮 في مباراة','🎮 В матче'],
+ 'friends.watching':['👁 צופה במשחק','👁 Watching a match','👁 يشاهد مباراة','👁 Смотрит матч'],
+ 'friends.watch':['👁 צפה','👁 Watch','👁 شاهد','👁 Смотреть'],
+ 'friends.watchLong':['👁 צפה במשחק','👁 Watch the match','👁 شاهد المباراة','👁 Смотреть матч'],
+ 'friends.notExist':['❌ השחקן לא קיים','❌ This player does not exist','❌ اللاعب غير موجود','❌ Такого игрока нет'],
+ 'friends.top':['🏆 המובילים','🏆 Leaderboard','🏆 المتصدرون','🏆 Лидеры'],
+ 'friends.list':['👥 החברים שלי','👥 My friends','👥 أصدقائي','👥 Мои друзья'],
+ 'friends.topNeedsServer':['בלי שרת הטבלה מציגה רק אותך ואת החברים שלך','Without a server the table shows only you and your friends','بدون خادم يعرض الجدول أنت وأصدقاءك فقط','Без сервера таблица показывает только тебя и друзей'],
+ 'watch.tag':['👁 צופה במשחק של {0}','👁 Watching {0}\'s match','👁 تشاهد مباراة {0}','👁 Смотришь матч {0}'],
+ 'watch.over':['המשחק נגמר!','Match over!','انتهت المباراة!','Матч окончен!'],
+ 'watch.won':['{0} ניצח! 🏆','{0} won! 🏆','{0} فاز! 🏆','{0} победил! 🏆'],
+ 'watch.draw':['תיקו!','Draw!','تعادل!','Ничья!'],
+ 'watch.noMatch':['{0} לא באמצע משחק כרגע','{0} is not in a match right now','{0} ليس في مباراة الآن','{0} сейчас не в матче'],
+ 'watch.connecting':['מתחבר למשחק של {0}… ⏳','Joining {0}\'s match… ⏳','جارٍ الاتصال بمباراة {0}… ⏳','Подключаемся к матчу {0}… ⏳'],
+ 'watch.joined':['{0} צופה במשחק שלך 👁','{0} is watching your match 👁','{0} يشاهد مباراتك 👁','{0} смотрит твой матч 👁'],
+ 'end.invite':['🎮 הזמן למשחק','🎮 Invite to a game','🎮 دعوة إلى لعبة','🎮 Пригласить в игру'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1621,7 +1674,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#exit-modal h2':'exit.title', '#btn-stay':'exit.stay',
   '#music-title':'music.title', '#btn-music-back':'btn.back', '#music-il-h':'music.il', '#music-intl-h':'music.intl', '#btn-music-off':'music.off',
   '#set-title':'set.title', '#set-sfx-l':'set.sfx', '#set-music-l':'set.music', '#set-lang-l':'set.lang', '#btn-settings-close':'btn.back2',
-  '#v2-title':'v2.title', '#v2-ai':'v2.ai', '#v2-human':'v2.human', '#v2-my-l':'v2.myTeam', '#v2-opp-l':'v2.opps', '#v2-opp0':'v2.opp0', '#v2-opp1':'v2.opp1', '#v2-opp2':'v2.opp2', '#v2-pick-l':'v2.pickPartner', '#v2-go':'btn.play', '#v2-cancel':'btn.back2',
+  '#v2-title':'v2.title', '#v2-my-l':'v2.myTeam', '#v2-opp1-l':'v2.opp1L', '#v2-opp2-l':'v2.opp2L', '#v2-pick-l':'v2.pickPartner', '#btn-friend-search':'friends.search', '#fr-tab-list':'friends.list', '#fr-tab-top':'friends.top', '#btn-fm-watch':'friends.watchLong', '#btn-end-invite':'end.invite', '#btn-end-home':'btn.back2', '#v2-go':'btn.play', '#v2-cancel':'btn.back2',
   '#goal-flash':'game.goal', '#btn-music':'btn.music', '#btn-settings':'btn.settings', '#btn-daily':'daily.btn',
   '#btn-codes':'btn.codes', '#codes-title':'codes.title', '#codes-hint':'codes.hint', '#btn-code-go':'codes.go', '#btn-codes-cancel':'btn.back2',
   '#intro-tap':'intro.tap', '.intro-title small':'home.sub', '#btn-stats-ach':'stats.ach', '#btn-stats-board':'stats.friends', '#ach h2':'ach.title', '#btn-ach-back':'btn.back',
@@ -1638,6 +1691,7 @@ function applyLang(){
   document.querySelectorAll('#levels .btn').forEach((b,i)=>b.innerHTML=`${LEVELS[i].color==='doom'?'☠️ ':''}${T('lvl.'+i)}<small>${LEVELS[i].goals} ⚽</small>`);
   document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=(PK_LEVELS[i].color==='doom'?'☠️ ':'')+T('lvl.'+i));
   document.querySelectorAll('.doom-sep').forEach(d=>d.textContent=T('level.doom'));
+  document.querySelectorAll('#v2-modal .v2opts[data-slot] .btn').forEach(b=>b.textContent=T('v2.src.'+b.dataset.src));
   document.querySelectorAll('#set-langs .btn').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
   const ni=$('#set-name'); if(ni) ni.placeholder=T('set.namePh');
   refreshHome(); buildGallery(); refreshPreview();
@@ -1835,53 +1889,132 @@ function reach(name, kind, timeout=5000){
 function onIncoming(conn){
   const kind=(conn.metadata&&conn.metadata.kind)||'', from=normName(conn.metadata&&conn.metadata.from);
   conn.on('open', ()=>{
-    if(kind==='probe'){ try{ conn.send({t:'pong'}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 400); }
-    else if(kind==='stats'){ try{ conn.send({t:'stats', name:normName(settings.name), s:myStats(), ach:Object.keys(prog.ach)}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 600); }
+    if(kind==='probe'){ try{ conn.send({t:'pong', st:myState()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 400); }
+    else if(kind==='stats'){ try{ conn.send({t:'stats', name:normName(settings.name), s:myStats(), ach:Object.keys(prog.ach), st:myState()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 600); }
     else if(kind==='invite'){ handleInvite(conn, from); }
+    else if(kind==='watch'){ handleWatch(conn, from); }
     else { try{ conn.close(); }catch(e){} }
   });
 }
+/* what am I doing right now, for friends who look me up */
+const myState = () => spectating ? 'watch' : (state!=='idle' && !pk) || (pk && !pk.train) ? 'match' : 'idle';
+/* ping a friend: null = not connected, otherwise {online:true, st:'idle'|'match'|'watch'} */
+function probeFriend(name){
+  return new Promise(async res=>{
+    const c=await reach(name,'probe',4000); if(!c){ res(null); return; }
+    let done=false; const fin=v=>{ if(done) return; done=true; res(v); setTimeout(()=>{ try{ c.close(); }catch(e){} },200); };
+    c.on('data', m=>fin({online:true, st:(m&&m.st)||'idle'}));
+    setTimeout(()=>fin({online:true, st:'idle'}), 1500);
+  });
+}
+/* ----- Firebase (optional): a tiny REST-based registry so we can tell "never existed" from "offline" and rank everyone by wins ----- */
+const fbOn = () => !!FB_URL;
+async function fbReq(path, method, body){
+  if(!fbOn()) return null;
+  try{ const r=await fetch(FB_URL.replace(/\/$/,'')+'/'+path+'.json', {method, headers:{'Content-Type':'application/json'}, body: body!==undefined ? JSON.stringify(body) : undefined}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; }
+}
+const fbKey = name => nameId(name).slice(4);
+let fbLastState='';
+function fbHeartbeat(force){
+  const name=normName(settings.name); if(!fbOn()||!name) return;
+  const st=myState(); if(!force && st===fbLastState && fbHeartbeat.t && Date.now()-fbHeartbeat.t<20000) return; fbLastState=st; fbHeartbeat.t=Date.now();
+  const s=loadStats();
+  fbReq('users/'+fbKey(name),'PATCH',{name, w:s.w|0, c:s.c|0, goals:prog.goals|0, xp:prog.xp|0, st, t:{'.sv':'timestamp'}});
+}
+setInterval(()=>fbHeartbeat(true), 25000);
+const fbOnline = u => !!(u && u.t && Date.now()-u.t < 75000);
 /* ----- friends list ----- */
+function statusOf(f){ return f.online==null ? 'checking' : !f.online ? 'offline' : f.st==='match' ? 'match' : f.st==='watch' ? 'watch' : 'online'; }
+const statusText = st => st==='checking' ? T('friends.checking') : st==='match' ? T('friends.inMatch') : st==='watch' ? T('friends.watching') : st==='online' ? T('friends.online') : st==='none' ? T('friends.notExist') : T('friends.offline');
 function friendRow(name){
-  const f=prog.friends[name]||{}; const st=f.online==null?'checking':(f.online?'online':'offline');
+  const f=prog.friends[name]||{}; const st=statusOf(f);
   return `<div class="frow" data-name="${esc(name)}"><span class="dot ${st}"></span><span class="fname">${esc(name)}</span>
-    <span class="fstat">${st==='checking'?T('friends.checking'):st==='online'?T('friends.online'):T('friends.offline')}</span>
-    <button class="btn small blue" data-act="view">${T('friends.view')}</button><button class="btn small green" data-act="invite">${T('friends.invite')}</button><button class="btn small red" data-act="remove">🗑</button></div>`;
+    <span class="fstat">${statusText(st)}</span>
+    ${st==='match' ? `<button class="btn small purple" data-act="watch">${T('friends.watch')}</button>` : ''}
+    <button class="btn small blue" data-act="view">${T('friends.view')}</button><button class="btn small green" data-act="invite" ${st==='online'?'':'disabled'}>${T('friends.invite')}</button><button class="btn small red" data-act="remove">🗑</button></div>`;
 }
 function buildFriends(){
   const names=Object.keys(prog.friends).sort((a,b)=>a.localeCompare(b));
   $('#fr-list').innerHTML = names.length ? names.map(friendRow).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`;
   $('#friend-input').placeholder=T('friends.ph'); updatePresenceUI();
 }
+function updateRow(name){ const row=$(`#fr-list .frow[data-name="${CSS.escape(name)}"]`); if(row) row.outerHTML=friendRow(name); }
+async function checkFriend(name){
+  const pr=await probeFriend(name); const f=prog.friends[name]; if(!f) return pr;
+  f.online=!!pr; f.st=pr?pr.st:''; if(pr) f.t=Date.now(); updateRow(name); return pr;
+}
 async function refreshFriendStatuses(){
   for(const name of Object.keys(prog.friends)){ prog.friends[name].online=null; }
   buildFriends();
-  await Promise.all(Object.keys(prog.friends).map(async name=>{
-    const c=await reach(name,'probe',4000); prog.friends[name].online=!!c; if(c) setTimeout(()=>{ try{ c.close(); }catch(e){} },300);
-    const row=$(`#fr-list .frow[data-name="${CSS.escape(name)}"]`); if(row){ row.outerHTML=friendRow(name); }
-  }));
+  await Promise.all(Object.keys(prog.friends).map(checkFriend));
 }
-function addFriend(raw){
+function addFriend(raw, quiet){
+  const name=normName(raw); if(!name) return false;
+  if(!normName(settings.name)){ toast(T('friends.needName'),'warn'); return false; }
+  if(name.toLowerCase()===normName(settings.name).toLowerCase()){ toast(T('friends.self'),'warn'); return false; }
+  if(prog.friends[name]){ if(!quiet) toast(T('friends.exists',name),'warn'); return false; }
+  prog.friends[name]={w:0,d:0,l:0,c:0,xp:0,goals:0,ach:[],t:0,online:null}; saveProg(); $('#friend-input').value='';
+  toast(T('friends.added',name),'ach'); sfx.click(); buildFriends();
+  checkFriend(name).then(pr=>{ if(!pr && !quiet) toast(T('friends.notConnected'),'warn'); });
+  return true;
+}
+/* ----- search: is this player online, in a match, offline – or does the name not exist at all (needs the server) ----- */
+function resultRow(name, r){
+  const st=r.checking ? 'checking' : r.status, isFriend=!!prog.friends[name];
+  const extra = r.fb && !r.checking ? `<span class="fstat">🏆 ${r.fb.w|0} · ⭐ ${r.fb.xp|0}</span>` : '';
+  const btns = r.checking || st==='none' ? '' :
+    `${st==='match' ? `<button class="btn small purple" data-act="watch">${T('friends.watch')}</button>` : ''}
+     ${st==='online' ? `<button class="btn small green" data-act="invite">${T('friends.invite')}</button>` : ''}
+     <button class="btn small blue" data-act="view">${T('friends.view')}</button>
+     ${isFriend ? '' : `<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`;
+  return `<div class="frow result" data-name="${esc(name)}"><span class="dot ${st}"></span><span class="fname">🔍 ${esc(name)}</span><span class="fstat">${statusText(st)}</span>${extra}${btns}<button class="btn small red" data-act="close">✖</button></div>`;
+}
+async function searchFriend(raw){
   const name=normName(raw); if(!name) return;
   if(!normName(settings.name)){ toast(T('friends.needName'),'warn'); return; }
   if(name.toLowerCase()===normName(settings.name).toLowerCase()){ toast(T('friends.self'),'warn'); return; }
-  if(prog.friends[name]){ toast(T('friends.exists',name),'warn'); return; }
-  prog.friends[name]={w:0,d:0,l:0,c:0,xp:0,goals:0,ach:[],t:0,online:null}; saveProg(); $('#friend-input').value='';
-  toast(T('friends.added',name),'ach'); sfx.click(); buildFriends();
-  reach(name,'probe',4000).then(c=>{ prog.friends[name].online=!!c; if(c){ setTimeout(()=>{ try{ c.close(); }catch(e){} },300); } else toast(T('friends.notConnected'),'warn'); const row=$(`#fr-list .frow[data-name="${CSS.escape(name)}"]`); if(row) row.outerHTML=friendRow(name); });
+  sfx.click(); const box=$('#fr-result'); box.hidden=false; box.innerHTML=resultRow(name,{checking:true});
+  const [fb, pr] = await Promise.all([fbOn() ? fbLookup(name) : Promise.resolve(undefined), probeFriend(name)]);
+  let status;
+  if(pr) status = pr.st==='match' ? 'match' : pr.st==='watch' ? 'watch' : 'online';
+  else if(fbOn() && fb===null) status='none';                       // the server has never seen this name
+  else if(fbOnline(fb)) status = fb.st==='match' ? 'match' : 'online';   // the server saw them a moment ago but we could not reach them directly
+  else status='offline';
+  if(prog.friends[name]){ const f=prog.friends[name]; f.online=status!=='offline'&&status!=='none'; f.st=status==='match'?'match':''; if(fb){ f.w=fb.w|0; f.c=fb.c|0; f.xp=fb.xp|0; f.goals=fb.goals|0; if(fb.t) f.t=Math.max(f.t|0,fb.t); } saveProg(); updateRow(name); }
+  box.innerHTML=resultRow(name,{status, fb: fb||null});
 }
+async function fbLookup(name){ return fbReq('users/'+fbKey(name),'GET'); }
+/* ----- leaderboard: everyone the server knows, by wins (friends only when there is no server) ----- */
+async function buildTop(){
+  const box=$('#fr-top'); box.innerHTML=`<div class="hint" style="text-align:center;margin-top:20px">${T('friends.checking')}</div>`;
+  let rows=null, server=false;
+  if(fbOn()){ const all=await fbReq('users','GET'); if(all){ server=true; rows=Object.values(all).filter(u=>u&&u.name).map(u=>({name:normName(u.name), w:u.w|0, c:u.c|0, xp:u.xp|0, online:fbOnline(u), st:u.st})); } }
+  if(!rows){ const s=loadStats(); rows=Object.keys(prog.friends).filter(n=>n.toLowerCase()!==normName(settings.name).toLowerCase()).map(n=>({name:n, w:prog.friends[n].w|0, c:prog.friends[n].c|0, xp:prog.friends[n].xp|0, online:!!prog.friends[n].online})); rows.push({name:normName(settings.name)||T('mp.you'), w:s.w|0, c:s.c|0, xp:prog.xp|0, online:true, me:true}); }
+  rows.sort((a,b)=>b.w-a.w || b.c-a.c || b.xp-a.xp); rows=rows.slice(0,25);
+  const me=normName(settings.name).toLowerCase();
+  const medal=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`;
+  box.innerHTML = (server ? '' : `<div class="hint" style="text-align:center">${T('friends.topNeedsServer')}</div>`) +
+    (rows.length ? rows.map((r,i)=>{ const mine=r.me||r.name.toLowerCase()===me; return `<div class="frow top ${mine?'mine':''}" data-name="${esc(r.name)}"><span class="rank">${medal(i)}</span><span class="dot ${r.online?(r.st==='match'?'match':'online'):'offline'}"></span><span class="fname">${esc(r.name)}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">🏆 ${r.w} · 🥇 ${r.c} · ⭐ ${r.xp}</span>${mine?'':`<button class="btn small blue" data-act="view">${T('friends.view')}</button>${prog.friends[r.name]?'':`<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`}</div>`; }).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`);
+}
+function showFrTab(which){ $('#fr-tab-list').classList.toggle('on',which==='list'); $('#fr-tab-top').classList.toggle('on',which==='top'); $('#fr-list').hidden=which!=='list'; $('#fr-top').hidden=which!=='top'; if(which==='top') buildTop(); }
 async function viewFriend(name){
   const c=await reach(name,'stats',5000);
   if(c){
-    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; prog.friends[name]=Object.assign(prog.friends[name]||{}, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true}); saveProg(); res(); } }); setTimeout(res,3000); });
+    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; prog.friends[name]=Object.assign(prog.friends[name]||{}, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true,st:m.st||'idle'}); saveProg(); res(); } }); setTimeout(res,3000); });
     try{ c.close(); }catch(e){}
-  } else { toast(T('friends.notConnected'),'warn'); if(prog.friends[name]) prog.friends[name].online=false; }
+  } else {
+    const fb = fbOn() ? await fbLookup(name) : null;
+    if(fb){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]}, {w:fb.w|0,c:fb.c|0,xp:fb.xp|0,goals:fb.goals|0,t:fb.t||0,online:false}); }
+    else { toast(T('friends.notConnected'),'warn'); if(prog.friends[name]) prog.friends[name].online=false; }
+  }
   const f=prog.friends[name]; if(!f) return;
+  const st=statusOf(f);
   $('#fm-name').textContent=(f.online?'🟢 ':'⚪ ')+name;
-  $('#fm-status').textContent = f.t ? (f.online ? T('friends.online') : T('friends.lastSeen', new Date(f.t).toLocaleDateString())) : T('friends.noData');
+  $('#fm-status').textContent = f.t ? (f.online ? statusText(st) : T('friends.lastSeen', new Date(f.t).toLocaleDateString())) : T('friends.noData');
   $('#fm-stats').innerHTML = `<div class="stat win"><div class="n">${f.w|0}</div><div class="l">${T('stats.w')}</div></div><div class="stat draw"><div class="n">${f.goals|0}</div><div class="l">⚽</div></div><div class="stat loss"><div class="n">${f.l|0}</div><div class="l">${T('stats.l')}</div></div><div class="stat cup"><div class="n">${f.xp|0}</div><div class="l">⭐ XP</div></div>`;
   const ach=f.ach||[]; $('#fm-ach').innerHTML = `<div class="hint">${T('ach.count',ach.length,ACH.length,f.xp|0)}</div><div class="fm-badges">${ACH.map(([id])=>`<span class="bd ${ach.includes(id)?'on':''}" title="${esc(T('a.'+id))}">${ACH_ICON[id]||'🏅'}</span>`).join('')}</div>`;
-  $('#btn-fm-invite').dataset.name=name; $('#btn-fm-invite').hidden=!f.online;
+  $('#btn-fm-invite').dataset.name=name; $('#btn-fm-invite').hidden=st!=='online';
+  $('#btn-fm-watch').dataset.name=name; $('#btn-fm-watch').hidden=st!=='match';
   $('#friend-modal').classList.add('show');
 }
 /* ----- invites ----- */
@@ -1898,10 +2031,11 @@ async function inviteFriend(name){
     else if(m.t==='busy'){ toast(T('invite.busy',name),'warn'); try{ c.close(); }catch(e){} }
   };
   c.on('data',onData);
-  setTimeout(()=>{ if(!(mp&&mp.conn===c)){ try{ c.close(); }catch(e){} } }, 40000);
+  setTimeout(()=>{ if(!(mp&&mp.conn===c) && !(mp&&mp.conns&&mp.conns.some(x=>x.conn===c))){ try{ c.close(); }catch(e){} } }, 40000);
 }
 function handleInvite(conn, from){
-  if(state!=='idle' || (mp&&mp.connected) || inviteConn){ try{ conn.send({t:'busy'}); setTimeout(()=>conn.close(),300); }catch(e){} return; }
+  if(state==='end' && !inviteConn){ setTimeout(()=>handleInvite(conn, from), 3500); return; }   // the match just ended: ask again once we are back home
+  if(state!=='idle' || (mp&&mp.connected) || inviteConn || spectating){ try{ conn.send({t:'busy'}); setTimeout(()=>conn.close(),300); }catch(e){} return; }
   inviteConn=conn; sfx.whistle();
   $('#invite-text').textContent=T('invite.text',from||'?');
   $('#invite-modal').classList.add('show');
@@ -1909,26 +2043,107 @@ function handleInvite(conn, from){
 }
 $('#btn-invite-accept').addEventListener('click', ()=>{ sfx.click(); const c=inviteConn; inviteConn=null; $('#invite-modal').classList.remove('show'); if(!c) return; try{ c.send({t:'accept'}); }catch(e){ return; } startMpFromConn(c,'guest'); });
 $('#btn-invite-decline').addEventListener('click', ()=>{ sfx.click(); const c=inviteConn; inviteConn=null; $('#invite-modal').classList.remove('show'); if(c){ try{ c.send({t:'decline'}); setTimeout(()=>c.close(),300); }catch(e){} } });
-function startMpFromConn(conn, role){
+function startMpFromConn(conn, role){                 // a friend invite turned into a 1v1: no room code needed
   mpTeardown();
-  mp={ role, conn, peer:null, code:'', connected:true, myPick:null, opPick:null, myReady:false, opReady:false, rin:{l:0,r:0,j:0,k:0,s:0}, ev:[], snap:null, lastKey:'', lastSent:0 };
-  mpWire(conn, true);
+  if(role==='host'){ mp={ role:'host', code:'', connected:false, conns:[], cfg:{v2:false, src:{P2:'net'}}, myPick:null, myReady:false }; mpAccept(conn, true); }
+  else { mp={ role:'guest', code:'', connected:false, slot:'P2', teamL:false, myPick:null, myReady:false, snap:null, lastKey:'', lastSent:0, lobby:null }; mp.conn=conn; mpWireGuest(conn, true); }
   showScreen('mp');
 }
+/* ----- watching a friend's match ----- */
+let spectators=[], spectating=null;
+function handleWatch(conn, from){
+  const busy = spectating || myState()!=='match' || (mp && mp.role==='guest' && !mp.connected) || !players.length;
+  if(busy){ try{ conn.send({t:'nomatch'}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} },400); return; }
+  spectators.push(conn);
+  const gone=()=>{ spectators=spectators.filter(c=>c!==conn); };
+  conn.on('close', gone); conn.on('error', gone);
+  try{ conn.send(matchSetupMsg()); }catch(e){}
+  if(from) toast(T('watch.joined', from),'xp');
+}
+function slotName(slot){                              // the person behind a slot, if we know them
+  const meName=normName(settings.name);
+  if(mp && mp.role==='host'){ if(slot==='P1') return meName; const c=mp.conns.find(x=>x.slot===slot); return c ? c.name : ''; }
+  if(mp && mp.role==='guest'){ if(slot===mp.slot) return meName; if(slot==='P1') return (mp.lobby&&mp.lobby.host.name)||mp.hostName||''; const c=mp.lobby&&mp.lobby.slots.find(x=>x.slot===slot); return c ? c.name : ''; }
+  if(spectating && spectating.names) return spectating.names[slot]||'';
+  return slot==='P1' ? meName : '';
+}
+function matchSetupMsg(){
+  const guestR = mp && mp.role==='guest' && !mp.teamL;
+  const names={}; for(const p of players) names[p.slot]=slotName(p.slot);
+  return { t:'setup', chars:players.map(p=>p.ch?p.ch.id:CHARS[0].id), v2:!!v2, src:v2?v2.src:null, names, lv:level?level.i:1,
+           sc: guestR ? [score.op,score.me] : [score.me,score.op], tl:timeLeft, host:slotName('P1') };
+}
+async function watchFriend(name){
+  if(state!=='idle' || spectating) return;
+  const c=await reach(name,'watch',6000);
+  if(!c){ toast(T('friends.notConnected'),'warn'); return; }
+  spectating={name, conn:c, snap:null, names:null};
+  toast(T('watch.connecting',name),'xp');
+  c.on('data', m=>{
+    if(!spectating || spectating.conn!==c || !m) return;
+    if(m.t==='nomatch'){ toast(T('watch.noMatch',name),'warn'); stopWatching(false); }
+    else if(m.t==='setup') spectSetup(m);
+    else if(m.t==='s'){ if(spectating.snap && spectating.snap.ev && spectating.snap.ev.length) m.ev=spectating.snap.ev.concat(m.ev||[]); spectating.snap=m; }
+  });
+  const drop=()=>{ if(spectating && spectating.conn===c){ if(state==='idle') stopWatching(false); else spectEnded(null, true); } };
+  c.on('close', drop); c.on('error', drop);
+}
+function spectSetup(m){
+  const ch=id=>CHARS.find(c=>c.id===id)||CHARS[0];
+  spectating.names=m.names||{}; level=LEVELS[m.lv]||LEVELS[1];
+  $('#end').classList.remove('show'); $('#end-actions').hidden=true;
+  beginMatch(ch(m.chars[0]), ch(m.chars[1]), m.v2 ? {c3:ch(m.chars[2]), c4:ch(m.chars[3]), src:m.src||{}} : null);
+  score.me=m.sc[0]|0; score.op=m.sc[1]|0; updateScore(); timeLeft=m.tl||MATCH_TIME; updateTimer();
+  $('#watch-tag').textContent=T('watch.tag', spectating.name);
+}
+function spectLoop(){
+  rafId=requestAnimationFrame(spectLoop);
+  if(!spectating) return;
+  if(spectating.snap){ const s=spectating.snap; spectating.snap=null; applySnapshot(s, true, false); }
+}
+function spectEnded(result, dropped){                 // the match I was watching is over: offer to invite the friend
+  if(!spectating) return;
+  state='end'; cancelAnimationFrame(rafId);
+  $('#end-title').textContent=T('watch.over');
+  const nL=slotName('P1')||nm(P1.ch), nR=slotName('P2')||nm(P2.ch);
+  $('#end-sub').textContent = dropped ? T('mp.left') : result==='draw' ? T('watch.draw') : T('watch.won', result==='p1' ? nL : nR);
+  if(result==='p1' || result==='p2'){ sfx.win(); confetti.burst(200); $('#fans').classList.add('cheer'); }
+  $('#end-actions').hidden=false; $('#end').classList.add('show');
+}
+function stopWatching(showHome){
+  if(spectating){ try{ spectating.conn.close(); }catch(e){} }
+  spectating=null; state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
+  $('#end').classList.remove('show'); $('#end-actions').hidden=true; $('#fans').classList.remove('cheer'); $('#game').classList.remove('watching');
+  if(showHome!==false) showScreen('home');
+  fbHeartbeat();
+}
+$('#btn-watch-exit').addEventListener('click', ()=>{ sfx.click(); stopWatching(true); });
+$('#btn-end-home').addEventListener('click', ()=>{ sfx.click(); stopWatching(true); });
+$('#btn-end-invite').addEventListener('click', ()=>{ sfx.click(); const n=spectating&&spectating.name; stopWatching(true); if(n) setTimeout(()=>inviteFriend(n), 400); });
 /* ----- screen wiring ----- */
-$('#btn-stats-board').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); buildFriends(); showScreen('friends'); refreshFriendStatuses(); });
+function openFriends(){ buildFriends(); $('#fr-result').hidden=true; showFrTab('list'); showScreen('friends'); refreshFriendStatuses(); }
+$('#btn-stats-board').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); openFriends(); });
 $('#btn-friends-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
 $('#btn-friend-add').addEventListener('click', ()=>{ addFriend($('#friend-input').value); });
-$('#friend-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') addFriend(e.target.value); });
-$('#fr-list').addEventListener('click', e=>{
-  const b=e.target.closest('button[data-act]'); if(!b) return; const name=b.closest('.frow').dataset.name; sfx.click();
-  if(b.dataset.act==='remove'){ delete prog.friends[name]; saveProg(); buildFriends(); }
-  else if(b.dataset.act==='view'){ viewFriend(name); }
-  else if(b.dataset.act==='invite'){ inviteFriend(name); }
-});
+$('#btn-friend-search').addEventListener('click', ()=>{ searchFriend($('#friend-input').value); });
+$('#friend-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') searchFriend(e.target.value); });
+$('#fr-tab-list').addEventListener('click', ()=>{ sfx.click(); showFrTab('list'); });
+$('#fr-tab-top').addEventListener('click', ()=>{ sfx.click(); showFrTab('top'); });
+function friendAction(e){
+  const b=e.target.closest('button[data-act]'); if(!b) return; const row=b.closest('.frow'); const name=row.dataset.name; sfx.click();
+  const act=b.dataset.act;
+  if(act==='remove'){ delete prog.friends[name]; saveProg(); buildFriends(); }
+  else if(act==='view'){ viewFriend(name); }
+  else if(act==='invite'){ inviteFriend(name); }
+  else if(act==='watch'){ watchFriend(name); }
+  else if(act==='add'){ if(addFriend(name, true)) b.remove(); }
+  else if(act==='close'){ $('#fr-result').hidden=true; }
+}
+$('#fr-list').addEventListener('click', friendAction); $('#fr-top').addEventListener('click', friendAction); $('#fr-result').addEventListener('click', friendAction);
 $('#btn-fm-close').addEventListener('click', ()=>{ sfx.click(); $('#friend-modal').classList.remove('show'); });
 $('#btn-fm-invite').addEventListener('click', ()=>{ sfx.click(); $('#friend-modal').classList.remove('show'); inviteFriend($('#btn-fm-invite').dataset.name); });
-$('#btn-mp-friends').addEventListener('click', ()=>{ sfx.click(); buildFriends(); showScreen('friends'); refreshFriendStatuses(); });
+$('#btn-fm-watch').addEventListener('click', ()=>{ sfx.click(); $('#friend-modal').classList.remove('show'); watchFriend($('#btn-fm-watch').dataset.name); });
+$('#btn-mp-friends').addEventListener('click', ()=>{ sfx.click(); openFriends(); });
 /* ---------- daily match ---------- */
 $('#btn-daily').addEventListener('click', ()=>{
   sfx.click(); const d=dailyInfo(), c=CHARS[d.opp];
@@ -1962,7 +2177,7 @@ $('#btn-stats-reset').addEventListener('click', ()=>{ sfx.click(); if(confirm(T(
 $('#btn-level-cancel').addEventListener('click', ()=>{ sfx.click(); v2Pending=null; $('#level-modal').classList.remove('show'); });
 
 /* ---------- 2 vs 2 setup ---------- */
-let v2Partner='ai', v2Idx=null;
+let v2Idx=null, v2Src={P3:'ai',P2:'ai',P4:'ai'};    // partner / opponent 1 / opponent 2: 'ai' | 'key' (my keyboard) | 'net' (another computer)
 function buildPartnerPick(){
   const box=$('#v2-partner'); box.innerHTML='';
   const rnd=document.createElement('div'); rnd.className='mpcard'+(v2Idx==null?' mine':''); rnd.innerHTML=`<div class="sprite" style="font-size:30px;display:flex;align-items:center;justify-content:center">🎲</div>${T('v2.random')}`;
@@ -1975,25 +2190,25 @@ function buildPartnerPick(){
     box.appendChild(d);
   });
 }
-let v2Opp=0;                                          // how many of the two opponents are friends on the keyboard
-/* which human sits on which key set: partner first, then opponent 1, then opponent 2 */
-function v2Humans(partner, opp){ const h=[]; if(partner==='human') h.push('partner'); if(opp>=1) h.push('opp1'); if(opp>=2) h.push('opp2'); return h; }
+const V2_ROLE={P3:'v2.rolePartner',P2:'v2.roleOpp1',P4:'v2.roleOpp2'};
+/* key sets go to the friends on my keyboard in order: partner, opponent 1, opponent 2 */
 function renderV2Keys(){
-  const hs=v2Humans(v2Partner, v2Opp), el=$('#v2-keys'); el.hidden=!hs.length; if(!hs.length) return;
-  const me=T('v2.keys', T('v2.roleMe'), '<kbd>A</kbd><kbd>D</kbd>', '<kbd>W</kbd>', '<kbd>S</kbd>', '<kbd>Space</kbd>');
-  el.innerHTML=[me].concat(hs.map((r,i)=>{ const ks=KEYSETS[i].keys; return T('v2.keys', T(r==='partner'?'v2.rolePartner':r==='opp1'?'v2.roleOpp1':'v2.roleOpp2'), ks[0], ks[1], ks[2], ks[3]); })).join('<br>');
+  const keyers=['P3','P2','P4'].filter(s=>v2Src[s]==='key'), el=$('#v2-keys'); el.hidden=!keyers.length;
+  if(keyers.length){
+    const me=T('v2.keys', T('v2.roleMe'), '<kbd>A</kbd><kbd>D</kbd>', '<kbd>W</kbd>', '<kbd>S</kbd>', '<kbd>Space</kbd>');
+    el.innerHTML=[me].concat(keyers.map((s,i)=>{ const ks=KEYSETS[i].keys; return T('v2.keys', T(V2_ROLE[s]), ks[0], ks[1], ks[2], ks[3]); })).join(keyers.length>1 ? '<br>' : ' &nbsp;|&nbsp; ');
+  }
+  const nets=['P3','P2','P4'].filter(s=>v2Src[s]==='net'); $('#v2-net-hint').hidden=!nets.length; $('#v2-net-hint').textContent=T('v2.netHint', nets.length);
+  $('#v2-pick-l').hidden = v2Src.P3==='net'; $('#v2-partner').hidden = v2Src.P3==='net';   // a remote partner picks their own character
 }
-function setV2Partner(k){ v2Partner=k; $('#v2-ai').classList.toggle('on',k==='ai'); $('#v2-human').classList.toggle('on',k==='human'); renderV2Keys(); }
-function setV2Opp(n){ v2Opp=n; for(let i=0;i<3;i++) $('#v2-opp'+i).classList.toggle('on', i===n); renderV2Keys(); }
-$('#btn-2v2').addEventListener('click', ()=>{ sfx.click(); buildPartnerPick(); setV2Partner(v2Partner); setV2Opp(v2Opp); $('#v2-modal').classList.add('show'); });
-$('#v2-ai').addEventListener('click', ()=>{ sfx.click(); setV2Partner('ai'); });
-$('#v2-human').addEventListener('click', ()=>{ sfx.click(); setV2Partner('human'); });
-for(let i=0;i<3;i++) $('#v2-opp'+i).addEventListener('click', ()=>{ sfx.click(); setV2Opp(i); });
+function renderV2Src(){ document.querySelectorAll('#v2-modal .v2opts[data-slot] .btn').forEach(b=>{ const s=b.closest('.v2opts').dataset.slot; b.classList.toggle('on', v2Src[s]===b.dataset.src); }); renderV2Keys(); }
+$('#btn-2v2').addEventListener('click', ()=>{ sfx.click(); buildPartnerPick(); renderV2Src(); $('#v2-modal').classList.add('show'); });
+document.querySelectorAll('#v2-modal .v2opts[data-slot] .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); v2Src[b.closest('.v2opts').dataset.slot]=b.dataset.src; renderV2Src(); }));
 $('#v2-cancel').addEventListener('click', ()=>{ sfx.click(); $('#v2-modal').classList.remove('show'); });
 $('#v2-go').addEventListener('click', ()=>{
   sfx.click();
   const idx = v2Idx!=null ? v2Idx : shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected && isUnlocked(CHARS[i])))[0];
-  v2Pending={partner:v2Partner, opp:v2Opp, idx};
+  v2Pending={src:Object.assign({},v2Src), idx};
   $('#v2-modal').classList.remove('show'); $('#level-modal').classList.add('show');
 });
 
@@ -2130,7 +2345,7 @@ const MATCH_TIME=240;
 
 const mkPlayer=(sel,sh,facing)=>({ el:$(sel), sh:$(sh), x:0,y:0,vx:0,vy:0, facing, kickT:0, slideT:0, slideCd:0, stunT:0, slideDir:facing, slideHit:false, reactT:0, targetX:0, wantKick:false, mode:'hunt', home:0 });
 const P1=mkPlayer('#p1','#sh1',1), P2=mkPlayer('#p2','#sh2',-1), P3=mkPlayer('#p3','#sh3',1), P4=mkPlayer('#p4','#sh4',-1);
-P1.home=230; P2.home=770; P3.home=130; P4.home=870;
+P1.home=230; P2.home=770; P3.home=130; P4.home=870; P1.slot='P1'; P2.slot='P2'; P3.slot='P3'; P4.slot='P4';
 let players=[P1,P2], teamL=[P1], teamR=[P2], v2=null, v2Pending=null;   // v2 = {partner:'ai'|'human', opp:0|1|2 humans, kp:[...]} during a 2v2 match
 /* extra keyboard players (2v2): up to three friends share the keyboard, each with their own key set */
 const KEYSETS=[
@@ -2233,58 +2448,65 @@ function startGame(levelIdx){
   const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected && !(v2Pending && i===v2Pending.idx) && i!==forcedOpp));
   const opp = forcedOpp!=null && forcedOpp!==selected ? forcedOpp : pool[0]; forcedOpp=null;
   if(v2Pending){
-    const opts={ c3:CHARS[v2Pending.idx], c4:CHARS[pool[1]], partner:v2Pending.partner, opp:v2Pending.opp||0 }; v2Pending=null;
-    beginMatch(CHARS[selected], CHARS[opp], opts);
+    const pend=v2Pending; v2Pending=null;
+    if(Object.values(pend.src).includes('net')){   // friends on other computers: open a room, they join with the code, then everyone picks
+      $('#level-modal').classList.remove('show'); showScreen('mp'); mpLobby(); mpStatus('');
+      mpHost({v2:true, src:pend.src, partnerIdx: pend.src.P3==='net' ? null : pend.idx, levelIdx});
+      return;
+    }
+    beginMatch(CHARS[selected], CHARS[opp], { c3:CHARS[pend.idx], c4:CHARS[pool[1]], src:pend.src });
   } else beginMatch(CHARS[selected], CHARS[opp]);
 }
 /* c1 plays on the left (P1), c2 on the right (P2). Offline and online-host: you are P1. Online guest: you are P2.
    opts (2v2): c3 = your partner (P3, left), c4 = second opponent (P4, right), partner = 'ai' | 'human' */
 function beginMatch(c1, c2, opts){
-  const localIsP1 = !(mp && mp.role==='guest');
-  v2 = opts ? {partner:opts.partner, opp:opts.opp||0, kp:[null,null,null]} : null;
+  // who am I on this pitch? offline / online host: P1. Online guest: the slot the host gave me. Spectator: nobody.
+  const mySlot = spectating ? null : (mp && mp.role==='guest') ? mp.slot : 'P1';
+  const me = mySlot ? SLOT_P[mySlot] : null, localIsP1 = mySlot==='P1';
+  v2 = opts ? {src:opts.src||{}, kp:[null,null,null]} : null;
   setField(v2 ? 1250 : 1000);                       // 2v2 is played in a bigger stadium
-  clearKP(); for(const p of [P1,P2,P3,P4]) p.ctl=null;
-  if(v2){                                           // hand a key set to every friend on the keyboard: partner, then opponent 1, then opponent 2
-    const hs=v2Humans(v2.partner, v2.opp), who={partner:P3, opp1:P2, opp2:P4};
-    hs.forEach((r,i)=>{ v2.kp[i]=KP[i]; who[r].ctl=KP[i]; });
+  clearKP();
+  for(const p of [P1,P2,P3,P4]){ p.ctl=null; p.src = p===P1 ? 'me' : (opts && opts.src && opts.src[p.slot]) || (p===P2 && mp ? 'net' : 'ai'); }
+  if(v2 && localIsP1){                              // hand a key set to every friend on my keyboard: partner, then opponent 1, then opponent 2
+    let i=0; for(const p of [P3,P2,P4]) if(p.src==='key'){ v2.kp[i]=KP[i]; p.ctl=KP[i]; i++; }
   }
   const solo = training==='shoot';                  // shooting practice: just you and an empty goal
   players = v2 ? [P1,P2,P3,P4] : solo ? [P1] : [P1,P2]; teamL = v2 ? [P1,P3] : [P1]; teamR = v2 ? [P2,P4] : solo ? [] : [P2];
   for(const p of [P3,P4]){ p.el.hidden=!v2; p.sh.hidden=!v2; }
   P2.el.hidden=solo; P2.sh.hidden=solo; $('#game').classList.toggle('training', solo);
-  myChar = localIsP1 ? c1 : c2; opChar = localIsP1 ? c2 : c1;
   P1.ch=c1; P2.ch=c2; P3.ch=opts?opts.c3:null; P4.ch=opts?opts.c4:null;   // play styles (speed / power / slide / jump)
-  sprite(P1.el.querySelector('.sprite'), c1);
-  sprite(P2.el.querySelector('.sprite'), c2);
-  P1.el.querySelector('.tag').textContent = localIsP1 ? T('game.me',nm(c1)) : nm(c1);
-  P2.el.querySelector('.tag').textContent = localIsP1 ? (P2.ctl ? T('game.friend',nm(c2)) : nm(c2)) : T('game.me',nm(c2));
-  P1.el.classList.toggle('me', localIsP1); P2.el.classList.toggle('me', !localIsP1);
-  if(v2){
-    sprite(P3.el.querySelector('.sprite'), opts.c3); sprite(P4.el.querySelector('.sprite'), opts.c4);
-    P3.el.querySelector('.tag').textContent = T(v2.partner==='human' ? 'game.friend' : 'game.partner', nm(opts.c3));
-    P4.el.querySelector('.tag').textContent = P4.ctl ? T('game.friend',nm(opts.c4)) : nm(opts.c4);
-    P3.el.classList.add('me');
+  const meL = !me || teamL.includes(me);            // my team is on the left (spectators watch from the left team's side)
+  myChar = me ? me.ch : c1; opChar = meL ? c2 : c1;
+  for(const p of players){
+    sprite(p.el.querySelector('.sprite'), p.ch);
+    const who=slotName(p.slot), cn=nm(p.ch);
+    p.el.querySelector('.tag').textContent = p===me ? T('game.me',cn) : p.src==='ai' ? (p===P3 ? T('game.partner',cn) : cn) : who ? who+' – '+cn : T('game.friend',cn);
+    p.el.classList.toggle('me', meL ? teamL.includes(p) : teamR.includes(p));
   }
-  $('#n-me').textContent = v2 ? nm(myChar)+' + '+nm(opts.c3) : nm(myChar);
-  $('#n-op').textContent = v2 ? nm(opChar)+' + '+nm(opts.c4) : nm(opChar);
-  $('#level-tag').textContent = mp ? T('game.online') : solo ? trainTag() : (dailyMatch ? T('daily.title')+' · ' : '') + T('game.level', T('lvl.'+level.i));
+  const namesL=teamL.map(p=>nm(p.ch)).join(' + '), namesR=teamR.map(p=>nm(p.ch)).join(' + ');
+  $('#n-me').textContent = meL ? namesL : namesR; $('#n-op').textContent = meL ? namesR : namesL;
+  $('#level-tag').textContent = mp || spectating ? T('game.online') : solo ? trainTag() : (dailyMatch ? T('daily.title')+' · ' : '') + T('game.level', T('lvl.'+level.i));
   const wantTheme = dailyMatch ? 'daily' : v2 ? 'night' : 'day'; if(pitchTheme!==wantTheme || pitchW!==FIELD_W) buildPitch(wantTheme);
-  $('#game').classList.toggle('daily', !!dailyMatch); $('#daily-fx').hidden=!dailyMatch; $('#game').classList.toggle('online', !!mp); $('#daily-fx .banner').textContent='🏟️ '+T('daily.title').replace(/^📅\s*/,'');
+  $('#game').classList.toggle('daily', !!dailyMatch); $('#daily-fx').hidden=!dailyMatch; $('#game').classList.toggle('online', !!mp || !!spectating); $('#daily-fx .banner').textContent='🏟️ '+T('daily.title').replace(/^📅\s*/,'');
+  $('#game').classList.toggle('watching', !!spectating); $('#watch-bar').hidden=!spectating;
   score={me:0,op:0}; updateScore();
   timeLeft=MATCH_TIME; updateTimer();
-  $('#end').classList.remove('show');
+  $('#end').classList.remove('show'); $('#end-actions').hidden=true;
   $('#fans').classList.remove('cheer');
   for(const p of players) p.kicks=0;
-  keys2.left=keys2.right=false; q2.jump=q2.kick=q2.slide=false; iceQueued=false; setupIceUI();
+  iceQueued=false; setupIceUI();
   rbuf.length=0; replay=null; wasBehind=false; said2=said1=said10=false; $('#replay-tag').hidden=true; lastSayT=performance.now(); nextAmbient=5;
   resetPositions();
   showScreen('game');
   keys.left=keys.right=keys.jump=keys.kick=false; jumpQueued=kickQueued=false;
   lastT=performance.now();
-  cancelAnimationFrame(rafId); rafId=requestAnimationFrame(localIsP1 ? loop : guestLoop);
+  cancelAnimationFrame(rafId); rafId=requestAnimationFrame(spectating ? spectLoop : localIsP1 ? loop : guestLoop);
   if(localIsP1){
+    evBuf.length=0;
     startCountdown(()=>{ if(state!=='countdown') return; sfx.whistle(); state='play'; lastT=performance.now(); setTimeout(()=>{ if(state==='play') say('c.kickoff'); }, 900); });
-  } else state='countdown';                       // the guest follows the host's countdown events
+    if(spectators.length){ const m=matchSetupMsg(); for(const s of spectators){ try{ s.send(m); }catch(e){} } }   // friends watching me: here is the new match
+  } else state='countdown';                       // guests and spectators follow the host's countdown events
+  fbHeartbeat();
 }
 /* ---------- 3-2-1 countdown before kick-off ---------- */
 let cdTimer=0;
@@ -2369,7 +2591,7 @@ function tryBuyIce(){
 let pausedFrom=null, cornerCd=0;
 let pausePending=false;
 function pauseGame(){
-  if(mp && mp.connected) return;                     // no pausing an online match
+  if((mp && mp.connected) || spectating) return;      // no pausing an online match or a match you only watch
   if(!pk && (state==='celebrate'||state==='replay'||state==='countdown')){ pausePending=true; return; }   // pause as soon as play resumes
   if(state==='play' && !pk){ pausedFrom='game'; state='paused'; cancelAnimationFrame(rafId); }
   else if(pk && !pk.corner && ['aim','hold','power','keep'].includes(pk.phase)){ pausedFrom='pk'; pk.pausedPhase=pk.phase; pk.phase='paused'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); }
@@ -2391,7 +2613,7 @@ function quitToHome(){
   endTraining(); pausePending=false;
   state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer'); dailyMatch=false; pausedFrom=null;
-  showScreen('home');
+  showScreen('home'); fbHeartbeat();
 }
 $('#btn-pause').addEventListener('click', e=>{ e.stopPropagation(); pauseGame(); });
 $('#btn-pk-pause').addEventListener('click', e=>{ e.stopPropagation(); pauseGame(); });
@@ -2448,7 +2670,7 @@ function updateTimer(){
 }
 
 function goHome(){
-  state='idle'; cancelAnimationFrame(rafId); endTraining();
+  state='idle'; cancelAnimationFrame(rafId); endTraining(); fbHeartbeat();
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
   if(mp && mp.connected){ mpShowPick(); showScreen('mp'); }   // online: back to the character screen for a rematch
   else showScreen('home');
@@ -2527,7 +2749,7 @@ function stepReplay(){
 }
 function afterGoal(){
   if(training==='shoot'){ $('#level-tag').textContent=trainTag(); resetPositions(); state='play'; lastT=performance.now(); return; }
-  const target = mp ? 3 : (level && level.goals) || 3;                       // goals needed to win: 3 / 3 / 4 / 5 / 7 by level
+  const target = mp && !v2 ? 3 : (level && level.goals) || 3;              // goals needed to win: 3 online 1v1, otherwise 3 / 3 / 4 / 5 / 7 / 10 by level
   if(score.me>=target || score.op>=target){ state='celebrate'; endGame(); return; }
   resetPositions(); sfx.whistle(); netEv('whistle'); state='play'; lastT=performance.now();
 }
@@ -2784,10 +3006,13 @@ function loop(t){
     if(iceQueued){ useIce(); iceQueued=false; }
     updateIce(dt);
     if(pausePending){ pausePending=false; pauseGame(); return; }
-    if(mp && mp.role==='host') applyRemote(); else if(training!=='shoot'){ if(P2.ctl) humanInput(P2, P2.ctl.k, P2.ctl.q); else updateAI(dt, P2, 1, teamL, v2?P4:null); }
-    if(v2){
-      if(P4.ctl) humanInput(P4, P4.ctl.k, P4.ctl.q); else updateAI(dt, P4, 1, teamL, P2);
-      if(P3.ctl) humanInput(P3, P3.ctl.k, P3.ctl.q); else updateAI(dt, P3, -1, teamR, P1);
+    if(training!=='shoot'){                          // every other seat: a friend on another computer, a friend on my keyboard, or the computer
+      for(const p of [P2,P3,P4]){
+        if(!players.includes(p)) continue;
+        if(p.src==='net') remoteInput(p);
+        else if(p.src==='key' && p.ctl) humanInput(p, p.ctl.k, p.ctl.q);
+        else updateAI(dt, p, p===P3 ? -1 : 1, p===P3 ? teamR : teamL, v2 ? (p===P3 ? P1 : p===P2 ? P4 : P2) : null);
+      }
     }
     updateSlides(dt);
     for(const p of players) movePlayer(p, dt, players.filter(o=>o!==p));
@@ -2811,7 +3036,7 @@ function loop(t){
     if(!(mp && mp.role==='guest') && performance.now()-lastSayT > nextAmbient*1000) ambient();
   }
   render();
-  if(mp && mp.role==='host') sendSnapshot();
+  if(!(mp && mp.role==='guest')) sendSnapshot();
 }
 let said2=false, said1=false, said10=false;
 
@@ -2831,12 +3056,22 @@ function render(){
 /* =========================================================
    MULTIPLAYER – two devices, peer-to-peer (PeerJS), host runs the physics
    ========================================================= */
-let mp=null;   // { role:'host'|'guest', peer, conn, code, connected, myPick, opPick, myReady, opReady, rin, ev, snap }
+
+/* =========================================================
+   ONLINE PLAY – room codes over PeerJS; the host runs the physics and streams snapshots to everyone else.
+   Slots: P1 = host. P2 (opponent 1), P3 (partner), P4 (opponent 2) each come from 'ai' (computer), 'key' (a friend on the
+   host's keyboard) or 'net' (another computer). A 1v1 online match is just P2 from the net. Spectators get the same snapshots.
+   ========================================================= */
+let mp=null;
+// host : { role:'host', peer, code, connected, conns:[{conn, slot, name, pick, ready, rin}], cfg:{v2, src:{P2,P3,P4}, partnerIdx, levelIdx}, myPick, myReady }
+// guest: { role:'guest', peer, conn, code, connected, slot, teamL, v2, src, hostName, lobby, myPick, myReady, snap, lastKey, lastSent }
 const CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const makeCode = () => Array.from({length:4}, ()=>CODE_CHARS[Math.floor(Math.random()*CODE_CHARS.length)]).join('');
 const peerIdFor = code => 'footballstar-'+code.toLowerCase();
-const netEv = e => { if(mp && mp.role==='host' && mp.ev) mp.ev.push(e); };
-for(const k of ['kick','bounce','slide','tackle']){ const f=sfx[k]; sfx[k]=()=>{ f(); netEv(k); }; }   // the guest hears what the host hears
+const SLOT_P={P1,P2,P3,P4};
+const evBuf=[];                                       // match events since the last snapshot (goal, sounds, commentary…)
+const netEv = e => { if((mp && mp.role==='host') || spectators.length) evBuf.push(e); };
+for(const k of ['kick','bounce','slide','tackle']){ const f=sfx[k]; sfx[k]=()=>{ f(); netEv(k); }; }   // the others hear what the host hears
 
 function loadPeerJS(){
   if(window.Peer) return Promise.resolve();
@@ -2848,130 +3083,241 @@ function loadPeerJS(){
   });
 }
 const mpStatus = t => { $('#mp-status').textContent=t; };
+const netSlots = cfg => ['P3','P2','P4'].filter(s=>cfg && cfg.src && cfg.src[s]==='net');
 function mpTeardown(){
-  if(mp){ try{ mp.conn && mp.conn.close(); }catch(e){} try{ mp.peer && mp.peer.destroy(); }catch(e){} }
+  if(mp){ for(const c of (mp.conns||[])){ try{ c.conn.close(); }catch(e){} } try{ mp.conn && mp.conn.close(); }catch(e){} try{ mp.peer && mp.peer.destroy(); }catch(e){} }
   mp=null;
 }
 function mpLobby(){
   $('#mp-lobby').hidden=false; $('#mp-pick').hidden=true; $('#mp-code').hidden=true;
   $('#btn-mp-host').disabled=false; $('#btn-mp-join').disabled=false; $('#mp-input').value='';
 }
-async function mpHost(){
+/* ----- host ----- */
+async function mpHost(cfg){                           // cfg = null → plain 1v1: one friend joins as P2
   mpTeardown(); mpStatus(T('mp.connecting')); $('#btn-mp-host').disabled=true;
   try{ await loadPeerJS(); }catch(e){ mpStatus(T('mp.offline')); $('#btn-mp-host').disabled=false; return; }
   const code=makeCode();
-  mp={ role:'host', code, connected:false, myPick:null, opPick:null, myReady:false, opReady:false, rin:{l:0,r:0,j:0,k:0}, ev:[] };
+  cfg = cfg || {v2:false, src:{P2:'net'}};
+  mp={ role:'host', code, connected:false, conns:[], cfg, myPick:null, myReady:false };
   const peer=new Peer(peerIdFor(code)); mp.peer=peer;
-  peer.on('open', ()=>{ $('#mp-code-text').textContent=code; $('#mp-code').hidden=false; mpStatus(T('mp.sendCode',code)); });
-  peer.on('connection', conn=>{ if(mp.conn){ conn.close(); return; } mp.conn=conn; mpWire(conn); });
+  peer.on('open', ()=>{ if(!mp||mp.peer!==peer) return; mpStatus(T('mp.sendCode',code)); mpShowPick(); });
+  peer.on('connection', conn=>{ if(mp && mp.peer===peer) mpAccept(conn); else conn.close(); });
   peer.on('error', e=>{
-    if(e.type==='unavailable-id'){ peer.destroy(); mpHost(); }             // code already taken → new one
-    else if(!mp || !mp.connected){ mpStatus(T('mp.err',e.type)); $('#btn-mp-host').disabled=false; }
+    if(!mp || mp.peer!==peer) return;
+    if(e.type==='unavailable-id'){ peer.destroy(); mpHost(cfg); }             // code already taken → new one
+    else if(!mp.connected){ mpStatus(T('mp.err',e.type)); $('#btn-mp-host').disabled=false; }
   });
 }
+function mpFreeSlot(){ const used=mp.conns.map(c=>c.slot); return netSlots(mp.cfg).find(s=>!used.includes(s)) || null; }
+function mpAccept(conn, alreadyOpen){
+  const slot=mpFreeSlot();
+  if(!slot){ const bye=()=>{ try{ conn.send({t:'full'}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} },300); }; if(alreadyOpen) bye(); else conn.on('open',bye); return; }
+  const c={conn, slot, name:'', pick:null, ready:false, rin:{l:0,r:0,j:0,k:0,s:0}};
+  mp.conns.push(c);
+  const onOpen=()=>{
+    if(!mp || mp.role!=='host' || !mp.conns.includes(c)) return;
+    mp.connected=true; sfx.win(); mpStatus('');
+    try{ conn.send({t:'hello', name:normName(settings.name), s:myStats(), slot, v2:!!mp.cfg.v2, src:mp.cfg.src}); }catch(e){}
+    if(state!=='idle' && !mp.cfg.v2){ /* nothing: a 1v1 host is never mid-match with a free slot */ }
+    mpShowPick(false); mpBroadcastLobby(); mpRefresh();
+  };
+  if(alreadyOpen) onOpen(); else conn.on('open', onOpen);
+  conn.on('data', m=>mpOnMsg(m, c));
+  conn.on('close', ()=>mpDrop(c)); conn.on('error', ()=>mpDrop(c));
+}
+function mpDrop(c){
+  if(!mp || mp.role!=='host') return;
+  const i=mp.conns.indexOf(c); if(i<0) return; mp.conns.splice(i,1);
+  if(state!=='idle'){ mpAbort(); return; }         // someone left mid-match: everyone back to the lobby
+  toast(T('mp.left'),'warn'); mpBroadcastLobby(); mpRefresh();
+}
+function mpAbort(){
+  mpSendAll({t:'left'});
+  state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
+  $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
+  sfx.lose(); mpStatus(T('mp.left'));
+  if(mp.conns.length || mp.code){ mpShowPick(); showScreen('mp'); } else { mpTeardown(); mpLobby(); showScreen('mp'); }
+  fbHeartbeat();
+}
+function mpSendAll(m){ if(!mp || !mp.conns) return; for(const c of mp.conns){ try{ c.conn.send(m); }catch(e){} } }
+function mpBroadcastLobby(){
+  if(!mp || mp.role!=='host') return;
+  mpSendAll({t:'lobby', host:{name:normName(settings.name), pick:mp.myPick, ready:mp.myReady}, slots:mp.conns.map(c=>({slot:c.slot, name:c.name, pick:c.pick, ready:c.ready})), partnerIdx:mp.cfg.src.P3==='net'?null:(mp.cfg.partnerIdx!=null?mp.cfg.partnerIdx:null)});
+}
+/* ----- guest ----- */
 async function mpJoin(code){
   code=(code||'').trim().toUpperCase();
   if(code.length!==4){ mpStatus(T('mp.code4')); return; }
   mpTeardown(); mpStatus(T('mp.connectingTo',code)); $('#btn-mp-join').disabled=true;
   try{ await loadPeerJS(); }catch(e){ mpStatus(T('mp.offline')); $('#btn-mp-join').disabled=false; return; }
-  mp={ role:'guest', code, connected:false, myPick:null, opPick:null, myReady:false, opReady:false, snap:null, lastKey:'', lastSent:0 };
+  mp={ role:'guest', code, connected:false, slot:'P2', teamL:false, myPick:null, myReady:false, snap:null, lastKey:'', lastSent:0, lobby:null };
   const peer=new Peer(); mp.peer=peer;
   peer.on('open', ()=>{
-    const conn=peer.connect(peerIdFor(code), {serialization:'json', reliable:true}); mp.conn=conn; mpWire(conn);
-    setTimeout(()=>{ if(mp && !mp.connected){ mpStatus(T('mp.notFound',code)); $('#btn-mp-join').disabled=false; } }, 9000);
+    if(!mp || mp.peer!==peer) return;
+    const conn=peer.connect(peerIdFor(code), {serialization:'json', reliable:true}); mp.conn=conn; mpWireGuest(conn);
+    setTimeout(()=>{ if(mp && mp.peer===peer && !mp.connected){ mpStatus(T('mp.notFound',code)); $('#btn-mp-join').disabled=false; } }, 9000);
   });
-  peer.on('error', e=>{ if(!mp || !mp.connected){ mpStatus(e.type==='peer-unavailable' ? T('mp.notFound',code) : T('mp.err',e.type)); $('#btn-mp-join').disabled=false; } });
+  peer.on('error', e=>{ if(mp && mp.peer===peer && !mp.connected){ mpStatus(e.type==='peer-unavailable' ? T('mp.notFound',code) : T('mp.err',e.type)); $('#btn-mp-join').disabled=false; } });
 }
-function mpWire(conn, alreadyOpen){
-  const onOpen=()=>{ mp.connected=true; sfx.win(); mpStatus(''); mpShowPick(); try{ conn.send({t:'hello', name:(settings.name||'').trim(), s:myStats()}); }catch(e){} };
+function mpWireGuest(conn, alreadyOpen){
+  const onOpen=()=>{ if(!mp || mp.conn!==conn) return; mp.connected=true; sfx.win(); mpStatus(''); try{ conn.send({t:'hello', name:normName(settings.name), s:myStats()}); }catch(e){} mpShowPick(); };
   if(alreadyOpen) onOpen(); else conn.on('open', onOpen);
-  conn.on('data', mpOnMsg);
-  conn.on('close', mpOnClose);
-  conn.on('error', mpOnClose);
+  conn.on('data', m=>mpOnMsg(m, null));
+  conn.on('close', mpOnClose); conn.on('error', mpOnClose);
 }
-function mpOnClose(){
-  if(!mp) return;
+function mpOnClose(){                                 // guest: the host is gone
+  if(!mp || mp.role!=='guest') return;
   const wasPlaying = state!=='idle';
   mpTeardown();
-  state='idle'; cancelAnimationFrame(rafId);
+  state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
   mpLobby(); mpStatus(T('mp.left')); showScreen('mp');
   if(wasPlaying) sfx.lose();
+  fbHeartbeat();
 }
-function mpOnMsg(m){
+function mpOnMsg(m, c){                               // c = the guest who sent it (host side) or null (guest side)
   if(!mp || !m) return;
   switch(m.t){
-    case 'hello': { const name=normName(m.name); if(name && m.s&&typeof m.s==='object'){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]},{w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,t:Date.now(),online:true}); saveProg(); } break; }
-    case 'pick': mp.opPick=m.i; if(mp.myPick===m.i && mp.role==='guest'){ mp.myPick=null; } mpRefresh(); break;
-    case 'ready': mp.opReady=!!m.v; mpRefresh(); break;
-    case 'start': if(mp.role==='guest'){ mp.snap=null; beginMatch(CHARS[m.p1], CHARS[m.p2]); } break;
-    case 'i': if(mp.role==='host' && mp.rin){ mp.rin.l=m.l; mp.rin.r=m.r; mp.rin.j=mp.rin.j||m.j; mp.rin.k=mp.rin.k||m.k; mp.rin.s=mp.rin.s||m.s; } break;
-    case 's': if(mp.role==='guest'){ if(mp.snap && mp.snap.ev && mp.snap.ev.length) m.ev=mp.snap.ev.concat(m.ev||[]); mp.snap=m; } break;   // never drop events
+    case 'hello': {
+      const name=normName(m.name);
+      if(name && name.toLowerCase()!==normName(settings.name).toLowerCase() && m.s && typeof m.s==='object'){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]},{w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,t:Date.now(),online:true}); saveProg(); }
+      if(c){ c.name=name; mpBroadcastLobby(); mpRefresh(); }
+      else { mp.slot=m.slot||'P2'; mp.teamL = mp.slot==='P3'; mp.v2=!!m.v2; mp.src=m.src||{P2:'net'}; mp.hostName=name; mpRefresh(); }
+      break; }
+    case 'full': if(!c){ mpStatus(T('mp.full')); mpTeardown(); mpLobby(); } break;
+    case 'lobby': if(!c){ mp.lobby=m; const mine=m.slots.find(s=>s.slot===mp.slot); if(mine){ mp.myPick=mine.pick; mp.myReady=mine.ready; } mpRefresh(); } break;
+    case 'pick': if(c){ if(m.i==null || !mpTaken(c).includes(m.i)) c.pick=m.i; mpBroadcastLobby(); mpRefresh(); } break;
+    case 'ready': if(c){ c.ready=!!m.v; mpBroadcastLobby(); mpRefresh(); } break;
+    case 'start': if(!c){ mp.snap=null; level=LEVELS[m.lv]||LEVELS[1]; beginMatch(CHARS[m.p1], CHARS[m.p2], m.opts ? {c3:CHARS[m.opts.c3], c4:CHARS[m.opts.c4], src:m.opts.src} : null); } break;
+    case 'left': if(!c){ state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true; $('#end').classList.remove('show'); $('#fans').classList.remove('cheer'); sfx.lose(); mpStatus(T('mp.left')); mpShowPick(); showScreen('mp'); fbHeartbeat(); } break;
+    case 'i': if(c && c.rin){ c.rin.l=m.l; c.rin.r=m.r; c.rin.j=c.rin.j||m.j; c.rin.k=c.rin.k||m.k; c.rin.s=c.rin.s||m.s; } break;
+    case 's': if(!c){ if(mp.snap && mp.snap.ev && mp.snap.ev.length) m.ev=mp.snap.ev.concat(m.ev||[]); mp.snap=m; } break;
   }
 }
-/* ----- character pick (both must pick, no duplicates, both press play) ----- */
-function mpShowPick(){
+/* ----- the pick screen: gallery + the two teams ----- */
+function mpTaken(except){                             // characters already chosen by everyone else
+  if(mp.role==='host'){ const t=[]; if(except!=='me' && mp.myPick!=null) t.push(mp.myPick); for(const c of mp.conns){ if(c!==except && c.pick!=null) t.push(c.pick); } if(mp.cfg.src.P3!=='net' && mp.cfg.partnerIdx!=null) t.push(mp.cfg.partnerIdx); return t; }
+  const lb=mp.lobby; if(!lb) return []; const t=[]; if(lb.host.pick!=null) t.push(lb.host.pick); for(const s of lb.slots){ if(s.slot!==mp.slot && s.pick!=null) t.push(s.pick); } if(lb.partnerIdx!=null) t.push(lb.partnerIdx); return t;
+}
+function mpShowPick(resetPicks){
   $('#mp-lobby').hidden=true; $('#mp-pick').hidden=false;
-  mp.myPick=null; mp.opPick=null; mp.myReady=false; mp.opReady=false;
+  if(resetPicks!==false){ mp.myPick=null; mp.myReady=false; if(mp.role==='host'){ for(const c of mp.conns){ c.pick=null; c.ready=false; } mpBroadcastLobby(); } }
   const g=$('#mp-gallery'); g.innerHTML='';
   CHARS.forEach((c,i)=>{
     const d=document.createElement('div'); d.className='mpcard'+(isUnlocked(c)?'':' locked'); d.dataset.i=i;
     d.innerHTML=`<div class="sprite">${playerSVG(c)}</div>${nm(c)}`;
-    d.addEventListener('click', ()=>{ if(!mp || mp.opPick===i || mp.myReady || !isUnlocked(c)) return; sfx.click(); mp.myPick=i; mp.conn.send({t:'pick', i}); mpRefresh(); });
+    d.addEventListener('click', ()=>{
+      if(!mp || mp.myReady || !isUnlocked(c) || mpTaken(mp.role==='host'?'me':null).includes(i)) return;
+      sfx.click();
+      if(mp.role==='host'){ mp.myPick=i; mpBroadcastLobby(); } else { mp.myPick=i; try{ mp.conn.send({t:'pick', i}); }catch(e){} }
+      mpRefresh();
+    });
     g.appendChild(d);
   });
   mpRefresh();
 }
+/* every seat in the match as a card: who sits there, which character, ready or not */
+function mpSeats(){
+  const out=[], meName=normName(settings.name)||T('mp.you');
+  if(mp.role==='host'){
+    out.push({slot:'P1', team:'L', name:meName, pick:mp.myPick, ready:mp.myReady, kind:'me'});
+    for(const s of (mp.cfg.v2 ? ['P3','P2','P4'] : ['P2'])){
+      const src=mp.cfg.src[s]||'ai', team=s==='P3'?'L':'R';
+      if(src==='net'){ const c=mp.conns.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:c.name||T('mp.friend'), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
+      else out.push({slot:s, team, name:T(src==='key'?'mp.keyFriend':'mp.computer'), pick:s==='P3'?mp.cfg.partnerIdx:null, ready:true, kind:src});
+    }
+  } else {
+    const lb=mp.lobby;
+    out.push({slot:'P1', team:'L', name:(lb&&lb.host.name)||mp.hostName||T('mp.host'), pick:lb?lb.host.pick:null, ready:!!(lb&&lb.host.ready), kind:'net'});
+    for(const s of (mp.v2 ? ['P3','P2','P4'] : ['P2'])){
+      const src=(mp.src||{})[s]||'ai', team=s==='P3'?'L':'R';
+      if(s===mp.slot){ out.push({slot:s, team, name:meName, pick:mp.myPick, ready:mp.myReady, kind:'me'}); continue; }
+      if(src==='net'){ const c=lb&&lb.slots.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:c.name||T('mp.friend'), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
+      else out.push({slot:s, team, name:T(src==='key'?'mp.keyFriend':'mp.computer'), pick:s==='P3'&&lb?lb.partnerIdx:null, ready:true, kind:src});
+    }
+  }
+  return out;
+}
 function mpRefresh(){
   if(!mp) return;
-  document.querySelectorAll('.mpcard').forEach(d=>{ const i=+d.dataset.i; d.classList.toggle('mine', i===mp.myPick); d.classList.toggle('theirs', i===mp.opPick); });
-  const me=$('#mp-me-sprite'), op=$('#mp-op-sprite');
-  if(mp.myPick!=null){ sprite(me, CHARS[mp.myPick]); $('#mp-me-name').textContent=nm(CHARS[mp.myPick]); } else { me.innerHTML=''; $('#mp-me-name').textContent=T('mp.pick'); }
-  if(mp.opPick!=null){ sprite(op, CHARS[mp.opPick]); $('#mp-op-name').textContent=nm(CHARS[mp.opPick]); } else { op.innerHTML=''; $('#mp-op-name').textContent=T('mp.picking'); }
-  $('#mp-op-tag').textContent = T('mp.friend') + (mp.opReady ? T('mp.ready') : '');
+  const taken=mpTaken(mp.role==='host'?'me':null);
+  document.querySelectorAll('#mp-gallery .mpcard').forEach(d=>{ const i=+d.dataset.i; d.classList.toggle('mine', i===mp.myPick); d.classList.toggle('theirs', taken.includes(i)); });
+  const seats=mpSeats(), duo=$('#mp-duo'); duo.classList.toggle('four', seats.length>2);
+  const card=s=>`<div class="who ${s.kind==='me'?'me':''} ${s.team==='R'?'op':''}"><div class="tag">${esc(s.name)}${s.ready&&s.kind!=='ai'&&s.kind!=='key'?' ✔':''}</div><div class="sprite">${s.pick!=null?playerSVG(CHARS[s.pick]):''}</div><div class="name">${s.pick!=null?nm(CHARS[s.pick]):s.kind==='wait'?'⏳':s.kind==='me'?T('mp.pick'):s.kind==='net'?T('mp.picking'):'🎲'}</div></div>`;
+  duo.innerHTML = seats.filter(s=>s.team==='L').map(card).join('') + '<div class="vs">VS</div>' + seats.filter(s=>s.team==='R').map(card).join('');
+  const codeEl=$('#mp-pick-code'); const waiting=seats.some(s=>s.kind==='wait');
+  codeEl.hidden = !(mp.role==='host' && mp.code); codeEl.textContent = mp.code ? T('mp.codeIs', mp.code) + (waiting ? ' ⏳' : '') : '';
   const b=$('#btn-mp-play'); b.classList.toggle('ready', mp.myReady);
   b.textContent = mp.myReady ? T('mp.readyWait') : T('btn.play'); b.disabled = mp.myPick==null;
-  if(mp.role==='host' && mp.myReady && mp.opReady && mp.myPick!=null && mp.opPick!=null && mp.myPick!==mp.opPick){
-    mp.conn.send({t:'start', p1:mp.myPick, p2:mp.opPick});
-    mp.rin={l:0,r:0,j:0,k:0}; mp.ev=[];
-    beginMatch(CHARS[mp.myPick], CHARS[mp.opPick]);
-  }
+  if(mp.role==='host' && mp.myReady && mpCanStart()) mpStart();
 }
-$('#btn-mp-play').addEventListener('click', ()=>{ if(!mp || mp.myPick==null) return; sfx.click(); mp.myReady=!mp.myReady; mp.conn.send({t:'ready', v:mp.myReady}); mpRefresh(); });
+function mpCanStart(){
+  if(mp.myPick==null) return false;
+  const need=netSlots(mp.cfg); if(mp.conns.length<need.length) return false;
+  if(!mp.conns.every(c=>c.pick!=null && c.ready)) return false;
+  const picks=[mp.myPick].concat(mp.conns.map(c=>c.pick)); return new Set(picks).size===picks.length;
+}
+function mpStart(){
+  const cfg=mp.cfg, picks=[mp.myPick].concat(mp.conns.map(c=>c.pick));
+  if(cfg.partnerIdx!=null && cfg.src.P3!=='net' && !picks.includes(cfg.partnerIdx)) picks.push(cfg.partnerIdx);
+  const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>!picks.includes(i)));
+  const idxFor = slot => { const c=mp.conns.find(x=>x.slot===slot); if(c) return c.pick; if(slot==='P3' && cfg.partnerIdx!=null && cfg.src.P3!=='net') return cfg.partnerIdx; return pool.pop(); };
+  const p1=mp.myPick, p2=idxFor('P2');
+  const opts = cfg.v2 ? {c3:idxFor('P3'), c4:idxFor('P4'), src:cfg.src} : null;
+  level=LEVELS[cfg.levelIdx!=null ? cfg.levelIdx : 1];
+  mpSendAll({t:'start', p1, p2, lv:level.i, opts});
+  for(const c of mp.conns) c.rin={l:0,r:0,j:0,k:0,s:0}; evBuf.length=0;
+  beginMatch(CHARS[p1], CHARS[p2], opts ? {c3:CHARS[opts.c3], c4:CHARS[opts.c4], src:opts.src} : null);
+}
+$('#btn-mp-play').addEventListener('click', ()=>{
+  if(!mp || mp.myPick==null) return; sfx.click(); mp.myReady=!mp.myReady;
+  if(mp.role==='host'){ mpBroadcastLobby(); mpRefresh(); } else { try{ mp.conn.send({t:'ready', v:mp.myReady}); }catch(e){} mpRefresh(); }
+});
 /* ----- in-match networking ----- */
-function applyRemote(){                          // host: drive P2 with the guest's inputs
-  const r=mp.rin; let d=0; if(r.l) d-=1; if(r.r) d+=1;
-  if(P2.slideT<=0 && P2.stunT<=0){ P2.vx=d*MOVE*st(P2).speed; if(d) P2.facing=d; }
-  if(r.j){ if(P2.y===0 && P2.slideT<=0 && P2.stunT<=0) P2.vy=JUMP*st(P2).jump; r.j=0; }
-  if(r.k){ if(P2.stunT<=0) doKick(P2); r.k=0; }
-  if(r.s){ doSlide(P2); r.s=0; }
+function applyRemoteFor(p, r){                        // host: drive a remote friend's player with the inputs they sent
+  let d=0; if(r.l) d-=1; if(r.r) d+=1;
+  if(p.frozenT>0){ r.j=r.k=r.s=0; return; }
+  if(p.slideT<=0 && p.stunT<=0){ p.vx=d*MOVE*st(p).speed; if(d) p.facing=d; }
+  if(r.j){ if(p.y===0 && p.slideT<=0 && p.stunT<=0) p.vy=JUMP*st(p).jump; r.j=0; }
+  if(r.k){ if(p.stunT<=0) doKick(p); r.k=0; }
+  if(r.s){ doSlide(p); r.s=0; }
+}
+function remoteInput(p){ const c=mp && mp.role==='host' && mp.conns.find(x=>x.slot===p.slot); if(c) applyRemoteFor(p, c.rin); else p.vx=0; }
+function snapshotMsg(){
+  const P=p=>[Math.round(p.x),Math.round(p.y),Math.round(p.vx),p.facing,p.kicks|0,p.slideT>0?1:0,p.stunT>0?1:0,p.frozenT>0?1:0];
+  return {t:'s', p:players.map(P), b:[Math.round(ball.x),Math.round(ball.y),+ball.rot.toFixed(2)], sc:[score.me,score.op], tl:+timeLeft.toFixed(1), st:state, ev:evBuf.slice()};
 }
 function sendSnapshot(){
-  if(!mp || !mp.conn || !mp.connected || mp.role!=='host') return;
-  const P=p=>[Math.round(p.x),Math.round(p.y),Math.round(p.vx),p.facing,p.kicks|0,p.slideT>0?1:0,p.stunT>0?1:0];
-  try{ mp.conn.send({t:'s', p:[P(P1),P(P2)], b:[Math.round(ball.x),Math.round(ball.y),+ball.rot.toFixed(2)], sc:[score.me,score.op], tl:+timeLeft.toFixed(1), st:state, ev:mp.ev}); }catch(e){}
-  mp.ev=[];
+  const host = mp && mp.role==='host' && mp.connected;
+  if(!host && !spectators.length) return;
+  const m=snapshotMsg(); evBuf.length=0;
+  if(host) mpSendAll(m);
+  for(const s of spectators){ try{ s.send(m); }catch(e){} }
 }
-function guestLoop(){                            // guest: send inputs, draw the host's latest snapshot
+function guestLoop(){                                 // guest: send inputs, draw the host's latest snapshot, pass it on to anyone watching me
   rafId=requestAnimationFrame(guestLoop);
   if(!mp || !mp.conn || !mp.connected) return;
   const msg={t:'i', l:keys.left?1:0, r:keys.right?1:0, j:jumpQueued?1:0, k:kickQueued?1:0, s:slideQueued?1:0};
   const key=''+msg.l+msg.r, now=performance.now();
   if(key!==mp.lastKey || msg.j || msg.k || msg.s || now-mp.lastSent>120){ try{ mp.conn.send(msg); }catch(e){} mp.lastKey=key; mp.lastSent=now; }
   jumpQueued=kickQueued=slideQueued=false;
-  if(mp.snap){ applySnapshot(mp.snap); mp.snap=null; }
+  if(mp.snap){ const s=mp.snap; mp.snap=null; applySnapshot(s, mp.teamL, true); for(const sp of spectators){ try{ sp.send(s); }catch(e){} } }
 }
-function applySnapshot(s){
-  [P1,P2].forEach((p,i)=>{
-    const a=s.p[i]; p.x=a[0]; p.y=a[1]; p.vx=a[2]; p.facing=a[3];
+/* teamL: is the viewer on the left team; isPlayer: false for spectators (no XP, no stats) */
+function applySnapshot(s, teamL, isPlayer){
+  players.forEach((p,i)=>{
+    const a=s.p[i]; if(!a) return;
+    p.x=a[0]; p.y=a[1]; p.vx=a[2]; p.facing=a[3];
     if(a[4]!==(p.kicks|0)){ p.kicks=a[4]; p.el.classList.remove('kicking'); void p.el.offsetWidth; p.el.classList.add('kicking'); }
     p.el.classList.toggle('sliding', !!a[5]);
     if(a[6] && !p.el.classList.contains('stunned')){ p.el.classList.add('stunned'); } else if(!a[6]) p.el.classList.remove('stunned');
+    if(a[7] && !p.el.classList.contains('frozen')){ p.el.classList.add('frozen'); const ic=p.el.querySelector('.ice'); if(ic) ic.innerHTML=iceSVG(); } else if(!a[7] && p.el.classList.contains('frozen')){ p.el.classList.remove('frozen'); p.el.classList.add('thaw'); setTimeout(()=>p.el.classList.remove('thaw'),500); }
   });
   ball.x=s.b[0]; ball.y=s.b[1]; ball.rot=s.b[2];
-  if(s.sc[1]>score.me){ prog.goals++; addXP(1); }              // my goal (guest is P2)
-  if(s.sc[0]>score.op && s.sc[0]>s.sc[1]) wasBehind=true;
-  score.me=s.sc[1]; score.op=s.sc[0]; updateScore();
+  const mi=teamL?0:1, oi=teamL?1:0;
+  if(isPlayer && s.sc[mi]>score.me){ prog.goals++; addXP(1); }
+  if(s.sc[oi]>score.op && s.sc[oi]>s.sc[mi]) wasBehind=true;
+  score.me=s.sc[mi]; score.op=s.sc[oi]; updateScore();
   timeLeft=s.tl; if(state!=='end' && (s.st==='play'||s.st==='celebrate'||s.st==='replay'||s.st==='countdown')) state=s.st; updateTimer();
   for(const e of (s.ev||[])){
     if(e==='kick') sfx.kick(); else if(e==='bounce') sfx.bounce(); else if(e==='whistle') sfx.whistle(); else if(e==='slide') sfx.slide(); else if(e==='tackle') sfx.tackle();
@@ -2979,18 +3325,17 @@ function applySnapshot(s){
     else if(e==='replay') $('#replay-tag').hidden=false; else if(e==='replayEnd') $('#replay-tag').hidden=true;
     else if(e.startsWith('count:')) showCount(+e.slice(6));
     else if(e.startsWith('say:')){ const parts=e.slice(4).split('|'); showLine(T(parts[0],...parts.slice(1)), PRIORITY_SAY.has(parts[0])); }
-    else if(e.startsWith('end:')){ const r=e.slice(4); showEnd(r==='p2'?'win':r==='p1'?'lose':'draw'); }
+    else if(e.startsWith('end:')){ const r=e.slice(4); if(!isPlayer){ spectEnded(r,false); } else showEnd(r==='draw' ? 'draw' : (r==='p1')===!!teamL ? 'win' : 'lose'); }
   }
   render();
 }
 /* ----- screen wiring ----- */
 $('#btn-mp').addEventListener('click', ()=>{ sfx.click(); if(!(mp && mp.connected)){ mpTeardown(); mpLobby(); mpStatus(''); } showScreen('mp'); });
 $('#btn-mp-back').addEventListener('click', ()=>{ sfx.click(); mpTeardown(); showScreen('home'); });
-$('#btn-mp-host').addEventListener('click', ()=>{ sfx.click(); mpHost(); });
+$('#btn-mp-host').addEventListener('click', ()=>{ sfx.click(); mpHost(null); });
 $('#btn-mp-join').addEventListener('click', ()=>{ sfx.click(); mpJoin($('#mp-input').value); });
 $('#mp-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') mpJoin(e.target.value); });
 $('#mp-input').addEventListener('input', e=>{ e.target.value=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,''); });
-
 /* =========================================================
    PENALTY WORLD CUP – 32 teams, knockout bracket, shootouts
    ========================================================= */
@@ -3553,7 +3898,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 ['pointerup','pointercancel'].forEach(t=>$('#pk').addEventListener(t, e=>{ if(pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); } }));
 
 /* ---------- init ---------- */
-buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang();
+buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setTimeout(()=>fbHeartbeat(true), 1500);
 setTimeout(registerPresence, 800);              // go online under your player name (if one is set)
 </script>
 </body>
