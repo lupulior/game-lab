@@ -510,6 +510,26 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 
 .overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(27,42,78,.55)}
 .overlay.show{display:flex}
+/* admin panel */
+.adm-panel{min-width:900px;max-width:940px;max-height:596px;overflow-y:auto;box-sizing:border-box;padding:12px 18px}
+.adm-panel h2{font-size:34px;margin-bottom:4px}
+.adm-grid{display:flex;gap:14px;align-items:flex-start}
+.adm-box{flex:1;min-width:0;background:rgba(27,42,78,.06);border-radius:16px;padding:8px 10px;text-align:start}
+.adm-h{font-size:20px;font-weight:900;color:var(--navy);margin:6px 0 4px;display:flex;align-items:center;gap:8px}
+.adm-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
+.adm-row .btn.small{font-size:16px;padding:6px 12px}
+.adm-box .setrow{margin:4px 0}
+.adm-box input{font-family:inherit;font-weight:900;font-size:17px;padding:6px 10px;border-radius:10px;border:3px solid var(--blue);width:110px;box-sizing:border-box}
+.adm-box input[type=number]{width:80px}
+.adm-list{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.frow.adm{padding:5px 10px;gap:8px}
+.frow.adm .fname{font-size:19px}
+.frow.adm .fstat{font-size:14px}
+.frow.adm .btn.small{font-size:14px;padding:5px 10px}
+.adm-dur{font-family:inherit;font-weight:900;font-size:14px;padding:4px 6px;border-radius:8px;border:2px solid var(--navy)}
+#ban-overlay{z-index:50;background:rgba(27,42,78,.92)}
+#ban-overlay h2{font-size:56px}
+.adm-crown{color:#F5C400}
 .panel{background:#fff;border-radius:34px;padding:30px 44px;text-align:center;box-shadow:0 16px 0 rgba(0,0,0,.25);max-width:760px}
 .panel h2{color:var(--navy);-webkit-text-stroke:0;text-shadow:none;margin-bottom:16px}
 .panel .levels{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:18px}
@@ -565,6 +585,7 @@ body.touch #touch{display:block}
       <button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button>
       <button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
       <div id="xp-badge">⭐ 0 XP</div>
+      <button class="btn small yellow" id="btn-admin" hidden>👑 אדמין</button>
     </div>
     <!-- centre: my player -->
     <div class="hero">
@@ -881,6 +902,37 @@ body.touch #touch{display:block}
     </div>
   </div>
 
+  <!-- ===== ADMIN PANEL ===== -->
+  <div class="overlay" id="admin-modal">
+    <div class="panel adm-panel">
+      <h2 id="adm-title">👑 פאנל אדמין</h2>
+      <div class="hint" id="adm-server"></div>
+      <div class="adm-grid">
+        <div class="adm-box">
+          <div class="adm-h" id="adm-powers-h">⚡ כוחות</div>
+          <div class="setrow"><span id="adm-super-l">🦸 כוחות-על במשחק (נגד המחשב)</span><label class="switch"><input type="checkbox" id="adm-super"><span></span></label></div>
+          <div class="adm-row"><button class="btn small yellow" id="btn-adm-xp1">⭐ +1,000 XP</button><button class="btn small yellow" id="btn-adm-xp2">⭐ +10,000 XP</button></div>
+          <div class="adm-row"><button class="btn small green" id="btn-adm-unlock">🔓 פתח הכל</button><button class="btn small red" id="btn-adm-reset">🧹 אפס התקדמות</button></div>
+          <div class="adm-h" id="adm-codes-h">🎁 קוד חדש לשחקנים</div>
+          <div class="adm-row"><input id="adm-code" maxlength="16" placeholder="קוד" autocomplete="off" spellcheck="false"><input id="adm-code-xp" type="number" min="1" value="500" title="XP"><input id="adm-code-uses" type="number" min="1" value="10" title="uses"><button class="btn small purple" id="btn-adm-code-go">צור</button></div>
+          <div class="hint" id="adm-codes-hint">קוד · כמה XP · לכמה שחקנים</div>
+          <div class="adm-list" id="adm-codes"></div>
+        </div>
+        <div class="adm-box">
+          <div class="adm-h" id="adm-online-h">🟢 מי מחובר עכשיו <button class="btn small blue" id="btn-adm-refresh">🔄</button></div>
+          <div class="adm-list" id="adm-online"></div>
+          <div class="adm-list" id="adm-bans"></div>
+        </div>
+      </div>
+      <div class="adm-row" style="margin-top:8px"><button class="btn small blue" id="btn-adm-close">חזרה</button><button class="btn small red" id="btn-adm-leave">🚪 צא ממצב אדמין</button></div>
+    </div>
+  </div>
+
+  <!-- ===== KICKED ===== -->
+  <div class="overlay" id="ban-overlay">
+    <div class="panel"><h2 id="ban-title">🚫 הורחקת מהמשחק</h2><div class="sub" id="ban-text" style="font-size:26px;font-weight:900;color:#5b6a8a"></div></div>
+  </div>
+
   <!-- ===== DAILY MATCH MODAL ===== -->
   <div class="overlay" id="daily-modal">
     <div class="panel">
@@ -1163,6 +1215,41 @@ const I18N_RAW={
  'watch.connecting':['מתחבר למשחק של {0}… ⏳','Joining {0}\'s match… ⏳','جارٍ الاتصال بمباراة {0}… ⏳','Подключаемся к матчу {0}… ⏳'],
  'watch.joined':['{0} צופה במשחק שלך 👁','{0} is watching your match 👁','{0} يشاهد مباراتك 👁','{0} смотрит твой матч 👁'],
  'end.invite':['🎮 הזמן למשחק','🎮 Invite to a game','🎮 دعوة إلى لعبة','🎮 Пригласить в игру'],
+ 'codes.usedUp':['הקוד הזה נגמר 😕','This code has run out 😕','انتهى هذا الكود 😕','Этот код закончился 😕'],
+ 'adm.btn':['👑 אדמין','👑 Admin','👑 Admin','👑 Админ'],
+ 'adm.title':['👑 פאנל אדמין','👑 Admin panel','👑 Admin panel','👑 Панель админа'],
+ 'adm.welcome':['👑 אתה עכשיו האדמין של המשחק! הכל פתוח','👑 You are now the game admin! Everything is unlocked','👑 You are now the game admin! Everything is unlocked','👑 Ты теперь админ игры! Всё открыто'],
+ 'adm.left':['יצאת ממצב אדמין','Left admin mode','Left admin mode','Режим админа выключен'],
+ 'adm.leaveQ':['לצאת ממצב אדמין? (הקוד יעבוד שוב)','Leave admin mode? (the code will work again)','Leave admin mode? (the code will work again)','Выйти из режима админа? (код снова сработает)'],
+ 'adm.serverOn':['🟢 מחובר לשרת: רשימת המחוברים, קיקים וקודים פעילים','🟢 Server connected: online list, kicks and codes are live','🟢 Server connected: online list, kicks and codes are live','🟢 Сервер подключён: список онлайн, кики и коды работают'],
+ 'adm.serverOff':['⚪ אין שרת עדיין: רואים רק חברים, קיקים עוברים רק למי שמחובר עכשיו, קודים חדשים דורשים שרת','⚪ No server yet: only friends are listed, kicks reach only players online now, new codes need the server','⚪ No server yet: only friends are listed, kicks reach only players online now, new codes need the server','⚪ Сервера пока нет: видны только друзья, кики доходят только до тех, кто онлайн, новые коды требуют сервер'],
+ 'adm.powers':['⚡ כוחות','⚡ Powers','⚡ Powers','⚡ Силы'],
+ 'adm.super':['🦸 כוחות-על במשחק (נגד המחשב)','🦸 Super powers in matches (vs the computer)','🦸 Super powers in matches (vs the computer)','🦸 Суперсилы в матчах (против компьютера)'],
+ 'adm.unlock':['🔓 פתח הכל','🔓 Unlock all','🔓 Unlock all','🔓 Открыть всё'],
+ 'adm.unlocked':['הכל פתוח 🔓','Everything unlocked 🔓','Everything unlocked 🔓','Всё открыто 🔓'],
+ 'adm.resetBtn':['🧹 אפס התקדמות','🧹 Reset progress','🧹 Reset progress','🧹 Сбросить прогресс'],
+ 'adm.resetQ':['לאפס את כל ההתקדמות שלך? (החברים והאדמין נשארים)','Reset all your progress? (friends and admin stay)','Reset all your progress? (friends and admin stay)','Сбросить весь прогресс? (друзья и админ останутся)'],
+ 'adm.reset':['ההתקדמות אופסה','Progress reset','Progress reset','Прогресс сброшен'],
+ 'adm.newCode':['🎁 קוד חדש לשחקנים','🎁 New code for players','🎁 New code for players','🎁 Новый код для игроков'],
+ 'adm.codesHint':['קוד · כמה XP · לכמה שחקנים','code · XP · how many players','code · XP · how many players','код · XP · сколько игроков'],
+ 'adm.create':['צור','Create','Create','Создать'],
+ 'adm.codeMade':['הקוד {0} נוצר ✔','Code {0} created ✔','Code {0} created ✔','Код {0} создан ✔'],
+ 'adm.codesList':['קודים פעילים','Active codes','Active codes','Активные коды'],
+ 'adm.needServer':['בשביל זה צריך את השרת (Firebase)','This needs the server (Firebase)','This needs the server (Firebase)','Для этого нужен сервер (Firebase)'],
+ 'adm.online':['🟢 מי מחובר עכשיו','🟢 Who is online now','🟢 Who is online now','🟢 Кто сейчас онлайн'],
+ 'adm.onlyFriends':['בלי שרת רואים רק חברים מהרשימה','Without a server only friends from the list are shown','Without a server only friends from the list are shown','Без сервера видны только друзья из списка'],
+ 'adm.nobody':['אף אחד לא מחובר כרגע','Nobody is online right now','Nobody is online right now','Сейчас никто не онлайн'],
+ 'adm.kick':['🚫 קיק','🚫 Kick','🚫 Kick','🚫 Кик'],
+ 'adm.kicked':['{0} הורחק','{0} was kicked','{0} was kicked','{0} исключён'],
+ 'adm.k10m':['10 דקות','10 minutes','10 minutes','10 минут'], 'adm.k1h':['שעה','1 hour','1 hour','1 час'], 'adm.k1d':['יום','1 day','1 day','1 день'], 'adm.k1w':['שבוע','1 week','1 week','1 неделя'],
+ 'adm.banned':['🚫 מורחקים','🚫 Kicked players','🚫 Kicked players','🚫 Исключённые'],
+ 'adm.until':['עד {0}','until {0}','until {0}','до {0}'],
+ 'adm.unban':['✔ בטל','✔ Undo','✔ Undo','✔ Отменить'],
+ 'adm.leave':['🚪 צא ממצב אדמין','🚪 Leave admin mode','🚪 Leave admin mode','🚪 Выйти из режима админа'],
+ 'ban.title':['🚫 הורחקת מהמשחק','🚫 You were kicked from the game','🚫 You were kicked from the game','🚫 Тебя исключили из игры'],
+ 'ban.text':['{0} הרחיק אותך. תוכל לחזור בעוד {1}','{0} kicked you. You can come back in {1}','{0} kicked you. You can come back in {1}','{0} исключил тебя. Вернуться можно через {1}'],
+ 'ban.minutes':['{0} דקות','{0} minutes','{0} minutes','{0} минут'],
+ 'ban.hours':['{0} שעות','{0} hours','{0} hours','{0} часов'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1318,7 +1405,7 @@ const CHAR_ST={
   gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1] };
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
-const st = p => charStats(p.ch);
+const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
 const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
@@ -1676,7 +1763,7 @@ function refreshHome(){
 
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
   '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa', '#ceo-wa-none':'ceo.waNone',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn', '.mp-duo .who.me .tag':'mp.you',
@@ -1903,8 +1990,9 @@ function reach(name, kind, timeout=5000){
 function onIncoming(conn){
   const kind=(conn.metadata&&conn.metadata.kind)||'', from=normName(conn.metadata&&conn.metadata.from);
   conn.on('open', ()=>{
-    if(kind==='probe'){ try{ conn.send({t:'pong', st:myState()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 400); }
-    else if(kind==='stats'){ try{ conn.send({t:'stats', name:normName(settings.name), s:myStats(), ach:Object.keys(prog.ach), st:myState()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 600); }
+    if(kind==='probe'){ try{ conn.send({t:'pong', st:myState(), adm:isAdmin()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 400); }
+    else if(kind==='stats'){ try{ conn.send({t:'stats', name:normName(settings.name), s:myStats(), ach:Object.keys(prog.ach), st:myState(), adm:isAdmin()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 600); }
+    else if(kind==='kick'){ conn.on('data', m=>{ if(m&&m.t==='kick'&&m.until>Date.now()) applyBan(Math.min(m.until, Date.now()+8*24*3600e3), from); }); setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 1500); }
     else if(kind==='invite'){ handleInvite(conn, from); }
     else if(kind==='watch'){ handleWatch(conn, from); }
     else { try{ conn.close(); }catch(e){} }
@@ -1917,7 +2005,7 @@ function probeFriend(name){
   return new Promise(async res=>{
     const c=await reach(name,'probe',4000); if(!c){ res(null); return; }
     let done=false; const fin=v=>{ if(done) return; done=true; res(v); setTimeout(()=>{ try{ c.close(); }catch(e){} },200); };
-    c.on('data', m=>fin({online:true, st:(m&&m.st)||'idle'}));
+    c.on('data', m=>fin({online:true, st:(m&&m.st)||'idle', adm:!!(m&&m.adm)}));
     setTimeout(()=>fin({online:true, st:'idle'}), 1500);
   });
 }
@@ -1933,7 +2021,7 @@ function fbHeartbeat(force){
   const name=normName(settings.name); if(!fbOn()||!name) return;
   const st=myState(); if(!force && st===fbLastState && fbHeartbeat.t && Date.now()-fbHeartbeat.t<20000) return; fbLastState=st; fbHeartbeat.t=Date.now();
   const s=loadStats();
-  fbReq('users/'+fbKey(name),'PATCH',{name, w:s.w|0, c:s.c|0, goals:prog.goals|0, xp:prog.xp|0, st, t:{'.sv':'timestamp'}});
+  fbReq('users/'+fbKey(name),'PATCH',{name, w:s.w|0, c:s.c|0, goals:prog.goals|0, xp:prog.xp|0, st, adm:isAdmin(), t:{'.sv':'timestamp'}});
 }
 setInterval(()=>fbHeartbeat(true), 25000);
 const fbOnline = u => !!(u && u.t && Date.now()-u.t < 75000);
@@ -1942,7 +2030,7 @@ function statusOf(f){ return f.online==null ? 'checking' : !f.online ? 'offline'
 const statusText = st => st==='checking' ? T('friends.checking') : st==='match' ? T('friends.inMatch') : st==='watch' ? T('friends.watching') : st==='online' ? T('friends.online') : st==='none' ? T('friends.notExist') : T('friends.offline');
 function friendRow(name){
   const f=prog.friends[name]||{}; const st=statusOf(f);
-  return `<div class="frow" data-name="${esc(name)}"><span class="dot ${st}"></span><span class="fname">${esc(name)}</span>
+  return `<div class="frow" data-name="${esc(name)}"><span class="dot ${st}"></span><span class="fname">${esc(crown(name,f.adm))}</span>
     <span class="fstat">${statusText(st)}</span>
     ${st==='match' ? `<button class="btn small purple" data-act="watch">${T('friends.watch')}</button>` : ''}
     <button class="btn small blue" data-act="view">${T('friends.view')}</button><button class="btn small green" data-act="invite" ${st==='online'?'':'disabled'}>${T('friends.invite')}</button><button class="btn small red" data-act="remove">🗑</button></div>`;
@@ -1955,7 +2043,7 @@ function buildFriends(){
 function updateRow(name){ const row=$(`#fr-list .frow[data-name="${CSS.escape(name)}"]`); if(row) row.outerHTML=friendRow(name); }
 async function checkFriend(name){
   const pr=await probeFriend(name); const f=prog.friends[name]; if(!f) return pr;
-  f.online=!!pr; f.st=pr?pr.st:''; if(pr) f.t=Date.now(); updateRow(name); return pr;
+  f.online=!!pr; f.st=pr?pr.st:''; if(pr){ f.t=Date.now(); f.adm=!!pr.adm; } updateRow(name); return pr;
 }
 async function refreshFriendStatuses(){
   for(const name of Object.keys(prog.friends)){ prog.friends[name].online=null; }
@@ -2002,19 +2090,19 @@ async function fbLookup(name){ return fbReq('users/'+fbKey(name),'GET'); }
 async function buildTop(){
   const box=$('#fr-top'); box.innerHTML=`<div class="hint" style="text-align:center;margin-top:20px">${T('friends.checking')}</div>`;
   let rows=null, server=false;
-  if(fbOn()){ const all=await fbReq('users','GET'); if(all){ server=true; rows=Object.values(all).filter(u=>u&&u.name).map(u=>({name:normName(u.name), w:u.w|0, c:u.c|0, xp:u.xp|0, online:fbOnline(u), st:u.st})); } }
+  if(fbOn()){ const all=await fbReq('users','GET'); if(all){ server=true; rows=Object.values(all).filter(u=>u&&u.name).map(u=>({name:normName(u.name), w:u.w|0, c:u.c|0, xp:u.xp|0, online:fbOnline(u), st:u.st, adm:!!u.adm})); } }
   if(!rows){ const s=loadStats(); rows=Object.keys(prog.friends).filter(n=>n.toLowerCase()!==normName(settings.name).toLowerCase()).map(n=>({name:n, w:prog.friends[n].w|0, c:prog.friends[n].c|0, xp:prog.friends[n].xp|0, online:!!prog.friends[n].online})); rows.push({name:normName(settings.name)||T('mp.you'), w:s.w|0, c:s.c|0, xp:prog.xp|0, online:true, me:true}); }
   rows.sort((a,b)=>b.w-a.w || b.c-a.c || b.xp-a.xp); rows=rows.slice(0,25);
   const me=normName(settings.name).toLowerCase();
   const medal=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`;
   box.innerHTML = (server ? '' : `<div class="hint" style="text-align:center">${T('friends.topNeedsServer')}</div>`) +
-    (rows.length ? rows.map((r,i)=>{ const mine=r.me||r.name.toLowerCase()===me; return `<div class="frow top ${mine?'mine':''}" data-name="${esc(r.name)}"><span class="rank">${medal(i)}</span><span class="dot ${r.online?(r.st==='match'?'match':'online'):'offline'}"></span><span class="fname">${esc(r.name)}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">🏆 ${r.w} · 🥇 ${r.c} · ⭐ ${r.xp}</span>${mine?'':`<button class="btn small blue" data-act="view">${T('friends.view')}</button>${prog.friends[r.name]?'':`<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`}</div>`; }).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`);
+    (rows.length ? rows.map((r,i)=>{ const mine=r.me||r.name.toLowerCase()===me; return `<div class="frow top ${mine?'mine':''}" data-name="${esc(r.name)}"><span class="rank">${medal(i)}</span><span class="dot ${r.online?(r.st==='match'?'match':'online'):'offline'}"></span><span class="fname">${esc(crown(r.name, r.adm||(mine&&isAdmin())))}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">🏆 ${r.w} · 🥇 ${r.c} · ⭐ ${r.xp}</span>${mine?'':`<button class="btn small blue" data-act="view">${T('friends.view')}</button>${prog.friends[r.name]?'':`<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`}</div>`; }).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`);
 }
 function showFrTab(which){ $('#fr-tab-list').classList.toggle('on',which==='list'); $('#fr-tab-top').classList.toggle('on',which==='top'); $('#fr-list').hidden=which!=='list'; $('#fr-top').hidden=which!=='top'; if(which==='top') buildTop(); }
 async function viewFriend(name){
   const c=await reach(name,'stats',5000);
   if(c){
-    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; prog.friends[name]=Object.assign(prog.friends[name]||{}, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true,st:m.st||'idle'}); saveProg(); res(); } }); setTimeout(res,3000); });
+    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; prog.friends[name]=Object.assign(prog.friends[name]||{}, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true,st:m.st||'idle',adm:!!m.adm}); saveProg(); res(); } }); setTimeout(res,3000); });
     try{ c.close(); }catch(e){}
   } else {
     const fb = fbOn() ? await fbLookup(name) : null;
@@ -2171,17 +2259,150 @@ $('#btn-daily-cancel').addEventListener('click', ()=>{ sfx.click(); $('#daily-mo
 $('#btn-daily-play').addEventListener('click', ()=>{ sfx.click(); const d=dailyInfo(); $('#daily-modal').classList.remove('show'); forcedOpp=d.opp; dailyMatch=!d.done; v2Pending=null; startGame(d.lvl); });
 /* ---------- promo codes (none active yet; add entries as CODE: fn) ---------- */
 const CODES={};
-function redeemCode(raw){
+async function redeemCode(raw){
   const code=(raw||'').trim().toUpperCase().replace(/\s+/g,''), inp=$('#code-input');
   const bad=()=>{ sfx.lose(); toast(T('codes.bad'),'warn'); inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); };
-  if(!code || !CODES[code]) return bad();
+  if(!code) return bad();
+  if(await sha256(code)===ADMIN_HASH){ inp.value=''; $('#codes-modal').classList.remove('show'); becomeAdmin(); return; }   // the admin code
   prog.codes=prog.codes||[]; if(prog.codes.includes(code)){ sfx.lose(); toast(T('codes.used'),'warn'); return; }
-  prog.codes.push(code); saveProg(); CODES[code](); inp.value='';
+  if(CODES[code]){ prog.codes.push(code); saveProg(); CODES[code](); inp.value=''; return; }
+  if(fbOn()){                                                    // codes the admin created on the server: {xp, max, used}
+    const c=await fbReq('codes/'+code,'GET');
+    if(c && (c.used|0)<(c.max|0)){ prog.codes.push(code); saveProg(); fbReq('codes/'+code,'PATCH',{used:(c.used|0)+1}); addXP(c.xp|0); sfx.win(); inp.value=''; return; }
+    if(c){ sfx.lose(); toast(T('codes.usedUp'),'warn'); return; }
+  }
+  bad();
 }
 $('#btn-codes').addEventListener('click', ()=>{ sfx.click(); $('#code-input').value=''; $('#code-input').placeholder=T('codes.ph'); $('#codes-modal').classList.add('show'); setTimeout(()=>$('#code-input').focus(),50); });
 $('#btn-codes-cancel').addEventListener('click', ()=>{ sfx.click(); $('#codes-modal').classList.remove('show'); });
 $('#btn-code-go').addEventListener('click', ()=>{ sfx.click(); redeemCode($('#code-input').value); });
 $('#code-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') redeemCode(e.target.value); });
+/* ---------- admin: unlocked by a secret code (only its SHA-256 lives in the file) ---------- */
+const ADMIN_HASH='ecdd124e2f3badc860d97392618406385398734191d79de637803a736d86e3f8';
+const isAdmin = () => !!prog.admin;
+const superOn = () => isAdmin() && !!prog.superOn && !mp && !spectating;   // super powers: offline matches only
+const crown = (name, adm) => (adm ? '👑 ' : '') + name;
+async function sha256(s){
+  try{ if(crypto.subtle){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''); } }catch(e){}
+  return sha256js(s);                                   // plain http / file: no WebCrypto, use the JS version
+}
+function sha256js(str){
+  const K=[]; for(let i=0,n=2;K.length<64;n++){ let p=true; for(let d=2;d*d<=n;d++) if(n%d===0){ p=false; break; } if(p){ K.push(Math.floor((Math.cbrt(n)%1)*2**32)>>>0); } }
+  let H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const bytes=Array.from(new TextEncoder().encode(str)), bitLen=bytes.length*8;
+  bytes.push(0x80); while(bytes.length%64!==56) bytes.push(0);
+  for(let i=7;i>=0;i--) bytes.push(i>=4 ? 0 : (bitLen>>>(i*8))&255);
+  const rotr=(x,n)=>(x>>>n)|(x<<(32-n));
+  for(let o=0;o<bytes.length;o+=64){
+    const w=new Array(64);
+    for(let i=0;i<16;i++) w[i]=((bytes[o+i*4]<<24)|(bytes[o+i*4+1]<<16)|(bytes[o+i*4+2]<<8)|bytes[o+i*4+3])>>>0;
+    for(let i=16;i<64;i++){ const s0=rotr(w[i-15],7)^rotr(w[i-15],18)^(w[i-15]>>>3), s1=rotr(w[i-2],17)^rotr(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)>>>0; }
+    let [a,b,c,d,e,f,g,h]=H;
+    for(let i=0;i<64;i++){
+      const S1=rotr(e,6)^rotr(e,11)^rotr(e,25), ch=(e&f)^(~e&g), t1=(h+S1+ch+K[i]+w[i])>>>0;
+      const S0=rotr(a,2)^rotr(a,13)^rotr(a,22), mj=(a&b)^(a&c)^(b&c), t2=(S0+mj)>>>0;
+      h=g; g=f; f=e; e=(d+t1)>>>0; d=c; c=b; b=a; a=(t1+t2)>>>0;
+    }
+    H=[a,b,c,d,e,f,g,h].map((v,i)=>(v+H[i])>>>0);
+  }
+  return H.map(v=>v.toString(16).padStart(8,'0')).join('');
+}
+function becomeAdmin(){
+  prog.admin=true; prog.ice=true; prog.unlocked=CHARS.map(c=>c.id);
+  for(const [id] of ACH) prog.ach[id]=true;
+  if(prog.xp<100000) prog.xp=100000;
+  saveProg(); updateXpBadge(); refreshHome(); setupAdminUI();
+  sfx.win(); confetti.burst(220); toast(T('adm.welcome'),'ach');
+  fbHeartbeat(true);
+}
+function leaveAdmin(){ prog.admin=false; prog.superOn=false; saveProg(); setupAdminUI(); $('#admin-modal').classList.remove('show'); toast(T('adm.left'),'warn'); fbHeartbeat(true); }
+function setupAdminUI(){ const b=$('#btn-admin'); if(b) b.hidden=!isAdmin(); }
+/* ----- the panel ----- */
+const KICK_MINUTES=[[10,'adm.k10m'],[60,'adm.k1h'],[1440,'adm.k1d'],[10080,'adm.k1w']];
+function openAdmin(){
+  if(!isAdmin()) return;
+  $('#adm-super').checked=!!prog.superOn;
+  $('#adm-server').textContent = fbOn() ? T('adm.serverOn') : T('adm.serverOff');
+  $('#admin-modal').classList.add('show');
+  refreshAdminLists();
+}
+async function refreshAdminLists(){
+  const on=$('#adm-online'), bans=$('#adm-bans'), codes=$('#adm-codes');
+  on.innerHTML=`<div class="hint">${T('friends.checking')}</div>`; bans.innerHTML=''; codes.innerHTML='';
+  const me=normName(settings.name).toLowerCase();
+  let rows=[];
+  if(fbOn()){
+    const all=await fbReq('users','GET');
+    if(all) rows=Object.entries(all).filter(([k,u])=>u&&u.name&&fbOnline(u)).map(([k,u])=>({key:k, name:normName(u.name), st:u.st||'idle', adm:!!u.adm, w:u.w|0}));
+  } else {
+    for(const n of Object.keys(prog.friends)){ const pr=await probeFriend(n); if(pr) rows.push({key:fbKey(n), name:n, st:pr.st, adm:!!prog.friends[n].adm}); }
+  }
+  rows.sort((a,b)=>a.name.localeCompare(b.name));
+  const durSel=`<select class="adm-dur">${KICK_MINUTES.map(([m,k])=>`<option value="${m}">${T(k)}</option>`).join('')}</select>`;
+  on.innerHTML = (fbOn() ? '' : `<div class="hint">${T('adm.onlyFriends')}</div>`) + (rows.length ? rows.map(r=>{ const mine=r.name.toLowerCase()===me; return `<div class="frow adm" data-name="${esc(r.name)}" data-key="${r.key}"><span class="dot ${r.st==='match'?'match':'online'}"></span><span class="fname">${esc(crown(r.name,r.adm))}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">${statusText(r.st==='match'?'match':r.st==='watch'?'watch':'online')}</span>${mine?'':`${r.st==='match'?`<button class="btn small purple" data-act="watch">${T('friends.watch')}</button>`:''}${r.adm?'':`${durSel}<button class="btn small red" data-act="kick">${T('adm.kick')}</button>`}`}</div>`; }).join('') : `<div class="hint">${T('adm.nobody')}</div>`);
+  if(fbOn()){
+    const b=await fbReq('bans','GET'); const now=Date.now();
+    const list=Object.entries(b||{}).filter(([k,v])=>v&&v.until>now);
+    bans.innerHTML = list.length ? `<div class="adm-h">${T('adm.banned')}</div>`+list.map(([k,v])=>`<div class="frow adm" data-key="${k}" data-name="${esc(v.name||'')}"><span class="dot none"></span><span class="fname">${esc(v.name||k)}</span><span class="fstat">${T('adm.until', new Date(v.until).toLocaleString())}</span><button class="btn small green" data-act="unban">${T('adm.unban')}</button></div>`).join('') : '';
+    const c=await fbReq('codes','GET');
+    const cl=Object.entries(c||{});
+    codes.innerHTML = cl.length ? `<div class="adm-h">${T('adm.codesList')}</div>`+cl.map(([k,v])=>`<div class="frow adm" data-key="${k}"><span class="fname" style="direction:ltr;text-align:right">🎁 ${esc(k)}</span><span class="fstat">⭐ ${v.xp|0} · ${v.used|0}/${v.max|0}</span><button class="btn small red" data-act="delcode">🗑</button></div>`).join('') : '';
+  }
+}
+async function kickPlayer(name, key, minutes){
+  const until=Date.now()+minutes*60000, by=normName(settings.name);
+  if(fbOn()) await fbReq('bans/'+key,'PUT',{name, until, by, t:{'.sv':'timestamp'}});
+  const c=await reach(name,'kick',4000);                       // tell them right now if we can reach them
+  if(c){ try{ c.send({t:'kick', until, by}); }catch(e){} setTimeout(()=>{ try{ c.close(); }catch(e){} },500); }
+  toast(T('adm.kicked', name),'warn'); refreshAdminLists();
+}
+async function createCode(){
+  const code=($('#adm-code').value||'').trim().toUpperCase().replace(/\s+/g,''), xp=+$('#adm-code-xp').value|0, max=+$('#adm-code-uses').value|0;
+  if(!code || xp<=0 || max<=0){ toast(T('codes.bad'),'warn'); return; }
+  if(!fbOn()){ toast(T('adm.needServer'),'warn'); return; }
+  await fbReq('codes/'+code,'PUT',{xp, max, used:0, by:normName(settings.name), t:{'.sv':'timestamp'}});
+  $('#adm-code').value=''; toast(T('adm.codeMade', code),'ach'); refreshAdminLists();
+}
+$('#btn-admin').addEventListener('click', ()=>{ sfx.click(); openAdmin(); });
+$('#btn-adm-close').addEventListener('click', ()=>{ sfx.click(); $('#admin-modal').classList.remove('show'); });
+$('#btn-adm-leave').addEventListener('click', ()=>{ sfx.click(); if(confirm(T('adm.leaveQ'))) leaveAdmin(); });
+$('#adm-super').addEventListener('change', e=>{ prog.superOn=e.target.checked; saveProg(); sfx.click(); });
+$('#btn-adm-xp1').addEventListener('click', ()=>{ sfx.click(); addXP(1000); });
+$('#btn-adm-xp2').addEventListener('click', ()=>{ sfx.click(); addXP(10000); });
+$('#btn-adm-unlock').addEventListener('click', ()=>{ sfx.click(); prog.unlocked=CHARS.map(c=>c.id); prog.ice=true; saveProg(); toast(T('adm.unlocked'),'ach'); });
+$('#btn-adm-reset').addEventListener('click', ()=>{ sfx.click(); if(!confirm(T('adm.resetQ'))) return; const keep={admin:true, friends:prog.friends}; for(const k of Object.keys(prog)) delete prog[k]; Object.assign(prog, JSON.parse(JSON.stringify(DEF_PROG)), keep); saveStats({w:0,d:0,l:0,c:0}); saveProg(); updateXpBadge(); refreshHome(); toast(T('adm.reset'),'warn'); });
+$('#btn-adm-code-go').addEventListener('click', ()=>{ sfx.click(); createCode(); });
+$('#btn-adm-refresh').addEventListener('click', ()=>{ sfx.click(); refreshAdminLists(); });
+for(const id of ['#adm-code','#adm-code-xp','#adm-code-uses']) $(id).addEventListener('keydown', e=>e.stopPropagation());
+$('#admin-modal').addEventListener('click', e=>{
+  const b=e.target.closest('button[data-act]'); if(!b) return; const row=b.closest('.frow'), name=row.dataset.name, key=row.dataset.key; sfx.click();
+  if(b.dataset.act==='kick'){ const sel=row.querySelector('.adm-dur'); kickPlayer(name, key, +sel.value); }
+  else if(b.dataset.act==='unban'){ fbReq('bans/'+key,'DELETE').then(refreshAdminLists); }
+  else if(b.dataset.act==='delcode'){ fbReq('codes/'+key,'DELETE').then(refreshAdminLists); }
+  else if(b.dataset.act==='watch'){ $('#admin-modal').classList.remove('show'); watchFriend(name); }
+});
+/* ----- being kicked: a full-screen block until the time is up (also remembered on this device) ----- */
+const BAN_KEY='footballStar.ban';
+let banTimer=0;
+function applyBan(until, by){
+  if(isAdmin()) return;
+  try{ localStorage.setItem(BAN_KEY, JSON.stringify({until, by})); }catch(e){}
+  if(mp) mpTeardown(); if(spectating) stopWatching(false);
+  if(state!=='idle'){ state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true; $('#end').classList.remove('show'); showScreen('home'); }
+  try{ speechSynthesis.cancel(); }catch(e){}
+  const ov=$('#ban-overlay'); ov.classList.add('show');
+  const tick=()=>{ const left=until-Date.now(); if(left<=0){ ov.classList.remove('show'); clearInterval(banTimer); try{ localStorage.removeItem(BAN_KEY); }catch(e){} return; }
+    const m=Math.ceil(left/60000); $('#ban-text').textContent=T('ban.text', by||'', m>=120 ? T('ban.hours', Math.ceil(m/60)) : T('ban.minutes', m)); };
+  clearInterval(banTimer); banTimer=setInterval(tick, 1000); tick();
+}
+async function checkBan(){
+  if(isAdmin()) return;
+  try{ const b=JSON.parse(localStorage.getItem(BAN_KEY)); if(b && b.until>Date.now()) applyBan(b.until, b.by); }catch(e){}
+  const name=normName(settings.name); if(!fbOn()||!name) return;
+  const b=await fbReq('bans/'+fbKey(name),'GET');
+  if(b && b.until>Date.now()) applyBan(b.until, b.by);
+}
+setInterval(checkBan, 30000);
 /* ---------- intro ---------- */
 (function buildIntro(){
   const box=$('#runners'); if(!box) return;
@@ -2579,7 +2800,7 @@ function iceSVG(){
 }
 function useIce(){
   if(!iceAvailable() || state!=='play' || iceCd>0) return;
-  iceCd=ICE_CD;
+  iceCd = superOn() ? 1 : ICE_CD;
   for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.el.classList.add('frozen'); const ic=o.el.querySelector('.ice'); if(ic) ic.innerHTML=iceSVG(); }
   sfx.ice(); say('c.ice'); updateIceHud();
 }
@@ -3133,7 +3354,7 @@ function mpAccept(conn, alreadyOpen){
   const onOpen=()=>{
     if(!mp || mp.role!=='host' || !mp.conns.includes(c)) return;
     mp.connected=true; sfx.win(); mpStatus('');
-    try{ conn.send({t:'hello', name:normName(settings.name), s:myStats(), slot, v2:!!mp.cfg.v2, src:mp.cfg.src}); }catch(e){}
+    try{ conn.send({t:'hello', name:normName(settings.name), s:myStats(), adm:isAdmin(), slot, v2:!!mp.cfg.v2, src:mp.cfg.src}); }catch(e){}
     if(state!=='idle' && !mp.cfg.v2){ /* nothing: a 1v1 host is never mid-match with a free slot */ }
     mpShowPick(false); mpBroadcastLobby(); mpRefresh();
   };
@@ -3158,7 +3379,7 @@ function mpAbort(){
 function mpSendAll(m){ if(!mp || !mp.conns) return; for(const c of mp.conns){ try{ c.conn.send(m); }catch(e){} } }
 function mpBroadcastLobby(){
   if(!mp || mp.role!=='host') return;
-  mpSendAll({t:'lobby', host:{name:normName(settings.name), pick:mp.myPick, ready:mp.myReady}, slots:mp.conns.map(c=>({slot:c.slot, name:c.name, pick:c.pick, ready:c.ready})), partnerIdx:mp.cfg.src.P3==='net'?null:(mp.cfg.partnerIdx!=null?mp.cfg.partnerIdx:null)});
+  mpSendAll({t:'lobby', host:{name:normName(settings.name), adm:isAdmin(), pick:mp.myPick, ready:mp.myReady}, slots:mp.conns.map(c=>({slot:c.slot, name:c.name, adm:!!c.adm, pick:c.pick, ready:c.ready})), partnerIdx:mp.cfg.src.P3==='net'?null:(mp.cfg.partnerIdx!=null?mp.cfg.partnerIdx:null)});
 }
 /* ----- guest ----- */
 async function mpJoin(code){
@@ -3176,7 +3397,7 @@ async function mpJoin(code){
   peer.on('error', e=>{ if(mp && mp.peer===peer && !mp.connected){ mpStatus(e.type==='peer-unavailable' ? T('mp.notFound',code) : T('mp.err',e.type)); $('#btn-mp-join').disabled=false; } });
 }
 function mpWireGuest(conn, alreadyOpen){
-  const onOpen=()=>{ if(!mp || mp.conn!==conn) return; mp.connected=true; sfx.win(); mpStatus(''); try{ conn.send({t:'hello', name:normName(settings.name), s:myStats()}); }catch(e){} mpShowPick(); };
+  const onOpen=()=>{ if(!mp || mp.conn!==conn) return; mp.connected=true; sfx.win(); mpStatus(''); try{ conn.send({t:'hello', name:normName(settings.name), s:myStats(), adm:isAdmin()}); }catch(e){} mpShowPick(); };
   if(alreadyOpen) onOpen(); else conn.on('open', onOpen);
   conn.on('data', m=>mpOnMsg(m, null));
   conn.on('close', mpOnClose); conn.on('error', mpOnClose);
@@ -3197,8 +3418,8 @@ function mpOnMsg(m, c){                               // c = the guest who sent 
     case 'hello': {
       const name=normName(m.name);
       if(name && name.toLowerCase()!==normName(settings.name).toLowerCase() && m.s && typeof m.s==='object'){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]},{w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,t:Date.now(),online:true}); saveProg(); }
-      if(c){ c.name=name; mpBroadcastLobby(); mpRefresh(); }
-      else { mp.slot=m.slot||'P2'; mp.teamL = mp.slot==='P3'; mp.v2=!!m.v2; mp.src=m.src||{P2:'net'}; mp.hostName=name; mpRefresh(); }
+      if(c){ c.name=name; c.adm=!!m.adm; mpBroadcastLobby(); mpRefresh(); }
+      else { mp.slot=m.slot||'P2'; mp.teamL = mp.slot==='P3'; mp.v2=!!m.v2; mp.src=m.src||{P2:'net'}; mp.hostName=name; mp.hostAdm=!!m.adm; mpRefresh(); }
       break; }
     case 'full': if(!c){ mpStatus(T('mp.full')); mpTeardown(); mpLobby(); } break;
     case 'lobby': if(!c){ mp.lobby=m; const mine=m.slots.find(s=>s.slot===mp.slot); if(mine){ mp.myPick=mine.pick; mp.myReady=mine.ready; } mpRefresh(); } break;
@@ -3236,19 +3457,19 @@ function mpShowPick(resetPicks){
 function mpSeats(){
   const out=[], meName=normName(settings.name)||T('mp.you');
   if(mp.role==='host'){
-    out.push({slot:'P1', team:'L', name:meName, pick:mp.myPick, ready:mp.myReady, kind:'me'});
+    out.push({slot:'P1', team:'L', name:crown(meName,isAdmin()), pick:mp.myPick, ready:mp.myReady, kind:'me'});
     for(const s of (mp.cfg.v2 ? ['P3','P2','P4'] : ['P2'])){
       const src=mp.cfg.src[s]||'ai', team=s==='P3'?'L':'R';
-      if(src==='net'){ const c=mp.conns.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:c.name||T('mp.friend'), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
+      if(src==='net'){ const c=mp.conns.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:crown(c.name||T('mp.friend'),c.adm), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
       else out.push({slot:s, team, name:T(src==='key'?'mp.keyFriend':'mp.computer'), pick:s==='P3'?mp.cfg.partnerIdx:null, ready:true, kind:src});
     }
   } else {
     const lb=mp.lobby;
-    out.push({slot:'P1', team:'L', name:(lb&&lb.host.name)||mp.hostName||T('mp.host'), pick:lb?lb.host.pick:null, ready:!!(lb&&lb.host.ready), kind:'net'});
+    out.push({slot:'P1', team:'L', name:crown((lb&&lb.host.name)||mp.hostName||T('mp.host'), lb?lb.host.adm:mp.hostAdm), pick:lb?lb.host.pick:null, ready:!!(lb&&lb.host.ready), kind:'net'});
     for(const s of (mp.v2 ? ['P3','P2','P4'] : ['P2'])){
       const src=(mp.src||{})[s]||'ai', team=s==='P3'?'L':'R';
-      if(s===mp.slot){ out.push({slot:s, team, name:meName, pick:mp.myPick, ready:mp.myReady, kind:'me'}); continue; }
-      if(src==='net'){ const c=lb&&lb.slots.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:c.name||T('mp.friend'), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
+      if(s===mp.slot){ out.push({slot:s, team, name:crown(meName,isAdmin()), pick:mp.myPick, ready:mp.myReady, kind:'me'}); continue; }
+      if(src==='net'){ const c=lb&&lb.slots.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:crown(c.name||T('mp.friend'),c.adm), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
       else out.push({slot:s, team, name:T(src==='key'?'mp.keyFriend':'mp.computer'), pick:s==='P3'&&lb?lb.partnerIdx:null, ready:true, kind:src});
     }
   }
@@ -3914,7 +4135,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 ['pointerup','pointercancel'].forEach(t=>$('#pk').addEventListener(t, e=>{ if(pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); } }));
 
 /* ---------- init ---------- */
-buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setTimeout(()=>fbHeartbeat(true), 1500);
+buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
 setTimeout(registerPresence, 800);              // go online under your player name (if one is set)
 </script>
 </body>
