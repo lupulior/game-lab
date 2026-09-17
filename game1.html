@@ -1376,7 +1376,7 @@ const CHAR_NAMES={
  beckham:['Beckham','بيكهام','Бекхэм'], henry:['Henry','هنري','Анри'], kaka:['Kaká','كاكا','Кака'], modric:['Modrić','مودريتش','Модрич'],
  debruyne:['De Bruyne','دي بروين','Де Брёйне'], xavi:['Xavi','تشافي','Хави'], rooney:['Rooney','روني','Руни'], drogba:['Drogba','دروغبا','Дрогба'],
  gerrard:['Gerrard','جيرارد','Джеррард'], aguero:['Agüero','أغويرو','Агуэро'], vandijk:['Van Dijk','فان دايك','Ван Дейк'], baggio:['Baggio','باجيو','Баджо'],
- mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'], khalaili:['Anan Khalaili','عنان خلايلي','Анан Халайли'],
+ mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'], khalaili:['Anan Khalaili','عنان خلايلي','Анан Халайли'], zahavi:['Eran Zahavi','عيران زهافي','Эран Захави'], benayoun:['Yossi Benayoun','يوسي بنايون','Йосси Бенаюн'], revivo:['Haim Revivo','حاييم ريفيفو','Хаим Ревиво'], berkovic:['Eyal Berkovic','إيال بيركوفيتش','Эяль Беркович'], solomon:['Manor Solomon','مانور سولومون','Манор Соломон'], gloukh:['Oscar Gloukh','أوسكار غلوخ','Оскар Глух'], dabbur:['Munas Dabbur','مؤنس دبور','Мунас Даббур'], spiegler:['Mordechai Spiegler','مردخاي شبيغلر','Мордехай Шпиглер'],
 };
 const nm = c => lang==='he' ? c.name : ((CHAR_NAMES[c.id]||[])[LI[lang]-1] || (CHAR_NAMES[c.id]||[])[0] || c.name);
 
@@ -1390,7 +1390,7 @@ const PRICES={
   pele:10000, maradona:7000, zidane:7000, ronaldinho:7000, cruyff:5000, r9:5000, beckham:5000, henry:4000, zlatan:4000, iniesta:4000,
   kaka:3500, modric:3500, xavi:3000, debruyne:3000, bellingham:3000, lewa:2500, gerrard:2500, rooney:2500, drogba:2500, suarez:2500,
   benzema:2000, kane:2000, yamal:2000, baggio:2000, haaland:1500, salah:1500, lautaro:1500, vandijk:1500, aguero:1500,
-  griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000, khalaili:100 };
+  griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000, khalaili:100, zahavi:1500, benayoun:1500, revivo:1200, berkovic:1200, solomon:1000, spiegler:1000, gloukh:700, dabbur:500 };
 const priceOf = c => PRICES[c.id] || 1000;
 const ICE_PRICE=10000, ICE_CD=15, ICE_DUR=1;        // ice power: permanent once bought, 15s cooldown, freezes opponents for 1s
 const fmtXp = n => Number(n).toLocaleString('en-US');
@@ -1402,7 +1402,7 @@ const CHAR_ST={
   lautaro:[1,1.1,1.05,1.05], yamal:[1.12,.9,1,.95], zlatan:[.9,1.2,1,1.15], bellingham:[1.05,1.05,1.1,1.1],
   pele:[1.15,1.15,1.05,1.15], maradona:[1.12,1.05,1.1,1], zidane:[.95,1.1,1,1.1], cruyff:[1.12,1,1,1], beckham:[.9,1.2,1,.95], henry:[1.15,1.05,1,1],
   kaka:[1.12,1.05,1,1], modric:[.95,1,1.1,1], debruyne:[.95,1.15,1,1], xavi:[.9,.9,1,.9], rooney:[1,1.1,1.15,1], drogba:[.95,1.2,1,1.15],
-  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02] };
+  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02], zahavi:[1,1.2,1,1.05], benayoun:[1.08,1.05,1,1], revivo:[1.02,1.15,1,1], berkovic:[1.05,1.08,.95,.95], solomon:[1.18,1,1,1], gloukh:[1.1,1.08,1,1], dabbur:[1.02,1.1,1,1.12], spiegler:[1,1.12,1,1.08] };
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
 const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
@@ -1515,6 +1515,23 @@ const CHARS = [
     jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:47, beard:false, brows:'round' },
   { id:'khalaili', name:'ענן חלאלי', skin:'#C99A6B', skinDark:'#8f6a43', hair:'short', hairColor:'#15110e',
     jersey:'#0B4DBB', stripes:'#ffffff', numColor:'#ffffff', shorts:'#ffffff', socks:'#0B4DBB', number:11, beard:true, beardColor:'#1d1713', brows:'sharp' },
+  /* more Israeli players */
+  { id:'zahavi', name:'ערן זהבי', skin:'#E8B892', skinDark:'#b07a55', hair:'short', hairColor:'#1a1512',
+    jersey:'#FFD21F', numColor:'#0B2A6B', shorts:'#0B2A6B', socks:'#FFD21F', number:7, beard:true, beardColor:'#1a1512', brows:'sharp' },
+  { id:'benayoun', name:'יוסי בניון', skin:'#E3B48C', skinDark:'#a97a52', hair:'short', hairColor:'#15110e',
+    jersey:'#0B4DBB', numColor:'#ffffff', shorts:'#ffffff', socks:'#0B4DBB', number:15, beard:false, brows:'round' },
+  { id:'revivo', name:'חיים רביבו', skin:'#E3B48C', skinDark:'#a97a52', hair:'wavy', hairColor:'#15110e',
+    jersey:'#ffffff', stripes:'#0B4DBB', numColor:'#0B4DBB', shorts:'#0B4DBB', socks:'#ffffff', number:10, beard:false, brows:'sharp' },
+  { id:'berkovic', name:"אייל ברקוביץ'", skin:'#F1C9A5', skinDark:'#b8865f', hair:'short', hairColor:'#2a1c12',
+    jersey:'#0E8A3E', numColor:'#ffffff', shorts:'#ffffff', socks:'#0E8A3E', number:8, beard:false, brows:'round' },
+  { id:'solomon', name:'מנור סולומון', skin:'#EBC29E', skinDark:'#b48a63', hair:'short', hairColor:'#2a1c12',
+    jersey:'#0B4DBB', stripes:'#ffffff', numColor:'#ffffff', shorts:'#ffffff', socks:'#0B4DBB', number:10, beard:true, beardColor:'#2a1c12', brows:'round' },
+  { id:'gloukh', name:'אוסקר גלוך', skin:'#F3D2B3', skinDark:'#c49a72', hair:'wavy', hairColor:'#8a6a3a', browColor:'#6a4f26',
+    jersey:'#0B4DBB', numColor:'#ffffff', shorts:'#ffffff', socks:'#0B4DBB', number:14, beard:false, brows:'round' },
+  { id:'dabbur', name:'מונס דאבור', skin:'#C99A6B', skinDark:'#8f6a43', hair:'short', hairColor:'#15110e',
+    jersey:'#0B4DBB', numColor:'#ffffff', shorts:'#0B4DBB', socks:'#ffffff', number:9, beard:true, beardColor:'#15110e', brows:'sharp' },
+  { id:'spiegler', name:'מרדכי שפיגלר', skin:'#F1C9A5', skinDark:'#b8865f', hair:'curly', hairColor:'#3a2a1a',
+    jersey:'#ffffff', numColor:'#0B4DBB', shorts:'#0B4DBB', socks:'#ffffff', number:10, beard:false, brows:'round' },
 ];
 
 const mixW = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v+(255-v)*a); return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };   // toward white
