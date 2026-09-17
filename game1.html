@@ -1376,7 +1376,7 @@ const CHAR_NAMES={
  beckham:['Beckham','بيكهام','Бекхэм'], henry:['Henry','هنري','Анри'], kaka:['Kaká','كاكا','Кака'], modric:['Modrić','مودريتش','Модрич'],
  debruyne:['De Bruyne','دي بروين','Де Брёйне'], xavi:['Xavi','تشافي','Хави'], rooney:['Rooney','روني','Руни'], drogba:['Drogba','دروغبا','Дрогба'],
  gerrard:['Gerrard','جيرارد','Джеррард'], aguero:['Agüero','أغويرو','Агуэро'], vandijk:['Van Dijk','فان دايك','Ван Дейк'], baggio:['Baggio','باجيو','Баджо'],
- mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'],
+ mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'], khalaili:['Anan Khalaili','عنان خلايلي','Анан Халайли'],
 };
 const nm = c => lang==='he' ? c.name : ((CHAR_NAMES[c.id]||[])[LI[lang]-1] || (CHAR_NAMES[c.id]||[])[0] || c.name);
 
@@ -1390,7 +1390,7 @@ const PRICES={
   pele:10000, maradona:7000, zidane:7000, ronaldinho:7000, cruyff:5000, r9:5000, beckham:5000, henry:4000, zlatan:4000, iniesta:4000,
   kaka:3500, modric:3500, xavi:3000, debruyne:3000, bellingham:3000, lewa:2500, gerrard:2500, rooney:2500, drogba:2500, suarez:2500,
   benzema:2000, kane:2000, yamal:2000, baggio:2000, haaland:1500, salah:1500, lautaro:1500, vandijk:1500, aguero:1500,
-  griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000 };
+  griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000, khalaili:100 };
 const priceOf = c => PRICES[c.id] || 1000;
 const ICE_PRICE=10000, ICE_CD=15, ICE_DUR=1;        // ice power: permanent once bought, 15s cooldown, freezes opponents for 1s
 const fmtXp = n => Number(n).toLocaleString('en-US');
@@ -1402,14 +1402,14 @@ const CHAR_ST={
   lautaro:[1,1.1,1.05,1.05], yamal:[1.12,.9,1,.95], zlatan:[.9,1.2,1,1.15], bellingham:[1.05,1.05,1.1,1.1],
   pele:[1.15,1.15,1.05,1.15], maradona:[1.12,1.05,1.1,1], zidane:[.95,1.1,1,1.1], cruyff:[1.12,1,1,1], beckham:[.9,1.2,1,.95], henry:[1.15,1.05,1,1],
   kaka:[1.12,1.05,1,1], modric:[.95,1,1.1,1], debruyne:[.95,1.15,1,1], xavi:[.9,.9,1,.9], rooney:[1,1.1,1.15,1], drogba:[.95,1.2,1,1.15],
-  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1] };
+  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02] };
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
 const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
 const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
-const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id);
+const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id) || !!prog.admin;   // the admin owns every player, new ones too
 const ACH=[['first_win',20],['hat_trick',15],['clean_sheet',25],['slide_goal',15],['header_goal',15],['win_hard',30],['win_crazy',50],['win_master',80],
   ['streak3',30],['ten_wins',40],['comeback',25],['last_second',20],['online_win',30],['v2_win',25],['pk_perfect',25],['pk_saves',25],['cup_win',60],['cup_master',120],['daily_win',20],['win_impossible',300]];
 const ACH_ICON={win_impossible:'☠️',first_win:'🥇',hat_trick:'🎩',clean_sheet:'🧱',slide_goal:'🦵',header_goal:'🧠',win_hard:'🔥',win_crazy:'🤪',win_master:'👑',streak3:'3️⃣',ten_wins:'🔟',comeback:'🔄',last_second:'⏱️',online_win:'🌐',v2_win:'👥',pk_perfect:'🎯',pk_saves:'🧤',cup_win:'🏆',cup_master:'💎',daily_win:'📅'};
@@ -1513,6 +1513,8 @@ const CHARS = [
     jersey:'#EF0107', numColor:'#fff', shorts:'#ffffff', socks:'#ffffff', number:7, beard:false, brows:'round' },
   { id:'foden', name:'פודן', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#E9C55B', browColor:'#8a6a1a',
     jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:47, beard:false, brows:'round' },
+  { id:'khalaili', name:'ענן חלילי', skin:'#C99A6B', skinDark:'#8f6a43', hair:'short', hairColor:'#15110e',
+    jersey:'#0B4DBB', stripes:'#ffffff', numColor:'#ffffff', shorts:'#ffffff', socks:'#0B4DBB', number:11, beard:true, beardColor:'#1d1713', brows:'sharp' },
 ];
 
 const mixW = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v+(255-v)*a); return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };   // toward white
