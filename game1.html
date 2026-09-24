@@ -230,6 +230,16 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #v2-modal .v2row{margin-bottom:4px}
 #v2-modal .panel h2{font-size:34px}#watch-bar{position:absolute;left:14px;top:70px;z-index:8;display:flex;align-items:center;gap:8px;direction:ltr}#watch-tag{font-size:20px;font-weight:900;color:#fff;background:var(--purple,#8E5CF6);border-radius:12px;padding:4px 14px;box-shadow:0 4px 0 rgba(0,0,0,.25)}#game.watching #btn-pause,#game.watching #touch,#game.watching #ice-hud{display:none!important}#game.watching #watch-bar{display:flex}#end-actions{margin-top:10px}
 #update-bar{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:60;cursor:pointer;font-size:20px;font-weight:900;color:var(--navy);background:linear-gradient(#FFE27A,#F5C400);border-radius:16px;padding:8px 22px;box-shadow:0 6px 0 #C99A10,0 10px 18px rgba(0,0,0,.25);animation:tapPulse 1.2s infinite}
+/* ice shield across my goal mouth */
+#goal-ice{position:absolute;left:0;top:232px;width:76px;height:140px;display:none;z-index:3;pointer-events:none;border-radius:8px 14px 14px 8px;
+  background:linear-gradient(135deg,rgba(235,250,255,.95) 0%,rgba(160,225,255,.65) 40%,rgba(90,185,255,.55) 65%,rgba(220,245,255,.9) 100%);
+  border:3px solid rgba(240,252,255,.95);box-shadow:0 0 0 2px rgba(120,200,255,.6),0 0 26px rgba(126,211,255,.9),inset 0 0 22px rgba(255,255,255,.7);transform-origin:0 50%}
+#goal-ice svg{position:absolute;inset:0;width:100%;height:100%}
+#goal-ice.show{display:block;animation:iceIn .2s cubic-bezier(.2,1.4,.4,1)}
+#goal-ice.thaw{display:block;animation:shatter .5s ease-out forwards}
+#set-ice-row{flex-wrap:wrap;gap:8px}
+#set-ice .btn.small{font-size:15px;padding:5px 10px}
+#set-ice .btn.on{outline:4px solid var(--yellow)}
 #watch-hold{position:absolute;left:50%;top:180px;transform:translateX(-50%);z-index:8;font-size:34px;font-weight:900;color:#fff;background:rgba(27,42,78,.85);border-radius:22px;padding:12px 30px;white-space:nowrap;box-shadow:0 8px 0 rgba(0,0,0,.25)}
 .fm-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .fm-badges .bd{font-size:26px;width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(27,42,78,.2);filter:grayscale(1);opacity:.35}
@@ -669,6 +679,7 @@ body.touch #touch{display:block}
     <div class="player me" id="p1"><div class="tag">אני</div><div class="sprite"></div><div class="ice"></div></div>
     <div class="player" id="p2"><div class="tag">יריב</div><div class="sprite"></div><div class="ice"></div></div>
     <div id="ball"></div>
+    <div id="goal-ice"></div>
     <div id="front"></div>
     </div></div>
     <div id="level-tag"></div>
@@ -833,6 +844,7 @@ body.touch #touch{display:block}
       <div class="setrow"><span id="set-name-l">👤 שם שחקן</span><input type="text" id="set-name" maxlength="14" placeholder="השם שלך" autocomplete="off" spellcheck="false"></div>
       <div class="name-status off" id="name-status"></div>
       <div class="setrow"><span id="set-voice-l">🎙️ קריין מדבר</span><label class="switch"><input type="checkbox" id="set-voice"><span></span></label></div>
+      <div class="setrow" id="set-ice-row"><span id="set-ice-l">❄️ כוח הקרח</span><div class="v2opts" id="set-ice"><button class="btn small blue on" data-mode="freeze">❄️ מקפיא יריב</button><button class="btn small blue" data-mode="goal">🧊 חומה על השער</button><button class="btn small red" data-mode="off">⛔ כבוי</button></div></div>
       <div class="setrow" style="justify-content:center"><span id="set-lang-l">🌍 שפה</span></div>
       <div class="langs" id="set-langs"></div>
       <br><button class="btn small blue" id="btn-settings-close">חזרה</button>
@@ -991,7 +1003,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-24.1';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-24.2';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1260,6 +1272,11 @@ const I18N_RAW={
  'watch.corner':['🚩 קרן! מחכים לנגיחה…','🚩 Corner! Waiting for the header…','🚩 ركنية! في انتظار الضربة الرأسية…','🚩 Угловой! Ждём удар головой…'],
  'watch.pk':['🥅 פנדל! מחכים לבעיטה…','🥅 Penalty! Waiting for the kick…','🥅 ركلة جزاء! في انتظار التسديدة…','🥅 Пенальти! Ждём удар…'],
  'upd.new':['🆕 יש גרסה חדשה של המשחק, לחץ כאן לרענון','🆕 A new version is out, click here to reload','🆕 هناك إصدار جديد، اضغط هنا للتحديث','🆕 Вышла новая версия, нажми здесь, чтобы обновить'],
+ 'set.ice':['❄️ כוח הקרח','❄️ Ice power','❄️ قوة الجليد','❄️ Сила льда'],
+ 'ice.m.freeze':['❄️ מקפיא יריב','❄️ Freeze opponent','❄️ تجميد الخصم','❄️ Заморозить соперника'],
+ 'ice.m.goal':['🧊 חומה על השער','🧊 Wall on my goal','🧊 جدار على مرماي','🧊 Стена на моих воротах'],
+ 'ice.m.off':['⛔ כבוי','⛔ Off','⛔ مطفأ','⛔ Выкл'],
+ 'c.iceGoal':['🎙️ 🧊 חומת קרח על השער! אי אפשר להבקיע!','🎙️ 🧊 A wall of ice on the goal! Nothing gets through!','🎙️ 🧊 جدار من الجليد على المرمى! لا شيء يمر!','🎙️ 🧊 Ледяная стена на воротах! Ничего не пройдёт!'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1358,7 +1375,7 @@ const I18N_RAW={
  'lvl.5':['בלתי אפשרי','Impossible','مستحيل','Невозможно'],
  'level.doom':['☠️ הרמה הקשה ביותר שיש ☠️','☠️ The hardest level there is ☠️','☠️ أصعب مستوى على الإطلاق ☠️','☠️ Самый сложный уровень ☠️'],
  'ice.name':['❄️ כוח קרח','❄️ Ice Power','❄️ قوة الجليد','❄️ Сила льда'],
- 'ice.desc':['מקפיא את היריב לשנייה. E במקלדת. טעינה 15 שניות. לתמיד!','Freezes the opponent for 1s. Press E. 15s cooldown. Yours forever!','يجمّد الخصم لثانية. زر E. إعادة تعبئة 15 ث. ملكك للأبد!','Замораживает соперника на 1 с. Клавиша E. Перезарядка 15 с. Навсегда!'],
+ 'ice.desc':['E במשחק: מקפיא את היריב לשנייה, או חומת קרח על השער שלך (לבחירה בהגדרות). טעינה 15 שניות. לתמיד!','Freezes the opponent for 1s. Press E. 15s cooldown. Yours forever!','يجمّد الخصم لثانية. زر E. إعادة تعبئة 15 ث. ملكك للأبد!','Замораживает соперника на 1 с. Клавиша E. Перезарядка 15 с. Навсегда!'],
  'ice.confirm':['לקנות את כוח הקרח תמורת {0} XP? (לתמיד)','Buy the Ice Power for {0} XP? (permanent)','شراء قوة الجليد مقابل {0} XP؟ (دائمة)','Купить Силу льда за {0} XP? (навсегда)'],
  'ice.bought':['❄️ כוח הקרח שלך! לחץ E במשחק','❄️ Ice Power is yours! Press E in a match','❄️ قوة الجليد لك! اضغط E في المباراة','❄️ Сила льда твоя! Нажми E в матче'],
  'ice.owned':['✔ נקנה','✔ Owned','✔ تم الشراء','✔ Куплено'],
@@ -1812,7 +1829,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
-  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#rotate span':'rotate', '#replay-tag':'replay',
+  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'set.ice', '#rotate span':'rotate', '#replay-tag':'replay',
   '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn',
   '#btn-train':'train.btn', '#train-title':'train.title', '#train-hint':'train.hint', '#btn-train-shoot':'train.shoot', '#btn-train-pk':'train.pk', '#btn-train-corner':'train.corner', '#btn-train-cancel':'btn.back2' };
 function applyLang(){
@@ -1822,6 +1839,7 @@ function applyLang(){
   document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=(PK_LEVELS[i].color==='doom'?'☠️ ':'')+T('lvl.'+i));
   document.querySelectorAll('.doom-sep').forEach(d=>d.textContent=T('level.doom'));
   document.querySelectorAll('#v2-modal .v2opts[data-slot] .btn').forEach(b=>b.textContent=T('v2.src.'+b.dataset.src));
+  document.querySelectorAll('#set-ice .btn').forEach(b=>{ b.textContent=T('ice.m.'+b.dataset.mode); b.classList.toggle('on', b.dataset.mode===iceMode()); });
   document.querySelectorAll('#set-langs .btn').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
   const ni=$('#set-name'); if(ni) ni.placeholder=T('set.namePh');
   refreshHome(); buildGallery(); refreshPreview();
@@ -2661,7 +2679,7 @@ ball.el.innerHTML=BALL_SVG;
 
 let level=LEVELS[0], state='idle', score={me:0,op:0}, timeLeft=MATCH_TIME, lastT=0, rafId=0;
 const keys={left:false,right:false,jump:false,kick:false,slide:false,ice:false};
-let iceQueued=false, iceCd=0;
+let iceQueued=false, iceCd=0, goalIceT=0;
 let jumpQueued=false, kickQueued=false, slideQueued=false;
 
 /* ---------- input ---------- */
@@ -2815,7 +2833,7 @@ function startCountdown(done){
   step();
 }
 /* ---------- ice power ---------- */
-function iceAvailable(){ return !!prog.ice && !mp && !spectating; }              // bought once, offline modes only
+function iceAvailable(){ return !!prog.ice && !mp && !spectating && iceMode()!=='off'; }              // bought once, offline modes only
 let iceSeq=0;
 // builds a fresh random jagged crystal: an irregular polygon body with facets, loose shards floating around it and sparkles
 function iceSVG(){
@@ -2853,15 +2871,30 @@ function iceSVG(){
     <g stroke="rgba(255,255,255,.8)" stroke-width="1.5">${facets}</g>
     <g fill="#fff" text-anchor="middle" style="text-shadow:0 0 6px #7ED3FF">${sparks}</g></svg>`;
 }
+/* the owner chooses what the power does: 'freeze' the opponents for a second, 'goal' = a wall of ice on my own goal, or 'off' */
+const iceMode = () => ['freeze','goal','off'].includes(settings.iceMode) ? settings.iceMode : 'freeze';
+const ICE_ICON={freeze:'❄️', goal:'🧊', off:'⛔'};
 function useIce(){
   if(!iceAvailable() || state!=='play' || iceCd>0) return;
   iceCd = superOn() ? 1 : ICE_CD;
+  if(iceMode()==='goal'){
+    goalIceT=ICE_DUR; const g=$('#goal-ice'); g.classList.remove('thaw'); g.classList.add('show'); g.innerHTML=goalIceSVG();
+    sfx.ice(); say('c.iceGoal'); netEv('gice:1'); updateIceHud(); return;
+  }
   for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.el.classList.add('frozen'); const ic=o.el.querySelector('.ice'); if(ic) ic.innerHTML=iceSVG(); }
   sfx.ice(); say('c.ice'); updateIceHud();
 }
-function updateIce(dt){ if(iceCd>0){ iceCd=Math.max(0,iceCd-dt); updateIceHud(); } }
+function goalIceSVG(){                               // a slab of ice with cracks and sparkles, stretched over the goal mouth
+  const rnd=(a,b)=>a+Math.random()*(b-a); let cracks='', sparks='';
+  for(let i=0;i<5;i++){ const x=rnd(5,70), y=rnd(5,135); cracks+=`<polyline points="${x.toFixed(0)},${y.toFixed(0)} ${(x+rnd(-14,14)).toFixed(0)},${(y+rnd(-16,16)).toFixed(0)} ${(x+rnd(-20,20)).toFixed(0)},${(y+rnd(-24,24)).toFixed(0)}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.5"/>`; }
+  for(let i=0;i<4;i++) sparks+=`<text x="${rnd(8,66).toFixed(0)}" y="${rnd(14,130).toFixed(0)}" font-size="${rnd(9,14).toFixed(0)}" fill="#fff">✦<animate attributeName="opacity" values=".2;1;.2" dur="${rnd(.7,1.3).toFixed(2)}s" repeatCount="indefinite"/></text>`;
+  return `<svg viewBox="0 0 76 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">${cracks}${sparks}</svg>`;
+}
+function endGoalIce(){ goalIceT=0; const g=$('#goal-ice'); if(!g.classList.contains('show')) return; g.classList.remove('show'); g.classList.add('thaw'); sfx.miss(); netEv('gice:0'); setTimeout(()=>g.classList.remove('thaw'),500); }
+function updateIce(dt){ if(iceCd>0){ iceCd=Math.max(0,iceCd-dt); updateIceHud(); } if(goalIceT>0){ goalIceT-=dt; if(goalIceT<=0) endGoalIce(); } }
 function updateIceHud(){
   const h=$('#ice-hud'); if(!h) return;
+  h.querySelector('.ic').textContent=ICE_ICON[iceMode()]; const tbi=document.querySelector('#touch .tb.ice'); if(tbi) tbi.textContent=ICE_ICON[iceMode()];
   const ready=iceCd<=0; h.classList.toggle('ready',ready);
   h.style.setProperty('--cd', Math.round(iceCd/ICE_CD*100)+'%');
   h.querySelector('.cd').textContent = ready ? '' : Math.ceil(iceCd);
@@ -2870,9 +2903,10 @@ function updateIceHud(){
 function setupIceUI(){
   const on=iceAvailable();
   $('#ice-hud').hidden=!on; const tb=document.querySelector('#touch .tb.ice'); if(tb) tb.hidden=!on;
-  iceCd=0; updateIceHud(); for(const p of [P1,P2,P3,P4]){ p.frozenT=0; p.el.classList.remove('frozen'); }
+  iceCd=0; goalIceT=0; $('#goal-ice').classList.remove('show','thaw'); updateIceHud(); for(const p of [P1,P2,P3,P4]){ p.frozenT=0; p.el.classList.remove('frozen'); }
 }
 $('#ice-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); iceQueued=true; });
+document.querySelectorAll('#set-ice .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); settings.iceMode=b.dataset.mode; saveSettings(); document.querySelectorAll('#set-ice .btn').forEach(x=>x.classList.toggle('on', x===b)); updateIceHud(); }));
 function tryBuyIce(){
   if(prog.ice) return;
   if(prog.xp<ICE_PRICE){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(ICE_PRICE)),'warn'); return; }
@@ -3216,6 +3250,10 @@ function stepBall(dt){
   if(!mp && !training && state==='play' && ball.y+R>GOAL_H && (ball.x<GOAL_W || ball.x>FIELD_W-GOAL_W) && performance.now()-cornerCd>4000){
     const leftGoal=ball.x<GOAL_W, lt=lastTouch, fresh=lt.p && performance.now()-lt.t<3000;
     if(fresh && (leftGoal ? teamL.includes(lt.p) : teamR.includes(lt.p))){ cornerCd=performance.now(); startCorner(leftGoal ? 'R' : 'L'); }
+  }
+  if(goalIceT>0){                                    // ice shield: a solid wall of ice across my goal mouth
+    const hit=Math.hypot(ball.x-clamp(ball.x,0,GOAL_W+8), ball.y-clamp(ball.y,GOAL_BOT-2,GOAL_H))<R;
+    collideRect(-50,GOAL_BOT-2,GOAL_W+8,GOAL_H); if(hit) sfx.bounce();
   }
   if(ball.y-R>=GOAL_BOT-1 && ball.y+R<GOAL_H){
     if(ball.x<GOAL_W-22) scoreGoal('op');
@@ -3620,6 +3658,8 @@ function applySnapshot(s, teamL, isPlayer){
     else if(e.startsWith('count:')) showCount(+e.slice(6));
     else if(e.startsWith('hold:')){ if(!isPlayer){ const h=$('#watch-hold'); h.hidden=false; h.textContent=T(e==='hold:corner' ? 'watch.corner' : 'watch.pk'); } }   // the host is on the corner / penalty screen
     else if(e==='holdEnd') $('#watch-hold').hidden=true;
+    else if(e==='gice:1'){ const g=$('#goal-ice'); g.classList.remove('thaw'); g.classList.add('show'); g.innerHTML=goalIceSVG(); }
+    else if(e==='gice:0'){ const g=$('#goal-ice'); g.classList.remove('show'); g.classList.add('thaw'); setTimeout(()=>g.classList.remove('thaw'),500); }
     else if(e.startsWith('say:')){ const parts=e.slice(4).split('|'); showLine(T(parts[0],...parts.slice(1)), PRIORITY_SAY.has(parts[0])); }
     else if(e.startsWith('end:')){ const r=e.slice(4); if(!isPlayer){ spectEnded(r,false); } else showEnd(r==='draw' ? 'draw' : (r==='p1')===!!teamL ? 'win' : 'lose'); }
   }
