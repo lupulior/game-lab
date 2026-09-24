@@ -229,6 +229,8 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #v2-modal .panel{padding-top:10px;padding-bottom:12px;max-height:596px;overflow-y:auto;box-sizing:border-box}
 #v2-modal .v2row{margin-bottom:4px}
 #v2-modal .panel h2{font-size:34px}#watch-bar{position:absolute;left:14px;top:70px;z-index:8;display:flex;align-items:center;gap:8px;direction:ltr}#watch-tag{font-size:20px;font-weight:900;color:#fff;background:var(--purple,#8E5CF6);border-radius:12px;padding:4px 14px;box-shadow:0 4px 0 rgba(0,0,0,.25)}#game.watching #btn-pause,#game.watching #touch,#game.watching #ice-hud{display:none!important}#game.watching #watch-bar{display:flex}#end-actions{margin-top:10px}
+#update-bar{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:60;cursor:pointer;font-size:20px;font-weight:900;color:var(--navy);background:linear-gradient(#FFE27A,#F5C400);border-radius:16px;padding:8px 22px;box-shadow:0 6px 0 #C99A10,0 10px 18px rgba(0,0,0,.25);animation:tapPulse 1.2s infinite}
+#watch-hold{position:absolute;left:50%;top:180px;transform:translateX(-50%);z-index:8;font-size:34px;font-weight:900;color:#fff;background:rgba(27,42,78,.85);border-radius:22px;padding:12px 30px;white-space:nowrap;box-shadow:0 8px 0 rgba(0,0,0,.25)}
 .fm-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .fm-badges .bd{font-size:26px;width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(27,42,78,.2);filter:grayscale(1);opacity:.35}
 .fm-badges .bd.on{filter:none;opacity:1;background:#FFF6CF;box-shadow:0 3px 0 #C99A10}
@@ -616,6 +618,8 @@ body.touch #touch{display:block}
     </div>
   </section>
 
+  <div id="update-bar" hidden>🆕 יש גרסה חדשה של המשחק, לחץ כאן לרענון</div>
+
   <!-- ===== CHARACTERS ===== -->
   <section id="chars" class="screen">
     <h2>בחרו דמות</h2>
@@ -669,6 +673,7 @@ body.touch #touch{display:block}
     </div></div>
     <div id="level-tag"></div>
     <div id="watch-bar" hidden><span id="watch-tag"></span><button class="btn red small" id="btn-watch-exit">✖</button></div>
+    <div id="watch-hold" hidden></div>
     <div id="timer">4:00</div>
     <div id="commentary"></div>
     <div id="replay-tag" hidden>🎬 ריפליי</div>
@@ -986,6 +991,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
+const GAME_VERSION='2026-09-24.1';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1250,6 +1256,10 @@ const I18N_RAW={
  'ban.text':['האדמין חסם אותך. תוכל לחזור בעוד {1}','The admin blocked you. You can come back in {1}','The admin blocked you. You can come back in {1}','Админ заблокировал тебя. Вернуться можно через {1}'],
  'ban.minutes':['{0} דקות','{0} minutes','{0} minutes','{0} минут'],
  'ban.hours':['{0} שעות','{0} hours','{0} hours','{0} часов'],
+ 'watch.leaveRoom':['צא קודם מחדר האונליין','Leave the online room first','Leave the online room first','Сначала выйди из онлайн-комнаты'],
+ 'watch.corner':['🚩 קרן! מחכים לנגיחה…','🚩 Corner! Waiting for the header…','🚩 ركنية! في انتظار الضربة الرأسية…','🚩 Угловой! Ждём удар головой…'],
+ 'watch.pk':['🥅 פנדל! מחכים לבעיטה…','🥅 Penalty! Waiting for the kick…','🥅 ركلة جزاء! في انتظار التسديدة…','🥅 Пенальти! Ждём удар…'],
+ 'upd.new':['🆕 יש גרסה חדשה של המשחק, לחץ כאן לרענון','🆕 A new version is out, click here to reload','🆕 هناك إصدار جديد، اضغط هنا للتحديث','🆕 Вышла новая версия, нажми здесь, чтобы обновить'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1426,7 +1436,7 @@ function achieve(id){
   setTimeout(()=>{ toast(T('ach.new', T('a.'+id), a[1]), 'ach'); try{ sfx.win(); }catch(e){} }, 400);
 }
 const dayKey = () => new Date().toISOString().slice(0,10);
-function dailyInfo(){ const s=Math.floor(Date.now()/864e5); return { opp:(s*7)%CHARS.length, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }   // daily stays within the 5 normal levels
+function dailyInfo(){ const s=Math.floor(Date.now()/864e5); let opp=(s*7)%CHARS.length; if(opp===selected) opp=(opp+1)%CHARS.length; return { opp, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }   // daily stays within the 5 normal levels
 const myStats = () => { const s=loadStats(); return {w:s.w,d:s.d,l:s.l,c:s.c,xp:prog.xp,goals:prog.goals}; };
 
 /* ---------- characters (cartoon caricatures) ---------- */
@@ -1782,10 +1792,10 @@ function refreshHome(){
 
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
   '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa', '#ceo-wa-none':'ceo.waNone',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
-  '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn', '.mp-duo .who.me .tag':'mp.you',
+  '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn',
   '#cup h2':'cup.title', '#btn-cup-back':'btn.back', '#team-pick .hint':'cup.pick', '#btn-cup-play':'btn.play', '#btn-cup-new':'cup.new',
   '#btn-pk-back':'pk.exit', '#btn-pk-continue':'pk.continue',
   '#level-modal h2':'level.title', '#level-modal .hint':'level.keys', '#btn-level-cancel':'btn.back2',
@@ -2011,14 +2021,18 @@ function onIncoming(conn){
   conn.on('open', ()=>{
     if(kind==='probe'){ try{ conn.send({t:'pong', st:myState(), adm:isAdmin()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 400); }
     else if(kind==='stats'){ try{ conn.send({t:'stats', name:normName(settings.name), s:myStats(), ach:Object.keys(prog.ach), st:myState(), adm:isAdmin()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 600); }
-    else if(kind==='kick'){ conn.on('data', m=>{ if(m&&m.t==='kick'&&m.until>Date.now()) applyBan(Math.min(m.until, Date.now()+8*24*3600e3), from); }); setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 1500); }
+    else if(kind==='kick'){ conn.on('data', m=>{
+        if(!(m&&m.t==='kick'&&m.until>Date.now())) return;
+        const until=Math.min(m.until, Date.now()+8*24*3600e3);
+        probeFriend(from).then(pr=>{ if(pr && pr.adm) applyBan(until, from); else if(fbOn()) checkBan(); });   // only a real, online admin can kick me (the server is checked too)
+      }); setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 1500); }
     else if(kind==='invite'){ handleInvite(conn, from); }
     else if(kind==='watch'){ handleWatch(conn, from); }
     else { try{ conn.close(); }catch(e){} }
   });
 }
 /* what am I doing right now, for friends who look me up */
-const myState = () => spectating ? 'watch' : (state!=='idle' && !pk) || (pk && !pk.train) ? 'match' : 'idle';
+const myState = () => spectating ? 'watch' : training ? 'idle' : (state!=='idle' && !pk) || (pk && !pk.train) ? 'match' : 'idle';
 /* ping a friend: null = not connected, otherwise {online:true, st:'idle'|'match'|'watch'} */
 function probeFriend(name){
   return new Promise(async res=>{
@@ -2119,16 +2133,17 @@ async function buildTop(){
 }
 function showFrTab(which){ $('#fr-tab-list').classList.toggle('on',which==='list'); $('#fr-tab-top').classList.toggle('on',which==='top'); $('#fr-list').hidden=which!=='list'; $('#fr-top').hidden=which!=='top'; if(which==='top') buildTop(); }
 async function viewFriend(name){
+  const known=!!prog.friends[name];                    // looking at someone must not add them to my friends
+  let f = known ? prog.friends[name] : {ach:[],w:0,d:0,l:0,c:0,xp:0,goals:0,t:0,online:false};
   const c=await reach(name,'stats',5000);
   if(c){
-    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; prog.friends[name]=Object.assign(prog.friends[name]||{}, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true,st:m.st||'idle',adm:!!m.adm}); saveProg(); res(); } }); setTimeout(res,3000); });
+    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; Object.assign(f, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true,st:m.st||'idle',adm:!!m.adm}); if(known) saveProg(); res(); } }); setTimeout(res,3000); });
     try{ c.close(); }catch(e){}
   } else {
     const fb = fbOn() ? await fbLookup(name) : null;
-    if(fb){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]}, {w:fb.w|0,c:fb.c|0,xp:fb.xp|0,goals:fb.goals|0,t:fb.t||0,online:false}); }
-    else { toast(T('friends.notConnected'),'warn'); if(prog.friends[name]) prog.friends[name].online=false; }
+    if(fb){ Object.assign(f, {w:fb.w|0,c:fb.c|0,xp:fb.xp|0,goals:fb.goals|0,t:fb.t||0,online:false,adm:!!fb.adm}); if(known) saveProg(); }
+    else { toast(T('friends.notConnected'),'warn'); f.online=false; }
   }
-  const f=prog.friends[name]; if(!f) return;
   const st=statusOf(f);
   $('#fm-name').textContent=(f.online?'🟢 ':'⚪ ')+name;
   $('#fm-status').textContent = f.t ? (f.online ? statusText(st) : T('friends.lastSeen', new Date(f.t).toLocaleDateString())) : T('friends.noData');
@@ -2141,7 +2156,7 @@ async function viewFriend(name){
 /* ----- invites ----- */
 let inviteConn=null;
 async function inviteFriend(name){
-  if(state!=='idle'){ return; }
+  if(state!=='idle' || pk || spectating) return;
   const c=await reach(name,'invite',6000);
   if(!c){ toast(T('friends.notConnected'),'warn'); return; }
   toast(T('invite.sent',name),'xp');
@@ -2156,7 +2171,7 @@ async function inviteFriend(name){
 }
 function handleInvite(conn, from){
   if(state==='end' && !inviteConn){ setTimeout(()=>handleInvite(conn, from), 3500); return; }   // the match just ended: ask again once we are back home
-  if(state!=='idle' || (mp&&mp.connected) || inviteConn || spectating){ try{ conn.send({t:'busy'}); setTimeout(()=>conn.close(),300); }catch(e){} return; }
+  if(state!=='idle' || pk || (mp&&mp.connected) || inviteConn || spectating){ try{ conn.send({t:'busy'}); setTimeout(()=>conn.close(),300); }catch(e){} return; }
   inviteConn=conn; sfx.whistle();
   $('#invite-text').textContent=T('invite.text',from||'?');
   $('#invite-modal').classList.add('show');
@@ -2172,8 +2187,12 @@ function startMpFromConn(conn, role){                 // a friend invite turned 
 }
 /* ----- watching a friend's match ----- */
 let spectators=[], spectating=null;
+function dropSpectators(){                            // the match I was showing is gone: tell everyone watching
+  for(const c of spectators){ try{ c.send({t:'nomatch'}); }catch(e){} setTimeout(()=>{ try{ c.close(); }catch(e){} },300); }
+  spectators=[];
+}
 function handleWatch(conn, from){
-  const busy = spectating || myState()!=='match' || (mp && mp.role==='guest' && !mp.connected) || !players.length;
+  const busy = spectating || pk || state==='idle' || myState()!=='match' || (mp && mp.role==='guest' && !mp.connected) || !players.length;
   if(busy){ try{ conn.send({t:'nomatch'}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} },400); return; }
   spectators.push(conn);
   const gone=()=>{ spectators=spectators.filter(c=>c!==conn); };
@@ -2195,14 +2214,15 @@ function matchSetupMsg(){
            sc: guestR ? [score.op,score.me] : [score.me,score.op], tl:timeLeft, host:slotName('P1') };
 }
 async function watchFriend(name){
-  if(state!=='idle' || spectating) return;
+  if(mp){ toast(T('watch.leaveRoom'),'warn'); return; }
+  if(state!=='idle' || pk || spectating) return;
   const c=await reach(name,'watch',6000);
   if(!c){ toast(T('friends.notConnected'),'warn'); return; }
   spectating={name, conn:c, snap:null, names:null};
   toast(T('watch.connecting',name),'xp');
   c.on('data', m=>{
     if(!spectating || spectating.conn!==c || !m) return;
-    if(m.t==='nomatch'){ toast(T('watch.noMatch',name),'warn'); stopWatching(false); }
+    if(m.t==='nomatch'){ if(state==='idle'){ toast(T('watch.noMatch',name),'warn'); stopWatching(false); } else spectEnded(null, true); }   // mid-match: the match was aborted
     else if(m.t==='setup') spectSetup(m);
     else if(m.t==='s'){ if(spectating.snap && spectating.snap.ev && spectating.snap.ev.length) m.ev=spectating.snap.ev.concat(m.ev||[]); spectating.snap=m; }
   });
@@ -2211,7 +2231,7 @@ async function watchFriend(name){
 }
 function spectSetup(m){
   const ch=id=>CHARS.find(c=>c.id===id)||CHARS[0];
-  spectating.names=m.names||{}; level=LEVELS[m.lv]||LEVELS[1];
+  spectating.names=m.names||{}; spectating.snap=null; level=LEVELS[m.lv]||LEVELS[1];
   $('#end').classList.remove('show'); $('#end-actions').hidden=true;
   beginMatch(ch(m.chars[0]), ch(m.chars[1]), m.v2 ? {c3:ch(m.chars[2]), c4:ch(m.chars[3]), src:m.src||{}} : null);
   score.me=m.sc[0]|0; score.op=m.sc[1]|0; updateScore(); timeLeft=m.tl||MATCH_TIME; updateTimer();
@@ -2234,7 +2254,7 @@ function spectEnded(result, dropped){                 // the match I was watchin
 function stopWatching(showHome){
   if(spectating){ try{ spectating.conn.close(); }catch(e){} }
   spectating=null; state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
-  $('#end').classList.remove('show'); $('#end-actions').hidden=true; $('#fans').classList.remove('cheer'); $('#game').classList.remove('watching');
+  $('#end').classList.remove('show'); $('#end-actions').hidden=true; $('#fans').classList.remove('cheer'); $('#game').classList.remove('watching'); $('#watch-hold').hidden=true;
   if(showHome!==false) showScreen('home');
   fbHeartbeat();
 }
@@ -2244,7 +2264,7 @@ $('#btn-end-invite').addEventListener('click', ()=>{ sfx.click(); const n=specta
 /* ----- screen wiring ----- */
 function openFriends(){ buildFriends(); $('#fr-result').hidden=true; showFrTab('list'); showScreen('friends'); refreshFriendStatuses(); }
 $('#btn-stats-board').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); openFriends(); });
-$('#btn-friends-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
+$('#btn-friends-back').addEventListener('click', ()=>{ sfx.click(); showScreen(mp ? 'mp' : 'home'); });
 $('#btn-friend-add').addEventListener('click', ()=>{ addFriend($('#friend-input').value); });
 $('#btn-friend-search').addEventListener('click', ()=>{ searchFriend($('#friend-input').value); });
 $('#friend-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') searchFriend(e.target.value); });
@@ -2330,11 +2350,11 @@ function becomeAdmin(){
   prog.admin=true; prog.ice=true; prog.unlocked=CHARS.map(c=>c.id);
   for(const [id] of ACH) prog.ach[id]=true;
   if(prog.xp<100000) prog.xp=100000;
-  saveProg(); updateXpBadge(); refreshHome(); setupAdminUI();
+  saveProg(); updateXpBadge(); refreshHome(); setupAdminUI(); buildGallery();
   sfx.win(); confetti.burst(220); toast(T('adm.welcome'),'ach');
   fbHeartbeat(true);
 }
-function leaveAdmin(){ prog.admin=false; prog.superOn=false; saveProg(); setupAdminUI(); $('#admin-modal').classList.remove('show'); toast(T('adm.left'),'warn'); fbHeartbeat(true); }
+function leaveAdmin(){ prog.admin=false; prog.superOn=false; saveProg(); setupAdminUI(); buildGallery(); $('#admin-modal').classList.remove('show'); toast(T('adm.left'),'warn'); fbHeartbeat(true); }
 function setupAdminUI(){ const b=$('#btn-admin'); if(b) b.hidden=!isAdmin(); }
 /* ----- the panel ----- */
 const KICK_MINUTES=[[10,'adm.k10m'],[60,'adm.k1h'],[1440,'adm.k1d'],[10080,'adm.k1w']];
@@ -2388,8 +2408,8 @@ $('#btn-adm-leave').addEventListener('click', ()=>{ sfx.click(); if(confirm(T('a
 $('#adm-super').addEventListener('change', e=>{ prog.superOn=e.target.checked; saveProg(); sfx.click(); });
 $('#btn-adm-xp1').addEventListener('click', ()=>{ sfx.click(); addXP(1000); });
 $('#btn-adm-xp2').addEventListener('click', ()=>{ sfx.click(); addXP(10000); });
-$('#btn-adm-unlock').addEventListener('click', ()=>{ sfx.click(); prog.unlocked=CHARS.map(c=>c.id); prog.ice=true; saveProg(); toast(T('adm.unlocked'),'ach'); });
-$('#btn-adm-reset').addEventListener('click', ()=>{ sfx.click(); if(!confirm(T('adm.resetQ'))) return; const keep={admin:true, friends:prog.friends}; for(const k of Object.keys(prog)) delete prog[k]; Object.assign(prog, JSON.parse(JSON.stringify(DEF_PROG)), keep); saveStats({w:0,d:0,l:0,c:0}); saveProg(); updateXpBadge(); refreshHome(); toast(T('adm.reset'),'warn'); });
+$('#btn-adm-unlock').addEventListener('click', ()=>{ sfx.click(); prog.unlocked=CHARS.map(c=>c.id); prog.ice=true; saveProg(); buildGallery(); toast(T('adm.unlocked'),'ach'); });
+$('#btn-adm-reset').addEventListener('click', ()=>{ sfx.click(); if(!confirm(T('adm.resetQ'))) return; const keep={admin:true, ice:true, friends:prog.friends}; for(const k of Object.keys(prog)) delete prog[k]; Object.assign(prog, JSON.parse(JSON.stringify(DEF_PROG)), keep); saveStats({w:0,d:0,l:0,c:0}); saveProg(); updateXpBadge(); refreshHome(); toast(T('adm.reset'),'warn'); });
 $('#btn-adm-code-go').addEventListener('click', ()=>{ sfx.click(); createCode(); });
 $('#btn-adm-refresh').addEventListener('click', ()=>{ sfx.click(); refreshAdminLists(); });
 for(const id of ['#adm-code','#adm-code-xp','#adm-code-uses']) $(id).addEventListener('keydown', e=>e.stopPropagation());
@@ -2406,7 +2426,7 @@ let banTimer=0;
 function applyBan(until, by){
   if(isAdmin()) return;
   try{ localStorage.setItem(BAN_KEY, JSON.stringify({until, by})); }catch(e){}
-  if(mp) mpTeardown(); if(spectating) stopWatching(false);
+  if(mp) mpTeardown(); if(spectating) stopWatching(false); dropSpectators();
   if(state!=='idle'){ state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true; $('#end').classList.remove('show'); showScreen('home'); }
   try{ speechSynthesis.cancel(); }catch(e){}
   const ov=$('#ban-overlay'); ov.classList.add('show');
@@ -2422,6 +2442,20 @@ async function checkBan(){
   if(b && b.until>Date.now()) applyBan(b.until, b.by);
 }
 setInterval(checkBan, 30000);
+/* ---------- "a new version is online": poll the live file and offer a reload (never mid-match) ---------- */
+let updateReady=false;
+async function checkUpdate(){
+  if(!/^https?:$/.test(location.protocol) || updateReady) return;
+  try{
+    const r=await fetch(location.pathname+'?v='+Date.now(), {cache:'no-store'}); if(!r.ok) return;
+    const m=/GAME_VERSION='([^']+)'/.exec(await r.text());
+    if(m && m[1]!==GAME_VERSION){ updateReady=true; showUpdateBar(); }
+  }catch(e){}
+}
+function showUpdateBar(){ if(state!=='idle' || pk){ setTimeout(showUpdateBar, 5000); return; } $('#update-bar').hidden=false; }
+$('#update-bar').addEventListener('click', ()=>{ location.reload(); });
+setInterval(checkUpdate, 60000); setTimeout(checkUpdate, 8000);
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkUpdate(); });
 /* ---------- intro ---------- */
 (function buildIntro(){
   const box=$('#runners'); if(!box) return;
@@ -2655,7 +2689,7 @@ function setKey(code,down){
   return false;
 }
 window.addEventListener('keydown', e=>{
-  if(state!=='play'){
+  if(state!=='play' && !(state==='countdown' && !pk)){   // during the countdown keys are already collected
     if(e.code==='Space'){ e.preventDefault(); if(pk && !e.repeat){ if(pk.corner) cornerTap(); else if(pk.phase==='aim') startHold(); } }
     if((e.code==='Escape'||e.code==='KeyP') && (state==='paused' || (pk && pk.phase==='paused'))) resumeGame();
     else if((e.code==='Escape'||e.code==='KeyP') && pk) pauseGame();
@@ -2699,6 +2733,7 @@ function goFullscreen(){
   try{ if(screen.orientation && screen.orientation.lock){ const r=screen.orientation.lock('landscape'); if(r&&r.catch) r.catch(()=>{}); } }catch(e){}
 }
 function startGame(levelIdx){
+  if(mp) mpTeardown();                               // an old online room must not leak into an offline match
   level=LEVELS[levelIdx];
   goFullscreen();
   const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected && !(v2Pending && i===v2Pending.idx) && i!==forcedOpp));
@@ -2721,7 +2756,7 @@ function beginMatch(c1, c2, opts){
   const me = mySlot ? SLOT_P[mySlot] : null, localIsP1 = mySlot==='P1';
   v2 = opts ? {src:opts.src||{}, kp:[null,null,null]} : null;
   setField(v2 ? 1250 : 1000);                       // 2v2 is played in a bigger stadium
-  clearKP();
+  clearKP(); pausePending=false;
   for(const p of [P1,P2,P3,P4]){ p.ctl=null; p.src = p===P1 ? 'me' : (opts && opts.src && opts.src[p.slot]) || (p===P2 && mp ? 'net' : 'ai'); }
   if(v2 && localIsP1){                              // hand a key set to every friend on my keyboard: partner, then opponent 1, then opponent 2
     let i=0; for(const p of [P3,P2,P4]) if(p.src==='key'){ v2.kp[i]=KP[i]; p.ctl=KP[i]; i++; }
@@ -2760,12 +2795,13 @@ function beginMatch(c1, c2, opts){
   if(localIsP1){
     evBuf.length=0;
     startCountdown(()=>{ if(state!=='countdown') return; sfx.whistle(); state='play'; lastT=performance.now(); setTimeout(()=>{ if(state==='play') say('c.kickoff'); }, 900); });
-    if(spectators.length){ const m=matchSetupMsg(); for(const s of spectators){ try{ s.send(m); }catch(e){} } }   // friends watching me: here is the new match
   } else state='countdown';                       // guests and spectators follow the host's countdown events
+  if(!spectating && spectators.length){ const m=matchSetupMsg(); for(const s of spectators){ try{ s.send(m); }catch(e){} } }   // friends watching me (host or guest): here is the new match
+  $('#watch-hold').hidden=true;
   fbHeartbeat();
 }
 /* ---------- 3-2-1 countdown before kick-off ---------- */
-let cdTimer=0;
+let cdTimer=0, endTimer=0;
 function showCount(n){
   const el=$('#countdown'); el.hidden=false; el.textContent = n>0 ? n : '⚽';
   el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
@@ -2779,7 +2815,7 @@ function startCountdown(done){
   step();
 }
 /* ---------- ice power ---------- */
-function iceAvailable(){ return !!prog.ice && !mp; }              // bought once, offline modes only
+function iceAvailable(){ return !!prog.ice && !mp && !spectating; }              // bought once, offline modes only
 let iceSeq=0;
 // builds a fresh random jagged crystal: an irregular polygon body with facets, loose shards floating around it and sparkles
 function iceSVG(){
@@ -2866,7 +2902,7 @@ function resumeGame(){
 function quitToHome(){
   $('#pause-modal').classList.remove('show'); sfx.click();
   if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); pk=null; clearCornerUI(); }
-  endTraining(); pausePending=false;
+  endTraining(); pausePending=false; dropSpectators();
   state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer'); dailyMatch=false; pausedFrom=null;
   showScreen('home'); fbHeartbeat();
@@ -2911,7 +2947,7 @@ function updateSlides(dt){
         o.el.classList.remove('stunned'); void o.el.offsetWidth; o.el.classList.add('stunned'); sfx.tackle();
         if(performance.now()-lastTackleSay>3000){ lastTackleSay=performance.now(); say('c.tackle', pname(p), pname(o)); }
         // foul inside your own box → penalty for the other team (offline modes only)
-        if(!mp){ const pL=teamL.includes(p); if((pL && o.x<205) || (!pL && o.x>795)) startMatchPenalty(pL ? 'R' : 'L'); }
+        if(!mp && !training){ const pL=teamL.includes(p); if((pL && o.x<205) || (!pL && o.x>FIELD_W-205)) startMatchPenalty(pL ? 'R' : 'L'); }
         break;
       }
     }
@@ -2951,7 +2987,7 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   say(outcome==='win' ? 'c.endWin' : outcome==='lose' ? 'c.endLose' : 'c.endDraw', score.me, score.op);
   updateTimer();
   $('#end').classList.add('show');
-  setTimeout(goHome, 3000);
+  clearTimeout(endTimer); endTimer=setTimeout(goHome, 3000);
 }
 function endGame(){
   const o = score.me>score.op ? 'win' : score.me<score.op ? 'lose' : 'draw';
@@ -3177,7 +3213,7 @@ function stepBall(dt){
   if(ball.x-R<0){ ball.x=R; ball.vx=Math.abs(ball.vx)*.6; }
   if(ball.x+R>FIELD_W){ ball.x=FIELD_W-R; ball.vx=-Math.abs(ball.vx)*.6; }
   // corner: the ball sails over a goal after a defender's touch (offline modes)
-  if(!mp && state==='play' && ball.y+R>GOAL_H && (ball.x<GOAL_W || ball.x>FIELD_W-GOAL_W) && performance.now()-cornerCd>4000){
+  if(!mp && !training && state==='play' && ball.y+R>GOAL_H && (ball.x<GOAL_W || ball.x>FIELD_W-GOAL_W) && performance.now()-cornerCd>4000){
     const leftGoal=ball.x<GOAL_W, lt=lastTouch, fresh=lt.p && performance.now()-lt.t<3000;
     if(fresh && (leftGoal ? teamL.includes(lt.p) : teamR.includes(lt.p))){ cornerCd=performance.now(); startCorner(leftGoal ? 'R' : 'L'); }
   }
@@ -3326,7 +3362,7 @@ const makeCode = () => Array.from({length:4}, ()=>CODE_CHARS[Math.floor(Math.ran
 const peerIdFor = code => 'footballstar-'+code.toLowerCase();
 const SLOT_P={P1,P2,P3,P4};
 const evBuf=[];                                       // match events since the last snapshot (goal, sounds, commentary…)
-const netEv = e => { if((mp && mp.role==='host') || spectators.length) evBuf.push(e); };
+const netEv = e => { if((mp && mp.role==='host') || (!mp && spectators.length)) evBuf.push(e); };
 for(const k of ['kick','bounce','slide','tackle']){ const f=sfx[k]; sfx[k]=()=>{ f(); netEv(k); }; }   // the others hear what the host hears
 
 function loadPeerJS(){
@@ -3388,8 +3424,8 @@ function mpDrop(c){
   toast(T('mp.left'),'warn'); mpBroadcastLobby(); mpRefresh();
 }
 function mpAbort(){
-  mpSendAll({t:'left'});
-  state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
+  mpSendAll({t:'left'}); dropSpectators();
+  state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); clearTimeout(endTimer); $('#countdown').hidden=true;
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
   sfx.lose(); mpStatus(T('mp.left'));
   if(mp.conns.length || mp.code){ mpShowPick(); showScreen('mp'); } else { mpTeardown(); mpLobby(); showScreen('mp'); }
@@ -3424,8 +3460,8 @@ function mpWireGuest(conn, alreadyOpen){
 function mpOnClose(){                                 // guest: the host is gone
   if(!mp || mp.role!=='guest') return;
   const wasPlaying = state!=='idle';
-  mpTeardown();
-  state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
+  mpTeardown(); dropSpectators();
+  state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); clearTimeout(endTimer); $('#countdown').hidden=true;
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
   mpLobby(); mpStatus(T('mp.left')); showScreen('mp');
   if(wasPlaying) sfx.lose();
@@ -3514,6 +3550,8 @@ function mpCanStart(){
   const picks=[mp.myPick].concat(mp.conns.map(c=>c.pick)); return new Set(picks).size===picks.length;
 }
 function mpStart(){
+  if(state!=='idle' || spectating) return;                   // never restart a match that is already running
+  mp.myReady=false; for(const c of mp.conns) c.ready=false;
   const cfg=mp.cfg, picks=[mp.myPick].concat(mp.conns.map(c=>c.pick));
   if(cfg.partnerIdx!=null && cfg.src.P3!=='net' && !picks.includes(cfg.partnerIdx)) picks.push(cfg.partnerIdx);
   const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>!picks.includes(i)));
@@ -3580,6 +3618,8 @@ function applySnapshot(s, teamL, isPlayer){
     else if(e==='goal') goalFx();
     else if(e==='replay') $('#replay-tag').hidden=false; else if(e==='replayEnd') $('#replay-tag').hidden=true;
     else if(e.startsWith('count:')) showCount(+e.slice(6));
+    else if(e.startsWith('hold:')){ if(!isPlayer){ const h=$('#watch-hold'); h.hidden=false; h.textContent=T(e==='hold:corner' ? 'watch.corner' : 'watch.pk'); } }   // the host is on the corner / penalty screen
+    else if(e==='holdEnd') $('#watch-hold').hidden=true;
     else if(e.startsWith('say:')){ const parts=e.slice(4).split('|'); showLine(T(parts[0],...parts.slice(1)), PRIORITY_SAY.has(parts[0])); }
     else if(e.startsWith('end:')){ const r=e.slice(4); if(!isPlayer){ spectEnded(r,false); } else showEnd(r==='draw' ? 'draw' : (r==='p1')===!!teamL ? 'win' : 'lose'); }
   }
@@ -3991,7 +4031,7 @@ function aiShoot(){
 }
 function pkResult(side, goal){
   if(!pk) return;
-  if(pk.onResult){ pk.onResult(goal); return; }                 // single in-match penalty
+  if(pk.onResult){ if(pk.phase!=='over') pk.onResult(goal); return; }   // single in-match penalty (never twice: ✖ may already have ended it)
   (side==='me' ? pk.sMe : pk.sOp).push(goal); renderPkScore();
   setTimeout(nextKick, 1900);
 }
@@ -3999,15 +4039,17 @@ function pkResult(side, goal){
 function startMatchPenalty(forTeam){
   if(state!=='play') return;
   state='penalty'; cancelAnimationFrame(rafId); say('c.penalty'); sfx.whistle();
+  netEv('hold:pk'); sendSnapshot();                   // anyone watching: the match is paused for a penalty
   const meShoots = forTeam==='L';
   const lv=PK_LEVELS[level.i]||PK_LEVELS[1];
   setTimeout(()=>{
     if(state!=='penalty') return;
     setupPenalty(meShoots, lv, goal=>{
+      if(!pk || pk.phase==='over') return;             // already resolved (✖ pressed while the ball was in flight)
       pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer);
       setTimeout(()=>{
         pk=null; $('#pk-score').hidden=false; showScreen('game');
-        lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play';
+        lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play'; netEv('holdEnd');
         if(goal) scoreGoal(meShoots ? 'me' : 'op'); else { resetPositions(); sfx.whistle(); }
       }, 1500);
     });
@@ -4031,14 +4073,16 @@ const crossPos = u => u<=1 ? bez({x:-60,y:330},{x:180,y:10},RING,u) : bez(RING,{
 function startCorner(forTeam){                       // 'L' = my team attacks (I head the ball), 'R' = opponent attacks (I clear it)
   if(state!=='play') return;
   state='corner'; cancelAnimationFrame(rafId); say('c.corner'); sfx.whistle();
+  netEv('hold:corner'); sendSnapshot();               // anyone watching: the match is paused for a corner
   const mine = forTeam==='L';
   setTimeout(()=>{
     if(state!=='corner') return;
     setupCorner(mine, (goal, who)=>{
-      pk.phase='over'; cancelAnimationFrame(pk.raf);
+      if(!pk || pk.phase==='over') return;             // already resolved (✖ pressed while the ball was in flight)
+      pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer);
       setTimeout(()=>{
         clearCornerUI(); pk=null;
-        showScreen('game'); lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play';
+        showScreen('game'); lastT=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop); state='play'; netEv('holdEnd');
         if(goal) scoreGoal(who); else { resetPositions(); sfx.whistle(); }
       }, 1500);
     });
@@ -4064,13 +4108,13 @@ function trainTag(){
   return T('train.shootTag', score.me);
 }
 function startTraining(kind){
-  $('#train-modal').classList.remove('show'); sfx.click(); trainStats={g:0,n:0}; training=kind; level=LEVELS[1];
+  $('#train-modal').classList.remove('show'); sfx.click(); if(mp) mpTeardown(); trainStats={g:0,n:0}; training=kind; level=LEVELS[1];
   const opp=CHARS[shuffle(CHARS.map((c,i)=>i).filter(i=>i!==selected))[0]];
   myChar=CHARS[selected]; opChar=opp;
   if(kind==='shoot'){ beginMatch(CHARS[selected], opp); return; }
   state='training'; cancelAnimationFrame(rafId); showScreen('pk');
   const again=()=>{ if(training!==kind) return; if(kind==='pk') setupPenalty(true, PK_LEVELS[1], onRes, trainTag()); else setupCorner(true, onRes, trainTag()); pk.train=kind; };
-  const onRes=goal=>{ trainStats.n++; if(goal) trainStats.g++; pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk-round').textContent=trainTag(); setTimeout(()=>{ if(training===kind && pk && pk.train){ if(kind==='corner') clearCornerUI(); again(); } }, 1600); };
+  const onRes=goal=>{ if(!pk || pk.phase==='over') return; trainStats.n++; if(goal) trainStats.g++; pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk-round').textContent=trainTag(); setTimeout(()=>{ if(training===kind && pk && pk.train){ if(kind==='corner') clearCornerUI(); again(); } }, 1600); };
   again();
 }
 function endTraining(){ training=null; trainStats={g:0,n:0}; $('#game').classList.remove('training'); }
