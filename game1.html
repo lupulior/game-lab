@@ -1207,7 +1207,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.11';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.10';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -2074,17 +2074,17 @@ async function buildFigure3D(c){
   const g=h3.group; while(g.children.length) g.remove(g.children[0]);
   const mat=t=>new THREE.MeshLambertMaterial({map:t, transparent:true, alphaTest:.5});
   const uvs=(geo,back)=>{ const p=geo.attributes.position, uv=geo.attributes.uv; for(let i=0;i<p.count;i++){ const X=p.getX(i), Y=p.getY(i); uv.setXY(i, back ? .5-X/10 : .5+X/10, Y/15); } uv.needsUpdate=true; return geo; };
-  const half=(mk, texF, texB, core)=>{ if(core){ for(const isBack of [false,true]){ const geo=mk(isBack); geo.scale(.965,.975,.9); g.add(new THREE.Mesh(geo, new THREE.MeshLambertMaterial({color:new THREE.Color(core)}))); } } for(const isBack of [false,true]){ const geo=mk(isBack); uvs(geo,isBack); g.add(new THREE.Mesh(geo, mat(isBack?texB:texF))); } };
+  const half=(mk, texF, texB)=>{ for(const isBack of [false,true]){ const geo=mk(isBack); uvs(geo,isBack); g.add(new THREE.Mesh(geo, mat(isBack?texB:texF))); } };
   const ball=(rx,ry,rz,x,y,z)=>isBack=>{ const geo=new THREE.SphereGeometry(1,40,28,isBack?Math.PI:0,Math.PI); geo.scale(rx,ry,rz); geo.translate(x,y,z); return geo; };
   const tube=(r,h,x,y,z,rot)=>isBack=>{ const geo=new THREE.CylinderGeometry(r,r,h,28,1,true,isBack?Math.PI/2:-Math.PI/2,Math.PI); if(rot) geo.rotateZ(rot); geo.translate(x,y,z); return geo; };
   const Y=py=>(150-py)/10;
-  half(ball(3.55,3.95,2.5, 0,Y(37),0), tf, tb, c.skin);                            // head with hair, ears, beard – slimmer front-to-back
-  half(ball(2.5,3.4,1.0, 0,Y(94),0), tfBody, tbBody, c.jersey);                    // shirt + shorts, a flat chest
+  half(ball(3.7,4.0,3.0, 0,Y(37),0), tf, tb);                                   // head with hair, ears, beard
+  half(ball(2.6,3.4,1.35, 0,Y(94),0), tfBody, tbBody);                           // shirt + shorts
   for(const s of [-1,1]){
-    half(tube(.56,3.1, s*2.65,Y(87),.05, s*-.465), tfArms, tbArms, c.skin);      // arm, from the shoulder down and out
-    half(ball(.66,.66,.6, s*3.3,Y(100),.1), tfArms, tbArms, c.skin);             // hand
-    half(tube(.62,3.7, s*1.0,Y(131.5),0, 0), tf, tb, c.socks);                    // leg + sock
-    half(ball(1.35,.6,1.05, s*1.0+.5,Y(144),.4), tf, tb, '#23232b');              // boot
+    half(tube(.56,3.1, s*2.65,Y(87),.05, s*-.465), tfArms, tbArms);              // arm, from the shoulder down and out
+    half(ball(.66,.66,.6, s*3.3,Y(100),.1), tfArms, tbArms);                     // hand
+    half(tube(.62,3.7, s*1.0,Y(131.5),0, 0), tf, tb);                            // leg + sock
+    half(ball(1.35,.6,1.05, s*1.0+.5,Y(144),.4), tf, tb);                        // boot
   }
   const podium=new THREE.Mesh(new THREE.CylinderGeometry(5.2,5.6,.9,48), new THREE.MeshLambertMaterial({color:0xF5C400})); podium.position.y=-.5; g.add(podium);
   const top=new THREE.Mesh(new THREE.CylinderGeometry(4.8,4.8,.14,48), new THREE.MeshLambertMaterial({color:0xFFF3B8})); g.add(top);
@@ -4599,7 +4599,7 @@ function setupKick(meShoots){                    // reset positions and sprites,
 /* aiming: the sight sweeps left-right along the ground line; press and hold to raise it, release to shoot */
 const AIM_Y0=392;
 const aimAt   = t => ({ x:500+345*Math.sin(t*2.3*pk.lv.aimSpeed), y:AIM_Y0 });
-const riseAt  = t => Math.max(40, AIM_Y0 - t*115*pk.lv.powerSpeed);          // held time → sight height (goes above the bar if held too long)
+const riseAt  = t => Math.max(40, AIM_Y0 - t*290*pk.lv.powerSpeed);          // held time → sight height (goes above the bar if held too long)
 const sinceT0 = () => (performance.now()-pk.t0)/1000;
 function placeCross(){ const c=$('#pk-cross'); c.style.left=pk.aim.x+'px'; c.style.top=pk.aim.y+'px'; }
 function aimLoop(){
