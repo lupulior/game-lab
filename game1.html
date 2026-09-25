@@ -54,7 +54,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .btn.play{font-size:66px;padding:18px 70px 22px;border-radius:44px}
 
 /* ---------- home ---------- */
-#home .title{position:absolute;top:18px;right:40px;text-align:right;direction:ltr;font-size:42px;white-space:nowrap;max-width:420px}
+#home .title{position:absolute;top:18px;right:40px;text-align:right;direction:ltr;font-size:42px}
 #home .title small{font-size:16px;margin-top:6px}
 #home .title small{text-align:right}
 /* home layout: title top-right, small tools top-left, my player in the middle, play column on the right, extras on the left */
@@ -311,7 +311,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .home-top .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
 .home-top .pill.trophy .next{font-size:12px;text-align:center;white-space:nowrap;opacity:.9}
 .home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400);width:128px;justify-content:center;white-space:nowrap;padding:6px 8px}
-.home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:17px;width:132px;justify-content:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:15px;width:206px;justify-content:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #xp-badge.pill{margin-inline-start:0}
 .hero{top:96px;width:340px}
 .hero .podium{position:absolute;left:50%;bottom:52px;width:300px;height:70px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#FFF3B8,#F5C400 70%,#C99A10);box-shadow:0 10px 0 #A87F0C,0 16px 22px rgba(0,0,0,.25);z-index:0}
@@ -467,14 +467,6 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #pk-goal{position:absolute;left:200px;top:110px;width:600px;height:310px}
 #pk-goal svg{width:100%;height:100%;display:block}
 #pk-keeper{position:absolute;left:440px;top:236px;width:120px;height:180px;transition:transform .32s ease-out;transform-origin:50% 95%;z-index:2;pointer-events:none}
-#pk-keeper .arm,#pk-shooter .arm{transform-box:view-box;transition:transform .22s ease-out}
-#pk-keeper .arm-l{transform-origin:30px 74px}#pk-keeper .arm-r{transform-origin:70px 74px}
-#pk-keeper.arms-up .arm-l{transform:rotate(150deg)}#pk-keeper.arms-up .arm-r{transform:rotate(-150deg)}
-#pk-keeper.arms-side.dive-l .arm-l{transform:rotate(100deg)}#pk-keeper.arms-side.dive-l .arm-r{transform:rotate(40deg)}
-#pk-keeper.arms-side.dive-r .arm-r{transform:rotate(-100deg)}#pk-keeper.arms-side.dive-r .arm-l{transform:rotate(-40deg)}
-#pk-keeper.arms-side.dive-c .arm-l{transform:rotate(60deg)}#pk-keeper.arms-side.dive-c .arm-r{transform:rotate(-60deg)}
-#pk-shooter .arm-l{transform-origin:30px 74px}#pk-shooter .arm-r{transform-origin:70px 74px}
-#pk-shooter.run .arm-l{transform:rotate(-70deg)}#pk-shooter.run .arm-r{transform:rotate(50deg)}
 #pk-shooter{position:absolute;left:300px;top:326px;width:108px;height:162px;z-index:2;pointer-events:none;transition:transform .22s ease-in}
 #pk-shooter.run{transform:translate(95px,18px)}
 #pk-shooter.run .leg-front{animation:kickA .3s ease-out}
@@ -1207,7 +1199,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.10';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.9';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1946,7 +1938,7 @@ function playerSVG(c, mood='happy'){
     <rect x="30" y="103" width="40" height="19" rx="5" fill="url(#sh-${id})" stroke="${OL}" stroke-width="${ow}"/>
     <rect x="31" y="104" width="38" height="3.5" rx="1.5" fill="rgba(255,255,255,.35)"/>
     <path d="M34 108 v12 M66 108 v12" stroke="rgba(255,255,255,.55)" stroke-width="2"/>
-    <g class="arms"><g class="arm arm-l">${arm(30,74,17,100)}</g><g class="arm arm-r">${arm(70,74,83,100)}</g></g><!--/arms-->
+    ${arm(30,74,17,100)}${arm(70,74,83,100)}
     <path d="M30 66 L22 82 L31 86 L31 108 L69 108 L69 86 L78 82 L70 66 Q50 74 30 66Z" fill="url(#js-${id})" stroke="${OL}" stroke-width="${ow}" stroke-linejoin="round"/>
     ${stripes}${band}
     <path d="M22 82 L31 86 L34 79 L29 69Z" fill="rgba(0,0,0,.12)"/><path d="M78 82 L69 86 L66 79 L71 69Z" fill="rgba(0,0,0,.12)"/>
@@ -1978,8 +1970,7 @@ function playerBackSVG(c){
   let hair = thin
     ? `<path d="M20 40 Q20 8 50 6 Q80 8 80 40 L80 50 Q50 64 20 50Z" fill="${hc}" opacity="${c.hair==='bald'?.45:.35}"/>`
     : `<path d="M18 42 Q18 6 50 5 Q82 6 82 42 L82 54 Q50 70 18 54Z" fill="${hc}"/>`;
-  if(c.hair==='wavy') hair+=`<path d="M18 44 Q14 56 20 64 Q24 54 26 46Z" fill="${hc}"/><path d="M82 44 Q86 56 80 64 Q76 54 74 46Z" fill="${hc}"/>`;
-  if(c.hair==='longband') hair+=`<path d="M17 46 Q11 62 19 74 L81 74 Q89 62 83 46 Q50 60 17 46Z" fill="${hc}"/>`;
+  if(c.hair==='wavy' || c.hair==='longband' || c.hair==='bun') hair+=`<path d="M18 46 Q12 62 20 72 L80 72 Q88 62 82 46 Q50 60 18 46Z" fill="${hc}"/>`;
   if(c.hair==='bun') hair+=`<circle cx="50" cy="8" r="8" fill="${hc}"/>`;
   if(c.hair==='curly') hair+=[22,30,38,46,54,62,70,78].map((x,i)=>`<circle cx="${x}" cy="${i%2?10:16}" r="7" fill="${hc}"/>`).join('')+`<circle cx="20" cy="46" r="6" fill="${hc}"/><circle cx="80" cy="46" r="6" fill="${hc}"/>`;
   if(c.hair==='mohawk') hair=`<path d="M19 40 Q19 14 50 10 Q81 14 81 40 L81 52 Q50 66 19 52Z" fill="${c.hairSide||hc}"/><path d="M44 4 Q50 0 56 4 L56 52 Q50 56 44 52Z" fill="${hc}"/>`;
@@ -1992,7 +1983,7 @@ function playerBackSVG(c){
   return `<svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">${defs}
     ${leg(55)}${leg(35)}
     <rect x="30" y="103" width="40" height="19" rx="5" fill="url(#sh-${id})" stroke="${OL}" stroke-width="${ow}"/>
-    <g class="arms"><g class="arm arm-l">${arm(30,74,17,100)}</g><g class="arm arm-r">${arm(70,74,83,100)}</g></g><!--/arms-->
+    ${arm(30,74,17,100)}${arm(70,74,83,100)}
     <path d="M30 66 L22 82 L31 86 L31 108 L69 108 L69 86 L78 82 L70 66 Q50 60 30 66Z" fill="url(#js-${id})" stroke="${OL}" stroke-width="${ow}" stroke-linejoin="round"/>
     ${stripes}
     <path d="M22 82 L31 86 L34 79 L29 69Z" fill="rgba(0,0,0,.12)"/><path d="M78 82 L69 86 L66 79 L71 69Z" fill="rgba(0,0,0,.12)"/>
@@ -2030,9 +2021,9 @@ async function initHero3D(){
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio||1)); renderer.setSize(300,420,false); renderer.setClearColor(0x000000,0);
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(23, 300/420, .1, 100); camera.position.set(0,3.2,16.5); camera.lookAt(0,2.6,0);
-  scene.add(new THREE.AmbientLight(0xffffff, .92));
-  const sun=new THREE.DirectionalLight(0xffffff, .3); sun.position.set(3,6,8); scene.add(sun);
-  const rim=new THREE.DirectionalLight(0xffffff, .2); rim.position.set(-4,3,-6); scene.add(rim);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x88aa66, .95));
+  const sun=new THREE.DirectionalLight(0xffffff, .85); sun.position.set(3,6,5); scene.add(sun);
+  const rim=new THREE.DirectionalLight(0x7ED3FF, .35); rim.position.set(-4,3,-4); scene.add(rim);
   const group=new THREE.Group(); scene.add(group);
   h3={renderer, scene, camera, group, raf:0, t0:performance.now()};
   $('.hero').classList.add('threed');
@@ -2052,42 +2043,72 @@ async function initHero3D(){
 /* builds the body: a lathe-shaped torso and shorts (shoulders wider than the waist, flat chest), slim limbs, an oval head with a calm, realistic face */
 /* the 3-D player, built to the exact proportions of the 2-D drawing (1 unit = 10 px of the 100×150 sprite): same big round head,
    big eyes, cheeks, smile, hair and kit – only now with real volume, so turning it shows the arms, the ears and the number on the back */
-/* the 3-D player IS the original drawing: the sprite is painted onto rounded bodies (head, torso, arms, legs) with straight-on
-   projection, so from the front it looks exactly like the 2-D character; turning it reveals the depth, the arms from the side
-   and the back drawing. Transparent pixels are cut away, so the silhouette is the drawing's own. */
-let fig3dToken=0;
-function svgToTexture(svg, w=400, h=600){
-  return new Promise(res=>{ const img=new Image(); img.onload=()=>{ const cv=document.createElement('canvas'); cv.width=w; cv.height=h; cv.getContext('2d').drawImage(img,0,0,w,h); const t=new THREE.CanvasTexture(cv); t.anisotropy=4; res(t); }; img.onerror=()=>res(null); img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); });
-}
-async function buildFigure3D(c){
+function buildFigure3D(c){
   if(!h3) return;
-  const token=++fig3dToken;
-  const strip=(svg,keep)=>{
-    const armsRe=/<g class="arms">[\s\S]*?<!--\/arms-->/;
-    if(keep==='body') return svg.replace(armsRe,'');
-    if(keep==='arms'){ const m=armsRe.exec(svg); const head=svg.slice(0, svg.indexOf('</defs>')+7); return m ? head+m[0]+'</svg>' : svg; }
-    return svg;
-  };
-  const front=playerSVG(c), back=playerBackSVG(c);
-  const [tf,tfBody,tfArms,tb,tbBody,tbArms]=await Promise.all([front,strip(front,'body'),strip(front,'arms'),back,strip(back,'body'),strip(back,'arms')].map(s=>svgToTexture(s)));
-  if(token!==fig3dToken || !h3) return;
   const g=h3.group; while(g.children.length) g.remove(g.children[0]);
-  const mat=t=>new THREE.MeshLambertMaterial({map:t, transparent:true, alphaTest:.5});
-  const uvs=(geo,back)=>{ const p=geo.attributes.position, uv=geo.attributes.uv; for(let i=0;i<p.count;i++){ const X=p.getX(i), Y=p.getY(i); uv.setXY(i, back ? .5-X/10 : .5+X/10, Y/15); } uv.needsUpdate=true; return geo; };
-  const half=(mk, texF, texB)=>{ for(const isBack of [false,true]){ const geo=mk(isBack); uvs(geo,isBack); g.add(new THREE.Mesh(geo, mat(isBack?texB:texF))); } };
-  const ball=(rx,ry,rz,x,y,z)=>isBack=>{ const geo=new THREE.SphereGeometry(1,40,28,isBack?Math.PI:0,Math.PI); geo.scale(rx,ry,rz); geo.translate(x,y,z); return geo; };
-  const tube=(r,h,x,y,z,rot)=>isBack=>{ const geo=new THREE.CylinderGeometry(r,r,h,28,1,true,isBack?Math.PI/2:-Math.PI/2,Math.PI); if(rot) geo.rotateZ(rot); geo.translate(x,y,z); return geo; };
-  const Y=py=>(150-py)/10;
-  half(ball(3.7,4.0,3.0, 0,Y(37),0), tf, tb);                                   // head with hair, ears, beard
-  half(ball(2.6,3.4,1.35, 0,Y(94),0), tfBody, tbBody);                           // shirt + shorts
-  for(const s of [-1,1]){
-    half(tube(.56,3.1, s*2.65,Y(87),.05, s*-.465), tfArms, tbArms);              // arm, from the shoulder down and out
-    half(ball(.66,.66,.6, s*3.3,Y(100),.1), tfArms, tbArms);                     // hand
-    half(tube(.62,3.7, s*1.0,Y(131.5),0, 0), tf, tb);                            // leg + sock
-    half(ball(1.35,.6,1.05, s*1.0+.5,Y(144),.4), tf, tb);                        // boot
+  const M=(hex,extra={})=>new THREE.MeshStandardMaterial(Object.assign({color:new THREE.Color(hex), roughness:.9, metalness:0}, extra));
+  const OL='#2a1c12';
+  const skin=M(c.skin), dark=M('#23232b',{roughness:.6}), jersey=M(c.jersey), shorts=M(c.shorts), socks=M(c.socks), hairM=M(c.hairColor||'#222',{roughness:.95});
+  const add=(geo,mat,x,y,z,opt={})=>{ const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); if(opt.rx) m.rotation.x=opt.rx; if(opt.ry) m.rotation.y=opt.ry; if(opt.rz) m.rotation.z=opt.rz; if(opt.s) m.scale.set(opt.s[0],opt.s[1],opt.s[2]); if(opt.name) m.name=opt.name; (opt.parent||g).add(m); return m; };
+  const cyl=(rt,rb,h)=>new THREE.CylinderGeometry(rt,rb,h,28), sph=r=>new THREE.SphereGeometry(r,36,26), box=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
+  const lathe=pts=>new THREE.LatheGeometry(pts.map(p=>new THREE.Vector2(p[0],p[1])), 36);
+  const Y=py=>(150-py)/10;                                   // sprite y (px, from the top) → world height
+  // legs (sprite: legs at x 35–46 and 55–66, y 116–150)
+  for(const x of [-1.0,1.0]){
+    add(cyl(.55,.55,2.3), skin, x,Y(127),0);
+    add(cyl(.65,.65,1.4), socks, x,Y(133),0);
+    add(cyl(.66,.66,.26), M('#ffffff'), x,Y(131),0);
+    add(box(2.4,.9,2.1), dark, x,Y(144.5),.35);
+    add(box(2.0,.16,1.2), M('#ffffff'), x,Y(142),.9);
   }
-  const podium=new THREE.Mesh(new THREE.CylinderGeometry(5.2,5.6,.9,48), new THREE.MeshLambertMaterial({color:0xF5C400})); podium.position.y=-.5; g.add(podium);
-  const top=new THREE.Mesh(new THREE.CylinderGeometry(4.8,4.8,.14,48), new THREE.MeshLambertMaterial({color:0xFFF3B8})); g.add(top);
+  // shorts (x 30–70, y 103–122) and shirt (y 66–108, shoulders 30–70, waist 31–69)
+  add(box(4.1,1.9,2.5), shorts, 0,Y(112.5),0);
+  add(box(3.9,.35,2.55), M('#ffffff',{transparent:true,opacity:.35}), 0,Y(105.5),0);
+  add(lathe([[1.85,Y(108)],[1.95,Y(98)],[2.05,Y(86)],[2.4,Y(81)],[2.0,Y(70)],[1.2,Y(66)]]), jersey, 0,0,0, {s:[1,1,.62]});
+  add(new THREE.TorusGeometry(.85,.14,10,36,Math.PI), M(c.numColor), 0,Y(67),.55, {rx:Math.PI/2, rz:Math.PI, s:[1,.6,1]});   // collar
+  if(c.stripes){ const st=M(c.stripes); for(const x of [-1.1,0,1.1]){ add(box(.6,3.9,.08), st, x,Y(88),1.28); add(box(.6,3.9,.08), st, x,Y(88),-1.28); } }
+  const numTex=(txt,col)=>{ const cv=document.createElement('canvas'); cv.width=cv.height=256; const x=cv.getContext('2d'); x.font='900 180px Arial Black, Arial, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.lineWidth=14; x.strokeStyle=OL; x.strokeText(txt,128,140); x.fillStyle=col; x.fillText(txt,128,140); return new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv), transparent:true}); };
+  add(new THREE.PlaneGeometry(2.6,2.6), numTex(String(c.number),c.numColor), 0,Y(88),-1.3, {ry:Math.PI});
+  add(new THREE.PlaneGeometry(2.0,2.0), numTex(String(c.number),c.numColor), 0,Y(90),1.3);               // like the drawing: the number on the chest
+  // sleeves + arms (sprite: arm from 30,74 to 17,100), hands
+  for(const s of [-1,1]){
+    add(cyl(.62,.7,1.6), jersey, s*2.35,Y(77),0, {rz:s*-.5});
+    add(cyl(.45,.5,2.9), skin, s*2.7,Y(88),.1, {rz:s*-.45});
+    add(sph(.6), skin, s*3.3,Y(100),.15);
+  }
+  add(box(1.2,1.5,1.1), M(c.skinDark||c.skin), 0,Y(63),0);                                  // neck
+  // head (sprite: circle r 30 at 50,38)
+  const head=new THREE.Group(); head.name='head'; head.position.set(0,Y(38),0); g.add(head);
+  add(sph(3.0), skin, 0,0,0, {parent:head});
+  for(const s of [-1,1]){ add(sph(.6), skin, s*3.0,-.2,0, {parent:head}); add(sph(.25), M(c.skinDark||'#a07050'), s*3.05,-.2,.25, {parent:head}); }
+  // face, as drawn: big white eyes, black pupils with a highlight, brows, blush, a small nose, the open smile with teeth and tongue
+  const bc=M(c.browColor||c.hairColor||'#222');
+  for(const s of [-1,1]){
+    add(sph(.72), M('#ffffff',{roughness:.35}), s*1.1,0,2.55, {s:[.95,1.1,.5], parent:head});
+    add(sph(.36), M('#1b1b1b'), s*1.15,-.1,2.9, {s:[1,1,.5], parent:head});
+    add(sph(.13), M('#ffffff'), s*1.0,.1,3.05, {parent:head});
+    if(c.brows==='sharp') add(box(1.4,.34,.3), bc, s*1.25,1.05,2.6, {rz:s*-.35, parent:head});
+    else add(new THREE.TorusGeometry(.62,.16,8,20,Math.PI*.8), bc, s*1.15,.85,2.6, {rz:Math.PI*.1, parent:head});
+    add(sph(.45), M('#ff8a8a',{transparent:true,opacity:.35}), s*1.9,-1.1,2.3, {s:[1,.9,.4], parent:head});
+  }
+  add(sph(.28), M(c.skinDark||'#a07050',{transparent:true,opacity:.7}), .2,-.55,2.95, {s:[.7,1.3,.7], parent:head});
+  const mouthW = c.teeth ? 2.0 : 1.6;
+  add(sph(mouthW), M('#7a2a2a'), 0,-1.55,2.2, {s:[1,.5,.42], parent:head});                     // the smiling mouth
+  add(box(mouthW*1.2,.36,.4), M('#ffffff'), 0,-1.2,2.75, {parent:head});                        // teeth
+  add(sph(.5), M('#e0525f'), 0,-2.05,2.55, {s:[1,.55,.6], parent:head});                        // tongue
+  // hair, per style, same shapes as the drawing
+  const cap=(len,mat,y=0,z=0)=>add(new THREE.SphereGeometry(3.08,36,24,0,Math.PI*2,0,Math.PI*len), mat, 0,y,z, {rx:-.18, parent:head});
+  if(c.hair==='bald'||c.hair==='tuft'){ cap(.3, M(c.hairColor,{transparent:true,opacity:.4})); if(c.hair==='tuft') add(sph(.55), hairM, 0,3.0,.9, {parent:head}); }
+  else if(c.hair==='mohawk'){ cap(.5, M(c.hairSide||'#222')); for(let i=-3;i<=3;i++) add(sph(.62), hairM, 0, 3.05-Math.abs(i)*.22, -i*.62, {parent:head}); }
+  else if(c.hair==='curly'){ cap(.5, hairM); for(let i=0;i<10;i++){ const a=i/10*Math.PI*2; add(sph(.85), hairM, Math.cos(a)*2.3, 2.2+Math.sin(a*2)*.25, Math.sin(a)*1.9-.3, {parent:head}); } }
+  else if(c.hair==='bun'){ cap(.48, hairM); add(sph(.8), hairM, 0,3.3,-.4, {parent:head}); }
+  else if(c.hair==='wavy'||c.hair==='longband'){ cap(.52, hairM); for(const s of [-1,1]) add(sph(1.1), hairM, s*2.5,-.2,-.9, {s:[.75,1.5,1], parent:head}); if(c.hair==='longband') add(new THREE.TorusGeometry(3.04,.22,8,48), M(c.bandColor||'#fff'), 0,1.5,0, {rx:Math.PI/2-.18, parent:head}); }
+  else cap(.48, hairM);
+  if(c.hair==='spiky') for(let i=-2;i<=2;i++) add(sph(.6), hairM, i*.95, 2.9, .5-Math.abs(i)*.15, {parent:head});
+  if(c.beard) add(new THREE.SphereGeometry(3.06,36,24,Math.PI*.1,Math.PI*.8,Math.PI*.56,Math.PI*.36), M(c.beardColor||'#333'), 0,-.1,0, {parent:head});
+  // podium
+  add(new THREE.CylinderGeometry(5.2,5.6,.9,48), M('#F5C400',{roughness:.5}), 0,-.5,0);
+  add(new THREE.CylinderGeometry(4.8,4.8,.14,48), M('#FFF3B8'), 0,0,0);
   g.scale.set(.36,.36,.36);
 }
 
@@ -2244,7 +2265,7 @@ function refreshHome(){
   if(typeof h3!=='undefined' && h3) buildFigure3D(CHARS[selected]);
   if(typeof refreshChallengeBadge==='function') refreshChallengeBadge();
   $('#home-name').textContent = nm(CHARS[selected]);
-  const me=$('#home-me'); if(me){ me.textContent = (isAdmin() ? '👑 ' : '') + T(rankOf(prog.trophies|0)); }   // just the rank up top
+  const me=$('#home-me'); if(me){ const n=normName(settings.name); me.textContent = (n ? crown(n, isAdmin()) : T('mp.you')) + ' · ' + T(rankOf(prog.trophies|0)); }
   updateXpBadge();
   if(typeof refreshRoad==='function') refreshRoad();
   if(typeof partyRefresh==='function') partyRefresh();
@@ -4567,7 +4588,7 @@ function setupKick(meShoots){                    // reset positions and sprites,
   const shooterC = pk.single ? pk.chars.shooter : (meShoots ? CHARS[selected] : teamChar(pk.op,false));
   sprite($('#pk-keeper'), keeperC);
   sprite($('#pk-shooter'), shooterC);
-  $('#pk-keeper').style.transform='none'; $('#pk-keeper').classList.remove('arms-up','arms-side','dive-l','dive-r','dive-c');
+  $('#pk-keeper').style.transform='none';
   const ball=$('#pk-ball'); ball.style.transition='none'; ball.style.transform='none'; void ball.offsetWidth; ball.style.transition='';
   el.classList.remove('power','sight','hold');
   $('#pk-shooter').classList.remove('run');
@@ -4605,29 +4626,15 @@ function placeCross(){ const c=$('#pk-cross'); c.style.left=pk.aim.x+'px'; c.sty
 function aimLoop(){
   if(!pk) return;
   if(pk.phase==='aim'){ pk.aim=aimAt(sinceT0()); placeCross(); }
-  else if(pk.phase==='hold'){ pk.aim.x=aimAt(sinceT0()).x; pk.aim.y=riseAt((performance.now()-pk.holdT0)/1000); placeCross(); }   // still sweeping sideways while it rises
+  else if(pk.phase==='hold'){ pk.aim.y=riseAt((performance.now()-pk.holdT0)/1000); placeCross(); }
   else return;
   pk.raf=requestAnimationFrame(aimLoop);
 }
 function keeperDive(z){
-  const k=$('#pk-keeper'); k.classList.remove('arms-up','arms-side','dive-l','dive-r'); void k.offsetWidth; k.classList.add(z.row===0?'arms-up':'arms-side', z.col===0?'dive-l':z.col===2?'dive-r':'dive-c');
   const tx=(z.col-1)*185, ty=z.row===0?-84:8, rot=(z.col-1)*32;
   $('#pk-keeper').style.transform=`translate(${tx}px,${ty}px) rotate(${rot}deg)`;
 }
 function ballTo(p){ $('#pk-ball').style.transform=`translate(${p.x-517}px,${p.y-500}px) scale(.55)`; }
-/* a shot flies on an arc: it lifts off the spot, peaks, and drops to the target while shrinking into the distance and spinning */
-function ballFly(p, ms=480){
-  const b=$('#pk-ball'), from={x:517,y:500}, t0=performance.now();
-  const lift = p.y<from.y-60 ? (from.y-p.y)*.35+50 : 30;                   // high shots climb more, rollers barely lift
-  b.style.transition='none';
-  const step=()=>{
-    const u=Math.min(1,(performance.now()-t0)/ms), e=1-Math.pow(1-u,2);
-    const x=from.x+(p.x-from.x)*e, y=from.y+(p.y-from.y)*e - lift*4*u*(1-u), sc=1-.45*e;
-    b.style.transform=`translate(${x-517}px,${y-500}px) scale(${sc.toFixed(3)}) rotate(${Math.round(u*720)}deg)`;
-    if(u<1) requestAnimationFrame(step); else b.style.transition='';
-  };
-  step();
-}
 function flash(txt){ const f=$('#pk-msg'); f.textContent=txt; f.classList.remove('show'); void f.offsetWidth; f.classList.add('show'); }
 const pointZone = (x,y) => ({col:clamp(Math.floor((x-PKG.x)/200),0,2), row:y<265?0:1});
 function startHold(){                                // press: lock the direction, start raising the sight
@@ -4648,7 +4655,7 @@ function userShoot(){                                // release: shoot at the si
   const readP = weak ? Math.min(1, pk.readP+.55) : pk.readP;
   const kz = Math.random()<readP ? zone : randomZone();
   $('#pk-hint').textContent='';
-  sfx.kick(); setTimeout(()=>{ keeperDive(kz); ballFly({x, y: over ? PKG.y-50 : Math.min(y, PKG.y+PKG.h-24)}, weak ? 620 : 460); }, 160);
+  sfx.kick(); setTimeout(()=>{ keeperDive(kz); ballTo({x, y: over ? PKG.y-50 : Math.min(y, PKG.y+PKG.h-24)}); }, 160);
   setTimeout(()=>{
     let goal;
     if(over){ goal=false; flash(T('pk.over')); sfx.miss(); }
@@ -4671,7 +4678,7 @@ function aiShoot(){
   pk.phase='fly'; $('#pk').classList.remove('keeping','sight'); $('#pk-cross').classList.remove('sight');
   const miss=pk.shotMiss, z=pk.shotZone, c=zoneCenter(z), d=pk.dive;
   const target = miss ? { x:c.x+(z.col===0?-110:z.col===2?110:0), y: z.row===0 ? PKG.y-46 : c.y } : c;
-  sfx.kick(); ballFly(target, 460);
+  sfx.kick(); ballTo(target);
   setTimeout(()=>{
     let goal;
     const same = d && d.zone.col===z.col && d.zone.row===z.row;
