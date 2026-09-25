@@ -104,9 +104,9 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .icon-btn{position:relative;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;font-size:30px;background:#fff;color:var(--navy);
   box-shadow:0 6px 0 rgba(27,42,78,.3),0 10px 16px rgba(0,0,0,.18);transition:transform .08s,box-shadow .08s;display:flex;align-items:center;justify-content:center}
 .icon-btn:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(27,42,78,.3)}
-#xp-badge{position:relative;margin-inline-start:6px;font-size:24px;font-weight:900;color:var(--navy);background:linear-gradient(#FFE27A,#F5C400);padding:6px 18px;border-radius:18px;
+#xp-badge,#trophy-badge{position:relative;margin-inline-start:6px;font-size:24px;font-weight:900;color:var(--navy);background:linear-gradient(#FFE27A,#F5C400);padding:6px 18px;border-radius:18px;
   box-shadow:0 5px 0 #C99A10,0 8px 14px rgba(0,0,0,.2);direction:ltr;white-space:nowrap;transition:transform .15s}
-#xp-badge.pop{transform:scale(1.15)}
+#xp-badge.pop,#trophy-badge.pop{transform:scale(1.15)}
 #code-input{width:560px;max-width:92%;font-size:28px;font-weight:900;text-align:center;letter-spacing:1px;direction:rtl;unicode-bidi:plaintext;text-transform:uppercase;box-sizing:border-box;border:4px solid var(--purple);border-radius:16px;
   padding:6px;font-family:inherit;color:var(--navy);background:#fff;user-select:text;-webkit-user-select:text;outline:none;margin:8px 0}
 #code-input.shake{animation:shake .4s}
@@ -351,6 +351,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .stat .l{font-size:20px;font-weight:900;margin-top:4px;white-space:nowrap}
 .stat.win{background:var(--green)}.stat.draw{background:var(--blue)}.stat.loss{background:var(--red)}
 .stat.cup{background:linear-gradient(#FFE27A,#E0A400);color:var(--navy)}
+.stat.trophy{background:linear-gradient(#FFD9A0,#F08A24);color:#fff}
 
 /* ---------- penalty world cup: team pick + bracket ---------- */
 #cup h2{position:absolute;top:20px;right:40px;font-size:34px}
@@ -656,6 +657,7 @@ body.touch #touch{display:block}
       <button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button>
       <button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
       <div id="xp-badge">⭐ 0 XP</div>
+      <div id="trophy-badge" title="גביעים">🏆 0</div>
       <button class="btn small yellow" id="btn-admin" hidden>👑 אדמין</button>
     </div>
     <!-- centre: my player -->
@@ -883,8 +885,10 @@ body.touch #touch{display:block}
         <div class="stat win"><div class="n" id="st-w">0</div><div class="l">ניצחונות</div></div>
         <div class="stat draw"><div class="n" id="st-d">0</div><div class="l">תיקו</div></div>
         <div class="stat loss"><div class="n" id="st-l">0</div><div class="l">הפסדים</div></div>
-        <div class="stat cup"><div class="n" id="st-c">0</div><div class="l">🏆 גביע העולם</div></div>
+        <div class="stat cup"><div class="n" id="st-c">0</div><div class="l">🥇 גביע העולם</div></div>
+        <div class="stat trophy"><div class="n" id="st-t">0</div><div class="l" id="st-t-l">🏆 גביעים</div></div>
       </div>
+      <div class="hint" id="st-rank"></div>
       <div class="hint" id="st-msg"></div>
       <div class="xpline" id="st-xp"></div>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:8px"><button class="btn small purple" id="btn-stats-ach">🏅 הישגים</button><button class="btn small green" id="btn-stats-board">📊 לוח שיאים</button></div>
@@ -1083,7 +1087,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.1';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.2';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1377,6 +1381,15 @@ const I18N_RAW={
  'name.ph':['השם שלך','Your name','اسمك','Твоё имя'],
  'name.go':['המשך ▶','Continue ▶','متابعة ▶','Продолжить ▶'],
  'name.saved':['ברוך הבא, {0}! 👋','Welcome, {0}! 👋','أهلاً بك، {0}! 👋','Добро пожаловать, {0}! 👋'],
+ 'stats.trophies':['🏆 גביעים','🏆 Trophies','🏆 كؤوس','🏆 Кубки'],
+ 'stats.rank':['דרגה: {0}','Rank: {0}','الرتبة: {0}','Ранг: {0}'],
+ 'trophy.gain':['🏆 +{0} גביעים!','🏆 +{0} trophies!','🏆 +{0} كؤوس!','🏆 +{0} кубков!'],
+ 'trophy.hint':['גביעים מרוויחים רק בניצחונות במשחקים אמיתיים (לא באימון)','Trophies come only from winning real matches (not training)','الكؤوس تُكسب فقط بالفوز في مباريات حقيقية (ليس في التدريب)','Кубки дают только победы в настоящих матчах (не тренировки)'],
+ 'rank.0':['🌱 מתחיל','🌱 Rookie','🌱 مبتدئ','🌱 Новичок'],
+ 'rank.1':['🥉 ארד','🥉 Bronze','🥉 برونزي','🥉 Бронза'],
+ 'rank.2':['🥈 כסף','🥈 Silver','🥈 فضي','🥈 Серебро'],
+ 'rank.3':['🥇 זהב','🥇 Gold','🥇 ذهبي','🥇 Золото'],
+ 'rank.4':['💎 יהלום','💎 Diamond','💎 ماسي','💎 Алмаз'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1533,7 +1546,7 @@ const CHAR_ST={
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
 const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
-const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false};
+const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false,trophies:0};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
 const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id) || !!prog.admin;   // the admin owns every player, new ones too
@@ -1545,8 +1558,12 @@ function toast(msg, cls){
   const d=document.createElement('div'); d.className='tst '+(cls||''); d.textContent=msg; box.appendChild(d);
   setTimeout(()=>d.classList.add('out'), 2600); setTimeout(()=>d.remove(), 3100);
 }
-function updateXpBadge(){ const b=document.getElementById('xp-badge'); if(!b) return; b.textContent='⭐ '+prog.xp+' XP'; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(()=>b.classList.remove('pop'),200); }
+function updateXpBadge(){ const tb=document.getElementById('trophy-badge'); if(tb) tb.textContent='🏆 '+(prog.trophies|0); const b=document.getElementById('xp-badge'); if(!b) return; b.textContent='⭐ '+prog.xp+' XP'; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(()=>b.classList.remove('pop'),200); }
 function addXP(n){ if(!(n>0)) return; prog.xp+=n; saveProg(); toast(T('xp.gain',n),'xp'); updateXpBadge(); }
+/* trophies: only real matches award them, and only a few – the rarest thing in the game */
+const RANKS=[[0,'rank.0'],[10,'rank.1'],[25,'rank.2'],[50,'rank.3'],[100,'rank.4']];
+const rankOf = t => RANKS.reduce((r,[min,k])=>t>=min?k:r,'rank.0');
+function addTrophies(n){ if(!(n>0) || training) return; prog.trophies=(prog.trophies|0)+n; saveProg(); toast(T('trophy.gain',n),'ach'); updateXpBadge(); }
 function achieve(id){
   if(prog.ach[id]) return; const a=ACH.find(x=>x[0]===id); if(!a) return;
   prog.ach[id]=Date.now(); prog.xp+=a[1]; saveProg(); updateXpBadge();
@@ -1554,7 +1571,7 @@ function achieve(id){
 }
 const dayKey = () => new Date().toISOString().slice(0,10);
 function dailyInfo(){ const s=Math.floor(Date.now()/864e5); let opp=(s*7)%CHARS.length; if(opp===selected) opp=(opp+1)%CHARS.length; return { opp, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }   // daily stays within the 5 normal levels
-const myStats = () => { const s=loadStats(); return {w:s.w,d:s.d,l:s.l,c:s.c,xp:prog.xp,goals:prog.goals}; };
+const myStats = () => { const s=loadStats(); return {w:s.w,d:s.d,l:s.l,c:s.c,xp:prog.xp,goals:prog.goals,tr:prog.trophies|0}; };
 
 /* ---------- characters (cartoon caricatures) ---------- */
 const CHARS = [
@@ -1929,7 +1946,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
-  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'set.ice', '#rotate span':'rotate', '#replay-tag':'replay',
+  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'set.ice', '#st-t-l':'stats.trophies', '#rotate span':'rotate', '#replay-tag':'replay',
   '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn',
   '#btn-train':'train.btn', '#train-title':'train.title', '#train-hint':'train.hint', '#btn-train-shoot':'train.shoot', '#btn-train-pk':'train.pk', '#btn-train-corner':'train.corner', '#btn-train-cancel':'btn.back2' };
 function applyLang(){
@@ -2091,6 +2108,7 @@ function showStats(){
   const s=loadStats(), total=s.w+s.d+s.l;
   $('#st-w').textContent=s.w; $('#st-d').textContent=s.d; $('#st-l').textContent=s.l; $('#st-c').textContent=s.c;
   $('#st-xp').textContent=T('stats.xp',prog.xp);
+  $('#st-t').textContent=prog.trophies|0; $('#st-rank').textContent=T('stats.rank', T(rankOf(prog.trophies|0)))+' · '+T('trophy.hint');
   $('#st-msg').textContent = total===0 ? T('stats.none') : s.w>s.l ? T('stats.ahead',total) : s.w===s.l ? T('stats.even',total) : T('stats.behind',total);
   $('#stats-modal').classList.add('show');
 }
@@ -2186,7 +2204,7 @@ function fbHeartbeat(force){
   const name=normName(settings.name); if(!fbOn()||!name) return;
   const st=myState(); if(!force && st===fbLastState && fbHeartbeat.t && Date.now()-fbHeartbeat.t<20000) return; fbLastState=st; fbHeartbeat.t=Date.now();
   const s=loadStats();
-  fbReq('users/'+fbKey(name),'PATCH',{name, w:s.w|0, c:s.c|0, goals:prog.goals|0, xp:prog.xp|0, st, adm:isAdmin(), t:{'.sv':'timestamp'}});
+  fbReq('users/'+fbKey(name),'PATCH',{name, w:s.w|0, c:s.c|0, goals:prog.goals|0, xp:prog.xp|0, tr:prog.trophies|0, st, adm:isAdmin(), t:{'.sv':'timestamp'}});
 }
 setInterval(()=>fbHeartbeat(true), 25000);
 const fbOnline = u => !!(u && u.t && Date.now()-u.t < 75000);
@@ -2255,13 +2273,13 @@ async function fbLookup(name){ return fbReq('users/'+fbKey(name),'GET'); }
 async function buildTop(){
   const box=$('#fr-top'); box.innerHTML=`<div class="hint" style="text-align:center;margin-top:20px">${T('friends.checking')}</div>`;
   let rows=null, server=false;
-  if(fbOn()){ const all=await fbReq('users','GET'); if(all){ server=true; rows=Object.values(all).filter(u=>u&&u.name).map(u=>({name:normName(u.name), w:u.w|0, c:u.c|0, xp:u.xp|0, online:fbOnline(u), st:u.st, adm:!!u.adm})); } }
-  if(!rows){ const s=loadStats(); rows=Object.keys(prog.friends).filter(n=>n.toLowerCase()!==normName(settings.name).toLowerCase()).map(n=>({name:n, w:prog.friends[n].w|0, c:prog.friends[n].c|0, xp:prog.friends[n].xp|0, online:!!prog.friends[n].online})); rows.push({name:normName(settings.name)||T('mp.you'), w:s.w|0, c:s.c|0, xp:prog.xp|0, online:true, me:true}); }
+  if(fbOn()){ const all=await fbReq('users','GET'); if(all){ server=true; rows=Object.values(all).filter(u=>u&&u.name).map(u=>({name:normName(u.name), w:u.w|0, c:u.c|0, xp:u.xp|0, tr:u.tr|0, online:fbOnline(u), st:u.st, adm:!!u.adm})); } }
+  if(!rows){ const s=loadStats(); rows=Object.keys(prog.friends).filter(n=>n.toLowerCase()!==normName(settings.name).toLowerCase()).map(n=>({name:n, w:prog.friends[n].w|0, c:prog.friends[n].c|0, xp:prog.friends[n].xp|0, tr:prog.friends[n].tr|0, online:!!prog.friends[n].online})); rows.push({name:normName(settings.name)||T('mp.you'), w:s.w|0, c:s.c|0, xp:prog.xp|0, tr:prog.trophies|0, online:true, me:true}); }
   rows.sort((a,b)=>b.w-a.w || b.c-a.c || b.xp-a.xp); rows=rows.slice(0,25);
   const me=normName(settings.name).toLowerCase();
   const medal=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`;
   box.innerHTML = (server ? '' : `<div class="hint" style="text-align:center">${T('friends.topNeedsServer')}</div>`) +
-    (rows.length ? rows.map((r,i)=>{ const mine=r.me||r.name.toLowerCase()===me; return `<div class="frow top ${mine?'mine':''}" data-name="${esc(r.name)}"><span class="rank">${medal(i)}</span><span class="dot ${r.online?(r.st==='match'?'match':'online'):'offline'}"></span><span class="fname">${esc(crown(r.name, r.adm||(mine&&isAdmin())))}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">🏆 ${r.w} · 🥇 ${r.c} · ⭐ ${r.xp}</span>${mine?'':`<button class="btn small blue" data-act="view">${T('friends.view')}</button>${prog.friends[r.name]?'':`<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`}</div>`; }).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`);
+    (rows.length ? rows.map((r,i)=>{ const mine=r.me||r.name.toLowerCase()===me; return `<div class="frow top ${mine?'mine':''}" data-name="${esc(r.name)}"><span class="rank">${medal(i)}</span><span class="dot ${r.online?(r.st==='match'?'match':'online'):'offline'}"></span><span class="fname">${esc(crown(r.name, r.adm||(mine&&isAdmin())))}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">✅ ${r.w} · 🏆 ${r.tr|0} · ⭐ ${r.xp}</span>${mine?'':`<button class="btn small blue" data-act="view">${T('friends.view')}</button>${prog.friends[r.name]?'':`<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`}</div>`; }).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`);
 }
 function showFrTab(which){ $('#fr-tab-list').classList.toggle('on',which==='list'); $('#fr-tab-top').classList.toggle('on',which==='top'); $('#fr-list').hidden=which!=='list'; $('#fr-top').hidden=which!=='top'; if(which==='top') buildTop(); }
 async function viewFriend(name){
@@ -2269,7 +2287,7 @@ async function viewFriend(name){
   let f = known ? prog.friends[name] : {ach:[],w:0,d:0,l:0,c:0,xp:0,goals:0,t:0,online:false};
   const c=await reach(name,'stats',5000);
   if(c){
-    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; Object.assign(f, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true,st:m.st||'idle',adm:!!m.adm}); if(known) saveProg(); res(); } }); setTimeout(res,3000); });
+    await new Promise(res=>{ let got=false; c.on('data', m=>{ if(m&&m.t==='stats'&&!got){ got=true; Object.assign(f, {w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,tr:m.s.tr|0,ach:Array.isArray(m.ach)?m.ach.slice(0,40):[],t:Date.now(),online:true,st:m.st||'idle',adm:!!m.adm}); if(known) saveProg(); res(); } }); setTimeout(res,3000); });
     try{ c.close(); }catch(e){}
   } else {
     const fb = fbOn() ? await fbLookup(name) : null;
@@ -2279,7 +2297,7 @@ async function viewFriend(name){
   const st=statusOf(f);
   $('#fm-name').textContent=(f.online?'🟢 ':'⚪ ')+name;
   $('#fm-status').textContent = f.t ? (f.online ? statusText(st) : T('friends.lastSeen', new Date(f.t).toLocaleDateString())) : T('friends.noData');
-  $('#fm-stats').innerHTML = `<div class="stat win"><div class="n">${f.w|0}</div><div class="l">${T('stats.w')}</div></div><div class="stat draw"><div class="n">${f.goals|0}</div><div class="l">⚽</div></div><div class="stat loss"><div class="n">${f.l|0}</div><div class="l">${T('stats.l')}</div></div><div class="stat cup"><div class="n">${f.xp|0}</div><div class="l">⭐ XP</div></div>`;
+  $('#fm-stats').innerHTML = `<div class="stat win"><div class="n">${f.w|0}</div><div class="l">${T('stats.w')}</div></div><div class="stat trophy"><div class="n">${f.tr|0}</div><div class="l">🏆</div></div><div class="stat draw"><div class="n">${f.goals|0}</div><div class="l">⚽</div></div><div class="stat loss"><div class="n">${f.l|0}</div><div class="l">${T('stats.l')}</div></div><div class="stat cup"><div class="n">${f.xp|0}</div><div class="l">⭐ XP</div></div>`;
   const ach=f.ach||[]; $('#fm-ach').innerHTML = `<div class="hint">${T('ach.count',ach.length,ACH.length,f.xp|0)}</div><div class="fm-badges">${ACH.map(([id])=>`<span class="bd ${ach.includes(id)?'on':''}" title="${esc(T('a.'+id))}">${ACH_ICON[id]||'🏅'}</span>`).join('')}</div>`;
   $('#btn-fm-invite').dataset.name=name; $('#btn-fm-invite').hidden=st!=='online';
   $('#btn-fm-watch').dataset.name=name; $('#btn-fm-watch').hidden=st!=='match';
@@ -3135,7 +3153,7 @@ function goHome(){
 
 function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from the local player's point of view
   state='end';
-  const xp0=prog.xp;
+  const xp0=prog.xp, t0=prog.trophies|0;
   const t=$('#end-title'), sub=$('#end-sub');
   if(outcome==='win'){ t.textContent=T('end.win'); sub.textContent=T(mp?'end.winMp':'end.winSub'); sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); recordResult('w'); }
   else if(outcome==='lose'){ t.textContent=T('end.lose'); sub.textContent=T(mp?'end.loseMp':'end.loseSub'); sfx.lose(); recordResult('l'); }
@@ -3143,11 +3161,12 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   // XP + achievements
   if(outcome==='win'){
     prog.wins++; prog.streak++; addXP(mp ? 5 : [2,3,5,7,10,25][level ? level.i : 1]);   // harder level = more XP
+    addTrophies(mp ? 2 : [1,1,1,2,2,3][level ? level.i : 1]);                          // trophies: 1 on easy levels, up to 3 on Impossible, 2 online
     achieve('first_win'); if(prog.streak>=3) achieve('streak3'); if(prog.wins>=10) achieve('ten_wins');
     if(score.op===0) achieve('clean_sheet'); if(wasBehind) achieve('comeback');
     if(mp) achieve('online_win'); if(v2) achieve('v2_win');
     if(!mp && level){ if(level.i===2) achieve('win_hard'); if(level.i===3) achieve('win_crazy'); if(level.i===4) achieve('win_master'); if(level.i===5) achieve('win_impossible'); }
-    if(dailyMatch && prog.daily!==dayKey()){ prog.daily=dayKey(); addXP(dailyInfo().xp); achieve('daily_win'); }
+    if(dailyMatch && prog.daily!==dayKey()){ prog.daily=dayKey(); addXP(dailyInfo().xp); addTrophies(1); achieve('daily_win'); }
   } else { prog.streak=0; if(outcome==='draw') addXP(1); }
   dailyMatch=false; saveProg();
   say(outcome==='win' ? 'c.endWin' : outcome==='lose' ? 'c.endLose' : 'c.endDraw', score.me, score.op);
@@ -3156,7 +3175,7 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   $('#end-score .me').textContent=score.me; $('#end-score .op').textContent=score.op;
   const stars = outcome==='win' ? (score.op===0 || score.me-score.op>=3 ? 3 : 2) : outcome==='draw' ? 1 : 0;
   $('#end-stars').querySelectorAll('span').forEach((s,i)=>{ s.classList.toggle('on', i<stars); s.style.animationDelay=(.3+i*.25)+'s'; });
-  const gained=prog.xp-xp0; $('#end-xp').hidden=gained<=0; $('#end-xp').textContent=T('end.xp', gained);
+  const gained=prog.xp-xp0, tg=(prog.trophies|0)-t0; $('#end-xp').hidden=gained<=0 && tg<=0; $('#end-xp').textContent=(gained>0?T('end.xp', gained):'')+(tg>0?(gained>0?'  ·  ':'')+'🏆 +'+tg:'');
   $('#btn-end-again').textContent = mp ? T('end.more') : T('end.again'); $('#end-btns').hidden=false; $('#end-actions').hidden=true;
   $('#end').classList.add('show');
   clearTimeout(endTimer);
@@ -3668,7 +3687,7 @@ function mpOnMsg(m, c){                               // c = the guest who sent 
   switch(m.t){
     case 'hello': {
       const name=normName(m.name);
-      if(name && name.toLowerCase()!==normName(settings.name).toLowerCase() && m.s && typeof m.s==='object'){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]},{w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,t:Date.now(),online:true}); saveProg(); }
+      if(name && name.toLowerCase()!==normName(settings.name).toLowerCase() && m.s && typeof m.s==='object'){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]},{w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,tr:m.s.tr|0,t:Date.now(),online:true}); saveProg(); }
       if(c){ c.name=name; c.adm=!!m.adm; mpBroadcastLobby(); mpRefresh(); }
       else { mp.slot=m.slot||'P2'; mp.teamL = mp.slot==='P3'; mp.v2=!!m.v2; mp.src=m.src||{P2:'net'}; mp.hostName=name; mp.hostAdm=!!m.adm; mpRefresh(); }
       break; }
@@ -4365,7 +4384,7 @@ function endShootout(res){
     if(pk.sMe.length>=5 && pk.sMe.slice(0,5).every(Boolean)) achieve('pk_perfect');
     if((pk.saves|0)>=3) achieve('pk_saves');
     addXP(2+cup.level.i);
-    if(cup.round===4){ achieve('cup_win'); if(cup.level.i>=4) achieve('cup_master'); addXP(10+cup.level.i*5); }
+    if(cup.round===4){ achieve('cup_win'); if(cup.level.i>=4) achieve('cup_master'); addXP(10+cup.level.i*5); addTrophies(3); }
   }
   const m=pk.m, iAmA=m.a===cup.mine, ga=pk.sMe.filter(Boolean).length, gb=pk.sOp.filter(Boolean).length;
   m.sa=iAmA?ga:gb; m.sb=iAmA?gb:ga; m.w = res==='me' ? cup.mine : (iAmA?m.b:m.a);
