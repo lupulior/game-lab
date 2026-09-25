@@ -64,7 +64,9 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .home-col.main .btn.play{font-size:48px;padding:12px 26px 16px;border-radius:34px}
 .home-col.more{top:110px;left:40px;align-items:flex-start}
 .home-col.more .btn{width:250px;font-size:22px;padding:9px 20px;box-sizing:border-box;justify-content:flex-start}
-.home-foot{position:absolute;right:40px;bottom:22px;display:flex;gap:10px;align-items:center}
+.home-foot{position:absolute;right:40px;bottom:18px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.home-foot .row{display:flex;gap:8px;align-items:center}
+.icon-btn.fs{background:var(--orange);color:#fff}
 .home-foot .icon-btn{width:48px;height:48px;font-size:24px}
 .home-foot .btn.small{font-size:17px;padding:6px 14px;opacity:.92}
 #btn-mp{font-size:24px;padding:12px 26px}
@@ -302,12 +304,12 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #name-modal .btn:disabled{opacity:.5;cursor:not-allowed}
 /* ===== home, Brawl-style: top bar pills, podium with a turning player, the party beside me ===== */
 .home-top .pill{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:inherit;border:0;cursor:pointer;font-size:22px;font-weight:900;color:var(--navy);background:#fff;border-radius:18px;padding:6px 16px;box-shadow:0 5px 0 rgba(27,42,78,.3),0 8px 14px rgba(0,0,0,.15)}
-.home-top .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:4px 14px 6px;min-width:172px;align-items:stretch}
+.home-top .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:4px 14px 6px;width:172px;align-items:stretch}
 .home-top .pill.trophy #trophy-badge{font-size:26px;text-align:center}
 .home-top .pill.trophy .road{display:block;height:8px;border-radius:6px;background:rgba(27,42,78,.3);overflow:hidden}
 .home-top .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
 .home-top .pill.trophy .next{font-size:12px;text-align:center;white-space:nowrap;opacity:.9}
-.home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400)}
+.home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400);width:150px;justify-content:center;white-space:nowrap}
 .home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:17px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #xp-badge.pill{margin-inline-start:0}
 .hero{top:96px;width:340px}
@@ -324,7 +326,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .hero.turned .turn-hint{display:none}
 #btn-ceo.wa{display:inline-flex;gap:8px;align-items:center;background:#25D366;box-shadow:0 8px 0 #128C7E,0 14px 20px rgba(0,0,0,.22)}
 #btn-ceo.wa:active{box-shadow:0 2px 0 #128C7E}
-.wa-big{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-size:40px;padding:14px 60px;background:#25D366;box-shadow:0 10px 0 #128C7E,0 16px 24px rgba(0,0,0,.25);text-decoration:none;z-index:5;animation:tapPulse 1.2s infinite}
+.wa-big{display:inline-block;margin-top:26px;font-size:40px;padding:14px 60px;background:#25D366;box-shadow:0 10px 0 #128C7E,0 16px 24px rgba(0,0,0,.25);text-decoration:none;z-index:5;animation:tapPulse 1.2s infinite}
 .chalrow{display:flex;align-items:center;gap:10px;background:rgba(27,42,78,.06);border-radius:14px;padding:8px 12px;margin:6px 0;font-weight:900;font-size:18px;color:var(--navy)}
 .chalrow .ct{flex:1;text-align:start}
 .chalrow .cb{width:180px;height:12px;background:rgba(27,42,78,.2);border-radius:8px;overflow:hidden}
@@ -356,14 +358,16 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #party-modes .btn{font-size:22px;padding:10px 22px}
 #party-modes .btn.on,#party-levels .btn.on{outline:5px solid var(--yellow)}
 #party-levels .btn.small{font-size:15px;padding:5px 10px}
-.road-panel{min-width:620px}
-.roadrow{display:flex;align-items:center;gap:12px;background:rgba(27,42,78,.06);border-radius:14px;padding:6px 12px;margin:6px 0;font-weight:900;font-size:20px;color:var(--navy)}
-.roadrow .rt{width:90px;text-align:center}
-.roadrow .rr{flex:1;display:flex;align-items:center;gap:10px;text-align:start}
-.roadrow .rr svg{width:34px;height:51px}
-.roadrow .rs{font-size:24px}
+.road-panel{min-width:860px;max-width:900px}
+#road-list{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-height:400px;overflow-y:auto;padding:6px 4px;scrollbar-width:thin}
+.roadrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(27,42,78,.06);border-radius:14px;padding:8px 6px;font-weight:900;font-size:15px;color:var(--navy);min-height:112px;position:relative}
+.roadrow .rt{font-size:16px;color:#8a6a1a}
+.roadrow .rr{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;line-height:1.1}
+.roadrow .rr svg{width:40px;height:60px}
+.roadrow .rs{position:absolute;top:4px;right:6px;font-size:16px}
 .roadrow.got{opacity:.6}
 .roadrow.ready{background:#DDF7E4;outline:3px solid var(--green)}
+.roadrow.next{outline:3px solid var(--yellow);background:#FFF6CF}
 #watch-hold{position:absolute;left:50%;top:180px;transform:translateX(-50%);z-index:8;font-size:34px;font-weight:900;color:#fff;background:rgba(27,42,78,.85);border-radius:22px;padding:12px 30px;white-space:nowrap;box-shadow:0 8px 0 rgba(0,0,0,.25)}
 .fm-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .fm-badges .bd{font-size:26px;width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(27,42,78,.2);filter:grayscale(1);opacity:.35}
@@ -755,9 +759,10 @@ body.touch #touch{display:block}
     </div>
     <!-- bottom: the odds and ends -->
     <div class="home-foot">
-      <button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button><button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button><button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
+      <div class="row"><button class="icon-btn fs" id="btn-fs" title="מסך מלא">⛶</button><button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button><button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button><button class="icon-btn" id="btn-codes" title="קודים">🎁</button></div>
+      <div class="row">
       <button class="btn green small wa" id="btn-ceo"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.7-1.2.1-.2 0-.3 0-.4l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5 5 0 0 0 1 2.6 11.5 11.5 0 0 0 4.4 3.9c1.6.7 2.2.7 3 .6a2.6 2.6 0 0 0 1.7-1.2 2 2 0 0 0 .1-1.2c0-.1-.2-.2-.5-.3z"/></svg><span id="btn-ceo-l">קבוצת הוואטסאפ</span></button>
-      <button class="btn red small" id="btn-exit">🚪 צא</button>
+      <button class="btn red small" id="btn-exit">🚪 צא</button></div>
     </div>
   </section>
 
@@ -767,7 +772,7 @@ body.touch #touch{display:block}
   <section id="chars" class="screen">
     <h2>בחרו דמות</h2>
     <button class="btn blue small" id="btn-back">➜ חזרה</button>
-    <div class="gal-filter" id="gal-filter"><button class="btn small blue on" data-f="all">הכול</button><button class="btn small blue" data-f="il">🇮🇱 ישראלים</button><button class="btn small blue" data-f="legend">🏆 אגדות</button><button class="btn small blue" data-f="free">🆓 חינם</button></div>
+    <div class="gal-filter" id="gal-filter"><button class="btn small blue on" data-f="all">הכול</button><button class="btn small blue" data-f="il">🇮🇱 ישראלים</button><button class="btn small blue" data-f="free">🆓 חינם</button></div>
     <div class="gallery" id="gallery"></div>
     <div class="preview">
       <div class="sprite" id="preview-sprite"></div>
@@ -1190,7 +1195,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.5';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.6';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1508,11 +1513,13 @@ const I18N_RAW={
  'road.title':['🏆 דרך הגביעים','🏆 Trophy road','🏆 طريق الكؤوس','🏆 Дорога кубков'],
  'road.sub':['יש לך {0} גביעים · דרגה {1}','You have {0} trophies · rank {1}','لديك {0} كأسًا · الرتبة {1}','У тебя {0} кубков · ранг {1}'],
  'road.char':['🏆 פרס מדרך הגביעים: {0} נפתח!','🏆 Trophy road reward: {0} unlocked!','🏆 مكافأة طريق الكؤوس: تم فتح {0}!','🏆 Награда дороги кубков: открыт {0}!'],
+ 'road.count':['{0} תחנות בדרך','{0} stops on the road','{0} محطات على الطريق','{0} остановок на дороге'],
  'road.done':['סיימת את כל הדרך! 🎉','You finished the whole road! 🎉','أكملت الطريق كله! 🎉','Ты прошёл всю дорогу! 🎉'],
  'road.only':['הדמות הזאת נפתחת רק ב-{0} גביעים 🏆','This player unlocks only at {0} trophies 🏆','هذه الشخصية تُفتح فقط عند {0} كأسًا 🏆','Этот игрок открывается только за {0} кубков 🏆'],
  'road.lock':['🏆 {0} גביעים','🏆 {0} trophies','🏆 {0} كأسًا','🏆 {0} кубков'],
  'road.lockBtn':['🔒 נפתח ב-{0} גביעים','🔒 Unlocks at {0} trophies','🔒 يُفتح عند {0} كأسًا','🔒 Откроется за {0} кубков'],
  'rank.5':['🔥 אגדה','🔥 Legend','🔥 أسطورة','🔥 Легенда'], 'rank.6':['👑 מלך','👑 King','👑 ملك','👑 Король'], 'rank.7':['🌟 כוכב-על','🌟 Superstar','🌟 نجم خارق','🌟 Суперзвезда'], 'rank.8':['🛸 חייזר','🛸 Alien','🛸 كائن فضائي','🛸 Инопланетянин'], 'rank.9':['♾️ אינסוף','♾️ Infinity','♾️ لا نهائي','♾️ Бесконечность'],
+ 'home.fs':['מסך מלא','Full screen','ملء الشاشة','Полный экран'],
  'home.turn':['↔ גרור כדי לסובב','↔ Drag to turn','↔ اسحب للتدوير','↔ Потяни, чтобы повернуть'],
  'chal.btn':['🎯 אתגרי השבוע','🎯 Weekly challenges','🎯 تحديات الأسبوع','🎯 Задания недели'],
  'chal.title':['🎯 אתגרי השבוע','🎯 Weekly challenges','🎯 تحديات الأسبوع','🎯 Задания недели'],
@@ -1700,7 +1707,7 @@ function toast(msg, cls){
   const d=document.createElement('div'); d.className='tst '+(cls||''); d.textContent=msg; box.appendChild(d);
   setTimeout(()=>d.classList.add('out'), 2600); setTimeout(()=>d.remove(), 3100);
 }
-function updateXpBadge(){ const tb=document.getElementById('trophy-badge'); if(tb) tb.textContent='🏆 '+(prog.trophies|0); const b=document.getElementById('xp-badge'); if(!b) return; b.textContent='⭐ '+prog.xp+' XP'; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(()=>b.classList.remove('pop'),200); }
+function updateXpBadge(){ const tb=document.getElementById('trophy-badge'); if(tb){ tb.textContent='🏆 '+(prog.trophies|0); tb.style.fontSize=(prog.trophies|0)>=10000?'18px':'26px'; } const b=document.getElementById('xp-badge'); if(!b) return; b.textContent='⭐ '+prog.xp+' XP'; b.style.fontSize = prog.xp>=1000000?'14px':prog.xp>=100000?'16px':prog.xp>=10000?'19px':'22px'; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(()=>b.classList.remove('pop'),200); }
 function addXP(n){ if(!(n>0)) return; prog.xp+=n; saveProg(); toast(T('xp.gain',n),'xp'); updateXpBadge(); }
 /* trophies: only real matches award them, and only a few – the rarest thing in the game */
 const RANKS=[[0,'rank.0'],[10,'rank.1'],[25,'rank.2'],[50,'rank.3'],[100,'rank.4'],[250,'rank.5'],[500,'rank.6'],[1000,'rank.7'],[2500,'rank.8'],[5000,'rank.9']];
@@ -2158,7 +2165,7 @@ function refreshHome(){
 
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo-l':'btn.ceo', '#btn-wa-link':'ceo.click', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#chal-title':'chal.title', '#btn-chal-close':'btn.back2', '#turn-hint':'home.turn', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=legend]':'gal.legend', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#chal-title':'chal.title', '#btn-chal-close':'btn.back2', '#turn-hint':'home.turn', '#btn-fs':'home.fs', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
   '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn',
@@ -4020,6 +4027,7 @@ const TROPHY_ROAD=(()=>{
   const taken=new Set(road.map(r=>r.ch).filter(Boolean)), pool=CHARS.filter(c=>!FREE_CHARS.includes(c.id) && !c.trophyOnly && !taken.has(c.id)).sort((a,b)=>priceOf(a)-priceOf(b)).map(c=>c.id);
   let k=0; for(let t=175; t<=1000; t+=25){ road.push(k%3===2 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*12}); k++; }
   for(let t=1050; t<=10000; t+=50){ road.push(k%5===4 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*15}); k++; }
+  for(let t=10100; t<=50000; t+=100){ road.push(k%6===5 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*20}); k++; }
   return road;
 })();
 const roadFor = id => (TROPHY_ROAD.find(r=>r.ch===id)||{}).t;
@@ -4046,9 +4054,11 @@ function refreshRoad(){
 }
 function openRoad(){
   const t=prog.trophies|0;
-  $('#road-list').innerHTML=TROPHY_ROAD.map(r=>{ const got=(prog.road||[]).includes(r.t); return `<div class="roadrow ${got?'got':t>=r.t?'ready':''}"><span class="rt">🏆 ${r.t}</span><span class="rr">${r.ch?playerSVG(CHARS.find(c=>c.id===r.ch)):'⭐'} ${rewardText(r)}</span><span class="rs">${got?'✔':t>=r.t?'🎁':'🔒'}</span></div>`; }).join('');
-  $('#road-sub').textContent=T('road.sub', t, T(rankOf(t)));
+  const nx=nextReward();
+  $('#road-list').innerHTML=TROPHY_ROAD.map(r=>{ const got=(prog.road||[]).includes(r.t), isNext=nx&&nx.t===r.t; return `<div class="roadrow ${got?'got':t>=r.t?'ready':''} ${isNext?'next':''}" ${isNext?'id="road-next-card"':''}><span class="rt">🏆 ${r.t}</span><span class="rr">${r.ch?playerSVG(CHARS.find(c=>c.id===r.ch)):'<span style="font-size:30px">⭐</span>'}<span>${rewardText(r)}</span></span><span class="rs">${got?'✔':t>=r.t?'🎁':'🔒'}</span></div>`; }).join('');
+  $('#road-sub').textContent=T('road.sub', t, T(rankOf(t)))+' · '+T('road.count', TROPHY_ROAD.length);
   $('#road-modal').classList.add('show');
+  const card=$('#road-next-card'); if(card) setTimeout(()=>card.scrollIntoView({block:'center'}), 30);
 }
 $('#trophy-pill').addEventListener('click', ()=>{ sfx.click(); openRoad(); });
 $('#btn-road-close').addEventListener('click', ()=>{ sfx.click(); $('#road-modal').classList.remove('show'); });
@@ -4094,6 +4104,7 @@ function openChallenges(){
   $('#chal-modal').classList.add('show');
 }
 $('#btn-chal').addEventListener('click', ()=>{ sfx.click(); openChallenges(); });
+$('#btn-fs').addEventListener('click', ()=>{ sfx.click(); try{ if(document.fullscreenElement){ document.exitFullscreen(); } else { const el=document.documentElement; (el.requestFullscreen||el.webkitRequestFullscreen).call(el); } }catch(e){} });
 $('#btn-chal-close').addEventListener('click', ()=>{ sfx.click(); $('#chal-modal').classList.remove('show'); });
 function applyRemoteFor(p, r){                        // host: drive a remote friend's player with the inputs they sent
   let d=0; if(r.l) d-=1; if(r.r) d+=1;
