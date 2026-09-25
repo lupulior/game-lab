@@ -312,10 +312,27 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #xp-badge.pill{margin-inline-start:0}
 .hero{top:96px;width:340px}
 .hero .podium{position:absolute;left:50%;bottom:52px;width:300px;height:70px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#FFF3B8,#F5C400 70%,#C99A10);box-shadow:0 10px 0 #A87F0C,0 16px 22px rgba(0,0,0,.25);z-index:0}
-.hero .turntable{position:relative;width:250px;height:375px;margin:0 auto;transform-style:preserve-3d;animation:turn 6s ease-in-out infinite;z-index:1}
-.hero .turntable .sprite{position:absolute;inset:0;width:250px;height:375px;margin:0;backface-visibility:hidden;animation:bob 2.4s ease-in-out infinite}
-.hero .turntable .sprite.back{transform:rotateY(180deg)}
-@keyframes turn{0%,100%{transform:perspective(900px) rotateY(-38deg)}50%{transform:perspective(900px) rotateY(38deg)}}
+.hero .turntable{position:relative;width:250px;height:375px;margin:0 auto;transform-style:preserve-3d;transform:perspective(900px) rotateY(0);z-index:1;cursor:grab;touch-action:pan-y}
+.hero .bobber{animation:bob 2.4s ease-in-out infinite}
+.hero .turntable .sprite{position:absolute;inset:0;width:250px;height:375px;margin:0;backface-visibility:hidden;animation:none}
+.hero .turntable .sprite.back{transform:rotateY(180deg) translateZ(14px)}
+.hero .turntable #home-sprite{transform:translateZ(14px)}
+/* the slabs between front and back give the figure real thickness when it turns */
+.hero .turntable .slab{backface-visibility:visible;filter:brightness(.55) saturate(.7)}
+.hero .turntable .slab.s1{transform:translateZ(7px)}.hero .turntable .slab.s2{transform:translateZ(0)}.hero .turntable .slab.s3{transform:translateZ(-7px)}
+.hero .turn-hint{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:14px;font-weight:900;color:#fff;background:rgba(27,42,78,.55);border-radius:10px;padding:2px 10px;white-space:nowrap;pointer-events:none;opacity:.9}
+.hero.turned .turn-hint{display:none}
+#btn-ceo.wa{display:inline-flex;gap:8px;align-items:center;background:#25D366;box-shadow:0 8px 0 #128C7E,0 14px 20px rgba(0,0,0,.22)}
+#btn-ceo.wa:active{box-shadow:0 2px 0 #128C7E}
+.wa-big{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-size:40px;padding:14px 60px;background:#25D366;box-shadow:0 10px 0 #128C7E,0 16px 24px rgba(0,0,0,.25);text-decoration:none;z-index:5;animation:tapPulse 1.2s infinite}
+.chalrow{display:flex;align-items:center;gap:10px;background:rgba(27,42,78,.06);border-radius:14px;padding:8px 12px;margin:6px 0;font-weight:900;font-size:18px;color:var(--navy)}
+.chalrow .ct{flex:1;text-align:start}
+.chalrow .cb{width:180px;height:12px;background:rgba(27,42,78,.2);border-radius:8px;overflow:hidden}
+.chalrow .cb i{display:block;height:100%;background:linear-gradient(90deg,#3FC35F,#FFD447);border-radius:8px}
+.chalrow .cn{width:56px;text-align:center}
+.chalrow .cx{width:90px;text-align:center;color:#1B7F3B}
+.chalrow.done{opacity:.6}
+.home-col.more .btn{font-size:19px;padding:7px 16px}
 .hero .shadow{position:relative;z-index:1;margin-top:-10px}
 .hero .name{position:relative;z-index:1}
 #party{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none}
@@ -709,7 +726,8 @@ body.touch #touch{display:block}
     <!-- centre: my player turning on a podium, with my team beside me -->
     <div class="hero">
       <div class="podium"></div>
-      <div class="turntable"><div class="sprite" id="home-sprite"></div><div class="sprite back" id="home-sprite-back"></div></div>
+      <div class="bobber"><div class="turntable" id="home-turntable"><div class="sprite slab s1"></div><div class="sprite slab s2"></div><div class="sprite slab s3"></div><div class="sprite" id="home-sprite"></div><div class="sprite back" id="home-sprite-back"></div></div>
+      </div><div class="turn-hint" id="turn-hint">↔ גרור כדי לסובב</div>
       <div class="shadow"></div>
       <div class="name" id="home-name"></div>
       <button class="btn blue small" id="btn-chars">🧑 החלף דמות</button>
@@ -728,6 +746,7 @@ body.touch #touch{display:block}
     <!-- left column: everything around the game -->
     <div class="home-col more">
       <button class="btn yellow small" id="btn-daily">📅 המשחק היומי</button>
+      <button class="btn green small" id="btn-chal">🎯 אתגרי השבוע</button>
       <button class="btn blue small" id="btn-train">🏋️ אימון</button>
       <button class="btn pink small" id="btn-friends">👥 חברים</button>
       <button class="btn purple small" id="btn-top">🥇 המובילים</button>
@@ -737,7 +756,7 @@ body.touch #touch{display:block}
     <!-- bottom: the odds and ends -->
     <div class="home-foot">
       <button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button><button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button><button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
-      <button class="btn purple small" id="btn-ceo">👔 מנכ"ל המשחק</button>
+      <button class="btn green small wa" id="btn-ceo"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.7-1.2.1-.2 0-.3 0-.4l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5 5 0 0 0 1 2.6 11.5 11.5 0 0 0 4.4 3.9c1.6.7 2.2.7 3 .6a2.6 2.6 0 0 0 1.7-1.2 2 2 0 0 0 .1-1.2c0-.1-.2-.2-.5-.3z"/></svg><span id="btn-ceo-l">קבוצת הוואטסאפ</span></button>
       <button class="btn red small" id="btn-exit">🚪 צא</button>
     </div>
   </section>
@@ -775,7 +794,7 @@ body.touch #touch{display:block}
       <div class="gold ceo-role">יוצר משחקים</div>
       <div class="ceo-tag">👔 מנכ"ל המשחק</div>
       <div class="ceo-wa" id="ceo-wa">📱 היכנסו לקבוצת הווצאפ שלנו ותקבלו קודים חינם!</div>
-      <div class="ceo-wa-none" id="ceo-wa-none">(עוד אין קבוצת ווצאפ)</div>
+      <a class="btn green wa-big" id="btn-wa-link" href="https://whatsapp.com/channel/0029Vb8Vsk02P59cWkjNLm0s" target="_blank" rel="noopener">👉 לחצו עלי 👈</a>
     </div>
     <canvas id="ceo-confetti" width="1000" height="620"></canvas>
     <button class="btn blue small" id="btn-ceo-back">➜ חזרה</button>
@@ -1057,6 +1076,16 @@ body.touch #touch{display:block}
     </div>
   </div>
 
+  <!-- ===== WEEKLY CHALLENGES ===== -->
+  <div class="overlay" id="chal-modal">
+    <div class="panel" style="min-width:640px">
+      <h2 id="chal-title">🎯 אתגרי השבוע</h2>
+      <div class="hint" id="chal-sub"></div>
+      <div id="chal-list"></div>
+      <br><button class="btn small blue" id="btn-chal-close">חזרה</button>
+    </div>
+  </div>
+
   <!-- ===== TROPHY ROAD ===== -->
   <div class="overlay" id="road-modal">
     <div class="panel road-panel">
@@ -1161,7 +1190,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.4';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.5';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1180,7 +1209,8 @@ const I18N_RAW={
  'home.sub':['כוכב הכדורגל','Football Star','نجم كرة القدم','Звезда футбола'],
  'btn.chars':['🧑 החלף דמות','🧑 Change player','🧑 تغيير الشخصية','🧑 Сменить игрока'],
  'btn.exit':['🚪 צא','🚪 Exit','🚪 خروج','🚪 Выход'],
- 'btn.ceo':['👔 מנכ"ל המשחק','👔 Game CEO','👔 مدير اللعبة','👔 Директор игры'],
+ 'btn.ceo':['קבוצת הוואטסאפ','WhatsApp group','مجموعة الواتساب','Группа WhatsApp'],
+ 'ceo.click':['👉 לחצו עלי 👈','👉 Click me 👈','👉 اضغطوا عليّ 👈','👉 Нажми на меня 👈'],
  'btn.mp':['🌐 אונליין עם חברים','🌐 Online with friends','🌐 أونلاين مع الأصدقاء','🌐 Онлайн с друзьями'],
  'btn.2v2':['👥 2 על 2','👥 2 vs 2','👥 2 ضد 2','👥 2 на 2'],
  'btn.pk':['🥅 גביע הפנדלים','🥅 Penalty World Cup','🥅 كأس ركلات الترجيح','🥅 Кубок пенальти'],
@@ -1266,7 +1296,7 @@ const I18N_RAW={
  'corner.clear':['הרחקה! 💪','Cleared! 💪','إبعاد! 💪','Выбил! 💪'],
  'corner.oppGoal':['נגיחה של היריב… גול 😢','Opponent header… goal 😢','رأسية الخصم… هدف 😢','Удар головой соперника… гол 😢'],
  'pk.hintPower':['💪 עצור את פס העוצמה בירוק! אדום = מעל השער','💪 Stop the power bar in the green! Red = over the bar','💪 أوقف شريط القوة في الأخضر! الأحمر = فوق المرمى','💪 Останови шкалу на зелёном! Красный = выше ворот'],
- 'pk.hintKeep':['🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר!','🧤 When the sight appears in the goal, click it fast!','🧤 عندما يظهر الهدف في المرمى انقر عليه بسرعة!','🧤 Когда прицел появится в воротах, быстро нажми на него!'],
+ 'pk.hintKeep':['🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר! (או Q W E / A S D במקלדת)','🧤 When the sight appears in the goal, click it fast!','🧤 عندما يظهر الهدف في المرمى انقر عليه بسرعة!','🧤 Когда прицел появится в воротах, быстро нажми на него!'],
  'pk.power':['עוצמה {0}%','Power {0}%','القوة {0}%','Сила {0}%'],
  'pk.over':['מעל השער! 😬','Over the bar! 😬','فوق المرمى! 😬','Выше ворот! 😬'],
  'pk.wide':['פספוס! 😬','Wide! 😬','خارج المرمى! 😬','Мимо! 😬'],
@@ -1482,6 +1512,26 @@ const I18N_RAW={
  'road.only':['הדמות הזאת נפתחת רק ב-{0} גביעים 🏆','This player unlocks only at {0} trophies 🏆','هذه الشخصية تُفتح فقط عند {0} كأسًا 🏆','Этот игрок открывается только за {0} кубков 🏆'],
  'road.lock':['🏆 {0} גביעים','🏆 {0} trophies','🏆 {0} كأسًا','🏆 {0} кубков'],
  'road.lockBtn':['🔒 נפתח ב-{0} גביעים','🔒 Unlocks at {0} trophies','🔒 يُفتح عند {0} كأسًا','🔒 Откроется за {0} кубков'],
+ 'rank.5':['🔥 אגדה','🔥 Legend','🔥 أسطورة','🔥 Легенда'], 'rank.6':['👑 מלך','👑 King','👑 ملك','👑 Король'], 'rank.7':['🌟 כוכב-על','🌟 Superstar','🌟 نجم خارق','🌟 Суперзвезда'], 'rank.8':['🛸 חייזר','🛸 Alien','🛸 كائن فضائي','🛸 Инопланетянин'], 'rank.9':['♾️ אינסוף','♾️ Infinity','♾️ لا نهائي','♾️ Бесконечность'],
+ 'home.turn':['↔ גרור כדי לסובב','↔ Drag to turn','↔ اسحب للتدوير','↔ Потяни, чтобы повернуть'],
+ 'chal.btn':['🎯 אתגרי השבוע','🎯 Weekly challenges','🎯 تحديات الأسبوع','🎯 Задания недели'],
+ 'chal.title':['🎯 אתגרי השבוע','🎯 Weekly challenges','🎯 تحديات الأسبوع','🎯 Задания недели'],
+ 'chal.sub':['אתגרים חדשים כל שבוע · נשארו {0} ימים','New challenges every week · {0} days left','تحديات جديدة كل أسبوع · بقي {0} أيام','Новые задания каждую неделю · осталось {0} дн.'],
+ 'chal.done':['🎯 אתגר הושלם: {0}','🎯 Challenge done: {0}','🎯 اكتمل التحدي: {0}','🎯 Задание выполнено: {0}'],
+ 'chal.win3':['נצח {0} משחקים','Win {0} matches','افز في {0} مباريات','Выиграй {0} матча'], 'chal.win5':['נצח {0} משחקים','Win {0} matches','افز في {0} مباريات','Выиграй {0} матчей'],
+ 'chal.goals10':['הבקע {0} גולים','Score {0} goals','سجّل {0} أهداف','Забей {0} голов'], 'chal.goals25':['הבקע {0} גולים','Score {0} goals','سجّل {0} هدفًا','Забей {0} голов'],
+ 'chal.hard2':['נצח {0} משחקים ברמה קשה ומעלה','Win {0} matches on Hard or above','افز في {0} مباريات في المستوى الصعب أو أعلى','Выиграй {0} матча на Сложно и выше'],
+ 'chal.clean2':['נצח {0} משחקים בלי לספוג','Win {0} matches without conceding','افز في {0} مباريات دون استقبال أهداف','Выиграй {0} матча всухую'],
+ 'chal.pk5':['הבקע {0} פנדלים','Score {0} penalties','سجّل {0} ركلات جزاء','Забей {0} пенальти'],
+ 'chal.header3':['הבקע {0} גולי נגיחה','Score {0} headers','سجّل {0} أهداف رأسية','Забей {0} гола головой'],
+ 'chal.v2win2':['נצח {0} משחקי 2 על 2','Win {0} 2v2 matches','افز في {0} مباريات 2 ضد 2','Выиграй {0} матча 2 на 2'],
+ 'chal.online1':['נצח {0} משחק אונליין','Win {0} online match','افز في {0} مباراة أونلاين','Выиграй {0} онлайн-матч'],
+ 'chal.daily3':['נצח {0} משחקים יומיים','Win {0} daily matches','افز في {0} مباريات يومية','Выиграй {0} ежедневных матча'],
+ 'chal.corner2':['הבקע {0} גולים מקרן','Score {0} goals from corners','سجّل {0} أهداف من ركنيات','Забей {0} гола с углового'],
+ 'chal.ice5':['השתמש בקרח {0} פעמים','Use the ice {0} times','استخدم الجليد {0} مرات','Используй лёд {0} раз'],
+ 'chal.slide10':['עשה {0} גליצ\'ים','Make {0} slide tackles','قم بـ {0} انزلاقات','Сделай {0} подкатов'],
+ 'chal.play7':['שחק {0} משחקים','Play {0} matches','العب {0} مباريات','Сыграй {0} матчей'],
+ 'chal.cup1':['זכה בגביע העולם בפנדלים','Win the penalty World Cup','افز بكأس العالم لركلات الجزاء','Выиграй Кубок мира по пенальти'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1608,7 +1658,7 @@ const CHAR_NAMES={
  beckham:['Beckham','بيكهام','Бекхэм'], henry:['Henry','هنري','Анри'], kaka:['Kaká','كاكا','Кака'], modric:['Modrić','مودريتش','Модрич'],
  debruyne:['De Bruyne','دي بروين','Де Брёйне'], xavi:['Xavi','تشافي','Хави'], rooney:['Rooney','روني','Руни'], drogba:['Drogba','دروغبا','Дрогба'],
  gerrard:['Gerrard','جيرارد','Джеррард'], aguero:['Agüero','أغويرو','Агуэро'], vandijk:['Van Dijk','فان دايك','Ван Дейк'], baggio:['Baggio','باجيو','Баджо'],
- mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'], khalaili:['Anan Khalaili','عنان خلايلي','Анан Халайли'], zahavi:['Eran Zahavi','عيران زهافي','Эран Захави'], benayoun:['Yossi Benayoun','يوسي بنايون','Йосси Бенаюн'], revivo:['Haim Revivo','حاييم ريفيفو','Хаим Ревиво'], berkovic:['Eyal Berkovic','إيال بيركوفيتش','Эяль Беркович'], solomon:['Manor Solomon','مانور سولومون','Манор Соломон'], gloukh:['Oscar Gloukh','أوسكار غلوخ','Оскар Глух'], dabbur:['Munas Dabbur','مؤنس دبور','Мунас Даббур'], spiegler:['Mordechai Spiegler','مردخاي شبيغلر','Мордехай Шпиглер'], goldstar:['Golden Star','النجم الذهبي','Золотая звезда'], streetking:['Street King','ملك الشارع','Король улиц'],
+ mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'], khalaili:['Anan Khalaili','عنان خلايلي','Анан Халайли'], zahavi:['Eran Zahavi','عيران زهافي','Эран Захави'], benayoun:['Yossi Benayoun','يوسي بنايون','Йосси Бенаюн'], revivo:['Haim Revivo','حاييم ريفيفو','Хаим Ревиво'], berkovic:['Eyal Berkovic','إيال بيركوفيتش','Эяль Беркович'], solomon:['Manor Solomon','مانور سولومون','Манор Соломон'], gloukh:['Oscar Gloukh','أوسكار غلوخ','Оскар Глух'], dabbur:['Munas Dabbur','مؤنس دبور','Мунас Даббур'], spiegler:['Mordechai Spiegler','مردخاي شبيغلر','Мордехай Шпиглер'], goldstar:['Golden Star','النجم الذهبي','Золотая звезда'], brunof:['Bruno Fernandes','برونو فرنانديز','Бруну Фернандеш'], rodri:['Rodri','رودري','Родри'], pedri:['Pedri','بيدري','Педри'], gavi:['Gavi','غافي','Гави'], rodrygo:['Rodrygo','رودريغو','Родриго'], endrick:['Endrick','إندريك','Эндрик'], osimhen:['Osimhen','أوسيمين','Осимхен'], hakimi:['Hakimi','حكيمي','Хакими'], kvara:['Kvaratskhelia','كفاراتسخيليا','Кварацхелия'], leao:['Leão','لياو','Леау'], palmer:['Palmer','بالمر','Палмер'], wirtz:['Wirtz','فيرتز','Вирц'], kroos:['Kroos','كروس','Кроос'], neuer:['Neuer','نوير','Нойер'], buffon:['Buffon','بوفون','Буффон'], maldini:['Maldini','مالديني','Мальдини'], robertocarlos:['Roberto Carlos','روبرتو كارلوس','Роберто Карлос'], figo:['Figo','فيغو','Фигу'], batistuta:['Batistuta','باتيستوتا','Батистута'], totti:['Totti','توتي','Тотти'], pirlo:['Pirlo','بيرلو','Пирло'], vanbasten:['Van Basten','فان باستن','Ван Бастен'], eusebio:['Eusébio','أوزيبيو','Эйсебио'], eto:['Eto’o','إيتو','Это’О'], weah:['Weah','وياه','Веа'], platini:['Platini','بلاتيني','Платини'], beckenbauer:['Beckenbauer','بيكنباور','Беккенбауэр'], garrincha:['Garrincha','غارينشا','Гарринча'], streetking:['Street King','ملك الشارع','Король улиц'],
 };
 const nm = c => lang==='he' ? c.name : ((CHAR_NAMES[c.id]||[])[LI[lang]-1] || (CHAR_NAMES[c.id]||[])[0] || c.name);
 
@@ -1622,7 +1672,7 @@ const PRICES={
   pele:10000, maradona:7000, zidane:7000, ronaldinho:7000, cruyff:5000, r9:5000, beckham:5000, henry:4000, zlatan:4000, iniesta:4000,
   kaka:3500, modric:3500, xavi:3000, debruyne:3000, bellingham:3000, lewa:2500, gerrard:2500, rooney:2500, drogba:2500, suarez:2500,
   benzema:2000, kane:2000, yamal:2000, baggio:2000, haaland:1500, salah:1500, lautaro:1500, vandijk:1500, aguero:1500,
-  griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000, khalaili:100, zahavi:1500, benayoun:1500, revivo:1200, berkovic:1200, solomon:1000, spiegler:1000, gloukh:700, dabbur:500 };
+  griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000, khalaili:100, zahavi:1500, benayoun:1500, revivo:1200, berkovic:1200, solomon:1000, spiegler:1000, gloukh:700, dabbur:500, brunof:2500, rodri:3000, pedri:2500, gavi:2000, rodrygo:2000, endrick:1200, osimhen:1500, hakimi:1500, kvara:1800, leao:1800, palmer:2200, wirtz:2500, kroos:4000, neuer:3000, buffon:4500, maldini:5000, robertocarlos:5000, figo:4000, batistuta:4500, totti:5000, pirlo:4500, vanbasten:6000, eusebio:6000, eto:3500, weah:3500, platini:6000, beckenbauer:7000, garrincha:7000 };
 const priceOf = c => PRICES[c.id] || 1000;
 const ICE_PRICE=10000, ICE_CD=15, ICE_DUR=1;        // ice power: permanent once bought, 15s cooldown, freezes opponents for 1s
 const fmtXp = n => Number(n).toLocaleString('en-US');
@@ -1634,7 +1684,7 @@ const CHAR_ST={
   lautaro:[1,1.1,1.05,1.05], yamal:[1.12,.9,1,.95], zlatan:[.9,1.2,1,1.15], bellingham:[1.05,1.05,1.1,1.1],
   pele:[1.15,1.15,1.05,1.15], maradona:[1.12,1.05,1.1,1], zidane:[.95,1.1,1,1.1], cruyff:[1.12,1,1,1], beckham:[.9,1.2,1,.95], henry:[1.15,1.05,1,1],
   kaka:[1.12,1.05,1,1], modric:[.95,1,1.1,1], debruyne:[.95,1.15,1,1], xavi:[.9,.9,1,.9], rooney:[1,1.1,1.15,1], drogba:[.95,1.2,1,1.15],
-  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02], zahavi:[1,1.2,1,1.05], benayoun:[1.08,1.05,1,1], revivo:[1.02,1.15,1,1], berkovic:[1.05,1.08,.95,.95], solomon:[1.18,1,1,1], gloukh:[1.1,1.08,1,1], dabbur:[1.02,1.1,1,1.12], spiegler:[1,1.12,1,1.08], goldstar:[1.2,1.2,1.1,1.15], streetking:[1.15,1.25,1.2,1.05] };
+  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02], zahavi:[1,1.2,1,1.05], benayoun:[1.08,1.05,1,1], revivo:[1.02,1.15,1,1], berkovic:[1.05,1.08,.95,.95], solomon:[1.18,1,1,1], gloukh:[1.1,1.08,1,1], dabbur:[1.02,1.1,1,1.12], spiegler:[1,1.12,1,1.08], goldstar:[1.2,1.2,1.1,1.15], streetking:[1.15,1.25,1.2,1.05], brunof:[1,1.15,1,1], rodri:[.95,1.05,1.2,1.05], pedri:[1.08,1,1,1], gavi:[1.1,.95,1.15,1], rodrygo:[1.15,1,1,1], endrick:[1.1,1.1,1,1.05], osimhen:[1.1,1.1,1,1.2], hakimi:[1.2,.95,1.1,1], kvara:[1.15,1.05,1,1], leao:[1.2,1.05,1,1], palmer:[1,1.15,1,1], wirtz:[1.1,1.08,1,1], kroos:[.95,1.2,1,1], neuer:[.95,1,1.15,1.25], buffon:[.9,1,1.2,1.25], maldini:[1,1,1.3,1.1], robertocarlos:[1.15,1.3,1.05,1], figo:[1.08,1.1,1,1], batistuta:[1,1.3,1,1.1], totti:[1,1.2,1,1], pirlo:[.95,1.25,1,1], vanbasten:[1.05,1.25,1,1.15], eusebio:[1.2,1.2,1,1], eto:[1.18,1.12,1,1.05], weah:[1.18,1.1,1,1.1], platini:[1,1.2,1,1], beckenbauer:[1.05,1.1,1.3,1.1], garrincha:[1.25,1.05,1,1] };
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
 const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
@@ -1653,7 +1703,7 @@ function toast(msg, cls){
 function updateXpBadge(){ const tb=document.getElementById('trophy-badge'); if(tb) tb.textContent='🏆 '+(prog.trophies|0); const b=document.getElementById('xp-badge'); if(!b) return; b.textContent='⭐ '+prog.xp+' XP'; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(()=>b.classList.remove('pop'),200); }
 function addXP(n){ if(!(n>0)) return; prog.xp+=n; saveProg(); toast(T('xp.gain',n),'xp'); updateXpBadge(); }
 /* trophies: only real matches award them, and only a few – the rarest thing in the game */
-const RANKS=[[0,'rank.0'],[10,'rank.1'],[25,'rank.2'],[50,'rank.3'],[100,'rank.4']];
+const RANKS=[[0,'rank.0'],[10,'rank.1'],[25,'rank.2'],[50,'rank.3'],[100,'rank.4'],[250,'rank.5'],[500,'rank.6'],[1000,'rank.7'],[2500,'rank.8'],[5000,'rank.9']];
 const rankOf = t => RANKS.reduce((r,[min,k])=>t>=min?k:r,'rank.0');
 function addTrophies(n){ if(!(n>0) || training) return; prog.trophies=(prog.trophies|0)+n; saveProg(); toast(T('trophy.gain',n),'ach'); updateXpBadge(); checkTrophyRoad(); }
 function achieve(id){
@@ -1768,6 +1818,35 @@ const CHARS = [
     jersey:'#0B4DBB', numColor:'#ffffff', shorts:'#0B4DBB', socks:'#ffffff', number:9, beard:true, beardColor:'#15110e', brows:'sharp' },
   { id:'spiegler', name:'מרדכי שפיגלר', skin:'#F1C9A5', skinDark:'#b8865f', hair:'curly', hairColor:'#3a2a1a',
     jersey:'#ffffff', numColor:'#0B4DBB', shorts:'#0B4DBB', socks:'#ffffff', number:10, beard:false, brows:'round' },
+  /* players from all over the world, modern and legends */
+  { id:'brunof', name:'ברונו פרננדס', skin:'#E8B892', skinDark:'#b07a55', hair:'short', hairColor:'#2a1c12', jersey:'#C8102E', numColor:'#fff', shorts:'#0B5F3A', socks:'#C8102E', number:8, beard:true, beardColor:'#2a1c12', brows:'sharp' },
+  { id:'rodri', name:'רודרי', skin:'#F1C9A5', skinDark:'#b8865f', hair:'short', hairColor:'#3a2a1a', jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:16, beard:false, brows:'round' },
+  { id:'pedri', name:'פדרי', skin:'#F1C9A5', skinDark:'#b8865f', hair:'short', hairColor:'#2a1c12', jersey:'#A50044', stripes:'#004D98', numColor:'#F5C400', shorts:'#004D98', socks:'#A50044', number:8, beard:false, brows:'round' },
+  { id:'gavi', name:'גאבי', skin:'#F1C9A5', skinDark:'#b8865f', hair:'wavy', hairColor:'#2a1c12', jersey:'#A50044', stripes:'#004D98', numColor:'#F5C400', shorts:'#004D98', socks:'#A50044', number:6, beard:false, brows:'sharp' },
+  { id:'rodrygo', name:'רודריגו', skin:'#C68642', skinDark:'#8a5a2a', hair:'short', hairColor:'#161616', jersey:'#ffffff', numColor:'#1B2A4E', shorts:'#ffffff', socks:'#ffffff', number:11, beard:false, brows:'round' },
+  { id:'endrick', name:'אנדריק', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'curly', hairColor:'#161616', jersey:'#FFD21F', numColor:'#0B7A3B', shorts:'#0B4DBB', socks:'#ffffff', number:9, beard:false, brows:'round' },
+  { id:'osimhen', name:'אוסימן', skin:'#6b4226', skinDark:'#452a17', hair:'short', hairColor:'#F5C400', jersey:'#0E8A3E', numColor:'#fff', shorts:'#ffffff', socks:'#0E8A3E', number:9, beard:false, brows:'sharp' },
+  { id:'hakimi', name:'חכימי', skin:'#C99A6B', skinDark:'#8f6a43', hair:'short', hairColor:'#161616', jersey:'#0B2A6B', numColor:'#fff', shorts:'#0B2A6B', socks:'#C8102E', number:2, beard:true, beardColor:'#161616', brows:'sharp' },
+  { id:'kvara', name:'קווארצחליה', skin:'#F1C9A5', skinDark:'#b8865f', hair:'wavy', hairColor:'#1d1410', jersey:'#ffffff', numColor:'#C8102E', shorts:'#C8102E', socks:'#ffffff', number:7, beard:true, beardColor:'#1d1410', brows:'sharp' },
+  { id:'leao', name:'לאאו', skin:'#6b4226', skinDark:'#452a17', hair:'curly', hairColor:'#161616', jersey:'#C8102E', stripes:'#111111', numColor:'#fff', shorts:'#ffffff', socks:'#111111', number:10, beard:false, brows:'round' },
+  { id:'palmer', name:'פאלמר', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#2a1c12', jersey:'#034694', numColor:'#fff', shorts:'#034694', socks:'#ffffff', number:20, beard:false, brows:'round' },
+  { id:'wirtz', name:'וירץ', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#8a6a3a', browColor:'#6a4f26', jersey:'#ffffff', numColor:'#111111', shorts:'#111111', socks:'#ffffff', number:10, beard:false, brows:'round' },
+  { id:'kroos', name:'קרוס', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#E9C55B', browColor:'#8a6a1a', jersey:'#ffffff', numColor:'#111111', shorts:'#111111', socks:'#ffffff', number:8, beard:false, brows:'sharp' },
+  { id:'neuer', name:'נוייר', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#8a6a3a', jersey:'#0E8A3E', numColor:'#fff', shorts:'#111111', socks:'#0E8A3E', number:1, beard:false, brows:'sharp' },
+  { id:'buffon', name:'בופון', skin:'#E8B892', skinDark:'#b07a55', hair:'short', hairColor:'#2a1c12', jersey:'#0B4DBB', numColor:'#fff', shorts:'#0B4DBB', socks:'#0B4DBB', number:1, beard:false, brows:'sharp' },
+  { id:'maldini', name:'מלדיני', skin:'#E8B892', skinDark:'#b07a55', hair:'wavy', hairColor:'#2a1c12', jersey:'#C8102E', stripes:'#111111', numColor:'#fff', shorts:'#ffffff', socks:'#111111', number:3, beard:false, brows:'sharp' },
+  { id:'robertocarlos', name:'רוברטו קרלוס', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'bald', hairColor:'#161616', jersey:'#FFD21F', numColor:'#0B7A3B', shorts:'#0B4DBB', socks:'#ffffff', number:6, beard:false, brows:'sharp' },
+  { id:'figo', name:'פיגו', skin:'#E8B892', skinDark:'#b07a55', hair:'short', hairColor:'#2a1c12', jersey:'#C8102E', numColor:'#fff', shorts:'#0B5F3A', socks:'#C8102E', number:7, beard:false, brows:'sharp' },
+  { id:'batistuta', name:'באטיסטוטה', skin:'#E8B892', skinDark:'#b07a55', hair:'longband', hairColor:'#3a2a1a', bandColor:'#111111', jersey:'#8EC9F0', stripes:'#ffffff', numColor:'#1B2A4E', shorts:'#111111', socks:'#ffffff', number:9, beard:false, brows:'sharp' },
+  { id:'totti', name:'טוטי', skin:'#E8B892', skinDark:'#b07a55', hair:'short', hairColor:'#2a1c12', jersey:'#8E1B3B', numColor:'#F5C400', shorts:'#8E1B3B', socks:'#8E1B3B', number:10, beard:false, brows:'round' },
+  { id:'pirlo', name:'פירלו', skin:'#E8B892', skinDark:'#b07a55', hair:'wavy', hairColor:'#2a1c12', jersey:'#0B4DBB', numColor:'#fff', shorts:'#ffffff', socks:'#0B4DBB', number:21, beard:true, beardColor:'#2a1c12', brows:'sharp' },
+  { id:'vanbasten', name:'ואן באסטן', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#3a2a1a', jersey:'#FF7A1A', numColor:'#fff', shorts:'#ffffff', socks:'#FF7A1A', number:9, beard:false, brows:'sharp' },
+  { id:'eusebio', name:'אוזביו', skin:'#6b4226', skinDark:'#452a17', hair:'short', hairColor:'#161616', jersey:'#E01A22', numColor:'#fff', shorts:'#ffffff', socks:'#E01A22', number:13, beard:false, brows:'round' },
+  { id:'eto', name:'אטו', skin:'#6b4226', skinDark:'#452a17', hair:'bald', hairColor:'#161616', jersey:'#0E8A3E', numColor:'#F5C400', shorts:'#C8102E', socks:'#F5C400', number:9, beard:false, brows:'sharp' },
+  { id:'weah', name:'ווה', skin:'#6b4226', skinDark:'#452a17', hair:'short', hairColor:'#161616', jersey:'#C8102E', stripes:'#111111', numColor:'#fff', shorts:'#ffffff', socks:'#111111', number:9, beard:false, brows:'round' },
+  { id:'platini', name:'פלאטיני', skin:'#E8B892', skinDark:'#b07a55', hair:'wavy', hairColor:'#2a1c12', jersey:'#0B2A6B', numColor:'#fff', shorts:'#ffffff', socks:'#C8102E', number:10, beard:false, brows:'round' },
+  { id:'beckenbauer', name:'בקנבאואר', skin:'#F3D2B3', skinDark:'#c49a72', hair:'short', hairColor:'#3a2a1a', jersey:'#ffffff', numColor:'#111111', shorts:'#111111', socks:'#ffffff', number:5, beard:false, brows:'sharp' },
+  { id:'garrincha', name:'גרינשה', skin:'#C68642', skinDark:'#8a5a2a', hair:'short', hairColor:'#161616', jersey:'#FFD21F', numColor:'#0B7A3B', shorts:'#0B4DBB', socks:'#ffffff', number:7, beard:false, brows:'round' },
   /* trophy-road exclusives: cannot be bought, only earned */
   { id:'goldstar', name:'כוכב הזהב', skin:'#E8B892', skinDark:'#b07a55', hair:'spiky', hairColor:'#F5C400', browColor:'#a87f0c', trophyOnly:true,
     jersey:'#F5C400', stripes:'#ffffff', numColor:'#1B2A4E', shorts:'#1B2A4E', socks:'#F5C400', number:1, beard:false, brows:'sharp' },
@@ -1867,6 +1946,56 @@ function playerSVG(c, mood='happy'){
     <path d="M50 42 Q54 48 49 49" stroke="${c.skinDark}" stroke-width="2" fill="none" stroke-linecap="round"/>
     ${mouth}
   </svg>`;
+}
+/* the player seen from behind: same body, hair from the back, the number big on the shirt (used by the 3-D turntable on the home screen) */
+function playerBackSVG(c){
+  const OL='#2a1c12', ow=1.6, id='bk-'+c.id+'-'+(svgSeq++);
+  const defs=`<defs>
+    <linearGradient id="sk-${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mixW(c.skin,.3)}"/><stop offset="1" stop-color="${c.skin}"/></linearGradient>
+    <linearGradient id="js-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mixW(c.jersey,.2)}"/><stop offset="1" stop-color="${mixK(c.jersey,.18)}"/></linearGradient>
+    <linearGradient id="sh-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mixW(c.shorts,.15)}"/><stop offset="1" stop-color="${mixK(c.shorts,.2)}"/></linearGradient>
+  </defs>`;
+  const hc=c.hairColor, thin = c.hair==='bald' || c.hair==='tuft';
+  let hair = thin
+    ? `<path d="M20 40 Q20 8 50 6 Q80 8 80 40 L80 50 Q50 64 20 50Z" fill="${hc}" opacity="${c.hair==='bald'?.45:.35}"/>`
+    : `<path d="M18 42 Q18 6 50 5 Q82 6 82 42 L82 54 Q50 70 18 54Z" fill="${hc}"/>`;
+  if(c.hair==='wavy' || c.hair==='longband' || c.hair==='bun') hair+=`<path d="M18 46 Q12 62 20 72 L80 72 Q88 62 82 46 Q50 60 18 46Z" fill="${hc}"/>`;
+  if(c.hair==='bun') hair+=`<circle cx="50" cy="8" r="8" fill="${hc}"/>`;
+  if(c.hair==='curly') hair+=[22,30,38,46,54,62,70,78].map((x,i)=>`<circle cx="${x}" cy="${i%2?10:16}" r="7" fill="${hc}"/>`).join('')+`<circle cx="20" cy="46" r="6" fill="${hc}"/><circle cx="80" cy="46" r="6" fill="${hc}"/>`;
+  if(c.hair==='mohawk') hair=`<path d="M19 40 Q19 14 50 10 Q81 14 81 40 L81 52 Q50 66 19 52Z" fill="${c.hairSide||hc}"/><path d="M44 4 Q50 0 56 4 L56 52 Q50 56 44 52Z" fill="${hc}"/>`;
+  if(c.hair==='longband') hair+=`<path d="M20 21 Q50 11 80 21 L80 28 Q50 18 20 28Z" fill="${c.bandColor||'#fff'}"/>`;
+  const stripes = c.stripes ? `<rect x="36" y="68" width="6" height="40" fill="${c.stripes}"/><rect x="58" y="68" width="6" height="40" fill="${c.stripes}"/>` : '';
+  const leg=(x)=>`<g><rect x="${x-.5}" y="116" width="11" height="22" rx="4.5" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/>
+      <rect x="${x-1.5}" y="126" width="13" height="14" rx="3" fill="${c.socks}" stroke="${OL}" stroke-width="${ow}"/>
+      <path d="M${x-3.5} 139 h18 a6 6 0 0 1 6 6 v3 h-24z" fill="#23232b" stroke="${OL}" stroke-width="${ow}"/></g>`;
+  const arm=(x1,y1,x2,y2)=>`<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${OL}" stroke-width="12.2" stroke-linecap="round"/><path d="M${x1} ${y1} L${x2} ${y2}" stroke="url(#sk-${id})" stroke-width="9" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="5.6" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/>`;
+  return `<svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">${defs}
+    ${leg(55)}${leg(35)}
+    <rect x="30" y="103" width="40" height="19" rx="5" fill="url(#sh-${id})" stroke="${OL}" stroke-width="${ow}"/>
+    ${arm(30,74,17,100)}${arm(70,74,83,100)}
+    <path d="M30 66 L22 82 L31 86 L31 108 L69 108 L69 86 L78 82 L70 66 Q50 60 30 66Z" fill="url(#js-${id})" stroke="${OL}" stroke-width="${ow}" stroke-linejoin="round"/>
+    ${stripes}
+    <path d="M22 82 L31 86 L34 79 L29 69Z" fill="rgba(0,0,0,.12)"/><path d="M78 82 L69 86 L66 79 L71 69Z" fill="rgba(0,0,0,.12)"/>
+    <text x="50" y="98" font-size="30" font-weight="900" text-anchor="middle" fill="${c.numColor}" stroke="${OL}" stroke-width="1" paint-order="stroke" font-family="Arial Black,Arial,sans-serif">${c.number}</text>
+    <rect x="44" y="56" width="12" height="14" fill="${mixK(c.skin,.12)}" stroke="${OL}" stroke-width="${ow}"/>
+    <circle cx="50" cy="38" r="30" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/>
+    <circle cx="20" cy="40" r="5.5" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/><circle cx="80" cy="40" r="5.5" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/>
+    <g stroke="${OL}" stroke-width="1.2" stroke-linejoin="round">${hair}</g>
+  </svg>`;
+}
+/* the home turntable: drag left/right to turn the player; the stack of layers gives it real thickness and a back */
+let heroAngle=0, heroVel=0, heroDrag=null, heroRaf=0;
+function heroRender(){ const t=$('#home-turntable'); if(t) t.style.transform=`perspective(900px) rotateY(${heroAngle}deg)`; }
+function heroTick(){
+  if(!heroDrag && Math.abs(heroVel)>.05){ heroAngle+=heroVel; heroVel*=.94; heroRender(); heroRaf=requestAnimationFrame(heroTick); }
+  else heroRaf=0;
+}
+function heroDragSetup(){
+  const el=$('.hero'); if(!el) return;
+  el.addEventListener('pointerdown', e=>{ if(e.target.closest('button')) return; heroDrag={x:e.clientX, a:heroAngle}; heroVel=0; el.setPointerCapture(e.pointerId); e.preventDefault(); });
+  el.addEventListener('pointermove', e=>{ if(!heroDrag) return; const na=heroDrag.a+(e.clientX-heroDrag.x)*.7; heroVel=na-heroAngle; heroAngle=na; heroRender(); });
+  const up=e=>{ if(!heroDrag) return; heroDrag=null; if(!heroRaf) heroRaf=requestAnimationFrame(heroTick); };
+  el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
 }
 
 const BALL_SVG = `<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
@@ -2017,7 +2146,9 @@ let previewIdx = 0;     // highlighted in the characters screen
 
 function refreshHome(){
   sprite($('#home-sprite'), CHARS[selected]);
-  const back=$('#home-sprite-back'); if(back) sprite(back, CHARS[selected]);
+  const back=$('#home-sprite-back'); if(back) back.innerHTML=playerBackSVG(CHARS[selected]);
+  document.querySelectorAll('#home-turntable .slab').forEach(s=>{ s.innerHTML=playerSVG(CHARS[selected]); });
+  if(typeof refreshChallengeBadge==='function') refreshChallengeBadge();
   $('#home-name').textContent = nm(CHARS[selected]);
   const me=$('#home-me'); if(me){ const n=normName(settings.name); me.textContent = (n ? crown(n, isAdmin()) : T('mp.you')) + ' · ' + T(rankOf(prog.trophies|0)); }
   updateXpBadge();
@@ -2026,9 +2157,9 @@ function refreshHome(){
 }
 
 /* ---------- language switching ---------- */
-const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=legend]':'gal.legend', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
-  '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa', '#ceo-wa-none':'ceo.waNone',
+const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo-l':'btn.ceo', '#btn-wa-link':'ceo.click', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#chal-title':'chal.title', '#btn-chal-close':'btn.back2', '#turn-hint':'home.turn', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=legend]':'gal.legend', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn',
   '#cup h2':'cup.title', '#btn-cup-back':'btn.back', '#team-pick .hint':'cup.pick', '#btn-cup-play':'btn.play', '#btn-cup-new':'cup.new',
@@ -2105,8 +2236,8 @@ $('#btn-music-off').addEventListener('click', ()=>{ sfx.click(); settings.track=
 
 /* ---------- characters screen ---------- */
 const ISRAELI_IDS=['khalaili','zahavi','benayoun','revivo','berkovic','solomon','gloukh','dabbur','spiegler'];
-const LEGEND_IDS=['pele','maradona','zidane','ronaldinho','cruyff','r9','beckham','henry','baggio','spiegler','revivo','berkovic','benayoun','iniesta','xavi','gerrard','rooney','drogba'];
-const NEW_IDS=['khalaili','zahavi','benayoun','revivo','berkovic','solomon','gloukh','dabbur','spiegler'];
+const LEGEND_IDS=['pele','maradona','zidane','ronaldinho','cruyff','r9','beckham','henry','baggio','spiegler','revivo','berkovic','benayoun','iniesta','xavi','gerrard','rooney','drogba','kroos','buffon','maldini','robertocarlos','figo','batistuta','totti','pirlo','vanbasten','eusebio','eto','weah','platini','beckenbauer','garrincha'];
+const NEW_IDS=['brunof','rodri','pedri','gavi','rodrygo','endrick','osimhen','hakimi','kvara','leao','palmer','wirtz','kroos','neuer','buffon','maldini','robertocarlos','figo','batistuta','totti','pirlo','vanbasten','eusebio','eto','weah','platini','beckenbauer','garrincha'];
 let galFilter='all';
 document.querySelectorAll('#gal-filter .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); galFilter=b.dataset.f; document.querySelectorAll('#gal-filter .btn').forEach(x=>x.classList.toggle('on', x===b)); buildGallery(); }));
 function buildGallery(){
@@ -2158,6 +2289,7 @@ $('#btn-choose').addEventListener('click', ()=>{ sfx.click(); const c=CHARS[prev
 
 /* ---------- exit modal ---------- */
 $('#btn-exit').addEventListener('click', ()=>{
+  if(mp && mp.connected){ sfx.click(); mpTeardown(); partyRefresh(); toast(T('party.left'),'warn'); return; }   // in a party: this button leaves the team
   sfx.lose(); sprite($('#exit-sprite'), CHARS[selected], 'sad'); $('#exit-modal').classList.add('show');
 });
 $('#btn-stay').addEventListener('click', ()=>{ sfx.click(); $('#exit-modal').classList.remove('show'); });
@@ -2960,6 +3092,7 @@ function setKey(code,down){
 window.addEventListener('keydown', e=>{
   if(state!=='play' && !(state==='countdown' && !pk)){   // during the countdown keys are already collected
     if(e.code==='Space'){ e.preventDefault(); if(pk && !e.repeat){ if(pk.corner) cornerTap(); else if(pk.phase==='aim') startHold(); } }
+    if(pk && pk.phase==='keep' && !e.repeat){ const K={KeyQ:[0,0],KeyW:[1,0],KeyE:[2,0],KeyA:[0,1],KeyS:[1,1],KeyD:[2,1],ArrowLeft:[0,1],ArrowRight:[2,1],ArrowUp:[1,0],ArrowDown:[1,1]}[e.code]; if(K){ e.preventDefault(); const c=zoneCenter({col:K[0],row:K[1]}); userDive(c.x, c.y); } }   // keyboard dive: Q W E top row, A S D bottom row
     if((e.code==='Escape'||e.code==='KeyP') && (state==='paused' || (pk && pk.phase==='paused'))) resumeGame();
     else if((e.code==='Escape'||e.code==='KeyP') && pk) pauseGame();
     return;
@@ -3135,7 +3268,7 @@ function useIce(){
     sfx.ice(); say('c.iceGoal'); netEv('gice:1'); updateIceHud(); return;
   }
   for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.el.classList.add('frozen'); const ic=o.el.querySelector('.ice'); if(ic) ic.innerHTML=iceSVG(); }
-  sfx.ice(); say('c.ice'); updateIceHud();
+  sfx.ice(); say('c.ice'); updateIceHud(); challengeEvent('ice');
 }
 function goalIceSVG(){                               // a slab of ice with cracks and sparkles, stretched over the goal mouth
   const rnd=(a,b)=>a+Math.random()*(b-a); let cracks='', sparks='';
@@ -3212,7 +3345,7 @@ function resetPositions(){
 function doSlide(p){
   if(p.y>0 || p.slideT>0 || p.slideCd>0 || p.stunT>0) return;
   p.slideT=.42; p.slideCd=1.3; p.slideDir=p.facing; p.slideHit=false; p.slides=(p.slides|0)+1;
-  p.el.classList.add('sliding'); sfx.slide();
+  p.el.classList.add('sliding'); sfx.slide(); if(p===P1) challengeEvent('slide');
 }
 function updateSlides(dt){
   for(const p of players){
@@ -3267,13 +3400,14 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   if(outcome==='win'){
     prog.wins++; prog.streak++; addXP(mp ? 5 : [2,3,5,7,10,25][level ? level.i : 1]);   // harder level = more XP
     addTrophies(mp ? 2 : [1,1,1,2,2,3][level ? level.i : 1]);                          // trophies: 1 on easy levels, up to 3 on Impossible, 2 online
+    challengeEvent('win'); if(!mp && level && level.i>=2) challengeEvent('winHard'); if(score.op===0) challengeEvent('clean'); if(v2) challengeEvent('v2win'); if(mp) challengeEvent('online'); if(dailyMatch) challengeEvent('daily');
     achieve('first_win'); if(prog.streak>=3) achieve('streak3'); if(prog.wins>=10) achieve('ten_wins');
     if(score.op===0) achieve('clean_sheet'); if(wasBehind) achieve('comeback');
     if(mp) achieve('online_win'); if(v2) achieve('v2_win');
     if(!mp && level){ if(level.i===2) achieve('win_hard'); if(level.i===3) achieve('win_crazy'); if(level.i===4) achieve('win_master'); if(level.i===5) achieve('win_impossible'); }
     if(dailyMatch && prog.daily!==dayKey()){ prog.daily=dayKey(); addXP(dailyInfo().xp); addTrophies(1); achieve('daily_win'); }
   } else { prog.streak=0; if(outcome==='draw') addXP(1); }
-  dailyMatch=false; saveProg();
+  challengeEvent('play'); dailyMatch=false; saveProg();
   say(outcome==='win' ? 'c.endWin' : outcome==='lose' ? 'c.endLose' : 'c.endDraw', score.me, score.op);
   updateTimer();
   // the result card: score, stars for the achievement, XP earned, and what to do next
@@ -3311,6 +3445,7 @@ function scoreGoal(who){
   updateScore();
   ball.vx*=.2; ball.vy=0;
   for(const p of players) p.el.classList.remove('running');
+  for(const p of players){ p.slideT=0; p.stunT=0; p.frozenT=0; p.el.classList.remove('sliding','stunned','frozen','kicking'); }   // no player stays mid-slide or mid-kick through the celebration and the replay
   goalFx(); netEv('goal');
   {
     const lt=lastTouch, fresh = lt.p && performance.now()-lt.t<2200, scorerTeamL = who==='me';
@@ -3322,7 +3457,7 @@ function scoreGoal(who){
     else say(who==='me' ? sayRandom(['c.goal1','c.goal2','c.goal3']) : sayRandom(['c.oppgoal1','c.oppgoal2']));
   }
   if(who==='me'){
-    prog.goals++; addXP(1);
+    prog.goals++; addXP(1); challengeEvent('goal'); if(lastTouch.p && teamL.includes(lastTouch.p) && lastTouch.type==='header' && performance.now()-lastTouch.t<2500) challengeEvent('header');
     if(score.me===3) achieve('hat_trick');
     if(timeLeft<=10) achieve('last_second');
     if(lastTouch.p && teamL.includes(lastTouch.p) && performance.now()-lastTouch.t<2500){ if(lastTouch.type==='slide') achieve('slide_goal'); if(lastTouch.type==='header') achieve('header_goal'); }
@@ -3831,6 +3966,8 @@ function partyRefresh(){
   const box=$('#party'); if(!box) return;
   const on = !!(mp && mp.connected);
   box.hidden=!on; $('#btn-play').textContent = on && mp.role==='guest' ? T('party.waitHost') : T('btn.play');
+  const ex=$('#btn-exit'); if(ex){ ex.textContent = on ? T('party.leave') : T('btn.exit'); ex.classList.toggle('inparty', on); }   // the exit button becomes "leave the team" while in a party
+  $('#btn-party-leave').hidden=true;
   if(!on){ $('#party-members').innerHTML=''; return; }
   const others=partyMembers().filter(m=>!m.me);
   $('#party-members').innerHTML = others.map((m,i)=>`<div class="member p${i}"><div class="sprite">${m.pick!=null?playerSVG(CHARS[m.pick]):''}</div><div class="mname">${m.host?'👑 ':''}${esc(crown(m.name,m.adm))}</div></div>`).join('');
@@ -3878,7 +4015,13 @@ function mpStart(mode, lvl){
   beginMatch(CHARS[p1], CHARS[p2], opts ? {c3:CHARS[opts.c3], c4:CHARS[opts.c4], src:opts.src} : null);
 }
 /* ----- trophy road: milestones that hand out XP and exclusive players ----- */
-const TROPHY_ROAD=[{t:5,xp:300},{t:10,ch:'gloukh'},{t:20,xp:800},{t:30,ch:'solomon'},{t:50,ch:'zahavi'},{t:75,xp:2000},{t:100,ch:'goldstar'},{t:150,ch:'streetking'}];
+const TROPHY_ROAD=(()=>{
+  const road=[{t:5,xp:300},{t:10,ch:'gloukh'},{t:20,xp:800},{t:30,ch:'solomon'},{t:50,ch:'zahavi'},{t:75,xp:2000},{t:100,ch:'goldstar'},{t:150,ch:'streetking'}];
+  const taken=new Set(road.map(r=>r.ch).filter(Boolean)), pool=CHARS.filter(c=>!FREE_CHARS.includes(c.id) && !c.trophyOnly && !taken.has(c.id)).sort((a,b)=>priceOf(a)-priceOf(b)).map(c=>c.id);
+  let k=0; for(let t=175; t<=1000; t+=25){ road.push(k%3===2 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*12}); k++; }
+  for(let t=1050; t<=10000; t+=50){ road.push(k%5===4 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*15}); k++; }
+  return road;
+})();
 const roadFor = id => (TROPHY_ROAD.find(r=>r.ch===id)||{}).t;
 function nextReward(){ return TROPHY_ROAD.find(r=>!(prog.road||[]).includes(r.t)); }
 function rewardText(r){ return r.xp ? `⭐ ${r.xp} XP` : nm(CHARS.find(c=>c.id===r.ch)); }
@@ -3911,6 +4054,47 @@ $('#trophy-pill').addEventListener('click', ()=>{ sfx.click(); openRoad(); });
 $('#btn-road-close').addEventListener('click', ()=>{ sfx.click(); $('#road-modal').classList.remove('show'); });
 $('#home-me').addEventListener('click', ()=>{ sfx.click(); showStats(); });
 $('#btn-ach-home').addEventListener('click', ()=>{ sfx.click(); $('#btn-stats-ach').click(); });
+/* ----- weekly challenges: four tasks drawn from a pool by the week number, XP for each, a new set every week ----- */
+const CHALLENGE_POOL=[
+  {id:'win3',    ev:'win',    n:3,  xp:150}, {id:'win5',   ev:'win',    n:5,  xp:300}, {id:'goals10', ev:'goal',  n:10, xp:200},
+  {id:'goals25', ev:'goal',   n:25, xp:450}, {id:'hard2',  ev:'winHard',n:2,  xp:300}, {id:'clean2',  ev:'clean', n:2,  xp:250},
+  {id:'pk5',     ev:'pk',     n:5,  xp:200}, {id:'header3',ev:'header',n:3,  xp:250}, {id:'v2win2',  ev:'v2win', n:2,  xp:300},
+  {id:'online1', ev:'online', n:1,  xp:250}, {id:'daily3', ev:'daily', n:3,  xp:300}, {id:'corner2', ev:'corner',n:2,  xp:250},
+  {id:'ice5',    ev:'ice',    n:5,  xp:150}, {id:'slide10',ev:'slide', n:10, xp:150}, {id:'play7',   ev:'play',  n:7,  xp:200},
+  {id:'cup1',    ev:'cup',    n:1,  xp:400},
+];
+const weekKey = () => { const d=new Date(); const s=Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/864e5); return 'w'+Math.floor((s+3)/7); };   // weeks start on Monday
+const weekLeft = () => { const d=new Date(); const s=Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/864e5); return 7-((s+3)%7); };
+function weekChallenges(){
+  const key=weekKey();
+  if(!prog.week || prog.week.key!==key){
+    let seed=parseInt(key.slice(1),10)*2654435761>>>0; const rnd=()=>{ seed=(seed*1103515245+12345)>>>0; return seed/4294967296; };
+    const pool=CHALLENGE_POOL.slice(), pick=[];
+    while(pick.length<4 && pool.length){ pick.push(pool.splice(Math.floor(rnd()*pool.length),1)[0].id); }
+    prog.week={key, ids:pick, prog:{}, done:[]}; saveProg();
+  }
+  return prog.week.ids.map(id=>CHALLENGE_POOL.find(c=>c.id===id)).filter(Boolean);
+}
+function challengeEvent(ev, n=1){
+  if(training || spectating) return;
+  const list=weekChallenges(); let changed=false;
+  for(const c of list){
+    if(c.ev!==ev || prog.week.done.includes(c.id)) continue;
+    prog.week.prog[c.id]=(prog.week.prog[c.id]|0)+n; changed=true;
+    if(prog.week.prog[c.id]>=c.n){ prog.week.done.push(c.id); addXP(c.xp); toast(T('chal.done', T('chal.'+c.id, c.n)),'ach'); sfx.win(); }
+  }
+  if(changed) saveProg();
+  refreshChallengeBadge();
+}
+function refreshChallengeBadge(){ const b=$('#btn-chal'); if(!b) return; const list=weekChallenges(); const left=list.filter(c=>!prog.week.done.includes(c.id)).length; b.textContent=T('chal.btn')+(left?` (${left})`:' ✔'); }
+function openChallenges(){
+  const list=weekChallenges();
+  $('#chal-sub').textContent=T('chal.sub', weekLeft());
+  $('#chal-list').innerHTML=list.map(c=>{ const p=Math.min(c.n, prog.week.prog[c.id]|0), done=prog.week.done.includes(c.id); return `<div class="chalrow ${done?'done':''}"><span class="ct">${T('chal.'+c.id, c.n)}</span><span class="cb"><i style="width:${Math.round(p/c.n*100)}%"></i></span><span class="cn">${p}/${c.n}</span><span class="cx">${done?'✔':'⭐ '+c.xp}</span></div>`; }).join('');
+  $('#chal-modal').classList.add('show');
+}
+$('#btn-chal').addEventListener('click', ()=>{ sfx.click(); openChallenges(); });
+$('#btn-chal-close').addEventListener('click', ()=>{ sfx.click(); $('#chal-modal').classList.remove('show'); });
 function applyRemoteFor(p, r){                        // host: drive a remote friend's player with the inputs they sent
   let d=0; if(r.l) d-=1; if(r.r) d+=1;
   if(p.frozenT>0){ r.j=r.k=r.s=0; return; }
@@ -4349,7 +4533,7 @@ function userShoot(){                                // release: shoot at the si
     else if(wide){ goal=false; flash(T('pk.wide')); sfx.miss(); }
     else if(kz.col===zone.col && kz.row===zone.row && Math.random()<(weak?.95:zone.row===1?.88:.66)){ goal=false; flash(T(weak?'pk.weak':'pk.saved')); sfx.save(); ballTo({x:zoneCenter(kz).x, y:zoneCenter(kz).y+30}); }
     else { goal=true; flash(T('pk.goal')); sfx.goal(); pkConfetti.burst(120); }
-    pkResult('me', goal);
+    if(goal) challengeEvent('pk'); pkResult('me', goal);
   }, 700);
 }
 function userDive(x,y){                              // keeping: click = dive to that spot
@@ -4492,7 +4676,7 @@ function cornerResolve(err){
   if(pk.mine){
     const goal = q>0 && Math.random() < q*(.92-lvl*.06);
     if(q===0){ ballTo({x:960,y:470}); flash(T('corner.miss')); sfx.miss(); }
-    else if(goal){ keeperDive(away); ballTo(c); flash(T('corner.goal')); sfx.goal(); pkConfetti.burst(140); achieve('header_goal'); }
+    else if(goal){ keeperDive(away); ballTo(c); flash(T('corner.goal')); sfx.goal(); pkConfetti.burst(140); achieve('header_goal'); challengeEvent('corner'); challengeEvent('header'); }
     else { keeperDive(z); ballTo({x:c.x,y:c.y+30}); flash(T('pk.saved')); sfx.save(); }
     setTimeout(()=>pk&&pk.onResult(goal,'me'), 1400);
   } else {
@@ -4511,7 +4695,7 @@ function endShootout(res){
     if(pk.sMe.length>=5 && pk.sMe.slice(0,5).every(Boolean)) achieve('pk_perfect');
     if((pk.saves|0)>=3) achieve('pk_saves');
     addXP(2+cup.level.i);
-    if(cup.round===4){ achieve('cup_win'); if(cup.level.i>=4) achieve('cup_master'); addXP(10+cup.level.i*5); addTrophies(3); }
+    if(cup.round===4){ achieve('cup_win'); if(cup.level.i>=4) achieve('cup_master'); addXP(10+cup.level.i*5); addTrophies(3); challengeEvent('cup'); }
   }
   const m=pk.m, iAmA=m.a===cup.mine, ga=pk.sMe.filter(Boolean).length, gb=pk.sOp.filter(Boolean).length;
   m.sa=iAmA?ga:gb; m.sb=iAmA?gb:ga; m.w = res==='me' ? cup.mine : (iAmA?m.b:m.a);
@@ -4545,7 +4729,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 ['pointerup','pointercancel'].forEach(t=>$('#pk').addEventListener(t, e=>{ if(pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); } }));
 
 /* ---------- init ---------- */
-buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
+buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); heroDragSetup(); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
 setTimeout(registerPresence, 800);              // go online under your player name (if one is set)
 </script>
 </body>
