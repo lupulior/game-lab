@@ -54,17 +54,18 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .btn.play{font-size:66px;padding:18px 70px 22px;border-radius:44px}
 
 /* ---------- home ---------- */
-#home .title{position:absolute;top:22px;right:40px;text-align:right;direction:ltr}
+#home .title{position:absolute;top:18px;right:40px;text-align:right;direction:ltr;font-size:50px}
 #home .title small{text-align:right}
 /* home layout: title top-right, small tools top-left, my player in the middle, play column on the right, extras on the left */
-.home-top{position:absolute;top:26px;left:40px;display:flex;align-items:center;gap:12px}
+.home-top{position:absolute;top:26px;left:40px;display:flex;align-items:center;gap:8px}
 .home-col{position:absolute;display:flex;flex-direction:column;gap:12px}
 .home-col.main{top:126px;right:40px;align-items:flex-end}
 .home-col.main .btn{width:300px;font-size:26px;padding:12px 26px;box-sizing:border-box}
 .home-col.main .btn.play{font-size:48px;padding:12px 26px 16px;border-radius:34px}
 .home-col.more{top:110px;left:40px;align-items:flex-start}
 .home-col.more .btn{width:250px;font-size:22px;padding:9px 20px;box-sizing:border-box;justify-content:flex-start}
-.home-foot{position:absolute;right:40px;bottom:22px;display:flex;gap:10px}
+.home-foot{position:absolute;right:40px;bottom:22px;display:flex;gap:10px;align-items:center}
+.home-foot .icon-btn{width:48px;height:48px;font-size:24px}
 .home-foot .btn.small{font-size:17px;padding:6px 14px;opacity:.92}
 #btn-mp{font-size:24px;padding:12px 26px}
 
@@ -299,6 +300,53 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 /* first-visit name prompt */
 #name-input{font-family:inherit;font-weight:900;font-size:30px;text-align:center;padding:8px 16px;border-radius:16px;border:4px solid var(--blue);width:360px;max-width:90%;margin:10px 0}
 #name-modal .btn:disabled{opacity:.5;cursor:not-allowed}
+/* ===== home, Brawl-style: top bar pills, podium with a turning player, the party beside me ===== */
+.home-top .pill{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:inherit;border:0;cursor:pointer;font-size:22px;font-weight:900;color:var(--navy);background:#fff;border-radius:18px;padding:6px 16px;box-shadow:0 5px 0 rgba(27,42,78,.3),0 8px 14px rgba(0,0,0,.15)}
+.home-top .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:4px 14px 6px;min-width:172px;align-items:stretch}
+.home-top .pill.trophy #trophy-badge{font-size:26px;text-align:center}
+.home-top .pill.trophy .road{display:block;height:8px;border-radius:6px;background:rgba(27,42,78,.3);overflow:hidden}
+.home-top .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
+.home-top .pill.trophy .next{font-size:12px;text-align:center;white-space:nowrap;opacity:.9}
+.home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400)}
+.home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:17px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#xp-badge.pill{margin-inline-start:0}
+.hero{top:96px;width:340px}
+.hero .podium{position:absolute;left:50%;bottom:52px;width:300px;height:70px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#FFF3B8,#F5C400 70%,#C99A10);box-shadow:0 10px 0 #A87F0C,0 16px 22px rgba(0,0,0,.25);z-index:0}
+.hero .turntable{position:relative;width:250px;height:375px;margin:0 auto;transform-style:preserve-3d;animation:turn 6s ease-in-out infinite;z-index:1}
+.hero .turntable .sprite{position:absolute;inset:0;width:250px;height:375px;margin:0;backface-visibility:hidden;animation:bob 2.4s ease-in-out infinite}
+.hero .turntable .sprite.back{transform:rotateY(180deg)}
+@keyframes turn{0%,100%{transform:perspective(900px) rotateY(-38deg)}50%{transform:perspective(900px) rotateY(38deg)}}
+.hero .shadow{position:relative;z-index:1;margin-top:-10px}
+.hero .name{position:relative;z-index:1}
+#party{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none}
+#party .members{position:absolute;left:0;right:0;top:0;height:100%}
+#party .member{position:absolute;width:120px;text-align:center;pointer-events:auto}
+#party .member .sprite{width:120px;height:180px;margin:0 auto;animation:bob 2.8s ease-in-out infinite}
+#party .member .sprite svg{width:100%;height:100%;display:block}
+#party .member .mname{font-size:17px;font-weight:900;color:#fff;-webkit-text-stroke:1px var(--navy);text-shadow:0 3px 0 var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#party .member.p0{left:615px;top:300px}
+#party .member.p1{left:262px;top:300px}
+#party .member.p2{left:760px;top:360px;transform:scale(.8)}
+#party .party-bar{position:absolute;left:40px;bottom:22px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;pointer-events:auto}
+#party .party-code{font-size:18px;font-weight:900;color:var(--navy);background:#FFF0B3;border-radius:14px;padding:6px 14px;direction:rtl;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+#party .party-code b{font-size:24px;letter-spacing:4px;direction:ltr;display:inline-block}
+#party .party-code .btn.small{font-size:14px;padding:4px 10px}
+.home-col.main{top:116px}
+.home-col.main .btn{width:230px;font-size:24px}
+.home-col.main .btn.play{font-size:44px}
+.home-col.more{top:116px}
+.home-col.more .btn{width:222px;font-size:20px;padding:8px 18px}
+#party-modes .btn{font-size:22px;padding:10px 22px}
+#party-modes .btn.on,#party-levels .btn.on{outline:5px solid var(--yellow)}
+#party-levels .btn.small{font-size:15px;padding:5px 10px}
+.road-panel{min-width:620px}
+.roadrow{display:flex;align-items:center;gap:12px;background:rgba(27,42,78,.06);border-radius:14px;padding:6px 12px;margin:6px 0;font-weight:900;font-size:20px;color:var(--navy)}
+.roadrow .rt{width:90px;text-align:center}
+.roadrow .rr{flex:1;display:flex;align-items:center;gap:10px;text-align:start}
+.roadrow .rr svg{width:34px;height:51px}
+.roadrow .rs{font-size:24px}
+.roadrow.got{opacity:.6}
+.roadrow.ready{background:#DDF7E4;outline:3px solid var(--green)}
 #watch-hold{position:absolute;left:50%;top:180px;transform:translateX(-50%);z-index:8;font-size:34px;font-weight:900;color:#fff;background:rgba(27,42,78,.85);border-radius:22px;padding:12px 30px;white-space:nowrap;box-shadow:0 8px 0 rgba(0,0,0,.25)}
 .fm-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .fm-badges .bd{font-size:26px;width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(27,42,78,.2);filter:grayscale(1);opacity:.35}
@@ -651,21 +699,24 @@ body.touch #touch{display:block}
     <div class="cloud" style="left:640px;top:170px;transform:scale(.6)"></div>
     <div class="home-grass"></div>
     <div class="title">⚽ Football Star<small>כוכב הכדורגל</small></div>
-    <!-- top-left: the small stuff (settings, music, codes) and my XP -->
+    <!-- top bar: trophies (with the road to the next reward), XP, me, and the small tools -->
     <div class="home-top">
-      <button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button>
-      <button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button>
-      <button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
-      <div id="xp-badge">⭐ 0 XP</div>
-      <div id="trophy-badge" title="גביעים">🏆 0</div>
+      <button class="pill trophy" id="trophy-pill" title="דרך הגביעים"><span id="trophy-badge">🏆 0</span><span class="road"><i id="road-fill"></i></span><span class="next" id="road-next"></span></button>
+      <div id="xp-badge" class="pill xp">⭐ 0 XP</div>
+      <button class="pill me" id="home-me" title="הניצחונות שלי"></button>
       <button class="btn small yellow" id="btn-admin" hidden>👑 אדמין</button>
     </div>
-    <!-- centre: my player -->
+    <!-- centre: my player turning on a podium, with my team beside me -->
     <div class="hero">
-      <div class="sprite" id="home-sprite"></div>
+      <div class="podium"></div>
+      <div class="turntable"><div class="sprite" id="home-sprite"></div><div class="sprite back" id="home-sprite-back"></div></div>
       <div class="shadow"></div>
       <div class="name" id="home-name"></div>
       <button class="btn blue small" id="btn-chars">🧑 החלף דמות</button>
+    </div>
+    <div id="party" hidden>
+      <div class="members" id="party-members"></div>
+      <div class="party-bar"><span class="party-code" id="party-code" hidden></span><button class="btn red small" id="btn-party-leave">🚪 יציאה מהקבוצה</button></div>
     </div>
     <!-- right column: playing, by importance -->
     <div class="home-col main">
@@ -678,12 +729,14 @@ body.touch #touch{display:block}
     <div class="home-col more">
       <button class="btn yellow small" id="btn-daily">📅 המשחק היומי</button>
       <button class="btn blue small" id="btn-train">🏋️ אימון</button>
-      <button class="btn yellow small" id="btn-stats">🏆 הניצחונות שלי</button>
       <button class="btn pink small" id="btn-friends">👥 חברים</button>
       <button class="btn purple small" id="btn-top">🥇 המובילים</button>
+      <button class="btn orange small" id="btn-ach-home">🏅 הישגים</button>
+      <button class="btn yellow small" id="btn-stats">🏆 הניצחונות שלי</button>
     </div>
     <!-- bottom: the odds and ends -->
     <div class="home-foot">
+      <button class="icon-btn" id="btn-settings" title="הגדרות">⚙️</button><button class="icon-btn" id="btn-music" title="מוזיקה">🎵</button><button class="icon-btn" id="btn-codes" title="קודים">🎁</button>
       <button class="btn purple small" id="btn-ceo">👔 מנכ"ל המשחק</button>
       <button class="btn red small" id="btn-exit">🚪 צא</button>
     </div>
@@ -993,6 +1046,27 @@ body.touch #touch{display:block}
     </div>
   </div>
 
+  <!-- ===== PARTY: the host picks how the team plays ===== -->
+  <div class="overlay" id="party-modal">
+    <div class="panel">
+      <h2 id="party-title">👥 איך משחקים?</h2>
+      <div class="v2opts" id="party-modes"></div>
+      <div class="hint" id="party-lv-l">רמת המחשב (כשיש בוטים):</div>
+      <div class="v2opts" id="party-levels"></div>
+      <div style="margin-top:10px"><button class="btn green" id="btn-party-go">שחק ▶</button> <button class="btn small" id="btn-party-cancel">חזרה</button></div>
+    </div>
+  </div>
+
+  <!-- ===== TROPHY ROAD ===== -->
+  <div class="overlay" id="road-modal">
+    <div class="panel road-panel">
+      <h2 id="road-title">🏆 דרך הגביעים</h2>
+      <div class="hint" id="road-sub"></div>
+      <div id="road-list"></div>
+      <br><button class="btn small blue" id="btn-road-close">חזרה</button>
+    </div>
+  </div>
+
   <!-- ===== NAME PROMPT (first visit) ===== -->
   <div class="overlay" id="name-modal">
     <div class="panel">
@@ -1087,7 +1161,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.2';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.4';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1390,6 +1464,24 @@ const I18N_RAW={
  'rank.2':['🥈 כסף','🥈 Silver','🥈 فضي','🥈 Серебро'],
  'rank.3':['🥇 זהב','🥇 Gold','🥇 ذهبي','🥇 Золото'],
  'rank.4':['💎 יהלום','💎 Diamond','💎 ماسي','💎 Алмаз'],
+ 'party.title':['👥 איך משחקים?','👥 How do we play?','👥 كيف نلعب؟','👥 Как играем?'],
+ 'party.level':['רמת המחשב (כשיש בוטים):','Computer level (when there are bots):','مستوى الحاسوب (عند وجود بوتات):','Уровень компьютера (когда есть боты):'],
+ 'party.m1v1':['⚔️ אחד נגד השני','⚔️ Against each other','⚔️ ضد بعضنا','⚔️ Друг против друга'],
+ 'party.mduo':['🤝 ביחד נגד 2 מחשבים','🤝 Together vs 2 computers','🤝 معًا ضد حاسوبين','🤝 Вместе против 2 компьютеров'],
+ 'party.mtrio':['👥 2 על 2 (אני ו-{0} מול השני + מחשב)','👥 2v2 (me and the first vs the second + computer)','👥 2 ضد 2 (أنا والأول ضد الثاني + حاسوب)','👥 2 на 2 (я и первый против второго + компьютер)'],
+ 'party.mquad':['👥 2 על 2, ארבעה שחקנים','👥 2v2, four players','👥 2 ضد 2، أربعة لاعبين','👥 2 на 2, четыре игрока'],
+ 'party.leave':['🚪 יציאה מהקבוצה','🚪 Leave the team','🚪 مغادرة الفريق','🚪 Покинуть команду'],
+ 'party.left':['יצאת מהקבוצה','You left the team','غادرت الفريق','Ты покинул команду'],
+ 'party.joined':['{0} הצטרף לקבוצה! 👥','{0} joined the team! 👥','{0} انضم إلى الفريق! 👥','{0} присоединился к команде! 👥'],
+ 'party.waiting':['הקבוצה פתוחה, קוד {0}. חברים יכולים להצטרף עכשיו','Team open, code {0}. Friends can join now','الفريق مفتوح، الرمز {0}. يمكن للأصدقاء الانضمام الآن','Команда открыта, код {0}. Друзья могут присоединиться'],
+ 'party.waitHost':['⏳ המארח מתחיל…','⏳ Waiting for the host…','⏳ في انتظار المضيف…','⏳ Ждём хоста…'],
+ 'road.title':['🏆 דרך הגביעים','🏆 Trophy road','🏆 طريق الكؤوس','🏆 Дорога кубков'],
+ 'road.sub':['יש לך {0} גביעים · דרגה {1}','You have {0} trophies · rank {1}','لديك {0} كأسًا · الرتبة {1}','У тебя {0} кубков · ранг {1}'],
+ 'road.char':['🏆 פרס מדרך הגביעים: {0} נפתח!','🏆 Trophy road reward: {0} unlocked!','🏆 مكافأة طريق الكؤوس: تم فتح {0}!','🏆 Награда дороги кубков: открыт {0}!'],
+ 'road.done':['סיימת את כל הדרך! 🎉','You finished the whole road! 🎉','أكملت الطريق كله! 🎉','Ты прошёл всю дорогу! 🎉'],
+ 'road.only':['הדמות הזאת נפתחת רק ב-{0} גביעים 🏆','This player unlocks only at {0} trophies 🏆','هذه الشخصية تُفتح فقط عند {0} كأسًا 🏆','Этот игрок открывается только за {0} кубков 🏆'],
+ 'road.lock':['🏆 {0} גביעים','🏆 {0} trophies','🏆 {0} كأسًا','🏆 {0} кубков'],
+ 'road.lockBtn':['🔒 נפתח ב-{0} גביעים','🔒 Unlocks at {0} trophies','🔒 يُفتح عند {0} كأسًا','🔒 Откроется за {0} кубков'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1516,7 +1608,7 @@ const CHAR_NAMES={
  beckham:['Beckham','بيكهام','Бекхэм'], henry:['Henry','هنري','Анри'], kaka:['Kaká','كاكا','Кака'], modric:['Modrić','مودريتش','Модрич'],
  debruyne:['De Bruyne','دي بروين','Де Брёйне'], xavi:['Xavi','تشافي','Хави'], rooney:['Rooney','روني','Руни'], drogba:['Drogba','دروغبا','Дрогба'],
  gerrard:['Gerrard','جيرارد','Джеррард'], aguero:['Agüero','أغويرو','Агуэро'], vandijk:['Van Dijk','فان دايك','Ван Дейк'], baggio:['Baggio','باجيو','Баджо'],
- mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'], khalaili:['Anan Khalaili','عنان خلايلي','Анан Халайли'], zahavi:['Eran Zahavi','عيران زهافي','Эран Захави'], benayoun:['Yossi Benayoun','يوسي بنايون','Йосси Бенаюн'], revivo:['Haim Revivo','حاييم ريفيفو','Хаим Ревиво'], berkovic:['Eyal Berkovic','إيال بيركوفيتش','Эяль Беркович'], solomon:['Manor Solomon','مانور سولومون','Манор Соломон'], gloukh:['Oscar Gloukh','أوسكار غلوخ','Оскар Глух'], dabbur:['Munas Dabbur','مؤنس دبور','Мунас Даббур'], spiegler:['Mordechai Spiegler','مردخاي شبيغلر','Мордехай Шпиглер'],
+ mane:['Mané','ماني','Мане'], musiala:['Musiala','موسيالا','Мусиала'], saka:['Saka','ساكا','Сака'], foden:['Foden','فودن','Фоден'], khalaili:['Anan Khalaili','عنان خلايلي','Анан Халайли'], zahavi:['Eran Zahavi','عيران زهافي','Эран Захави'], benayoun:['Yossi Benayoun','يوسي بنايون','Йосси Бенаюн'], revivo:['Haim Revivo','حاييم ريفيفو','Хаим Ревиво'], berkovic:['Eyal Berkovic','إيال بيركوفيتش','Эяль Беркович'], solomon:['Manor Solomon','مانور سولومون','Манор Соломон'], gloukh:['Oscar Gloukh','أوسكار غلوخ','Оскар Глух'], dabbur:['Munas Dabbur','مؤنس دبور','Мунас Даббур'], spiegler:['Mordechai Spiegler','مردخاي شبيغلر','Мордехай Шпиглер'], goldstar:['Golden Star','النجم الذهبي','Золотая звезда'], streetking:['Street King','ملك الشارع','Король улиц'],
 };
 const nm = c => lang==='he' ? c.name : ((CHAR_NAMES[c.id]||[])[LI[lang]-1] || (CHAR_NAMES[c.id]||[])[0] || c.name);
 
@@ -1542,11 +1634,11 @@ const CHAR_ST={
   lautaro:[1,1.1,1.05,1.05], yamal:[1.12,.9,1,.95], zlatan:[.9,1.2,1,1.15], bellingham:[1.05,1.05,1.1,1.1],
   pele:[1.15,1.15,1.05,1.15], maradona:[1.12,1.05,1.1,1], zidane:[.95,1.1,1,1.1], cruyff:[1.12,1,1,1], beckham:[.9,1.2,1,.95], henry:[1.15,1.05,1,1],
   kaka:[1.12,1.05,1,1], modric:[.95,1,1.1,1], debruyne:[.95,1.15,1,1], xavi:[.9,.9,1,.9], rooney:[1,1.1,1.15,1], drogba:[.95,1.2,1,1.15],
-  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02], zahavi:[1,1.2,1,1.05], benayoun:[1.08,1.05,1,1], revivo:[1.02,1.15,1,1], berkovic:[1.05,1.08,.95,.95], solomon:[1.18,1,1,1], gloukh:[1.1,1.08,1,1], dabbur:[1.02,1.1,1,1.12], spiegler:[1,1.12,1,1.08] };
+  gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02], zahavi:[1,1.2,1,1.05], benayoun:[1.08,1.05,1,1], revivo:[1.02,1.15,1,1], berkovic:[1.05,1.08,.95,.95], solomon:[1.18,1,1,1], gloukh:[1.1,1.08,1,1], dabbur:[1.02,1.1,1,1.12], spiegler:[1,1.12,1,1.08], goldstar:[1.2,1.2,1.1,1.15], streetking:[1.15,1.25,1.2,1.05] };
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
 const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
-const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false,trophies:0};
+const DEF_PROG={xp:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false,trophies:0,road:[]};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
 const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id) || !!prog.admin;   // the admin owns every player, new ones too
@@ -1563,7 +1655,7 @@ function addXP(n){ if(!(n>0)) return; prog.xp+=n; saveProg(); toast(T('xp.gain',
 /* trophies: only real matches award them, and only a few – the rarest thing in the game */
 const RANKS=[[0,'rank.0'],[10,'rank.1'],[25,'rank.2'],[50,'rank.3'],[100,'rank.4']];
 const rankOf = t => RANKS.reduce((r,[min,k])=>t>=min?k:r,'rank.0');
-function addTrophies(n){ if(!(n>0) || training) return; prog.trophies=(prog.trophies|0)+n; saveProg(); toast(T('trophy.gain',n),'ach'); updateXpBadge(); }
+function addTrophies(n){ if(!(n>0) || training) return; prog.trophies=(prog.trophies|0)+n; saveProg(); toast(T('trophy.gain',n),'ach'); updateXpBadge(); checkTrophyRoad(); }
 function achieve(id){
   if(prog.ach[id]) return; const a=ACH.find(x=>x[0]===id); if(!a) return;
   prog.ach[id]=Date.now(); prog.xp+=a[1]; saveProg(); updateXpBadge();
@@ -1676,6 +1768,11 @@ const CHARS = [
     jersey:'#0B4DBB', numColor:'#ffffff', shorts:'#0B4DBB', socks:'#ffffff', number:9, beard:true, beardColor:'#15110e', brows:'sharp' },
   { id:'spiegler', name:'מרדכי שפיגלר', skin:'#F1C9A5', skinDark:'#b8865f', hair:'curly', hairColor:'#3a2a1a',
     jersey:'#ffffff', numColor:'#0B4DBB', shorts:'#0B4DBB', socks:'#ffffff', number:10, beard:false, brows:'round' },
+  /* trophy-road exclusives: cannot be bought, only earned */
+  { id:'goldstar', name:'כוכב הזהב', skin:'#E8B892', skinDark:'#b07a55', hair:'spiky', hairColor:'#F5C400', browColor:'#a87f0c', trophyOnly:true,
+    jersey:'#F5C400', stripes:'#ffffff', numColor:'#1B2A4E', shorts:'#1B2A4E', socks:'#F5C400', number:1, beard:false, brows:'sharp' },
+  { id:'streetking', name:'מלך הרחוב', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'mohawk', hairColor:'#F04E4E', trophyOnly:true,
+    jersey:'#111111', numColor:'#F04E4E', shorts:'#111111', socks:'#F04E4E', number:99, beard:true, beardColor:'#161616', brows:'sharp' },
 ];
 
 const mixW = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v+(255-v)*a); return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };   // toward white
@@ -1920,13 +2017,17 @@ let previewIdx = 0;     // highlighted in the characters screen
 
 function refreshHome(){
   sprite($('#home-sprite'), CHARS[selected]);
+  const back=$('#home-sprite-back'); if(back) sprite(back, CHARS[selected]);
   $('#home-name').textContent = nm(CHARS[selected]);
+  const me=$('#home-me'); if(me){ const n=normName(settings.name); me.textContent = (n ? crown(n, isAdmin()) : T('mp.you')) + ' · ' + T(rankOf(prog.trophies|0)); }
   updateXpBadge();
+  if(typeof refreshRoad==='function') refreshRoad();
+  if(typeof partyRefresh==='function') partyRefresh();
 }
 
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=legend]':'gal.legend', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=legend]':'gal.legend', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
   '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa', '#ceo-wa-none':'ceo.waNone',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn',
@@ -2023,7 +2124,7 @@ function buildGallery(){
     card.className='card'; card.tabIndex=0; card.dataset.i=i;
     const locked=!isUnlocked(c); if(locked) card.classList.add('locked');
     const badges = (NEW_IDS.includes(c.id) ? `<span class="badge new">${T('gal.new')}</span>` : '') + (ISRAELI_IDS.includes(c.id) ? `<span class="badge il">🇮🇱</span>` : '');
-    card.innerHTML = `${badges}<div class="sprite">${playerSVG(c)}</div><div class="name">${nm(c)}</div>${locked?`<div class="lock">${T('shop.locked',fmtXp(priceOf(c)))}</div>`:''}`;
+    card.innerHTML = `${badges}<div class="sprite">${playerSVG(c)}</div><div class="name">${nm(c)}</div>${locked?`<div class="lock">${c.trophyOnly ? T('road.lock', roadFor(c.id)) : T('shop.locked',fmtXp(priceOf(c)))}</div>`:''}`;
     const pick = ()=>{ sfx.click(); previewIdx=i; refreshPreview(); };
     card.addEventListener('click', pick);
     card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
@@ -2036,13 +2137,14 @@ function refreshPreview(){
   sprite($('#preview-sprite'), c);
   $('#preview-name').textContent = nm(c);
   $('#preview-sprite').style.filter = locked ? 'grayscale(1) brightness(.8)' : '';
-  const b=$('#btn-choose'); b.textContent = locked ? T('shop.unlock',fmtXp(priceOf(c))) : T('btn.choose');
+  const b=$('#btn-choose'); b.textContent = locked ? (c.trophyOnly ? T('road.lockBtn', roadFor(c.id)) : T('shop.unlock',fmtXp(priceOf(c)))) : T('btn.choose');
   const s=charStats(c), bar=(k,ic)=>`<div class="strow"><span class="sl">${ic} ${T('st.'+k)}</span><span class="sb"><i style="width:${Math.round(clamp((s[k]-.82)/.4,.08,1)*100)}%"></i></span></div>`;
   $('#preview-stats').innerHTML = bar('speed','⚡')+bar('power','💥')+bar('slide','🦵')+bar('jump','🦘');
   b.classList.toggle('purple',locked); b.classList.toggle('yellow',!locked);
   const h=$('#shop-hint'); if(h) h.textContent=T('shop.hint',prog.xp);
 }
 function tryBuy(c){
+  if(c.trophyOnly){ sfx.lose(); toast(T('road.only', roadFor(c.id)),'warn'); return; }
   const price=priceOf(c);
   if(prog.xp<price){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(price)),'warn'); return false; }
   if(!confirm(T('shop.confirm',nm(c),fmtXp(price)))) return false;
@@ -2052,7 +2154,7 @@ function tryBuy(c){
 
 $('#btn-chars').addEventListener('click', ()=>{ sfx.click(); previewIdx=selected; refreshPreview(); showScreen('chars'); });
 $('#btn-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
-$('#btn-choose').addEventListener('click', ()=>{ sfx.click(); const c=CHARS[previewIdx]; if(!isUnlocked(c)){ tryBuy(c); return; } selected=previewIdx; refreshHome(); showScreen('home'); });
+$('#btn-choose').addEventListener('click', ()=>{ sfx.click(); const c=CHARS[previewIdx]; if(!isUnlocked(c)){ tryBuy(c); return; } selected=previewIdx; refreshHome(); showScreen('home'); if(mp && mp.role==='guest' && mp.connected){ try{ mp.conn.send({t:'pick', i:selected}); }catch(e){} } if(mp && mp.role==='host') mpBroadcastLobby(); partyRefresh(); });
 
 /* ---------- exit modal ---------- */
 $('#btn-exit').addEventListener('click', ()=>{
@@ -2094,7 +2196,9 @@ function buildLevels(){
   });
 }
 buildLevels();
-$('#btn-play').addEventListener('click', ()=>{ sfx.click(); v2Pending=null; $('#level-modal').classList.add('show'); });
+$('#btn-play').addEventListener('click', ()=>{ sfx.click(); v2Pending=null;
+  if(mp && mp.connected){ if(mp.role==='guest'){ toast(T('party.waitHost'),'warn'); return; } if(mp.conns.length){ openPartyModal(); return; } mpTeardown(); partyRefresh(); }   // alone in a room: play offline
+  $('#level-modal').classList.add('show'); });
 
 /* ---------- wins record (saved in this browser) ---------- */
 const STATS_KEY='footballStar.stats';
@@ -2331,9 +2435,9 @@ $('#btn-invite-accept').addEventListener('click', ()=>{ sfx.click(); const c=inv
 $('#btn-invite-decline').addEventListener('click', ()=>{ sfx.click(); const c=inviteConn; inviteConn=null; $('#invite-modal').classList.remove('show'); if(c){ try{ c.send({t:'decline'}); setTimeout(()=>c.close(),300); }catch(e){} } });
 function startMpFromConn(conn, role){                 // a friend invite turned into a 1v1: no room code needed
   mpTeardown();
-  if(role==='host'){ mp={ role:'host', code:'', connected:false, conns:[], cfg:{v2:false, src:{P2:'net'}}, myPick:null, myReady:false }; mpAccept(conn, true); }
+  if(role==='host'){ mp={ role:'host', code:'', connected:false, conns:[], cfg:PARTY_CFG(), myPick:null, myReady:false }; mpAccept(conn, true); }
   else { mp={ role:'guest', code:'', connected:false, slot:'P2', teamL:false, myPick:null, myReady:false, snap:null, lastKey:'', lastSent:0, lobby:null }; mp.conn=conn; mpWireGuest(conn, true); }
-  showScreen('mp');
+  showScreen('home'); partyRefresh();
 }
 /* ----- watching a friend's match ----- */
 let spectators=[], spectating=null;
@@ -2907,7 +3011,7 @@ function startGame(levelIdx){
     const pend=v2Pending; v2Pending=null;
     if(Object.values(pend.src).includes('net')){   // friends on other computers: open a room, they join with the code, then everyone picks
       $('#level-modal').classList.remove('show'); showScreen('mp'); mpLobby(); mpStatus('');
-      mpHost({v2:true, src:pend.src, partnerIdx: pend.src.P3==='net' ? null : pend.idx, levelIdx});
+      mpHost(PARTY_CFG());
       return;
     }
     beginMatch(CHARS[selected], CHARS[opp], { c3:CHARS[pend.idx], c4:CHARS[pool[1]], src:pend.src });
@@ -3145,9 +3249,10 @@ function updateTimer(){
 }
 
 function goHome(){
+  $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
   state='idle'; cancelAnimationFrame(rafId); endTraining(); fbHeartbeat();
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
-  if(mp && mp.connected){ mpShowPick(); showScreen('mp'); }   // online: back to the character screen for a rematch
+  if(mp && mp.connected){ showScreen('home'); partyRefresh(); }   // online: back to the party on the home screen for a rematch
   else showScreen('home');
 }
 
@@ -3604,10 +3709,10 @@ async function mpHost(cfg){                           // cfg = null → plain 1v
   mpTeardown(); mpStatus(T('mp.connecting')); $('#btn-mp-host').disabled=true;
   try{ await loadPeerJS(); }catch(e){ mpStatus(T('mp.offline')); $('#btn-mp-host').disabled=false; return; }
   const code=makeCode();
-  cfg = cfg || {v2:false, src:{P2:'net'}};
+  cfg = cfg || PARTY_CFG();
   mp={ role:'host', code, connected:false, conns:[], cfg, myPick:null, myReady:false };
   const peer=new Peer(peerIdFor(code)); mp.peer=peer;
-  peer.on('open', ()=>{ if(!mp||mp.peer!==peer) return; mpStatus(T('mp.sendCode',code)); mpShowPick(); });
+  peer.on('open', ()=>{ if(!mp||mp.peer!==peer) return; mpStatus(T('mp.sendCode',code)); mpShowPick(); toast(T('party.waiting', code),'xp'); });
   peer.on('connection', conn=>{ if(mp && mp.peer===peer) mpAccept(conn); else conn.close(); });
   peer.on('error', e=>{
     if(!mp || mp.peer!==peer) return;
@@ -3643,7 +3748,7 @@ function mpAbort(){
   state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); clearTimeout(endTimer); $('#countdown').hidden=true;
   $('#end').classList.remove('show'); $('#fans').classList.remove('cheer');
   sfx.lose(); mpStatus(T('mp.left'));
-  if(mp.conns.length || mp.code){ mpShowPick(); showScreen('mp'); } else { mpTeardown(); mpLobby(); showScreen('mp'); }
+  if(mp.conns.length || mp.code){ showScreen('home'); partyRefresh(); } else { mpTeardown(); mpLobby(); showScreen('mp'); }
   fbHeartbeat();
 }
 function mpSendAll(m){ if(!mp || !mp.conns) return; for(const c of mp.conns){ try{ c.conn.send(m); }catch(e){} } }
@@ -3667,7 +3772,7 @@ async function mpJoin(code){
   peer.on('error', e=>{ if(mp && mp.peer===peer && !mp.connected){ mpStatus(e.type==='peer-unavailable' ? T('mp.notFound',code) : T('mp.err',e.type)); $('#btn-mp-join').disabled=false; } });
 }
 function mpWireGuest(conn, alreadyOpen){
-  const onOpen=()=>{ if(!mp || mp.conn!==conn) return; mp.connected=true; sfx.win(); mpStatus(''); try{ conn.send({t:'hello', name:normName(settings.name), s:myStats(), adm:isAdmin()}); }catch(e){} mpShowPick(); };
+  const onOpen=()=>{ if(!mp || mp.conn!==conn) return; mp.connected=true; sfx.win(); mpStatus(''); try{ conn.send({t:'hello', name:normName(settings.name), s:myStats(), adm:isAdmin(), pick:selected}); }catch(e){} mpShowPick(); };
   if(alreadyOpen) onOpen(); else conn.on('open', onOpen);
   conn.on('data', m=>mpOnMsg(m, null));
   conn.on('close', mpOnClose); conn.on('error', mpOnClose);
@@ -3688,15 +3793,15 @@ function mpOnMsg(m, c){                               // c = the guest who sent 
     case 'hello': {
       const name=normName(m.name);
       if(name && name.toLowerCase()!==normName(settings.name).toLowerCase() && m.s && typeof m.s==='object'){ prog.friends[name]=Object.assign(prog.friends[name]||{ach:[]},{w:m.s.w|0,d:m.s.d|0,l:m.s.l|0,c:m.s.c|0,xp:m.s.xp|0,goals:m.s.goals|0,tr:m.s.tr|0,t:Date.now(),online:true}); saveProg(); }
-      if(c){ c.name=name; c.adm=!!m.adm; mpBroadcastLobby(); mpRefresh(); }
+      if(c){ c.name=name; c.adm=!!m.adm; if(m.pick!=null) c.pick=m.pick; mpBroadcastLobby(); mpRefresh(); toast(T('party.joined', name),'ach'); }
       else { mp.slot=m.slot||'P2'; mp.teamL = mp.slot==='P3'; mp.v2=!!m.v2; mp.src=m.src||{P2:'net'}; mp.hostName=name; mp.hostAdm=!!m.adm; mpRefresh(); }
       break; }
     case 'full': if(!c){ mpStatus(T('mp.full')); mpTeardown(); mpLobby(); } break;
     case 'lobby': if(!c){ mp.lobby=m; const mine=m.slots.find(s=>s.slot===mp.slot); if(mine){ mp.myPick=mine.pick; mp.myReady=mine.ready; } mpRefresh(); } break;
     case 'pick': if(c){ if(m.i==null || !mpTaken(c).includes(m.i)) c.pick=m.i; mpBroadcastLobby(); mpRefresh(); } break;
     case 'ready': if(c){ c.ready=!!m.v; mpBroadcastLobby(); mpRefresh(); } break;
-    case 'start': if(!c){ mp.snap=null; level=LEVELS[m.lv]||LEVELS[1]; beginMatch(CHARS[m.p1], CHARS[m.p2], m.opts ? {c3:CHARS[m.opts.c3], c4:CHARS[m.opts.c4], src:m.opts.src} : null); } break;
-    case 'left': if(!c){ state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true; $('#end').classList.remove('show'); $('#fans').classList.remove('cheer'); sfx.lose(); mpStatus(T('mp.left')); mpShowPick(); showScreen('mp'); fbHeartbeat(); } break;
+    case 'start': if(!c){ mp.snap=null; if(m.slot){ mp.slot=m.slot; mp.teamL=m.slot==='P3'; mp.src=m.src||mp.src; mp.v2=!!m.v2; } level=LEVELS[m.lv]||LEVELS[1]; beginMatch(CHARS[m.p1], CHARS[m.p2], m.opts ? {c3:CHARS[m.opts.c3], c4:CHARS[m.opts.c4], src:m.opts.src} : null); } break;
+    case 'left': if(!c){ state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true; $('#end').classList.remove('show'); $('#fans').classList.remove('cheer'); sfx.lose(); toast(T('mp.left'),'warn'); showScreen('home'); partyRefresh(); fbHeartbeat(); } break;
     case 'i': if(c && c.rin){ c.rin.l=m.l; c.rin.r=m.r; c.rin.j=c.rin.j||m.j; c.rin.k=c.rin.k||m.k; c.rin.s=c.rin.s||m.s; } break;
     case 's': if(!c){ if(mp.snap && mp.snap.ev && mp.snap.ev.length) m.ev=mp.snap.ev.concat(m.ev||[]); mp.snap=m; } break;
   }
@@ -3706,84 +3811,106 @@ function mpTaken(except){                             // characters already chos
   if(mp.role==='host'){ const t=[]; if(except!=='me' && mp.myPick!=null) t.push(mp.myPick); for(const c of mp.conns){ if(c!==except && c.pick!=null) t.push(c.pick); } if(mp.cfg.src.P3!=='net' && mp.cfg.partnerIdx!=null) t.push(mp.cfg.partnerIdx); return t; }
   const lb=mp.lobby; if(!lb) return []; const t=[]; if(lb.host.pick!=null) t.push(lb.host.pick); for(const s of lb.slots){ if(s.slot!==mp.slot && s.pick!=null) t.push(s.pick); } if(lb.partnerIdx!=null) t.push(lb.partnerIdx); return t;
 }
-function mpShowPick(resetPicks){
-  $('#mp-lobby').hidden=true; $('#mp-pick').hidden=false;
-  if(resetPicks!==false){ mp.myPick=null; mp.myReady=false; if(mp.role==='host'){ for(const c of mp.conns){ c.pick=null; c.ready=false; } mpBroadcastLobby(); } }
-  const g=$('#mp-gallery'); g.innerHTML='';
-  CHARS.forEach((c,i)=>{
-    const d=document.createElement('div'); d.className='mpcard'+(isUnlocked(c)?'':' locked'); d.dataset.i=i;
-    d.innerHTML=`<div class="sprite">${playerSVG(c)}</div>${nm(c)}`;
-    d.addEventListener('click', ()=>{
-      if(!mp || mp.myReady || !isUnlocked(c) || mpTaken(mp.role==='host'?'me':null).includes(i)) return;
-      sfx.click();
-      if(mp.role==='host'){ mp.myPick=i; mpBroadcastLobby(); } else { mp.myPick=i; try{ mp.conn.send({t:'pick', i}); }catch(e){} }
-      mpRefresh();
-    });
-    g.appendChild(d);
-  });
-  mpRefresh();
-}
-/* every seat in the match as a card: who sits there, which character, ready or not */
-function mpSeats(){
-  const out=[], meName=normName(settings.name)||T('mp.you');
-  if(mp.role==='host'){
-    out.push({slot:'P1', team:'L', name:crown(meName,isAdmin()), pick:mp.myPick, ready:mp.myReady, kind:'me'});
-    for(const s of (mp.cfg.v2 ? ['P3','P2','P4'] : ['P2'])){
-      const src=mp.cfg.src[s]||'ai', team=s==='P3'?'L':'R';
-      if(src==='net'){ const c=mp.conns.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:crown(c.name||T('mp.friend'),c.adm), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
-      else out.push({slot:s, team, name:T(src==='key'?'mp.keyFriend':'mp.computer'), pick:s==='P3'?mp.cfg.partnerIdx:null, ready:true, kind:src});
-    }
-  } else {
-    const lb=mp.lobby;
-    out.push({slot:'P1', team:'L', name:crown((lb&&lb.host.name)||mp.hostName||T('mp.host'), lb?lb.host.adm:mp.hostAdm), pick:lb?lb.host.pick:null, ready:!!(lb&&lb.host.ready), kind:'net'});
-    for(const s of (mp.v2 ? ['P3','P2','P4'] : ['P2'])){
-      const src=(mp.src||{})[s]||'ai', team=s==='P3'?'L':'R';
-      if(s===mp.slot){ out.push({slot:s, team, name:crown(meName,isAdmin()), pick:mp.myPick, ready:mp.myReady, kind:'me'}); continue; }
-      if(src==='net'){ const c=lb&&lb.slots.find(x=>x.slot===s); out.push(c ? {slot:s, team, name:crown(c.name||T('mp.friend'),c.adm), pick:c.pick, ready:c.ready, kind:'net'} : {slot:s, team, name:T('mp.waitCode'), pick:null, ready:false, kind:'wait'}); }
-      else out.push({slot:s, team, name:T(src==='key'?'mp.keyFriend':'mp.computer'), pick:s==='P3'&&lb?lb.partnerIdx:null, ready:true, kind:src});
-    }
-  }
+/* ----- the party: online friends gather on the home screen (like a team lobby); the host picks the mode and starts ----- */
+const PARTY_CFG = () => ({v2:true, src:{P3:'net',P2:'net',P4:'net'}, party:true});
+const inParty = () => !!(mp && mp.connected && (mp.role==='guest' || (mp.conns && mp.conns.length)));
+function mpShowPick(){ showScreen('home'); partyRefresh(); }                 // kept for the old call sites: the lobby is the home screen now
+function mpRefresh(){ partyRefresh(); }
+function mpTaken(){ return []; }                                              // friends may pick the same player
+/* everyone in the party, me first: {name, pick, adm, host, me} */
+function partyMembers(){
+  if(!mp) return [];
+  const meName=normName(settings.name)||T('mp.you');
+  if(mp.role==='host') return [{name:meName, pick:selected, adm:isAdmin(), host:true, me:true}].concat(mp.conns.map(c=>({name:c.name||T('mp.friend'), pick:c.pick, adm:!!c.adm})));
+  const lb=mp.lobby, out=[{name:meName, pick:selected, adm:isAdmin(), me:true}];
+  out.push({name:(lb&&lb.host.name)||mp.hostName||T('mp.host'), pick:lb?lb.host.pick:null, adm:lb?!!lb.host.adm:!!mp.hostAdm, host:true});
+  if(lb) for(const s of lb.slots){ if(s.slot!==mp.slot) out.push({name:s.name||T('mp.friend'), pick:s.pick, adm:!!s.adm}); }
   return out;
 }
-function mpRefresh(){
-  if(!mp) return;
-  const taken=mpTaken(mp.role==='host'?'me':null);
-  document.querySelectorAll('#mp-gallery .mpcard').forEach(d=>{ const i=+d.dataset.i; d.classList.toggle('mine', i===mp.myPick); d.classList.toggle('theirs', taken.includes(i)); });
-  const seats=mpSeats(), duo=$('#mp-duo'); duo.classList.toggle('four', seats.length>2);
-  const card=s=>`<div class="who ${s.kind==='me'?'me':''} ${s.team==='R'?'op':''}"><div class="tag">${esc(s.name)}${s.ready&&s.kind!=='ai'&&s.kind!=='key'?' ✔':''}</div><div class="sprite">${s.pick!=null?playerSVG(CHARS[s.pick]):''}</div><div class="name">${s.pick!=null?nm(CHARS[s.pick]):s.kind==='wait'?'⏳':s.kind==='me'?T('mp.pick'):s.kind==='net'?T('mp.picking'):'🎲'}</div></div>`;
-  duo.innerHTML = seats.filter(s=>s.team==='L').map(card).join('') + '<div class="vs">VS</div>' + seats.filter(s=>s.team==='R').map(card).join('');
-  const codeEl=$('#mp-pick-code'); const waiting=seats.some(s=>s.kind==='wait');
-  codeEl.hidden = !(mp.role==='host' && mp.code);
-  if(mp.code) codeEl.innerHTML = `<span class="lbl">${T('mp.codeLbl')}</span><span class="code">${mp.code}</span>${waiting ? '<span class="w">⏳</span>' : ''}<button class="btn small yellow" id="btn-copy-code">${T('mp.copy')}</button>`;
-  const b=$('#btn-mp-play'); b.classList.toggle('ready', mp.myReady);
-  b.textContent = mp.myReady ? T('mp.readyWait') : T('btn.play'); b.disabled = mp.myPick==null;
-  if(mp.role==='host' && mp.myReady && mpCanStart()) mpStart();
+function partyRefresh(){
+  const box=$('#party'); if(!box) return;
+  const on = !!(mp && mp.connected);
+  box.hidden=!on; $('#btn-play').textContent = on && mp.role==='guest' ? T('party.waitHost') : T('btn.play');
+  if(!on){ $('#party-members').innerHTML=''; return; }
+  const others=partyMembers().filter(m=>!m.me);
+  $('#party-members').innerHTML = others.map((m,i)=>`<div class="member p${i}"><div class="sprite">${m.pick!=null?playerSVG(CHARS[m.pick]):''}</div><div class="mname">${m.host?'👑 ':''}${esc(crown(m.name,m.adm))}</div></div>`).join('');
+  const code=$('#party-code'); const showCode = mp.role==='host' && mp.code && mp.conns.length<3;
+  code.hidden=!showCode; if(showCode) code.innerHTML=`${T('mp.codeLbl')} <b>${mp.code}</b> <button class="btn small yellow" id="btn-copy-code">${T('mp.copy')}</button>`;
 }
-function mpCanStart(){
-  if(mp.myPick==null) return false;
-  const need=netSlots(mp.cfg); if(mp.conns.length<need.length) return false;
-  if(!mp.conns.every(c=>c.pick!=null && c.ready)) return false;
-  const picks=[mp.myPick].concat(mp.conns.map(c=>c.pick)); return new Set(picks).size===picks.length;
+$('#btn-party-leave').addEventListener('click', ()=>{ sfx.click(); mpTeardown(); partyRefresh(); toast(T('party.left'),'warn'); });
+$('#party-code').addEventListener('click', e=>{ if(!e.target.closest('#btn-copy-code') || !mp) return; sfx.click(); const t=mp.code; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(()=>toast(T('mp.copied', t),'xp')).catch(()=>{}); });
+/* the host chooses how the party plays: with 2 = against each other or together vs bots; 3 = 2v2 with one bot; 4 = 2v2 */
+const PARTY_MODES={
+  2:[['1v1','party.m1v1'],['duo','party.mduo']],
+  3:[['trio','party.mtrio']],
+  4:[['quad','party.mquad']],
+};
+let partyLevel=1;
+function openPartyModal(){
+  const n=1+mp.conns.length, modes=PARTY_MODES[n]||PARTY_MODES[2];
+  const first=(mp.conns[0]&&mp.conns[0].name)||T('mp.friend');
+  $('#party-modes').innerHTML=modes.map(([k,l],i)=>`<button class="btn ${i?'blue':'green'} ${i===0?'on':''}" data-mode="${k}">${T(l, first)}</button>`).join('');
+  $('#party-levels').innerHTML=LEVELS.map((L,i)=>`<button class="btn small ${L.color} ${i===partyLevel?'on':''}" data-lv="${i}">${LEVEL_ICON[i]} ${T('lvl.'+i)}</button>`).join('');
+  $('#party-modal').classList.add('show');
 }
-function mpStart(){
-  if(state!=='idle' || spectating) return;                   // never restart a match that is already running
-  mp.myReady=false; for(const c of mp.conns) c.ready=false;
-  const cfg=mp.cfg, picks=[mp.myPick].concat(mp.conns.map(c=>c.pick));
-  if(cfg.partnerIdx!=null && cfg.src.P3!=='net' && !picks.includes(cfg.partnerIdx)) picks.push(cfg.partnerIdx);
-  const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>!picks.includes(i)));
-  const idxFor = slot => { const c=mp.conns.find(x=>x.slot===slot); if(c) return c.pick; if(slot==='P3' && cfg.partnerIdx!=null && cfg.src.P3!=='net') return cfg.partnerIdx; return pool.pop(); };
-  const p1=mp.myPick, p2=idxFor('P2');
-  const opts = cfg.v2 ? {c3:idxFor('P3'), c4:idxFor('P4'), src:cfg.src} : null;
-  level=LEVELS[cfg.levelIdx!=null ? cfg.levelIdx : 1];
-  mpSendAll({t:'start', p1, p2, lv:level.i, opts});
-  for(const c of mp.conns) c.rin={l:0,r:0,j:0,k:0,s:0}; evBuf.length=0;
+$('#party-modes').addEventListener('click', e=>{ const b=e.target.closest('[data-mode]'); if(!b) return; sfx.click(); document.querySelectorAll('#party-modes .btn').forEach(x=>x.classList.toggle('on', x===b)); });
+$('#party-levels').addEventListener('click', e=>{ const b=e.target.closest('[data-lv]'); if(!b) return; sfx.click(); partyLevel=+b.dataset.lv; document.querySelectorAll('#party-levels .btn').forEach(x=>x.classList.toggle('on', x===b)); });
+$('#btn-party-cancel').addEventListener('click', ()=>{ sfx.click(); $('#party-modal').classList.remove('show'); });
+$('#btn-party-go').addEventListener('click', ()=>{ sfx.click(); const b=document.querySelector('#party-modes .btn.on'); $('#party-modal').classList.remove('show'); mpStart(b ? b.dataset.mode : '1v1', partyLevel); });
+function mpStart(mode, lvl){
+  if(!mp || mp.role!=='host' || state!=='idle' || spectating) return;
+  const conns=mp.conns.slice(0,3), n=1+conns.length;
+  mode = mode || (n===2 ? '1v1' : n===3 ? 'trio' : 'quad');
+  const plan = mode==='1v1' ? {v2:false, slots:['P2'], src:{P2:'net'}}
+             : mode==='duo' ? {v2:true, slots:['P3'], src:{P3:'net',P2:'ai',P4:'ai'}}
+             : mode==='trio' ? {v2:true, slots:['P3','P2'], src:{P3:'net',P2:'net',P4:'ai'}}
+             : {v2:true, slots:['P3','P2','P4'], src:{P3:'net',P2:'net',P4:'net'}};
+  conns.forEach((c,i)=>{ c.slot=plan.slots[i]||'P4'; });
+  mp.cfg={v2:plan.v2, src:plan.src, party:true};
+  const used=[selected].concat(conns.map(c=>c.pick).filter(p=>p!=null));
+  const pool=shuffle(CHARS.map((c,i)=>i).filter(i=>!used.includes(i)));
+  const idxFor = slot => { const c=conns.find(x=>x.slot===slot); return c ? (c.pick!=null ? c.pick : pool.pop()) : pool.pop(); };
+  const p1=selected, p2=idxFor('P2');
+  const opts = plan.v2 ? {c3:idxFor('P3'), c4:idxFor('P4'), src:plan.src} : null;
+  level=LEVELS[lvl!=null ? lvl : 1];
+  for(const c of conns){ c.rin={l:0,r:0,j:0,k:0,s:0}; try{ c.conn.send({t:'start', p1, p2, lv:level.i, opts, slot:c.slot, src:plan.src, v2:plan.v2}); }catch(e){} }
+  evBuf.length=0;
   beginMatch(CHARS[p1], CHARS[p2], opts ? {c3:CHARS[opts.c3], c4:CHARS[opts.c4], src:opts.src} : null);
 }
-$('#btn-mp-play').addEventListener('click', ()=>{
-  if(!mp || mp.myPick==null) return; sfx.click(); mp.myReady=!mp.myReady;
-  if(mp.role==='host'){ mpBroadcastLobby(); mpRefresh(); } else { try{ mp.conn.send({t:'ready', v:mp.myReady}); }catch(e){} mpRefresh(); }
-});
-/* ----- in-match networking ----- */
+/* ----- trophy road: milestones that hand out XP and exclusive players ----- */
+const TROPHY_ROAD=[{t:5,xp:300},{t:10,ch:'gloukh'},{t:20,xp:800},{t:30,ch:'solomon'},{t:50,ch:'zahavi'},{t:75,xp:2000},{t:100,ch:'goldstar'},{t:150,ch:'streetking'}];
+const roadFor = id => (TROPHY_ROAD.find(r=>r.ch===id)||{}).t;
+function nextReward(){ return TROPHY_ROAD.find(r=>!(prog.road||[]).includes(r.t)); }
+function rewardText(r){ return r.xp ? `⭐ ${r.xp} XP` : nm(CHARS.find(c=>c.id===r.ch)); }
+function checkTrophyRoad(){
+  prog.road=prog.road||[]; let changed=false;
+  for(const r of TROPHY_ROAD){
+    if((prog.trophies|0)>=r.t && !prog.road.includes(r.t)){
+      prog.road.push(r.t); changed=true;
+      if(r.xp) addXP(r.xp);
+      if(r.ch){ if(!prog.unlocked.includes(r.ch)) prog.unlocked.push(r.ch); sfx.win(); confetti.burst(160); toast(T('road.char', nm(CHARS.find(c=>c.id===r.ch))),'ach'); }
+    }
+  }
+  if(changed){ saveProg(); buildGallery(); }
+  refreshRoad();
+}
+function refreshRoad(){
+  const r=nextReward(), t=prog.trophies|0, fill=$('#road-fill'), nx=$('#road-next'); if(!fill) return;
+  if(!r){ fill.style.width='100%'; nx.textContent=T('road.done'); return; }
+  const prev=TROPHY_ROAD[TROPHY_ROAD.indexOf(r)-1], base=prev?prev.t:0;
+  fill.style.width=Math.round(Math.max(0,Math.min(1,(t-base)/(r.t-base)))*100)+'%';
+  nx.textContent=`${r.t} 🏆 → ${rewardText(r)}`;
+}
+function openRoad(){
+  const t=prog.trophies|0;
+  $('#road-list').innerHTML=TROPHY_ROAD.map(r=>{ const got=(prog.road||[]).includes(r.t); return `<div class="roadrow ${got?'got':t>=r.t?'ready':''}"><span class="rt">🏆 ${r.t}</span><span class="rr">${r.ch?playerSVG(CHARS.find(c=>c.id===r.ch)):'⭐'} ${rewardText(r)}</span><span class="rs">${got?'✔':t>=r.t?'🎁':'🔒'}</span></div>`; }).join('');
+  $('#road-sub').textContent=T('road.sub', t, T(rankOf(t)));
+  $('#road-modal').classList.add('show');
+}
+$('#trophy-pill').addEventListener('click', ()=>{ sfx.click(); openRoad(); });
+$('#btn-road-close').addEventListener('click', ()=>{ sfx.click(); $('#road-modal').classList.remove('show'); });
+$('#home-me').addEventListener('click', ()=>{ sfx.click(); showStats(); });
+$('#btn-ach-home').addEventListener('click', ()=>{ sfx.click(); $('#btn-stats-ach').click(); });
 function applyRemoteFor(p, r){                        // host: drive a remote friend's player with the inputs they sent
   let d=0; if(r.l) d-=1; if(r.r) d+=1;
   if(p.frozenT>0){ r.j=r.k=r.s=0; return; }
