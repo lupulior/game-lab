@@ -54,8 +54,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .btn.play{font-size:66px;padding:18px 70px 22px;border-radius:44px}
 
 /* ---------- home ---------- */
-#home .title{position:absolute;top:18px;right:40px;text-align:right;direction:ltr;font-size:42px}
-#home .title small{font-size:16px;margin-top:6px}
+#home .title{position:absolute;top:18px;right:40px;text-align:right;direction:ltr;font-size:50px}
 #home .title small{text-align:right}
 /* home layout: title top-right, small tools top-left, my player in the middle, play column on the right, extras on the left */
 .home-top{position:absolute;top:26px;left:40px;display:flex;align-items:center;gap:8px}
@@ -305,13 +304,13 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #name-modal .btn:disabled{opacity:.5;cursor:not-allowed}
 /* ===== home, Brawl-style: top bar pills, podium with a turning player, the party beside me ===== */
 .home-top .pill{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:inherit;border:0;cursor:pointer;font-size:22px;font-weight:900;color:var(--navy);background:#fff;border-radius:18px;padding:6px 16px;box-shadow:0 5px 0 rgba(27,42,78,.3),0 8px 14px rgba(0,0,0,.15)}
-.home-top .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:4px 12px 6px;width:158px;align-items:stretch}
+.home-top .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:4px 14px 6px;width:172px;align-items:stretch}
 .home-top .pill.trophy #trophy-badge{font-size:26px;text-align:center}
 .home-top .pill.trophy .road{display:block;height:8px;border-radius:6px;background:rgba(27,42,78,.3);overflow:hidden}
 .home-top .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
 .home-top .pill.trophy .next{font-size:12px;text-align:center;white-space:nowrap;opacity:.9}
-.home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400);width:128px;justify-content:center;white-space:nowrap;padding:6px 8px}
-.home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:15px;width:206px;justify-content:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400);width:150px;justify-content:center;white-space:nowrap}
+.home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:17px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #xp-badge.pill{margin-inline-start:0}
 .hero{top:96px;width:340px}
 .hero .podium{position:absolute;left:50%;bottom:52px;width:300px;height:70px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#FFF3B8,#F5C400 70%,#C99A10);box-shadow:0 10px 0 #A87F0C,0 16px 22px rgba(0,0,0,.25);z-index:0}
@@ -1199,7 +1198,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.9';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.8';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -2020,7 +2019,7 @@ async function initHero3D(){
   let renderer; try{ renderer=new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true}); }catch(e){ return; }
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio||1)); renderer.setSize(300,420,false); renderer.setClearColor(0x000000,0);
   const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(23, 300/420, .1, 100); camera.position.set(0,3.2,16.5); camera.lookAt(0,2.6,0);
+  const camera=new THREE.PerspectiveCamera(23, 300/420, .1, 100); camera.position.set(0,3.4,16.5); camera.lookAt(0,2.5,0);
   scene.add(new THREE.HemisphereLight(0xffffff, 0x88aa66, .95));
   const sun=new THREE.DirectionalLight(0xffffff, .85); sun.position.set(3,6,5); scene.add(sun);
   const rim=new THREE.DirectionalLight(0x7ED3FF, .35); rim.position.set(-4,3,-4); scene.add(rim);
@@ -2041,75 +2040,69 @@ async function initHero3D(){
 }
 /* builds the body from primitives: legs, shorts, shirt with stripes and the number on the back, arms, neck, a big round head with a face, hair and beard */
 /* builds the body: a lathe-shaped torso and shorts (shoulders wider than the waist, flat chest), slim limbs, an oval head with a calm, realistic face */
-/* the 3-D player, built to the exact proportions of the 2-D drawing (1 unit = 10 px of the 100×150 sprite): same big round head,
-   big eyes, cheeks, smile, hair and kit – only now with real volume, so turning it shows the arms, the ears and the number on the back */
 function buildFigure3D(c){
   if(!h3) return;
   const g=h3.group; while(g.children.length) g.remove(g.children[0]);
-  const M=(hex,extra={})=>new THREE.MeshStandardMaterial(Object.assign({color:new THREE.Color(hex), roughness:.9, metalness:0}, extra));
-  const OL='#2a1c12';
-  const skin=M(c.skin), dark=M('#23232b',{roughness:.6}), jersey=M(c.jersey), shorts=M(c.shorts), socks=M(c.socks), hairM=M(c.hairColor||'#222',{roughness:.95});
+  const M=(hex,extra={})=>new THREE.MeshStandardMaterial(Object.assign({color:new THREE.Color(hex), roughness:.85, metalness:0}, extra));
+  const skin=M(c.skin), dark=M('#23232b',{roughness:.5}), jersey=M(c.jersey), shorts=M(c.shorts), socks=M(c.socks), hairM=M(c.hairColor||'#222',{roughness:.95});
   const add=(geo,mat,x,y,z,opt={})=>{ const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); if(opt.rx) m.rotation.x=opt.rx; if(opt.ry) m.rotation.y=opt.ry; if(opt.rz) m.rotation.z=opt.rz; if(opt.s) m.scale.set(opt.s[0],opt.s[1],opt.s[2]); if(opt.name) m.name=opt.name; (opt.parent||g).add(m); return m; };
-  const cyl=(rt,rb,h)=>new THREE.CylinderGeometry(rt,rb,h,28), sph=r=>new THREE.SphereGeometry(r,36,26), box=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
-  const lathe=pts=>new THREE.LatheGeometry(pts.map(p=>new THREE.Vector2(p[0],p[1])), 36);
-  const Y=py=>(150-py)/10;                                   // sprite y (px, from the top) → world height
-  // legs (sprite: legs at x 35–46 and 55–66, y 116–150)
-  for(const x of [-1.0,1.0]){
-    add(cyl(.55,.55,2.3), skin, x,Y(127),0);
-    add(cyl(.65,.65,1.4), socks, x,Y(133),0);
-    add(cyl(.66,.66,.26), M('#ffffff'), x,Y(131),0);
-    add(box(2.4,.9,2.1), dark, x,Y(144.5),.35);
-    add(box(2.0,.16,1.2), M('#ffffff'), x,Y(142),.9);
+  const cyl=(rt,rb,h)=>new THREE.CylinderGeometry(rt,rb,h,24), sph=r=>new THREE.SphereGeometry(r,32,24), box=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
+  const lathe=pts=>new THREE.LatheGeometry(pts.map(p=>new THREE.Vector2(p[0],p[1])), 32);
+  // legs: thighs, calves, socks, boots
+  for(const x of [-.2,.2]){
+    add(cyl(.13,.17,1.0), skin, x,.62,0);
+    add(cyl(.15,.15,.46), socks, x,.34,0);
+    add(cyl(.155,.155,.05), M('#ffffff'), x,.5,0);
+    add(box(.32,.16,.6), dark, x,.08,.1);
+    add(box(.26,.05,.4), M('#ffffff'), x,.13,.2);
   }
-  // shorts (x 30–70, y 103–122) and shirt (y 66–108, shoulders 30–70, waist 31–69)
-  add(box(4.1,1.9,2.5), shorts, 0,Y(112.5),0);
-  add(box(3.9,.35,2.55), M('#ffffff',{transparent:true,opacity:.35}), 0,Y(105.5),0);
-  add(lathe([[1.85,Y(108)],[1.95,Y(98)],[2.05,Y(86)],[2.4,Y(81)],[2.0,Y(70)],[1.2,Y(66)]]), jersey, 0,0,0, {s:[1,1,.62]});
-  add(new THREE.TorusGeometry(.85,.14,10,36,Math.PI), M(c.numColor), 0,Y(67),.55, {rx:Math.PI/2, rz:Math.PI, s:[1,.6,1]});   // collar
-  if(c.stripes){ const st=M(c.stripes); for(const x of [-1.1,0,1.1]){ add(box(.6,3.9,.08), st, x,Y(88),1.28); add(box(.6,3.9,.08), st, x,Y(88),-1.28); } }
-  const numTex=(txt,col)=>{ const cv=document.createElement('canvas'); cv.width=cv.height=256; const x=cv.getContext('2d'); x.font='900 180px Arial Black, Arial, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.lineWidth=14; x.strokeStyle=OL; x.strokeText(txt,128,140); x.fillStyle=col; x.fillText(txt,128,140); return new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv), transparent:true}); };
-  add(new THREE.PlaneGeometry(2.6,2.6), numTex(String(c.number),c.numColor), 0,Y(88),-1.3, {ry:Math.PI});
-  add(new THREE.PlaneGeometry(2.0,2.0), numTex(String(c.number),c.numColor), 0,Y(90),1.3);               // like the drawing: the number on the chest
-  // sleeves + arms (sprite: arm from 30,74 to 17,100), hands
+  // shorts and shirt as turned profiles (radius, height), flattened front-to-back
+  add(lathe([[.4,1.0],[.46,1.15],[.5,1.45],[.48,1.72],[.42,1.78]]), shorts, 0,0,0, {s:[1,1,.78]});
+  add(lathe([[.44,1.7],[.5,1.95],[.55,2.35],[.6,2.8],[.63,3.12],[.55,3.32],[.3,3.44],[.24,3.52]]), jersey, 0,0,0, {s:[1,1,.68]});
+  add(new THREE.TorusGeometry(.26,.045,10,32), M(c.numColor), 0,3.5,0, {rx:Math.PI/2, s:[1,.7,1]});   // collar
+  if(c.stripes){ const st=M(c.stripes); for(const x of [-.3,0,.3]){ add(box(.11,1.4,.03), st, x,2.55,.42); add(box(.11,1.4,.03), st, x,2.55,-.42); } }
+  const numTex=(txt,col)=>{ const cv=document.createElement('canvas'); cv.width=cv.height=256; const x=cv.getContext('2d'); x.font='900 170px Arial Black, Arial, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.lineWidth=14; x.strokeStyle='#2a1c12'; x.strokeText(txt,128,140); x.fillStyle=col; x.fillText(txt,128,140); return new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv), transparent:true}); };
+  add(new THREE.PlaneGeometry(.7,.7), numTex(String(c.number),c.numColor), 0,2.62,-.43, {ry:Math.PI});
+  add(new THREE.PlaneGeometry(.26,.26), numTex(String(c.number),c.numColor), .27,2.9,.43);
+  // shoulders, sleeves, arms, hands
   for(const s of [-1,1]){
-    add(cyl(.62,.7,1.6), jersey, s*2.35,Y(77),0, {rz:s*-.5});
-    add(cyl(.45,.5,2.9), skin, s*2.7,Y(88),.1, {rz:s*-.45});
-    add(sph(.6), skin, s*3.3,Y(100),.15);
+    add(sph(.2), jersey, s*.62,3.18,0);
+    add(cyl(.16,.19,.42), jersey, s*.74,2.96,0, {rz:s*-.28});
+    add(cyl(.11,.13,.8), skin, s*.9,2.42,.04, {rz:s*-.16});
+    add(sph(.14), skin, s*.98,2.02,.08);
   }
-  add(box(1.2,1.5,1.1), M(c.skinDark||c.skin), 0,Y(63),0);                                  // neck
-  // head (sprite: circle r 30 at 50,38)
-  const head=new THREE.Group(); head.name='head'; head.position.set(0,Y(38),0); g.add(head);
-  add(sph(3.0), skin, 0,0,0, {parent:head});
-  for(const s of [-1,1]){ add(sph(.6), skin, s*3.0,-.2,0, {parent:head}); add(sph(.25), M(c.skinDark||'#a07050'), s*3.05,-.2,.25, {parent:head}); }
-  // face, as drawn: big white eyes, black pupils with a highlight, brows, blush, a small nose, the open smile with teeth and tongue
-  const bc=M(c.browColor||c.hairColor||'#222');
+  add(cyl(.16,.2,.34), M(c.skinDark||c.skin), 0,3.62,0);                          // neck
+  // head: an oval, slightly narrower at the chin
+  const head=new THREE.Group(); head.name='head'; head.position.set(0,4.5,0); g.add(head);
+  add(sph(.74), skin, 0,0,0, {s:[1,1.14,1], parent:head});
+  add(sph(.5), skin, 0,-.42,.05, {s:[1.15,.75,1], parent:head});                     // jaw
+  for(const s of [-1,1]){ add(sph(.12), skin, s*.72,0,0, {s:[.6,1,1], parent:head}); }
+  // eyes: white, iris, pupil, a small highlight; thin brows; nose; a calm closed mouth
+  const iris=M(c.eyes||'#4a2e14');
   for(const s of [-1,1]){
-    add(sph(.72), M('#ffffff',{roughness:.35}), s*1.1,0,2.55, {s:[.95,1.1,.5], parent:head});
-    add(sph(.36), M('#1b1b1b'), s*1.15,-.1,2.9, {s:[1,1,.5], parent:head});
-    add(sph(.13), M('#ffffff'), s*1.0,.1,3.05, {parent:head});
-    if(c.brows==='sharp') add(box(1.4,.34,.3), bc, s*1.25,1.05,2.6, {rz:s*-.35, parent:head});
-    else add(new THREE.TorusGeometry(.62,.16,8,20,Math.PI*.8), bc, s*1.15,.85,2.6, {rz:Math.PI*.1, parent:head});
-    add(sph(.45), M('#ff8a8a',{transparent:true,opacity:.35}), s*1.9,-1.1,2.3, {s:[1,.9,.4], parent:head});
+    add(sph(.115), M('#ffffff',{roughness:.3}), s*.26,.08,.62, {s:[1,.9,.5], parent:head});
+    add(sph(.06), iris, s*.26,.08,.7, {s:[1,1,.5], parent:head});
+    add(sph(.03), M('#111111'), s*.26,.08,.735, {s:[1,1,.6], parent:head});
+    add(sph(.015), M('#ffffff'), s*.24,.11,.76, {parent:head});
+    add(box(.27,.04,.05), M(c.browColor||c.hairColor||'#222'), s*.27,.3,.66, {rz: c.brows==='sharp' ? s*-.22 : 0, parent:head});
+    add(box(.2,.03,.04), M(c.skinDark||'#8a5a3a',{transparent:true,opacity:.35}), s*.26,-.03,.68, {parent:head});   // lower lid shade
   }
-  add(sph(.28), M(c.skinDark||'#a07050',{transparent:true,opacity:.7}), .2,-.55,2.95, {s:[.7,1.3,.7], parent:head});
-  const mouthW = c.teeth ? 2.0 : 1.6;
-  add(sph(mouthW), M('#7a2a2a'), 0,-1.55,2.2, {s:[1,.5,.42], parent:head});                     // the smiling mouth
-  add(box(mouthW*1.2,.36,.4), M('#ffffff'), 0,-1.2,2.75, {parent:head});                        // teeth
-  add(sph(.5), M('#e0525f'), 0,-2.05,2.55, {s:[1,.55,.6], parent:head});                        // tongue
-  // hair, per style, same shapes as the drawing
-  const cap=(len,mat,y=0,z=0)=>add(new THREE.SphereGeometry(3.08,36,24,0,Math.PI*2,0,Math.PI*len), mat, 0,y,z, {rx:-.18, parent:head});
-  if(c.hair==='bald'||c.hair==='tuft'){ cap(.3, M(c.hairColor,{transparent:true,opacity:.4})); if(c.hair==='tuft') add(sph(.55), hairM, 0,3.0,.9, {parent:head}); }
-  else if(c.hair==='mohawk'){ cap(.5, M(c.hairSide||'#222')); for(let i=-3;i<=3;i++) add(sph(.62), hairM, 0, 3.05-Math.abs(i)*.22, -i*.62, {parent:head}); }
-  else if(c.hair==='curly'){ cap(.5, hairM); for(let i=0;i<10;i++){ const a=i/10*Math.PI*2; add(sph(.85), hairM, Math.cos(a)*2.3, 2.2+Math.sin(a*2)*.25, Math.sin(a)*1.9-.3, {parent:head}); } }
-  else if(c.hair==='bun'){ cap(.48, hairM); add(sph(.8), hairM, 0,3.3,-.4, {parent:head}); }
-  else if(c.hair==='wavy'||c.hair==='longband'){ cap(.52, hairM); for(const s of [-1,1]) add(sph(1.1), hairM, s*2.5,-.2,-.9, {s:[.75,1.5,1], parent:head}); if(c.hair==='longband') add(new THREE.TorusGeometry(3.04,.22,8,48), M(c.bandColor||'#fff'), 0,1.5,0, {rx:Math.PI/2-.18, parent:head}); }
-  else cap(.48, hairM);
-  if(c.hair==='spiky') for(let i=-2;i<=2;i++) add(sph(.6), hairM, i*.95, 2.9, .5-Math.abs(i)*.15, {parent:head});
-  if(c.beard) add(new THREE.SphereGeometry(3.06,36,24,Math.PI*.1,Math.PI*.8,Math.PI*.56,Math.PI*.36), M(c.beardColor||'#333'), 0,-.1,0, {parent:head});
+  add(sph(.07), M(c.skinDark||'#a07050'), 0,-.06,.72, {s:[.75,1.35,.9], parent:head});
+  add(new THREE.TorusGeometry(.16,.022,8,24,Math.PI*.85), M('#8a3a3a'), 0,-.28,.66, {rz:Math.PI*1.075, parent:head});   // a calm slight smile
+  // hair
+  const cap=(r,len,y,z,mat)=>add(new THREE.SphereGeometry(r,32,20,0,Math.PI*2,0,Math.PI*(len+.08)), mat, 0,y+.02,z, {rx:-.12, s:[1,1.12,1], parent:head});
+  if(c.hair==='bald'||c.hair==='tuft'){ cap(.755,.3,.05,-.06, M(c.hairColor,{transparent:true,opacity:.45})); if(c.hair==='tuft') add(sph(.12), hairM, 0,.78,.25, {parent:head}); }
+  else if(c.hair==='mohawk'){ cap(.755,.48,.04,-.04, M(c.hairSide||'#222')); for(let i=-3;i<=3;i++) add(sph(.15), hairM, 0, .8-Math.abs(i)*.06, -i*.15, {parent:head}); }
+  else if(c.hair==='curly'){ cap(.76,.48,.04,-.04, hairM); for(let i=0;i<10;i++){ const a=i/10*Math.PI*2; add(sph(.2), hairM, Math.cos(a)*.56, .56+Math.sin(a*2)*.06, Math.sin(a)*.45-.08, {parent:head}); } }
+  else if(c.hair==='bun'){ cap(.76,.46,.04,-.04, hairM); add(sph(.2), hairM, 0,.82,-.12, {parent:head}); }
+  else if(c.hair==='wavy'||c.hair==='longband'){ cap(.765,.5,.04,-.04, hairM); for(const s of [-1,1]) add(sph(.28), hairM, s*.6,-.02,-.2, {s:[.8,1.5,1], parent:head}); if(c.hair==='longband') add(new THREE.TorusGeometry(.75,.05,8,40), M(c.bandColor||'#fff'), 0,.34,0, {rx:Math.PI/2-.18, parent:head}); }
+  else cap(.76,.46,.04,-.04, hairM);
+  if(c.hair==='spiky') for(let i=-2;i<=2;i++) add(sph(.14), hairM, i*.24, .74, .1-Math.abs(i)*.04, {parent:head});
+  if(c.beard) add(new THREE.SphereGeometry(.77,32,20,Math.PI*.18,Math.PI*.64,Math.PI*.62,Math.PI*.3), M(c.beardColor||'#333',{transparent:true,opacity:.75}), 0,-.03,0, {s:[1,1.12,1], parent:head});
   // podium
-  add(new THREE.CylinderGeometry(5.2,5.6,.9,48), M('#F5C400',{roughness:.5}), 0,-.5,0);
-  add(new THREE.CylinderGeometry(4.8,4.8,.14,48), M('#FFF3B8'), 0,0,0);
-  g.scale.set(.36,.36,.36);
+  add(new THREE.CylinderGeometry(1.7,1.9,.3,48), M('#F5C400',{roughness:.5}), 0,-.18,0);
+  add(new THREE.CylinderGeometry(1.55,1.55,.05,48), M('#FFF3B8'), 0,0,0);
+  g.scale.set(.95,.95,.95);
 }
 
 const BALL_SVG = `<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
