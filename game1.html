@@ -54,7 +54,8 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .btn.play{font-size:66px;padding:18px 70px 22px;border-radius:44px}
 
 /* ---------- home ---------- */
-#home .title{position:absolute;top:18px;right:40px;text-align:right;direction:ltr;font-size:50px}
+#home .title{position:absolute;top:18px;right:40px;text-align:right;direction:ltr;font-size:42px;white-space:nowrap}
+#home .title small{font-size:16px;margin-top:6px}
 #home .title small{text-align:right}
 /* home layout: title top-right, small tools top-left, my player in the middle, play column on the right, extras on the left */
 .home-top{position:absolute;top:26px;left:40px;display:flex;align-items:center;gap:8px}
@@ -304,22 +305,22 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #name-modal .btn:disabled{opacity:.5;cursor:not-allowed}
 /* ===== home, Brawl-style: top bar pills, podium with a turning player, the party beside me ===== */
 .home-top .pill{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:inherit;border:0;cursor:pointer;font-size:22px;font-weight:900;color:var(--navy);background:#fff;border-radius:18px;padding:6px 16px;box-shadow:0 5px 0 rgba(27,42,78,.3),0 8px 14px rgba(0,0,0,.15)}
-.home-top .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:4px 14px 6px;width:172px;align-items:stretch}
+.home-top .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:4px 12px 6px;width:158px;align-items:stretch}
 .home-top .pill.trophy #trophy-badge{font-size:26px;text-align:center}
 .home-top .pill.trophy .road{display:block;height:8px;border-radius:6px;background:rgba(27,42,78,.3);overflow:hidden}
 .home-top .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
 .home-top .pill.trophy .next{font-size:12px;text-align:center;white-space:nowrap;opacity:.9}
-.home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400);width:150px;justify-content:center;white-space:nowrap}
-.home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:17px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-top .pill.xp{background:linear-gradient(#FFE27A,#F5C400);width:128px;justify-content:center;white-space:nowrap;padding:6px 8px}
+.home-top .pill.me{background:linear-gradient(#E6F0FF,#BFD8FF);font-size:17px;width:132px;justify-content:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #xp-badge.pill{margin-inline-start:0}
 .hero{top:96px;width:340px}
 .hero .podium{position:absolute;left:50%;bottom:52px;width:300px;height:70px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#FFF3B8,#F5C400 70%,#C99A10);box-shadow:0 10px 0 #A87F0C,0 16px 22px rgba(0,0,0,.25);z-index:0}
-.hero .turntable{position:relative;width:250px;height:375px;margin:0 auto;transform-style:preserve-3d;transform:perspective(900px) rotateY(0);z-index:1;cursor:grab;touch-action:pan-y}
+.hero .turntable{position:relative;width:250px;height:375px;margin:0 auto;z-index:1}
 .hero .bobber{animation:bob 2.4s ease-in-out infinite}
 #hero3d{display:none;width:300px;height:420px;margin:16px auto -44px;cursor:grab;touch-action:pan-y}
 .hero.threed #hero3d{display:block}
 .hero.threed .turntable,.hero.threed .podium,.hero.threed .shadow{display:none}
-.hero .turntable .sprite{position:absolute;inset:0;width:250px;height:375px;margin:0;backface-visibility:hidden;animation:none}
+.hero .turntable .sprite{position:absolute;inset:0;width:250px;height:375px;margin:0}
 .hero .turntable .sprite.back{transform:rotateY(180deg) translateZ(14px)}
 .hero .turntable #home-sprite{transform:translateZ(14px)}
 /* the slabs between front and back give the figure real thickness when it turns */
@@ -466,6 +467,13 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #pk-goal{position:absolute;left:200px;top:110px;width:600px;height:310px}
 #pk-goal svg{width:100%;height:100%;display:block}
 #pk-keeper{position:absolute;left:440px;top:236px;width:120px;height:180px;transition:transform .32s ease-out;transform-origin:50% 95%;z-index:2;pointer-events:none}
+#pk-keeper .arm,#pk-shooter .arm{transform-box:view-box;transition:transform .22s ease-out}
+#pk-keeper .arm-l,#pk-shooter .arm-l{transform-origin:30px 74px}#pk-keeper .arm-r,#pk-shooter .arm-r{transform-origin:70px 74px}
+#pk-keeper.arms-up .arm-l{transform:rotate(150deg)}#pk-keeper.arms-up .arm-r{transform:rotate(-150deg)}
+#pk-keeper.arms-side.dive-l .arm-l{transform:rotate(100deg)}#pk-keeper.arms-side.dive-l .arm-r{transform:rotate(40deg)}
+#pk-keeper.arms-side.dive-r .arm-r{transform:rotate(-100deg)}#pk-keeper.arms-side.dive-r .arm-l{transform:rotate(-40deg)}
+#pk-keeper.arms-side.dive-c .arm-l{transform:rotate(60deg)}#pk-keeper.arms-side.dive-c .arm-r{transform:rotate(-60deg)}
+#pk-shooter.run .arm-l{transform:rotate(-70deg)}#pk-shooter.run .arm-r{transform:rotate(50deg)}
 #pk-shooter{position:absolute;left:300px;top:326px;width:108px;height:162px;z-index:2;pointer-events:none;transition:transform .22s ease-in}
 #pk-shooter.run{transform:translate(95px,18px)}
 #pk-shooter.run .leg-front{animation:kickA .3s ease-out}
@@ -533,6 +541,11 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .preview .shadow{width:180px;height:24px;margin:-16px auto 8px;border-radius:50%;background:rgba(0,0,0,.22)}
 .preview .name{font-size:34px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);margin-bottom:6px}
 .preview{top:70px}
+.ice-preview .ice-big{font-size:120px;line-height:1.1;filter:drop-shadow(0 0 18px #7ED3FF)}
+.ice-preview .hint{font-size:16px;color:#1B2A4E;max-width:380px;margin:4px auto}
+.ice-preview .ice-modes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 10px}
+.ice-preview .ice-modes .btn.small{font-size:16px;padding:6px 12px}
+.ice-preview .ice-modes .btn.on{outline:4px solid var(--yellow)}
 .preview .sprite{width:180px;height:270px}
 .preview .name{margin-bottom:4px;font-size:30px}
 .pstats{width:300px;margin:0 auto 6px;background:rgba(255,255,255,.55);border-radius:14px;padding:4px 10px}
@@ -733,8 +746,8 @@ body.touch #touch{display:block}
     <!-- centre: my player turning on a podium, with my team beside me -->
     <div class="hero">
       <div class="podium"></div>
-      <div class="bobber"><canvas id="hero3d" width="300" height="420"></canvas><div class="turntable" id="home-turntable"><div class="sprite slab s1"></div><div class="sprite slab s2"></div><div class="sprite slab s3"></div><div class="sprite" id="home-sprite"></div><div class="sprite back" id="home-sprite-back"></div></div>
-      </div><div class="turn-hint" id="turn-hint">↔ גרור כדי לסובב</div>
+      <div class="bobber"><div class="turntable" id="home-turntable"><div class="sprite" id="home-sprite"></div></div>
+      </div>
       <div class="shadow"></div>
       <div class="name" id="home-name"></div>
       <button class="btn blue small" id="btn-chars">🧑 החלף דמות</button>
@@ -784,6 +797,15 @@ body.touch #touch{display:block}
       <div class="pstats" id="preview-stats"></div>
       <button class="btn yellow" id="btn-choose">✔ בחר</button>
       <div class="hint" id="shop-hint" style="margin-top:10px;font-size:17px"></div>
+    </div>
+    <!-- the ice power: opened from its card in the gallery, chosen here like a character -->
+    <div class="preview ice-preview" id="ice-preview" hidden>
+      <div class="ice-big">❄️</div>
+      <div class="name" id="ice-pv-name">כוח הקרח</div>
+      <div class="hint" id="ice-pv-desc"></div>
+      <div class="hint" id="set-ice-l" style="margin-top:8px">מה הקרח עושה?</div>
+      <div class="v2opts ice-modes" id="set-ice"><button class="btn small blue on" data-mode="freeze">❄️ מקפיא יריב</button><button class="btn small blue" data-mode="goal">🧊 חומה על השער</button><button class="btn small red" data-mode="off">⛔ כבוי</button></div>
+      <button class="btn yellow" id="btn-ice-buy" hidden>🔓 קנה</button>
     </div>
   </section>
 
@@ -998,7 +1020,6 @@ body.touch #touch{display:block}
       <div class="setrow"><span id="set-name-l">👤 שם שחקן</span><input type="text" id="set-name" maxlength="14" placeholder="השם שלך" autocomplete="off" spellcheck="false"></div>
       <div class="name-status off" id="name-status"></div>
       <div class="setrow"><span id="set-voice-l">🎙️ קריין מדבר</span><label class="switch"><input type="checkbox" id="set-voice"><span></span></label></div>
-      <div class="setrow" id="set-ice-row"><span id="set-ice-l">❄️ כוח הקרח</span><div class="v2opts" id="set-ice"><button class="btn small blue on" data-mode="freeze">❄️ מקפיא יריב</button><button class="btn small blue" data-mode="goal">🧊 חומה על השער</button><button class="btn small red" data-mode="off">⛔ כבוי</button></div></div>
       <div class="setrow" style="justify-content:center"><span id="set-lang-l">🌍 שפה</span></div>
       <div class="langs" id="set-langs"></div>
       <br><button class="btn small blue" id="btn-settings-close">חזרה</button>
@@ -1198,7 +1219,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.12';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.13';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1469,6 +1490,7 @@ const I18N_RAW={
  'watch.pk':['🥅 פנדל! מחכים לבעיטה…','🥅 Penalty! Waiting for the kick…','🥅 ركلة جزاء! في انتظار التسديدة…','🥅 Пенальти! Ждём удар…'],
  'upd.new':['🆕 יש גרסה חדשה של המשחק, לחץ כאן לרענון','🆕 A new version is out, click here to reload','🆕 هناك إصدار جديد، اضغط هنا للتحديث','🆕 Вышла новая версия, нажми здесь, чтобы обновить'],
  'set.ice':['❄️ כוח הקרח','❄️ Ice power','❄️ قوة الجليد','❄️ Сила льда'],
+ 'ice.what':['מה הקרח עושה?','What does the ice do?','ماذا يفعل الجليد؟','Что делает лёд?'],
  'ice.m.freeze':['❄️ מקפיא יריב','❄️ Freeze opponent','❄️ تجميد الخصم','❄️ Заморозить соперника'],
  'ice.m.goal':['🧊 חומה על השער','🧊 Wall on my goal','🧊 جدار على مرماي','🧊 Стена на моих воротах'],
  'ice.m.off':['⛔ כבוי','⛔ Off','⛔ مطفأ','⛔ Выкл'],
@@ -1640,7 +1662,7 @@ const I18N_RAW={
  'lvl.5':['בלתי אפשרי','Impossible','مستحيل','Невозможно'],
  'level.doom':['☠️ הרמה הקשה ביותר שיש ☠️','☠️ The hardest level there is ☠️','☠️ أصعب مستوى على الإطلاق ☠️','☠️ Самый сложный уровень ☠️'],
  'ice.name':['❄️ כוח קרח','❄️ Ice Power','❄️ قوة الجليد','❄️ Сила льда'],
- 'ice.desc':['E במשחק: מקפיא את היריב לשנייה, או חומת קרח על השער שלך (לבחירה בהגדרות). טעינה 15 שניות. לתמיד!','Freezes the opponent for 1s. Press E. 15s cooldown. Yours forever!','يجمّد الخصم لثانية. زر E. إعادة تعبئة 15 ث. ملكك للأبد!','Замораживает соперника на 1 с. Клавиша E. Перезарядка 15 с. Навсегда!'],
+ 'ice.desc':['E במשחק: מקפיא את היריב לשנייה, או חומת קרח על השער שלך (בוחרים כאן). טעינה 15 שניות. לתמיד!','Freezes the opponent for 1s. Press E. 15s cooldown. Yours forever!','يجمّد الخصم لثانية. زر E. إعادة تعبئة 15 ث. ملكك للأبد!','Замораживает соперника на 1 с. Клавиша E. Перезарядка 15 с. Навсегда!'],
  'ice.confirm':['לקנות את כוח הקרח תמורת {0} XP? (לתמיד)','Buy the Ice Power for {0} XP? (permanent)','شراء قوة الجليد مقابل {0} XP؟ (دائمة)','Купить Силу льда за {0} XP? (навсегда)'],
  'ice.bought':['❄️ כוח הקרח שלך! לחץ E במשחק','❄️ Ice Power is yours! Press E in a match','❄️ قوة الجليد لك! اضغط E في المباراة','❄️ Сила льда твоя! Нажми E в матче'],
  'ice.owned':['✔ נקנה','✔ Owned','✔ تم الشراء','✔ Куплено'],
@@ -1937,7 +1959,7 @@ function playerSVG(c, mood='happy'){
     <rect x="30" y="103" width="40" height="19" rx="5" fill="url(#sh-${id})" stroke="${OL}" stroke-width="${ow}"/>
     <rect x="31" y="104" width="38" height="3.5" rx="1.5" fill="rgba(255,255,255,.35)"/>
     <path d="M34 108 v12 M66 108 v12" stroke="rgba(255,255,255,.55)" stroke-width="2"/>
-    ${arm(30,74,17,100)}${arm(70,74,83,100)}
+    <g class="arms"><g class="arm arm-l">${arm(30,74,17,100)}</g><g class="arm arm-r">${arm(70,74,83,100)}</g></g><!--/arms-->
     <path d="M30 66 L22 82 L31 86 L31 108 L69 108 L69 86 L78 82 L70 66 Q50 74 30 66Z" fill="url(#js-${id})" stroke="${OL}" stroke-width="${ow}" stroke-linejoin="round"/>
     ${stripes}${band}
     <path d="M22 82 L31 86 L34 79 L29 69Z" fill="rgba(0,0,0,.12)"/><path d="M78 82 L69 86 L66 79 L71 69Z" fill="rgba(0,0,0,.12)"/>
@@ -1982,7 +2004,7 @@ function playerBackSVG(c){
   return `<svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">${defs}
     ${leg(55)}${leg(35)}
     <rect x="30" y="103" width="40" height="19" rx="5" fill="url(#sh-${id})" stroke="${OL}" stroke-width="${ow}"/>
-    ${arm(30,74,17,100)}${arm(70,74,83,100)}
+    <g class="arms"><g class="arm arm-l">${arm(30,74,17,100)}</g><g class="arm arm-r">${arm(70,74,83,100)}</g></g><!--/arms-->
     <path d="M30 66 L22 82 L31 86 L31 108 L69 108 L69 86 L78 82 L70 66 Q50 60 30 66Z" fill="url(#js-${id})" stroke="${OL}" stroke-width="${ow}" stroke-linejoin="round"/>
     ${stripes}
     <path d="M22 82 L31 86 L34 79 L29 69Z" fill="rgba(0,0,0,.12)"/><path d="M78 82 L69 86 L66 79 L71 69Z" fill="rgba(0,0,0,.12)"/>
@@ -2253,12 +2275,12 @@ let previewIdx = 0;     // highlighted in the characters screen
 
 function refreshHome(){
   sprite($('#home-sprite'), CHARS[selected]);
-  const back=$('#home-sprite-back'); if(back) back.innerHTML=playerBackSVG(CHARS[selected]);
-  document.querySelectorAll('#home-turntable .slab').forEach(s=>{ s.innerHTML=playerSVG(CHARS[selected]); });
-  if(typeof h3!=='undefined' && h3) buildFigure3D(CHARS[selected]);
+
+
+
   if(typeof refreshChallengeBadge==='function') refreshChallengeBadge();
   $('#home-name').textContent = nm(CHARS[selected]);
-  const me=$('#home-me'); if(me){ const n=normName(settings.name); me.textContent = (n ? crown(n, isAdmin()) : T('mp.you')) + ' · ' + T(rankOf(prog.trophies|0)); }
+  const me=$('#home-me'); if(me){ me.textContent = (isAdmin() ? '👑 ' : '') + T(rankOf(prog.trophies|0)); }
   updateXpBadge();
   if(typeof refreshRoad==='function') refreshRoad();
   if(typeof partyRefresh==='function') partyRefresh();
@@ -2266,7 +2288,7 @@ function refreshHome(){
 
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo-l':'btn.ceo', '#btn-wa-link':'ceo.click', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#chal-title':'chal.title', '#btn-chal-close':'btn.back2', '#turn-hint':'home.turn', '#btn-fs':'home.fs', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#chal-title':'chal.title', '#btn-chal-close':'btn.back2', '#btn-fs':'home.fs', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
   '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn',
@@ -2286,7 +2308,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
-  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'set.ice', '#st-t-l':'stats.trophies', '#rotate span':'rotate', '#replay-tag':'replay',
+  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'ice.what', '#ice-pv-name':'ice.name', '#st-t-l':'stats.trophies', '#rotate span':'rotate', '#replay-tag':'replay',
   '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn',
   '#btn-train':'train.btn', '#train-title':'train.title', '#train-hint':'train.hint', '#btn-train-shoot':'train.shoot', '#btn-train-pk':'train.pk', '#btn-train-corner':'train.corner', '#btn-train-cancel':'btn.back2' };
 function applyLang(){
@@ -2353,7 +2375,7 @@ function buildGallery(){
   // ice power card (permanent power-up) at the top of the shop
   const ice=document.createElement('div'); ice.className='card icecard'+(prog.ice?' owned':''); ice.tabIndex=0;
   ice.innerHTML=`<div class="ico">❄️</div><div class="name">${T('ice.name')}</div><div class="desc">${T('ice.desc')}</div>${prog.ice?`<div class="lock" style="background:var(--green);color:#fff">${T('ice.owned')}</div>`:`<div class="lock">${T('shop.locked',fmtXp(ICE_PRICE))}</div>`}`;
-  ice.addEventListener('click', ()=>{ sfx.click(); if(!prog.ice) tryBuyIce(); else toast(T('ice.owned'),'xp'); });
+  ice.addEventListener('click', ()=>{ sfx.click(); openIcePanel(); });
   if(galFilter==='all') g.appendChild(ice);
   CHARS.forEach((c,i)=>{
     if(galFilter==='il' && !ISRAELI_IDS.includes(c.id)) return;
@@ -2371,6 +2393,7 @@ function buildGallery(){
   });
 }
 function refreshPreview(){
+  const ip=$('#ice-preview'); if(ip){ ip.hidden=true; $('#chars .preview:not(.ice-preview)').hidden=false; }
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', +c.dataset.i===previewIdx));
   const c=CHARS[previewIdx], locked=!isUnlocked(c);
   sprite($('#preview-sprite'), c);
@@ -3411,6 +3434,16 @@ function setupIceUI(){
 }
 $('#ice-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); iceQueued=true; });
 document.querySelectorAll('#set-ice .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); settings.iceMode=b.dataset.mode; saveSettings(); document.querySelectorAll('#set-ice .btn').forEach(x=>x.classList.toggle('on', x===b)); updateIceHud(); }));
+/* the ice panel on the character screen: pick what the power does, or buy it */
+function openIcePanel(){
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('icecard')));
+  $('#chars .preview:not(.ice-preview)').hidden=true; const p=$('#ice-preview'); p.hidden=false;
+  $('#ice-pv-desc').textContent=T('ice.desc');
+  $('#set-ice').hidden=!prog.ice; $('#set-ice-l').hidden=!prog.ice;
+  const buy=$('#btn-ice-buy'); buy.hidden=!!prog.ice; buy.textContent=T('shop.unlock', fmtXp(ICE_PRICE));
+  document.querySelectorAll('#set-ice .btn').forEach(b=>b.classList.toggle('on', b.dataset.mode===iceMode()));
+}
+$('#btn-ice-buy').addEventListener('click', ()=>{ sfx.click(); tryBuyIce(); if(prog.ice) openIcePanel(); });
 function tryBuyIce(){
   if(prog.ice) return;
   if(prog.xp<ICE_PRICE){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(ICE_PRICE)),'warn'); return; }
@@ -3516,7 +3549,7 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   else { t.textContent=T('end.draw'); sub.textContent=T(mp?'end.drawMp':'end.drawSub'); sfx.lose(); recordResult('d'); }
   // XP + achievements
   if(outcome==='win'){
-    prog.wins++; prog.streak++; addXP(mp ? 5 : [2,3,5,7,10,25][level ? level.i : 1]);   // harder level = more XP
+    prog.wins++; prog.streak++; addXP(mp ? 5 : [2,3,5,7,10,1000][level ? level.i : 1]);   // harder level = more XP; Impossible pays 1,000
     addTrophies(mp ? 2 : [1,1,1,2,2,3][level ? level.i : 1]);                          // trophies: 1 on easy levels, up to 3 on Impossible, 2 online
     challengeEvent('win'); if(!mp && level && level.i>=2) challengeEvent('winHard'); if(score.op===0) challengeEvent('clean'); if(v2) challengeEvent('v2win'); if(mp) challengeEvent('online'); if(dailyMatch) challengeEvent('daily');
     achieve('first_win'); if(prog.streak>=3) achieve('streak3'); if(prog.wins>=10) achieve('ten_wins');
@@ -4581,7 +4614,7 @@ function setupKick(meShoots){                    // reset positions and sprites,
   const shooterC = pk.single ? pk.chars.shooter : (meShoots ? CHARS[selected] : teamChar(pk.op,false));
   sprite($('#pk-keeper'), keeperC);
   sprite($('#pk-shooter'), shooterC);
-  $('#pk-keeper').style.transform='none';
+  $('#pk-keeper').style.transform='none'; $('#pk-keeper').classList.remove('arms-up','arms-side','dive-l','dive-r','dive-c');
   const ball=$('#pk-ball'); ball.style.transition='none'; ball.style.transform='none'; void ball.offsetWidth; ball.style.transition='';
   el.classList.remove('power','sight','hold');
   $('#pk-shooter').classList.remove('run');
@@ -4613,21 +4646,35 @@ function setupKick(meShoots){                    // reset positions and sprites,
 /* aiming: the sight sweeps left-right along the ground line; press and hold to raise it, release to shoot */
 const AIM_Y0=392;
 const aimAt   = t => ({ x:500+345*Math.sin(t*2.3*pk.lv.aimSpeed), y:AIM_Y0 });
-const riseAt  = t => Math.max(40, AIM_Y0 - t*290*pk.lv.powerSpeed);          // held time → sight height (goes above the bar if held too long)
+const riseAt  = t => Math.max(40, AIM_Y0 - t*115*pk.lv.powerSpeed);          // held time → sight height (goes above the bar if held too long)
 const sinceT0 = () => (performance.now()-pk.t0)/1000;
 function placeCross(){ const c=$('#pk-cross'); c.style.left=pk.aim.x+'px'; c.style.top=pk.aim.y+'px'; }
 function aimLoop(){
   if(!pk) return;
   if(pk.phase==='aim'){ pk.aim=aimAt(sinceT0()); placeCross(); }
-  else if(pk.phase==='hold'){ pk.aim.y=riseAt((performance.now()-pk.holdT0)/1000); placeCross(); }
+  else if(pk.phase==='hold'){ pk.aim.x=aimAt(sinceT0()).x; pk.aim.y=riseAt((performance.now()-pk.holdT0)/1000); placeCross(); }   // still sweeping sideways while it rises
   else return;
   pk.raf=requestAnimationFrame(aimLoop);
 }
 function keeperDive(z){
+  const k=$('#pk-keeper'); k.classList.remove('arms-up','arms-side','dive-l','dive-r','dive-c'); void k.offsetWidth; k.classList.add(z.row===0?'arms-up':'arms-side', z.col===0?'dive-l':z.col===2?'dive-r':'dive-c');
   const tx=(z.col-1)*185, ty=z.row===0?-84:8, rot=(z.col-1)*32;
   $('#pk-keeper').style.transform=`translate(${tx}px,${ty}px) rotate(${rot}deg)`;
 }
 function ballTo(p){ $('#pk-ball').style.transform=`translate(${p.x-517}px,${p.y-500}px) scale(.55)`; }
+/* a shot flies on an arc: it lifts off the spot, peaks, and drops to the target while shrinking into the distance and spinning */
+function ballFly(p, ms=480){
+  const b=$('#pk-ball'), from={x:517,y:500}, t0=performance.now();
+  const lift = p.y<from.y-60 ? (from.y-p.y)*.35+50 : 30;
+  b.style.transition='none';
+  const step=()=>{
+    const u=Math.min(1,(performance.now()-t0)/ms), e=1-Math.pow(1-u,2);
+    const x=from.x+(p.x-from.x)*e, y=from.y+(p.y-from.y)*e - lift*4*u*(1-u), sc=1-.45*e;
+    b.style.transform=`translate(${x-517}px,${y-500}px) scale(${sc.toFixed(3)}) rotate(${Math.round(u*720)}deg)`;
+    if(u<1) requestAnimationFrame(step); else b.style.transition='';
+  };
+  step();
+}
 function flash(txt){ const f=$('#pk-msg'); f.textContent=txt; f.classList.remove('show'); void f.offsetWidth; f.classList.add('show'); }
 const pointZone = (x,y) => ({col:clamp(Math.floor((x-PKG.x)/200),0,2), row:y<265?0:1});
 function startHold(){                                // press: lock the direction, start raising the sight
@@ -4648,7 +4695,7 @@ function userShoot(){                                // release: shoot at the si
   const readP = weak ? Math.min(1, pk.readP+.55) : pk.readP;
   const kz = Math.random()<readP ? zone : randomZone();
   $('#pk-hint').textContent='';
-  sfx.kick(); setTimeout(()=>{ keeperDive(kz); ballTo({x, y: over ? PKG.y-50 : Math.min(y, PKG.y+PKG.h-24)}); }, 160);
+  sfx.kick(); setTimeout(()=>{ keeperDive(kz); ballFly({x, y: over ? PKG.y-50 : Math.min(y, PKG.y+PKG.h-24)}, weak ? 620 : 460); }, 160);
   setTimeout(()=>{
     let goal;
     if(over){ goal=false; flash(T('pk.over')); sfx.miss(); }
@@ -4671,7 +4718,7 @@ function aiShoot(){
   pk.phase='fly'; $('#pk').classList.remove('keeping','sight'); $('#pk-cross').classList.remove('sight');
   const miss=pk.shotMiss, z=pk.shotZone, c=zoneCenter(z), d=pk.dive;
   const target = miss ? { x:c.x+(z.col===0?-110:z.col===2?110:0), y: z.row===0 ? PKG.y-46 : c.y } : c;
-  sfx.kick(); ballTo(target);
+  sfx.kick(); ballFly(target, 460);
   setTimeout(()=>{
     let goal;
     const same = d && d.zone.col===z.col && d.zone.row===z.row;
@@ -4851,7 +4898,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 ['pointerup','pointercancel'].forEach(t=>$('#pk').addEventListener(t, e=>{ if(pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); } }));
 
 /* ---------- init ---------- */
-buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); heroDragSetup(); setTimeout(initHero3D, 500); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
+buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
 setTimeout(registerPresence, 800);              // go online under your player name (if one is set)
 </script>
 </body>
