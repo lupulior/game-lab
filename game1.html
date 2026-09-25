@@ -240,6 +240,65 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #set-ice-row{flex-wrap:wrap;gap:8px}
 #set-ice .btn.small{font-size:15px;padding:5px 10px}
 #set-ice .btn.on{outline:4px solid var(--yellow)}
+/* screen and overlay transitions */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.screen.active{animation:fadeIn .22s ease-out}
+.overlay.show{animation:fadeIn .18s ease-out}
+/* end-of-match card */
+#end .panel{min-width:520px}
+#end .panel h2{font-size:64px}
+#end-score{font-size:74px;font-weight:900;color:var(--navy);line-height:1;display:flex;justify-content:center;gap:18px;direction:ltr;margin:2px 0 6px}
+#end-score .me{color:var(--blue)}#end-score .op{color:var(--red)}#end-score .dash{color:#8a93a8}
+#end-stars{font-size:44px;line-height:1;margin-bottom:6px;letter-spacing:6px}
+#end-stars span{display:inline-block;filter:grayscale(1);opacity:.35;transform:scale(.8)}
+#end-stars span.on{filter:none;opacity:1;animation:starPop .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes starPop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+#end-xp{font-size:26px;font-weight:900;color:#1B7F3B;background:#DDF7E4;border-radius:14px;padding:4px 18px;display:inline-block;margin:4px 0 8px}
+#end-btns{margin-top:6px}#end-btns .btn{font-size:26px;padding:10px 26px}
+/* level cards */
+.levels{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.lvcard{flex-direction:column;gap:2px;width:148px;padding:6px 8px 8px;border-radius:20px;line-height:1.1;text-align:center}
+.lvcard .lvico{font-size:32px;line-height:1}
+.lvcard .lvname{font-size:21px}
+.lvcard .lvgoals{font-size:14px;opacity:.95;margin-bottom:4px}
+.lvbar{display:flex;align-items:center;gap:6px;width:100%;font-size:12px;font-weight:900;direction:rtl}
+.lvbar span{width:44px;text-align:end;opacity:.95}
+.lvbar i{flex:1;height:8px;background:rgba(0,0,0,.25);border-radius:6px;overflow:hidden;display:block}
+.lvbar b{display:block;height:100%;background:#fff;border-radius:6px}
+#level-modal .panel{max-width:940px;padding:14px 30px 16px}
+#level-modal .hint{font-size:14px;margin-top:6px}
+/* goal flash: light streak and the scorer's name */
+#goal-flash::before{content:"";position:absolute;left:-60%;top:40%;width:220%;height:22%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);transform:skewX(-20deg);opacity:0;pointer-events:none}
+#goal-flash.show::before{animation:streak .9s .15s ease-out}
+@keyframes streak{0%{opacity:0;transform:translateX(-40%) skewX(-20deg)}30%{opacity:1}100%{opacity:0;transform:translateX(40%) skewX(-20deg)}}
+#goal-scorer{position:absolute;left:50%;top:62%;transform:translate(-50%,-50%) scale(0);font-size:34px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);text-shadow:0 4px 0 var(--navy);white-space:nowrap;z-index:7;pointer-events:none}
+#goal-scorer.show{animation:scorerPop 1.9s .25s ease-out both}
+@keyframes scorerPop{0%{transform:translate(-50%,-50%) scale(0)}20%{transform:translate(-50%,-50%) scale(1.1)}30%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+/* character gallery: filter chips and badges */
+.gal-filter{position:absolute;left:34px;top:92px;width:428px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;z-index:2}
+.gal-filter .btn.small{font-size:15px;padding:5px 12px}
+.gal-filter .btn.on{outline:4px solid var(--yellow)}
+.gallery{top:138px;height:452px}
+.card .badge{position:absolute;top:6px;font-size:13px;font-weight:900;border-radius:10px;padding:2px 7px;z-index:2}
+.card .badge.new{right:6px;background:var(--red);color:#fff}
+.card .badge.il{left:6px;background:#fff;border:2px solid var(--blue);font-size:16px;padding:0 5px}
+/* multiplayer lobby illustrations and the big code */
+.mp-card .mp-ico{font-size:54px;line-height:1.1;margin-bottom:2px}
+#mp-pick-code{display:flex;align-items:center;gap:10px;font-size:22px;padding:6px 14px}
+#mp-pick-code .code{font-size:38px;letter-spacing:6px;color:var(--navy)}
+#mp-pick-code .btn.small{font-size:15px;padding:5px 12px}
+/* cup: prominent country names, gold frame on my team, spinning trophy */
+.team .n{display:block;font-size:14px;color:var(--navy);margin-top:2px}
+.team.mine{border-color:#F5C400;box-shadow:0 0 0 3px #FFD447,0 5px 0 rgba(27,42,78,.22),0 0 18px rgba(255,212,71,.8)}
+#cup h2::before{content:"🏆";display:inline-block;margin-inline-end:8px;animation:spinY 3s linear infinite}
+@keyframes spinY{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+/* crowd hype meter */
+#hype{position:absolute;left:0;top:78px;width:100%;height:6px;background:rgba(0,0,0,.35);z-index:2}
+#hype-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,#3FC35F,#FFD447,#F04E4E);transition:width .15s linear;box-shadow:0 0 8px rgba(255,212,71,.8)}
+#fans.hype .fan{animation-duration:.4s!important}
+/* first-visit name prompt */
+#name-input{font-family:inherit;font-weight:900;font-size:30px;text-align:center;padding:8px 16px;border-radius:16px;border:4px solid var(--blue);width:360px;max-width:90%;margin:10px 0}
+#name-modal .btn:disabled{opacity:.5;cursor:not-allowed}
 #watch-hold{position:absolute;left:50%;top:180px;transform:translateX(-50%);z-index:8;font-size:34px;font-weight:900;color:#fff;background:rgba(27,42,78,.85);border-radius:22px;padding:12px 30px;white-space:nowrap;box-shadow:0 8px 0 rgba(0,0,0,.25)}
 .fm-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .fm-badges .bd{font-size:26px;width:44px;height:44px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(27,42,78,.2);filter:grayscale(1);opacity:.35}
@@ -386,7 +445,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 /* ---------- characters ---------- */
 #chars h2{position:absolute;top:26px;right:40px}
 #btn-back{position:absolute;top:26px;left:34px}
-.gallery{position:absolute;left:34px;top:100px;width:428px;height:490px;overflow-y:auto;overflow-x:hidden;padding:8px;
+.gallery{position:absolute;left:34px;top:138px;width:428px;height:452px;overflow-y:auto;overflow-x:hidden;padding:8px;
   background:rgba(255,255,255,.35);border-radius:22px;scrollbar-width:thin;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start;direction:ltr}
 .gallery::-webkit-scrollbar{width:8px}.gallery::-webkit-scrollbar-thumb{background:rgba(27,42,78,.4);border-radius:8px}
 .card{width:192px;height:196px;border-radius:20px;background:#fff;border:6px solid #fff;cursor:pointer;direction:rtl;
@@ -545,11 +604,11 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .panel{background:#fff;border-radius:34px;padding:30px 44px;text-align:center;box-shadow:0 16px 0 rgba(0,0,0,.25);max-width:760px}
 .panel h2{color:var(--navy);-webkit-text-stroke:0;text-shadow:none;margin-bottom:16px}
 .panel .levels{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:18px}
-#levels .btn{flex-direction:column;gap:0;line-height:1.05;padding:10px 30px}
+#levels .btn{flex-direction:column;gap:2px;line-height:1.1;padding:6px 8px 8px}
 #levels .btn small{font-size:15px;font-weight:900;opacity:.9}
 .panel .hint{font-size:20px;font-weight:700;color:#5b6a8a;line-height:1.6}
 .panel kbd{display:inline-block;background:var(--navy);color:#fff;border-radius:8px;padding:2px 10px;font-family:inherit;font-size:18px;margin:0 3px;direction:ltr}
-#end .panel h2{font-size:80px;line-height:1.1;margin-bottom:6px}
+#end .panel h2{font-size:60px;line-height:1.1;margin-bottom:2px}
 #end .sub{font-size:26px;font-weight:900;color:#5b6a8a}
 #exit-modal .sprite{width:180px;height:270px;margin:0 auto 10px}
 
@@ -634,6 +693,7 @@ body.touch #touch{display:block}
   <section id="chars" class="screen">
     <h2>בחרו דמות</h2>
     <button class="btn blue small" id="btn-back">➜ חזרה</button>
+    <div class="gal-filter" id="gal-filter"><button class="btn small blue on" data-f="all">הכול</button><button class="btn small blue" data-f="il">🇮🇱 ישראלים</button><button class="btn small blue" data-f="legend">🏆 אגדות</button><button class="btn small blue" data-f="free">🆓 חינם</button></div>
     <div class="gallery" id="gallery"></div>
     <div class="preview">
       <div class="sprite" id="preview-sprite"></div>
@@ -670,6 +730,7 @@ body.touch #touch{display:block}
   <section id="game" class="screen">
     <div id="world"><div id="arena">
     <div id="fans"></div>
+    <div id="hype"><i id="hype-fill"></i></div>
     <div id="pitch"></div>
     <div id="daily-fx" hidden><div class="beam l"></div><div class="beam r"></div><div class="banner">🏟️ המשחק היומי</div></div>
     <div class="pshadow" id="sh1"></div><div class="pshadow" id="sh2"></div><div class="pshadow" id="shb"></div>
@@ -697,11 +758,20 @@ body.touch #touch{display:block}
     </div>
     <canvas id="confetti" width="1000" height="620"></canvas>
     <div id="goal-flash">גול!!!</div>
+    <div id="goal-scorer"></div>
     <div id="touch">
       <div class="grp move" id="tmove"><div class="tb" data-k="left">◀</div><div class="tb" data-k="right">▶</div></div>
       <div class="grp act"><div class="tb ice" data-k="ice" hidden>❄️</div><div class="tb slide" data-k="slide">🦵</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
     </div>
-    <div class="overlay" id="end"><div class="panel"><h2 id="end-title"></h2><div class="sub" id="end-sub"></div><div id="end-actions" hidden><button class="btn green" id="btn-end-invite">🎮 הזמן למשחק</button> <button class="btn small blue" id="btn-end-home">חזרה</button></div></div></div>
+    <div class="overlay" id="end"><div class="panel">
+      <h2 id="end-title"></h2>
+      <div id="end-score"><span class="me">0</span><span class="dash">-</span><span class="op">0</span></div>
+      <div id="end-stars"><span>⭐</span><span>⭐</span><span>⭐</span></div>
+      <div class="sub" id="end-sub"></div>
+      <div id="end-xp" hidden></div>
+      <div id="end-btns"><button class="btn green" id="btn-end-again">🔄 שוב</button> <button class="btn blue" id="btn-end-home2">🏠 בית</button></div>
+      <div id="end-actions" hidden><button class="btn green" id="btn-end-invite">🎮 הזמן למשחק</button> <button class="btn small blue" id="btn-end-home">חזרה</button></div>
+    </div></div>
   </section>
 
   <!-- ===== MULTIPLAYER ===== -->
@@ -710,19 +780,19 @@ body.touch #touch{display:block}
     <button class="btn blue small" id="btn-mp-back">➜ חזרה</button>
     <div id="mp-lobby">
       <div class="mp-card">
-        <h3>🔑 צור משחק</h3>
+        <div class="mp-ico">🎟️</div><h3>🔑 צור משחק</h3>
         <p>קבל קוד ושלח אותו לחבר</p>
         <button class="btn green" id="btn-mp-host">קבל קוד</button>
         <div id="mp-code" hidden><div class="code" id="mp-code-text"></div><div class="wait">מחכה שהחבר יכניס את הקוד… ⏳</div></div>
       </div>
       <div class="mp-card">
-        <h3>🚀 הצטרף למשחק</h3>
+        <div class="mp-ico">🚪</div><h3>🚀 הצטרף למשחק</h3>
         <p>הכנס את הקוד שקיבלת מהחבר</p>
         <input id="mp-input" maxlength="4" placeholder="ABCD" autocomplete="off" spellcheck="false">
         <button class="btn orange" id="btn-mp-join">הצטרף</button>
       </div>
       <div class="mp-card">
-        <h3 id="mp-friends-h">👥 חברים</h3>
+        <div class="mp-ico">🧑‍🤝‍🧑</div><h3 id="mp-friends-h">👥 חברים</h3>
         <p id="mp-friends-p">הזמן חבר מהרשימה, בלי קוד</p>
         <button class="btn pink" id="btn-mp-friends">לרשימת החברים</button>
       </div>
@@ -919,6 +989,16 @@ body.touch #touch{display:block}
     </div>
   </div>
 
+  <!-- ===== NAME PROMPT (first visit) ===== -->
+  <div class="overlay" id="name-modal">
+    <div class="panel">
+      <h2 id="name-title">👤 מה השם שלך?</h2>
+      <div class="hint" id="name-hint">השם מופיע לחברים ובטבלת המובילים</div>
+      <input id="name-input" maxlength="14" placeholder="השם שלך" autocomplete="off" spellcheck="false">
+      <br><button class="btn green" id="btn-name-go" disabled>המשך ▶</button>
+    </div>
+  </div>
+
   <!-- ===== ADMIN PANEL ===== -->
   <div class="overlay" id="admin-modal">
     <div class="panel adm-panel">
@@ -1003,7 +1083,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-24.2';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.1';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1277,6 +1357,26 @@ const I18N_RAW={
  'ice.m.goal':['🧊 חומה על השער','🧊 Wall on my goal','🧊 جدار على مرماي','🧊 Стена на моих воротах'],
  'ice.m.off':['⛔ כבוי','⛔ Off','⛔ مطفأ','⛔ Выкл'],
  'c.iceGoal':['🎙️ 🧊 חומת קרח על השער! אי אפשר להבקיע!','🎙️ 🧊 A wall of ice on the goal! Nothing gets through!','🎙️ 🧊 جدار من الجليد على المرمى! لا شيء يمر!','🎙️ 🧊 Ледяная стена на воротах! Ничего не пройдёт!'],
+ 'end.again':['🔄 שוב','🔄 Again','🔄 مرة أخرى','🔄 Ещё раз'],
+ 'end.more':['🔄 עוד משחק','🔄 Another game','🔄 لعبة أخرى','🔄 Ещё игра'],
+ 'end.home':['🏠 בית','🏠 Home','🏠 الرئيسية','🏠 Домой'],
+ 'end.xp':['⭐ +{0} XP','⭐ +{0} XP','⭐ +{0} XP','⭐ +{0} XP'],
+ 'level.goalsToWin':['{0} גולים לניצחון','{0} goals to win','{0} أهداف للفوز','{0} гола для победы'],
+ 'level.brain':['חוכמה','Brain','ذكاء','Ум'],
+ 'goal.own':['גול עצמי – {0}','Own goal – {0}','هدف عكسي – {0}','Автогол – {0}'],
+ 'gal.all':['הכול','All','الكل','Все'],
+ 'gal.il':['🇮🇱 ישראלים','🇮🇱 Israelis','🇮🇱 إسرائيليون','🇮🇱 Израильтяне'],
+ 'gal.legend':['🏆 אגדות','🏆 Legends','🏆 أساطير','🏆 Легенды'],
+ 'gal.free':['🆓 חינם','🆓 Free','🆓 مجاني','🆓 Бесплатно'],
+ 'gal.new':['🆕 חדש','🆕 New','🆕 جديد','🆕 Новый'],
+ 'mp.codeLbl':['🔑 הקוד שלך:','🔑 Your code:','🔑 رمزك:','🔑 Твой код:'],
+ 'mp.copy':['📋 העתק','📋 Copy','📋 نسخ','📋 Копировать'],
+ 'mp.copied':['הקוד {0} הועתק ✔','Code {0} copied ✔','تم نسخ الرمز {0} ✔','Код {0} скопирован ✔'],
+ 'name.ask':['👤 מה השם שלך?','👤 What is your name?','👤 ما اسمك؟','👤 Как тебя зовут?'],
+ 'name.hint':['השם מופיע לחברים ובטבלת המובילים','Friends and the leaderboard will see this name','يظهر الاسم للأصدقاء وفي جدول المتصدرين','Это имя увидят друзья и таблица лидеров'],
+ 'name.ph':['השם שלך','Your name','اسمك','Твоё имя'],
+ 'name.go':['המשך ▶','Continue ▶','متابعة ▶','Продолжить ▶'],
+ 'name.saved':['ברוך הבא, {0}! 👋','Welcome, {0}! 👋','أهلاً بك، {0}! 👋','Добро пожаловать, {0}! 👋'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
  'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
@@ -1809,7 +1909,7 @@ function refreshHome(){
 
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo':'btn.ceo', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=legend]':'gal.legend', '#gal-filter [data-f=free]':'gal.free', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
   '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa', '#ceo-wa-none':'ceo.waNone',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn',
@@ -1835,7 +1935,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=LANGS[lang].dir;
   for(const [sel,key] of Object.entries(STATIC_I18N)){ const el=$(sel); if(!el) continue; if(el.classList.contains('icon-btn') || el.id==='btn-pause' || el.id==='btn-pk-pause') el.title=T(key); else el.innerHTML=T(key); }
-  document.querySelectorAll('#levels .btn').forEach((b,i)=>b.innerHTML=`${LEVELS[i].color==='doom'?'☠️ ':''}${T('lvl.'+i)}<small>${LEVELS[i].goals} ⚽</small>`);
+  buildLevels();
   document.querySelectorAll('#pk-levels .btn').forEach((b,i)=>b.textContent=(PK_LEVELS[i].color==='doom'?'☠️ ':'')+T('lvl.'+i));
   document.querySelectorAll('.doom-sep').forEach(d=>d.textContent=T('level.doom'));
   document.querySelectorAll('#v2-modal .v2opts[data-slot] .btn').forEach(b=>b.textContent=T('v2.src.'+b.dataset.src));
@@ -1886,18 +1986,27 @@ $('#btn-music-back').addEventListener('click', ()=>{ sfx.click(); showScreen('ho
 $('#btn-music-off').addEventListener('click', ()=>{ sfx.click(); settings.track=null; saveSettings(); music.stop(); buildMusicList(); });
 
 /* ---------- characters screen ---------- */
+const ISRAELI_IDS=['khalaili','zahavi','benayoun','revivo','berkovic','solomon','gloukh','dabbur','spiegler'];
+const LEGEND_IDS=['pele','maradona','zidane','ronaldinho','cruyff','r9','beckham','henry','baggio','spiegler','revivo','berkovic','benayoun','iniesta','xavi','gerrard','rooney','drogba'];
+const NEW_IDS=['khalaili','zahavi','benayoun','revivo','berkovic','solomon','gloukh','dabbur','spiegler'];
+let galFilter='all';
+document.querySelectorAll('#gal-filter .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); galFilter=b.dataset.f; document.querySelectorAll('#gal-filter .btn').forEach(x=>x.classList.toggle('on', x===b)); buildGallery(); }));
 function buildGallery(){
   const g = $('#gallery'); g.innerHTML='';
   // ice power card (permanent power-up) at the top of the shop
   const ice=document.createElement('div'); ice.className='card icecard'+(prog.ice?' owned':''); ice.tabIndex=0;
   ice.innerHTML=`<div class="ico">❄️</div><div class="name">${T('ice.name')}</div><div class="desc">${T('ice.desc')}</div>${prog.ice?`<div class="lock" style="background:var(--green);color:#fff">${T('ice.owned')}</div>`:`<div class="lock">${T('shop.locked',fmtXp(ICE_PRICE))}</div>`}`;
   ice.addEventListener('click', ()=>{ sfx.click(); if(!prog.ice) tryBuyIce(); else toast(T('ice.owned'),'xp'); });
-  g.appendChild(ice);
+  if(galFilter==='all') g.appendChild(ice);
   CHARS.forEach((c,i)=>{
+    if(galFilter==='il' && !ISRAELI_IDS.includes(c.id)) return;
+    if(galFilter==='legend' && !LEGEND_IDS.includes(c.id)) return;
+    if(galFilter==='free' && !FREE_CHARS.includes(c.id)) return;
     const card = document.createElement('div');
     card.className='card'; card.tabIndex=0; card.dataset.i=i;
     const locked=!isUnlocked(c); if(locked) card.classList.add('locked');
-    card.innerHTML = `<div class="sprite">${playerSVG(c)}</div><div class="name">${nm(c)}</div>${locked?`<div class="lock">${T('shop.locked',fmtXp(priceOf(c)))}</div>`:''}`;
+    const badges = (NEW_IDS.includes(c.id) ? `<span class="badge new">${T('gal.new')}</span>` : '') + (ISRAELI_IDS.includes(c.id) ? `<span class="badge il">🇮🇱</span>` : '');
+    card.innerHTML = `${badges}<div class="sprite">${playerSVG(c)}</div><div class="name">${nm(c)}</div>${locked?`<div class="lock">${T('shop.locked',fmtXp(priceOf(c)))}</div>`:''}`;
     const pick = ()=>{ sfx.click(); previewIdx=i; refreshPreview(); };
     card.addEventListener('click', pick);
     card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
@@ -1952,17 +2061,22 @@ const LEVELS = [
   { name:'מאסטר', color:'purple', speed:1.38,react:.05, kick:1,   jump:1,   err:0,   power:1.05,smart:1,   goals:7 },
   { name:'בלתי אפשרי', color:'doom', speed:1.65,react:.02, kick:1,   jump:1,   err:0,   power:1.18,smart:1,   goals:10 },   // nearly impossible
 ];
-(function buildLevels(){
-  const box=$('#levels');
+/* level cards: colour, icon, goals to win and how strong the computer is (speed / kick / brain) */
+const LEVEL_ICON=['🌱','😊','🔥','🤪','👑','☠️'];
+function buildLevels(){
+  const box=$('#levels'); box.innerHTML='';
+  const bar=(k,v)=>`<div class="lvbar"><span>${T(k)}</span><i><b style="width:${Math.round(Math.min(1,v)*100)}%"></b></i></div>`;
   LEVELS.forEach((L,i)=>{
     L.i=i;
     const b=document.createElement('button');
     if(L.color==='doom'){ const sep=document.createElement('div'); sep.className='doom-sep'; sep.textContent=T('level.doom'); box.appendChild(sep); }
-    b.className=`btn ${L.color}`; b.innerHTML=`${L.color==='doom'?'☠️ ':''}${T('lvl.'+i)}<small>${L.goals} ⚽</small>`;
+    b.className=`btn lvcard ${L.color}`;
+    b.innerHTML=`<div class="lvico">${LEVEL_ICON[i]}</div><div class="lvname">${T('lvl.'+i)}</div><div class="lvgoals">${T('level.goalsToWin', L.goals)}</div>${bar('st.speed', L.speed/1.65)}${bar('st.power', (L.kick+L.power)/2.2)}${bar('level.brain', L.smart)}`;
     b.addEventListener('click', ()=>{ sfx.click(); $('#level-modal').classList.remove('show'); startGame(i); });
     box.appendChild(b);
   });
-})();
+}
+buildLevels();
 $('#btn-play').addEventListener('click', ()=>{ sfx.click(); v2Pending=null; $('#level-modal').classList.add('show'); });
 
 /* ---------- wins record (saved in this browser) ---------- */
@@ -2478,8 +2592,23 @@ document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkUp
 (function buildIntro(){
   const box=$('#runners'); if(!box) return;
   [0,1,2,3,5].forEach((ci,k)=>{ const d=document.createElement('div'); d.className='rn'; d.style.animationDelay=(-k*1.4)+'s'; d.innerHTML=playerSVG(CHARS[ci]); box.appendChild(d); });
-  $('#intro').addEventListener('pointerdown', ()=>{ sfx.click(); goFullscreen(); showScreen('home'); });
+  $('#intro').addEventListener('pointerdown', ()=>{ sfx.click(); goFullscreen(); showScreen('home'); askNameIfMissing(); });
 })();
+/* nobody plays nameless: the first time in, we ask for a name before anything else */
+function askNameIfMissing(){
+  if(normName(settings.name)) return;
+  const inp=$('#name-input'); inp.value=''; inp.placeholder=T('name.ph'); $('#btn-name-go').disabled=true;
+  $('#name-modal').classList.add('show'); setTimeout(()=>inp.focus(), 80);
+}
+function submitName(){
+  const n=normName($('#name-input').value); if(n.length<2) return;
+  settings.name=n; saveSettings(); $('#name-modal').classList.remove('show'); sfx.win();
+  const si=$('#set-name'); if(si) si.value=n;
+  registerPresence(); updatePresenceUI(); fbHeartbeat(true); toast(T('name.saved', n),'ach');
+}
+$('#name-input').addEventListener('input', e=>{ $('#btn-name-go').disabled = normName(e.target.value).length<2; });
+$('#name-input').addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') submitName(); });
+$('#btn-name-go').addEventListener('click', ()=>{ sfx.click(); submitName(); });
 $('#btn-stats-close').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); });
 $('#btn-stats-reset').addEventListener('click', ()=>{ sfx.click(); if(confirm(T('stats.confirm'))){ saveStats({w:0,d:0,l:0,c:0}); showStats(); } });
 $('#btn-level-cancel').addEventListener('click', ()=>{ sfx.click(); v2Pending=null; $('#level-modal').classList.remove('show'); });
@@ -2816,6 +2945,8 @@ function beginMatch(c1, c2, opts){
   } else state='countdown';                       // guests and spectators follow the host's countdown events
   if(!spectating && spectators.length){ const m=matchSetupMsg(); for(const s of spectators){ try{ s.send(m); }catch(e){} } }   // friends watching me (host or guest): here is the new match
   $('#watch-hold').hidden=true;
+  hype=0; updateHype(0);
+  if(!mp && !spectating && !solo) lastMatch={c1, c2, opts, level, daily:!!dailyMatch};
   fbHeartbeat();
 }
 /* ---------- 3-2-1 countdown before kick-off ---------- */
@@ -3004,6 +3135,7 @@ function goHome(){
 
 function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from the local player's point of view
   state='end';
+  const xp0=prog.xp;
   const t=$('#end-title'), sub=$('#end-sub');
   if(outcome==='win'){ t.textContent=T('end.win'); sub.textContent=T(mp?'end.winMp':'end.winSub'); sfx.win(); confetti.burst(260); $('#fans').classList.add('cheer'); recordResult('w'); }
   else if(outcome==='lose'){ t.textContent=T('end.lose'); sub.textContent=T(mp?'end.loseMp':'end.loseSub'); sfx.lose(); recordResult('l'); }
@@ -3020,9 +3152,22 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   dailyMatch=false; saveProg();
   say(outcome==='win' ? 'c.endWin' : outcome==='lose' ? 'c.endLose' : 'c.endDraw', score.me, score.op);
   updateTimer();
+  // the result card: score, stars for the achievement, XP earned, and what to do next
+  $('#end-score .me').textContent=score.me; $('#end-score .op').textContent=score.op;
+  const stars = outcome==='win' ? (score.op===0 || score.me-score.op>=3 ? 3 : 2) : outcome==='draw' ? 1 : 0;
+  $('#end-stars').querySelectorAll('span').forEach((s,i)=>{ s.classList.toggle('on', i<stars); s.style.animationDelay=(.3+i*.25)+'s'; });
+  const gained=prog.xp-xp0; $('#end-xp').hidden=gained<=0; $('#end-xp').textContent=T('end.xp', gained);
+  $('#btn-end-again').textContent = mp ? T('end.more') : T('end.again'); $('#end-btns').hidden=false; $('#end-actions').hidden=true;
   $('#end').classList.add('show');
-  clearTimeout(endTimer); endTimer=setTimeout(goHome, 3000);
+  clearTimeout(endTimer);
 }
+let lastMatch=null;                              // how the last offline match was started, so "again" can replay it
+$('#btn-end-again').addEventListener('click', ()=>{
+  sfx.click(); const m=lastMatch; goHome();
+  if(mp) return;                                  // online: back to the character screen for a rematch
+  if(m){ level=m.level; dailyMatch=m.daily; forcedOpp=null; beginMatch(m.c1, m.c2, m.opts); }
+});
+$('#btn-end-home2').addEventListener('click', ()=>{ sfx.click(); goHome(); if(mp){ mpTeardown(); showScreen('home'); } });
 function endGame(){
   const o = score.me>score.op ? 'win' : score.me<score.op ? 'lose' : 'draw';
   netEv('end:'+(o==='win'?'p1':o==='lose'?'p2':'draw'));
@@ -3046,6 +3191,8 @@ function scoreGoal(who){
   {
     const lt=lastTouch, fresh = lt.p && performance.now()-lt.t<2200, scorerTeamL = who==='me';
     const ownGoal = fresh && (scorerTeamL ? teamR.includes(lt.p) : teamL.includes(lt.p));
+    const scorerText = fresh ? (ownGoal ? T('goal.own', pname(lt.p)) : '⚽ '+pname(lt.p)) : '';
+    showScorer(scorerText); netEv('scorer:'+scorerText.replace(/\|/g,' '));
     if(ownGoal) say(who==='me' ? 'c.ownGoalOp' : 'c.ownGoalMe', pname(lt.p));
     else if(fresh) say(who==='me' ? 'c.goalBy' : 'c.oppgoalBy', pname(lt.p));
     else say(who==='me' ? sayRandom(['c.goal1','c.goal2','c.goal3']) : sayRandom(['c.oppgoal1','c.oppgoal2']));
@@ -3146,10 +3293,21 @@ function ambient(){
   nextAmbient=5+Math.random()*4;
 }
 function goalFx(){
-  sfx.goal(); confetti.burst(200);
+  sfx.goal(); confetti.burst(200); hype=1;
   $('#fans').classList.add('cheer');
   const f=$('#goal-flash'); f.classList.remove('show'); void f.offsetWidth; f.classList.add('show');
+  const s=$('#goal-scorer'); s.classList.remove('show'); void s.offsetWidth; s.classList.add('show');
   setTimeout(()=>$('#fans').classList.remove('cheer'), 1900);
+}
+function showScorer(text){ $('#goal-scorer').textContent=text; }
+/* crowd hype: rises when the ball is near a goal or flying fast, explodes on a goal, and the fans get louder */
+let hype=0;
+function updateHype(dt){
+  const nearGoal = ball.x<260 || ball.x>FIELD_W-260, fast = Math.abs(ball.vx)>650;
+  const target = (nearGoal ? .6 : .15) + (fast ? .25 : 0) + (ball.y>150 ? .1 : 0);
+  if(dt>0) hype += (Math.min(1,target)-hype)*Math.min(1, dt*(target>hype ? 3 : .8));
+  const el=$('#hype-fill'); if(el) el.style.width=Math.round(hype*100)+'%';
+  $('#fans').classList.toggle('hype', hype>.7);
 }
 
 /* ---------- physics ---------- */
@@ -3365,7 +3523,7 @@ function loop(t){
     if(timeLeft<=10 && !said10){ said10=true; say('c.10s'); }
     if(!(mp && mp.role==='guest') && performance.now()-lastSayT > nextAmbient*1000) ambient();
   }
-  render();
+  updateHype(dt); render();
   if(!(mp && mp.role==='guest')) sendSnapshot();
 }
 let said2=false, said1=false, said10=false;
@@ -3576,7 +3734,8 @@ function mpRefresh(){
   const card=s=>`<div class="who ${s.kind==='me'?'me':''} ${s.team==='R'?'op':''}"><div class="tag">${esc(s.name)}${s.ready&&s.kind!=='ai'&&s.kind!=='key'?' ✔':''}</div><div class="sprite">${s.pick!=null?playerSVG(CHARS[s.pick]):''}</div><div class="name">${s.pick!=null?nm(CHARS[s.pick]):s.kind==='wait'?'⏳':s.kind==='me'?T('mp.pick'):s.kind==='net'?T('mp.picking'):'🎲'}</div></div>`;
   duo.innerHTML = seats.filter(s=>s.team==='L').map(card).join('') + '<div class="vs">VS</div>' + seats.filter(s=>s.team==='R').map(card).join('');
   const codeEl=$('#mp-pick-code'); const waiting=seats.some(s=>s.kind==='wait');
-  codeEl.hidden = !(mp.role==='host' && mp.code); codeEl.textContent = mp.code ? T('mp.codeIs', mp.code) + (waiting ? ' ⏳' : '') : '';
+  codeEl.hidden = !(mp.role==='host' && mp.code);
+  if(mp.code) codeEl.innerHTML = `<span class="lbl">${T('mp.codeLbl')}</span><span class="code">${mp.code}</span>${waiting ? '<span class="w">⏳</span>' : ''}<button class="btn small yellow" id="btn-copy-code">${T('mp.copy')}</button>`;
   const b=$('#btn-mp-play'); b.classList.toggle('ready', mp.myReady);
   b.textContent = mp.myReady ? T('mp.readyWait') : T('btn.play'); b.disabled = mp.myPick==null;
   if(mp.role==='host' && mp.myReady && mpCanStart()) mpStart();
@@ -3658,15 +3817,17 @@ function applySnapshot(s, teamL, isPlayer){
     else if(e.startsWith('count:')) showCount(+e.slice(6));
     else if(e.startsWith('hold:')){ if(!isPlayer){ const h=$('#watch-hold'); h.hidden=false; h.textContent=T(e==='hold:corner' ? 'watch.corner' : 'watch.pk'); } }   // the host is on the corner / penalty screen
     else if(e==='holdEnd') $('#watch-hold').hidden=true;
+    else if(e.startsWith('scorer:')) showScorer(e.slice(7));
     else if(e==='gice:1'){ const g=$('#goal-ice'); g.classList.remove('thaw'); g.classList.add('show'); g.innerHTML=goalIceSVG(); }
     else if(e==='gice:0'){ const g=$('#goal-ice'); g.classList.remove('show'); g.classList.add('thaw'); setTimeout(()=>g.classList.remove('thaw'),500); }
     else if(e.startsWith('say:')){ const parts=e.slice(4).split('|'); showLine(T(parts[0],...parts.slice(1)), PRIORITY_SAY.has(parts[0])); }
     else if(e.startsWith('end:')){ const r=e.slice(4); if(!isPlayer){ spectEnded(r,false); } else showEnd(r==='draw' ? 'draw' : (r==='p1')===!!teamL ? 'win' : 'lose'); }
   }
-  render();
+  updateHype(1/60); render();
 }
 /* ----- screen wiring ----- */
 $('#btn-mp').addEventListener('click', ()=>{ sfx.click(); if(!(mp && mp.connected)){ mpTeardown(); mpLobby(); mpStatus(''); } showScreen('mp'); });
+$('#mp-pick-code').addEventListener('click', e=>{ const b=e.target.closest('#btn-copy-code'); if(!b || !mp) return; sfx.click(); const t=mp.code; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(()=>toast(T('mp.copied', t),'xp')).catch(()=>{ try{ const i=document.createElement('input'); i.value=t; document.body.appendChild(i); i.select(); document.execCommand('copy'); i.remove(); toast(T('mp.copied', t),'xp'); }catch(_){} }); });
 $('#btn-mp-back').addEventListener('click', ()=>{ sfx.click(); mpTeardown(); showScreen('home'); });
 $('#btn-mp-host').addEventListener('click', ()=>{ sfx.click(); mpHost(null); });
 $('#btn-mp-join').addEventListener('click', ()=>{ sfx.click(); mpJoin($('#mp-input').value); });
@@ -3836,8 +3997,8 @@ const pkConfetti  = makeConfetti($('#pk-confetti'),  ['#FFD447','#FFE27A','#fff'
 function buildTeams(){
   const box=$('#teams'); box.innerHTML='';
   TEAMS.forEach((t,i)=>{
-    const d=document.createElement('div'); d.className='team'; d.tabIndex=0;
-    d.innerHTML=`<span class="flag">${t.flag}</span>${tn(t)}`;
+    const d=document.createElement('div'); d.className='team'+(cup && cup.mine===i ? ' mine' : ''); d.tabIndex=0;
+    d.innerHTML=`<span class="flag">${t.flag}</span><span class="n">${tn(t)}</span>`;
     const pick=()=>{ sfx.click(); newCup(i); };
     d.addEventListener('click',pick); d.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
     box.appendChild(d);
