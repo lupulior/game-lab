@@ -316,6 +316,9 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .hero .podium{position:absolute;left:50%;bottom:52px;width:300px;height:70px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#FFF3B8,#F5C400 70%,#C99A10);box-shadow:0 10px 0 #A87F0C,0 16px 22px rgba(0,0,0,.25);z-index:0}
 .hero .turntable{position:relative;width:250px;height:375px;margin:0 auto;transform-style:preserve-3d;transform:perspective(900px) rotateY(0);z-index:1;cursor:grab;touch-action:pan-y}
 .hero .bobber{animation:bob 2.4s ease-in-out infinite}
+#hero3d{display:none;width:300px;height:420px;margin:-6px auto -34px;cursor:grab;touch-action:pan-y}
+.hero.threed #hero3d{display:block}
+.hero.threed .turntable,.hero.threed .podium,.hero.threed .shadow{display:none}
 .hero .turntable .sprite{position:absolute;inset:0;width:250px;height:375px;margin:0;backface-visibility:hidden;animation:none}
 .hero .turntable .sprite.back{transform:rotateY(180deg) translateZ(14px)}
 .hero .turntable #home-sprite{transform:translateZ(14px)}
@@ -730,7 +733,7 @@ body.touch #touch{display:block}
     <!-- centre: my player turning on a podium, with my team beside me -->
     <div class="hero">
       <div class="podium"></div>
-      <div class="bobber"><div class="turntable" id="home-turntable"><div class="sprite slab s1"></div><div class="sprite slab s2"></div><div class="sprite slab s3"></div><div class="sprite" id="home-sprite"></div><div class="sprite back" id="home-sprite-back"></div></div>
+      <div class="bobber"><canvas id="hero3d" width="300" height="420"></canvas><div class="turntable" id="home-turntable"><div class="sprite slab s1"></div><div class="sprite slab s2"></div><div class="sprite slab s3"></div><div class="sprite" id="home-sprite"></div><div class="sprite back" id="home-sprite-back"></div></div>
       </div><div class="turn-hint" id="turn-hint">↔ גרור כדי לסובב</div>
       <div class="shadow"></div>
       <div class="name" id="home-name"></div>
@@ -1195,7 +1198,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='';
-const GAME_VERSION='2026-09-25.6';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-25.7';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1999,10 +2002,104 @@ function heroTick(){
 }
 function heroDragSetup(){
   const el=$('.hero'); if(!el) return;
-  el.addEventListener('pointerdown', e=>{ if(e.target.closest('button')) return; heroDrag={x:e.clientX, a:heroAngle}; heroVel=0; el.setPointerCapture(e.pointerId); e.preventDefault(); });
+  el.addEventListener('pointerdown', e=>{ if(e.target.closest('button')) return; heroDrag={x:e.clientX, a:heroAngle}; heroVel=0; el.classList.add('turned'); el.setPointerCapture(e.pointerId); e.preventDefault(); });
   el.addEventListener('pointermove', e=>{ if(!heroDrag) return; const na=heroDrag.a+(e.clientX-heroDrag.x)*.7; heroVel=na-heroAngle; heroAngle=na; heroRender(); });
   const up=e=>{ if(!heroDrag) return; heroDrag=null; if(!heroRaf) heroRaf=requestAnimationFrame(heroTick); };
   el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+}
+/* ----- the 3-D player on the home screen (three.js): a real body you can look at from every side ----- */
+let h3=null;                                         // {renderer, scene, camera, group, raf}
+function loadThree(){
+  if(window.THREE) return Promise.resolve();
+  return new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'; s.onload=res; s.onerror=()=>rej(new Error('three')); document.head.appendChild(s); });
+}
+async function initHero3D(){
+  const cv=$('#hero3d'); if(!cv || h3) return;
+  try{ await loadThree(); }catch(e){ return; }
+  let renderer; try{ renderer=new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true}); }catch(e){ return; }
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio||1)); renderer.setSize(300,420,false); renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(26, 300/420, .1, 100); camera.position.set(0,3.2,14.5); camera.lookAt(0,2.55,0);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x88aa66, .95));
+  const sun=new THREE.DirectionalLight(0xffffff, .85); sun.position.set(3,6,5); scene.add(sun);
+  const rim=new THREE.DirectionalLight(0x7ED3FF, .35); rim.position.set(-4,3,-4); scene.add(rim);
+  const group=new THREE.Group(); scene.add(group);
+  h3={renderer, scene, camera, group, raf:0, t0:performance.now()};
+  $('.hero').classList.add('threed');
+  buildFigure3D(CHARS[selected]);
+  const loop=()=>{
+    h3.raf=requestAnimationFrame(loop);
+    if(!$('#home').classList.contains('active') || document.hidden) return;
+    const t=(performance.now()-h3.t0)/1000;
+    group.rotation.y=heroAngle*Math.PI/180;
+    group.position.y=Math.sin(t*2.6)*.06;                              // a gentle idle bounce
+    const head=group.getObjectByName('head'); if(head) head.rotation.z=Math.sin(t*1.3)*.04;
+    renderer.render(scene, camera);
+  };
+  loop();
+}
+/* builds the body from primitives: legs, shorts, shirt with stripes and the number on the back, arms, neck, a big round head with a face, hair and beard */
+function buildFigure3D(c){
+  if(!h3) return;
+  const g=h3.group; while(g.children.length) g.remove(g.children[0]);
+  const M=(hex,extra={})=>new THREE.MeshToonMaterial(Object.assign({color:new THREE.Color(hex)}, extra));
+  const skin=M(c.skin), dark=M('#23232b'), jersey=M(c.jersey), shorts=M(c.shorts), socks=M(c.socks), hairM=M(c.hairColor||'#222');
+  const add=(geo,mat,x,y,z,opt={})=>{ const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); if(opt.rx) m.rotation.x=opt.rx; if(opt.ry) m.rotation.y=opt.ry; if(opt.rz) m.rotation.z=opt.rz; if(opt.s) m.scale.set(opt.s[0],opt.s[1],opt.s[2]); if(opt.name) m.name=opt.name; (opt.parent||g).add(m); return m; };
+  const cyl=(rt,rb,h)=>new THREE.CylinderGeometry(rt,rb,h,24), sph=r=>new THREE.SphereGeometry(r,32,24), box=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
+  // legs, socks, shoes
+  for(const x of [-.32,.32]){
+    add(cyl(.2,.22,1.05), skin, x,.72,0);
+    add(cyl(.25,.25,.5), socks, x,.38,0);
+    add(cyl(.26,.26,.05), M('#ffffff'), x,.5,0);
+    add(box(.5,.24,.8), dark, x,.12,.12);
+    add(box(.42,.06,.5), M('#ffffff'), x,.2,.25);
+  }
+  // shorts and shirt
+  add(cyl(.8,.72,.7), shorts, 0,1.55,0, {s:[1.2,1,.85]});
+  add(box(1.6,.08,1.3), M('#ffffff',{transparent:true,opacity:.35}), 0,1.9,0);
+  add(cyl(.66,.78,1.55), jersey, 0,2.65,0, {s:[1.28,1,.82]});
+  add(cyl(.34,.34,.25), M(c.numColor), 0,3.42,0, {s:[1.2,1,.8]});                  // collar
+  if(c.stripes){ const st=M(c.stripes); for(const x of [-.36,0,.36]){ add(box(.14,1.5,.04), st, x,2.65,.62); add(box(.14,1.5,.04), st, x,2.65,-.62); } }
+  // the number: big on the back, small on the chest
+  const numTex=(size,txt,col)=>{ const cv=document.createElement('canvas'); cv.width=cv.height=256; const x=cv.getContext('2d'); x.font='900 190px Arial Black, Arial, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.lineWidth=18; x.strokeStyle='#2a1c12'; x.strokeText(txt,128,140); x.fillStyle=col; x.fillText(txt,128,140); const t=new THREE.CanvasTexture(cv); return new THREE.MeshBasicMaterial({map:t, transparent:true}); };
+  add(new THREE.PlaneGeometry(.95,.95), numTex(1,String(c.number),c.numColor), 0,2.7,-.67, {ry:Math.PI});
+  add(new THREE.PlaneGeometry(.36,.36), numTex(1,String(c.number),c.numColor), .38,2.95,.66);
+  // sleeves, arms, hands
+  for(const s of [-1,1]){
+    add(cyl(.27,.3,.55), jersey, s*.98,2.95,0, {rz:s*-.45});
+    add(cyl(.19,.21,.95), skin, s*1.18,2.35,.05, {rz:s*-.3});
+    add(sph(.24), skin, s*1.32,1.9,.1);
+  }
+  add(cyl(.24,.28,.35), M(c.skinDark||c.skin), 0,3.55,0);                          // neck
+  // head
+  const head=new THREE.Group(); head.name='head'; head.position.set(0,4.55,0); g.add(head);
+  add(sph(1), skin, 0,0,0, {s:[1,1.06,1], parent:head});
+  for(const s of [-1,1]){ add(sph(.19), skin, s*.99,0,0, {parent:head}); add(sph(.09), M(c.skinDark||'#a07050'), s*1.05,0,.02, {parent:head}); }
+  // face: eyes, pupils, highlights, brows, nose, cheeks, mouth
+  for(const s of [-1,1]){
+    add(sph(.22), M('#ffffff'), s*.36,.06,.9, {s:[1,1.15,.45], parent:head});
+    add(sph(.11), M('#1b1b1b'), s*.38,.05,1.0, {parent:head});
+    add(sph(.04), M('#ffffff'), s*.43,.1,1.09, {parent:head});
+    add(box(.36,.07,.08), M(c.browColor||c.hairColor||'#222'), s*.38,.38,.92, {rz: c.brows==='sharp' ? s*-.35 : 0, parent:head});
+    add(sph(.14), M('#ff9aa0',{transparent:true,opacity:.55}), s*.62,-.22,.76, {s:[1,.7,.3], parent:head});
+  }
+  add(sph(.1), M(c.skinDark||'#a07050'), 0,-.12,1.0, {parent:head});
+  add(sph(.36), M('#7a2a2a'), 0,-.5,.78, {s:[1,.5,.5], parent:head});                 // open mouth
+  add(box(.42,.09,.1), M('#ffffff'), 0,-.42,.98, {parent:head});                      // teeth
+  add(sph(.12), M('#e0525f'), 0,-.6,.9, {s:[1,.5,.5], parent:head});                  // tongue
+  // hair styles
+  const cap=(r,len,y,z,mat)=>add(new THREE.SphereGeometry(r,32,20,0,Math.PI*2,0,Math.PI*len), mat, 0,y,z, {rx:-.25, parent:head});
+  if(c.hair==='bald'||c.hair==='tuft'){ cap(1.02,.32,.05,-.08, M(c.hairColor,{transparent:true,opacity:.45})); if(c.hair==='tuft') add(sph(.16), hairM, 0,.95,.35, {parent:head}); }
+  else if(c.hair==='mohawk'){ cap(1.02,.5,.05,-.05, M(c.hairSide||'#222')); for(let i=-3;i<=3;i++) add(sph(.22), hairM, 0, 1.0-Math.abs(i)*.08, -i*.2, {parent:head}); }
+  else if(c.hair==='curly'){ cap(1.03,.5,.05,-.05, hairM); for(let i=0;i<10;i++){ const a=i/10*Math.PI*2; add(sph(.3), hairM, Math.cos(a)*.75, .72+Math.sin(a*2)*.1, Math.sin(a)*.6-.1, {parent:head}); } }
+  else if(c.hair==='bun'){ cap(1.03,.48,.05,-.05, hairM); add(sph(.28), hairM, 0,1.05,-.15, {parent:head}); }
+  else if(c.hair==='wavy'||c.hair==='longband'){ cap(1.04,.52,.05,-.05, hairM); for(const s of [-1,1]) add(sph(.38), hairM, s*.82,-.05,-.25, {s:[.8,1.4,1], parent:head}); if(c.hair==='longband') add(new THREE.TorusGeometry(1.02,.07,8,40), M(c.bandColor||'#fff'), 0,.45,0, {rx:Math.PI/2-.2, parent:head}); }
+  else cap(1.03,.48,.05,-.05, hairM);                                                // short and spiky
+  if(c.hair==='spiky') for(let i=-2;i<=2;i++) add(sph(.2), hairM, i*.32, .92, .15-Math.abs(i)*.05, {parent:head});
+  if(c.beard) add(new THREE.SphereGeometry(1.03,32,20,Math.PI*.12,Math.PI*.76,Math.PI*.58,Math.PI*.36), M(c.beardColor||'#333'), 0,0,0, {parent:head});
+  // podium
+  add(new THREE.CylinderGeometry(2.1,2.3,.35,48), M('#F5C400'), 0,-.2,0);
+  add(new THREE.CylinderGeometry(1.9,1.9,.06,48), M('#FFF3B8'), 0,0,0);
 }
 
 const BALL_SVG = `<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
@@ -2155,6 +2252,7 @@ function refreshHome(){
   sprite($('#home-sprite'), CHARS[selected]);
   const back=$('#home-sprite-back'); if(back) back.innerHTML=playerBackSVG(CHARS[selected]);
   document.querySelectorAll('#home-turntable .slab').forEach(s=>{ s.innerHTML=playerSVG(CHARS[selected]); });
+  if(typeof h3!=='undefined' && h3) buildFigure3D(CHARS[selected]);
   if(typeof refreshChallengeBadge==='function') refreshChallengeBadge();
   $('#home-name').textContent = nm(CHARS[selected]);
   const me=$('#home-me'); if(me){ const n=normName(settings.name); me.textContent = (n ? crown(n, isAdmin()) : T('mp.you')) + ' · ' + T(rankOf(prog.trophies|0)); }
@@ -4740,7 +4838,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 ['pointerup','pointercancel'].forEach(t=>$('#pk').addEventListener(t, e=>{ if(pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); } }));
 
 /* ---------- init ---------- */
-buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); heroDragSetup(); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
+buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); heroDragSetup(); setTimeout(initHero3D, 500); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
 setTimeout(registerPresence, 800);              // go online under your player name (if one is set)
 </script>
 </body>
