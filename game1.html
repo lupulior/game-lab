@@ -714,6 +714,7 @@ body.touch #ice-hud,body.touch #fire-hud,body.touch #sc-hud{width:86px;height:86
 .frow.adm .fname{font-size:19px}
 .frow.adm .fstat{font-size:14px}
 .frow.adm .btn.small{font-size:14px;padding:5px 10px}
+.code-row{cursor:pointer}.code-row.open{background:#FFF3B8}.code-users{background:#fff;border:2px solid #E3E8F2;border-radius:0 0 14px 14px;margin:-6px 6px 0;padding:8px 12px 6px;display:flex;flex-direction:column;gap:3px}.code-users .hint{font-size:14px;margin:0}.code-user{display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:var(--navy)}.code-user .when{font-size:12px;color:#7a8499;font-weight:400}
 .adm-dur{font-family:inherit;font-weight:900;font-size:14px;padding:4px 6px;border-radius:8px;border:2px solid var(--navy)}
 #ban-overlay{z-index:50;background:rgba(27,42,78,.92)}
 #ban-overlay h2{font-size:56px}
@@ -1270,7 +1271,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-26.5';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-26.6';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1520,6 +1521,9 @@ const I18N_RAW={
  'adm.codesHint':['קוד · כמה XP · לכמה שחקנים','code · XP · how many players','code · XP · how many players','код · XP · сколько игроков'],
  'adm.create':['צור','Create','Create','Создать'],
  'adm.codeMade':['הקוד {0} נוצר ✔','Code {0} created ✔','Code {0} created ✔','Код {0} создан ✔'],
+ 'adm.codeUsers':['מי השתמש בקוד:','Who used this code:','من استخدم هذا الكود:','Кто использовал код:'],
+ 'adm.codeNone':['עדיין אף אחד לא השתמש בקוד הזה','Nobody has used this code yet','لم يستخدم أحد هذا الكود بعد','Этим кодом ещё никто не пользовался'],
+ 'adm.codeTap':['לחצו על קוד כדי לראות מי השתמש בו','Tap a code to see who used it','اضغط على كود لترى من استخدمه','Нажми на код, чтобы увидеть, кто его использовал'],
  'adm.codesList':['קודים פעילים','Active codes','Active codes','Активные коды'],
  'adm.needServer':['בשביל זה צריך את השרת (Firebase)','This needs the server (Firebase)','This needs the server (Firebase)','Для этого нужен сервер (Firebase)'],
  'adm.online':['🟢 מי מחובר עכשיו','🟢 Who is online now','🟢 Who is online now','🟢 Кто сейчас онлайн'],
@@ -2903,7 +2907,7 @@ async function redeemCode(raw){
   if(CODES[code]){ prog.codes.push(code); saveProg(); CODES[code](); inp.value=''; return; }
   if(fbOn()){                                                    // codes the admin created on the server: {xp, max, used}
     const c=await fbReq('codes/'+code,'GET');
-    if(c && (c.used|0)<(c.max|0)){ prog.codes.push(code); saveProg(); fbReq('codes/'+code,'PATCH',{used:(c.used|0)+1}); addXP(c.xp|0); sfx.win(); inp.value=''; return; }
+    if(c && (c.used|0)<(c.max|0)){ prog.codes.push(code); saveProg(); fbReq('codes/'+code,'PATCH',{used:(c.used|0)+1}); const me=normName(settings.name); if(me) fbReq('codes/'+code+'/users/'+fbKey(me),'PUT',{name:me, t:{'.sv':'timestamp'}}); addXP(c.xp|0); sfx.win(); inp.value=''; return; }
     if(c){ sfx.lose(); toast(T('codes.usedUp'),'warn'); return; }
   }
   bad();
@@ -2981,7 +2985,8 @@ async function refreshAdminLists(){
     bans.innerHTML = list.length ? `<div class="adm-h">${T('adm.banned')}</div>`+list.map(([k,v])=>`<div class="frow adm" data-key="${k}" data-name="${esc(v.name||'')}"><span class="dot none"></span><span class="fname">${esc(v.name||k)}</span><span class="fstat">${T('adm.until', new Date(v.until).toLocaleString())}</span><button class="btn small green" data-act="unban">${T('adm.unban')}</button></div>`).join('') : '';
     const c=await fbReq('codes','GET');
     const cl=Object.entries(c||{});
-    codes.innerHTML = cl.length ? `<div class="adm-h">${T('adm.codesList')}</div>`+cl.map(([k,v])=>`<div class="frow adm" data-key="${k}"><span class="fname" style="direction:ltr;text-align:right">🎁 ${esc(k)}</span><span class="fstat">⭐ ${v.xp|0} · ${v.used|0}/${v.max|0}</span><button class="btn small red" data-act="delcode">🗑</button></div>`).join('') : '';
+    const usersOf=v=>Object.values((v&&v.users)||{}).filter(u=>u&&u.name).sort((a,b)=>(b.t|0)-(a.t|0));
+    codes.innerHTML = cl.length ? `<div class="adm-h">${T('adm.codesList')}</div><div class="hint">${T('adm.codeTap')}</div>`+cl.map(([k,v])=>{ const us=usersOf(v); return `<div class="code-wrap"><div class="frow adm code-row" data-key="${k}" title="${T('adm.codeTap')}"><span class="fname" style="direction:ltr;text-align:right">🎁 ${esc(k)}</span><span class="fstat">⭐ ${v.xp|0} · ${us.length||v.used|0}/${v.max|0} ▾</span><button class="btn small red" data-act="delcode">🗑</button></div><div class="code-users" hidden><div class="hint">${us.length ? T('adm.codeUsers') : T('adm.codeNone')}</div>${us.map(u=>`<div class="code-user"><span>👤 ${esc(u.name)}</span><span class="when">${u.t ? new Date(u.t).toLocaleString() : ''}</span></div>`).join('')}</div></div>`; }).join('') : '';
   }
 }
 async function kickPlayer(name, key, minutes){
@@ -3010,6 +3015,7 @@ $('#btn-adm-code-go').addEventListener('click', ()=>{ sfx.click(); createCode();
 $('#btn-adm-refresh').addEventListener('click', ()=>{ sfx.click(); refreshAdminLists(); });
 for(const id of ['#adm-code','#adm-code-xp','#adm-code-uses']) $(id).addEventListener('keydown', e=>e.stopPropagation());
 $('#admin-modal').addEventListener('click', e=>{
+  const cr=e.target.closest('.code-row'); if(cr && !e.target.closest('button')){ sfx.click(); const u=cr.nextElementSibling; u.hidden=!u.hidden; cr.classList.toggle('open', !u.hidden); return; }
   const b=e.target.closest('button[data-act]'); if(!b) return; const row=b.closest('.frow'), name=row.dataset.name, key=row.dataset.key; sfx.click();
   if(b.dataset.act==='kick'){ const sel=row.querySelector('.adm-dur'); kickPlayer(name, key, +sel.value); }
   else if(b.dataset.act==='unban'){ fbReq('bans/'+key,'DELETE').then(refreshAdminLists); }
