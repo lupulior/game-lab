@@ -450,7 +450,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 .mbox .t .s{margin-left:auto}
 .mbox.live{border-color:var(--yellow);box-shadow:0 0 0 3px var(--yellow),0 0 18px rgba(255,212,71,.8);animation:livebox 1s infinite alternate}
 @keyframes livebox{to{transform:scale(1.06)}}
-.mbox.final{width:120px;height:56px;font-size:15px;border-color:#C99A10}.mbox.final .t{height:26px}
+.mbox.final{width:88px;height:56px;font-size:14px;border-color:#C99A10}.mbox.final .t{height:26px}
 #cup-champ{position:absolute;left:50%;top:120px;transform:translateX(-50%);text-align:center;font-size:20px;font-weight:900;color:#fff;-webkit-text-stroke:1px var(--navy);text-shadow:0 3px 0 var(--navy);white-space:nowrap}
 #cup-champ .big{font-size:40px;display:block;color:var(--yellow)}
 #cup-bar{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.6);padding:8px 16px;border-radius:26px;white-space:nowrap}
@@ -467,6 +467,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #pk-goal{position:absolute;left:200px;top:110px;width:600px;height:310px}
 #pk-goal svg{width:100%;height:100%;display:block}
 #pk-keeper{position:absolute;left:440px;top:236px;width:120px;height:180px;transition:transform .32s ease-out;transform-origin:50% 95%;z-index:2;pointer-events:none}
+#pk-keeper svg,#pk-shooter svg{overflow:visible}
 #pk-keeper .arm,#pk-shooter .arm{transform-box:view-box;transition:transform .22s ease-out}
 #pk-keeper .arm-l,#pk-shooter .arm-l{transform-origin:30px 74px}#pk-keeper .arm-r,#pk-shooter .arm-r{transform-origin:70px 74px}
 #pk-keeper.arms-up .arm-l{transform:rotate(150deg)}#pk-keeper.arms-up .arm-r{transform:rotate(-150deg)}
@@ -505,7 +506,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #pk-msg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);font-size:104px;font-weight:900;color:var(--yellow);
   -webkit-text-stroke:3px var(--navy);text-shadow:0 10px 0 var(--navy);pointer-events:none;white-space:nowrap;z-index:6}
 #pk-msg.show{animation:pop 1.4s ease-out forwards}
-#pk-hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:24px;font-weight:900;color:#fff;background:var(--navy);padding:6px 24px;border-radius:18px;white-space:nowrap;z-index:5}
+#pk-hint{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);font-size:24px;font-weight:900;color:#fff;background:var(--navy);padding:6px 24px;border-radius:18px;white-space:nowrap;z-index:5}
 #pk-confetti{position:absolute;inset:0;width:1000px;height:620px;pointer-events:none;z-index:6}
 #pk-end{z-index:8;cursor:default}
 .sun{position:absolute;top:34px;left:445px;width:110px;height:110px;border-radius:50%;background:var(--yellow);
@@ -849,12 +850,6 @@ body.touch #touch{display:block}
       <button class="btn yellow" id="btn-fire-select" hidden>✔ בחר</button>
       <button class="btn yellow" id="btn-fire-buy" hidden>🔓 קנה</button>
     </div>
-    <div class="preview ice-preview sc-preview" id="sc-preview" hidden>
-      <div class="ice-big">🌀</div>
-      <div class="name" id="sc-pv-name">מספרת</div>
-      <div class="hint" id="sc-pv-desc"></div>
-      <div class="hint" style="margin-top:8px;color:#1B7F3B">✔ חינם לכולם · פעם אחת בכל משחק · מקש X</div>
-    </div>
   </section>
 
   <!-- ===== CEO ===== -->
@@ -907,7 +902,6 @@ body.touch #touch{display:block}
     <button id="btn-pause" title="הפסקה">❚❚</button>
     <div id="ice-hud" hidden><div class="ring"></div><span class="ic">❄️</span><span class="cd"></span><span class="key">E</span></div>
     <div id="fire-hud" hidden><div class="ring"></div><span class="ic">🔥</span><span class="cd"></span><span class="key">F</span></div>
-    <div id="sc-hud" hidden><div class="ring"></div><span class="ic">🌀</span><span class="cd"></span><span class="key">X</span></div>
     <div id="scoreboard">
       <div class="score"><span class="me" id="s-me">0</span><span>-</span><span class="op" id="s-op">0</span></div>
       <div class="names"><span class="me" id="n-me"></span><span>|</span><span class="op" id="n-op"></span></div>
@@ -1271,7 +1265,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-26.6';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-27.1';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1347,9 +1341,9 @@ const I18N_RAW={
  'lvl.3':['מטורף','Crazy','مجنون','Безумно'], 'lvl.4':['מאסטר','Master','خبير','Мастер'],
  'level.title':['באיזו רמה לשחק?','Which level?','ما المستوى؟','Какой уровень?'],
  'level.keys':['<kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ\' &nbsp; <kbd>Q</kbd> 🌀<br>נגיעה בכדור דוחפת אותו. מנצח מי שמגיע ראשון למספר הגולים של הרמה, או מי שמוביל אחרי 4 דקות!',
-   '<kbd>A</kbd> left &nbsp; <kbd>D</kbd> right &nbsp; <kbd>W</kbd> jump &nbsp; <kbd>Space</kbd> power kick &nbsp; <kbd>S</kbd> slide<br>Touching the ball nudges it. First to reach the level\'s goal count wins, or whoever leads after 4 minutes!',
-   '<kbd>A</kbd> يسار &nbsp; <kbd>D</kbd> يمين &nbsp; <kbd>W</kbd> قفز &nbsp; <kbd>مسافة</kbd> تسديدة قوية &nbsp; <kbd>S</kbd> انزلاق<br>لمس الكرة يدفعها. يفوز من يصل أولًا إلى عدد أهداف المستوى، أو المتقدم بعد 4 دقائق!',
-   '<kbd>A</kbd> влево &nbsp; <kbd>D</kbd> вправо &nbsp; <kbd>W</kbd> прыжок &nbsp; <kbd>Пробел</kbd> сильный удар &nbsp; <kbd>S</kbd> подкат<br>Касание толкает мяч. Побеждает тот, кто первым набирает число голов уровня, или кто впереди через 4 минуты!'],
+   '<kbd>A</kbd> left &nbsp; <kbd>D</kbd> right &nbsp; <kbd>W</kbd> jump &nbsp; <kbd>Space</kbd> power kick &nbsp; <kbd>S</kbd> slide &nbsp; <kbd>Q</kbd> 🌀 bicycle kick<br>Touching the ball nudges it. First to reach the level\'s goal count wins, or whoever leads after 4 minutes!',
+   '<kbd>A</kbd> يسار &nbsp; <kbd>D</kbd> يمين &nbsp; <kbd>W</kbd> قفز &nbsp; <kbd>مسافة</kbd> تسديدة قوية &nbsp; <kbd>S</kbd> انزلاق &nbsp; <kbd>Q</kbd> 🌀 مقصية<br>لمس الكرة يدفعها. يفوز من يصل أولًا إلى عدد أهداف المستوى، أو المتقدم بعد 4 دقائق!',
+   '<kbd>A</kbd> влево &nbsp; <kbd>D</kbd> вправо &nbsp; <kbd>W</kbd> прыжок &nbsp; <kbd>Пробел</kbd> сильный удар &nbsp; <kbd>S</kbd> подкат &nbsp; <kbd>Q</kbd> 🌀 бисиклета<br>Касание толкает мяч. Побеждает тот, кто первым набирает число голов уровня, или кто впереди через 4 минуты!'],
  'pklevel.title':['🥅 באיזו רמה לשחק פנדלים?','🥅 Penalty level?','🥅 ما مستوى ركلات الترجيح؟','🥅 Уровень пенальти?'],
  'pklevel.hint':['ברמה קשה יותר השוער מנחש טוב יותר, הכוונת זזה מהר יותר,<br>וכשאתה שוער יש לך פחות זמן להגיב','On harder levels the keeper guesses better, the sight moves faster,<br>and as keeper you get less time to react','في المستويات الأصعب يخمّن الحارس أفضل ويتحرك الهدف أسرع،<br>وكحارس يكون لديك وقت أقل للرد','На сложных уровнях вратарь угадывает лучше, прицел движется быстрее,<br>а как вратарю тебе даётся меньше времени'],
  'pk.hintAim':['🎯 לחץ והחזק כדי להרים את הבעיטה, שחרר כדי לבעוט','🎯 Press and hold to lift the shot, release to kick','🎯 اضغط مطولًا لرفع التسديدة، وأفلت للتسديد','🎯 Нажми и держи, чтобы поднять удар, отпусти для удара'],
@@ -1377,7 +1371,8 @@ const I18N_RAW={
  'corner.clear':['הרחקה! 💪','Cleared! 💪','إبعاد! 💪','Выбил! 💪'],
  'corner.oppGoal':['נגיחה של היריב… גול 😢','Opponent header… goal 😢','رأسية الخصم… هدف 😢','Удар головой соперника… гол 😢'],
  'pk.hintPower':['💪 עצור את פס העוצמה בירוק! אדום = מעל השער','💪 Stop the power bar in the green! Red = over the bar','💪 أوقف شريط القوة في الأخضر! الأحمر = فوق المرمى','💪 Останови шкалу на зелёном! Красный = выше ворот'],
- 'pk.hintKeep':['🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר! (או Q W E / A S D במקלדת)','🧤 When the sight appears in the goal, click it fast!','🧤 عندما يظهر الهدف في المرمى انقر عليه بسرعة!','🧤 Когда прицел появится в воротах, быстро нажми на него!'],
+ 'pk.quitQ':['לצאת באמצע הפנדלים? זה ייחשב הפסד והגביע ייגמר','Quit the shootout? It counts as a loss and your cup is over','الخروج من ركلات الترجيح؟ سيُحسب خسارة وتنتهي البطولة','Выйти из серии пенальти? Это засчитается как поражение, и кубок закончится'],
+ 'pk.hintKeep':['🧤 כשהכוונת מופיעה בשער – לחץ עליה מהר! (או Q W E / A S D במקלדת)','🧤 When the sight appears in the goal, click it fast! (or Q W E / A S D on the keyboard)','🧤 عندما يظهر الهدف في المرمى انقر عليه بسرعة! (أو Q W E / A S D على لوحة المفاتيح)','🧤 Когда прицел появится в воротах, быстро нажми на него! (или Q W E / A S D на клавиатуре)'],
  'pk.power':['עוצמה {0}%','Power {0}%','القوة {0}%','Сила {0}%'],
  'pk.over':['מעל השער! 😬','Over the bar! 😬','فوق المرمى! 😬','Выше ворот! 😬'],
  'pk.wide':['פספוס! 😬','Wide! 😬','خارج المرمى! 😬','Мимо! 😬'],
@@ -1502,52 +1497,53 @@ const I18N_RAW={
  'watch.connecting':['מתחבר למשחק של {0}… ⏳','Joining {0}\'s match… ⏳','جارٍ الاتصال بمباراة {0}… ⏳','Подключаемся к матчу {0}… ⏳'],
  'watch.joined':['{0} צופה במשחק שלך 👁','{0} is watching your match 👁','{0} يشاهد مباراتك 👁','{0} смотрит твой матч 👁'],
  'end.invite':['🎮 הזמן למשחק','🎮 Invite to a game','🎮 دعوة إلى لعبة','🎮 Пригласить в игру'],
+ 'fb.down':['אין חיבור לשרת כרגע, נסו שוב עוד רגע','No connection to the server right now, try again in a moment','لا يوجد اتصال بالخادم الآن، حاولوا مرة أخرى بعد قليل','Сейчас нет связи с сервером, попробуй ещё раз через минуту'],
  'codes.usedUp':['הקוד הזה נגמר 😕','This code has run out 😕','انتهى هذا الكود 😕','Этот код закончился 😕'],
- 'adm.btn':['👑 אדמין','👑 Admin','👑 Admin','👑 Админ'],
- 'adm.title':['👑 פאנל אדמין','👑 Admin panel','👑 Admin panel','👑 Панель админа'],
- 'adm.welcome':['👑 אתה עכשיו האדמין של המשחק! הכל פתוח','👑 You are now the game admin! Everything is unlocked','👑 You are now the game admin! Everything is unlocked','👑 Ты теперь админ игры! Всё открыто'],
- 'adm.left':['יצאת ממצב אדמין','Left admin mode','Left admin mode','Режим админа выключен'],
- 'adm.leaveQ':['לצאת ממצב אדמין? (הקוד יעבוד שוב)','Leave admin mode? (the code will work again)','Leave admin mode? (the code will work again)','Выйти из режима админа? (код снова сработает)'],
- 'adm.serverOn':['🟢 מחובר לשרת: רשימת המחוברים, קיקים וקודים פעילים','🟢 Server connected: online list, kicks and codes are live','🟢 Server connected: online list, kicks and codes are live','🟢 Сервер подключён: список онлайн, кики и коды работают'],
- 'adm.serverOff':['⚪ אין שרת עדיין: רואים רק חברים, קיקים עוברים רק למי שמחובר עכשיו, קודים חדשים דורשים שרת','⚪ No server yet: only friends are listed, kicks reach only players online now, new codes need the server','⚪ No server yet: only friends are listed, kicks reach only players online now, new codes need the server','⚪ Сервера пока нет: видны только друзья, кики доходят только до тех, кто онлайн, новые коды требуют сервер'],
- 'adm.powers':['⚡ כוחות','⚡ Powers','⚡ Powers','⚡ Силы'],
- 'adm.super':['🦸 כוחות-על במשחק (נגד המחשב)','🦸 Super powers in matches (vs the computer)','🦸 Super powers in matches (vs the computer)','🦸 Суперсилы в матчах (против компьютера)'],
- 'adm.unlock':['🔓 פתח הכל','🔓 Unlock all','🔓 Unlock all','🔓 Открыть всё'],
- 'adm.unlocked':['הכל פתוח 🔓','Everything unlocked 🔓','Everything unlocked 🔓','Всё открыто 🔓'],
- 'adm.resetBtn':['🧹 אפס התקדמות','🧹 Reset progress','🧹 Reset progress','🧹 Сбросить прогресс'],
- 'adm.resetQ':['לאפס את כל ההתקדמות שלך? (החברים והאדמין נשארים)','Reset all your progress? (friends and admin stay)','Reset all your progress? (friends and admin stay)','Сбросить весь прогресс? (друзья и админ останутся)'],
- 'adm.reset':['ההתקדמות אופסה','Progress reset','Progress reset','Прогресс сброшен'],
- 'adm.newCode':['🎁 קוד חדש לשחקנים','🎁 New code for players','🎁 New code for players','🎁 Новый код для игроков'],
- 'adm.codesHint':['קוד · כמה XP · לכמה שחקנים','code · XP · how many players','code · XP · how many players','код · XP · сколько игроков'],
- 'adm.create':['צור','Create','Create','Создать'],
- 'adm.codeMade':['הקוד {0} נוצר ✔','Code {0} created ✔','Code {0} created ✔','Код {0} создан ✔'],
+ 'adm.btn':['👑 אדמין','👑 Admin','👑 المشرف','👑 Админ'],
+ 'adm.title':['👑 פאנל אדמין','👑 Admin panel','👑 لوحة المشرف','👑 Панель админа'],
+ 'adm.welcome':['👑 אתה עכשיו האדמין של המשחק! הכל פתוח','👑 You are now the game admin! Everything is unlocked','👑 أنت الآن مشرف اللعبة! كل شيء مفتوح','👑 Ты теперь админ игры! Всё открыто'],
+ 'adm.left':['יצאת ממצב אדמין','Left admin mode','خرجت من وضع المشرف','Режим админа выключен'],
+ 'adm.leaveQ':['לצאת ממצב אדמין? (הקוד יעבוד שוב)','Leave admin mode? (the code will work again)','الخروج من وضع المشرف؟ (سيعمل الكود مرة أخرى)','Выйти из режима админа? (код снова сработает)'],
+ 'adm.serverOn':['🟢 מחובר לשרת: רשימת המחוברים, קיקים וקודים פעילים','🟢 Server connected: online list, kicks and codes are live','🟢 متصل بالخادم: قائمة المتصلين والطرد والأكواد تعمل','🟢 Сервер подключён: список онлайн, кики и коды работают'],
+ 'adm.serverOff':['⚪ אין שרת עדיין: רואים רק חברים, קיקים עוברים רק למי שמחובר עכשיו, קודים חדשים דורשים שרת','⚪ No server yet: only friends are listed, kicks reach only players online now, new codes need the server','⚪ لا يوجد خادم بعد: تظهر قائمة الأصدقاء فقط، الطرد يصل فقط للمتصلين الآن، والأكواد الجديدة تحتاج خادمًا','⚪ Сервера пока нет: видны только друзья, кики доходят только до тех, кто онлайн, новые коды требуют сервер'],
+ 'adm.powers':['⚡ כוחות','⚡ Powers','⚡ القوى','⚡ Силы'],
+ 'adm.super':['🦸 כוחות-על במשחק (נגד המחשב)','🦸 Super powers in matches (vs the computer)','🦸 قوى خارقة في المباريات (ضد الحاسوب)','🦸 Суперсилы в матчах (против компьютера)'],
+ 'adm.unlock':['🔓 פתח הכל','🔓 Unlock all','🔓 فتح الكل','🔓 Открыть всё'],
+ 'adm.unlocked':['הכל פתוח 🔓','Everything unlocked 🔓','كل شيء مفتوح 🔓','Всё открыто 🔓'],
+ 'adm.resetBtn':['🧹 אפס התקדמות','🧹 Reset progress','🧹 إعادة ضبط التقدم','🧹 Сбросить прогресс'],
+ 'adm.resetQ':['לאפס את כל ההתקדמות שלך? (החברים והאדמין נשארים)','Reset all your progress? (friends and admin stay)','إعادة ضبط كل تقدمك؟ (يبقى الأصدقاء والمشرف)','Сбросить весь прогресс? (друзья и админ останутся)'],
+ 'adm.reset':['ההתקדמות אופסה','Progress reset','تمت إعادة ضبط التقدم','Прогресс сброшен'],
+ 'adm.newCode':['🎁 קוד חדש לשחקנים','🎁 New code for players','🎁 كود جديد للاعبين','🎁 Новый код для игроков'],
+ 'adm.codesHint':['קוד · כמה XP · לכמה שחקנים','code · XP · how many players','الكود · XP · كم لاعبًا','код · XP · сколько игроков'],
+ 'adm.create':['צור','Create','إنشاء','Создать'],
+ 'adm.codeMade':['הקוד {0} נוצר ✔','Code {0} created ✔','تم إنشاء الكود {0} ✔','Код {0} создан ✔'],
  'adm.codeUsers':['מי השתמש בקוד:','Who used this code:','من استخدم هذا الكود:','Кто использовал код:'],
  'adm.codeNone':['עדיין אף אחד לא השתמש בקוד הזה','Nobody has used this code yet','لم يستخدم أحد هذا الكود بعد','Этим кодом ещё никто не пользовался'],
  'adm.codeTap':['לחצו על קוד כדי לראות מי השתמש בו','Tap a code to see who used it','اضغط على كود لترى من استخدمه','Нажми на код, чтобы увидеть, кто его использовал'],
- 'adm.codesList':['קודים פעילים','Active codes','Active codes','Активные коды'],
- 'adm.needServer':['בשביל זה צריך את השרת (Firebase)','This needs the server (Firebase)','This needs the server (Firebase)','Для этого нужен сервер (Firebase)'],
- 'adm.online':['🟢 מי מחובר עכשיו','🟢 Who is online now','🟢 Who is online now','🟢 Кто сейчас онлайн'],
- 'adm.onlyFriends':['בלי שרת רואים רק חברים מהרשימה','Without a server only friends from the list are shown','Without a server only friends from the list are shown','Без сервера видны только друзья из списка'],
- 'adm.nobody':['אף אחד לא מחובר כרגע','Nobody is online right now','Nobody is online right now','Сейчас никто не онлайн'],
- 'adm.kick':['🚫 קיק','🚫 Kick','🚫 Kick','🚫 Кик'],
- 'adm.kicked':['{0} הורחק','{0} was kicked','{0} was kicked','{0} исключён'],
- 'adm.k10m':['10 דקות','10 minutes','10 minutes','10 минут'], 'adm.k1h':['שעה','1 hour','1 hour','1 час'], 'adm.k1d':['יום','1 day','1 day','1 день'], 'adm.k1w':['שבוע','1 week','1 week','1 неделя'],
- 'adm.banned':['🚫 מורחקים','🚫 Kicked players','🚫 Kicked players','🚫 Исключённые'],
- 'adm.until':['עד {0}','until {0}','until {0}','до {0}'],
- 'adm.unban':['✔ בטל','✔ Undo','✔ Undo','✔ Отменить'],
- 'adm.leave':['🚪 צא ממצב אדמין','🚪 Leave admin mode','🚪 Leave admin mode','🚪 Выйти из режима админа'],
- 'ban.title':['🚫 הורחקת מהמשחק','🚫 You were kicked from the game','🚫 You were kicked from the game','🚫 Тебя исключили из игры'],
- 'ban.text':['האדמין חסם אותך. תוכל לחזור בעוד {1}','The admin blocked you. You can come back in {1}','The admin blocked you. You can come back in {1}','Админ заблокировал тебя. Вернуться можно через {1}'],
- 'ban.minutes':['{0} דקות','{0} minutes','{0} minutes','{0} минут'],
- 'ban.hours':['{0} שעות','{0} hours','{0} hours','{0} часов'],
- 'watch.leaveRoom':['צא קודם מחדר האונליין','Leave the online room first','Leave the online room first','Сначала выйди из онлайн-комнаты'],
+ 'adm.codesList':['קודים פעילים','Active codes','الأكواد الفعّالة','Активные коды'],
+ 'adm.needServer':['בשביל זה צריך את השרת (Firebase)','This needs the server (Firebase)','هذا يحتاج إلى الخادم (Firebase)','Для этого нужен сервер (Firebase)'],
+ 'adm.online':['🟢 מי מחובר עכשיו','🟢 Who is online now','🟢 من متصل الآن','🟢 Кто сейчас онлайн'],
+ 'adm.onlyFriends':['בלי שרת רואים רק חברים מהרשימה','Without a server only friends from the list are shown','بدون خادم تظهر فقط قائمة الأصدقاء','Без сервера видны только друзья из списка'],
+ 'adm.nobody':['אף אחד לא מחובר כרגע','Nobody is online right now','لا أحد متصل الآن','Сейчас никто не онлайн'],
+ 'adm.kick':['🚫 קיק','🚫 Kick','🚫 طرد','🚫 Кик'],
+ 'adm.kicked':['{0} הורחק','{0} was kicked','تم طرد {0}','{0} исключён'],
+ 'adm.k10m':['10 דקות','10 minutes','10 دقائق','10 минут'], 'adm.k1h':['שעה','1 hour','1 hour','1 час'], 'adm.k1d':['יום','1 day','1 day','1 день'], 'adm.k1w':['שבוע','1 week','1 week','1 неделя'],
+ 'adm.banned':['🚫 מורחקים','🚫 Kicked players','🚫 اللاعبون المطرودون','🚫 Исключённые'],
+ 'adm.until':['עד {0}','until {0}','حتى {0}','до {0}'],
+ 'adm.unban':['✔ בטל','✔ Undo','✔ تراجع','✔ Отменить'],
+ 'adm.leave':['🚪 צא ממצב אדמין','🚪 Leave admin mode','🚪 الخروج من وضع المشرف','🚪 Выйти из режима админа'],
+ 'ban.title':['🚫 הורחקת מהמשחק','🚫 You were kicked from the game','🚫 تم طردك من اللعبة','🚫 Тебя исключили из игры'],
+ 'ban.text':['האדמין חסם אותך. תוכל לחזור בעוד {1}','The admin blocked you. You can come back in {1}','المشرف حظرك. يمكنك العودة بعد {1}','Админ заблокировал тебя. Вернуться можно через {1}'],
+ 'ban.minutes':['{0} דקות','{0} minutes','{0} دقائق','{0} минут'],
+ 'ban.hours':['{0} שעות','{0} hours','{0} ساعات','{0} часов'],
+ 'watch.leaveRoom':['צא קודם מחדר האונליין','Leave the online room first','اخرج من غرفة الأونلاين أولًا','Сначала выйди из онлайн-комнаты'],
  'watch.corner':['🚩 קרן! מחכים לנגיחה…','🚩 Corner! Waiting for the header…','🚩 ركنية! في انتظار الضربة الرأسية…','🚩 Угловой! Ждём удар головой…'],
  'watch.pk':['🥅 פנדל! מחכים לבעיטה…','🥅 Penalty! Waiting for the kick…','🥅 ركلة جزاء! في انتظار التسديدة…','🥅 Пенальти! Ждём удар…'],
  'upd.new':['🆕 יש גרסה חדשה של המשחק, לחץ כאן לרענון','🆕 A new version is out, click here to reload','🆕 هناك إصدار جديد، اضغط هنا للتحديث','🆕 Вышла новая версия, нажми здесь, чтобы обновить'],
  'set.ice':['❄️ כוח הקרח','❄️ Ice power','❄️ قوة الجليد','❄️ Сила льда'],
  'ice.what':['מה הקרח עושה?','What does the ice do?','ماذا يفعل الجليد؟','Что делает лёд?'],
  'sc.name':['🌀 מספרת','🌀 Bicycle kick','🌀 مقصية','🌀 Удар через себя'],
- 'sc.desc':['Q במשחק, פעם אחת בכל משחק: סיבוב באוויר ובעיטה לכיוון ההפוך. עובד רק כשהכדור לפניך, על הדשא או באוויר','Q in a match, once per match: a spinning overhead kick the other way. Only when the ball is in front of you, on the grass or in the air','X في المباراة، مرة واحدة: دوران في الهواء وركلة بالاتجاه المعاكس. فقط عندما تكون الكرة أمامك','X в матче, один раз: переворот и удар в обратную сторону. Только когда мяч перед тобой'],
+ 'sc.desc':['Q במשחק, פעם אחת בכל משחק: סיבוב באוויר ובעיטה לכיוון ההפוך. עובד רק כשהכדור לפניך, על הדשא או באוויר','Q in a match, once per match: a spinning overhead kick the other way. Only when the ball is in front of you, on the grass or in the air','Q في المباراة: دوران في الهواء وركلة بالاتجاه المعاكس. فقط عندما تكون الكرة أمامك','Q в матче: переворот и удар в обратную сторону. Только когда мяч перед тобой'],
  'sc.free':['✔ חינם לכולם','✔ Free for all','✔ مجاني للجميع','✔ Бесплатно для всех'],
  'sc.noBall':['🌀 אין כדור לפניך למספרת!','🌀 No ball in front of you!','🌀 لا كرة أمامك!','🌀 Перед тобой нет мяча!'],
  'c.scissors':['🎙️ 🌀 מספרת של {0}!!! איזה יופי!','🎙️ 🌀 Bicycle kick by {0}!!! Beautiful!','🎙️ 🌀 مقصية من {0}!!! رائعة!','🎙️ 🌀 Удар через себя от {0}!!! Красота!'],
@@ -1811,6 +1807,7 @@ const RANKS=[[0,'rank.0'],[10,'rank.1'],[25,'rank.2'],[50,'rank.3'],[100,'rank.4
 const rankOf = t => RANKS.reduce((r,[min,k])=>t>=min?k:r,'rank.0');
 function addTrophies(n){ if(!(n>0) || training) return; prog.trophies=(prog.trophies|0)+n; saveProg(); toast(T('trophy.gain',n),'ach'); updateXpBadge(); checkTrophyRoad(); }
 function achieve(id){
+  if(training || (pk && pk.train)) return;                 // practice never hands out achievements
   if(prog.ach[id]) return; const a=ACH.find(x=>x[0]===id); if(!a) return;
   prog.ach[id]=Date.now(); prog.xp+=a[1]; saveProg(); updateXpBadge();
   setTimeout(()=>{ toast(T('ach.new', T('a.'+id), a[1]), 'ach'); try{ sfx.win(); }catch(e){} }, 400);
@@ -2360,7 +2357,7 @@ function refreshHome(){
 
 /* ---------- language switching ---------- */
 const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '#btn-exit':'btn.exit', '#btn-ceo-l':'btn.ceo', '#btn-wa-link':'ceo.click', '#btn-mp':'btn.mp', '#btn-2v2':'btn.2v2',
-  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#chal-title':'chal.title', '#btn-chal-close':'btn.back2', '#btn-fs':'home.fs', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=free]':'gal.free', '#gal-filter [data-f=power]':'gal.power', '#sc-pv-name':'sc.name', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
+  '#btn-pk':'btn.pk', '#btn-stats':'btn.stats', '#btn-play':'btn.play', '#btn-friends':'btn.friends', '#btn-top':'btn.top', '#btn-ach-home':'stats.ach', '#btn-party-leave':'party.leave', '#chal-title':'chal.title', '#btn-chal-close':'btn.back2', '#btn-fs':'home.fs', '#party-title':'party.title', '#party-lv-l':'party.level', '#btn-party-go':'btn.play', '#btn-party-cancel':'btn.back2', '#road-title':'road.title', '#btn-road-close':'btn.back2', '#btn-admin':'adm.btn', '#adm-title':'adm.title', '#adm-powers-h':'adm.powers', '#adm-super-l':'adm.super', '#btn-adm-unlock':'adm.unlock', '#btn-adm-reset':'adm.resetBtn', '#adm-codes-h':'adm.newCode', '#adm-codes-hint':'adm.codesHint', '#btn-adm-code-go':'adm.create', '#btn-adm-close':'btn.back2', '#btn-adm-leave':'adm.leave', '#ban-title':'ban.title', '#update-bar':'upd.new', '#btn-end-home2':'end.home', '#name-title':'name.ask', '#name-hint':'name.hint', '#btn-name-go':'name.go', '#gal-filter [data-f=all]':'gal.all', '#gal-filter [data-f=il]':'gal.il', '#gal-filter [data-f=free]':'gal.free', '#gal-filter [data-f=power]':'gal.power', '#chars h2':'chars.title', '#btn-back':'btn.back', '#btn-choose':'btn.choose',
   '#btn-ceo-back':'btn.back', '.ceo-name':'ceo.name', '.ceo-role':'ceo.role', '.ceo-tag':'btn.ceo', '#ceo-wa':'ceo.wa',
   '#mp h2':'mp.title', '#btn-mp-back':'btn.back', '#mp-lobby .mp-card:nth-child(1) h3':'mp.host.h', '#mp-lobby .mp-card:nth-child(1) p':'mp.host.p', '#btn-mp-host':'mp.host.btn',
   '#mp-code .wait':'mp.wait', '#mp-lobby .mp-card:nth-child(2) h3':'mp.join.h', '#mp-lobby .mp-card:nth-child(2) p':'mp.join.p', '#btn-mp-join':'mp.join.btn',
@@ -2640,7 +2637,7 @@ function probeFriend(name){
 const fbOn = () => !!FB_URL;
 async function fbReq(path, method, body){
   if(!fbOn()) return null;
-  try{ const r=await fetch(FB_URL.replace(/\/$/,'')+'/'+path+'.json', {method, headers:{'Content-Type':'application/json'}, body: body!==undefined ? JSON.stringify(body) : undefined}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; }
+  try{ const r=await fetch(FB_URL.replace(/\/$/,'')+'/'+path+'.json', {method, headers:{'Content-Type':'application/json'}, body: body!==undefined ? JSON.stringify(body) : undefined}); if(!r.ok) return undefined; return await r.json(); }catch(e){ return undefined; }   // undefined = could not reach the server, null = nothing stored there
 }
 const fbKey = name => nameId(name).slice(4);
 let fbLastState='';
@@ -2706,6 +2703,7 @@ async function searchFriend(raw){
   const [fb, pr] = await Promise.all([fbOn() ? fbLookup(name) : Promise.resolve(undefined), probeFriend(name)]);
   let status;
   if(pr) status = pr.st==='match' ? 'match' : pr.st==='watch' ? 'watch' : 'online';
+  else if(fbOn() && fb===undefined){ status='offline'; toast(T('fb.down'),'warn'); }   // could not reach the server: we only know they are not online right now
   else if(fbOn() && fb===null) status='none';                       // the server has never seen this name
   else if(fbOnline(fb)) status = fb.st==='match' ? 'match' : 'online';   // the server saw them a moment ago but we could not reach them directly
   else status='offline';
@@ -2762,7 +2760,7 @@ async function inviteFriend(name){
   toast(T('invite.sent',name),'xp');
   const onData=m=>{
     if(!m) return;
-    if(m.t==='accept'){ c.off('data',onData); startMpFromConn(c,'host'); }
+    if(m.t==='accept'){ c.off('data',onData); if(state!=='idle' || pk || spectating){ try{ c.send({t:'left'}); setTimeout(()=>c.close(),300); }catch(e){} return; } startMpFromConn(c,'host'); }
     else if(m.t==='decline'){ toast(T('invite.declined',name),'warn'); try{ c.close(); }catch(e){} }
     else if(m.t==='busy'){ toast(T('invite.busy',name),'warn'); try{ c.close(); }catch(e){} }
   };
@@ -2907,7 +2905,10 @@ async function redeemCode(raw){
   if(CODES[code]){ prog.codes.push(code); saveProg(); CODES[code](); inp.value=''; return; }
   if(fbOn()){                                                    // codes the admin created on the server: {xp, max, used}
     const c=await fbReq('codes/'+code,'GET');
-    if(c && (c.used|0)<(c.max|0)){ prog.codes.push(code); saveProg(); fbReq('codes/'+code,'PATCH',{used:(c.used|0)+1}); const me=normName(settings.name); if(me) fbReq('codes/'+code+'/users/'+fbKey(me),'PUT',{name:me, t:{'.sv':'timestamp'}}); addXP(c.xp|0); sfx.win(); inp.value=''; return; }
+    if(c===undefined){ sfx.lose(); toast(T('fb.down'),'warn'); return; }
+    const me=normName(settings.name);
+    if(c && me && c.users && c.users[fbKey(me)]){ sfx.lose(); toast(T('codes.used'),'warn'); return; }
+    if(c && Math.max(c.used|0, Object.keys(c.users||{}).length)<(c.max|0)){ prog.codes.push(code); saveProg(); fbReq('codes/'+code,'PATCH',{used:{'.sv':{increment:1}}}); if(me) fbReq('codes/'+code+'/users/'+fbKey(me),'PUT',{name:me, t:{'.sv':'timestamp'}}); addXP(c.xp|0); sfx.win(); inp.value=''; return; }
     if(c){ sfx.lose(); toast(T('codes.usedUp'),'warn'); return; }
   }
   bad();
@@ -2986,12 +2987,12 @@ async function refreshAdminLists(){
     const c=await fbReq('codes','GET');
     const cl=Object.entries(c||{});
     const usersOf=v=>Object.values((v&&v.users)||{}).filter(u=>u&&u.name).sort((a,b)=>(b.t|0)-(a.t|0));
-    codes.innerHTML = cl.length ? `<div class="adm-h">${T('adm.codesList')}</div><div class="hint">${T('adm.codeTap')}</div>`+cl.map(([k,v])=>{ const us=usersOf(v); return `<div class="code-wrap"><div class="frow adm code-row" data-key="${k}" title="${T('adm.codeTap')}"><span class="fname" style="direction:ltr;text-align:right">🎁 ${esc(k)}</span><span class="fstat">⭐ ${v.xp|0} · ${us.length||v.used|0}/${v.max|0} ▾</span><button class="btn small red" data-act="delcode">🗑</button></div><div class="code-users" hidden><div class="hint">${us.length ? T('adm.codeUsers') : T('adm.codeNone')}</div>${us.map(u=>`<div class="code-user"><span>👤 ${esc(u.name)}</span><span class="when">${u.t ? new Date(u.t).toLocaleString() : ''}</span></div>`).join('')}</div></div>`; }).join('') : '';
+    codes.innerHTML = cl.length ? `<div class="adm-h">${T('adm.codesList')}</div><div class="hint">${T('adm.codeTap')}</div>`+cl.map(([k,v])=>{ const us=usersOf(v); return `<div class="code-wrap"><div class="frow adm code-row" data-key="${k}" title="${T('adm.codeTap')}"><span class="fname" style="direction:ltr;text-align:right">🎁 ${esc(k)}</span><span class="fstat">⭐ ${v.xp|0} · ${Math.max(us.length, v.used|0)}/${v.max|0} ▾</span><button class="btn small red" data-act="delcode">🗑</button></div><div class="code-users" hidden><div class="hint">${us.length ? T('adm.codeUsers') : T('adm.codeNone')}</div>${us.map(u=>`<div class="code-user"><span>👤 ${esc(u.name)}</span><span class="when">${u.t ? new Date(u.t).toLocaleString() : ''}</span></div>`).join('')}</div></div>`; }).join('') : '';
   }
 }
 async function kickPlayer(name, key, minutes){
   const until=Date.now()+minutes*60000, by=normName(settings.name);
-  if(fbOn()) await fbReq('bans/'+key,'PUT',{name, until, by, t:{'.sv':'timestamp'}});
+  if(fbOn()){ const r=await fbReq('bans/'+key,'PUT',{name, until, by, t:{'.sv':'timestamp'}}); if(r===undefined) toast(T('fb.down'),'warn'); }
   const c=await reach(name,'kick',4000);                       // tell them right now if we can reach them
   if(c){ try{ c.send({t:'kick', until, by}); }catch(e){} setTimeout(()=>{ try{ c.close(); }catch(e){} },500); }
   toast(T('adm.kicked', name),'warn'); refreshAdminLists();
@@ -3000,7 +3001,8 @@ async function createCode(){
   const code=($('#adm-code').value||'').trim().toUpperCase().replace(/\s+/g,''), xp=+$('#adm-code-xp').value|0, max=+$('#adm-code-uses').value|0;
   if(!code || xp<=0 || max<=0){ toast(T('codes.bad'),'warn'); return; }
   if(!fbOn()){ toast(T('adm.needServer'),'warn'); return; }
-  await fbReq('codes/'+code,'PUT',{xp, max, used:0, by:normName(settings.name), t:{'.sv':'timestamp'}});
+  const r=await fbReq('codes/'+code,'PUT',{xp, max, used:0, by:normName(settings.name), t:{'.sv':'timestamp'}});
+  if(r===undefined){ toast(T('fb.down'),'warn'); return; }
   $('#adm-code').value=''; toast(T('adm.codeMade', code),'ach'); refreshAdminLists();
 }
 $('#btn-admin').addEventListener('click', ()=>{ sfx.click(); openAdmin(); });
@@ -3262,7 +3264,7 @@ const KEYSETS=[
 ];
 const KP=KEYSETS.map(()=>({ k:{left:false,right:false,jump:false,kick:false,slide:false,sc:false}, q:{jump:false,kick:false,slide:false,sc:false} }));
 const keys2=KP[0].k, q2=KP[0].q;
-function clearKP(){ for(const c of KP){ c.k.left=c.k.right=c.k.jump=c.k.kick=c.k.slide=false; c.q.jump=c.q.kick=c.q.slide=false; } }
+function clearKP(){ for(const c of KP){ c.k.left=c.k.right=c.k.jump=c.k.kick=c.k.slide=c.k.sc=false; c.q.jump=c.q.kick=c.q.slide=c.q.sc=false; } }
 /* the pitch width: 1000 for 1v1, wider for 2v2 (the world is scaled down to fit the stage, so the stadium looks bigger) */
 function setField(w){
   FIELD_W=w; MINX=GOAL_W-16+PW/2; MAXX=FIELD_W-GOAL_W+16-PW/2;
@@ -3320,7 +3322,7 @@ window.addEventListener('keydown', e=>{
   if(setKey(e.code,true)) e.preventDefault();
 });
 window.addEventListener('keyup', e=>{ if(e.code==='Space' && pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); return; } if(setKey(e.code,false)) e.preventDefault(); });
-window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=false; clearKP(); });
+window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=keys.slide=keys.ice=keys.fire=keys.sc=false; clearKP(); });
 
 /* touch controls: slide a finger across ◀ ▶ without lifting to change direction; jump/kick are taps */
 (function setupTouch(){
@@ -3337,7 +3339,7 @@ window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=f
   ['pointerup','pointercancel'].forEach(t=>move.addEventListener(t, e=>{ if(e.pointerId===moveId) clearMove(); }));
   document.querySelectorAll('#touch .act .tb').forEach(b=>{
     const k=b.dataset.k;
-    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else if(k==='ice') iceQueued=true; else if(k==='fire') fireQueued=true; else if(k==='sc') scQueued=true; else kickQueued=true; });
+    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(state!=='play') return; if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else if(k==='ice') iceQueued=true; else if(k==='fire') fireQueued=true; else if(k==='sc') scQueued=true; else kickQueued=true; });
     ['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t, ()=>b.classList.remove('pressed')));
   });
 })();
@@ -3409,7 +3411,7 @@ function beginMatch(c1, c2, opts){
   rbuf.length=0; replay=null; wasBehind=false; said2=said1=said10=false; $('#replay-tag').hidden=true; lastSayT=performance.now(); nextAmbient=5;
   resetPositions();
   showScreen('game');
-  keys.left=keys.right=keys.jump=keys.kick=false; jumpQueued=kickQueued=false;
+  keys.left=keys.right=keys.jump=keys.kick=keys.slide=keys.ice=keys.fire=keys.sc=false; jumpQueued=kickQueued=slideQueued=iceQueued=fireQueued=scQueued=false; clearKP();
   lastT=performance.now();
   cancelAnimationFrame(rafId); rafId=requestAnimationFrame(spectating ? spectLoop : localIsP1 ? loop : guestLoop);
   if(localIsP1){
@@ -3437,7 +3439,7 @@ function startCountdown(done){
   step();
 }
 /* ---------- ice power ---------- */
-function iceAvailable(){ return !!prog.ice && !mp && !spectating && iceMode()!=='off'; }              // bought once, offline modes only
+function iceAvailable(){ return !!prog.ice && !mp && !spectating && !training && iceMode()!=='off'; }              // bought once, offline modes only
 let iceSeq=0;
 // builds a fresh random jagged crystal: an irregular polygon body with facets, loose shards floating around it and sparkles
 function iceSVG(){
@@ -3483,9 +3485,9 @@ function useIce(){
   iceCd = superOn() ? 1 : ICE_CD;
   if(iceMode()==='goal'){
     goalIceT=ICE_DUR; const g=$('#goal-ice'); g.classList.remove('thaw'); g.classList.add('show'); g.innerHTML=goalIceSVG();
-    sfx.ice(); say('c.iceGoal'); netEv('gice:1'); updateIceHud(); return;
+    sfx.ice(); say('c.iceGoal'); netEv('gice:1'); updateIceHud(); challengeEvent('ice'); return;
   }
-  for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.el.classList.add('frozen'); const ic=o.el.querySelector('.ice'); if(ic) ic.innerHTML=iceSVG(); }
+  for(const o of teamR){ o.frozenT=ICE_DUR; o.vx=0; o.slideT=0; o.el.classList.remove('sliding'); o.el.classList.add('frozen'); const ic=o.el.querySelector('.ice'); if(ic) ic.innerHTML=iceSVG(); }
   sfx.ice(); say('c.ice'); updateIceHud(); challengeEvent('ice');
 }
 function goalIceSVG(){                               // the goal frozen over: icicles hanging from the bar, frost ferns creeping across the net, snow on the posts, a cold haze
@@ -3519,8 +3521,8 @@ function setupIceUI(){
   $('#ice-hud').hidden=!on; const tb=document.querySelector('#touch .tb.ice'); if(tb) tb.hidden=!on;
   iceCd=0; goalIceT=0; $('#goal-ice').classList.remove('show','thaw'); updateIceHud(); for(const p of [P1,P2,P3,P4]){ p.frozenT=0; p.el.classList.remove('frozen'); }
 }
-$('#ice-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); iceQueued=true; });
-document.querySelectorAll('#set-ice .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); settings.iceMode=b.dataset.mode; saveSettings(); document.querySelectorAll('#set-ice .btn').forEach(x=>x.classList.toggle('on', x===b)); updateIceHud(); }));
+$('#ice-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); if(state==='play') iceQueued=true; });
+document.querySelectorAll('#set-ice .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); settings.iceMode=b.dataset.mode; saveSettings(); openIcePanel(); updateIceHud(); }));
 /* the ice panel on the character screen: pick what the power does, or buy it */
 function openIcePanel(){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('icecard')));
@@ -3542,15 +3544,20 @@ function tryBuyIce(){
 }
 /* ---------- fire power: the ball drops, burns away and a new one appears at the centre (10,000 XP, 20s cooldown, offline modes) ---------- */
 const FIRE_PRICE=10000, FIRE_CD=20;
-let fireQueued=false, fireCd=0, fireBusy=false;
-function fireAvailable(){ return !!prog.fire && !mp && !spectating && settings.fireOff!==true; }
+let fireQueued=false, fireCd=0, fireBusy=false, fireT=0;
+function fireAvailable(){ return !!prog.fire && !mp && !spectating && !training && settings.fireOff!==true; }
 function useFire(){
   if(!fireAvailable() || state!=='play' || fireCd>0 || fireBusy) return;
-  fireCd=FIRE_CD; fireBusy=true; updateFireHud();
+  fireCd=FIRE_CD; fireBusy=true; fireT=.9; updateFireHud();
   sfx.ice(); say('c.fire'); netEv('fire');
   fireFx();
-  ball.vx*=.3; ball.vy=Math.min(ball.vy,-300);                           // it drops like a stone
-  setTimeout(()=>{ if(state!=='play'){ fireBusy=false; return; } ball.x=FIELD_W/2; ball.y=R; ball.vx=0; ball.vy=0; ball.rot=0; render(); const b=$('#ball'); b.classList.remove('burning'); b.classList.remove('reappear'); void b.offsetWidth; b.classList.add('reappear'); setTimeout(()=>b.classList.remove('reappear'),400); fireBusy=false; }, 900);
+  ball.vx=0; ball.vy=Math.min(ball.vy,-300);                              // it drops like a stone, straight down – it cannot roll into a goal
+}
+function fireDone(){                                   // the burn is over (or play was interrupted): a fresh ball at the centre, visible again
+  if(!fireBusy) return; fireBusy=false; fireT=0;
+  const b=$('#ball'); b.classList.remove('burning'); $('#ball-fire').classList.remove('show');
+  if(state==='play'){ ball.x=FIELD_W/2; ball.y=R; ball.vx=0; ball.vy=0; ball.rot=0; render(); b.classList.remove('reappear'); void b.offsetWidth; b.classList.add('reappear'); setTimeout(()=>b.classList.remove('reappear'),400); }
+  netEv('fireEnd');
 }
 function fireFx(){                                     // flames on the ball, a scorch mark on the ground, then the ball is gone
   const fx=$('#ball-fire'), sc=$('#scorch'), b=$('#ball');
@@ -3564,7 +3571,7 @@ function fireSVG(){
   for(let i=0;i<6;i++) s+=`<circle cx="${rnd(25,65)}" cy="${rnd(20,60)}" r="${rnd(1.5,3)}" fill="#FFD447"><animate attributeName="cy" values="${rnd(50,70)};${rnd(0,20)}" dur="${rnd(.5,.9)}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="${rnd(.5,.9)}s" repeatCount="indefinite"/></circle>`;
   return `<svg viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
 }
-function updateFire(dt){ if(fireCd>0){ fireCd=Math.max(0,fireCd-dt); updateFireHud(); } }
+function updateFire(dt){ if(fireCd>0){ fireCd=Math.max(0,fireCd-dt); updateFireHud(); } if(fireBusy){ ball.vx=0; fireT-=dt; if(fireT<=0) fireDone(); } }
 function updateFireHud(){
   const h=$('#fire-hud'); if(!h) return;
   const ready=fireCd<=0; h.classList.toggle('ready',ready);
@@ -3576,9 +3583,9 @@ function setupFireUI(){
   const on=fireAvailable();
   $('#fire-hud').hidden=!on; const tb=document.querySelector('#touch .tb.fire'); if(tb) tb.hidden=!on;
   const tops=[]; if(iceAvailable()) tops.push('#ice-hud'); if(fireAvailable()) tops.push('#fire-hud'); const touch=document.body.classList.contains('touch'); tops.forEach((id,i)=>{ $(id).style.top=(70+i*(touch?96:82))+'px'; });   // the powers stack down the left side
-  fireCd=0; fireBusy=false; fireQueued=false; updateFireHud(); $('#ball').classList.remove('burning','reappear'); $('#ball-fire').classList.remove('show'); $('#scorch').classList.remove('show');
+  fireCd=0; fireBusy=false; fireT=0; fireQueued=false; updateFireHud(); $('#ball').classList.remove('burning','reappear'); $('#ball-fire').classList.remove('show'); $('#scorch').classList.remove('show');
 }
-$('#fire-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); fireQueued=true; });
+$('#fire-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); if(state==='play') fireQueued=true; });
 function openFirePanel(){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('firecard')));
   $('#chars .preview:not(.ice-preview):not(.fire-preview)').hidden=true; $('#ice-preview').hidden=true; const sp=$('#sc-preview'); if(sp) sp.hidden=true; const p=$('#fire-preview'); p.hidden=false;
@@ -3595,9 +3602,10 @@ function tryBuyFire(){
   if(!confirm(T('fire.confirm',fmtXp(FIRE_PRICE)))) return;
   prog.xp-=FIRE_PRICE; prog.fire=true; saveProg(); sfx.win(); toast(T('fire.bought'),'ach'); updateXpBadge(); buildGallery(); refreshPreview();
 }
-/* ---------- scissors kick: once per match, a spinning overhead kick that sends the ball the OTHER way – only when the ball is in front of you (on the ground or flying at you) ---------- */
+/* ---------- bicycle kick ("מספרת"): a spinning overhead kick that sends the ball the OTHER way – as often as you like, only when the ball is in front of you (on the ground or flying at you) ---------- */
 let scQueued=false;
-function scissorsReady(p){ return !p.scissorsUsed && p.slideT<=0 && p.stunT<=0 && p.frozenT<=0; }
+const SC_CD=.8;                                                            // a short breather between kicks so the spin can finish
+function scissorsReady(p){ return !(p.scCd>0) && p.slideT<=0 && p.stunT<=0 && p.frozenT<=0; }
 function ballInFront(p){
   const dx=ball.x-p.x, front = Math.sign(dx)===p.facing || Math.abs(dx)<12;
   return front && Math.abs(dx)<170 && ball.y<PH+70;                        // in front and within reach: rolling or flying at you
@@ -3605,25 +3613,19 @@ function ballInFront(p){
 function doScissors(p){
   if(!scissorsReady(p)) return false;
   if(!ballInFront(p)){ if(p===P1 && !mp){ toast(T('sc.noBall'),'warn'); } return false; }
-  p.scissorsUsed=true;
+  p.scCd=SC_CD;
   p.el.classList.remove('scissors'); void p.el.offsetWidth; p.el.classList.add('scissors'); setTimeout(()=>p.el.classList.remove('scissors'), 600);
   const dir=-p.facing;                                                       // the other way from where you stand
-  ball.x=p.x+dir*10; ball.vx=dir*1150*st(p).power; ball.vy=720; ball.y=Math.max(ball.y, 40);
+  ball.x=p.x+dir*(PW/2+R+6); ball.y=Math.max(ball.y, 40);                    // starts just outside the body, so the kick keeps its full speed
+  ball.vx=dir*1150*st(p).power; ball.vy=720;
   lastTouch={p,type:'scissors',t:performance.now()};
   p.kicks=(p.kicks|0)+1; sfx.kick(); sfx.tackle();
   if(teamL.includes(p)) say('c.scissors', pname(p)); netEv('sc:'+players.indexOf(p));
-  updateScHud();
   return true;
 }
 function useScissors(){ if(state!=='play' || spectating || (mp && mp.role==='guest')) return; doScissors(P1); }
-function updateScHud(){ const used=!!P1.scissorsUsed; const tb=document.querySelector('#touch .tb.sc'); if(tb) tb.classList.toggle('used',used); }
-function setupScUI(){ for(const p of [P1,P2,P3,P4]) p.scissorsUsed=false; scQueued=false; $('#sc-hud').hidden=true; const tb=document.querySelector('#touch .tb.sc'); if(tb) tb.hidden=!!spectating; updateScHud(); }
-$('#sc-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); scQueued=true; });
-function openScPanel(){
-  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('sccard')));
-  $('#chars .preview:not(.ice-preview):not(.fire-preview):not(.sc-preview)').hidden=true; $('#ice-preview').hidden=true; $('#fire-preview').hidden=true; $('#sc-preview').hidden=false;
-  $('#sc-pv-desc').textContent=T('sc.desc');
-}
+function updateScissors(dt){ for(const p of players) if(p.scCd>0) p.scCd-=dt; }
+function setupScUI(){ for(const p of [P1,P2,P3,P4]) p.scCd=0; scQueued=false; const tb=document.querySelector('#touch .tb.sc'); if(tb) tb.hidden=!!spectating; }
 /* ---------- pause (match + penalties) ---------- */
 let pausedFrom=null, cornerCd=0;
 let pausePending=false;
@@ -3633,6 +3635,7 @@ function pauseGame(){
   if(state==='play' && !pk){ pausedFrom='game'; state='paused'; cancelAnimationFrame(rafId); }
   else if(pk && !pk.corner && ['aim','hold','power','keep'].includes(pk.phase)){ pausedFrom='pk'; pk.pausedPhase=pk.phase; pk.phase='paused'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); }
   else if(pk && pk.corner && (pk.phase==='cross'||pk.phase==='wait')){ pausedFrom='corner'; pk.phase='paused'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); }
+  else if(pk){ pk.pausePending=true; return; }              // between kicks: pause as soon as the next kick is set up
   else return;
   try{ speechSynthesis.cancel(); }catch(e){}
   sfx.click(); $('#pause-modal').classList.add('show');
@@ -3662,6 +3665,7 @@ function resetPositions(){
     p.x=p.home; p.y=0; p.vx=p.vy=0; p.facing = p.home<FIELD_W/2 ? 1 : -1; p.reactT=0; p.targetX=p.x;
     p.slideT=p.slideCd=p.stunT=0; p.slideHit=false; p.el.classList.remove('running','kicking','sliding','stunned');
   }
+  if(typeof fireBusy!=='undefined' && fireBusy){ fireBusy=false; fireT=0; $('#ball').classList.remove('burning'); $('#ball-fire').classList.remove('show'); netEv('fireEnd'); }
   ball.x=FIELD_W/2; ball.y=R; ball.vx=0; ball.vy=0;
   render();
 }
@@ -3759,7 +3763,7 @@ function endGame(){
 }
 
 function scoreGoal(who){
-  if(state!=='play') return;
+  if(state!=='play' || fireBusy) return;
   state='celebrate';
   if(training==='shoot'){                             // practice: no score, no own goals, no XP, no commentary – just the celebration and a reset
     ball.vx*=.2; ball.vy=0; for(const p of players) p.el.classList.remove('running');
@@ -3906,7 +3910,7 @@ function movePlayer(p,dt,others){
   if(p.kickT>0) p.kickT-=dt;
 }
 function humanInput(p,k,q){                          // extra keyboard player (2v2 with friends)
-  if(p.frozenT>0){ q.jump=q.kick=q.slide=false; return; }
+  if(p.frozenT>0){ q.jump=q.kick=q.slide=q.sc=false; return; }
   let d=0; if(k.left) d-=1; if(k.right) d+=1;
   if(p.slideT<=0 && p.stunT<=0){ p.vx=d*MOVE*st(p).speed; if(d) p.facing=d; }
   if(q.jump && p.y===0 && p.slideT<=0 && p.stunT<=0) p.vy=JUMP*st(p).jump;
@@ -4078,7 +4082,7 @@ function loop(t){
     if(slideQueued){ doSlide(P1); slideQueued=false; }
     if(iceQueued){ useIce(); iceQueued=false; }
     if(fireQueued){ useFire(); fireQueued=false; } updateFire(dt);
-    if(scQueued){ useScissors(); scQueued=false; }
+    if(scQueued){ useScissors(); scQueued=false; } updateScissors(dt);
     updateIce(dt);
     if(pausePending){ pausePending=false; pauseGame(); return; }
     if(training!=='shoot'){                          // every other seat: a friend on another computer, a friend on my keyboard, or the computer
@@ -4183,7 +4187,7 @@ async function mpHost(cfg){                           // cfg = null → plain 1v
     else if(!mp.connected){ mpStatus(T('mp.err',e.type)); $('#btn-mp-host').disabled=false; }
   });
 }
-function mpFreeSlot(){ const used=mp.conns.map(c=>c.slot); return netSlots(mp.cfg).find(s=>!used.includes(s)) || null; }
+function mpFreeSlot(){ const used=mp.conns.map(c=>c.slot); return netSlots(mp.cfg && mp.cfg.party ? PARTY_CFG() : mp.cfg).find(s=>!used.includes(s)) || null; }
 function mpAccept(conn, alreadyOpen){
   const slot=mpFreeSlot();
   if(!slot){ const bye=()=>{ try{ conn.send({t:'full'}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} },300); }; if(alreadyOpen) bye(); else conn.on('open',bye); return; }
@@ -4203,7 +4207,8 @@ function mpAccept(conn, alreadyOpen){
 function mpDrop(c){
   if(!mp || mp.role!=='host') return;
   const i=mp.conns.indexOf(c); if(i<0) return; mp.conns.splice(i,1);
-  if(state!=='idle'){ mpAbort(); return; }         // someone left mid-match: everyone back to the lobby
+  if(!mp.conns.length) mp.connected=false;               // nobody left in the party
+  if(state!=='idle' && state!=='end'){ mpAbort(); return; }         // someone left mid-match: everyone back to the lobby
   toast(T('mp.left'),'warn'); mpBroadcastLobby(); mpRefresh();
 }
 function mpAbort(){
@@ -4429,7 +4434,7 @@ $('#btn-fs').addEventListener('click', ()=>{ sfx.click(); try{ if(document.fulls
 $('#btn-chal-close').addEventListener('click', ()=>{ sfx.click(); $('#chal-modal').classList.remove('show'); });
 function applyRemoteFor(p, r){                        // host: drive a remote friend's player with the inputs they sent
   let d=0; if(r.l) d-=1; if(r.r) d+=1;
-  if(p.frozenT>0){ r.j=r.k=r.s=0; return; }
+  if(p.frozenT>0){ r.j=r.k=r.s=r.x=0; return; }
   if(p.slideT<=0 && p.stunT<=0){ p.vx=d*MOVE*st(p).speed; if(d) p.facing=d; }
   if(r.j){ if(p.y===0 && p.slideT<=0 && p.stunT<=0) p.vy=JUMP*st(p).jump; r.j=0; }
   if(r.k){ if(p.stunT<=0) doKick(p); r.k=0; }
@@ -4469,7 +4474,7 @@ function applySnapshot(s, teamL, isPlayer){
   });
   ball.x=s.b[0]; ball.y=s.b[1]; ball.rot=s.b[2];
   const mi=teamL?0:1, oi=teamL?1:0;
-  if(isPlayer && s.sc[mi]>score.me){ prog.goals++; addXP(1); }
+  if(isPlayer && s.sc[mi]>score.me){ prog.goals++; addXP(1); challengeEvent('goal'); }
   if(s.sc[oi]>score.op && s.sc[oi]>s.sc[mi]) wasBehind=true;
   score.me=s.sc[mi]; score.op=s.sc[oi]; updateScore();
   timeLeft=s.tl; if(state!=='end' && (s.st==='play'||s.st==='celebrate'||s.st==='replay'||s.st==='countdown')) state=s.st; updateTimer();
@@ -4481,7 +4486,8 @@ function applySnapshot(s, teamL, isPlayer){
     else if(e.startsWith('hold:')){ if(!isPlayer){ const h=$('#watch-hold'); h.hidden=false; h.textContent=T(e==='hold:corner' ? 'watch.corner' : 'watch.pk'); } }   // the host is on the corner / penalty screen
     else if(e==='holdEnd') $('#watch-hold').hidden=true;
     else if(e==='fire') fireFx();
-    else if(e.startsWith('sc:')){ const p=players[+e.slice(3)]; if(p){ p.el.classList.remove('scissors'); void p.el.offsetWidth; p.el.classList.add('scissors'); setTimeout(()=>p.el.classList.remove('scissors'),600); sfx.tackle(); if(mp && p===SLOT_P[mp.slot]){ P1.scissorsUsed=true; updateScHud(); } } }
+    else if(e==='fireEnd'){ const b=$('#ball'); b.classList.remove('burning'); $('#ball-fire').classList.remove('show'); b.classList.remove('reappear'); void b.offsetWidth; b.classList.add('reappear'); setTimeout(()=>b.classList.remove('reappear'),400); }
+    else if(e.startsWith('sc:')){ const p=players[+e.slice(3)]; if(p){ p.el.classList.remove('scissors'); void p.el.offsetWidth; p.el.classList.add('scissors'); setTimeout(()=>p.el.classList.remove('scissors'),600); } }
     else if(e.startsWith('scorer:')) showScorer(e.slice(7));
     else if(e==='gice:1'){ const g=$('#goal-ice'); g.classList.remove('thaw'); g.classList.add('show'); g.innerHTML=goalIceSVG(); }
     else if(e==='gice:0'){ const g=$('#goal-ice'); g.classList.remove('show'); g.classList.add('thaw'); setTimeout(()=>g.classList.remove('thaw'),500); }
@@ -4678,8 +4684,14 @@ function newCup(myIdx){
   order.splice(Math.floor(Math.random()*32),0,myIdx);
   cup={ mine:myIdx, round:0, rounds:[[]], out:false, champion:null, level:pkLevel };
   for(let i=0;i<16;i++) cup.rounds[0].push({a:order[2*i], b:order[2*i+1], w:null, sa:0, sb:0});
-  simulateRound(); renderBracket();
+  simulateRound(); renderBracket(); saveCup();
   $('#team-pick').hidden=true; $('#bracket').hidden=false;
+}
+/* the cup survives a reload / update: saved in this browser after every result */
+const CUP_KEY='footballStar.cup';
+function saveCup(){ try{ if(cup) localStorage.setItem(CUP_KEY, JSON.stringify(Object.assign({}, cup, {level:cup.level.i}))); else localStorage.removeItem(CUP_KEY); }catch(e){} }
+function loadCup(){
+  try{ const c=JSON.parse(localStorage.getItem(CUP_KEY)||'null'); if(!c || !c.rounds) return; c.level=PK_LEVELS[c.level]||PK_LEVELS[1]; cup=c; pkLevel=cup.level; renderBracket(); $('#team-pick').hidden=true; $('#bracket').hidden=false; }catch(e){}
 }
 const isMine = m => m.a===cup.mine || m.b===cup.mine;
 function simMatch(m){                                   // computer vs computer shootout, weighted by team strength
@@ -4701,7 +4713,7 @@ function myLiveMatch(){ return cup && !cup.out && cup.champion===null ? cup.roun
 
 /* ----- bracket drawing ----- */
 function matchPos(r,i){
-  if(r===4) return {x:440, y:80+230-28, w:120, h:56, side:0, final:true};
+  if(r===4) return {x:456, y:80+230-28, w:88, h:56, side:0, final:true};
   const perSide=8>>r, side=i<perSide?0:1, k=i-side*perSide, slot=460/perSide;
   return { x: side===0 ? 20+r*112 : 884-r*112, y:80+slot*(k+.5)-23, w:96, h:46, side };
 }
@@ -4743,7 +4755,7 @@ function renderBracket(){
 }
 $('#btn-pk').addEventListener('click', ()=>{ sfx.click(); if(cup) showScreen('cup'); else $('#pk-level-modal').classList.add('show'); });
 $('#btn-cup-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
-$('#btn-cup-new').addEventListener('click', ()=>{ sfx.click(); cup=null; showTeamPick(); $('#pk-level-modal').classList.add('show'); });
+$('#btn-cup-new').addEventListener('click', ()=>{ sfx.click(); cup=null; saveCup(); showTeamPick(); $('#pk-level-modal').classList.add('show'); });
 $('#btn-cup-play').addEventListener('click', ()=>{ sfx.click(); const m=myLiveMatch(); if(m) startShootout(m); });
 
 /* ----- shootout ----- */
@@ -4760,7 +4772,7 @@ function startShootout(m){
   $('#pk-score .tm.a .f').innerHTML=pk.me.flag; $('#pk-score .tm.a .n').textContent=pk.me.code;
   $('#pk-score .tm.b .f').innerHTML=pk.op.flag; $('#pk-score .tm.b .n').textContent=pk.op.code;
   $('#pk-ball').innerHTML=BALL_SVG;
-  $('#pk-end').classList.remove('show');
+  pkResetVisuals();
   renderPkScore(); showScreen('pk'); sfx.whistle();
   setTimeout(nextKick, 600);
 }
@@ -4787,12 +4799,21 @@ function nextKick(){
   $('#pk-score .tm.a').classList.toggle('turn',meShoots); $('#pk-score .tm.b').classList.toggle('turn',!meShoots);
   setupKick(meShoots);
 }
+/* a clean penalty screen before it is shown: no leftover dive, ball, sight, run-up or result text from the previous kick */
+function keeperArmsInFront(){ const k=$('#pk-keeper'), g=k.querySelector('.arms'); if(g) g.parentNode.appendChild(g); }
+function pkResetVisuals(){
+  const el=$('#pk'); el.classList.remove('shooting','keeping','locked','power','sight','hold','corner');
+  const k=$('#pk-keeper'); k.style.transition='none'; k.style.transform='none'; k.classList.remove('arms-up','arms-side','dive-l','dive-r','dive-c'); void k.offsetWidth; k.style.transition='';
+  const s=$('#pk-shooter'); s.style.transition='none'; s.classList.remove('run','headjump'); void s.offsetWidth; s.style.transition='';
+  const b=$('#pk-ball'); b.style.transition='none'; b.style.transform='none'; void b.offsetWidth; b.style.transition='';
+  $('#pk-cross').classList.remove('sight'); $('#pk-msg').classList.remove('show'); $('#pk-end').classList.remove('show'); $('#watch-hold').hidden=true;
+}
 function setupKick(meShoots){                    // reset positions and sprites, then start the aim or the keep phase
   pk.curMeShoots=meShoots;
   const el=$('#pk'); el.classList.remove('shooting','keeping','locked');
   const keeperC  = pk.single ? pk.chars.keeper  : (meShoots ? teamChar(pk.op,true)  : CHARS[selected]);
   const shooterC = pk.single ? pk.chars.shooter : (meShoots ? CHARS[selected] : teamChar(pk.op,false));
-  sprite($('#pk-keeper'), keeperC);
+  sprite($('#pk-keeper'), keeperC); keeperArmsInFront();
   sprite($('#pk-shooter'), shooterC);
   $('#pk-keeper').style.transform='none'; $('#pk-keeper').classList.remove('arms-up','arms-side','dive-l','dive-r','dive-c');
   const ball=$('#pk-ball'); ball.style.transition='none'; ball.style.transform='none'; void ball.offsetWidth; ball.style.transition='';
@@ -4822,6 +4843,7 @@ function setupKick(meShoots){                    // reset positions and sprites,
       pk.timer=setTimeout(aiShoot, pk.window*1000);
     }, 700+Math.random()*900);
   }
+  if(pk.pausePending){ pk.pausePending=false; pauseGame(); }
 }
 /* aiming: the sight sweeps left-right along the ground line; press and hold to raise it, release to shoot */
 const AIM_Y0=392;
@@ -4941,7 +4963,7 @@ function setupPenalty(meShoots, lv, onResult, title){
        readP: clamp(lv.read+.1,.05,.8), missP: Math.max(.03, lv.miss),
        chars:{ shooter: meShoots ? myChar : opChar, keeper: meShoots ? opChar : myChar }, onResult };
   $('#pk-score').hidden=true; $('#pk-round').textContent=title||T('pen.title'); $('#pk-hint').textContent='';
-  $('#pk-end').classList.remove('show'); $('#pk-ball').innerHTML=BALL_SVG;
+  pkResetVisuals(); $('#pk-ball').innerHTML=BALL_SVG;
   showScreen('pk'); setTimeout(()=>{ if(pk && pk.single && !pk.corner) setupKick(meShoots); }, 500);
 }
 /* ---------- corner: header timing mini-game (offline modes) ---------- */
@@ -4973,11 +4995,12 @@ function clearCornerUI(){ $('#pk-score').hidden=false; $('#corner-ring').hidden=
 function setupCorner(mine, onResult, title){
   pk={ corner:true, single:true, mine, lv:PK_LEVELS[level.i]||PK_LEVELS[1], clv:CORNER_LV[level.i]||CORNER_LV[1], phase:'wait', t0:0, raf:0, timer:0, onResult, train: pk&&pk.train };
   $('#pk-score').hidden=true; $('#pk-round').textContent=title||(T('corner.title')+' · '+T('lvl.'+level.i)); $('#pk-hint').textContent=T(mine?'corner.hintAtk':'corner.hintDef');
-  $('#pk-end').classList.remove('show'); $('#pk').classList.remove('shooting','keeping','locked','hold','sight'); $('#pk').classList.add('corner');
-  sprite($('#pk-keeper'), mine ? opChar : myChar); $('#pk-keeper').style.transform='none';
+  pkResetVisuals(); $('#pk').classList.add('corner');
+  sprite($('#pk-keeper'), mine ? opChar : myChar); keeperArmsInFront(); $('#pk-keeper').style.transform='none';
   sprite($('#pk-shooter'), mine ? myChar : opChar); $('#pk-shooter').classList.remove('run','headjump');
   const b=$('#pk-ball'); b.innerHTML=BALL_SVG; b.style.transition='none'; b.style.transform='translate(-600px,-170px) scale(.7)';
   $('#corner-ring').hidden=false; showScreen('pk');
+  if(pk.pausePending){ pk.pausePending=false; pauseGame(); return; }
   pk.timer=setTimeout(()=>{ if(pk&&pk.corner){ pk.phase='cross'; pk.t0=performance.now(); pk.raf=requestAnimationFrame(cornerLoop); } }, 800);
 }
 /* ---------- training: shooting / penalties / corners ---------- */
@@ -5053,17 +5076,17 @@ function endShootout(res){
     if(cup.round===4){ t.textContent=T('pk.champTitle'); s.innerHTML=T('pk.champSub', pk.me.flag+' '+tn(pk.me), ga+'-'+gb); recordResult('c'); sfx.win(); pkConfetti.burst(320); }
     else { t.textContent=T('pk.advTitle'); s.innerHTML=T('pk.advSub', pk.op.flag+' '+tn(pk.op), ga+'-'+gb); sfx.win(); pkConfetti.burst(200); }
   }else{ cup.out=true; t.textContent=T('pk.outTitle'); s.innerHTML=T('pk.outSub', pk.op.flag+' '+tn(pk.op), gb+'-'+ga); sfx.lose(); }
-  $('#pk-hint').textContent=''; $('#pk-round').textContent='';
+  $('#pk-hint').textContent=''; $('#pk-round').textContent=''; saveCup();
   setTimeout(()=>$('#pk-end').classList.add('show'), 1300);
 }
 $('#btn-pk-continue').addEventListener('click', ()=>{
   sfx.click(); $('#pk-end').classList.remove('show');
   const wonCup = pk && !cup.out && cup.round===4;
   advanceRound(); if(cup.out) finishCupSimulated();
-  pk=null; renderBracket(); showScreen('cup');
+  pk=null; renderBracket(); saveCup(); showScreen('cup');
   if(wonCup) cupConfetti.burst(300);
 });
-$('#btn-pk-back').addEventListener('click', e=>{ e.stopPropagation(); sfx.click(); if(pk && pk.train){ quitToHome(); return; } if(pk && pk.single){ if(pk.phase!=='over') pk.onResult(false); return; } if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); } pk=null; showScreen('cup'); });
+$('#btn-pk-back').addEventListener('click', e=>{ e.stopPropagation(); sfx.click(); if(pk && pk.train){ quitToHome(); return; } if(pk && pk.single){ if(pk.phase!=='over') pk.onResult(false); return; } if(pk && pk.phase!=='over' && pk.m && pk.m.w===null){ if(!confirm(T('pk.quitQ'))) return; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); const m=pk.m; m.w = m.a===cup.mine ? m.b : m.a; cup.out=true; finishCupSimulated(); saveCup(); } else if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); } pk=null; renderBracket(); showScreen('cup'); });
 $('#pk').addEventListener('pointerdown', e=>{
   if(e.target.closest('button') || e.target.closest('#pk-score')) return;
   if(!pk) return;
@@ -5078,7 +5101,7 @@ $('#pk').addEventListener('pointerdown', e=>{
 ['pointerup','pointercancel'].forEach(t=>$('#pk').addEventListener(t, e=>{ if(pk && pk.phase==='hold'){ e.preventDefault(); userShoot(); } }));
 
 /* ---------- init ---------- */
-buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
+buildPitch(); buildGallery(); refreshHome(); refreshPreview(); resetPositions(); applyLang(); setupAdminUI(); loadCup(); setTimeout(()=>{ fbHeartbeat(true); checkBan(); }, 1500);
 setTimeout(registerPresence, 800);              // go online under your player name (if one is set)
 </script>
 </body>
