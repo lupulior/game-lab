@@ -1219,7 +1219,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-25.15';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-26.1';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -2637,16 +2637,22 @@ async function searchFriend(raw){
 }
 async function fbLookup(name){ return fbReq('users/'+fbKey(name),'GET'); }
 /* ----- leaderboard: everyone the server knows, by wins (friends only when there is no server) ----- */
+/* names never shown on the leaderboard, and three friendly bots that fill it until 20 real players are on it */
+const HIDDEN_NAMES=['בדיקה-קלוד'];
+const LEADER_BOTS=[{name:'רוני הכוכב', tr:50, w:14, c:1, xp:420, bot:true},{name:'דניאל 10', tr:35, w:9, c:0, xp:260, bot:true},{name:'נועה גול', tr:20, w:6, c:0, xp:150, bot:true}];
 async function buildTop(){
   const box=$('#fr-top'); box.innerHTML=`<div class="hint" style="text-align:center;margin-top:20px">${T('friends.checking')}</div>`;
   let rows=null, server=false;
   if(fbOn()){ const all=await fbReq('users','GET'); if(all){ server=true; rows=Object.values(all).filter(u=>u&&u.name).map(u=>({name:normName(u.name), w:u.w|0, c:u.c|0, xp:u.xp|0, tr:u.tr|0, online:fbOnline(u), st:u.st, adm:!!u.adm})); } }
   if(!rows){ const s=loadStats(); rows=Object.keys(prog.friends).filter(n=>n.toLowerCase()!==normName(settings.name).toLowerCase()).map(n=>({name:n, w:prog.friends[n].w|0, c:prog.friends[n].c|0, xp:prog.friends[n].xp|0, tr:prog.friends[n].tr|0, online:!!prog.friends[n].online})); rows.push({name:normName(settings.name)||T('mp.you'), w:s.w|0, c:s.c|0, xp:prog.xp|0, tr:prog.trophies|0, online:true, me:true}); }
+  const hidden=new Set(HIDDEN_NAMES.concat(LEADER_BOTS.map(b=>b.name)).map(n=>n.toLowerCase()));
+  rows=rows.filter(r=>!hidden.has(r.name.toLowerCase()));
+  if(rows.length<20) rows=rows.concat(LEADER_BOTS.map(b=>Object.assign({online:false}, b)));   // the bots leave once 20 real players are on the table
   rows.sort((a,b)=>b.w-a.w || b.c-a.c || b.xp-a.xp); rows=rows.slice(0,25);
   const me=normName(settings.name).toLowerCase();
   const medal=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`;
   box.innerHTML = (server ? '' : `<div class="hint" style="text-align:center">${T('friends.topNeedsServer')}</div>`) +
-    (rows.length ? rows.map((r,i)=>{ const mine=r.me||r.name.toLowerCase()===me; return `<div class="frow top ${mine?'mine':''}" data-name="${esc(r.name)}"><span class="rank">${medal(i)}</span><span class="dot ${r.online?(r.st==='match'?'match':'online'):'offline'}"></span><span class="fname">${esc(crown(r.name, r.adm||(mine&&isAdmin())))}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">✅ ${r.w} · 🏆 ${r.tr|0} · ⭐ ${r.xp}</span>${mine?'':`<button class="btn small blue" data-act="view">${T('friends.view')}</button>${prog.friends[r.name]?'':`<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`}</div>`; }).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`);
+    (rows.length ? rows.map((r,i)=>{ const mine=r.me||r.name.toLowerCase()===me; return `<div class="frow top ${mine?'mine':''}" data-name="${esc(r.name)}"><span class="rank">${medal(i)}</span><span class="dot ${r.online?(r.st==='match'?'match':'online'):'offline'}"></span><span class="fname">${esc(crown(r.name, r.adm||(mine&&isAdmin())))}${mine?' <small>('+T('mp.you')+')</small>':''}</span><span class="fstat">✅ ${r.w} · 🏆 ${r.tr|0} · ⭐ ${r.xp}</span>${mine||r.bot?'':`<button class="btn small blue" data-act="view">${T('friends.view')}</button>${prog.friends[r.name]?'':`<button class="btn small yellow" data-act="add">${T('friends.add')}</button>`}`}</div>`; }).join('') : `<div class="hint" style="text-align:center;margin-top:20px">${T('friends.empty')}</div>`);
 }
 function showFrTab(which){ $('#fr-tab-list').classList.toggle('on',which==='list'); $('#fr-tab-top').classList.toggle('on',which==='top'); $('#fr-list').hidden=which!=='list'; $('#fr-top').hidden=which!=='top'; if(which==='top') buildTop(); }
 async function viewFriend(name){
