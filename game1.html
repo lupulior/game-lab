@@ -473,7 +473,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #pk-keeper.arms-side.dive-l .arm-l{transform:rotate(100deg)}#pk-keeper.arms-side.dive-l .arm-r{transform:rotate(40deg)}
 #pk-keeper.arms-side.dive-r .arm-r{transform:rotate(-100deg)}#pk-keeper.arms-side.dive-r .arm-l{transform:rotate(-40deg)}
 #pk-keeper.arms-side.dive-c .arm-l{transform:rotate(60deg)}#pk-keeper.arms-side.dive-c .arm-r{transform:rotate(-60deg)}
-#pk-shooter.run .arm-l{transform:rotate(-70deg)}#pk-shooter.run .arm-r{transform:rotate(50deg)}
+#pk-shooter.run .arm-l{transform:rotate(55deg)}#pk-shooter.run .arm-r{transform:rotate(-55deg)}   /* arms swing out and up, never behind the shirt */
 #pk-shooter{position:absolute;left:300px;top:326px;width:108px;height:162px;z-index:2;pointer-events:none;transition:transform .22s ease-in}
 #pk-shooter.run{transform:translate(95px,18px)}
 #pk-shooter.run .leg-front{animation:kickA .3s ease-out}
@@ -665,7 +665,7 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 #goal-flash.show{animation:pop 1.8s ease-out forwards}
 @keyframes pop{0%{transform:translate(-50%,-50%) scale(0) rotate(-10deg)}20%{transform:translate(-50%,-50%) scale(1.15) rotate(4deg)}35%{transform:translate(-50%,-50%) scale(1) rotate(0)}85%{opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
 
-.overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(27,42,78,.55)}
+.overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(27,42,78,.55);z-index:40}
 .overlay.show{display:flex}
 /* admin panel */
 .adm-panel{min-width:900px;max-width:940px;max-height:596px;overflow-y:auto;box-sizing:border-box;padding:12px 18px}
@@ -1219,7 +1219,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-26.1';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-26.2';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
