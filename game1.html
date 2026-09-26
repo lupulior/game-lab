@@ -644,6 +644,8 @@ body.touch #ice-hud,body.touch #fire-hud,body.touch #sc-hud{width:86px;height:86
 #ice-hud.ready .cd,#fire-hud.ready .cd,#sc-hud.ready .cd{display:none}
 #touch .tb.ice{background:rgba(126,211,255,.35);border-color:#7ED3FF}
 #touch .tb.ice.cool,#touch .tb.fire.cool{opacity:.45}
+#touch .tb.sc{background:rgba(142,92,246,.35);border-color:#8E5CF6}
+#touch .tb.sc.used{opacity:.35}
 #touch .tb.fire{background:rgba(255,122,61,.35);border-color:#FF7A3D}
 .card.firecard{background:linear-gradient(#fff0e0,#ffc99a);border-color:#FF7A3D}
 .card.firecard .ico{font-size:70px;line-height:1.2}
@@ -833,20 +835,22 @@ body.touch #touch{display:block}
       <div class="name" id="ice-pv-name">כוח הקרח</div>
       <div class="hint" id="ice-pv-desc"></div>
       <div class="hint" id="set-ice-l" style="margin-top:8px">מה הקרח עושה?</div>
-      <div class="v2opts ice-modes" id="set-ice"><button class="btn small blue on" data-mode="freeze">❄️ מקפיא יריב</button><button class="btn small blue" data-mode="goal">🧊 חומה על השער</button><button class="btn small red" data-mode="off">⛔ כבוי</button></div>
+      <div class="v2opts ice-modes" id="set-ice"><button class="btn small blue on" data-mode="freeze">❄️ מקפיא יריב</button><button class="btn small blue" data-mode="goal">🧊 חומה על השער</button></div>
+      <button class="btn yellow" id="btn-ice-select" hidden>✔ בחר</button>
       <button class="btn yellow" id="btn-ice-buy" hidden>🔓 קנה</button>
     </div>
     <div class="preview ice-preview fire-preview" id="fire-preview" hidden>
       <div class="ice-big">🔥</div>
       <div class="name" id="fire-pv-name">כוח אש</div>
       <div class="hint" id="fire-pv-desc"></div>
-      <div class="hint" id="fire-pv-l" style="margin-top:8px">הכוח פעיל?</div>
-      <div class="v2opts ice-modes" id="fire-toggle"><button class="btn small blue on" data-on="1">🔥 פעיל</button><button class="btn small red" data-on="0">⛔ כבוי</button></div>
+      <div class="hint" id="fire-pv-l" style="margin-top:8px" hidden></div>
+      <div class="v2opts ice-modes" id="fire-toggle" hidden></div>
+      <button class="btn yellow" id="btn-fire-select" hidden>✔ בחר</button>
       <button class="btn yellow" id="btn-fire-buy" hidden>🔓 קנה</button>
     </div>
     <div class="preview ice-preview sc-preview" id="sc-preview" hidden>
-      <div class="ice-big">🤸</div>
-      <div class="name" id="sc-pv-name">מספריים</div>
+      <div class="ice-big">🌀</div>
+      <div class="name" id="sc-pv-name">מספרת</div>
       <div class="hint" id="sc-pv-desc"></div>
       <div class="hint" style="margin-top:8px;color:#1B7F3B">✔ חינם לכולם · פעם אחת בכל משחק · מקש X</div>
     </div>
@@ -902,7 +906,7 @@ body.touch #touch{display:block}
     <button id="btn-pause" title="הפסקה">❚❚</button>
     <div id="ice-hud" hidden><div class="ring"></div><span class="ic">❄️</span><span class="cd"></span><span class="key">E</span></div>
     <div id="fire-hud" hidden><div class="ring"></div><span class="ic">🔥</span><span class="cd"></span><span class="key">F</span></div>
-    <div id="sc-hud" hidden><div class="ring"></div><span class="ic">🤸</span><span class="cd"></span><span class="key">X</span></div>
+    <div id="sc-hud" hidden><div class="ring"></div><span class="ic">🌀</span><span class="cd"></span><span class="key">X</span></div>
     <div id="scoreboard">
       <div class="score"><span class="me" id="s-me">0</span><span>-</span><span class="op" id="s-op">0</span></div>
       <div class="names"><span class="me" id="n-me"></span><span>|</span><span class="op" id="n-op"></span></div>
@@ -912,7 +916,7 @@ body.touch #touch{display:block}
     <div id="goal-scorer"></div>
     <div id="touch">
       <div class="grp move" id="tmove"><div class="tb" data-k="left">◀</div><div class="tb" data-k="right">▶</div></div>
-      <div class="grp act"><div class="tb ice" data-k="ice" hidden>❄️</div><div class="tb fire" data-k="fire" hidden>🔥</div><div class="tb slide" data-k="slide">🦵</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
+      <div class="grp act"><div class="tb ice" data-k="ice" hidden>❄️</div><div class="tb fire" data-k="fire" hidden>🔥</div><div class="tb slide" data-k="slide">🦵</div><div class="tb sc" data-k="sc">🌀</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
     </div>
     <div class="overlay" id="end"><div class="panel">
       <h2 id="end-title"></h2>
@@ -1019,7 +1023,7 @@ body.touch #touch{display:block}
       <h2>באיזו רמה לשחק?</h2>
       <div class="levels" id="levels"></div>
       <div class="hint">
-        <kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ'<br>
+        <kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ' &nbsp; <kbd>Q</kbd> מספרת<br>
         נגיעה בכדור דוחפת אותו. הראשון שמבקיע 3 גולים מנצח, או מי שמוביל אחרי 4 דקות!
       </div>
       <br><button class="btn small" id="btn-level-cancel">חזרה</button>
@@ -1266,7 +1270,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-26.4';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-26.5';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1341,7 +1345,7 @@ const I18N_RAW={
  'lvl.0':['קל','Easy','سهل','Легко'], 'lvl.1':['בינוני','Medium','متوسط','Средне'], 'lvl.2':['קשה','Hard','صعب','Сложно'],
  'lvl.3':['מטורף','Crazy','مجنون','Безумно'], 'lvl.4':['מאסטר','Master','خبير','Мастер'],
  'level.title':['באיזו רמה לשחק?','Which level?','ما المستوى؟','Какой уровень?'],
- 'level.keys':['<kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ\'<br>נגיעה בכדור דוחפת אותו. מנצח מי שמגיע ראשון למספר הגולים של הרמה, או מי שמוביל אחרי 4 דקות!',
+ 'level.keys':['<kbd>A</kbd> שמאלה &nbsp; <kbd>D</kbd> ימינה &nbsp; <kbd>W</kbd> קפיצה &nbsp; <kbd>רווח</kbd> בעיטה חזקה &nbsp; <kbd>S</kbd> גליץ\' &nbsp; <kbd>Q</kbd> 🌀<br>נגיעה בכדור דוחפת אותו. מנצח מי שמגיע ראשון למספר הגולים של הרמה, או מי שמוביל אחרי 4 דקות!',
    '<kbd>A</kbd> left &nbsp; <kbd>D</kbd> right &nbsp; <kbd>W</kbd> jump &nbsp; <kbd>Space</kbd> power kick &nbsp; <kbd>S</kbd> slide<br>Touching the ball nudges it. First to reach the level\'s goal count wins, or whoever leads after 4 minutes!',
    '<kbd>A</kbd> يسار &nbsp; <kbd>D</kbd> يمين &nbsp; <kbd>W</kbd> قفز &nbsp; <kbd>مسافة</kbd> تسديدة قوية &nbsp; <kbd>S</kbd> انزلاق<br>لمس الكرة يدفعها. يفوز من يصل أولًا إلى عدد أهداف المستوى، أو المتقدم بعد 4 دقائق!',
    '<kbd>A</kbd> влево &nbsp; <kbd>D</kbd> вправо &nbsp; <kbd>W</kbd> прыжок &nbsp; <kbd>Пробел</kbd> сильный удар &nbsp; <kbd>S</kbd> подкат<br>Касание толкает мяч. Побеждает тот, кто первым набирает число голов уровня, или кто впереди через 4 минуты!'],
@@ -1538,12 +1542,14 @@ const I18N_RAW={
  'upd.new':['🆕 יש גרסה חדשה של המשחק, לחץ כאן לרענון','🆕 A new version is out, click here to reload','🆕 هناك إصدار جديد، اضغط هنا للتحديث','🆕 Вышла новая версия, нажми здесь, чтобы обновить'],
  'set.ice':['❄️ כוח הקרח','❄️ Ice power','❄️ قوة الجليد','❄️ Сила льда'],
  'ice.what':['מה הקרח עושה?','What does the ice do?','ماذا يفعل الجليد؟','Что делает лёд?'],
- 'sc.name':['🤸 מספריים','🤸 Scissors kick','🤸 مقصية','🤸 Ножницы'],
- 'sc.desc':['X במשחק, פעם אחת במשחק: סיבוב באוויר ובעיטה לכיוון ההפוך. עובד רק כשהכדור לפניך, על הדשא או באוויר','X in a match, once per match: a spinning overhead kick the other way. Only when the ball is in front of you, on the grass or in the air','X في المباراة، مرة واحدة: دوران في الهواء وركلة بالاتجاه المعاكس. فقط عندما تكون الكرة أمامك','X в матче, один раз: переворот и удар в обратную сторону. Только когда мяч перед тобой'],
+ 'sc.name':['🌀 מספרת','🌀 Bicycle kick','🌀 مقصية','🌀 Удар через себя'],
+ 'sc.desc':['Q במשחק, פעם אחת בכל משחק: סיבוב באוויר ובעיטה לכיוון ההפוך. עובד רק כשהכדור לפניך, על הדשא או באוויר','Q in a match, once per match: a spinning overhead kick the other way. Only when the ball is in front of you, on the grass or in the air','X في المباراة، مرة واحدة: دوران في الهواء وركلة بالاتجاه المعاكس. فقط عندما تكون الكرة أمامك','X в матче, один раз: переворот и удар в обратную сторону. Только когда мяч перед тобой'],
  'sc.free':['✔ חינם לכולם','✔ Free for all','✔ مجاني للجميع','✔ Бесплатно для всех'],
- 'sc.noBall':['🤸 אין כדור לפניך!','🤸 No ball in front of you!','🤸 لا كرة أمامك!','🤸 Перед тобой нет мяча!'],
- 'c.scissors':['🎙️ 🤸 מספריים של {0}!!! איזה יופי!','🎙️ 🤸 Scissors kick by {0}!!! Beautiful!','🎙️ 🤸 مقصية من {0}!!! رائعة!','🎙️ 🤸 Ножницы от {0}!!! Красота!'],
+ 'sc.noBall':['🌀 אין כדור לפניך למספרת!','🌀 No ball in front of you!','🌀 لا كرة أمامك!','🌀 Перед тобой нет мяча!'],
+ 'c.scissors':['🎙️ 🌀 מספרת של {0}!!! איזה יופי!','🎙️ 🌀 Bicycle kick by {0}!!! Beautiful!','🎙️ 🌀 مقصية من {0}!!! رائعة!','🎙️ 🌀 Удар через себя от {0}!!! Красота!'],
  'gal.power':['⚡ כוחות','⚡ Powers','⚡ القوى','⚡ Силы'],
+ 'pw.select':['✔ בחר','✔ Choose','✔ اختر','✔ Выбрать'],
+ 'pw.off':['⛔ כבה','⛔ Turn off','⛔ إيقاف','⛔ Выключить'],
  'fire.name':['🔥 כוח אש','🔥 Fire Power','🔥 قوة النار','🔥 Сила огня'],
  'fire.desc':['F במשחק: הכדור נופל, נשרף ונעלם, ומופיע שוב באמצע המגרש. טעינה 20 שניות. לתמיד!','Press F: the ball drops, burns away and reappears at the centre. 20s cooldown. Forever!','F في المباراة: تسقط الكرة وتحترق وتختفي ثم تظهر في المنتصف. تبريد 20 ثانية. للأبد!','F в матче: мяч падает, сгорает и появляется в центре. Перезарядка 20 с. Навсегда!'],
  'fire.confirm':['לקנות את כוח האש תמורת {0} XP? (לתמיד)','Buy the Fire Power for {0} XP? (permanent)','شراء قوة النار مقابل {0} XP؟ (للأبد)','Купить Силу огня за {0} XP? (навсегда)'],
@@ -2370,7 +2376,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
-  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'ice.what', '#ice-pv-name':'ice.name', '#fire-pv-name':'fire.name', '#fire-pv-l':'fire.what', '#st-t-l':'stats.trophies', '#rotate span':'rotate', '#replay-tag':'replay',
+  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'ice.what', '#ice-pv-name':'ice.name', '#fire-pv-name':'fire.name', '#st-t-l':'stats.trophies', '#rotate span':'rotate', '#replay-tag':'replay',
   '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn',
   '#btn-train':'train.btn', '#train-title':'train.title', '#train-hint':'train.hint', '#btn-train-shoot':'train.shoot', '#btn-train-pk':'train.pk', '#btn-train-corner':'train.corner', '#btn-train-cancel':'btn.back2' };
 function applyLang(){
@@ -2443,10 +2449,6 @@ function buildGallery(){
   fire.innerHTML=`<div class="ico">🔥</div><div class="name">${T('fire.name')}</div><div class="desc">${T('fire.desc')}</div>${prog.fire?`<div class="lock" style="background:var(--green);color:#fff">${T('ice.owned')}</div>`:`<div class="lock">${T('shop.locked',fmtXp(FIRE_PRICE))}</div>`}`;
   fire.addEventListener('click', ()=>{ sfx.click(); openFirePanel(); });
   if(galFilter==='power') g.appendChild(fire);
-  const sc=document.createElement('div'); sc.className='card sccard owned'; sc.tabIndex=0;
-  sc.innerHTML=`<div class="ico">🤸</div><div class="name">${T('sc.name')}</div><div class="desc">${T('sc.desc')}</div><div class="lock" style="background:var(--green);color:#fff">${T('sc.free')}</div>`;
-  sc.addEventListener('click', ()=>{ sfx.click(); openScPanel(); });
-  if(galFilter==='power') g.appendChild(sc);
   CHARS.forEach((c,i)=>{
     if(galFilter==='il' && !ISRAELI_IDS.includes(c.id)) return;
     if(galFilter==='legend' && !LEGEND_IDS.includes(c.id)) return;
@@ -3289,9 +3291,9 @@ function setKey(code,down){
     case 'KeyW': if(down&&!keys.jump) jumpQueued=true; keys.jump=down; return true;
     case 'Space': if(down&&!keys.kick) kickQueued=true; keys.kick=down; return true;
     case 'KeyS': if(down&&!keys.slide) slideQueued=true; keys.slide=down; return true;
-    case 'KeyE': case 'KeyQ': if(down&&!keys.ice) iceQueued=true; keys.ice=down; return true;
+    case 'KeyE': if(down&&!keys.ice) iceQueued=true; keys.ice=down; return true;
     case 'KeyF': if(down&&!keys.fire) fireQueued=true; keys.fire=down; return true;
-    case 'KeyX': if(down&&!keys.sc) scQueued=true; keys.sc=down; return true;
+    case 'KeyQ': if(down&&!keys.sc) scQueued=true; keys.sc=down; return true;
     case 'ArrowLeft':  keys.left=down; return true;
     case 'ArrowRight': keys.right=down; return true;
     case 'ArrowUp':    if(down&&!keys.jump) jumpQueued=true; keys.jump=down; return true;
@@ -3329,7 +3331,7 @@ window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=f
   ['pointerup','pointercancel'].forEach(t=>move.addEventListener(t, e=>{ if(e.pointerId===moveId) clearMove(); }));
   document.querySelectorAll('#touch .act .tb').forEach(b=>{
     const k=b.dataset.k;
-    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else if(k==='ice') iceQueued=true; else if(k==='fire') fireQueued=true; else kickQueued=true; });
+    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else if(k==='ice') iceQueued=true; else if(k==='fire') fireQueued=true; else if(k==='sc') scQueued=true; else kickQueued=true; });
     ['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t, ()=>b.classList.remove('pressed')));
   });
 })();
@@ -3519,10 +3521,13 @@ function openIcePanel(){
   $('#chars .preview:not(.ice-preview):not(.fire-preview)').hidden=true; const fp=$('#fire-preview'); if(fp) fp.hidden=true; const sp=$('#sc-preview'); if(sp) sp.hidden=true; const p=$('#ice-preview'); p.hidden=false;
   $('#ice-pv-desc').textContent=T('ice.desc');
   $('#set-ice').hidden=!prog.ice; $('#set-ice-l').hidden=!prog.ice;
+  const sel=$('#btn-ice-select'); sel.hidden=!prog.ice; sel.textContent = iceMode()==='off' ? T('pw.select') : T('pw.off'); sel.classList.toggle('yellow', iceMode()==='off'); sel.classList.toggle('red', iceMode()!=='off');
   const buy=$('#btn-ice-buy'); buy.hidden=!!prog.ice; buy.textContent=T('shop.unlock', fmtXp(ICE_PRICE));
   document.querySelectorAll('#set-ice .btn').forEach(b=>b.classList.toggle('on', b.dataset.mode===iceMode()));
+  $('#set-ice').style.opacity = iceMode()==='off' ? '.5' : '1';
 }
 $('#btn-ice-buy').addEventListener('click', ()=>{ sfx.click(); tryBuyIce(); if(prog.ice) openIcePanel(); });
+$('#btn-ice-select').addEventListener('click', ()=>{ sfx.click(); if(iceMode()==='off'){ settings.iceMode=settings.iceLast||'freeze'; } else { settings.iceLast=iceMode(); settings.iceMode='off'; } saveSettings(); openIcePanel(); updateIceHud(); });
 function tryBuyIce(){
   if(prog.ice) return;
   if(prog.xp<ICE_PRICE){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(ICE_PRICE)),'warn'); return; }
@@ -3564,7 +3569,7 @@ function updateFireHud(){
 function setupFireUI(){
   const on=fireAvailable();
   $('#fire-hud').hidden=!on; const tb=document.querySelector('#touch .tb.fire'); if(tb) tb.hidden=!on;
-  const tops=[]; if(iceAvailable()) tops.push('#ice-hud'); if(fireAvailable()) tops.push('#fire-hud'); tops.push('#sc-hud'); const touch=document.body.classList.contains('touch'); tops.forEach((id,i)=>{ $(id).style.top=(70+i*(touch?96:82))+'px'; });   // the powers stack down the left side
+  const tops=[]; if(iceAvailable()) tops.push('#ice-hud'); if(fireAvailable()) tops.push('#fire-hud'); const touch=document.body.classList.contains('touch'); tops.forEach((id,i)=>{ $(id).style.top=(70+i*(touch?96:82))+'px'; });   // the powers stack down the left side
   fireCd=0; fireBusy=false; fireQueued=false; updateFireHud(); $('#ball').classList.remove('burning','reappear'); $('#ball-fire').classList.remove('show'); $('#scorch').classList.remove('show');
 }
 $('#fire-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); fireQueued=true; });
@@ -3572,12 +3577,12 @@ function openFirePanel(){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('firecard')));
   $('#chars .preview:not(.ice-preview):not(.fire-preview)').hidden=true; $('#ice-preview').hidden=true; const sp=$('#sc-preview'); if(sp) sp.hidden=true; const p=$('#fire-preview'); p.hidden=false;
   $('#fire-pv-desc').textContent=T('fire.desc');
-  $('#fire-toggle').hidden=!prog.fire; $('#fire-pv-l').hidden=!prog.fire;
+  const fsel=$('#btn-fire-select'); fsel.hidden=!prog.fire; fsel.textContent = settings.fireOff===true ? T('pw.select') : T('pw.off'); fsel.classList.toggle('yellow', settings.fireOff===true); fsel.classList.toggle('red', settings.fireOff!==true);
   const buy=$('#btn-fire-buy'); buy.hidden=!!prog.fire; buy.textContent=T('shop.unlock', fmtXp(FIRE_PRICE));
-  document.querySelectorAll('#fire-toggle .btn').forEach(b=>b.classList.toggle('on', (b.dataset.on==='1')!==(settings.fireOff===true)));
 }
 document.querySelectorAll('#fire-toggle .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); settings.fireOff = b.dataset.on!=='1'; saveSettings(); openFirePanel(); }));
 $('#btn-fire-buy').addEventListener('click', ()=>{ sfx.click(); tryBuyFire(); if(prog.fire) openFirePanel(); });
+$('#btn-fire-select').addEventListener('click', ()=>{ sfx.click(); settings.fireOff = settings.fireOff!==true; saveSettings(); openFirePanel(); });
 function tryBuyFire(){
   if(prog.fire) return;
   if(prog.xp<FIRE_PRICE){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(FIRE_PRICE)),'warn'); return; }
@@ -3605,8 +3610,8 @@ function doScissors(p){
   return true;
 }
 function useScissors(){ if(state!=='play' || spectating || (mp && mp.role==='guest')) return; doScissors(P1); }
-function updateScHud(){ const h=$('#sc-hud'); if(!h) return; const used=!!P1.scissorsUsed; h.classList.toggle('used',used); h.classList.toggle('ready',!used); h.querySelector('.cd').textContent = used ? '✔' : ''; }
-function setupScUI(){ for(const p of [P1,P2,P3,P4]) p.scissorsUsed=false; scQueued=false; $('#sc-hud').hidden = !!spectating || (mp && mp.role==='guest' && false); updateScHud(); }
+function updateScHud(){ const used=!!P1.scissorsUsed; const tb=document.querySelector('#touch .tb.sc'); if(tb) tb.classList.toggle('used',used); }
+function setupScUI(){ for(const p of [P1,P2,P3,P4]) p.scissorsUsed=false; scQueued=false; $('#sc-hud').hidden=true; const tb=document.querySelector('#touch .tb.sc'); if(tb) tb.hidden=!!spectating; updateScHud(); }
 $('#sc-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); scQueued=true; });
 function openScPanel(){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('sccard')));
