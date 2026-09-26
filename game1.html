@@ -16,10 +16,8 @@ html,body{height:100%;overflow:hidden;background:linear-gradient(#3FB2F5,#A9E4FF
   font-family:"Varela Round","Arial Rounded MT Bold","Heebo","Rubik",Arial,sans-serif;color:var(--navy);user-select:none;-webkit-user-select:none}
 
 #stage{position:absolute;left:calc(50% - 500px);top:calc(50% - 310px);width:1000px;height:620px;
-  transform-origin:center center;overflow:hidden;
-  background:linear-gradient(var(--sky),var(--sky2) 75%)}
-#bleed{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(var(--sky),var(--sky2) 75%)}
-#stage{z-index:1}
+  transform-origin:center center;overflow:hidden;border-radius:26px;
+  background:linear-gradient(var(--sky),var(--sky2) 75%);box-shadow:0 24px 70px rgba(0,40,90,.35)}
 
 .screen{position:absolute;inset:0;display:none}
 .screen.active{display:block}
@@ -751,7 +749,6 @@ body.touch #touch{display:block}
 </style>
 </head>
 <body>
-<div id="bleed"></div>
 <div id="stage">
 
   <!-- ===== HOME ===== -->
@@ -1268,7 +1265,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-27.2';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-27.1';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -2330,40 +2327,13 @@ const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
 const sprite = (el,c,mood) => { el.innerHTML = playerSVG(c,mood); };
 
 function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id)); updateBleed();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id));
 }
 
 /* ---------- scaling ---------- */
-/* ---------- the backdrop: the window outside the stage continues the scene (sky, stands, track, grass) instead of showing blue bars ---------- */
-function updateBleed(){
-  const b=$('#bleed'); if(!b) return;
-  const s=Math.min(window.innerWidth/1000, window.innerHeight/620), T=(window.innerHeight-620*s)/2;
-  const y=v=>(T+v*s).toFixed(1)+'px';
-  const act=document.querySelector('.screen.active'), id=act?act.id:'';
-  let bg;
-  if(id==='game'){
-    const TH=(typeof PITCH_THEMES!=='undefined' && PITCH_THEMES[pitchTheme])||{base:'#3FB35B',far:'#2E8F46',track:'#C9694A',boards:['#F04E4E','#3D8BFF','#FFD447','#8E5CF6']};
-    const k=FIELD_W>1000 ? 1000/FIELD_W : 1, off=620*(1-k), w=v=>off+k*v;        // 2v2: the world is scaled down and sits on the bottom
-    const farY=(typeof proj==='function') ? w(proj(FIELD_W/2,1)[1]) : w(235);
-    const top = k<1 ? '#1c2750' : 'var(--sky)';                                 // 2v2: the floodlit night sky above the stands
-    const P=125*k*s, L=(window.innerWidth-1000*s)/2, px=((L%P)+P)%P;      // the boards line up with the ones drawn on the stage
-    const boards=`repeating-linear-gradient(90deg,${TH.boards.map((c,i)=>`${c} ${(i*P).toFixed(1)}px ${((i+1)*P-4).toFixed(1)}px, transparent ${((i+1)*P-4).toFixed(1)}px ${((i+1)*P).toFixed(1)}px`).join(',')})`;
-    bg=`linear-gradient(${top} 0 ${y(w(0))}, #2b3a6b ${y(w(0))} ${y(w(44))}, #22305a ${y(w(44))} ${y(w(78))}, ${TH.far} ${y(w(78))} ${y(w(80))}, transparent ${y(w(80))} ${y(w(104))}, ${TH.far} ${y(w(104))} ${y(w(106))}, ${TH.track} ${y(w(106))} ${y(w(148))}, ${TH.far} ${y(w(148))} ${y(farY)}, ${TH.base} ${y(farY)} 100%)`;
-    b.style.background=`${boards} ${px.toFixed(1)}px ${y(w(80))}/100% ${(24*k*s).toFixed(1)}px no-repeat, ${bg}`;
-    b.style.backgroundColor=TH.far;
-    return;
-  }
-  if(id==='pk'){ b.style.background=`linear-gradient(180deg,#5db9ff ${y(0)},#bfe6ff ${y(238)},#3FB35B ${y(238)},#4CC76A ${y(620)})`; b.style.backgroundColor='#4CC76A'; return; }
-  if(id==='ceo'){ b.style.background='radial-gradient(ellipse at 50% 42%,#4a3a9a 0%,#1B2A4E 55%,#0b1230 100%)'; b.style.backgroundColor='#0b1230'; return; }
-  if(id==='home' || id==='intro'){                                          // the striped lawn at the bottom carries on to the edges
-    const P=80*s, L=(window.innerWidth-1000*s)/2, px=((L%(2*P))+2*P)%(2*P);
-    b.style.background=`repeating-linear-gradient(90deg,var(--grass) 0 ${P.toFixed(1)}px,var(--grass2) ${P.toFixed(1)}px ${(2*P).toFixed(1)}px) ${px.toFixed(1)}px ${y(500)}/100% ${(120*s).toFixed(1)}px no-repeat, linear-gradient(var(--sky) ${y(0)}, var(--sky2) ${y(465)})`; b.style.backgroundColor='var(--grass)'; return;
-  }
-  b.style.background=`linear-gradient(var(--sky) ${y(0)}, var(--sky2) ${y(465)})`; b.style.backgroundColor='var(--sky2)';
-}
 function fit(){
   const s = Math.min(window.innerWidth/1000, window.innerHeight/620);
-  $('#stage').style.transform = `scale(${s})`; updateBleed();
+  $('#stage').style.transform = `scale(${s})`;
 }
 window.addEventListener('resize', fit); fit();
 if(('ontouchstart' in window) || navigator.maxTouchPoints>0) document.body.classList.add('touch');
@@ -3225,7 +3195,6 @@ function buildPitch(themeName){
   $('#pitch').innerHTML=s;
   $('#front').innerHTML=`<svg viewBox="0 0 ${W} 620" xmlns="http://www.w3.org/2000/svg"><defs>`+
     '<pattern id="net2" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0H7M0 0V7" stroke="rgba(255,255,255,.75)" stroke-width="1"/></pattern></defs>'+goalParts('front')+'</svg>';
-  if(typeof updateBleed==='function') updateBleed();
 }
 function goalParts(layer){
   let s=''; const H=GOAL_H, B=GOAL_BOT;
