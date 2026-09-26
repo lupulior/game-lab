@@ -626,15 +626,32 @@ h2{font-size:40px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--nav
 @keyframes shiver{from{transform:translateX(-2px)}to{transform:translateX(2px)}}
 .player.frozen .sprite.flip{animation:shiverF .12s infinite alternate}
 @keyframes shiverF{from{transform:scaleX(-1) translateX(-2px)}to{transform:scaleX(-1) translateX(2px)}}
-#ice-hud{position:absolute;top:70px;left:16px;width:74px;height:74px;border-radius:50%;background:#fff;box-shadow:0 5px 0 rgba(27,42,78,.3);display:flex;align-items:center;justify-content:center;z-index:7;cursor:pointer;user-select:none}
-#ice-hud .ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(rgba(27,42,78,.55) var(--cd,0%),transparent 0)}
-#ice-hud .ic{font-size:36px;position:relative;z-index:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
-#ice-hud .cd{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);z-index:2;pointer-events:none}
-#ice-hud .key{position:absolute;bottom:-6px;right:-4px;background:var(--navy);color:#fff;font-size:13px;font-weight:900;border-radius:8px;padding:1px 6px;z-index:3}
-#ice-hud.ready{box-shadow:0 5px 0 rgba(27,42,78,.3),0 0 22px #7ED3FF;animation:tapPulse 1.2s infinite}
-#ice-hud.ready .cd{display:none}
+#fire-hud{top:152px}
+#ice-hud,#fire-hud{position:absolute;top:70px;left:16px;width:74px;height:74px;border-radius:50%;background:#fff;box-shadow:0 5px 0 rgba(27,42,78,.3);display:flex;align-items:center;justify-content:center;z-index:7;cursor:pointer;user-select:none}
+#ice-hud .ring,#fire-hud .ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(rgba(27,42,78,.55) var(--cd,0%),transparent 0)}
+#ice-hud .ic,#fire-hud .ic{font-size:36px;position:relative;z-index:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+#ice-hud .cd,#fire-hud .cd{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px var(--navy);z-index:2;pointer-events:none}
+#ice-hud .key,#fire-hud .key{position:absolute;bottom:-6px;right:-4px;background:var(--navy);color:#fff;font-size:13px;font-weight:900;border-radius:8px;padding:1px 6px;z-index:3}
+#ice-hud.ready,#fire-hud.ready{box-shadow:0 5px 0 rgba(27,42,78,.3),0 0 22px #7ED3FF;animation:tapPulse 1.2s infinite}
+#ice-hud.ready .cd,#fire-hud.ready .cd{display:none}
 #touch .tb.ice{background:rgba(126,211,255,.35);border-color:#7ED3FF}
-#touch .tb.ice.cool{opacity:.45}
+#touch .tb.ice.cool,#touch .tb.fire.cool{opacity:.45}
+#touch .tb.fire{background:rgba(255,122,61,.35);border-color:#FF7A3D}
+.card.firecard{background:linear-gradient(#fff0e0,#ffc99a);border-color:#FF7A3D}
+.card.firecard .ico{font-size:70px;line-height:1.2}
+.card.firecard .desc{font-size:13px;font-weight:900;color:#1B2A4E;padding:0 6px;line-height:1.2}
+.card.firecard.owned{border-color:var(--yellow)}
+.fire-preview .ice-big{filter:drop-shadow(0 0 18px #FF7A3D)}
+#ball-fire{position:absolute;left:0;top:0;width:90px;height:110px;margin:-84px 0 0 -45px;display:none;z-index:4;pointer-events:none}
+#ball-fire.show{display:block;animation:flameUp .9s ease-out forwards}
+@keyframes flameUp{0%{transform:scale(.4);opacity:0}25%{transform:scale(1.1);opacity:1}70%{transform:scale(1) translateY(-6px);opacity:1}100%{transform:scale(1.3) translateY(-40px);opacity:0}}
+#ball.burning{animation:burnBall .9s ease-in forwards}
+@keyframes burnBall{0%{filter:none}40%{filter:brightness(.6) sepia(1) saturate(4) hue-rotate(-20deg)}100%{filter:brightness(.1);opacity:0;transform:scale(.2)}}
+#ball.reappear{animation:reappear .35s ease-out}
+@keyframes reappear{from{transform:scale(0) rotate(0);filter:brightness(2)}to{transform:scale(1);filter:none}}
+#scorch{position:absolute;left:0;top:0;width:70px;height:22px;margin:-11px 0 0 -35px;border-radius:50%;background:radial-gradient(ellipse,rgba(40,20,10,.7),rgba(40,20,10,0) 70%);display:none;pointer-events:none;z-index:1}
+#scorch.show{display:block;animation:scorchFade 2.5s ease-out forwards}
+@keyframes scorchFade{to{opacity:0}}
 .card.icecard{background:linear-gradient(#e8f7ff,#bfe8ff);border-color:#7ED3FF}
 .card.icecard .ico{font-size:70px;line-height:1.2}
 .card.icecard .desc{font-size:13px;font-weight:900;color:#1B2A4E;padding:0 6px;line-height:1.2}
@@ -807,6 +824,14 @@ body.touch #touch{display:block}
       <div class="v2opts ice-modes" id="set-ice"><button class="btn small blue on" data-mode="freeze">❄️ מקפיא יריב</button><button class="btn small blue" data-mode="goal">🧊 חומה על השער</button><button class="btn small red" data-mode="off">⛔ כבוי</button></div>
       <button class="btn yellow" id="btn-ice-buy" hidden>🔓 קנה</button>
     </div>
+    <div class="preview ice-preview fire-preview" id="fire-preview" hidden>
+      <div class="ice-big">🔥</div>
+      <div class="name" id="fire-pv-name">כוח אש</div>
+      <div class="hint" id="fire-pv-desc"></div>
+      <div class="hint" id="fire-pv-l" style="margin-top:8px">הכוח פעיל?</div>
+      <div class="v2opts ice-modes" id="fire-toggle"><button class="btn small blue on" data-on="1">🔥 פעיל</button><button class="btn small red" data-on="0">⛔ כבוי</button></div>
+      <button class="btn yellow" id="btn-fire-buy" hidden>🔓 קנה</button>
+    </div>
   </section>
 
   <!-- ===== CEO ===== -->
@@ -845,6 +870,8 @@ body.touch #touch{display:block}
     <div class="player" id="p2"><div class="tag">יריב</div><div class="sprite"></div><div class="ice"></div></div>
     <div id="ball"></div>
     <div id="goal-ice"></div>
+    <div id="scorch"></div>
+    <div id="ball-fire"></div>
     <div id="front"></div>
     </div></div>
     <div id="level-tag"></div>
@@ -856,6 +883,7 @@ body.touch #touch{display:block}
     <div id="countdown" hidden>3</div>
     <button id="btn-pause" title="הפסקה">❚❚</button>
     <div id="ice-hud" hidden><div class="ring"></div><span class="ic">❄️</span><span class="cd"></span><span class="key">E</span></div>
+    <div id="fire-hud" hidden><div class="ring"></div><span class="ic">🔥</span><span class="cd"></span><span class="key">F</span></div>
     <div id="scoreboard">
       <div class="score"><span class="me" id="s-me">0</span><span>-</span><span class="op" id="s-op">0</span></div>
       <div class="names"><span class="me" id="n-me"></span><span>|</span><span class="op" id="n-op"></span></div>
@@ -865,7 +893,7 @@ body.touch #touch{display:block}
     <div id="goal-scorer"></div>
     <div id="touch">
       <div class="grp move" id="tmove"><div class="tb" data-k="left">◀</div><div class="tb" data-k="right">▶</div></div>
-      <div class="grp act"><div class="tb ice" data-k="ice" hidden>❄️</div><div class="tb slide" data-k="slide">🦵</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
+      <div class="grp act"><div class="tb ice" data-k="ice" hidden>❄️</div><div class="tb fire" data-k="fire" hidden>🔥</div><div class="tb slide" data-k="slide">🦵</div><div class="tb jump" data-k="jump">⤒</div><div class="tb kick" data-k="kick">⚽</div></div>
     </div>
     <div class="overlay" id="end"><div class="panel">
       <h2 id="end-title"></h2>
@@ -1219,7 +1247,7 @@ body.touch #touch{display:block}
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-26.2';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-09-26.3';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1491,6 +1519,14 @@ const I18N_RAW={
  'upd.new':['🆕 יש גרסה חדשה של המשחק, לחץ כאן לרענון','🆕 A new version is out, click here to reload','🆕 هناك إصدار جديد، اضغط هنا للتحديث','🆕 Вышла новая версия, нажми здесь, чтобы обновить'],
  'set.ice':['❄️ כוח הקרח','❄️ Ice power','❄️ قوة الجليد','❄️ Сила льда'],
  'ice.what':['מה הקרח עושה?','What does the ice do?','ماذا يفعل الجليد؟','Что делает лёд?'],
+ 'fire.name':['🔥 כוח אש','🔥 Fire Power','🔥 قوة النار','🔥 Сила огня'],
+ 'fire.desc':['F במשחק: הכדור נופל, נשרף ונעלם, ומופיע שוב באמצע המגרש. טעינה 20 שניות. לתמיד!','Press F: the ball drops, burns away and reappears at the centre. 20s cooldown. Forever!','F في المباراة: تسقط الكرة وتحترق وتختفي ثم تظهر في المنتصف. تبريد 20 ثانية. للأبد!','F в матче: мяч падает, сгорает и появляется в центре. Перезарядка 20 с. Навсегда!'],
+ 'fire.confirm':['לקנות את כוח האש תמורת {0} XP? (לתמיד)','Buy the Fire Power for {0} XP? (permanent)','شراء قوة النار مقابل {0} XP؟ (للأبد)','Купить Силу огня за {0} XP? (навсегда)'],
+ 'fire.bought':['🔥 כוח האש שלך! לחץ F במשחק','🔥 Fire Power is yours! Press F in a match','🔥 قوة النار لك! اضغط F في المباراة','🔥 Сила огня твоя! Нажми F в матче'],
+ 'fire.what':['הכוח פעיל?','Power on?','القوة مفعّلة؟','Сила включена?'],
+ 'fire.on':['🔥 פעיל','🔥 On','🔥 مفعّل','🔥 Вкл'],
+ 'fire.off':['⛔ כבוי','⛔ Off','⛔ مطفأ','⛔ Выкл'],
+ 'c.fire':['🎙️ 🔥 אש! הכדור נשרף! כדור חדש באמצע!','🎙️ 🔥 Fire! The ball burned up! New ball at the centre!','🎙️ 🔥 نار! احترقت الكرة! كرة جديدة في المنتصف!','🎙️ 🔥 Огонь! Мяч сгорел! Новый мяч в центре!'],
  'ice.m.freeze':['❄️ מקפיא יריב','❄️ Freeze opponent','❄️ تجميد الخصم','❄️ Заморозить соперника'],
  'ice.m.goal':['🧊 חומה על השער','🧊 Wall on my goal','🧊 جدار على مرماي','🧊 Стена на моих воротах'],
  'ice.m.off':['⛔ כבוי','⛔ Off','⛔ مطفأ','⛔ Выкл'],
@@ -1705,6 +1741,7 @@ const PRICES={
   kaka:3500, modric:3500, xavi:3000, debruyne:3000, bellingham:3000, lewa:2500, gerrard:2500, rooney:2500, drogba:2500, suarez:2500,
   benzema:2000, kane:2000, yamal:2000, baggio:2000, haaland:1500, salah:1500, lautaro:1500, vandijk:1500, aguero:1500,
   griezmann:1000, son:1000, vini:1000, mane:1000, dembele:1000, saka:1000, musiala:1000, foden:1000, khalaili:100, zahavi:1500, benayoun:1500, revivo:1200, berkovic:1200, solomon:1000, spiegler:1000, gloukh:700, dabbur:500, brunof:2500, rodri:3000, pedri:2500, gavi:2000, rodrygo:2000, endrick:1200, osimhen:1500, hakimi:1500, kvara:1800, leao:1800, palmer:2200, wirtz:2500, kroos:4000, neuer:3000, buffon:4500, maldini:5000, robertocarlos:5000, figo:4000, batistuta:4500, totti:5000, pirlo:4500, vanbasten:6000, eusebio:6000, eto:3500, weah:3500, platini:6000, beckenbauer:7000, garrincha:7000 };
+Object.keys(PRICES).forEach((id,i)=>{ if(i%2===0) PRICES[id]=Math.round(PRICES[id]*1.2/100)*100; });   // about half the players cost a little more
 const priceOf = c => PRICES[c.id] || 1000;
 const ICE_PRICE=10000, ICE_CD=15, ICE_DUR=1;        // ice power: permanent once bought, 15s cooldown, freezes opponents for 1s
 const fmtXp = n => Number(n).toLocaleString('en-US');
@@ -2308,7 +2345,7 @@ const STATIC_I18N={ '#home .title small':'home.sub', '#btn-chars':'btn.chars', '
   '#invite-title':'invite.title', '#btn-invite-accept':'invite.accept', '#btn-invite-decline':'invite.decline',
   '#mp-friends-h':'mp.friendsCard', '#mp-friends-p':'mp.friendsP', '#btn-mp-friends':'mp.friendsBtn',
   '#daily-modal h2':'daily.title', '#btn-daily-play':'btn.play', '#btn-daily-cancel':'btn.back2',
-  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'ice.what', '#ice-pv-name':'ice.name', '#st-t-l':'stats.trophies', '#rotate span':'rotate', '#replay-tag':'replay',
+  '#set-name-l':'set.name', '#set-voice-l':'set.voice', '#set-ice-l':'ice.what', '#ice-pv-name':'ice.name', '#fire-pv-name':'fire.name', '#fire-pv-l':'fire.what', '#st-t-l':'stats.trophies', '#rotate span':'rotate', '#replay-tag':'replay',
   '#pause-title':'pause.title', '#btn-resume':'pause.resume', '#btn-quit-home':'pause.home', '#btn-pause':'pause.btn', '#btn-pk-pause':'pause.btn',
   '#btn-train':'train.btn', '#train-title':'train.title', '#train-hint':'train.hint', '#btn-train-shoot':'train.shoot', '#btn-train-pk':'train.pk', '#btn-train-corner':'train.corner', '#btn-train-cancel':'btn.back2' };
 function applyLang(){
@@ -2377,6 +2414,10 @@ function buildGallery(){
   ice.innerHTML=`<div class="ico">❄️</div><div class="name">${T('ice.name')}</div><div class="desc">${T('ice.desc')}</div>${prog.ice?`<div class="lock" style="background:var(--green);color:#fff">${T('ice.owned')}</div>`:`<div class="lock">${T('shop.locked',fmtXp(ICE_PRICE))}</div>`}`;
   ice.addEventListener('click', ()=>{ sfx.click(); openIcePanel(); });
   if(galFilter==='all') g.appendChild(ice);
+  const fire=document.createElement('div'); fire.className='card firecard'+(prog.fire?' owned':''); fire.tabIndex=0;
+  fire.innerHTML=`<div class="ico">🔥</div><div class="name">${T('fire.name')}</div><div class="desc">${T('fire.desc')}</div>${prog.fire?`<div class="lock" style="background:var(--green);color:#fff">${T('ice.owned')}</div>`:`<div class="lock">${T('shop.locked',fmtXp(FIRE_PRICE))}</div>`}`;
+  fire.addEventListener('click', ()=>{ sfx.click(); openFirePanel(); });
+  if(galFilter==='all') g.appendChild(fire);
   CHARS.forEach((c,i)=>{
     if(galFilter==='il' && !ISRAELI_IDS.includes(c.id)) return;
     if(galFilter==='legend' && !LEGEND_IDS.includes(c.id)) return;
@@ -2393,7 +2434,7 @@ function buildGallery(){
   });
 }
 function refreshPreview(){
-  const ip=$('#ice-preview'); if(ip){ ip.hidden=true; $('#chars .preview:not(.ice-preview)').hidden=false; }
+  const ip=$('#ice-preview'), fp=$('#fire-preview'); if(ip){ ip.hidden=true; if(fp) fp.hidden=true; $('#chars .preview:not(.ice-preview):not(.fire-preview)').hidden=false; }
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', +c.dataset.i===previewIdx));
   const c=CHARS[previewIdx], locked=!isUnlocked(c);
   sprite($('#preview-sprite'), c);
@@ -2870,7 +2911,7 @@ function sha256js(str){
   return H.map(v=>v.toString(16).padStart(8,'0')).join('');
 }
 function becomeAdmin(){
-  prog.admin=true; prog.ice=true; prog.unlocked=CHARS.map(c=>c.id);
+  prog.admin=true; prog.ice=true; prog.fire=true; prog.unlocked=CHARS.map(c=>c.id);
   for(const [id] of ACH) prog.ach[id]=true;
   if(prog.xp<100000) prog.xp=100000;
   saveProg(); updateXpBadge(); refreshHome(); setupAdminUI(); buildGallery();
@@ -2931,8 +2972,8 @@ $('#btn-adm-leave').addEventListener('click', ()=>{ sfx.click(); if(confirm(T('a
 $('#adm-super').addEventListener('change', e=>{ prog.superOn=e.target.checked; saveProg(); sfx.click(); });
 $('#btn-adm-xp1').addEventListener('click', ()=>{ sfx.click(); addXP(1000); });
 $('#btn-adm-xp2').addEventListener('click', ()=>{ sfx.click(); addXP(10000); });
-$('#btn-adm-unlock').addEventListener('click', ()=>{ sfx.click(); prog.unlocked=CHARS.map(c=>c.id); prog.ice=true; saveProg(); buildGallery(); toast(T('adm.unlocked'),'ach'); });
-$('#btn-adm-reset').addEventListener('click', ()=>{ sfx.click(); if(!confirm(T('adm.resetQ'))) return; const keep={admin:true, ice:true, friends:prog.friends}; for(const k of Object.keys(prog)) delete prog[k]; Object.assign(prog, JSON.parse(JSON.stringify(DEF_PROG)), keep); saveStats({w:0,d:0,l:0,c:0}); saveProg(); updateXpBadge(); refreshHome(); toast(T('adm.reset'),'warn'); });
+$('#btn-adm-unlock').addEventListener('click', ()=>{ sfx.click(); prog.unlocked=CHARS.map(c=>c.id); prog.ice=true; prog.fire=true; saveProg(); buildGallery(); toast(T('adm.unlocked'),'ach'); });
+$('#btn-adm-reset').addEventListener('click', ()=>{ sfx.click(); if(!confirm(T('adm.resetQ'))) return; const keep={admin:true, ice:true, fire:true, friends:prog.friends}; for(const k of Object.keys(prog)) delete prog[k]; Object.assign(prog, JSON.parse(JSON.stringify(DEF_PROG)), keep); saveStats({w:0,d:0,l:0,c:0}); saveProg(); updateXpBadge(); refreshHome(); toast(T('adm.reset'),'warn'); });
 $('#btn-adm-code-go').addEventListener('click', ()=>{ sfx.click(); createCode(); });
 $('#btn-adm-refresh').addEventListener('click', ()=>{ sfx.click(); refreshAdminLists(); });
 for(const id of ['#adm-code','#adm-code-xp','#adm-code-uses']) $(id).addEventListener('keydown', e=>e.stopPropagation());
@@ -3219,6 +3260,7 @@ function setKey(code,down){
     case 'Space': if(down&&!keys.kick) kickQueued=true; keys.kick=down; return true;
     case 'KeyS': if(down&&!keys.slide) slideQueued=true; keys.slide=down; return true;
     case 'KeyE': case 'KeyQ': if(down&&!keys.ice) iceQueued=true; keys.ice=down; return true;
+    case 'KeyF': if(down&&!keys.fire) fireQueued=true; keys.fire=down; return true;
     case 'ArrowLeft':  keys.left=down; return true;
     case 'ArrowRight': keys.right=down; return true;
     case 'ArrowUp':    if(down&&!keys.jump) jumpQueued=true; keys.jump=down; return true;
@@ -3256,7 +3298,7 @@ window.addEventListener('blur', ()=>{ keys.left=keys.right=keys.jump=keys.kick=f
   ['pointerup','pointercancel'].forEach(t=>move.addEventListener(t, e=>{ if(e.pointerId===moveId) clearMove(); }));
   document.querySelectorAll('#touch .act .tb').forEach(b=>{
     const k=b.dataset.k;
-    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else if(k==='ice') iceQueued=true; else kickQueued=true; });
+    b.addEventListener('pointerdown', e=>{ e.preventDefault(); b.classList.add('pressed'); if(k==='jump') jumpQueued=true; else if(k==='slide') slideQueued=true; else if(k==='ice') iceQueued=true; else if(k==='fire') fireQueued=true; else kickQueued=true; });
     ['pointerup','pointercancel','pointerleave'].forEach(t=>b.addEventListener(t, ()=>b.classList.remove('pressed')));
   });
 })();
@@ -3324,7 +3366,7 @@ function beginMatch(c1, c2, opts){
   $('#end').classList.remove('show'); $('#end-actions').hidden=true;
   $('#fans').classList.remove('cheer');
   for(const p of players) p.kicks=0;
-  iceQueued=false; setupIceUI();
+  iceQueued=false; setupIceUI(); setupFireUI();
   rbuf.length=0; replay=null; wasBehind=false; said2=said1=said10=false; $('#replay-tag').hidden=true; lastSayT=performance.now(); nextAmbient=5;
   resetPositions();
   showScreen('game');
@@ -3443,7 +3485,7 @@ document.querySelectorAll('#set-ice .btn').forEach(b=>b.addEventListener('click'
 /* the ice panel on the character screen: pick what the power does, or buy it */
 function openIcePanel(){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('icecard')));
-  $('#chars .preview:not(.ice-preview)').hidden=true; const p=$('#ice-preview'); p.hidden=false;
+  $('#chars .preview:not(.ice-preview):not(.fire-preview)').hidden=true; const fp=$('#fire-preview'); if(fp) fp.hidden=true; const p=$('#ice-preview'); p.hidden=false;
   $('#ice-pv-desc').textContent=T('ice.desc');
   $('#set-ice').hidden=!prog.ice; $('#set-ice-l').hidden=!prog.ice;
   const buy=$('#btn-ice-buy'); buy.hidden=!!prog.ice; buy.textContent=T('shop.unlock', fmtXp(ICE_PRICE));
@@ -3455,6 +3497,61 @@ function tryBuyIce(){
   if(prog.xp<ICE_PRICE){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(ICE_PRICE)),'warn'); return; }
   if(!confirm(T('ice.confirm',fmtXp(ICE_PRICE)))) return;
   prog.xp-=ICE_PRICE; prog.ice=true; saveProg(); sfx.ice(); toast(T('ice.bought'),'ach'); updateXpBadge(); buildGallery(); refreshPreview();
+}
+/* ---------- fire power: the ball drops, burns away and a new one appears at the centre (10,000 XP, 20s cooldown, offline modes) ---------- */
+const FIRE_PRICE=10000, FIRE_CD=20;
+let fireQueued=false, fireCd=0, fireBusy=false;
+function fireAvailable(){ return !!prog.fire && !mp && !spectating && settings.fireOff!==true; }
+function useFire(){
+  if(!fireAvailable() || state!=='play' || fireCd>0 || fireBusy) return;
+  fireCd=FIRE_CD; fireBusy=true; updateFireHud();
+  sfx.ice(); say('c.fire'); netEv('fire');
+  fireFx();
+  ball.vx*=.3; ball.vy=Math.min(ball.vy,-300);                           // it drops like a stone
+  setTimeout(()=>{ if(state!=='play'){ fireBusy=false; return; } ball.x=FIELD_W/2; ball.y=R; ball.vx=0; ball.vy=0; ball.rot=0; render(); const b=$('#ball'); b.classList.remove('burning'); b.classList.remove('reappear'); void b.offsetWidth; b.classList.add('reappear'); setTimeout(()=>b.classList.remove('reappear'),400); fireBusy=false; }, 900);
+}
+function fireFx(){                                     // flames on the ball, a scorch mark on the ground, then the ball is gone
+  const fx=$('#ball-fire'), sc=$('#scorch'), b=$('#ball');
+  fx.innerHTML=fireSVG(); fx.style.left=ball.x+'px'; fx.style.top=(GROUND_Y-ball.y)+'px'; fx.classList.remove('show'); void fx.offsetWidth; fx.classList.add('show');
+  b.classList.remove('burning'); void b.offsetWidth; b.classList.add('burning');
+  setTimeout(()=>{ sc.style.left=ball.x+'px'; sc.style.top=(GROUND_Y-4)+'px'; sc.classList.remove('show'); void sc.offsetWidth; sc.classList.add('show'); }, 380);
+}
+function fireSVG(){
+  const rnd=(a,b)=>a+Math.random()*(b-a); let s='';
+  for(let i=0;i<7;i++){ const x=rnd(22,68), h=rnd(40,95), w=rnd(14,26), d=rnd(.4,.9); s+=`<path d="M${x} 100 Q${x-w/2} ${100-h*.5} ${x} ${100-h} Q${x+w/2} ${100-h*.5} ${x} 100Z" fill="${i%3===0?'#FFD447':i%3===1?'#FF7A3D':'#F04E4E'}" opacity=".95"><animate attributeName="d" values="M${x} 100 Q${x-w/2} ${100-h*.5} ${x} ${100-h} Q${x+w/2} ${100-h*.5} ${x} 100Z;M${x+4} 100 Q${x-w/2+3} ${100-h*.55} ${x-3} ${100-h*1.15} Q${x+w/2-2} ${100-h*.45} ${x+4} 100Z;M${x} 100 Q${x-w/2} ${100-h*.5} ${x} ${100-h} Q${x+w/2} ${100-h*.5} ${x} 100Z" dur="${d}s" repeatCount="indefinite"/></path>`; }
+  for(let i=0;i<6;i++) s+=`<circle cx="${rnd(25,65)}" cy="${rnd(20,60)}" r="${rnd(1.5,3)}" fill="#FFD447"><animate attributeName="cy" values="${rnd(50,70)};${rnd(0,20)}" dur="${rnd(.5,.9)}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="${rnd(.5,.9)}s" repeatCount="indefinite"/></circle>`;
+  return `<svg viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+function updateFire(dt){ if(fireCd>0){ fireCd=Math.max(0,fireCd-dt); updateFireHud(); } }
+function updateFireHud(){
+  const h=$('#fire-hud'); if(!h) return;
+  const ready=fireCd<=0; h.classList.toggle('ready',ready);
+  h.style.setProperty('--cd', Math.round(fireCd/FIRE_CD*100)+'%');
+  h.querySelector('.cd').textContent = ready ? '' : Math.ceil(fireCd);
+  const tb=document.querySelector('#touch .tb.fire'); if(tb) tb.classList.toggle('cool',!ready);
+}
+function setupFireUI(){
+  const on=fireAvailable();
+  $('#fire-hud').hidden=!on; const tb=document.querySelector('#touch .tb.fire'); if(tb) tb.hidden=!on;
+  $('#fire-hud').style.top = iceAvailable() ? '152px' : '70px';               // sits under the ice button, or takes its place
+  fireCd=0; fireBusy=false; fireQueued=false; updateFireHud(); $('#ball').classList.remove('burning','reappear'); $('#ball-fire').classList.remove('show'); $('#scorch').classList.remove('show');
+}
+$('#fire-hud').addEventListener('pointerdown', e=>{ e.preventDefault(); e.stopPropagation(); fireQueued=true; });
+function openFirePanel(){
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('selected', c.classList.contains('firecard')));
+  $('#chars .preview:not(.ice-preview):not(.fire-preview)').hidden=true; $('#ice-preview').hidden=true; const p=$('#fire-preview'); p.hidden=false;
+  $('#fire-pv-desc').textContent=T('fire.desc');
+  $('#fire-toggle').hidden=!prog.fire; $('#fire-pv-l').hidden=!prog.fire;
+  const buy=$('#btn-fire-buy'); buy.hidden=!!prog.fire; buy.textContent=T('shop.unlock', fmtXp(FIRE_PRICE));
+  document.querySelectorAll('#fire-toggle .btn').forEach(b=>b.classList.toggle('on', (b.dataset.on==='1')!==(settings.fireOff===true)));
+}
+document.querySelectorAll('#fire-toggle .btn').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); settings.fireOff = b.dataset.on!=='1'; saveSettings(); openFirePanel(); }));
+$('#btn-fire-buy').addEventListener('click', ()=>{ sfx.click(); tryBuyFire(); if(prog.fire) openFirePanel(); });
+function tryBuyFire(){
+  if(prog.fire) return;
+  if(prog.xp<FIRE_PRICE){ sfx.lose(); toast(T('shop.noXp',fmtXp(prog.xp),fmtXp(FIRE_PRICE)),'warn'); return; }
+  if(!confirm(T('fire.confirm',fmtXp(FIRE_PRICE)))) return;
+  prog.xp-=FIRE_PRICE; prog.fire=true; saveProg(); sfx.win(); toast(T('fire.bought'),'ach'); updateXpBadge(); buildGallery(); refreshPreview();
 }
 /* ---------- pause (match + penalties) ---------- */
 let pausedFrom=null, cornerCd=0;
@@ -3908,6 +4005,7 @@ function loop(t){
     if(kickQueued){ if(P1.stunT<=0) doKick(P1); kickQueued=false; }
     if(slideQueued){ doSlide(P1); slideQueued=false; }
     if(iceQueued){ useIce(); iceQueued=false; }
+    if(fireQueued){ useFire(); fireQueued=false; } updateFire(dt);
     updateIce(dt);
     if(pausePending){ pausePending=false; pauseGame(); return; }
     if(training!=='shoot'){                          // every other seat: a friend on another computer, a friend on my keyboard, or the computer
@@ -4173,11 +4271,11 @@ function mpStart(mode, lvl){
 }
 /* ----- trophy road: milestones that hand out XP and exclusive players ----- */
 const TROPHY_ROAD=(()=>{
-  const road=[{t:5,xp:300},{t:10,ch:'gloukh'},{t:20,xp:800},{t:30,ch:'solomon'},{t:50,ch:'zahavi'},{t:75,xp:2000},{t:100,ch:'goldstar'},{t:150,ch:'streetking'}];
+  const road=[{t:5,xp:200},{t:10,ch:'gloukh'},{t:20,xp:400},{t:30,ch:'solomon'},{t:50,ch:'zahavi'},{t:75,xp:800},{t:100,ch:'goldstar'},{t:150,ch:'streetking'}];
   const taken=new Set(road.map(r=>r.ch).filter(Boolean)), pool=CHARS.filter(c=>!FREE_CHARS.includes(c.id) && !c.trophyOnly && !taken.has(c.id)).sort((a,b)=>priceOf(a)-priceOf(b)).map(c=>c.id);
-  let k=0; for(let t=175; t<=1000; t+=25){ road.push(k%3===2 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*12}); k++; }
-  for(let t=1050; t<=10000; t+=50){ road.push(k%5===4 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*15}); k++; }
-  for(let t=10100; t<=50000; t+=100){ road.push(k%6===5 && pool.length ? {t, ch:pool.shift()} : {t, xp:t*20}); k++; }
+  let k=0; for(let t=175; t<=1000; t+=25){ road.push(k%3===2 && pool.length ? {t, ch:pool.shift()} : {t, xp:Math.round(t*2/50)*50}); k++; }
+  for(let t=1050; t<=10000; t+=50){ road.push(k%5===4 && pool.length ? {t, ch:pool.shift()} : {t, xp:Math.round(t*1.2/50)*50}); k++; }
+  for(let t=10100; t<=50000; t+=100){ road.push(k%6===5 && pool.length ? {t, ch:pool.shift()} : {t, xp:Math.round(t*.8/100)*100}); k++; }
   return road;
 })();
 const roadFor = id => (TROPHY_ROAD.find(r=>r.ch===id)||{}).t;
@@ -4308,6 +4406,7 @@ function applySnapshot(s, teamL, isPlayer){
     else if(e.startsWith('count:')) showCount(+e.slice(6));
     else if(e.startsWith('hold:')){ if(!isPlayer){ const h=$('#watch-hold'); h.hidden=false; h.textContent=T(e==='hold:corner' ? 'watch.corner' : 'watch.pk'); } }   // the host is on the corner / penalty screen
     else if(e==='holdEnd') $('#watch-hold').hidden=true;
+    else if(e==='fire') fireFx();
     else if(e.startsWith('scorer:')) showScorer(e.slice(7));
     else if(e==='gice:1'){ const g=$('#goal-ice'); g.classList.remove('thaw'); g.classList.add('show'); g.innerHTML=goalIceSVG(); }
     else if(e==='gice:0'){ const g=$('#goal-ice'); g.classList.remove('show'); g.classList.add('thaw'); setTimeout(()=>g.classList.remove('thaw'),500); }
