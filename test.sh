@@ -40,7 +40,7 @@ awk -v h="$tmpdir/harness.js" '
   /^<\/script>$/ && open { print "}});"; open=0 }
   {print}' "$out" > "$out.2" && mv "$out.2" "$out"
 [ -n "${KEEP:-}" ] && cp "$out" ./test-build.html && echo "kept ./test-build.html"
-"$EDGE" --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --virtual-time-budget=240000 --dump-dom "file:///$(cygpath -m "$out")" 2>/dev/null \
+./edge.sh "file:///$(cygpath -m "$out")" --virtual-time-budget=240000 \
   | grep -o '<pre id="test-log">.*</pre>' | sed 's|<pre id="test-log">||; s|</pre>||' | sed 's|&quot;|"|g; s|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g' > "$tmpdir/result.json" || true
 if [ ! -s "$tmpdir/result.json" ]; then echo "NO RESULT: the page never reached the test log (a syntax error in a module? load last-test-build.html in a browser)"; cp "$out" ./last-test-build.html; exit 2; fi
 cat "$tmpdir/result.json"; echo

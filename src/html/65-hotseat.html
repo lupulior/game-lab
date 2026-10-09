@@ -1,0 +1,21 @@
+  <!-- ===== penalties vs a friend on the same device: the keeper picks a corner in secret, then the shooter shoots ===== -->
+  <div class="overlay" id="hs-pick-modal">
+    <div class="panel hs-panel">
+      <div class="hs-who" id="hs-pick-who">🧤 השוער בוחר</div>
+      <div class="hint" id="hs-pick-hint">הבועט לא מסתכל! לאן לקפוץ?</div>
+      <div class="hs-goal" id="hs-goal">
+        <button class="hs-zone" data-col="0" data-row="0">↖</button><button class="hs-zone" data-col="1" data-row="0">⬆</button><button class="hs-zone" data-col="2" data-row="0">↗</button>
+        <button class="hs-zone" data-col="0" data-row="1">↙</button><button class="hs-zone" data-col="1" data-row="1">⬇</button><button class="hs-zone" data-col="2" data-row="1">↘</button>
+      </div>
+      <div class="hint small" id="hs-pick-keys">במקלדת: Q W E למעלה · A S D למטה</div>
+      <div class="hs-score" id="hs-pick-score"></div>
+      <button class="btn small red" id="btn-hs-quit">✖ סיום</button>
+    </div>
+  </div>
+  <div class="overlay" id="hs-end-modal">
+    <div class="panel hs-panel">
+      <h2 id="hs-end-title"></h2>
+      <div class="hs-final" id="hs-end-score"></div>
+      <div class="hs-btns"><button class="btn green" id="btn-hs-again">🔄 עוד סיבוב</button> <button class="btn blue small" id="btn-hs-home">🏠 הביתה</button></div>
+    </div>
+  </div>

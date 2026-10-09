@@ -37,6 +37,8 @@ cat > /tmp/tour-tail.js <<'EOF'
     else if(scene==='home-en'){ setLang('en'); refreshHomeV2(); }
     else if(scene==='home-ru'){ setLang('ru'); refreshHomeV2(); }
     else if(scene==='ctrl'){ prog.matches=0; prog.onboard={}; saveProg(); refreshHome(); $('#btn-play-big').click(); }
+    else if(scene==='hotseat'){ startHotseatPk(); await w(400); }
+    else if(scene==='hotseat-kick'){ startHotseatPk(); await w(300); document.querySelector('#hs-goal .hs-zone').click(); await w(900); }
     else if(scene==='admin'){ prog.admin=true; saveProg(); setupAdminUI(); openAdmin(); await w(800); }
     if(scene.startsWith('home')){ await w(900); document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show')); }
     await w(600);
@@ -49,6 +51,6 @@ r /tmp/tour-tail.js
 # simpler and reliable: append the tail before the LAST </script>
 awk -v tail=/tmp/tour-tail.js '{lines[NR]=$0} END{ last=0; for(i=1;i<=NR;i++) if(lines[i]=="</script>") last=i; for(i=1;i<=NR;i++){ if(i==last){ while((getline l < tail)>0) print l } print lines[i] } }' game1.html > tour.html
 for s in "$@"; do
-  "$EDGE" --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --hide-scrollbars --window-size=1000,620 --virtual-time-budget=14000 --screenshot="$(cygpath -w "$PWD/art/tour/$s.png")" "file:///$(cygpath -m "$PWD/tour.html")#$s" >/dev/null 2>&1 || true
+  SHOT="$(cygpath -w "$PWD/art/tour/$s.png")" ./edge.sh "file:///$(cygpath -m "$PWD/tour.html")#$s" --window-size=1000,620 --virtual-time-budget=14000 >/dev/null 2>&1 || true
   printf '%-14s %s\n' "$s" "$( [ -f art/tour/$s.png ] && stat -c %s art/tour/$s.png || echo missing )"
 done

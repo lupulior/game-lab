@@ -1,0 +1,12 @@
+/* penalties vs a friend: the keeper's secret pick */
+.hs-panel{max-width:620px;text-align:center}
+.hs-who{font-size:30px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.hs-goal{direction:ltr;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px auto 8px;width:420px;padding:12px;border:8px solid #fff;border-bottom:0;border-radius:14px 14px 0 0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.35) 0 2px,transparent 2px 14px),repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 2px,transparent 2px 14px),#5db9ff}
+.hs-zone{font-size:40px;font-weight:900;min-height:70px;border:0;border-radius:14px;background:rgba(255,255,255,.85);color:var(--navy);cursor:pointer;box-shadow:0 5px 0 rgba(27,42,78,.3);font-family:inherit}
+.hs-zone:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,78,.3)}
+.hint.small{font-size:14px;opacity:.75}
+.hs-score{font-size:22px;font-weight:900;color:var(--navy);margin:8px 0 10px;direction:ltr}
+.hs-score .d{display:inline-block;width:14px;height:14px;border-radius:50%;background:#D6DCE8;margin:0 2px;vertical-align:middle}
+.hs-score .d.g{background:#3FC35F}.hs-score .d.m{background:#F04E4E}
+.hs-final{font-size:54px;font-weight:900;color:var(--navy);direction:ltr;margin:6px 0 14px}
+.hs-btns{display:flex;justify-content:center;gap:10px}
