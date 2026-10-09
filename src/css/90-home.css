@@ -74,3 +74,12 @@
 #home-title-tag{font-size:16px;font-weight:900;color:#fff;background:rgba(27,42,78,.55);border-radius:12px;padding:2px 12px;margin-top:-6px}
 /* #52 (shared finding): the shop's filter chips and card buttons reach 44px too — additive only, the shop module owns their look */
 .shop-filters .btn.small,.shop-item .btn.small{min-height:44px}
+/* the trophy pill (with the road to the next reward) lives in the bottom-left corner */
+#home-trophy{position:absolute;left:28px;bottom:14px;z-index:3}
+#home-trophy .pill{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:inherit;border:0;cursor:pointer;font-size:22px;font-weight:900;color:var(--navy);background:#fff;border-radius:18px;padding:6px 16px;box-shadow:0 5px 0 rgba(27,42,78,.3),0 8px 14px rgba(0,0,0,.15)}
+#home-trophy .pill.trophy{background:linear-gradient(#FFE8B0,#F5B400);flex-direction:column;gap:2px;padding:6px 14px 8px;width:190px;align-items:stretch}
+#home-trophy .pill.trophy #trophy-badge{font-size:30px;text-align:center}
+#home-trophy .pill.trophy .road{display:block;height:10px;border-radius:6px;background:rgba(27,42,78,.3);overflow:hidden}
+#home-trophy .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
+#home-trophy .pill.trophy .next{font-size:13px;text-align:center;white-space:nowrap;opacity:.9}
+#home.v2.inparty #party .party-bar{left:30px;bottom:130px}

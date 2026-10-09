@@ -53,6 +53,8 @@ function buildHomeV2(){
   const mdChip=el('button','chip',''); mdChip.id='chip-mode'; mdChip.addEventListener('click', ()=>{ sfx.click(); openModeSheet(); });
   chips.appendChild(lvChip); chips.appendChild(mdChip); centre.appendChild(chips);
   home.appendChild(centre);
+  // trophies + the road to the next reward: bottom-left corner
+  const tro=el('div','',''); tro.id='home-trophy'; const tp=$('#trophy-pill'); if(tp) tro.appendChild(tp); home.appendChild(tro);
   // left: today
   const today=el('div','',''); today.id='today-card'; home.appendChild(today);
   // right column
@@ -189,7 +191,7 @@ Hooks.on('screen', id=>{
 /* ----- the back button / browser history: back closes the top modal, then leaves a screen, then asks before exiting ----- */
 const UI={stack:[], ignore:0, popping:false, ready:false};
 function uiPush(tag){ UI.stack.push(tag); try{ history.pushState({fs:tag}, ''); }catch(e){} }
-function uiForget(tag){ const i=UI.stack.lastIndexOf(tag); if(i<0) return; UI.stack.splice(i,1); if(!UI.popping){ UI.ignore++; try{ history.back(); }catch(e){ UI.ignore--; } } }
+function uiForget(tag){ const i=UI.stack.lastIndexOf(tag); if(i>=0) UI.stack.splice(i,1); }   // the history entry stays (same URL); the next back press simply pops it and acts on whatever is open then
 function uiSetup(){
   if(UI.ready) return; UI.ready=true;
   try{ history.replaceState({fs:'root'}, ''); history.pushState({fs:'sentinel'}, ''); }catch(e){}

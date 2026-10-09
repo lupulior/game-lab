@@ -5,6 +5,7 @@
   $('#intro').click(); showScreen('home'); await new Promise(r=>setTimeout(r,100));
   TASSERT('home v2 built', $('#home').classList.contains('v2') && !!$('#btn-play-big') && !!$('#today-card') && !!$('#home-right'));
   TASSERT('old buttons moved, listeners kept', $('#home-right').contains($('#btn-mp')) && $('#more-grid').contains($('#btn-stats')) && $('#mode-others').contains($('#btn-2v2')));
+  { const r=$('#trophy-pill').getBoundingClientRect(), s=$('#stage').getBoundingClientRect(), sc=s.width/1000; TASSERT('trophy pill sits in the bottom-left corner', $('#home-trophy').contains($('#trophy-pill')) && (r.left-s.left)/sc<60 && (s.bottom-r.bottom)/sc<40 && (r.bottom-s.top)/sc<=620); }
   TASSERT('play label shows level + mode', /▶/.test($('#btn-play-big').textContent) && $('#btn-play-big').textContent.includes(T('lvl.0')));
   // level sheet
   $('#chip-level').click(); await new Promise(r=>setTimeout(r,30));
@@ -95,6 +96,7 @@
   $('#party-levels [data-lv="2"]').click(); await new Promise(r=>setTimeout(r,30));
   TASSERT('#43 modal choice flows back to the chip', partyLevel===2 && settings.lastLevel===2 && $('#chip-level').textContent.includes(T('lvl.2')));
   $('#btn-party-cancel').click(); await new Promise(r=>setTimeout(r,60));
+  for(let i=0;i<30 && UI.ignore>0;i++) await new Promise(r=>setTimeout(r,25));   // let the modal's own history.back() land first
   window.dispatchEvent(new PopStateEvent('popstate')); await new Promise(r=>setTimeout(r,60));
   TASSERT('#34/#49 back in a party asks first', !!mp && $('#ask-modal').classList.contains('show') && $('#ask-text').textContent===T('party.leaveQ'));
   $('#btn-ask-no').click(); await new Promise(r=>setTimeout(r,60));
