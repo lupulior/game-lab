@@ -59,10 +59,11 @@
   TASSERT('road: gems at 500', TROPHY_ROAD.find(r=>r.t===500).gems===10 && TROPHY_ROAD.find(r=>r.t===2500).gems===25);
   TASSERT('road: fewer characters', TROPHY_ROAD.filter(r=>r.ch).length<25 && TROPHY_ROAD.filter(r=>r.ch).length>=10);
   TASSERT('no new script errors', window.__errs.length===errs0); if(window.__errs.length) TLOG('errors', window.__errs);
+  await econTest2(); await econTest3();
   TDONE();
 })();
 /* review fixes: monotonic day key, the day captured at kick-off, quitting a match counts as a loss */
-(async()=>{
+async function econTest2(){
   await new Promise(r=>setTimeout(r,100));
   const today=localDayKey(now()); const d=new Date(now()); d.setDate(d.getDate()+1); const tomorrow=localDayKey(d.getTime()); d.setDate(d.getDate()+6); const far=localDayKey(d.getTime());
   prog.dayMax=tomorrow; TASSERT('day key never goes back (1 day ahead kept)', dayKey()===tomorrow);
@@ -75,4 +76,18 @@
   prog.keys=ECON.keyCap; prog.keyDay={key:dayKey(), n:0};
   const r=payout({outcome:'win', fmt:'quick', levelI:2, goals:0}); TASSERT('no key promised on a full wallet', r.key===0);
   TDONE();
-})();
+}
+/* win-streak milestones and numbers that must fit their box */
+async function econTest3(){
+  await new Promise(r=>setTimeout(r,100));
+  prog.coinDay={key:dayKey(), n:0}; prog.streakDays=0;
+  prog.streak=3; let r=payout({outcome:'win', fmt:'quick', levelI:1, goals:0}); TASSERT('3 wins in a row: +50 coins part', r.parts.some(p=>p[0]==='end.pStreakWin' && p[1]===50) && r.streakGems===0);
+  prog.streak=5; r=payout({outcome:'win', fmt:'quick', levelI:1, goals:0}); TASSERT('5 in a row: +100 and a gem', r.parts.some(p=>p[0]==='end.pStreakWin' && p[1]===100) && r.streakGems===1);
+  prog.streak=4; r=payout({outcome:'win', fmt:'quick', levelI:1, goals:0}); TASSERT('4 in a row: no milestone', !r.parts.some(p=>p[0]==='end.pStreakWin'));
+  prog.streak=20; r=payout({outcome:'win', fmt:'quick', levelI:1, goals:0}); TASSERT('20 in a row: every-10 reward', r.parts.some(p=>p[0]==='end.pStreakWin' && p[1]===300) && r.streakGems===5);
+  prog.streak=0;
+  showScreen('home'); const b=$('#xp-badge'); prog.coins=123456789; updateXpBadge(); await new Promise(r=>setTimeout(r,320));
+  TASSERT('a huge coin number shrinks instead of widening the pill', b.scrollWidth<=b.clientWidth+1 && b.offsetWidth<=152 && parseFloat(b.style.fontSize)<22);
+  prog.coins=12; updateXpBadge(); await new Promise(r=>setTimeout(r,320)); TASSERT('a small number gets its size back', !b.style.fontSize || parseFloat(b.style.fontSize)>=20);
+  TDONE();
+}

@@ -768,6 +768,14 @@ body.touch #touch{display:block}
 #golden-flash{position:absolute;left:50%;top:230px;transform:translateX(-50%) scale(.6);font-size:64px;font-weight:900;color:#FFD447;text-shadow:0 4px 0 #B8860B,0 0 30px rgba(255,212,71,.8);z-index:30;pointer-events:none;animation:goldenA 1.8s ease-out forwards;white-space:nowrap}
 @keyframes goldenA{0%{opacity:0;transform:translateX(-50%) scale(.6)}20%{opacity:1;transform:translateX(-50%) scale(1.15)}80%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) scale(1.3)}}
 #game.fmt-quick #timer{background:linear-gradient(#FFE27A,#F5C400);color:var(--navy)}
+/* numbers never push their box wider: fixed widths, the text shrinks (fitText) */
+.home-top .pill.xp{width:150px;min-width:0;max-width:150px;justify-content:center;white-space:nowrap;overflow:hidden;padding:6px 10px;box-sizing:border-box}
+.home-top .pill.gem{width:104px;min-width:0;max-width:104px;overflow:hidden;padding:6px 8px;box-sizing:border-box}
+.home-top .pill.lv{width:134px;min-width:0;max-width:134px;overflow:hidden;padding:6px 10px;box-sizing:border-box}
+.home-top .pill.me{width:132px;max-width:132px;box-sizing:border-box}
+#home-trophy .pill.trophy #trophy-badge{white-space:nowrap;overflow:hidden}
+#home-trophy .pill.trophy .next{overflow:hidden}
+#end-score .me,#end-score .op{max-width:160px;overflow:hidden;white-space:nowrap}
 
 /* ===== 10-shop.css ===== */
 /* ===== shop screen (1000×620 stage, scoped to #shop / .shop-*) ===== */
@@ -884,6 +892,7 @@ body.touch #touch{display:block}
 .shop-pow .desc{font-size:15px;font-weight:700;color:#3f4e70;line-height:1.3}
 .shop-pow .btn{font-size:22px;padding:10px 24px;min-height:48px}
 .shop-pow .own{font-size:22px;font-weight:900;color:#fff;background:var(--green);border-radius:14px;padding:6px 18px}
+.shop-wallet span{width:150px;box-sizing:border-box;text-align:center;white-space:nowrap;overflow:hidden}
 
 /* ===== 20-chests.css ===== */
 /* ===== chests screen (keys + fixed bundles, pick 1 of 3) ===== */
@@ -968,6 +977,7 @@ body.touch #touch{display:block}
 @keyframes chestBurst{0%{transform:scale(1.15) rotate(0)}40%{transform:scale(1.4) rotate(-10deg);filter:drop-shadow(0 8px 0 rgba(0,0,0,.18)) brightness(1.4)}100%{transform:scale(.2) rotate(30deg);opacity:0}}
 .copen-tap{font-size:26px;font-weight:900;color:#5B34B5;background:#EADBFF;border-radius:16px;padding:6px 20px;display:inline-block;margin:6px 0 10px;animation:tapPulse 1s ease-in-out infinite}
 @keyframes tapPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.chests-wallet span{width:140px;box-sizing:border-box;text-align:center;white-space:nowrap;overflow:hidden}
 
 /* ===== 30-daily.css ===== */
 /* ===== daily loop: pickup / calendar / missions / streak modals + the home "היום" card (all scoped to d* ids and classes) ===== */
@@ -1234,6 +1244,8 @@ body.touch #touch{display:block}
 #home-trophy .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
 #home-trophy .pill.trophy .next{font-size:13px;text-align:center;white-space:nowrap;opacity:.9}
 #home.v2.inparty #party .party-bar{left:30px;bottom:130px}
+#home-trophy{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+#home-trophy .pill.wstreak{background:linear-gradient(#FFE1D6,#FF9A6A);font-size:16px;padding:5px 10px;width:190px;box-sizing:border-box;justify-content:center;white-space:nowrap;overflow:hidden;min-height:0}
 
 /* ===== 95-onboard.css ===== */
 /* controls card */
@@ -1970,7 +1982,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-10-09.3';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-10-09.4';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -2506,9 +2518,9 @@ function toast(msg, cls){
   setTimeout(()=>d.classList.add('out'), 2600); setTimeout(()=>d.remove(), 3100);
 }
 function updateXpBadge(){
-  const tb=document.getElementById('trophy-badge'); if(tb){ tb.textContent='🏆 '+(prog.trophies|0); tb.style.fontSize=(prog.trophies|0)>=10000?'18px':'26px'; }
+  const tb=document.getElementById('trophy-badge'); if(tb){ tb.textContent='🏆 '+fmtNum(prog.trophies|0); }
   const pop=el=>{ if(!el) return; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(()=>el.classList.remove('pop'),200); };
-  const b=document.getElementById('xp-badge'); if(b){ const v=prog.coins|0; b.textContent='🪙 '+fmtNum(v); b.style.fontSize = v>=1000000?'15px':v>=100000?'17px':v>=10000?'19px':'22px'; pop(b); }
+  const b=document.getElementById('xp-badge'); if(b){ const v=prog.coins|0; b.textContent='🪙 '+fmtNum(v); pop(b); }
   const g=document.getElementById('gem-badge'); if(g){ g.textContent='💎 '+fmtNum(prog.gems|0); pop(g); }
   const k=document.getElementById('key-badge'); if(k){ k.textContent='🔑 '+(prog.keys|0); k.hidden=!(prog.keys|0); }
   const l=document.getElementById('lv-badge'); if(l){ const p=levelProgress(); l.innerHTML='⭐ '+T('cur.level')+' '+p.lv+'<span class="bar"><i style="width:'+p.pct+'%"></i></span>'; }
@@ -4530,15 +4542,16 @@ function scoreGoal(who){
 }
 /* ---------- goal replay (last 1.5s at half speed) ---------- */
 const rbuf=[]; let replay=null, wasBehind=false, lastTouch={p:null,type:'',t:0};
-function recordFrame(){ rbuf.push({p:players.map(p=>[p.x,p.y,p.facing]), b:[ball.x,ball.y,ball.rot]}); if(rbuf.length>90) rbuf.shift(); }
+function recordFrame(){ rbuf.push({p:players.map(p=>[p.x,p.y,p.facing,(p.el.classList.contains('sliding')?1:0)|(p.el.classList.contains('kicking')?2:0)|(p.el.classList.contains('scissors')?4:0)]), b:[ball.x,ball.y,ball.rot]}); if(rbuf.length>90) rbuf.shift(); }   // the 4th value: the move the player is doing (slide / kick / bicycle kick) so the replay shows it
 function startReplay(frames){
   if(frames.length<10){ afterGoal(); return; }
   replay={frames, i:0}; state='replay'; $('#replay-tag').hidden=false; netEv('replay'); say('c.replay');
 }
 function stepReplay(){
   const f=replay.frames[Math.floor(replay.i/2)];
-  if(!f){ replay=null; $('#replay-tag').hidden=true; netEv('replayEnd'); afterGoal(); return; }
-  players.forEach((p,k)=>{ if(f.p[k]){ p.x=f.p[k][0]; p.y=f.p[k][1]; p.facing=f.p[k][2]; } });
+  if(!f){ replay=null; for(const p of players) p.el.classList.remove('sliding','kicking','scissors'); $('#replay-tag').hidden=true; netEv('replayEnd'); afterGoal(); return; }
+  replay.prev=replay.prev||[];
+  players.forEach((p,k)=>{ if(f.p[k]){ p.x=f.p[k][0]; p.y=f.p[k][1]; p.facing=f.p[k][2]; const s=f.p[k][3]|0, was=replay.prev[k]|0; p.el.classList.toggle('sliding', !!(s&1)); if((s&2) && !(was&2)){ p.el.classList.remove('kicking'); void p.el.offsetWidth; p.el.classList.add('kicking'); } if((s&4) && !(was&4)){ p.el.classList.remove('scissors'); void p.el.offsetWidth; p.el.classList.add('scissors'); } replay.prev[k]=s; } });
   ball.x=f.b[0]; ball.y=f.b[1]; ball.rot=f.b[2]; replay.i++;
 }
 function afterGoal(){
@@ -5869,6 +5882,7 @@ const ECON = {
   motdMult:2, sundayMult:2,
   starter:{khalaili:100, dabbur:300, gloukh:400, spiegler:400, griezmann:400},
   streakBonusStep:.1, streakBonusMax:.5, winStreakStep:.1, winStreakMax:.5,
+  winStreakMilestones:{3:{coins:50}, 5:{coins:100, gems:1}, 10:{coins:300, gems:5}, every10:{coins:300, gems:5}},   // ⚡ wins in a row
 };
 /* ----- hook bus: modules subscribe to game events instead of editing the core ----- */
 const Hooks = {
@@ -5963,6 +5977,8 @@ function payout(o){
   if(o.outcome==='win' && o.stars>=3){ base+=ECON.threeStar; parts.push(['end.pStars', ECON.threeStar]); }
   if(o.outcome==='win' && o.golden){ base+=ECON.goldenBonus; parts.push(['end.pGolden', ECON.goldenBonus]); }
   const winStreak = o.outcome==='win' ? (prog.streak|0) : 0;
+  const ms = o.outcome==='win' ? winStreakMilestone(winStreak) : null;
+  if(ms && ms.coins){ base+=ms.coins; parts.push(['end.pStreakWin', ms.coins]); }
   const cycles = Math.floor((prog.streakDays|0)/7);
   const bonus = Math.min(ECON.winStreakMax, Math.max(0,winStreak-1)*ECON.winStreakStep) + Math.min(ECON.streakBonusMax, cycles*ECON.streakBonusStep);
   const sunday = (typeof matchSunday!=='undefined' && matchSunday!=null) ? matchSunday : isSunday();
@@ -5975,7 +5991,7 @@ function payout(o){
   xp += (o.goals|0)*ECON.xpGoal; if(o.motd) xp+=ECON.xpMotd;
   const kd=dayCounter('keyDay');
   const key = (o.outcome==='win' && (o.online || lvl>=ECON.keyMinLevel) && kd.n<ECON.keysPerDay && (prog.keys|0)<ECON.keyCap) ? 1 : 0;
-  return {coins, xp, key, parts, bonus, mult, capped, base};
+  return {coins, xp, key, parts, bonus, mult, capped, base, streakGems: ms && ms.gems ? ms.gems : 0, streak: winStreak};
 }
 /* called once per finished match (not training): stamps the day for the streak, applies the payout, returns the summary for the end card */
 function applyMatchRewards(o){
@@ -5983,6 +5999,8 @@ function applyMatchRewards(o){
   if(r.coins>0){ dayCounter('coinDay').n+=r.coins; addCoins(r.coins,'match'); }
   if(r.key){ if(addKeys(1,'match')>0) dayCounter('keyDay').n+=1; else r.key=0; }
   if(r.xp>0) addXP(r.xp);
+  if(r.streakGems>0) addGems(r.streakGems,'winstreak');
+  if(r.streak>=3 && winStreakMilestone(r.streak)) setTimeout(()=>toast(T('streak.win', r.streak),'ach'), 800);
   prog.matches=(prog.matches|0)+1; prog.lastPlay=now();
   stampStreakDay(typeof matchDay!=='undefined' && matchDay ? matchDay : undefined);
   saveProg();
@@ -6087,6 +6105,16 @@ function startOfflineMatch(levelI, oppIdx){ if(mp) mpTeardown(); dailyMatch=fals
 migrateProg();
 Object.assign(PRICES, ECON.starter);                                      // the starter band drops AFTER the level credit for already-bought players
 restoreSelected();
+/* ⚡ wins in a row: a reward at 3, 5, 10 and every 10 after that */
+function winStreakMilestone(n){ const M=ECON.winStreakMilestones; if(!M || !(n>=3)) return null; if(M[n]) return M[n]; if(n>10 && n%10===0) return M.every10; return null; }
+/* numbers that must stay inside a fixed box: shrink the font until the text fits (never grow the box) */
+function fitText(el, minPx){ if(!el) return; el.style.fontSize=''; let fs=parseFloat(getComputedStyle(el).fontSize)||20; minPx=minPx||11; let guard=30; while(el.scrollWidth>el.clientWidth+1 && fs>minPx && guard-->0){ fs-=1; el.style.fontSize=fs+'px'; } }
+function fitAllNumbers(){ for(const sel of ['#xp-badge','#gem-badge','#lv-badge','#trophy-badge','#home-me','#home-wstreak','#shop-coins','#shop-gems','#chests-wallet span','#end-score .me','#end-score .op','#st-xp','#road-next']) document.querySelectorAll(sel).forEach(el=>fitText(el)); }
+Hooks.on('wallet', ()=>setTimeout(fitAllNumbers, 0));
+Hooks.on('screen', ()=>setTimeout(fitAllNumbers, 50));
+I18N_ADD({ 'end.pStreakWin':['⚡ רצף ניצחונות','⚡ Win streak','⚡ سلسلة انتصارات','⚡ Серия побед'],
+           'streak.win':['⚡ {0} ניצחונות ברצף! פרס!','⚡ {0} wins in a row! Bonus!','⚡ {0} انتصارات متتالية! مكافأة!','⚡ {0} побед подряд! Бонус!'],
+           'streak.home':['⚡ {0} ברצף','⚡ {0} in a row','⚡ {0} متتالية','⚡ {0} подряд'], 'streak.next':['הבא: {0}','next: {0}','التالي: {0}','след.: {0}'] });
 
 /* ===== 05-cosmetics-data.js ===== */
 /* ===== cosmetics catalogue (data only; the shop module sells and renders them, the chests module hands them out) =====
@@ -6356,8 +6384,9 @@ function shopWallet(){ const c=$('#shop-coins'), g=$('#shop-gems'); if(c) c.text
 function shopRefresh(){ shopWallet(); if($('#shop').classList.contains('active')) shopBuildTab(); }
 function shopBuildTab(){
   document.querySelectorAll('#shop-tabs .shop-tab').forEach(b=>b.classList.toggle('on', b.dataset.tab===shopTab));
-  const body=$('#shop-body'); body.innerHTML='';
+  const body=$('#shop-body'); const keepScroll=body.scrollTop; body.innerHTML='';
   ({today:shopBuildToday, players:shopBuildPlayers, looks:shopBuildLooks, gems:shopBuildGems, powers:shopBuildPowers})[shopTab](body);
+  body.scrollTop=keepScroll;                                           // re-rendering (equip/unequip) keeps the scroll position
 }
 const shopBtn=(cls, txt, fn, extra)=>{ const b=document.createElement('button'); b.className='btn small '+cls; b.innerHTML=txt; if(extra) Object.assign(b.dataset, extra); b.addEventListener('click', e=>{ e.stopPropagation(); sfx.click(); fn(); }); return b; };
 
@@ -8896,7 +8925,7 @@ function buildHomeV2(){
   chips.appendChild(lvChip); chips.appendChild(mdChip); centre.appendChild(chips);
   home.appendChild(centre);
   // trophies + the road to the next reward: bottom-left corner
-  const tro=el('div','',''); tro.id='home-trophy'; const tp=$('#trophy-pill'); if(tp) tro.appendChild(tp); home.appendChild(tro);
+  const tro=el('div','',''); tro.id='home-trophy'; const tp=$('#trophy-pill'); if(tp) tro.appendChild(tp); const ws=el('button','pill wstreak',''); ws.id='home-wstreak'; ws.hidden=true; ws.addEventListener('click', ()=>{ sfx.click(); toast(T('streak.win', prog.streak|0).replace('!',''),'xp'); }); tro.appendChild(ws); home.appendChild(tro);
   // left: today
   const today=el('div','',''); today.id='today-card'; home.appendChild(today);
   // right column
@@ -8949,6 +8978,7 @@ function refreshHomeV2(){
   $('#btn-pk').textContent = (typeof cup!=='undefined' && cup && !cup.champion && !cup.out) ? T('home.cupCont') : T('btn.pk');
   const ttl=(typeof titleText==='function') ? titleText() : ''; let te=$('#home-title-tag'); if(ttl){ if(!te){ te=document.createElement('div'); te.id='home-title-tag'; $('#home-centre').insertBefore(te, $('#home-centre').firstChild); } te.textContent=ttl; } else if(te) te.remove();
   const nc=(typeof nameColorClass==='function') ? nameColorClass() : ''; $('#home-name').className='name'+(nc?' '+nc:'');
+  const ws=$('#home-wstreak'); if(ws){ const n=prog.streak|0; ws.hidden=n<2; const nx=[3,5,10].find(x=>x>n)||(Math.floor(n/10)+1)*10; ws.textContent=T('streak.home', n)+' · '+T('streak.next', nx); fitText(ws); }
   refreshTodayCard(); refreshNextUp();
 }
 function refreshTodayCard(){

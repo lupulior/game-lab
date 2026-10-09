@@ -112,3 +112,4 @@
 .shop-pow .desc{font-size:15px;font-weight:700;color:#3f4e70;line-height:1.3}
 .shop-pow .btn{font-size:22px;padding:10px 24px;min-height:48px}
 .shop-pow .own{font-size:22px;font-weight:900;color:#fff;background:var(--green);border-radius:14px;padding:6px 18px}
+.shop-wallet span{width:150px;box-sizing:border-box;text-align:center;white-space:nowrap;overflow:hidden}

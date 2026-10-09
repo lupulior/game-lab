@@ -18,6 +18,7 @@ const ECON = {
   motdMult:2, sundayMult:2,
   starter:{khalaili:100, dabbur:300, gloukh:400, spiegler:400, griezmann:400},
   streakBonusStep:.1, streakBonusMax:.5, winStreakStep:.1, winStreakMax:.5,
+  winStreakMilestones:{3:{coins:50}, 5:{coins:100, gems:1}, 10:{coins:300, gems:5}, every10:{coins:300, gems:5}},   // ⚡ wins in a row
 };
 /* ----- hook bus: modules subscribe to game events instead of editing the core ----- */
 const Hooks = {
@@ -112,6 +113,8 @@ function payout(o){
   if(o.outcome==='win' && o.stars>=3){ base+=ECON.threeStar; parts.push(['end.pStars', ECON.threeStar]); }
   if(o.outcome==='win' && o.golden){ base+=ECON.goldenBonus; parts.push(['end.pGolden', ECON.goldenBonus]); }
   const winStreak = o.outcome==='win' ? (prog.streak|0) : 0;
+  const ms = o.outcome==='win' ? winStreakMilestone(winStreak) : null;
+  if(ms && ms.coins){ base+=ms.coins; parts.push(['end.pStreakWin', ms.coins]); }
   const cycles = Math.floor((prog.streakDays|0)/7);
   const bonus = Math.min(ECON.winStreakMax, Math.max(0,winStreak-1)*ECON.winStreakStep) + Math.min(ECON.streakBonusMax, cycles*ECON.streakBonusStep);
   const sunday = (typeof matchSunday!=='undefined' && matchSunday!=null) ? matchSunday : isSunday();
@@ -124,7 +127,7 @@ function payout(o){
   xp += (o.goals|0)*ECON.xpGoal; if(o.motd) xp+=ECON.xpMotd;
   const kd=dayCounter('keyDay');
   const key = (o.outcome==='win' && (o.online || lvl>=ECON.keyMinLevel) && kd.n<ECON.keysPerDay && (prog.keys|0)<ECON.keyCap) ? 1 : 0;
-  return {coins, xp, key, parts, bonus, mult, capped, base};
+  return {coins, xp, key, parts, bonus, mult, capped, base, streakGems: ms && ms.gems ? ms.gems : 0, streak: winStreak};
 }
 /* called once per finished match (not training): stamps the day for the streak, applies the payout, returns the summary for the end card */
 function applyMatchRewards(o){
@@ -132,6 +135,8 @@ function applyMatchRewards(o){
   if(r.coins>0){ dayCounter('coinDay').n+=r.coins; addCoins(r.coins,'match'); }
   if(r.key){ if(addKeys(1,'match')>0) dayCounter('keyDay').n+=1; else r.key=0; }
   if(r.xp>0) addXP(r.xp);
+  if(r.streakGems>0) addGems(r.streakGems,'winstreak');
+  if(r.streak>=3 && winStreakMilestone(r.streak)) setTimeout(()=>toast(T('streak.win', r.streak),'ach'), 800);
   prog.matches=(prog.matches|0)+1; prog.lastPlay=now();
   stampStreakDay(typeof matchDay!=='undefined' && matchDay ? matchDay : undefined);
   saveProg();
@@ -236,3 +241,13 @@ function startOfflineMatch(levelI, oppIdx){ if(mp) mpTeardown(); dailyMatch=fals
 migrateProg();
 Object.assign(PRICES, ECON.starter);                                      // the starter band drops AFTER the level credit for already-bought players
 restoreSelected();
+/* ⚡ wins in a row: a reward at 3, 5, 10 and every 10 after that */
+function winStreakMilestone(n){ const M=ECON.winStreakMilestones; if(!M || !(n>=3)) return null; if(M[n]) return M[n]; if(n>10 && n%10===0) return M.every10; return null; }
+/* numbers that must stay inside a fixed box: shrink the font until the text fits (never grow the box) */
+function fitText(el, minPx){ if(!el) return; el.style.fontSize=''; let fs=parseFloat(getComputedStyle(el).fontSize)||20; minPx=minPx||11; let guard=30; while(el.scrollWidth>el.clientWidth+1 && fs>minPx && guard-->0){ fs-=1; el.style.fontSize=fs+'px'; } }
+function fitAllNumbers(){ for(const sel of ['#xp-badge','#gem-badge','#lv-badge','#trophy-badge','#home-me','#home-wstreak','#shop-coins','#shop-gems','#chests-wallet span','#end-score .me','#end-score .op','#st-xp','#road-next']) document.querySelectorAll(sel).forEach(el=>fitText(el)); }
+Hooks.on('wallet', ()=>setTimeout(fitAllNumbers, 0));
+Hooks.on('screen', ()=>setTimeout(fitAllNumbers, 50));
+I18N_ADD({ 'end.pStreakWin':['⚡ רצף ניצחונות','⚡ Win streak','⚡ سلسلة انتصارات','⚡ Серия побед'],
+           'streak.win':['⚡ {0} ניצחונות ברצף! פרס!','⚡ {0} wins in a row! Bonus!','⚡ {0} انتصارات متتالية! مكافأة!','⚡ {0} побед подряд! Бонус!'],
+           'streak.home':['⚡ {0} ברצף','⚡ {0} in a row','⚡ {0} متتالية','⚡ {0} подряд'], 'streak.next':['הבא: {0}','next: {0}','التالي: {0}','след.: {0}'] });

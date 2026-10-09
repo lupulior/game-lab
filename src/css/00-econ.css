@@ -19,3 +19,11 @@
 #golden-flash{position:absolute;left:50%;top:230px;transform:translateX(-50%) scale(.6);font-size:64px;font-weight:900;color:#FFD447;text-shadow:0 4px 0 #B8860B,0 0 30px rgba(255,212,71,.8);z-index:30;pointer-events:none;animation:goldenA 1.8s ease-out forwards;white-space:nowrap}
 @keyframes goldenA{0%{opacity:0;transform:translateX(-50%) scale(.6)}20%{opacity:1;transform:translateX(-50%) scale(1.15)}80%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) scale(1.3)}}
 #game.fmt-quick #timer{background:linear-gradient(#FFE27A,#F5C400);color:var(--navy)}
+/* numbers never push their box wider: fixed widths, the text shrinks (fitText) */
+.home-top .pill.xp{width:150px;min-width:0;max-width:150px;justify-content:center;white-space:nowrap;overflow:hidden;padding:6px 10px;box-sizing:border-box}
+.home-top .pill.gem{width:104px;min-width:0;max-width:104px;overflow:hidden;padding:6px 8px;box-sizing:border-box}
+.home-top .pill.lv{width:134px;min-width:0;max-width:134px;overflow:hidden;padding:6px 10px;box-sizing:border-box}
+.home-top .pill.me{width:132px;max-width:132px;box-sizing:border-box}
+#home-trophy .pill.trophy #trophy-badge{white-space:nowrap;overflow:hidden}
+#home-trophy .pill.trophy .next{overflow:hidden}
+#end-score .me,#end-score .op{max-width:160px;overflow:hidden;white-space:nowrap}

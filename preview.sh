@@ -8,7 +8,7 @@ tmpdir="$(mktemp -d)"; mkdir -p "$tmpdir/src/css" "$tmpdir/src/html" "$tmpdir/sr
 cp src/core.html "$tmpdir/src/"; cp build.sh "$tmpdir/"
 for d in css html js; do
   for p in src/$d/*; do [ -f "$p" ] || continue; b="$(basename "$p")"; keep=0
-    case "$b" in 00-*|05-*) keep=1;; esac
+    case "$b" in 00-*|05-*|99-*) keep=1;; esac
     for w in "$@"; do [ "$w" = all ] && keep=1; case "$b" in *"$w"*) keep=1;; esac; done
     [ $keep = 1 ] && cp "$p" "$tmpdir/src/$d/"
   done

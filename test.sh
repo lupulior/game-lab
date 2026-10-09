@@ -14,7 +14,7 @@ cp src/core.html "$tmpdir/src/"; cp build.sh "$tmpdir/"
 if [ -n "${1:-}" ] && [ -z "${ALL:-}" ]; then
   for d in css html js test; do
     for p in src/$d/*; do [ -f "$p" ] || continue; b="$(basename "$p")"
-      keep=0; case "$b" in 00-*|05-*) keep=1;; esac; for w in "$@"; do case "$b" in *"$w"*) keep=1;; esac; done
+      keep=0; case "$b" in 00-*|05-*|99-*) keep=1;; esac; for w in "$@"; do case "$b" in *"$w"*) keep=1;; esac; done
       [ $keep = 1 ] && cp "$p" "$tmpdir/src/$d/"
     done
   done

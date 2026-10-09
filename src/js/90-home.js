@@ -54,7 +54,7 @@ function buildHomeV2(){
   chips.appendChild(lvChip); chips.appendChild(mdChip); centre.appendChild(chips);
   home.appendChild(centre);
   // trophies + the road to the next reward: bottom-left corner
-  const tro=el('div','',''); tro.id='home-trophy'; const tp=$('#trophy-pill'); if(tp) tro.appendChild(tp); home.appendChild(tro);
+  const tro=el('div','',''); tro.id='home-trophy'; const tp=$('#trophy-pill'); if(tp) tro.appendChild(tp); const ws=el('button','pill wstreak',''); ws.id='home-wstreak'; ws.hidden=true; ws.addEventListener('click', ()=>{ sfx.click(); toast(T('streak.win', prog.streak|0).replace('!',''),'xp'); }); tro.appendChild(ws); home.appendChild(tro);
   // left: today
   const today=el('div','',''); today.id='today-card'; home.appendChild(today);
   // right column
@@ -107,6 +107,7 @@ function refreshHomeV2(){
   $('#btn-pk').textContent = (typeof cup!=='undefined' && cup && !cup.champion && !cup.out) ? T('home.cupCont') : T('btn.pk');
   const ttl=(typeof titleText==='function') ? titleText() : ''; let te=$('#home-title-tag'); if(ttl){ if(!te){ te=document.createElement('div'); te.id='home-title-tag'; $('#home-centre').insertBefore(te, $('#home-centre').firstChild); } te.textContent=ttl; } else if(te) te.remove();
   const nc=(typeof nameColorClass==='function') ? nameColorClass() : ''; $('#home-name').className='name'+(nc?' '+nc:'');
+  const ws=$('#home-wstreak'); if(ws){ const n=prog.streak|0; ws.hidden=n<2; const nx=[3,5,10].find(x=>x>n)||(Math.floor(n/10)+1)*10; ws.textContent=T('streak.home', n)+' · '+T('streak.next', nx); fitText(ws); }
   refreshTodayCard(); refreshNextUp();
 }
 function refreshTodayCard(){

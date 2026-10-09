@@ -83,3 +83,5 @@
 #home-trophy .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
 #home-trophy .pill.trophy .next{font-size:13px;text-align:center;white-space:nowrap;opacity:.9}
 #home.v2.inparty #party .party-bar{left:30px;bottom:130px}
+#home-trophy{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+#home-trophy .pill.wstreak{background:linear-gradient(#FFE1D6,#FF9A6A);font-size:16px;padding:5px 10px;width:190px;box-sizing:border-box;justify-content:center;white-space:nowrap;overflow:hidden;min-height:0}

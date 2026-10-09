@@ -16,6 +16,7 @@ cat > /tmp/tour-tail.js <<'EOF'
     $('#intro').classList.remove('active'); showScreen('home'); refreshHome(); await w(300);
     document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show'));
     if(scene==='home'){ }
+    else if(scene==='home-big'){ prog.coins=12345678; prog.gems=98765; prog.trophies=48765; prog.streak=7; saveProg(); updateXpBadge(); refreshHomeV2(); }
     else if(scene==='shop-today'){ openShop('today'); }
     else if(scene==='shop-players'){ openShop('players'); }
     else if(scene==='shop-looks'){ prog.cos={items:['kit_il','boots_gold','ball_flame']}; prog.eq={kit:'kit_il',boots:'boots_gold',ball:'ball_flame'}; saveProg(); openShop('looks'); }

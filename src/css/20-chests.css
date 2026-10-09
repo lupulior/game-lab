@@ -80,3 +80,4 @@
 @keyframes chestBurst{0%{transform:scale(1.15) rotate(0)}40%{transform:scale(1.4) rotate(-10deg);filter:drop-shadow(0 8px 0 rgba(0,0,0,.18)) brightness(1.4)}100%{transform:scale(.2) rotate(30deg);opacity:0}}
 .copen-tap{font-size:26px;font-weight:900;color:#5B34B5;background:#EADBFF;border-radius:16px;padding:6px 20px;display:inline-block;margin:6px 0 10px;animation:tapPulse 1s ease-in-out infinite}
 @keyframes tapPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.chests-wallet span{width:140px;box-sizing:border-box;text-align:center;white-space:nowrap;overflow:hidden}
