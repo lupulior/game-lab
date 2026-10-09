@@ -67,3 +67,16 @@
 .cpick.coin .pv{font-size:64px}
 #btn-chest-done{min-width:260px;margin-top:2px}
 #chests-confetti{position:absolute;inset:0;width:1000px;height:620px;pointer-events:none;z-index:47}
+/* tap to open: the closed chest shakes harder with every tap, then bursts */
+.copen-chest.locked{animation:chestIdle 1.4s ease-in-out infinite;cursor:pointer;user-select:none}
+@keyframes chestIdle{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.copen-chest.shake1{animation:chestShake1 .45s ease-in-out}
+.copen-chest.shake2{animation:chestShake2 .45s ease-in-out}
+.copen-chest.shake3{animation:chestShake3 .45s ease-in-out}
+@keyframes chestShake1{0%,100%{transform:rotate(0) scale(1.04)}25%{transform:rotate(-7deg) scale(1.06)}50%{transform:rotate(7deg) scale(1.06)}75%{transform:rotate(-5deg) scale(1.05)}}
+@keyframes chestShake2{0%,100%{transform:rotate(0) scale(1.08)}20%{transform:rotate(-14deg) scale(1.12) translateX(-6px)}40%{transform:rotate(14deg) scale(1.12) translateX(6px)}60%{transform:rotate(-10deg) scale(1.1)}80%{transform:rotate(10deg) scale(1.1)}}
+@keyframes chestShake3{0%,100%{transform:rotate(0) scale(1.12)}15%{transform:rotate(-22deg) scale(1.2) translateX(-12px)}30%{transform:rotate(22deg) scale(1.2) translateX(12px)}45%{transform:rotate(-16deg) scale(1.18)}60%{transform:rotate(16deg) scale(1.18)}80%{transform:rotate(-8deg) scale(1.14)}}
+.copen-chest.burst{animation:chestBurst .42s ease-in forwards}
+@keyframes chestBurst{0%{transform:scale(1.15) rotate(0)}40%{transform:scale(1.4) rotate(-10deg);filter:drop-shadow(0 8px 0 rgba(0,0,0,.18)) brightness(1.4)}100%{transform:scale(.2) rotate(30deg);opacity:0}}
+.copen-tap{font-size:26px;font-weight:900;color:#5B34B5;background:#EADBFF;border-radius:16px;padding:6px 20px;display:inline-block;margin:6px 0 10px;animation:tapPulse 1s ease-in-out infinite}
+@keyframes tapPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}

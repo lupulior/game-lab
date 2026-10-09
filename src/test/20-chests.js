@@ -3,7 +3,8 @@
   await new Promise(r=>setTimeout(r,200));
   const tick=()=>new Promise(r=>setTimeout(r,30));
   const errs0=window.__errs.length;
-  const clickYes=async()=>{ await tick(); TASSERT('ask() shows before paying', $('#ask-modal').classList.contains('show')); $('#btn-ask-yes').click(); await tick(); };
+  const clickYes=async()=>{ await tick(); TASSERT('ask() shows before paying', $('#ask-modal').classList.contains('show')); $('#btn-ask-yes').click(); await tick(); await openTaps(); };
+  const openTaps=async()=>{ if(!$('#copen-chest').classList.contains('locked')) return; for(let i=0;i<(ECON.chests.taps||3);i++){ chestTap(); } await new Promise(r=>setTimeout(r,500)); };
   const offered=()=>[...document.querySelectorAll('#copen-cards .cpick')].map(b=>b.dataset.id);
   const owned=()=>((prog.cos&&prog.cos.items)||[]).slice();
   // --- clean wallet
@@ -33,6 +34,10 @@
   // --- open the owned bronze through the DOM (no ask, no pick)
   prog.coinDay={key:dayKey(), n:0};
   let c0=prog.coins; $('[data-open=bronze]').click(); await tick();
+  TASSERT('a paid chest arrives closed: tap hint, no rewards yet', $('#copen-chest').classList.contains('locked') && !$('#copen-tap').hidden && $('#copen-rewards').children.length===0 && $('#btn-chest-done').hidden);
+  chestTap(); await tick(); TASSERT('first tap shakes', $('#copen-chest').classList.contains('shake1') && $('#copen-tap').textContent===T('chests.tapN',2));
+  await openTaps();
+  TASSERT('after the taps the chest is open', !$('#copen-chest').classList.contains('locked') && $('#copen-tap').hidden);
   TASSERT('bronze opens without asking', !$('#ask-modal').classList.contains('show') && $('#chest-open-modal').classList.contains('show'));
   TASSERT('bronze: 80 coins + 1 pack (0 coins, counted) + inventory 0', prog.coins===c0+80 && prog.packs===1 && prog.chests.bronze===0 && prog.chestOpened.bronze===1);
   TASSERT('an owned chest does not touch the daily cap', (prog.coinDay?prog.coinDay.n:0)===0 && coinCapLeft()===coinCapToday());
@@ -99,7 +104,7 @@
   // --- welcome chest: 100 coins + kit_il, once
   prog.cos.items=[]; prog.welcomeChest=false; prog.chests.welcome=1; buildChests();
   TASSERT('welcome banner shows when prog.chests.welcome>0', !$('#chests-welcome').hidden);
-  c0=prog.coins; $('#chests-welcome').click(); await tick();
+  c0=prog.coins; $('#chests-welcome').click(); await tick(); await openTaps();
   TASSERT('welcome chest: +100 coins + kit_il', prog.coins===c0+100 && cosOwned('kit_il') && prog.welcomeChest===true && prog.chests.welcome===0 && $('#chest-open-modal').classList.contains('show'));
   $('#btn-chest-done').click(); await tick();
   TASSERT('welcome chest only once', openWelcomeChest()===false && prog.coins===c0+100 && prog.cos.items.filter(x=>x==='kit_il').length===1 && $('#chests-welcome').hidden);

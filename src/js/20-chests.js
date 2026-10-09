@@ -8,7 +8,7 @@
          prog.chestPick={kind,rarity,ids,seed} (an unpicked offer survives a reload)  prog.welcomeChest=true once granted
    Hooks emitted: 'chest'(kind) when a chest is handed out, 'chestOpen'(kind, rewards) after one is opened, 'chestPick'(id)
    =================================================================================================== */
-Object.assign(ECON, { chests: {
+Object.assign(ECON, { chests: { taps:3,                                   // taps needed to open a freshly paid chest (each one shakes it harder)
   bronze: { keys:1, coins:150, gems:0,  give:{coins:80,  packs:1, gems:0}, pick:null,   kitAlways:false },
   silver: { keys:3, coins:500, gems:0,  give:{coins:300, packs:2, gems:0}, pick:'rare', kitAlways:false },
   gold:   { keys:8, coins:0,   gems:25, give:{coins:900, packs:3, gems:5}, pick:'epic', kitAlways:true  },
@@ -172,7 +172,7 @@ async function openChest(kind){
     const want=rewards.coins+packCoins, got=chestPayCoins(want, 'chest', how!=='coins');   // a chest bought with coins counts toward the daily cap; keys/gems/owned chests pay in full
     if(got<want){ rewards.capped=true; rewards.packCoins=Math.min(packCoins, got); rewards.coins=got-rewards.packCoins; }
     if(rewards.gems) addGems(rewards.gems, 'chest');
-    chestShowOpen(kind, rewards, offer);
+    chestShowOpen(kind, rewards, offer, true);
     Hooks.emit('chestOpen', kind, rewards); refreshChestsBadge(); buildChests();
     return true;
   } finally { chestBusy=false; }
@@ -184,7 +184,7 @@ function openWelcomeChest(){
   saveProg();
   addCoins(cfg.give.coins, 'welcome');
   const kit = chestGiveCosmetic(cfg.kit) ? cfg.kit : null;
-  chestShowOpen('welcome', {coins:cfg.give.coins, packs:0, packCoins:0, gems:0, kit}, null);
+  chestShowOpen('welcome', {coins:cfg.give.coins, packs:0, packCoins:0, gems:0, kit}, null, true);
   Hooks.emit('chestOpen', 'welcome', {coins:cfg.give.coins, kit}); refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
   return true;
 }
@@ -195,7 +195,38 @@ function chestConfetti(n){
   const cv=$('#chests-confetti'); if(!cv) return;
   try{ chestsConfetti = chestsConfetti || makeConfetti(cv, ['#FFD447','#F5C542','#fff7c2','#FF7A3D','#8E5CF6','#fff']); cv.hidden=false; chestsConfetti.burst(n); setTimeout(()=>{ cv.hidden=true; }, 4500); }catch(e){}
 }
-function chestShowOpen(kind, r, offer){
+/* a freshly paid chest arrives CLOSED: the kid taps it ECON.chests.taps times, each tap shakes it harder, the last one bursts it open */
+const CHEST_TAP = { left:0, kind:null, r:null, offer:null };
+function chestTap(){
+  const ch=$('#copen-chest'); if(!ch || !ch.classList.contains('locked') || CHEST_TAP.left<=0) return;
+  CHEST_TAP.left--;
+  const n=(ECON.chests.taps||3)-CHEST_TAP.left;
+  try{ sfx.click(); }catch(e){}
+  if(CHEST_TAP.left>0){
+    ch.classList.remove('shake1','shake2','shake3'); void ch.offsetWidth; ch.classList.add('shake'+Math.min(3,n));
+    $('#copen-tap').textContent=T('chests.tapN', CHEST_TAP.left);
+    return;
+  }
+  ch.classList.remove('locked','shake1','shake2','shake3'); ch.classList.add('burst'); $('#copen-tap').hidden=true;
+  try{ sfx.kick(); }catch(e){}
+  setTimeout(()=>{ ch.classList.remove('burst'); chestReveal(CHEST_TAP.kind, CHEST_TAP.r, CHEST_TAP.offer); }, 420);
+}
+function chestShowOpen(kind, r, offer, tapToOpen){
+  const m=$('#chest-open-modal'); if(!m) return;
+  const ch=$('#copen-chest'); ch.textContent=chestIcon(kind);
+  if(tapToOpen && (ECON.chests.taps|0)>0){
+    CHEST_TAP.left=ECON.chests.taps|0; CHEST_TAP.kind=kind; CHEST_TAP.r=r; CHEST_TAP.offer=offer;
+    $('#copen-title').textContent=T('chests.tap');
+    ch.className='copen-chest locked'; ch.style.animation='';
+    const tap=$('#copen-tap'); tap.hidden=false; tap.textContent=T('chests.tapN', CHEST_TAP.left);
+    $('#copen-rewards').innerHTML=''; $('#copen-pick-title').hidden=true; $('#copen-cards').hidden=true; $('#copen-cards').innerHTML=''; $('#btn-chest-done').hidden=true;
+    m.classList.add('show');
+    return;
+  }
+  $('#copen-tap').hidden=true;
+  chestReveal(kind, r, offer);
+}
+function chestReveal(kind, r, offer){
   const m=$('#chest-open-modal'); if(!m) return;
   $('#copen-title').textContent=T('chests.opening', chestName(kind));
   const ch=$('#copen-chest'); ch.textContent=chestIcon(kind); ch.className='copen-chest'+(offer?' small':''); ch.style.animation='none'; void ch.offsetWidth; ch.style.animation='';
@@ -295,3 +326,7 @@ Hooks.on('screen', id=>{ if(id==='chests') buildChests(); });
 NextUp.add(()=> chestsBadge()>0 ? { prio:40, icon:'🎁', text:T('chests.nextUp'), action:openChestsScreen } : null);
 chestInv();
 applyLang();
+/* tap-to-open: the chest (or anywhere on the panel) while it is locked */
+$('#chest-open-modal').addEventListener('pointerdown', e=>{ if(e.target.closest('button') || e.target.closest('.cpick')) return; if($('#copen-chest').classList.contains('locked')){ e.preventDefault(); chestTap(); } });
+I18N_ADD({ 'chests.tap':['לחץ על התיבה כדי לפתוח!','Tap the chest to open it!','اضغط على الصندوق لفتحه!','Нажми на сундук, чтобы открыть!'],
+           'chests.tapN':['👆 עוד {0}','👆 {0} more','👆 {0} أخرى','👆 ещё {0}'] });
