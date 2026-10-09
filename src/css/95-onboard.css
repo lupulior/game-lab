@@ -1,0 +1,24 @@
+/* controls card */
+.ctrl-panel{max-width:760px}
+.ctrl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 16px}
+.ctrl-grid .ck{background:#F3F6FB;border-radius:18px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:900;color:var(--navy)}
+.ctrl-grid .ck .big{font-size:40px}
+.ctrl-grid .ck .what{font-size:19px}
+.ctrl-grid .ck .how{font-size:14px;opacity:.75}
+.ctrl-grid .ck kbd{font-size:16px;color:var(--navy);background:#fff;border:2px solid #D6DCE8;border-bottom-width:4px;border-radius:8px;padding:1px 8px;margin:0 2px;text-shadow:none;font-family:inherit}
+.ctrl-btns{display:flex;justify-content:center;gap:10px}
+/* labels over the real buttons during the first seconds of match 1 */
+#ctrl-labels{position:absolute;inset:0;pointer-events:none;z-index:35}
+#ctrl-labels .cl{position:absolute;font-size:22px;font-weight:900;color:#fff;background:rgba(27,42,78,.85);border-radius:14px;padding:6px 14px;white-space:nowrap;box-shadow:0 4px 0 rgba(0,0,0,.25);animation:clPop .5s ease-out}
+@keyframes clPop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+#ctrl-labels .cl-move{left:60px;bottom:196px}
+#ctrl-labels .cl-kick{right:30px;bottom:220px}
+#ctrl-labels .cl-jump{right:230px;bottom:160px}
+#ctrl-labels .cl-slide{right:380px;bottom:160px}
+#ctrl-labels .cl-sleep{left:50%;top:92px;transform:translateX(-50%);background:rgba(255,255,255,.92);color:var(--navy);font-size:24px}
+body:not(.touch) #ctrl-labels .cl-move{left:50%;bottom:40px;transform:translateX(-50%)}
+body:not(.touch) #ctrl-labels .cl-kick,body:not(.touch) #ctrl-labels .cl-jump,body:not(.touch) #ctrl-labels .cl-slide{display:none}
+/* the small onboarding cards */
+.onb-panel{max-width:560px}
+.onb-ic{font-size:72px;line-height:1;margin-bottom:4px;animation:bob 2s ease-in-out infinite}
+.onb-btns{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}

@@ -1,0 +1,35 @@
+/* ===== 40-endcard: the reward ceremony on the result card ===== */
+.endcard-panel{width:780px;max-width:800px;max-height:604px;box-sizing:border-box;padding:12px 30px 16px;overflow:hidden}
+.endcard-panel h2{margin-bottom:2px}
+#endcard-earn{display:block;text-align:start;width:100%;margin:2px 0 6px;font-size:19px;font-weight:800;color:var(--navy,#1b2a4e);line-height:1.25}
+#endcard-earn[hidden]{display:none}
+.ec-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;min-height:28px;padding:1px 0;opacity:0;transform:translateY(8px);transition:opacity .25s ease-out,transform .25s ease-out}
+.ec-row.ec-on{opacity:1;transform:none}
+.ec-row[hidden]{display:none}
+.ec-now .ec-row{transition:none}
+.ec-big{font-size:26px;font-weight:900;white-space:nowrap}
+.ec-coins .ec-big{color:#1B7F3B;background:#DDF7E4;border-radius:12px;padding:1px 12px}
+.ec-chip{font-size:17px;font-weight:800;color:#44527a;background:#eef2fb;border-radius:10px;padding:2px 9px;white-space:nowrap}
+.ec-chip.ec-bonus{color:#9a4b00;background:#ffe9c7}
+.ec-chip.ec-mult{color:#6a2fd6;background:#efe6ff}
+.ec-bar{flex:1 1 140px;height:14px;background:#e4e8f3;border-radius:8px;overflow:hidden;min-width:120px;direction:ltr}
+.ec-bar>i{display:block;height:100%;width:0;background:#FFD447;border-radius:8px;transition:width .6s ease-out}
+.ec-cap .ec-bar>i{background:#F5C542}
+.ec-cap.ec-full .ec-bar>i{background:#FF7A3D}
+.ec-xp .ec-bar>i{background:#3D8BFF}
+.ec-small{font-size:17px;color:#5b6a8a;white-space:nowrap}
+.ec-capped{font-size:17px;color:#c2521f}
+.ec-lvup{color:#9a4b00;background:#fff3c4;border-radius:10px;padding:1px 10px;font-size:18px}
+.ec-now .ec-bar>i{transition:none}
+#endcard-earn .btn.ec-open{font-size:18px;padding:6px 16px;border-radius:14px;min-height:36px;box-shadow:0 4px 0 #22883C}
+.ec-mission{font-size:17px;background:#f3f5fb;border-radius:10px;padding:2px 9px;color:#44527a;white-space:nowrap}
+.ec-mission.ec-done{color:#1B7F3B;background:#DDF7E4}
+.ec-streak .ec-big{color:#c2521f}
+.ec-bot{color:#44527a;font-size:18px}
+.ec-tip{color:#1F5BC2;font-size:18px;background:#e8f1ff;border-radius:12px;padding:4px 12px;display:flex}
+.ec-train{font-size:28px;color:#1B7F3B;justify-content:center;text-align:center}
+#endcard-btns{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+#endcard-btns[hidden]{display:none}
+#endcard-btns .btn{font-size:24px;padding:9px 22px;min-height:50px;touch-action:manipulation}
+#endcard-btns .btn.ec-icon{padding:9px 16px;font-size:26px}
+@media (prefers-reduced-motion:reduce){.ec-row{transition:none;opacity:1;transform:none}.ec-bar>i{transition:none}}

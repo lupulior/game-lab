@@ -1,0 +1,19 @@
+  <!-- social: an in-game text prompt (used for the restore code) -->
+  <div class="overlay" id="social-input-modal">
+    <div class="panel social-panel">
+      <h2 id="social-input-title">🔑 קוד שחזור</h2>
+      <div class="hint" id="social-input-hint">הקוד מופיע במכשיר הישן, במסך "עוד"</div>
+      <input id="social-input" maxlength="12" placeholder="ABCD-EFGH-IJ" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <div class="social-btns"><button class="btn green" id="btn-social-input-ok">⬇️ שחזר</button> <button class="btn small blue" id="btn-social-input-cancel">חזרה</button></div>
+    </div>
+  </div>
+  <!-- social: my restore code (copy only — the code is a key, it never goes to the share sheet) -->
+  <div class="overlay" id="social-code-modal">
+    <div class="panel social-panel">
+      <h2 id="social-code-title">☁️ קוד השחזור שלי</h2>
+      <div class="social-code" id="social-code-text">----</div>
+      <div class="hint" id="social-code-hint">עם הקוד הזה ההתקדמות חוזרת בכל מכשיר. שמרו אותו — רק לכם!</div>
+      <div class="social-status" id="social-code-status"></div>
+      <div class="social-btns"><button class="btn yellow" id="btn-social-copy">📋 העתק</button> <button class="btn small blue" id="btn-social-code-close">חזרה</button></div>
+    </div>
+  </div>

@@ -1,0 +1,11 @@
+/* ===== social & safety: invite button, restore-code modals, the link inside the name modal ===== */
+#btn-invite{font-size:17px;padding:6px 14px}
+.social-panel{min-width:520px;max-width:760px}
+.social-panel .social-btns{margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.social-panel .social-btns .btn{min-height:48px}
+#social-input{font-family:inherit;font-weight:900;font-size:36px;text-align:center;letter-spacing:3px;direction:ltr;text-transform:uppercase;padding:8px 16px;border-radius:16px;border:4px solid var(--purple);width:420px;max-width:92%;margin:12px 0 4px;outline:none;color:var(--navy)}
+#social-input:focus{border-color:var(--blue)}
+.social-code{font-size:56px;font-weight:900;letter-spacing:4px;direction:ltr;color:var(--navy);background:#FFF6D1;border:4px dashed var(--yellow);border-radius:20px;padding:10px 24px;margin:6px auto 12px;display:inline-block;user-select:text;-webkit-user-select:text}
+.social-status{font-size:18px;font-weight:700;color:#5b6a8a;margin-top:8px;min-height:22px}
+.social-link{display:block;margin:14px auto 0;background:none;border:0;cursor:pointer;font-family:inherit;font-size:20px;font-weight:800;color:var(--purple);text-decoration:underline;padding:10px 16px;min-height:44px}
+.social-link:active{opacity:.7}

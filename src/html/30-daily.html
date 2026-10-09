@@ -1,0 +1,45 @@
+<!-- ===== DAILY LOOP: the one-tap pickup, the 28-day calendar, today's missions, the streak celebration, save-the-streak ===== -->
+<div class="overlay" id="daily-pickup-modal">
+  <div class="panel dpk-panel">
+    <h2 id="dpk-title">🎁 איסוף יומי</h2>
+    <div class="dpk-sub" id="dpk-sub"></div>
+    <div id="dpk-rows"></div>
+    <div class="dpk-btns"><button class="btn yellow big" id="btn-dpk-all">🎁 קח הכול</button></div>
+    <div class="dpk-foot"><button class="btn small blue" id="btn-dpk-cal">📅 הלוח</button> <button class="btn small" id="btn-dpk-close">סגור</button></div>
+  </div>
+</div>
+<div class="overlay" id="daily-cal-modal">
+  <div class="panel dcal-panel">
+    <h2 id="dcal-title">📅 לוח 28 הימים</h2>
+    <div class="dpk-sub" id="dcal-sub"></div>
+    <div class="dcal-grid" id="dcal-grid"></div>
+    <button class="btn small blue" id="btn-dcal-close">סגור</button>
+  </div>
+</div>
+<div class="overlay" id="daily-missions-modal">
+  <div class="panel dms-panel">
+    <h2 id="dms-title">🎯 המשימות של היום</h2>
+    <div id="dms-list"></div>
+    <div class="dms-bonus" id="dms-bonus"></div>
+    <div class="dms-btns"><button class="btn purple small" id="btn-dms-reroll">🔄 החלף משימה</button> <button class="btn small blue" id="btn-dms-close">סגור</button></div>
+  </div>
+</div>
+<div class="overlay" id="daily-streak-modal">
+  <div class="panel dstk-panel">
+    <div class="dstk-flame">🔥</div>
+    <h2 id="dstk-title">🔥 הרצף שלך</h2>
+    <div class="dstk-day" id="dstk-day"></div>
+    <div class="dstk-reward" id="dstk-reward"></div>
+    <div class="dstk-ms" id="dstk-ms" hidden></div>
+    <div class="dstk-next" id="dstk-next"></div>
+    <button class="btn green big" id="btn-dstk-ok">יש! 🎉</button>
+  </div>
+</div>
+<div class="overlay" id="daily-save-modal">
+  <div class="panel dsv-panel">
+    <h2 id="dsv-title">הצל את הרצף 💪</h2>
+    <div class="dsv-text" id="dsv-text"></div>
+    <button class="btn green big" id="btn-dsv-yes">💪 הצל את הרצף</button>
+    <div><button class="btn small" id="btn-dsv-no">לא עכשיו</button></div>
+  </div>
+</div>

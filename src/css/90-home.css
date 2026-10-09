@@ -1,0 +1,76 @@
+/* ===== home v2: hero in the middle with one big PLAY, "today" card on the left, the shop/chests column on the right ===== */
+#home.v2 .hero{top:66px;transform:translateX(-50%) scale(.72);transform-origin:50% 0}
+#home.v2 .hero .btn.small{display:none}
+#home.v2 .home-col.main{display:none}
+#home.v2 .home-col.more{display:none}
+#home.v2 .title{font-size:34px;top:14px}
+#home.v2 .title small{font-size:14px}
+/* centre stack under the hero */
+#home-centre{position:absolute;left:50%;top:364px;transform:translateX(-50%);width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:2}
+#home-centre .who{display:flex;gap:8px;align-items:center}
+/* #52: every small control is at least 44px tall (thumbs on a scaled-down phone stage); the column ends at ~606px, above the stage bottom */
+#home-centre .who .btn.small{font-size:17px;padding:0 14px;min-height:44px}
+#nextup{display:none;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:4px 8px 4px 14px;box-shadow:0 6px 0 rgba(27,42,78,.18);font-size:18px;font-weight:900;color:var(--navy);max-width:420px;white-space:nowrap;overflow:hidden}
+#nextup.on{display:flex}
+#nextup .nu-ic{font-size:24px}
+#nextup .nu-text{overflow:hidden;text-overflow:ellipsis}
+#nextup .btn.small{font-size:16px;padding:0 12px;min-height:44px;margin-inline-start:auto}
+#btn-play-big{font-size:46px;padding:8px 60px 12px;border-radius:40px;width:320px;box-sizing:border-box;line-height:1.05;flex-direction:column;gap:0}
+#btn-play-big small{font-size:15px;font-weight:900;opacity:.9;text-shadow:none;display:block;margin-top:-2px}
+#btn-play-big.pulse{animation:playPulse 1.4s ease-in-out infinite}
+@keyframes playPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+#home-chips{display:flex;gap:12px}
+.chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;cursor:pointer;font-family:inherit;font-size:15px;font-weight:900;color:var(--navy);background:#fff;border-radius:16px;padding:0 12px;min-height:44px;box-sizing:border-box;box-shadow:0 5px 0 rgba(27,42,78,.2);white-space:nowrap}
+.chip:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,78,.2)}
+.chip .up{color:#1B7F3B;font-size:14px}
+/* left: today */
+#today-card{position:absolute;left:28px;top:110px;width:272px;background:rgba(255,255,255,.92);border-radius:22px;padding:10px 12px 12px;box-shadow:0 8px 0 rgba(27,42,78,.15);z-index:2;display:flex;flex-direction:column;gap:8px}
+#today-card h3{font-size:20px;color:var(--navy);display:flex;align-items:center;justify-content:space-between;margin:0}
+#today-card .flame{font-size:16px;background:#FFF0B3;border-radius:12px;padding:2px 10px}
+#today-card .btn{font-size:17px;padding:8px 12px;justify-content:center;width:100%;box-sizing:border-box}
+#today-card .btn.small{font-size:16px;padding:7px 12px}
+#today-card .mission{font-size:15px;font-weight:900;color:var(--navy);display:flex;flex-direction:column;gap:2px}
+#today-card .mission .bar{height:8px;border-radius:5px;background:rgba(27,42,78,.15);overflow:hidden}
+#today-card .mission .bar i{display:block;height:100%;background:linear-gradient(90deg,#3FC35F,#FFD447);border-radius:5px}
+#today-card .mission.done{opacity:.6;text-decoration:line-through}
+#today-card .row{display:flex;gap:6px}
+#today-card .row .btn{flex:1}
+/* right: shop column */
+#home-right{position:absolute;right:30px;top:110px;width:240px;display:flex;flex-direction:column;gap:9px;z-index:2}
+/* #53: 19px + a short online label so no language spills past the edge; no overflow:hidden here (it would clip the badges) */
+#home-right .btn{width:100%;box-sizing:border-box;font-size:19px;padding:9px 14px;justify-content:flex-start;position:relative;white-space:nowrap;min-height:44px}
+#home-right .btn .badge{position:absolute;top:-8px;left:-6px;min-width:26px;height:26px;border-radius:13px;background:var(--red);color:#fff;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 6px;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+#home-right .btn .dot{position:absolute;top:-5px;left:-5px;width:16px;height:16px;border-radius:50%;background:var(--red);border:3px solid #fff}
+#home.v2 .home-foot .row .btn.small{font-size:15px;padding:0 10px;min-height:44px}
+#home.v2 .home-foot{bottom:10px;right:24px}
+#home.v2 .home-foot .row{flex-wrap:wrap;justify-content:flex-end;max-width:280px;row-gap:6px;gap:10px}
+#home.v2.inparty #today-card,#home.v2.inparty #nextup{display:none}
+#home.v2.guest #home-chips{display:none}   /* #44: a waiting guest has nothing to choose */
+/* sheets */
+.sheet{align-items:flex-end}
+.sheet-panel{width:100%;max-width:100%;border-radius:34px 34px 0 0;padding:14px 40px 22px;box-sizing:border-box;max-height:560px;overflow-y:auto}
+.sheet-grip{width:60px;height:7px;border-radius:4px;background:#D6DCE8;margin:0 auto 6px}
+.sheet-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:10px 0 14px}
+.sheet-grid .btn{font-size:18px;padding:10px 8px;justify-content:center;box-sizing:border-box;white-space:normal;line-height:1.1;min-height:44px}   /* #53: long labels wrap instead of overlapping the neighbour */
+.sheet-langs{display:flex;justify-content:center;gap:10px;margin-bottom:12px}
+.sheet-langs .btn.small{font-size:20px;padding:0 14px;min-height:44px}
+.sheet-langs .btn.small.on{outline:5px solid var(--yellow)}
+.lvl-panel{max-width:960px;padding-left:26px;padding-right:26px}   /* #56: six 138px cards + gaps (878px) fit on ONE row (908px of content) */
+.lvl-grid{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 12px}
+.lvl-grid .btn.lvcard{width:138px;padding:10px 8px;position:relative}
+.lvl-grid .btn.lvcard.on{outline:6px solid var(--yellow)}
+.lvl-grid .btn.lvcard .rec{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:13px;border-radius:10px;padding:2px 8px;white-space:nowrap;box-shadow:0 3px 0 #22883C}
+.mode-panel{max-width:900px}
+.mode-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.mode-row .btn{font-size:20px;padding:10px 18px;flex-direction:column;gap:2px;min-width:150px;box-sizing:border-box}
+.mode-row .btn small{font-size:13px;font-weight:900;opacity:.9;text-shadow:none}
+.mode-row .btn.on{outline:6px solid var(--yellow)}
+.mode-row.other .btn{font-size:18px;padding:9px 14px;min-width:0}
+/* party members move to the free left side (the today card is hidden in a party) */
+#home.v2.inparty #party .member.p1{left:36px;top:112px}
+#home.v2.inparty #party .member.p0{left:170px;top:112px}
+#home.v2.inparty #party .member.p2{left:60px;top:318px;transform:scale(.8)}
+#home.v2.inparty #party .party-bar{left:30px;bottom:66px}
+#home-title-tag{font-size:16px;font-weight:900;color:#fff;background:rgba(27,42,78,.55);border-radius:12px;padding:2px 12px;margin-top:-6px}
+/* #52 (shared finding): the shop's filter chips and card buttons reach 44px too — additive only, the shop module owns their look */
+.shop-filters .btn.small,.shop-item .btn.small{min-height:44px}

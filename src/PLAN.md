@@ -364,7 +364,7 @@ Today 453 KB / 5,100 lines. Budget: wave 1 ≤ 650 KB, hard cap 800 KB for `game
 ```json
 { "rules": {
   "users":   { ".read": true, ".indexOn": ["str","t","w"],
-               "$uid": { ".write": "auth != null && auth.uid == $uid",
+               "$key": { ".write": "auth != null",   /* rows are keyed by the player name for now; a uid-keyed table is planned for wave 2 */
                          "name": { ".validate": "newData.isString() && newData.val().length <= 16" },
                          "str":  { ".validate": "!data.exists() || newData.val() - data.val() <= 15" },
                          "lv":   { ".validate": "newData.val() <= 200" } } },
@@ -376,7 +376,7 @@ Today 453 KB / 5,100 lines. Budget: wave 1 ≤ 650 KB, hard cap 800 KB for `game
   "bans":    { ".read": true, ".write": "root.child('admins/'+auth.uid).val() == true" },
   "codes":   { "$c": { ".read": true, ".write": "root.child('admins/'+auth.uid).val() == true",
                        "used":  { ".write": "auth != null && newData.val() == data.val() + 1" },
-                       "users": { "$uid": { ".write": "auth != null && auth.uid == $uid && !data.exists()" } } } },
+                       "users": { "$who": { ".write": "auth != null && !data.exists()" } } } },
   "saves":   { "$id": { ".read": true, ".write": "auth != null && (!data.exists() || data.child('uid').val() == auth.uid)",
                         ".validate": "newData.child('uid').val() == auth.uid" } },
   "daily":   { "$day": { ".read": true, ".indexOn": ["margin"], "$uid": { ".write": "auth != null && auth.uid == $uid" } } },

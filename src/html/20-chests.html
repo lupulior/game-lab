@@ -1,0 +1,21 @@
+  <!-- ===== CHESTS: keys + fixed bundles, pick 1 of 3 face-up cards ===== -->
+  <section id="chests" class="screen">
+    <h2 id="chests-title">🎁 תיבות</h2>
+    <button class="btn blue small" id="btn-chests-back">➜ חזרה</button>
+    <div class="chests-wallet" id="chests-wallet"></div>
+    <div class="chests-row" id="chests-row"></div>
+    <button class="btn green" id="chests-welcome" hidden>🎁 תיבת ברוכים הבאים — פתח!</button>
+    <button class="btn purple" id="chests-pending" hidden>🎴 יש לך קלף לבחור!</button>
+  </section>
+  <!-- the chest opens here: rewards, then the three face-up cards -->
+  <div class="overlay" id="chest-open-modal">
+    <div class="panel">
+      <div class="copen-title" id="copen-title"></div>
+      <div class="copen-chest" id="copen-chest">🎁</div>
+      <div class="copen-rewards" id="copen-rewards"></div>
+      <div class="copen-pick-title" id="copen-pick-title" hidden></div>
+      <div class="copen-cards" id="copen-cards" hidden></div>
+      <button class="btn green big" id="btn-chest-done" hidden>✔ סיימתי</button>
+    </div>
+  </div>
+  <canvas id="chests-confetti" width="1000" height="620" hidden></canvas>

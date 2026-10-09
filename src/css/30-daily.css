@@ -1,0 +1,63 @@
+/* ===== daily loop: pickup / calendar / missions / streak modals + the home "היום" card (all scoped to d* ids and classes) ===== */
+.dpk-panel,.dms-panel{min-width:560px;max-width:700px;padding:18px 34px 20px}
+.dpk-panel h2,.dms-panel h2,.dcal-panel h2,.dstk-panel h2,.dsv-panel h2{font-size:36px;margin-bottom:6px}
+.dpk-sub{font-size:18px;font-weight:900;color:#5b6a8a;margin-bottom:8px}
+.dpk-row,.dmr{display:flex;align-items:center;gap:12px;background:rgba(27,42,78,.06);border-radius:16px;padding:10px 14px;margin:8px 0;font-weight:900;font-size:21px;color:var(--navy);min-height:44px;box-sizing:border-box}
+.dpk-row .dpi,.dmr .dmi{font-size:30px;width:40px;text-align:center;flex:none}
+.dpk-row .dpt,.dmr .dmt{flex:1;text-align:start}
+.dpk-row .dpr{color:#1B7F3B;background:#DDF7E4;border-radius:12px;padding:4px 14px;white-space:nowrap}
+.dpk-row .dpc{width:34px;text-align:center;color:#1B7F3B;font-size:26px}
+.dpk-row.done{opacity:.55}
+.dpk-row.dim{opacity:.45;border:3px dashed rgba(27,42,78,.25);background:transparent}
+.dpk-btns{margin-top:10px}
+.dpk-btns .btn.big{font-size:30px;padding:12px 44px}
+.dpk-foot{margin-top:10px}
+.btn.d-off{opacity:.5;filter:grayscale(.4);pointer-events:none}
+/* the 28-day grid: 7 × 4 tiles */
+.dcal-panel{min-width:700px;max-width:760px;padding:16px 28px 18px}
+.dcal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:8px 0 14px}
+.dcal-tile{background:rgba(27,42,78,.06);border-radius:14px;padding:6px 2px;min-height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:900;color:var(--navy);font-size:15px;line-height:1.15}
+.dcal-tile b{font-size:19px}
+.dcal-tile span{font-size:13px;color:#5b6a8a;text-align:center;overflow:hidden;max-width:92px}
+.dcal-tile.got{background:#DDF7E4;color:#1B7F3B}.dcal-tile.got span{color:#1B7F3B;font-size:20px}
+.dcal-tile.next{border:3px dashed #C99A10;background:#FFF6CF}
+.dcal-tile.now{background:linear-gradient(#FFE27A,#F5C400);box-shadow:0 4px 0 #C99A10;animation:tapPulse 1.2s infinite}
+/* missions */
+.dmr .dmb{width:150px;height:14px;background:rgba(27,42,78,.2);border-radius:8px;overflow:hidden;flex:none}
+.dmr .dmb i{display:block;height:100%;background:linear-gradient(90deg,#3FC35F,#FFD447);border-radius:8px;transition:width .4s}
+.dmr .dmn{width:56px;text-align:center;flex:none}
+.dmr .dmx{width:86px;text-align:center;color:#1B7F3B;flex:none}
+.dmr.done{opacity:.6}
+.dms-bonus{font-size:20px;font-weight:900;color:#5b6a8a;margin:6px 0 10px;background:rgba(27,42,78,.06);border-radius:12px;padding:6px 12px}
+.dms-bonus.on{color:#1B7F3B;background:#DDF7E4}
+.dms-btns .btn{min-height:44px}
+/* streak celebration */
+.dstk-panel{min-width:460px;max-width:560px;padding:14px 34px 22px}
+.dstk-flame{font-size:84px;line-height:1;animation:dstkFlame 1s ease-in-out infinite alternate;filter:drop-shadow(0 8px 10px rgba(255,122,61,.5))}
+@keyframes dstkFlame{from{transform:scale(1) rotate(-4deg)}to{transform:scale(1.12) rotate(4deg)}}
+.dstk-day{font-size:44px;font-weight:900;color:var(--orange);margin:2px 0}
+.dstk-reward{font-size:28px;font-weight:900;color:#1B7F3B;background:#DDF7E4;border-radius:14px;padding:6px 20px;display:inline-block;margin:4px 0 8px}
+.dstk-ms{font-size:20px;font-weight:900;color:#8E5CF6;margin:4px 0 8px}
+.dstk-next{font-size:19px;font-weight:900;color:#5b6a8a;margin-bottom:12px}
+/* save the streak */
+.dsv-panel{min-width:460px;max-width:580px;padding:18px 34px 20px}
+.dsv-text{font-size:24px;font-weight:900;color:var(--navy);line-height:1.4;margin:4px 0 16px}
+.dsv-panel .btn.big{margin-bottom:10px}
+/* the end-card line: streak day + mission ticks */
+#daily-end-line{font-size:22px;font-weight:900;color:var(--orange);background:#FFF0B3;border-radius:14px;padding:4px 18px;display:inline-block;margin:0 0 8px}
+/* the home "היום" card (the home module places #daily-card; it fills with dailyCardHTML()) */
+.dcard{display:flex;flex-direction:column;gap:6px;color:var(--navy);font-weight:900;width:100%;box-sizing:border-box}
+.dcard-title{font-size:20px}
+.dcard-head{display:flex;align-items:center;justify-content:space-between;font-size:22px}
+.dcard-flame.cold{opacity:.55}
+.dcard-frz{font-size:17px;color:#3D8BFF}
+.dcard .btn.dcard-pick{width:100%;justify-content:center;font-size:20px;min-height:44px;box-sizing:border-box}
+.dcard .btn.dcard-pick.due{animation:tapPulse 1.2s infinite}
+.dcard-missions{display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.dcard-m{display:flex;align-items:center;gap:8px;font-size:17px;min-height:26px}
+.dcard-m.done{opacity:.55}
+.dcard-mi{width:26px;text-align:center;font-size:20px;flex:none}
+.dcard-mb{flex:1;height:10px;background:rgba(27,42,78,.2);border-radius:6px;overflow:hidden}
+.dcard-mb i{display:block;height:100%;background:linear-gradient(90deg,#3FC35F,#FFD447);border-radius:6px}
+.dcard-mn{width:40px;text-align:center;font-size:15px;flex:none}
+.dcard-motd{font-size:17px;cursor:pointer;background:rgba(27,42,78,.06);border-radius:12px;padding:6px 10px;min-height:44px;display:flex;align-items:center;justify-content:space-between;box-sizing:border-box}

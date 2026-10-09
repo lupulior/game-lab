@@ -1270,7 +1270,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-09-27.3';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-10-09.1';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1600,7 +1600,7 @@ const I18N_RAW={
  'party.level':['רמת המחשב (כשיש בוטים):','Computer level (when there are bots):','مستوى الحاسوب (عند وجود بوتات):','Уровень компьютера (когда есть боты):'],
  'party.m1v1':['⚔️ אחד נגד השני','⚔️ Against each other','⚔️ ضد بعضنا','⚔️ Друг против друга'],
  'party.mduo':['🤝 ביחד נגד 2 מחשבים','🤝 Together vs 2 computers','🤝 معًا ضد حاسوبين','🤝 Вместе против 2 компьютеров'],
- 'party.mtrio':['👥 2 על 2 (אני ו-{0} מול השני + מחשב)','👥 2v2 (me and the first vs the second + computer)','👥 2 ضد 2 (أنا والأول ضد الثاني + حاسوب)','👥 2 на 2 (я и первый против второго + компьютер)'],
+ 'party.mtrio':['👥 2 על 2 (אני ו-{0} מול השני + מחשב)','👥 2v2 (me and {0} vs the other + computer)','👥 2 ضد 2 (أنا و{0} ضد الآخر + حاسوب)','👥 2 на 2 (я и {0} против второго + компьютер)'],
  'party.mquad':['👥 2 על 2, ארבעה שחקנים','👥 2v2, four players','👥 2 ضد 2، أربعة لاعبين','👥 2 на 2, четыре игрока'],
  'party.leave':['🚪 יציאה מהקבוצה','🚪 Leave the team','🚪 مغادرة الفريق','🚪 Покинуть команду'],
  'party.left':['יצאת מהקבוצה','You left the team','غادرت الفريق','Ты покинул команду'],
@@ -1795,7 +1795,7 @@ const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[
 const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
 const DEF_PROG={xp:0,coins:0,gems:0,keys:0,xpTotal:0,lvClaimed:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false,trophies:0,road:[]};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
-const saveProg=()=>{ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} };
+function saveProg(){ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} }
 const isUnlocked = c => FREE_CHARS.includes(c.id) || prog.unlocked.includes(c.id) || !!prog.admin;   // the admin owns every player, new ones too
 const ACH=[['first_win',20],['hat_trick',15],['clean_sheet',25],['slide_goal',15],['header_goal',15],['win_hard',30],['win_crazy',50],['win_master',80],
   ['streak3',30],['ten_wins',40],['comeback',25],['last_second',20],['online_win',30],['v2_win',25],['pk_perfect',25],['pk_saves',25],['cup_win',60],['cup_master',120],['daily_win',20],['win_impossible',300]];
@@ -1824,7 +1824,7 @@ function achieve(id){
   prog.ach[id]=Date.now(); saveProg(); addCoins(a[1]*ECON.achMult,'ach'); addXP(a[1], true); if(ECON.achGems[id]) addGems(ECON.achGems[id],'ach');
   setTimeout(()=>{ toast(T('ach.new', T('a.'+id), a[1]*ECON.achMult), 'ach'); try{ sfx.win(); }catch(e){} }, 400);
 }
-const dayKey = () => localDayKey(now());
+const dayKey = () => { const k=localDayKey(now()); const m=prog.dayMax; if(m && m>k){ const ahead=(new Date(m).getTime()-new Date(k).getTime())/864e5; if(ahead<=2) return m; } if(m!==k){ prog.dayMax=k; saveProg(); } return k; };   // monotonic: a clock set back never re-opens yesterday
 function dailyInfo(){ const s=Math.floor((now()-new Date(now()).getTimezoneOffset()*60000)/864e5); let opp=(s*7)%CHARS.length; if(opp===selected) opp=(opp+1)%CHARS.length; return { opp, lvl:s%5, done: prog.daily===dayKey(), xp:15 }; }   // daily stays within the 5 normal levels
 const myStats = () => { const s=loadStats(); return {w:s.w,d:s.d,l:s.l,c:s.c,xp:prog.coins|0,lv:myLevel(),goals:prog.goals,tr:prog.trophies|0}; };
 
@@ -1971,7 +1971,7 @@ const mixW = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v+(25
 const mixK = (hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v*(1-a));       return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };   // toward black
 let svgSeq=0;
 function playerSVG(c, mood='happy', skin){
-  if(skin===undefined && typeof skinFor==='function') skin=skinFor(c); if(skin) c=Object.assign({}, c, skin);
+  if(skin===undefined && window.MODS_READY && typeof skinFor==='function') skin=skinFor(c); if(skin) c=Object.assign({}, c, skin);   // MODS_READY: modules are only consulted once they have fully loaded
   const OL='#2a1c12', ow=1.6, id=c.id+'-'+(svgSeq++);        // unique gradient ids per drawing: a gradient defined inside a hidden screen would not paint
   const defs=`<defs>
     <linearGradient id="sk-${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mixW(c.skin,.3)}"/><stop offset="1" stop-color="${c.skin}"/></linearGradient>
@@ -2337,7 +2337,7 @@ document.addEventListener('pointerdown', function startMusicOnce(){ if(settings.
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
 const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
-const sprite = (el,c,mood) => { el.innerHTML = playerSVG(c,mood); };
+const sprite = (el,c,mood,skin) => { el.innerHTML = playerSVG(c,mood,skin); };
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id)); Hooks.emit('screen', id);
@@ -2354,6 +2354,7 @@ if(('ontouchstart' in window) || navigator.maxTouchPoints>0) document.body.class
 /* ---------- selection state ---------- */
 let selected = 0;       // chosen character index
 let previewIdx = 0;     // highlighted in the characters screen
+let training=null, trainStats={g:0,n:0};   // declared early: modules and load-time code (the intro sprites) may read it
 
 function refreshHome(){
   sprite($('#home-sprite'), CHARS[selected]); Hooks.emit('home');
@@ -2626,7 +2627,7 @@ function onIncoming(conn){
     if(kind==='probe'){ try{ conn.send({t:'pong', st:myState(), adm:isAdmin()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 400); }
     else if(kind==='stats'){ try{ conn.send({t:'stats', name:normName(settings.name), s:myStats(), ach:Object.keys(prog.ach), st:myState(), adm:isAdmin()}); }catch(e){} setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 600); }
     else if(kind==='kick'){ conn.on('data', m=>{
-        if(!(m&&m.t==='kick'&&m.until>Date.now())) return;
+        if(!(m&&m.t==='kick'&&m.until>now())) return;
         const until=Math.min(m.until, Date.now()+8*24*3600e3);
         probeFriend(from).then(pr=>{ if(pr && pr.adm) applyBan(until, from); else if(fbOn()) checkBan(); });   // only a real, online admin can kick me (the server is checked too)
       }); setTimeout(()=>{ try{ conn.close(); }catch(e){} }, 1500); }
@@ -2823,7 +2824,7 @@ function matchSetupMsg(){
   const guestR = mp && mp.role==='guest' && !mp.teamL;
   const names={}; for(const p of players) names[p.slot]=slotName(p.slot);
   return { t:'setup', chars:players.map(p=>p.ch?p.ch.id:CHARS[0].id), v2:!!v2, src:v2?v2.src:null, names, lv:level?level.i:1,
-           sc: guestR ? [score.op,score.me] : [score.me,score.op], tl:timeLeft, host:slotName('P1') };
+           sc: guestR ? [score.op,score.me] : [score.me,score.op], tl:timeLeft, host:slotName('P1'), fmt:matchFmt };
 }
 async function watchFriend(name){
   if(mp){ toast(T('watch.leaveRoom'),'warn'); return; }
@@ -2843,7 +2844,7 @@ async function watchFriend(name){
 }
 function spectSetup(m){
   const ch=id=>CHARS.find(c=>c.id===id)||CHARS[0];
-  spectating.names=m.names||{}; spectating.snap=null; level=LEVELS[m.lv]||LEVELS[1];
+  spectating.names=m.names||{}; spectating.snap=null; level=LEVELS[m.lv]||LEVELS[1]; matchFmt=ECON.formats[m.fmt] ? m.fmt : 'classic';
   $('#end').classList.remove('show'); $('#end-actions').hidden=true;
   beginMatch(ch(m.chars[0]), ch(m.chars[1]), m.v2 ? {c3:ch(m.chars[2]), c4:ch(m.chars[3]), src:m.src||{}} : null);
   score.me=m.sc[0]|0; score.op=m.sc[1]|0; updateScore(); timeLeft=m.tl||matchTime(); updateTimer();
@@ -2910,10 +2911,11 @@ $('#btn-daily-cancel').addEventListener('click', ()=>{ sfx.click(); $('#daily-mo
 $('#btn-daily-play').addEventListener('click', ()=>{ sfx.click(); const d=dailyInfo(); $('#daily-modal').classList.remove('show'); forcedOpp=d.opp; dailyMatch=!d.done; v2Pending=null; startGame(d.lvl); });
 /* ---------- promo codes (none active yet; add entries as CODE: fn) ---------- */
 const CODES={};
+function validCodeKey(c){ return /^[^.#$\[\]\/\s]{2,40}$/.test(String(c||'')); }   // a Firebase key: no . # $ [ ] / or spaces, 2-40 chars (Hebrew is fine)
 async function redeemCode(raw){
   const code=(raw||'').trim().toUpperCase().replace(/\s+/g,''), inp=$('#code-input');
   const bad=()=>{ sfx.lose(); toast(T('codes.bad'),'warn'); inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); };
-  if(!code) return bad();
+  if(!code || !validCodeKey(code)) return bad();
   if(await sha256(code)===ADMIN_HASH){ inp.value=''; $('#codes-modal').classList.remove('show'); becomeAdmin(); return; }   // the admin code
   prog.codes=prog.codes||[]; if(prog.codes.includes(code)){ sfx.lose(); toast(T('codes.used'),'warn'); return; }
   if(CODES[code]){ prog.codes.push(code); saveProg(); CODES[code](); inp.value=''; return; }
@@ -3014,6 +3016,7 @@ async function kickPlayer(name, key, minutes){
 async function createCode(){
   const code=($('#adm-code').value||'').trim().toUpperCase().replace(/\s+/g,''), xp=+$('#adm-code-xp').value|0, max=+$('#adm-code-uses').value|0;
   if(!code || xp<=0 || max<=0){ toast(T('codes.bad'),'warn'); return; }
+  if(!validCodeKey(code)){ toast(T('social.badChars'),'warn'); return; }
   if(!fbOn()){ toast(T('adm.needServer'),'warn'); return; }
   const r=await fbReq('codes/'+code,'PUT',{xp, max, used:0, by:normName(settings.name), t:{'.sv':'timestamp'}});
   if(r===undefined){ toast(T('fb.down'),'warn'); return; }
@@ -3059,7 +3062,7 @@ async function checkBan(){
   const b=await fbReq('bans/'+fbKey(name),'GET');
   if(b && b.until>Date.now()) applyBan(b.until, b.by);
 }
-setInterval(checkBan, 30000);
+setInterval(()=>checkBan(), 30000);
 /* ---------- "a new version is online": poll the live file and offer a reload (never mid-match) ---------- */
 let updateReady=false;
 async function checkUpdate(){
@@ -3406,7 +3409,7 @@ function beginMatch(c1, c2, opts){
   const meL = !me || teamL.includes(me);            // my team is on the left (spectators watch from the left team's side)
   myChar = me ? me.ch : c1; opChar = meL ? c2 : c1;
   for(const p of players){
-    sprite(p.el.querySelector('.sprite'), p.ch);
+    sprite(p.el.querySelector('.sprite'), p.ch, 'happy', p===me ? undefined : null);   // only my own seat wears my kit
     const who=slotName(p.slot), cn=nm(p.ch);
     p.el.querySelector('.tag').textContent = p===me ? T('game.me',cn) : p.src==='ai' ? (p===P3 ? T('game.partner',cn) : cn) : who ? who+' – '+cn : T('game.friend',cn);
     p.el.classList.toggle('me', meL ? teamL.includes(p) : teamR.includes(p));
@@ -3419,7 +3422,7 @@ function beginMatch(c1, c2, opts){
   $('#game').classList.toggle('watching', !!spectating); $('#watch-bar').hidden=!spectating;
   score={me:0,op:0}; updateScore();
   if(!mp && !spectating) matchFmt = training ? 'classic' : myFormat();
-  timeLeft=matchTime(); overtime=false; matchEarn={coins:0,gems:0,keys:0,xp:0,goals:0,levelUps:[]}; updateTimer();
+  timeLeft=matchTime(); overtime=false; matchDay=dayKey(); matchSunday=isSunday(); matchEarn={coins:0,gems:0,keys:0,xp:0,goals:0,levelUps:[]}; updateTimer();
   $('#game').classList.toggle('fmt-quick', matchFmt==='quick'); $('#game').classList.toggle('fmt-golden', matchFmt==='golden');
   $('#end').classList.remove('show'); $('#end-actions').hidden=true;
   $('#fans').classList.remove('cheer');
@@ -3666,6 +3669,7 @@ function resumeGame(){
 }
 function quitToHome(){
   $('#pause-modal').classList.remove('show'); sfx.click();
+  if(!training && !spectating && ['play','celebrate','replay','penalty','paused'].includes(state) && !(mp && mp.role==='guest')){ prog.streak=0; if(!mp && level && typeof noteResult==='function') noteResult(level.i,'lose',score.me-score.op); saveProg(); }   // leaving a running match counts as a loss
   if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); pk=null; clearCornerUI(); }
   endTraining(); pausePending=false; dropSpectators();
   state='idle'; cancelAnimationFrame(rafId); clearTimeout(cdTimer); $('#countdown').hidden=true;
@@ -3674,8 +3678,8 @@ function quitToHome(){
 }
 $('#btn-pause').addEventListener('click', e=>{ e.stopPropagation(); pauseGame(); });
 $('#btn-pk-pause').addEventListener('click', e=>{ e.stopPropagation(); pauseGame(); });
-$('#btn-resume').addEventListener('click', resumeGame);
-$('#btn-quit-home').addEventListener('click', quitToHome);
+$('#btn-resume').addEventListener('click', ()=>resumeGame());
+$('#btn-quit-home').addEventListener('click', ()=>quitToHome());
 
 function resetPositions(){
   for(const p of [P1,P2,P3,P4]){
@@ -3744,10 +3748,12 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   else { t.textContent=T('end.draw'); sub.textContent=T(mp?'end.drawMp':'end.drawSub'); sfx.lose(); recordResult('d'); }
   const stars = outcome==='win' ? (score.op===0 || score.me-score.op>=3 ? 3 : 2) : outcome==='draw' ? 1 : 0;
   const online = !!mp && !v2 || (!!mp && v2 && mp.cfg && Object.values(mp.cfg.src||{}).includes('net') && !(mp.cfg.src.P2!=='net' && mp.cfg.src.P4!=='net'));
-  const motd = dailyMatch && prog.daily!==dayKey();
+  const mday = matchDay||dayKey();
+  const motd = dailyMatch && prog.daily!==mday && prog.motdTried!==mday;
   // rewards + achievements
   if(outcome==='win'){ prog.wins++; prog.streak++; } else if(outcome==='lose'){ prog.streak=0; }
   const pay = training ? null : applyMatchRewards({outcome, fmt:matchFmt, levelI: level ? level.i : 1, online, goals:earn.goals|0, clean:score.op===0, stars, golden:overtime, motd});
+  if(motd) prog.motdTried=mday;
   if(outcome==='win'){
     addTrophies(mp ? 2 : [1,1,1,2,2,3][level ? level.i : 1]);                          // trophies: 1 on easy levels, up to 3 on Impossible, 2 online
     challengeEvent('win'); if(!mp && level && level.i>=2) challengeEvent('winHard'); if(score.op===0) challengeEvent('clean'); if(v2) challengeEvent('v2win'); if(mp) challengeEvent('online'); if(dailyMatch) challengeEvent('daily');
@@ -3755,7 +3761,7 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
     if(score.op===0) achieve('clean_sheet'); if(wasBehind) achieve('comeback');
     if(mp) achieve('online_win'); if(v2) achieve('v2_win');
     if(!mp && level){ if(level.i===2) achieve('win_hard'); if(level.i===3) achieve('win_crazy'); if(level.i===4) achieve('win_master'); if(level.i===5) achieve('win_impossible'); }
-    if(motd){ prog.daily=dayKey(); addTrophies(1); achieve('daily_win'); }
+    if(motd){ prog.daily=mday; addTrophies(1); achieve('daily_win'); }
   }
   if(!mp && !training && !dailyMatch && level) noteResult(level.i, outcome, score.me-score.op);
   challengeEvent('play'); dailyMatch=false; saveProg();
@@ -3770,15 +3776,16 @@ function showEnd(outcome){                       // 'win' | 'lose' | 'draw' from
   $('#btn-end-again').textContent = mp ? T('end.more') : T('end.again'); $('#end-btns').hidden=false; $('#end-actions').hidden=true;
   $('#end').classList.add('show');
   clearTimeout(endTimer);
-  const info={outcome, stars, score:{me:score.me, op:score.op}, earn, pay, trophies:tg, online, fmt:matchFmt, level: level ? level.i : 1, v2:!!v2, training:!!training, overtime, opp: opChar ? opChar.id : null};
+  const info={outcome, stars, score:{me:score.me, op:score.op}, earn, pay, trophies:tg, online, motd, fmt:matchFmt, level: level ? level.i : 1, v2:!!v2, training:!!training, overtime, opp: opChar ? opChar.id : null};
   matchEarn=null; overtime=false;
   Hooks.emit('matchEnd', info);
+  matchDay=null; matchSunday=null;                                          // the kick-off day is only meaningful while a match is being settled
 }
 let lastMatch=null;                              // how the last offline match was started, so "again" can replay it
 $('#btn-end-again').addEventListener('click', ()=>{
   sfx.click(); const m=lastMatch; goHome();
   if(mp) return;                                  // online: back to the character screen for a rematch
-  if(m){ level=m.level; dailyMatch=m.daily; forcedOpp=null; beginMatch(m.c1, m.c2, m.opts); }
+  if(m){ level=m.level; dailyMatch=!!m.daily && prog.daily!==dayKey(); forcedOpp=null; beginMatch(m.c1, m.c2, m.opts); }
 });
 $('#btn-end-home2').addEventListener('click', ()=>{ sfx.click(); goHome(); if(mp){ mpTeardown(); showScreen('home'); } });
 function endGame(){
@@ -3793,7 +3800,7 @@ function scoreGoal(who){
   state='celebrate';
   if(training==='shoot'){                             // practice: no score, no own goals, no XP, no commentary – just the celebration and a reset
     ball.vx*=.2; ball.vy=0; for(const p of players) p.el.classList.remove('running');
-    if(who==='me') goalFx();
+    if(who==='me'){ goalFx(); trainStats.g++; if(typeof trainDrillCheck==='function') trainDrillCheck(); }
     setTimeout(()=>{ if(state==='celebrate') afterGoal(); }, who==='me' ? 1300 : 400); return;
   }
   if(who==='me') score.me++; else score.op++;
@@ -3836,6 +3843,7 @@ function stepReplay(){
 }
 function afterGoal(){
   if(training==='shoot'){ $('#level-tag').textContent=trainTag(); resetPositions(); state='play'; lastT=performance.now(); return; }
+  if(overtime && score.me!==score.op){ state='celebrate'; endGame(); return; }   // golden goal: the first goal in overtime decides
   const target = matchTarget();              // goals needed to win: 3 online 1v1, otherwise 3 / 3 / 4 / 5 / 7 / 10 by level
   if(score.me>=target || score.op>=target){ state='celebrate'; endGame(); return; }
   resetPositions(); sfx.whistle(); netEv('whistle'); state='play'; lastT=performance.now();
@@ -3884,6 +3892,7 @@ function showLine(text, priority){
 }
 function say(key, ...args){
   showLine(T(key,...args), PRIORITY_SAY.has(key));
+  if(mp && mp.conns && mp.conns.some(c=>!c.ver || c.ver<GAME_VERSION)) return;   // guests on an older build would read raw keys
   netEv('say:'+[key].concat(args.map(a=>String(a).replace(/\|/g,' '))).join('|'));
 }
 /* who is nearest to the ball, and on which team */
@@ -4127,7 +4136,7 @@ function loop(t){
       else collideBall(p);
     }
     if(training!=='shoot'){ timeLeft-=dt; updateTimer(); }
-    if(timeLeft<=0){ timeLeft=0; const g=fmtOf(matchFmt).golden; if(g && !overtime && score.me===score.op && !training){ overtime=true; timeLeft=g; say('c.golden'); netEv('golden'); goldenFlash(); } else endGame(); }
+    if(timeLeft<=0){ timeLeft=0; const g=fmtOf(matchFmt).golden; if(g && !overtime && score.me===score.op && !training){ overtime=true; timeLeft=g; said10=false; say('c.golden'); netEv('golden'); goldenFlash(); } else endGame(); }
   }else if(state==='celebrate'){
     ball.vx*=Math.pow(.2,dt); ball.x+=ball.vx*dt;
   }else if(state==='replay' && replay){
@@ -4329,7 +4338,7 @@ function partyRefresh(){
   $('#btn-party-leave').hidden=true;
   if(!on){ $('#party-members').innerHTML=''; return; }
   const others=partyMembers().filter(m=>!m.me);
-  $('#party-members').innerHTML = others.map((m,i)=>`<div class="member p${i}"><div class="sprite">${m.pick!=null?playerSVG(CHARS[m.pick]):''}</div><div class="mname">${m.host?'👑 ':''}${esc(crown(m.name,m.adm))}</div></div>`).join('');
+  $('#party-members').innerHTML = others.map((m,i)=>`<div class="member p${i}"><div class="sprite">${m.pick!=null?playerSVG(CHARS[m.pick],'happy',null):''}</div><div class="mname">${m.host?'👑 ':''}${esc(crown(m.name,m.adm))}</div></div>`).join('');
   const code=$('#party-code'); const showCode = mp.role==='host' && mp.code && mp.conns.length<3;
   code.hidden=!showCode; if(showCode) code.innerHTML=`${T('mp.codeLbl')} <b>${mp.code}</b> <button class="btn small yellow" id="btn-copy-code">${T('mp.copy')}</button>`;
 }
@@ -4369,7 +4378,7 @@ function mpStart(mode, lvl){
   const p1=selected, p2=idxFor('P2');
   const opts = plan.v2 ? {c3:idxFor('P3'), c4:idxFor('P4'), src:plan.src} : null;
   level=LEVELS[lvl!=null ? lvl : 1];
-  matchFmt = conns.every(c=>c.ver) ? myFormat() : 'classic';            // a guest on an old version plays the classic 4 minutes
+  matchFmt = conns.every(c=>c.ver && c.ver>=GAME_VERSION) ? myFormat() : 'classic';   // a guest on an older version plays the classic 4 minutes
   for(const c of conns){ c.rin={l:0,r:0,j:0,k:0,s:0}; try{ c.conn.send({t:'start', p1, p2, lv:level.i, opts, slot:c.slot, src:plan.src, v2:plan.v2, fmt:matchFmt}); }catch(e){} }
   evBuf.length=0;
   beginMatch(CHARS[p1], CHARS[p2], opts ? {c3:CHARS[opts.c3], c4:CHARS[opts.c4], src:opts.src} : null);
@@ -4996,9 +5005,11 @@ function startMatchPenalty(forTeam){
 }
 /* one penalty kick on the shootout screen (in-match penalties and training) */
 function setupPenalty(meShoots, lv, onResult, title){
+  const pp=!!(pk&&pk.pausePending);
   pk={ single:true, lv, rnd:0, phase:'idle', sMe:[], sOp:[], kick:0, meFirst:meShoots, aim:null, raf:0, t0:0, timer:0, saves:0,
        readP: clamp(lv.read+.1,.05,.8), missP: Math.max(.03, lv.miss),
        chars:{ shooter: meShoots ? myChar : opChar, keeper: meShoots ? opChar : myChar }, onResult };
+  if(pp) pk.pausePending=true;                        // a pause pressed between two kicks is kept
   $('#pk-score').hidden=true; $('#pk-round').textContent=title||T('pen.title'); $('#pk-hint').textContent='';
   pkResetVisuals(); $('#pk-ball').innerHTML=ballSVG();
   showScreen('pk'); setTimeout(()=>{ if(pk && pk.single && !pk.corner) setupKick(meShoots); }, 500);
@@ -5041,7 +5052,7 @@ function setupCorner(mine, onResult, title){
   pk.timer=setTimeout(()=>{ if(pk&&pk.corner){ pk.phase='cross'; pk.t0=performance.now(); pk.raf=requestAnimationFrame(cornerLoop); } }, 800);
 }
 /* ---------- training: shooting / penalties / corners ---------- */
-let training=null, trainStats={g:0,n:0};
+/* (training / trainStats are declared with the other match state near the top of the game section) */
 function trainTag(){
   if(training==='pk') return T('train.pkTag', trainStats.g, trainStats.n);
   if(training==='corner') return T('train.cornerTag', trainStats.g, trainStats.n);
@@ -5054,7 +5065,7 @@ function startTraining(kind){
   if(kind==='shoot'){ beginMatch(CHARS[selected], opp); return; }
   state='training'; cancelAnimationFrame(rafId); showScreen('pk');
   const again=()=>{ if(training!==kind) return; if(kind==='pk') setupPenalty(true, PK_LEVELS[1], onRes, trainTag()); else setupCorner(true, onRes, trainTag()); pk.train=kind; };
-  const onRes=goal=>{ if(!pk || pk.phase==='over') return; trainStats.n++; if(goal) trainStats.g++; pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk-round').textContent=trainTag(); setTimeout(()=>{ if(training===kind && pk && pk.train){ if(kind==='corner') clearCornerUI(); again(); } }, 1600); };
+  const onRes=goal=>{ if(!pk || pk.phase==='over') return; trainStats.n++; if(goal) trainStats.g++; if(typeof trainDrillCheck==='function') trainDrillCheck(); pk.phase='over'; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); $('#pk-round').textContent=trainTag(); setTimeout(()=>{ if(training===kind && pk && pk.train){ if(kind==='corner') clearCornerUI(); again(); } }, 1600); };
   again();
 }
 function endTraining(){ training=null; trainStats={g:0,n:0}; $('#game').classList.remove('training'); }
@@ -5123,7 +5134,7 @@ $('#btn-pk-continue').addEventListener('click', ()=>{
   pk=null; renderBracket(); saveCup(); showScreen('cup');
   if(wonCup) cupConfetti.burst(300);
 });
-$('#btn-pk-back').addEventListener('click', async e=>{ e.stopPropagation(); sfx.click(); if(pk && pk.train){ quitToHome(); return; } if(pk && pk.single){ if(pk.phase!=='over') pk.onResult(false); return; } if(pk && pk.phase!=='over' && pk.m && pk.m.w===null){ if(!(await ask(T('pk.quitQ')))) return; if(!pk) return; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); const m=pk.m; m.w = m.a===cup.mine ? m.b : m.a; cup.out=true; finishCupSimulated(); saveCup(); } else if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); } pk=null; renderBracket(); showScreen('cup'); });
+$('#btn-pk-back').addEventListener('click', async e=>{ e.stopPropagation(); sfx.click(); if(pk && pk.train){ quitToHome(); return; } if(pk && pk.single){ if(pk.phase!=='over') pk.onResult(false, 'quit'); return; } if(pk && pk.phase!=='over' && pk.m && pk.m.w===null){ if(!(await ask(T('pk.quitQ')))) return; if(!pk) return; cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); const m=pk.m; m.w = m.a===cup.mine ? m.b : m.a; cup.out=true; finishCupSimulated(); saveCup(); } else if(pk){ cancelAnimationFrame(pk.raf); clearTimeout(pk.timer); } pk=null; renderBracket(); showScreen('cup'); });
 $('#pk').addEventListener('pointerdown', e=>{
   if(e.target.closest('button') || e.target.closest('#pk-score')) return;
   if(!pk) return;

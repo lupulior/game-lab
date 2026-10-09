@@ -14,15 +14,17 @@ tmp="$(mktemp)"
 inject(){ # $1 marker line (exact), $2 glob of files, $3 wrap-start, $4 wrap-end
   local marker="$1" glob="$2" pre="$3" post="$4" part="$(mktemp)"
   : > "$part"
-  for p in $glob; do [ -f "$p" ] || continue; printf '%s/* ===== %s ===== */\n' "$pre" "$(basename "$p")" >> "$part"; cat "$p" >> "$part"; printf '\n%s' "$post" >> "$part"; done
+  for p in $glob; do [ -f "$p" ] || continue; printf "%s===== %s =====%s
+" "$pre" "$(basename "$p")" "$post" >> "$part"; cat "$p" >> "$part"; printf "
+" >> "$part"; done
   awk -v marker="$marker" -v partfile="$part" '
     $0==marker { while((getline line < partfile)>0) print line; close(partfile); next } { print }' "$tmp" > "$tmp.2" && mv "$tmp.2" "$tmp"
   rm -f "$part"
 }
 cp src/core.html "$tmp"
-inject '/* @css */'     'src/css/*.css'   '' ''
+inject '/* @css */'     'src/css/*.css'   '/* ' ' */'
 inject '<!-- @html -->' 'src/html/*.html' '<!-- ' ' -->'
-inject '/* @js */'      'src/js/*.js'     '' ''
-if [ "$mode" = "test" ]; then inject '/* @test */' 'src/test/*.js' '' ''; else sed -i '/^\/\* @test \*\/$/d' "$tmp"; fi
+inject '/* @js */'      'src/js/*.js'     '/* ' ' */'
+if [ "$mode" = "test" ]; then inject '/* @test */' 'src/test/*.js' '/* ' ' */'; else sed -i '/^\/\* @test \*\/$/d' "$tmp"; fi
 mv "$tmp" "$out"
 printf 'built %s (%s lines, %s KB)\n' "$out" "$(wc -l < "$out")" "$(( $(stat -c %s "$out") / 1024 ))"

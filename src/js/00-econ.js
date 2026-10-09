@@ -26,15 +26,17 @@ const Hooks = {
   emit(n, ...a){ for(const f of (this._h[n]||[])){ try{ f(...a); }catch(e){ console.error('hook '+n, e); } } },
 };
 function I18N_ADD(o){ Object.assign(I18N_RAW, o); }          // {key:[he,en,ar,ru]}
+const _coreApplyLang=applyLang; applyLang=function(){ if(!window.MODS_READY) return; return _coreApplyLang.apply(this, arguments); };   // modules call applyLang() at load; only the init line's pass does real work
 function STATIC_ADD(o){ Object.assign(STATIC_I18N, o); }     // {'#selector':'key'}
 const fmtNum = n => Number(n||0).toLocaleString('en-US');
 const pad2 = n => (n<10?'0':'')+n;
 
 /* ----- server-synced time: dayKey/weekKey use it, so changing the phone clock does not hand out rewards ----- */
-function now(){ return Date.now() + (settings.clockOffset|0); }
+let clockOffset=0;                                                         // server − phone, learned from the heartbeat each session (never persisted: a fixed phone clock must not stay wrong)
+function now(){ return Date.now() + clockOffset; }
 function localDayKey(ms){ const d=new Date(ms); return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
 function isSunday(){ return new Date(now()).getDay()===0; }
-function syncClock(serverMs){ if(typeof serverMs==='number' && serverMs>1e12){ const off=serverMs-Date.now(); if(Math.abs(off-(settings.clockOffset|0))>5000){ settings.clockOffset=off; saveSettings(); } } }
+function syncClock(serverMs){ if(typeof serverMs==='number' && serverMs>1e12){ const off=serverMs-Date.now(); if(Math.abs(off-clockOffset)>5000) clockOffset=off; } }
 
 /* ----- level meter: level L is reached at 25·L²+75·L lifetime XP (L5 = 1,000, L10 = 3,250, L30 = 24,750) ----- */
 const xpForLevel = n => 25*n*n + 75*n;
@@ -89,7 +91,7 @@ function coinCapToday(){ return isSunday() ? ECON.capSunday : ECON.capCoins; }
 function coinCapLeft(){ return Math.max(0, coinCapToday()-dayCounter('coinDay').n); }
 
 /* ----- match formats ----- */
-let matchFmt='classic', overtime=false;
+let matchFmt='classic', overtime=false, matchDay=null, matchSunday=null;   // matchDay/matchSunday: the server day the running match started on
 function fmtOf(name){ return ECON.formats[name] || ECON.formats.classic; }
 function matchTime(){ return fmtOf(matchFmt).time; }
 function matchTarget(){ const f=fmtOf(matchFmt); if(f.target) return f.target; return (mp && !v2) ? 3 : (level && level.goals) || 3; }
@@ -112,7 +114,8 @@ function payout(o){
   const winStreak = o.outcome==='win' ? (prog.streak|0) : 0;
   const cycles = Math.floor((prog.streakDays|0)/7);
   const bonus = Math.min(ECON.winStreakMax, Math.max(0,winStreak-1)*ECON.winStreakStep) + Math.min(ECON.streakBonusMax, cycles*ECON.streakBonusStep);
-  const mult = Math.max(o.motd ? ECON.motdMult : 1, isSunday() ? ECON.sundayMult : 1, (typeof eventMult==='function' ? eventMult() : 1));
+  const sunday = (typeof matchSunday!=='undefined' && matchSunday!=null) ? matchSunday : isSunday();
+  const mult = Math.max(o.motd ? ECON.motdMult : 1, sunday ? ECON.sundayMult : 1, (typeof eventMult==='function' ? eventMult() : 1));
   let coins=Math.round(base*(1+bonus)*mult);
   coins=Math.min(coins, ECON.matchMax);
   const left=coinCapLeft(); let capped=false;
@@ -120,24 +123,24 @@ function payout(o){
   let xp = o.outcome==='win' ? (o.online ? ECON.xpOnline : ECON.xpWin[lvl]) : o.outcome==='draw' ? ECON.xpDraw : ECON.xpLoss;
   xp += (o.goals|0)*ECON.xpGoal; if(o.motd) xp+=ECON.xpMotd;
   const kd=dayCounter('keyDay');
-  const key = (o.outcome==='win' && (o.online || lvl>=ECON.keyMinLevel) && kd.n<ECON.keysPerDay) ? 1 : 0;
+  const key = (o.outcome==='win' && (o.online || lvl>=ECON.keyMinLevel) && kd.n<ECON.keysPerDay && (prog.keys|0)<ECON.keyCap) ? 1 : 0;
   return {coins, xp, key, parts, bonus, mult, capped, base};
 }
 /* called once per finished match (not training): stamps the day for the streak, applies the payout, returns the summary for the end card */
 function applyMatchRewards(o){
   const r=payout(o);
   if(r.coins>0){ dayCounter('coinDay').n+=r.coins; addCoins(r.coins,'match'); }
-  if(r.key){ dayCounter('keyDay').n+=1; addKeys(1,'match'); }
+  if(r.key){ if(addKeys(1,'match')>0) dayCounter('keyDay').n+=1; else r.key=0; }
   if(r.xp>0) addXP(r.xp);
   prog.matches=(prog.matches|0)+1; prog.lastPlay=now();
-  stampStreakDay();
+  stampStreakDay(typeof matchDay!=='undefined' && matchDay ? matchDay : undefined);
   saveProg();
   return r;
 }
 /* the daily streak: finishing any real match (win or loss) counts; a missed day uses a free freeze if there is one */
-function stampStreakDay(){
-  const k=dayKey(); if(prog.streakLast===k) return false;
-  const y=localDayKey(now()-864e5), y2=localDayKey(now()-2*864e5);
+function stampStreakDay(day){
+  const k=day||dayKey(); if(prog.streakLast===k) return false;
+  const dy=new Date(now()); dy.setDate(dy.getDate()-1); const y=localDayKey(dy.getTime()); dy.setDate(dy.getDate()-1); const y2=localDayKey(dy.getTime());
   if(!prog.streakLast) prog.streakDays=1;
   else if(prog.streakLast===y) prog.streakDays=(prog.streakDays|0)+1;
   else if(prog.streakLast===y2 && (prog.freezes|0)>0){ prog.freezes--; prog.streakDays=(prog.streakDays|0)+1; }
@@ -171,14 +174,17 @@ function ask(text, yes, no){
 /* ----- one-time migration from the XP-only game: every XP point becomes a coin, nothing is lost ----- */
 function migrateProg(){
   if(prog.migrated==='v2') return false;
-  const was=prog.xp|0, existing = was>0 || (prog.unlocked||[]).length>0 || (prog.trophies|0)>0;
+  const was=prog.xp|0, existing = was>0 || (prog.unlocked||[]).length>0 || (prog.trophies|0)>0 || (prog.wins|0)>0;
   prog.coins=(prog.coins|0)+was;
   prog.gems=(prog.gems|0)+ECON.welcome.gems; prog.keys=(prog.keys|0)+ECON.welcome.keys;
   let xp=was;
   if(!prog.admin){ for(const id of (prog.unlocked||[])){ const c=CHARS.find(x=>x.id===id); if(c && !FREE_CHARS.includes(id) && !c.trophyOnly && !roadFor(id)) xp+=priceOf(c); } if(prog.ice) xp+=ICE_PRICE; if(prog.fire) xp+=FIRE_PRICE; }
   xp=Math.min(xp, xpForLevel(30));
   prog.xpTotal=xp; prog.lvClaimed=levelOf(xp);
-  prog.migrated='v2'; prog.welcomeDue=existing; prog.matches=prog.matches|0;
+  const st=loadStats(); const played=(st.w|0)+(st.d|0)+(st.l|0);
+  prog.matches=Math.max(prog.matches|0, played, existing ? 1 : 0);
+  if(existing) prog.onboard=Object.assign({ctrl:true,welcome:true,pickup:true,shop:true,share:true}, prog.onboard||{});   // a veteran skips the first-session cards
+  prog.migrated='v2'; prog.welcomeDue=existing;
   if(!settings.format){ settings.format = existing ? 'classic' : 'quick'; saveSettings(); }
   saveProg(); return existing;
 }
@@ -213,12 +219,12 @@ I18N_ADD({
 });
 
 /* ----- the ball and the golden-goal flash ----- */
-function ballSVG(){ return (typeof ballSkin==='function' && ballSkin()) || BALL_SVG; }
+function ballSVG(){ return (window.MODS_READY && typeof ballSkin==='function' && ballSkin()) || BALL_SVG; }
 function goldenFlash(){ const el=$('#golden-flash'); if(!el) return; el.textContent=T('golden.flash'); el.hidden=false; el.style.animation='none'; void el.offsetWidth; el.style.animation=''; setTimeout(()=>{ el.hidden=true; }, 1900); try{ sfx.whistle(); }catch(e){} }
 
 /* ----- the welcome gift for players who already had XP ----- */
 Hooks.on('screen', id=>{ if(id==='home' && prog.welcomeDue && !mp){ setTimeout(()=>{ if(prog.welcomeDue && $('#home').classList.contains('active')){ $('#welcome-text').textContent=T('welcome.text'); $('#welcome-title').textContent=T('welcome.title'); $('#btn-welcome-take').textContent=T('welcome.take'); $('#welcome-modal').classList.add('show'); } }, 600); } });
-$('#btn-welcome-take').addEventListener('click', ()=>{ if(!prog.welcomeDue) return; prog.welcomeDue=false; saveProg(); $('#welcome-modal').classList.remove('show'); sfx.win(); confetti.burst(200); addCoins(ECON.welcome.coins,'welcome'); Hooks.emit('welcome'); });
+$('#btn-welcome-take').addEventListener('click', ()=>{ if(!prog.welcomeDue) return; prog.welcomeDue=false; saveProg(); $('#welcome-modal').classList.remove('show'); sfx.win(); confetti.burst(200); addCoins(ECON.welcome.coins,'welcome'); if(typeof giveCosmetic==='function') giveCosmetic('kit_il'); Hooks.emit('welcome'); });
 
 /* ----- "what should I do next?" — modules register candidates {prio (higher first), text, icon, action}; the home shows the best one ----- */
 const NextUp = { fns:[], add(fn){ this.fns.push(fn); }, best(){ let b=null; for(const fn of this.fns){ try{ const c=fn(); if(c && (!b || c.prio>b.prio)) b=c; }catch(e){} } return b; } };
@@ -227,6 +233,6 @@ function randomOpponent(){ const pool=CHARS.map((c,i)=>i).filter(i=>i!==selected
 function startOfflineMatch(levelI, oppIdx){ if(mp) mpTeardown(); dailyMatch=false; v2Pending=null; forcedOpp = oppIdx!=null ? oppIdx : randomOpponent(); document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show')); startGame(Math.max(0, Math.min(5, levelI|0))); }
 
 /* ----- load-time: starter prices, migration, remembered character ----- */
-Object.assign(PRICES, ECON.starter);
 migrateProg();
+Object.assign(PRICES, ECON.starter);                                      // the starter band drops AFTER the level credit for already-bought players
 restoreSelected();

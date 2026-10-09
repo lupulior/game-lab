@@ -48,7 +48,7 @@
   TASSERT('tie at 0:00 → golden overtime 30s', overtime===true && timeLeft>20 && state==='play');
   timeLeft=0.001; lastT=performance.now()-16; loop(performance.now());
   TASSERT('still tied → draw ends the match', state==='end');
-  TASSERT('end card shows coins', !$('#end-xp').hidden && $('#end-xp').textContent.includes('🪙') && prog.coins>c2);
+  TASSERT('end card shows coins', ((!$('#end-xp').hidden && $('#end-xp').textContent.includes('🪙')) || ($('#endcard-earn') && !$('#endcard-earn').hidden)) && prog.coins>c2);
   TASSERT('draw keeps the win streak', prog.streak===1);
   goHome();
   // --- ask() resolves through the buttons
@@ -59,5 +59,20 @@
   TASSERT('road: gems at 500', TROPHY_ROAD.find(r=>r.t===500).gems===10 && TROPHY_ROAD.find(r=>r.t===2500).gems===25);
   TASSERT('road: fewer characters', TROPHY_ROAD.filter(r=>r.ch).length<25 && TROPHY_ROAD.filter(r=>r.ch).length>=10);
   TASSERT('no new script errors', window.__errs.length===errs0); if(window.__errs.length) TLOG('errors', window.__errs);
+  TDONE();
+})();
+/* review fixes: monotonic day key, the day captured at kick-off, quitting a match counts as a loss */
+(async()=>{
+  await new Promise(r=>setTimeout(r,100));
+  const today=localDayKey(now()); const d=new Date(now()); d.setDate(d.getDate()+1); const tomorrow=localDayKey(d.getTime()); d.setDate(d.getDate()+6); const far=localDayKey(d.getTime());
+  prog.dayMax=tomorrow; TASSERT('day key never goes back (1 day ahead kept)', dayKey()===tomorrow);
+  prog.dayMax=far; TASSERT('a clock that was far ahead is forgiven', dayKey()===today && prog.dayMax===today);
+  settings.format='quick'; level=LEVELS[1]; mp=null; training=null; beginMatch(CHARS[0], CHARS[1]);
+  TASSERT('kick-off day captured', matchDay===dayKey() && typeof matchSunday==='boolean');
+  state='play'; prog.streak=5; score.me=0; score.op=2; prog.matches=5; prog.recent={};
+  quitToHome();
+  TASSERT('quitting a losing match resets the streak and notes a loss', prog.streak===0 && prog.recent[1] && prog.recent[1].slice(-1)[0]==='l' && state==='idle');
+  prog.keys=ECON.keyCap; prog.keyDay={key:dayKey(), n:0};
+  const r=payout({outcome:'win', fmt:'quick', levelI:2, goals:0}); TASSERT('no key promised on a full wallet', r.key===0);
   TDONE();
 })();

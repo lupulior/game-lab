@@ -1,0 +1,21 @@
+/* ===== match-format extras: format picker chips, series pips, sudden-death pips, end-card line ===== */
+/* the 4 format chips (party modal + home): two lines per chip, ≥44 px tall */
+.fmt-picker{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:6px 0 10px}
+.fmt-picker .btn{flex-direction:column;gap:0;line-height:1.1;font-size:20px;padding:7px 16px;min-height:46px;min-width:150px}
+.fmt-picker .btn .s{display:block;font-size:13px;font-weight:700;opacity:.92;white-space:nowrap}
+.fmt-picker .btn.on{outline:5px solid var(--yellow)}
+.fmt-picker.off{opacity:.45;pointer-events:none}
+.fmt-hint{font-size:16px;font-weight:700;color:#5b6a8a;margin:-4px 0 8px}
+#fmt-party-l{margin-top:4px}
+/* Best-of-3 pips under the clock */
+#fmt-series{position:absolute;top:66px;left:50%;transform:translateX(-50%);font-size:19px;font-weight:900;color:#fff;background:var(--purple);padding:3px 14px;border-radius:14px;z-index:5;white-space:nowrap;direction:ltr;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+#fmt-series .pips{letter-spacing:2px;margin-inline-start:6px}
+/* sudden-death pips on the penalty screen (the shootout score box is hidden for single kicks) */
+#fmt-sd-pips{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:#fff;color:var(--navy);border-radius:18px;padding:6px 18px;display:flex;gap:14px;align-items:center;font-size:22px;font-weight:900;box-shadow:0 5px 0 rgba(0,0,0,.3);direction:ltr;z-index:5;white-space:nowrap}
+#fmt-sd-pips .sep{color:#8a93a8}
+/* the golden-goal clock shows a label, not a countdown */
+#timer.fmt-label{direction:rtl;letter-spacing:0;font-size:26px;background:linear-gradient(#FFE27A,#F5C400);color:var(--navy)}
+/* the result card: the series / kicks line and the "next game" button */
+#fmt-end-line{font-size:24px;font-weight:900;color:var(--navy);background:#FFF3B8;border-radius:14px;padding:4px 18px;display:inline-block;margin:0 0 8px;line-height:1.35}
+#fmt-end-line.won{background:#DDF7E4;color:#1B7F3B}
+#btn-fmt-next{font-size:26px;padding:10px 26px}

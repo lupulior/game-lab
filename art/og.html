@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>og card 1200×630</title>
+<style>
+  html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#3FB2F5}
+  body{font-family:"Varela Round","Arial Rounded MT Bold","Heebo","Rubik",Arial,sans-serif;position:relative}
+  #sky{position:absolute;inset:0;background:linear-gradient(#7ED3FF,#E3F7FF 68%)}
+  .cloud{position:absolute;background:#fff;border-radius:60px;opacity:.92}
+  .cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+  .cloud:before{width:60%;height:140%;left:12%;top:-60%}
+  .cloud:after{width:45%;height:110%;right:12%;top:-40%}
+  #sun{position:absolute;right:70px;top:46px;width:120px;height:120px;border-radius:50%;background:#FFD447;box-shadow:0 0 0 18px rgba(255,212,71,.35),0 0 60px rgba(255,212,71,.8)}
+  #stands{position:absolute;left:0;right:0;top:250px;height:110px;background:repeating-linear-gradient(90deg,#F04E4E 0 38px,#3D8BFF 38px 76px,#FFD447 76px 114px,#8E5CF6 114px 152px);opacity:.75}
+  #stands:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20px 20px,rgba(255,255,255,.28) 7px,transparent 8px) 0 0/40px 40px}
+  #board{position:absolute;left:0;right:0;top:350px;height:28px;background:#1B2A4E;color:#fff;font-weight:900;font-size:18px;letter-spacing:6px;line-height:28px;text-align:center;direction:ltr;opacity:.95}
+  #grass{position:absolute;left:0;right:0;top:378px;bottom:0;background:repeating-linear-gradient(90deg,#4CC76A 0 100px,#3FB35B 100px 200px)}
+  #line{position:absolute;left:0;right:0;top:470px;height:6px;background:rgba(255,255,255,.85)}
+  #title{position:absolute;left:0;right:0;top:40px;text-align:center;font-size:112px;font-weight:900;color:#FFD447;line-height:1;
+    -webkit-text-stroke:3px #1B2A4E;text-shadow:0 10px 0 #1B2A4E,0 20px 30px rgba(0,0,0,.28)}
+  #sub{position:absolute;left:0;right:0;top:172px;text-align:center;font-size:44px;font-weight:900;color:#fff;-webkit-text-stroke:1.5px #1B2A4E;text-shadow:0 5px 0 #1B2A4E}
+  #team{position:absolute;left:0;right:0;top:300px;height:330px;display:flex;justify-content:center;align-items:flex-end;gap:26px}
+  .p{width:190px;height:285px;filter:drop-shadow(0 16px 10px rgba(0,0,0,.28))}
+  .p svg{width:100%;height:100%}
+  .p:nth-child(1),.p:nth-child(5){height:240px;width:160px;margin-bottom:10px}
+  .p:nth-child(2),.p:nth-child(4){height:262px;width:175px;margin-bottom:4px}
+  #ball{position:absolute;left:36px;top:510px;width:96px;height:96px;filter:drop-shadow(0 12px 8px rgba(0,0,0,.3))}
+  #badge{position:absolute;left:60px;top:70px;background:#fff;color:#1B2A4E;font-weight:900;font-size:30px;border-radius:30px;padding:10px 26px;box-shadow:0 8px 0 rgba(27,42,78,.35);direction:rtl}
+  #badge small{display:block;font-size:20px;color:#5b6a8a}
+</style>
+</head>
+<body>
+  <div id="sky"></div>
+  <div id="sun"></div>
+  <div class="cloud" style="left:120px;top:150px;width:170px;height:46px"></div>
+  <div class="cloud" style="left:860px;top:120px;width:220px;height:54px"></div>
+  <div id="stands"></div>
+  <div id="board">FOOTBALL STAR · FOOTBALL STAR · FOOTBALL STAR · FOOTBALL STAR</div>
+  <div id="grass"></div>
+  <div id="line"></div>
+  <div id="title">כוכב הכדורגל ⚽</div>
+  <div id="sub">Football Star · משחק כדורגל לילדים</div>
+  <div id="badge">80 כוכבים<small>אונליין עם חברים 🌐</small></div>
+  <div id="team"></div>
+  <svg id="ball" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#fff" stroke="#2a1c12" stroke-width="3"/><polygon points="50,24 66,36 60,56 40,56 34,36" fill="#1b1b1b"/><polygon points="50,24 40,10 60,10" fill="#1b1b1b" opacity=".9"/><polygon points="66,36 84,30 86,52 60,56" fill="#1b1b1b" opacity=".9" transform="translate(4 0) scale(.9)"/><polygon points="34,36 16,30 14,52 40,56" fill="#1b1b1b" opacity=".9" transform="translate(-4 0) scale(.9)"/><polygon points="40,56 60,56 64,78 36,78" fill="#1b1b1b" opacity=".9" transform="translate(0 6) scale(.9)"/><circle cx="36" cy="30" r="10" fill="#fff" opacity=".5"/></svg>
+<script>
+/* five of the game's characters, drawn with the game's own sprite style (a trimmed copy of playerSVG) */
+const CH=[
+  { id:'messi', skin:'#F1C9A5', skinDark:'#b8865f', hair:'wavy', hairColor:'#6B4423', jersey:'#8EC9F0', stripes:'#ffffff', numColor:'#1B2A4E', shorts:'#111111', socks:'#ffffff', number:10, beard:true, beardColor:'#5a3a1e', brows:'round' },
+  { id:'neymar', skin:'#D9A06B', skinDark:'#9c6a3f', hair:'mohawk', hairColor:'#F0D060', hairSide:'#2a1d14', browColor:'#2a1d14', jersey:'#FFDC00', numColor:'#009C3B', shorts:'#1A3DA8', socks:'#ffffff', number:10, brows:'round' },
+  { id:'mbappe', skin:'#8D5A3B', skinDark:'#5e3a24', hair:'short', hairColor:'#161616', jersey:'#1F4FD8', numColor:'#fff', shorts:'#ffffff', socks:'#E03030', number:10, brows:'round' },
+  { id:'ronaldo', skin:'#E8B892', skinDark:'#b07a55', hair:'spiky', hairColor:'#1e1a17', jersey:'#C8102E', numColor:'#fff', shorts:'#0B5F3A', socks:'#C8102E', number:7, brows:'sharp' },
+  { id:'haaland', skin:'#F3D2B3', skinDark:'#c49a72', hair:'bun', hairColor:'#F2DC8A', browColor:'#c9a84a', jersey:'#6CABDD', numColor:'#1C2C5B', shorts:'#ffffff', socks:'#6CABDD', number:9, brows:'sharp' },
+];
+const mixW=(hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v+(255-v)*a); return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };
+const mixK=(hex,a)=>{ const n=parseInt(hex.slice(1),16), f=v=>Math.round(v*(1-a)); return `rgb(${f(n>>16)},${f((n>>8)&255)},${f(n&255)})`; };
+function playerSVG(c){
+  const OL='#2a1c12', ow=1.6, id=c.id;
+  const defs=`<defs><linearGradient id="sk-${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mixW(c.skin,.3)}"/><stop offset="1" stop-color="${c.skin}"/></linearGradient>
+    <linearGradient id="js-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mixW(c.jersey,.25)}"/><stop offset="1" stop-color="${mixK(c.jersey,.14)}"/></linearGradient>
+    <linearGradient id="sh-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mixW(c.shorts,.2)}"/><stop offset="1" stop-color="${mixK(c.shorts,.16)}"/></linearGradient></defs>`;
+  let hair='';
+  if(c.hair==='short') hair=`<path d="M19 40 Q19 8 50 6 Q81 8 81 40 Q70 22 50 22 Q30 22 19 40Z" fill="${c.hairColor}"/>`;
+  else if(c.hair==='wavy') hair=`<path d="M17 46 Q13 4 50 4 Q87 4 83 46 Q80 26 68 22 Q50 18 32 22 Q20 26 17 46Z" fill="${c.hairColor}"/><path d="M17 40 Q10 56 20 66 Q22 52 24 42Z" fill="${c.hairColor}"/><path d="M83 40 Q90 56 80 66 Q78 52 76 42Z" fill="${c.hairColor}"/>`;
+  else if(c.hair==='mohawk') hair=`<path d="M19 40 Q19 14 50 10 Q81 14 81 40 Q70 26 50 26 Q30 26 19 40Z" fill="${c.hairSide}"/><path d="M32 24 Q34 12 42 10 Q46 2 50 4 Q54 2 58 10 Q66 12 68 24 Q60 18 50 18 Q40 18 32 24Z" fill="${c.hairColor}"/><circle cx="36" cy="16" r="6" fill="${c.hairColor}"/><circle cx="43" cy="9" r="6" fill="${c.hairColor}"/><circle cx="50" cy="6" r="6.5" fill="${c.hairColor}"/><circle cx="57" cy="9" r="6" fill="${c.hairColor}"/><circle cx="64" cy="16" r="6" fill="${c.hairColor}"/>`;
+  else if(c.hair==='bun') hair=`<path d="M18 44 Q16 6 50 6 Q84 6 82 44 Q76 22 50 21 Q24 22 18 44Z" fill="${c.hairColor}"/><path d="M18 40 Q12 54 20 62 Q22 50 24 42Z" fill="${c.hairColor}"/><path d="M82 40 Q88 54 80 62 Q78 50 76 42Z" fill="${c.hairColor}"/><circle cx="50" cy="7" r="8" fill="${c.hairColor}"/><path d="M42 9 Q50 12 58 9" stroke="#8a6a1a" stroke-width="2" fill="none"/>`;
+  else hair=`<path d="M19 40 Q19 16 32 12 L36 3 L43 11 L50 1 L57 11 L64 3 L68 12 Q81 16 81 40 Q70 24 50 24 Q30 24 19 40Z" fill="${c.hairColor}"/>`;
+  const beard = c.beard ? `<path d="M23 44 Q24 74 50 76 Q76 74 77 44 Q72 60 50 60 Q28 60 23 44Z" fill="${c.beardColor}"/>` : '';
+  const bc=c.browColor||c.hairColor;
+  const brows = c.brows==='sharp' ? `<path d="M30 26 L44 31" stroke="${bc}" stroke-width="4" stroke-linecap="round"/><path d="M70 26 L56 31" stroke="${bc}" stroke-width="4" stroke-linecap="round"/>`
+    : `<path d="M32 29 Q38 24 44 29" stroke="${bc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56 29 Q62 24 68 29" stroke="${bc}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+  const mouth=`<path d="M34 52 Q50 70 66 52 Z" fill="#7a2a2a" stroke="${OL}" stroke-width="1.2"/><path d="M40 53 Q50 59 60 53 Z" fill="#fff"/><path d="M43 61 Q50 67 57 61 Q50 59 43 61Z" fill="#e0525f"/>`;
+  const stripes = c.stripes ? `<rect x="36" y="68" width="6" height="40" fill="${c.stripes}"/><rect x="47" y="68" width="6" height="40" fill="${c.stripes}"/><rect x="58" y="68" width="6" height="40" fill="${c.stripes}"/>` : '';
+  const leg=(x)=>`<rect x="${x-.5}" y="116" width="11" height="22" rx="4.5" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/><rect x="${x-1.5}" y="126" width="13" height="14" rx="3" fill="${c.socks}" stroke="${OL}" stroke-width="${ow}"/><rect x="${x-.5}" y="129.5" width="11" height="2.6" fill="rgba(255,255,255,.6)"/><path d="M${x-3.5} 139 h18 a6 6 0 0 1 6 6 v3 h-24z" fill="#23232b" stroke="${OL}" stroke-width="${ow}"/><path d="M${x-3.5} 146.5 h24" stroke="#777" stroke-width="1.4"/><path d="M${x+2} 141.5 h8" stroke="#fff" stroke-width="1.5" opacity=".85"/>`;
+  const arm=(x1,y1,x2,y2)=>`<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${OL}" stroke-width="12.2" stroke-linecap="round"/><path d="M${x1} ${y1} L${x2} ${y2}" stroke="url(#sk-${id})" stroke-width="9" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="5.6" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/>`;
+  return `<svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">${defs}${leg(55)}${leg(35)}
+    <rect x="30" y="103" width="40" height="19" rx="5" fill="url(#sh-${id})" stroke="${OL}" stroke-width="${ow}"/><rect x="31" y="104" width="38" height="3.5" rx="1.5" fill="rgba(255,255,255,.35)"/>
+    ${arm(30,74,12,62)}${arm(70,74,88,62)}
+    <path d="M30 66 L22 82 L31 86 L31 108 L69 108 L69 86 L78 82 L70 66 Q50 74 30 66Z" fill="url(#js-${id})" stroke="${OL}" stroke-width="${ow}" stroke-linejoin="round"/>${stripes}
+    <path d="M22 82 L31 86 L34 79 L29 69Z" fill="rgba(0,0,0,.12)"/><path d="M78 82 L69 86 L66 79 L71 69Z" fill="rgba(0,0,0,.12)"/><path d="M31 105 H69" stroke="rgba(0,0,0,.2)" stroke-width="2"/>
+    <path d="M42 67 Q50 78 58 67" fill="none" stroke="${c.numColor}" stroke-width="2.6" stroke-linecap="round"/>
+    <text x="50" y="99" font-size="20" font-weight="900" text-anchor="middle" fill="${c.numColor}" stroke="${OL}" stroke-width=".9" paint-order="stroke" font-family="Arial Black,Arial,sans-serif">${c.number}</text>
+    <rect x="44" y="56" width="12" height="14" fill="${mixK(c.skin,.12)}" stroke="${OL}" stroke-width="${ow}"/>
+    <circle cx="50" cy="38" r="30" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/>
+    <circle cx="20" cy="40" r="5.5" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/><circle cx="80" cy="40" r="5.5" fill="url(#sk-${id})" stroke="${OL}" stroke-width="${ow}"/>
+    <g stroke="${OL}" stroke-width="1.2" stroke-linejoin="round">${beard}${hair}</g>${brows}
+    <circle cx="31" cy="49" r="4.2" fill="#ff7a7a" opacity=".25"/><circle cx="69" cy="49" r="4.2" fill="#ff7a7a" opacity=".25"/>
+    <ellipse cx="39" cy="38" rx="6.5" ry="7.5" fill="#fff" stroke="${OL}" stroke-width="1.3"/><ellipse cx="61" cy="38" rx="6.5" ry="7.5" fill="#fff" stroke="${OL}" stroke-width="1.3"/>
+    <circle cx="41" cy="39" r="3.5" fill="#1b1b1b"/><circle cx="63" cy="39" r="3.5" fill="#1b1b1b"/><circle cx="42.4" cy="37.4" r="1.3" fill="#fff"/><circle cx="64.4" cy="37.4" r="1.3" fill="#fff"/>
+    <path d="M50 42 Q54 48 49 49" stroke="${c.skinDark}" stroke-width="2" fill="none" stroke-linecap="round"/>${mouth}</svg>`;
+}
+const team=document.getElementById('team');
+CH.forEach(c=>{ const d=document.createElement('div'); d.className='p'; d.innerHTML=playerSVG(c); team.appendChild(d); });
+</script>
+</body>
+</html>

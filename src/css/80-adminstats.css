@@ -1,0 +1,27 @@
+/* ===== 80-adminstats: the admin "📈 מדדים" section, red flags, reduced motion ===== */
+.adm-stats{margin-top:12px;width:100%;box-sizing:border-box}
+.adm-stats .adm-h .btn.small{font-size:16px;padding:6px 12px}
+.adm-stats .ast-boot{font-size:14px;font-weight:700;color:#5b6a8a;margin-inline-start:auto}
+.ast-tiles{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 8px}
+.ast-tile{flex:1 1 150px;min-width:150px;background:rgba(255,255,255,.9);border-radius:14px;padding:8px 10px;text-align:center;box-shadow:0 4px 0 rgba(27,42,78,.18)}
+.ast-tile b{display:block;font-size:26px;font-weight:900;color:var(--navy);line-height:1.1;white-space:nowrap}
+.ast-tile span{display:block;font-size:14px;font-weight:700;color:#5b6a8a;margin-top:2px}
+.ast-tile.good b{color:#1E9E4A}
+.ast-tile.bad b{color:var(--red,#E0282E)}
+.ast-h{font-size:18px;font-weight:900;color:var(--navy);margin:6px 0 2px}
+.ast-h.bad{color:var(--red,#E0282E)}
+.ast-bars{display:flex;align-items:flex-end;gap:6px;height:96px;padding:0 4px 18px;direction:ltr;position:relative;background:rgba(255,255,255,.6);border-radius:12px;box-sizing:border-box}
+.ast-col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
+.ast-col .ast-bar{width:100%;min-height:2px;background:linear-gradient(#3D8BFF,#1D6FE8);border-radius:6px 6px 2px 2px}
+.ast-col small{position:absolute;bottom:-18px;font-size:12px;font-weight:900;color:#5b6a8a}
+.ast-rule{margin-top:10px;font-size:14px}
+/* red flags in the online list */
+.frow.adm.adm-flag{background:#FFE1E1;border:3px solid var(--red,#E0282E)}
+.frow.adm.adm-flag .fname{color:var(--red,#E0282E)}
+.frow.adm.adm-hidden{opacity:.6}
+.frow.adm .ast-flag{font-size:14px;font-weight:900;color:#fff;background:var(--red,#E0282E);border-radius:10px;padding:2px 8px;white-space:nowrap}
+.frow.adm .ast-hidebtn{font-size:14px;padding:5px 10px}
+/* prefers-reduced-motion: the decorative loops stop, confetti is skipped (see applyMotionPref) */
+.reduced *{animation-iteration-count:1!important}
+.reduced .hero .sprite,.reduced #party .member .sprite,.reduced .runners *,.reduced #ceo .rays,.reduced .ceo-cup,.reduced .gold,.reduced .spark,.reduced #fans *,.reduced .fans *,.reduced .pill.pop{animation:none!important;transition:none!important}
+.reduced #confetti,.reduced #ceo-confetti{display:none!important}
