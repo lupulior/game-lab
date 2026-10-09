@@ -43,10 +43,10 @@ function buildHomeV2(){
   const el=(tag,cls,html)=>{ const e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; };
   // centre: name row, next-up, PLAY, chips
   const centre=el('div','',''); centre.id='home-centre';
-  const who=el('div','who',''); const charsBtn=$('#btn-chars'); who.appendChild(charsBtn); charsBtn.classList.add('small');
-  const looks=el('button','btn small purple',T('home.looks')); looks.id='btn-looks'; looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
+  const who=el('div','who',''); const charsBtn=$('#btn-chars'); who.appendChild(charsBtn); charsBtn.classList.add('small'); charsBtn.hidden=true;   // choosing a player lives in the shop (players tab)
+  const looks=el('button','btn purple wide',T('home.looks')); looks.id='btn-looks'; looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
   centre.appendChild(who);
-  const nu=el('div','',''); nu.id='nextup'; centre.appendChild(nu);
+  const nu=el('div','',''); nu.id='nextup'; nu.hidden=true; centre.appendChild(nu);   // the next-up line is gone from the home (NextUp still drives the tab title)
   const play=el('button','btn green',''); play.id='btn-play-big'; play.addEventListener('click', homePlay); centre.appendChild(play);
   const chips=el('div','',''); chips.id='home-chips';
   const lvChip=el('button','chip',''); lvChip.id='chip-level'; lvChip.addEventListener('click', ()=>{ sfx.click(); openLevelSheet(); });
@@ -64,6 +64,7 @@ function buildHomeV2(){
   right.appendChild($('#btn-mp')); right.appendChild($('#btn-top')); right.appendChild($('#btn-friends'));
   const more=el('button','btn blue',T('home.more')); more.id='btn-more'; more.addEventListener('click', ()=>{ sfx.click(); openMoreSheet(); }); right.appendChild(more);
   home.appendChild(right);
+  const fs=$('#btn-fs'), ex=$('#btn-exit'); if(fs && ex && ex.parentNode){ ex.parentNode.insertBefore(fs, ex.nextSibling); }   // fullscreen sits next to exit
   for(const id of ['btn-mp','btn-top','btn-friends']) $('#'+id).classList.remove('small');
   // the "more" sheet gets the rest
   const grid=$('#more-grid');
@@ -125,7 +126,7 @@ function refreshNextUp(){
   const nu=$('#nextup'); if(!nu) return;
   const c=NextUp.best();
   if(!c){ nu.classList.remove('on'); nu.innerHTML=''; return; }
-  nu.classList.add('on'); nu.innerHTML=`<span class="nu-ic">${c.icon||'👉'}</span><span class="nu-text">${esc(c.text)}</span>`;
+  nu.classList.add('on'); nu.hidden=true; nu.innerHTML=`<span class="nu-ic">${c.icon||'👉'}</span><span class="nu-text">${esc(c.text)}</span>`;
   const b=document.createElement('button'); b.className='btn small green'; b.textContent=c.btn||T('home.go'); b.addEventListener('click', ()=>{ sfx.click(); try{ c.action(); }catch(e){} }); nu.appendChild(b);
 }
 NextUp.add(()=>({prio:1, icon:'⚽', text:T('home.playMore'), action:homePlay, claim:false}));

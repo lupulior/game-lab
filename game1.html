@@ -1160,14 +1160,14 @@ body.touch #touch{display:block}
 
 /* ===== 90-home.css ===== */
 /* ===== home v2: hero in the middle with one big PLAY, "today" card on the left, the shop/chests column on the right ===== */
-#home.v2 .hero{top:66px;transform:translateX(-50%) scale(.72);transform-origin:50% 0}
+#home.v2 .hero{top:82px;transform:translateX(-50%) scale(.78);transform-origin:50% 0}
 #home.v2 .hero .btn.small{display:none}
 #home.v2 .home-col.main{display:none}
 #home.v2 .home-col.more{display:none}
 #home.v2 .title{font-size:34px;top:14px}
 #home.v2 .title small{font-size:14px}
 /* centre stack under the hero */
-#home-centre{position:absolute;left:50%;top:364px;transform:translateX(-50%);width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:2}
+#home-centre{position:absolute;left:50%;top:424px;transform:translateX(-50%);width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:2}
 #home-centre .who{display:flex;gap:8px;align-items:center}
 /* #52: every small control is at least 44px tall (thumbs on a scaled-down phone stage); the column ends at ~606px, above the stage bottom */
 #home-centre .who .btn.small{font-size:17px;padding:0 14px;min-height:44px}
@@ -1176,7 +1176,7 @@ body.touch #touch{display:block}
 #nextup .nu-ic{font-size:24px}
 #nextup .nu-text{overflow:hidden;text-overflow:ellipsis}
 #nextup .btn.small{font-size:16px;padding:0 12px;min-height:44px;margin-inline-start:auto}
-#btn-play-big{font-size:46px;padding:8px 60px 12px;border-radius:40px;width:320px;box-sizing:border-box;line-height:1.05;flex-direction:column;gap:0}
+#btn-play-big{font-size:42px;padding:4px 60px 8px;border-radius:40px;width:320px;box-sizing:border-box;line-height:1.05;flex-direction:column;gap:0}
 #btn-play-big small{font-size:15px;font-weight:900;opacity:.9;text-shadow:none;display:block;margin-top:-2px}
 #btn-play-big.pulse{animation:playPulse 1.4s ease-in-out infinite}
 @keyframes playPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
@@ -1232,7 +1232,7 @@ body.touch #touch{display:block}
 #home.v2.inparty #party .member.p0{left:170px;top:112px}
 #home.v2.inparty #party .member.p2{left:60px;top:318px;transform:scale(.8)}
 #home.v2.inparty #party .party-bar{left:30px;bottom:66px}
-#home-title-tag{font-size:16px;font-weight:900;color:#fff;background:rgba(27,42,78,.55);border-radius:12px;padding:2px 12px;margin-top:-6px}
+#home-title-tag{font-size:15px;font-weight:900;color:#fff;background:rgba(27,42,78,.55);border-radius:12px;padding:1px 12px;margin:-4px 0 -2px}
 /* #52 (shared finding): the shop's filter chips and card buttons reach 44px too — additive only, the shop module owns their look */
 .shop-filters .btn.small,.shop-item .btn.small{min-height:44px}
 /* the trophy pill (with the road to the next reward) lives in the bottom-left corner */
@@ -1246,6 +1246,11 @@ body.touch #touch{display:block}
 #home.v2.inparty #party .party-bar{left:30px;bottom:130px}
 #home-trophy{display:flex;flex-direction:column;gap:6px;align-items:stretch}
 #home-trophy .pill.wstreak{background:linear-gradient(#FFE1D6,#FF9A6A);font-size:16px;padding:5px 10px;width:190px;box-sizing:border-box;justify-content:center;white-space:nowrap;overflow:hidden;min-height:0}
+#home-centre{gap:5px}
+#home-centre .who .btn.wide{width:260px;font-size:19px;padding:0 18px;min-height:44px;justify-content:center;box-sizing:border-box}
+#nextup{display:none!important}
+#home.v2 .home-foot .row:first-child:empty{display:none}
+#home.v2 .home-foot .icon-btn.fs{width:44px;height:44px;font-size:22px}
 
 /* ===== 95-onboard.css ===== */
 /* controls card */
@@ -1982,7 +1987,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-10-09.4';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-10-09.5';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -8914,10 +8919,10 @@ function buildHomeV2(){
   const el=(tag,cls,html)=>{ const e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; };
   // centre: name row, next-up, PLAY, chips
   const centre=el('div','',''); centre.id='home-centre';
-  const who=el('div','who',''); const charsBtn=$('#btn-chars'); who.appendChild(charsBtn); charsBtn.classList.add('small');
-  const looks=el('button','btn small purple',T('home.looks')); looks.id='btn-looks'; looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
+  const who=el('div','who',''); const charsBtn=$('#btn-chars'); who.appendChild(charsBtn); charsBtn.classList.add('small'); charsBtn.hidden=true;   // choosing a player lives in the shop (players tab)
+  const looks=el('button','btn purple wide',T('home.looks')); looks.id='btn-looks'; looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
   centre.appendChild(who);
-  const nu=el('div','',''); nu.id='nextup'; centre.appendChild(nu);
+  const nu=el('div','',''); nu.id='nextup'; nu.hidden=true; centre.appendChild(nu);   // the next-up line is gone from the home (NextUp still drives the tab title)
   const play=el('button','btn green',''); play.id='btn-play-big'; play.addEventListener('click', homePlay); centre.appendChild(play);
   const chips=el('div','',''); chips.id='home-chips';
   const lvChip=el('button','chip',''); lvChip.id='chip-level'; lvChip.addEventListener('click', ()=>{ sfx.click(); openLevelSheet(); });
@@ -8935,6 +8940,7 @@ function buildHomeV2(){
   right.appendChild($('#btn-mp')); right.appendChild($('#btn-top')); right.appendChild($('#btn-friends'));
   const more=el('button','btn blue',T('home.more')); more.id='btn-more'; more.addEventListener('click', ()=>{ sfx.click(); openMoreSheet(); }); right.appendChild(more);
   home.appendChild(right);
+  const fs=$('#btn-fs'), ex=$('#btn-exit'); if(fs && ex && ex.parentNode){ ex.parentNode.insertBefore(fs, ex.nextSibling); }   // fullscreen sits next to exit
   for(const id of ['btn-mp','btn-top','btn-friends']) $('#'+id).classList.remove('small');
   // the "more" sheet gets the rest
   const grid=$('#more-grid');
@@ -8996,7 +9002,7 @@ function refreshNextUp(){
   const nu=$('#nextup'); if(!nu) return;
   const c=NextUp.best();
   if(!c){ nu.classList.remove('on'); nu.innerHTML=''; return; }
-  nu.classList.add('on'); nu.innerHTML=`<span class="nu-ic">${c.icon||'👉'}</span><span class="nu-text">${esc(c.text)}</span>`;
+  nu.classList.add('on'); nu.hidden=true; nu.innerHTML=`<span class="nu-ic">${c.icon||'👉'}</span><span class="nu-text">${esc(c.text)}</span>`;
   const b=document.createElement('button'); b.className='btn small green'; b.textContent=c.btn||T('home.go'); b.addEventListener('click', ()=>{ sfx.click(); try{ c.action(); }catch(e){} }); nu.appendChild(b);
 }
 NextUp.add(()=>({prio:1, icon:'⚽', text:T('home.playMore'), action:homePlay, claim:false}));

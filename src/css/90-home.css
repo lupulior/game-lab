@@ -1,12 +1,12 @@
 /* ===== home v2: hero in the middle with one big PLAY, "today" card on the left, the shop/chests column on the right ===== */
-#home.v2 .hero{top:66px;transform:translateX(-50%) scale(.72);transform-origin:50% 0}
+#home.v2 .hero{top:82px;transform:translateX(-50%) scale(.78);transform-origin:50% 0}
 #home.v2 .hero .btn.small{display:none}
 #home.v2 .home-col.main{display:none}
 #home.v2 .home-col.more{display:none}
 #home.v2 .title{font-size:34px;top:14px}
 #home.v2 .title small{font-size:14px}
 /* centre stack under the hero */
-#home-centre{position:absolute;left:50%;top:364px;transform:translateX(-50%);width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:2}
+#home-centre{position:absolute;left:50%;top:424px;transform:translateX(-50%);width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:2}
 #home-centre .who{display:flex;gap:8px;align-items:center}
 /* #52: every small control is at least 44px tall (thumbs on a scaled-down phone stage); the column ends at ~606px, above the stage bottom */
 #home-centre .who .btn.small{font-size:17px;padding:0 14px;min-height:44px}
@@ -15,7 +15,7 @@
 #nextup .nu-ic{font-size:24px}
 #nextup .nu-text{overflow:hidden;text-overflow:ellipsis}
 #nextup .btn.small{font-size:16px;padding:0 12px;min-height:44px;margin-inline-start:auto}
-#btn-play-big{font-size:46px;padding:8px 60px 12px;border-radius:40px;width:320px;box-sizing:border-box;line-height:1.05;flex-direction:column;gap:0}
+#btn-play-big{font-size:42px;padding:4px 60px 8px;border-radius:40px;width:320px;box-sizing:border-box;line-height:1.05;flex-direction:column;gap:0}
 #btn-play-big small{font-size:15px;font-weight:900;opacity:.9;text-shadow:none;display:block;margin-top:-2px}
 #btn-play-big.pulse{animation:playPulse 1.4s ease-in-out infinite}
 @keyframes playPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
@@ -71,7 +71,7 @@
 #home.v2.inparty #party .member.p0{left:170px;top:112px}
 #home.v2.inparty #party .member.p2{left:60px;top:318px;transform:scale(.8)}
 #home.v2.inparty #party .party-bar{left:30px;bottom:66px}
-#home-title-tag{font-size:16px;font-weight:900;color:#fff;background:rgba(27,42,78,.55);border-radius:12px;padding:2px 12px;margin-top:-6px}
+#home-title-tag{font-size:15px;font-weight:900;color:#fff;background:rgba(27,42,78,.55);border-radius:12px;padding:1px 12px;margin:-4px 0 -2px}
 /* #52 (shared finding): the shop's filter chips and card buttons reach 44px too — additive only, the shop module owns their look */
 .shop-filters .btn.small,.shop-item .btn.small{min-height:44px}
 /* the trophy pill (with the road to the next reward) lives in the bottom-left corner */
@@ -85,3 +85,8 @@
 #home.v2.inparty #party .party-bar{left:30px;bottom:130px}
 #home-trophy{display:flex;flex-direction:column;gap:6px;align-items:stretch}
 #home-trophy .pill.wstreak{background:linear-gradient(#FFE1D6,#FF9A6A);font-size:16px;padding:5px 10px;width:190px;box-sizing:border-box;justify-content:center;white-space:nowrap;overflow:hidden;min-height:0}
+#home-centre{gap:5px}
+#home-centre .who .btn.wide{width:260px;font-size:19px;padding:0 18px;min-height:44px;justify-content:center;box-sizing:border-box}
+#nextup{display:none!important}
+#home.v2 .home-foot .row:first-child:empty{display:none}
+#home.v2 .home-foot .icon-btn.fs{width:44px;height:44px;font-size:22px}
