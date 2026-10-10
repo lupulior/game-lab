@@ -13,8 +13,8 @@
 Object.assign(ECON, { slots: {
   n:3,
   hours:{bronze:1, silver:3, gold:8},
-  rate:{bronze:3, silver:3, gold:2.5},          // 💎 per remaining hour …
-  max:{bronze:3, silver:8, gold:18},            // … capped here
+  rate:{bronze:4, silver:4, gold:3.5},          // 💎 per remaining hour …
+  max:{bronze:4, silver:11, gold:24},            // … capped here
   goldPct:5, silverPct:25,                      // a lucky win upgrades the chest
   silverLevel:3, goldLevel:5,                   // a win at this level or above guarantees silver / gold (5 = Impossible, the BOSS)
   fallback:{bronze:80, silver:300, gold:900},   // coins instead of a chest when no chests module exists

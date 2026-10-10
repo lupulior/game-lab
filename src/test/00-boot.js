@@ -5,5 +5,7 @@
   TASSERT('home screen exists', !!document.querySelector('#home'));
   TASSERT('T works', typeof T==='function' && T('btn.play').length>0);
   TLOG('version', typeof GAME_VERSION!=='undefined' ? GAME_VERSION : 'n/a');
+  // every suite after this one plays as a returning player who already has a name (93-name makes the name mandatory before any match; its own suite clears it)
+  if(typeof settings!=='undefined' && !normName(settings.name)){ settings.name='בודק'; saveSettings(); }
   TDONE();
 })();

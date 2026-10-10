@@ -1,12 +1,14 @@
 /* ===== cosmetics catalogue (data only; the shop module sells and renders them, the chests module hands them out) =====
    type: kit (jersey/shorts/socks/stripes/numColor colours merged over the character by playerSVG), boots (colour), ball (pattern + colours),
-   stadium (a PITCH_THEMES entry), celeb (a goal celebration animation id), title (text shown next to the name).
-   price = coins, gems = gem price (then price is 0). rarity: rare | epic | legendary. week: reserved for a future Sunday drop (not sold yet). */
+   stadium (a PITCH_THEMES entry), celeb (a goal celebration animation id), title (text shown next to the name),
+   skin (char: the one character it belongs to; data: any playerSVG field — jersey, shorts, socks, stripes, numColor, hairColor, boots, beard… — merged
+   over that character when it is the selected one; always legendary and gem-priced).
+   price = coins, gems = gem price (then price is 0). rarity: rare | epic | legendary. week: sold from that Sunday after launch (0/absent = from day one). */
 const COSMETICS=[
   {id:'kit_il',     type:'kit', name:['כחול-לבן','Blue & white','أزرق وأبيض','Бело-синяя'], price:600, rarity:'rare', data:{jersey:'#1D6FE8', shorts:'#FFFFFF', socks:'#1D6FE8', stripes:'#FFFFFF', numColor:'#FFFFFF'}, welcome:true},
   {id:'kit_redblack',type:'kit', name:['אדום-שחור','Red & black','أحمر وأسود','Красно-чёрная'], price:600, rarity:'rare', data:{jersey:'#E0282E', shorts:'#111111', socks:'#111111', stripes:'#111111', numColor:'#FFFFFF'}},
   {id:'kit_neon',   type:'kit', name:['ניאון','Neon','نيون','Неон'], price:1200, rarity:'epic', data:{jersey:'#39FF14', shorts:'#111111', socks:'#39FF14', stripes:null, numColor:'#111111'}},
-  {id:'kit_gold',   type:'kit', name:['זהב','Gold foil','ذهبي','Золотая'], price:0, gems:60, rarity:'legendary', data:{jersey:'#F5C542', shorts:'#8A5A00', socks:'#F5C542', stripes:'#FFF3B8', numColor:'#8A5A00'}},
+  {id:'kit_gold',   type:'kit', name:['זהב','Gold foil','ذهبي','Золотая'], price:0, gems:80, rarity:'legendary', data:{jersey:'#F5C542', shorts:'#8A5A00', socks:'#F5C542', stripes:'#FFF3B8', numColor:'#8A5A00'}},
   {id:'kit_purple', type:'kit', name:['פסים סגולים','Purple stripes','خطوط بنفسجية','Фиолетовые полосы'], price:800, rarity:'rare', data:{jersey:'#8E5CF6', shorts:'#FFFFFF', socks:'#8E5CF6', stripes:'#FFFFFF', numColor:'#FFFFFF'}},
   {id:'kit_hoops',  type:'kit', name:['חישוקים ירוקים','Green hoops','أطواق خضراء','Зелёные полосы'], price:800, rarity:'rare', data:{jersey:'#1E9E4A', shorts:'#FFFFFF', socks:'#1E9E4A', stripes:'#FFFFFF', numColor:'#FFFFFF'}},
   {id:'kit_pink',   type:'kit', name:['ורוד','Pink','وردي','Розовая'], price:800, rarity:'rare', data:{jersey:'#FF5FA2', shorts:'#FFFFFF', socks:'#FF5FA2', stripes:null, numColor:'#FFFFFF'}},
@@ -19,7 +21,7 @@ const COSMETICS=[
   {id:'boots_red',  type:'boots', name:['נעליים אדומות','Red boots','حذاء أحمر','Красные бутсы'], price:400, rarity:'rare', data:{boots:'#E0282E'}},
   {id:'ball_il',    type:'ball', name:['כדור דגל ישראל','Israel flag ball','كرة علم إسرائيل','Мяч с флагом'], price:500, rarity:'rare', data:{pattern:'flag', a:'#1D6FE8', b:'#FFFFFF'}},
   {id:'ball_flame', type:'ball', name:['כדור אש','Flame ball','كرة النار','Огненный мяч'], price:1200, rarity:'epic', data:{pattern:'flame', a:'#FF7A3D', b:'#FFD447'}},
-  {id:'ball_galaxy',type:'ball', name:['כדור גלקסיה','Galaxy ball','كرة المجرة','Галактический мяч'], price:0, gems:150, rarity:'legendary', data:{pattern:'galaxy', a:'#2B1B6B', b:'#8E5CF6'}},
+  {id:'ball_galaxy',type:'ball', name:['כדור גלקסיה','Galaxy ball','كرة المجرة','Галактический мяч'], price:0, gems:195, rarity:'legendary', data:{pattern:'galaxy', a:'#2B1B6B', b:'#8E5CF6'}},
   {id:'ball_brown', type:'ball', name:['כדור קלאסי חום','Classic brown ball','كرة بنية كلاسيكية','Классический коричневый'], price:300, rarity:'rare', data:{pattern:'classic', a:'#8B5A2B', b:'#5A3A1E'}},
   {id:'stad_beach', type:'stadium', name:['אצטדיון חוף','Beach stadium','ملعب الشاطئ','Пляжный стадион'], price:1500, rarity:'rare', data:{base:'#E8C97A', stripeA:'#E8C97A', stripeB:'#F2D68E', far:'#D4B46A', track:'#5BC8FF', boards:['#FF7A3D','#3D8BFF','#FFD447','#3FC35F','#FF5FA2','#ffffff']}},
   {id:'stad_snow',  type:'stadium', name:['אצטדיון שלג','Snow stadium','ملعب الثلج','Снежный стадион'], price:2000, rarity:'epic', data:{base:'#EAF4FF', stripeA:'#EAF4FF', stripeB:'#DCEBFA', far:'#C9DCF0', track:'#9FB4CC', boards:['#3D8BFF','#ffffff','#7ED3FF','#1B2A4E','#ffffff','#3D8BFF']}},
@@ -34,6 +36,87 @@ const COSMETICS=[
   {id:'kit_tiger',  type:'kit', name:['טיגריס','Tiger','نمر','Тигровая'], price:1500, rarity:'epic', week:4, data:{jersey:'#F28C28', shorts:'#111111', socks:'#F28C28', stripes:'#111111', numColor:'#111111'}},
   {id:'boots_blue', type:'boots', name:['נעליים כחולות','Blue boots','حذاء أزرق','Синие бутсы'], price:400, rarity:'rare', week:5, data:{boots:'#1D6FE8'}},
   {id:'boots_pink', type:'boots', name:['נעליים ורודות','Pink boots','حذاء وردي','Розовые бутсы'], price:500, rarity:'rare', week:6, data:{boots:'#FF5FA2'}},
+
+  /* ===== the big wardrobe (2026-10-10): plain colour kits, stripes, themed kits, more boots, balls, stadiums, title packs =====
+     about half sell from day one, the rest drop one Sunday after another (week 1..8) */
+  // --- kits: plain colours (rare) ---
+  {id:'kit_red',    type:'kit', name:['אדום','Red','أحمر','Красная'], price:500, rarity:'rare', data:{jersey:'#E0282E', shorts:'#E0282E', socks:'#E0282E', stripes:null, numColor:'#FFFFFF'}},
+  {id:'kit_blue',   type:'kit', name:['כחול','Blue','أزرق','Синяя'], price:500, rarity:'rare', data:{jersey:'#1D6FE8', shorts:'#1D6FE8', socks:'#1D6FE8', stripes:null, numColor:'#FFFFFF'}},
+  {id:'kit_green',  type:'kit', name:['ירוק','Green','أخضر','Зелёная'], price:500, rarity:'rare', week:1, data:{jersey:'#1E9E4A', shorts:'#1E9E4A', socks:'#1E9E4A', stripes:null, numColor:'#FFFFFF'}},
+  {id:'kit_yellow', type:'kit', name:['צהוב','Yellow','أصفر','Жёлтая'], price:500, rarity:'rare', data:{jersey:'#FFD447', shorts:'#1B2A4E', socks:'#FFD447', stripes:null, numColor:'#1B2A4E'}},
+  {id:'kit_orange', type:'kit', name:['כתום','Orange','برتقالي','Оранжевая'], price:500, rarity:'rare', week:2, data:{jersey:'#FF7A3D', shorts:'#FFFFFF', socks:'#FF7A3D', stripes:null, numColor:'#FFFFFF'}},
+  {id:'kit_white',  type:'kit', name:['לבן','White','أبيض','Белая'], price:500, rarity:'rare', data:{jersey:'#FFFFFF', shorts:'#FFFFFF', socks:'#FFFFFF', stripes:null, numColor:'#1B2A4E'}},
+  {id:'kit_black',  type:'kit', name:['שחור','Black','أسود','Чёрная'], price:600, rarity:'rare', week:1, data:{jersey:'#111111', shorts:'#111111', socks:'#111111', stripes:null, numColor:'#FFFFFF'}},
+  // --- kits: stripes and two-colour classics (rare) ---
+  {id:'kit_redwhite', type:'kit', name:['פסים אדום-לבן','Red & white stripes','خطوط حمراء وبيضاء','Красно-белые полосы'], price:700, rarity:'rare', data:{jersey:'#E0282E', shorts:'#FFFFFF', socks:'#E0282E', stripes:'#FFFFFF', numColor:'#FFFFFF'}},
+  {id:'kit_blackwhite', type:'kit', name:['פסים שחור-לבן','Black & white stripes','خطوط سوداء وبيضاء','Чёрно-белые полосы'], price:700, rarity:'rare', week:3, data:{jersey:'#111111', shorts:'#FFFFFF', socks:'#111111', stripes:'#FFFFFF', numColor:'#FFFFFF'}},
+  {id:'kit_claret', type:'kit', name:['בורדו-תכלת','Claret & blue','نبيذي وسماوي','Бордово-голубая'], price:800, rarity:'rare', week:4, data:{jersey:'#7A1F3D', shorts:'#FFFFFF', socks:'#7ED3FF', stripes:'#7ED3FF', numColor:'#FFFFFF'}},
+  {id:'kit_redblue', type:'kit', name:['אדום-כחול','Red & blue','أحمر وأزرق','Красно-синяя'], price:700, rarity:'rare', data:{jersey:'#E0282E', shorts:'#1D6FE8', socks:'#E0282E', stripes:'#1D6FE8', numColor:'#FFFFFF'}},
+  {id:'kit_yellowblue', type:'kit', name:['צהוב-כחול','Yellow & blue','أصفر وأزرق','Жёлто-синяя'], price:600, rarity:'rare', data:{jersey:'#FFD21F', shorts:'#0B2A6B', socks:'#FFD21F', stripes:'#0B2A6B', numColor:'#0B2A6B'}},
+  {id:'kit_il_away', type:'kit', name:['ישראל חוץ','Israel away','إسرائيل خارج الأرض','Израиль гостевая'], price:700, rarity:'rare', data:{jersey:'#FFFFFF', shorts:'#1D6FE8', socks:'#FFFFFF', stripes:'#1D6FE8', numColor:'#1D6FE8'}},
+  // --- kits: themed (epic) ---
+  {id:'kit_camo',   type:'kit', name:['הסוואה','Camo','تمويه','Камуфляж'], price:1000, rarity:'epic', data:{jersey:'#4B5320', shorts:'#3B4420', socks:'#4B5320', stripes:'#2E3B1E', numColor:'#D9D2A8'}},
+  {id:'kit_galaxy', type:'kit', name:['גלקסיה','Galaxy','مجرة','Галактика'], price:1500, rarity:'epic', week:2, data:{jersey:'#2B1B6B', shorts:'#1B1040', socks:'#2B1B6B', stripes:'#8E5CF6', numColor:'#FFD447'}},
+  {id:'kit_retro90', type:'kit', name:['רטרו שנות ה-90','Retro 90s','ريترو التسعينات','Ретро 90-х'], price:1200, rarity:'epic', week:5, data:{jersey:'#00A9A5', shorts:'#111111', socks:'#00A9A5', stripes:'#FF4E9B', numColor:'#FFFFFF'}},
+  {id:'kit_silver', type:'kit', name:['כסף','Silver','فضي','Серебряная'], price:1500, rarity:'epic', week:3, data:{jersey:'#C8CED8', shorts:'#5B6A8A', socks:'#C8CED8', stripes:'#FFFFFF', numColor:'#1B2A4E'}},
+  {id:'kit_lava',   type:'kit', name:['לבה','Lava','حمم','Лава'], price:1300, rarity:'epic', data:{jersey:'#FF3D00', shorts:'#111111', socks:'#FF3D00', stripes:'#FFD447', numColor:'#FFD447'}},
+  {id:'kit_ice',    type:'kit', name:['קרח','Ice','جليد','Ледяная'], price:1200, rarity:'epic', week:6, data:{jersey:'#BFEFFF', shorts:'#FFFFFF', socks:'#BFEFFF', stripes:'#FFFFFF', numColor:'#1B2A4E'}},
+  {id:'kit_rainbow', type:'kit', name:['קשת בענן','Rainbow','قوس قزح','Радуга'], price:1800, rarity:'epic', data:{jersey:'#FF4E9B', shorts:'#FFD447', socks:'#3FC35F', stripes:'#4DA6FF', numColor:'#FFFFFF'}},
+  {id:'kit_neonpink', type:'kit', name:['ניאון ורוד','Pink neon','نيون وردي','Розовый неон'], price:1100, rarity:'epic', week:7, data:{jersey:'#FF2BD6', shorts:'#111111', socks:'#FF2BD6', stripes:null, numColor:'#111111'}},
+  {id:'kit_night',  type:'kit', name:['לילה','Night','ليل','Ночная'], price:1000, rarity:'epic', week:4, data:{jersey:'#1B2A4E', shorts:'#111111', socks:'#1B2A4E', stripes:'#8E5CF6', numColor:'#7ED3FF'}},
+  // --- kits: legendary ---
+  {id:'kit_champion', type:'kit', name:['האלוף','Champion','البطل','Чемпион'], price:3000, rarity:'legendary', week:8, data:{jersey:'#F5C542', shorts:'#111111', socks:'#F5C542', stripes:'#111111', numColor:'#111111'}},
+  {id:'kit_royal',  type:'kit', name:['מלכותי','Royal','ملكي','Королевская'], price:0, gems:65, rarity:'legendary', data:{jersey:'#5B2BD6', shorts:'#2B1B6B', socks:'#F5C542', stripes:'#F5C542', numColor:'#F5C542'}},
+  {id:'kit_diamond', type:'kit', name:['יהלום','Diamond','ماسي','Бриллиантовая'], price:0, gems:70, rarity:'legendary', week:5, data:{jersey:'#7ED3FF', shorts:'#1B2A4E', socks:'#7ED3FF', stripes:'#FFFFFF', numColor:'#1B2A4E'}},
+  // --- boots ---
+  {id:'boots_purple', type:'boots', name:['נעליים סגולות','Purple boots','حذاء بنفسجي','Фиолетовые бутсы'], price:400, rarity:'rare', data:{boots:'#8E5CF6'}},
+  {id:'boots_orange', type:'boots', name:['נעליים כתומות','Orange boots','حذاء برتقالي','Оранжевые бутсы'], price:400, rarity:'rare', week:1, data:{boots:'#FF7A3D'}},
+  {id:'boots_yellow', type:'boots', name:['נעליים צהובות','Yellow boots','حذاء أصفر','Жёлтые бутсы'], price:400, rarity:'rare', data:{boots:'#FFD447'}},
+  {id:'boots_mint', type:'boots', name:['נעלי מנטה','Mint boots','حذاء نعناعي','Мятные бутсы'], price:450, rarity:'rare', week:3, data:{boots:'#7FE3C4'}},
+  {id:'boots_sky',  type:'boots', name:['נעלי תכלת','Sky boots','حذاء سماوي','Голубые бутсы'], price:450, rarity:'rare', data:{boots:'#7ED3FF'}},
+  {id:'boots_silver', type:'boots', name:['נעלי כסף','Silver boots','حذاء فضي','Серебряные бутсы'], price:900, rarity:'epic', week:2, data:{boots:'#C8CED8'}},
+  {id:'boots_lava', type:'boots', name:['נעלי לבה','Lava boots','حذاء الحمم','Лавовые бутсы'], price:1000, rarity:'epic', data:{boots:'#FF3D00'}},
+  {id:'boots_galaxy', type:'boots', name:['נעלי גלקסיה','Galaxy boots','حذاء المجرة','Галактические бутсы'], price:0, gems:50, rarity:'legendary', week:4, data:{boots:'#5B2BD6'}},
+  {id:'boots_diamond', type:'boots', name:['נעלי יהלום','Diamond boots','حذاء ماسي','Бриллиантовые бутсы'], price:0, gems:60, rarity:'legendary', data:{boots:'#7ED3FF'}},
+  // --- balls (patterns: classic / flag / flame / galaxy) ---
+  {id:'ball_neon',  type:'ball', name:['כדור ניאון','Neon ball','كرة نيون','Неоновый мяч'], price:400, rarity:'rare', data:{pattern:'classic', a:'#39FF14', b:'#111111'}},
+  {id:'ball_pink',  type:'ball', name:['כדור ורוד','Pink ball','كرة وردية','Розовый мяч'], price:400, rarity:'rare', week:1, data:{pattern:'classic', a:'#FF5FA2', b:'#FFFFFF'}},
+  {id:'ball_rainbow', type:'ball', name:['כדור קשת','Rainbow ball','كرة قوس قزح','Радужный мяч'], price:600, rarity:'rare', data:{pattern:'classic', a:'#FF4E9B', b:'#4DA6FF'}},
+  {id:'ball_blackgold', type:'ball', name:['כדור שחור-זהב','Black & gold ball','كرة سوداء وذهبية','Чёрно-золотой мяч'], price:900, rarity:'epic', week:2, data:{pattern:'classic', a:'#111111', b:'#F5C542'}},
+  {id:'ball_ice',   type:'ball', name:['כדור קרח','Ice ball','كرة الجليد','Ледяной мяч'], price:1200, rarity:'epic', week:3, data:{pattern:'flame', a:'#7ED3FF', b:'#EAF4FF'}},
+  {id:'ball_lava',  type:'ball', name:['כדור לבה','Lava ball','كرة الحمم','Лавовый мяч'], price:1300, rarity:'epic', data:{pattern:'flame', a:'#FF3D00', b:'#1A0A00'}},
+  {id:'ball_il_gold', type:'ball', name:['כדור ישראל זהב','Israel gold ball','كرة إسرائيل الذهبية','Золотой мяч Израиля'], price:1000, rarity:'epic', data:{pattern:'flag', a:'#F5C542', b:'#FFFFFF'}},
+  {id:'ball_gold',  type:'ball', name:['כדור זהב','Gold ball','كرة ذهبية','Золотой мяч'], price:0, gems:60, rarity:'legendary', week:6, data:{pattern:'classic', a:'#F5C542', b:'#8A5A00'}},
+  {id:'ball_nebula', type:'ball', name:['כדור ערפילית','Nebula ball','كرة السديم','Мяч-туманность'], price:0, gems:85, rarity:'legendary', data:{pattern:'galaxy', a:'#FF4E9B', b:'#FFD447'}},
+  // --- stadiums (each becomes a PITCH_THEMES entry) ---
+  {id:'stad_jungle', type:'stadium', name:['אצטדיון ג\'ונגל','Jungle stadium','ملعب الغابة','Стадион в джунглях'], price:1500, rarity:'rare', data:{base:'#1E7A3A', stripeA:'#1E7A3A', stripeB:'#27904A', far:'#145228', track:'#6B4A2B', boards:['#3FC35F','#FFD447','#FF7A3D','#8B5A2B','#ffffff']}},
+  {id:'stad_ocean', type:'stadium', name:['אצטדיון אוקיינוס','Ocean stadium','ملعب المحيط','Океанский стадион'], price:2000, rarity:'epic', week:1, data:{base:'#1D8FA8', stripeA:'#1D8FA8', stripeB:'#25A3BE', far:'#136C80', track:'#E8C97A', boards:['#7ED3FF','#ffffff','#1D6FE8','#00D3A7']}},
+  {id:'stad_candy', type:'stadium', name:['אצטדיון ממתקים','Candy stadium','ملعب الحلوى','Конфетный стадион'], price:2200, rarity:'epic', week:5, data:{base:'#FFB7E0', stripeA:'#FFB7E0', stripeB:'#FFC9E8', far:'#F58FC8', track:'#7ED3FF', boards:['#FF5FA2','#7ED3FF','#FFD447','#ffffff','#3FC35F']}},
+  {id:'stad_volcano', type:'stadium', name:['אצטדיון הר געש','Volcano stadium','ملعب البركان','Вулканический стадион'], price:2500, rarity:'epic', data:{base:'#3A2A2A', stripeA:'#3A2A2A', stripeB:'#463333', far:'#2A1D1D', track:'#FF3D00', boards:['#FF3D00','#FFD447','#111111','#FF7A3D'], night:true}},
+  {id:'stad_neon',  type:'stadium', name:['אצטדיון ניאון','Neon stadium','ملعب النيون','Неоновый стадион'], price:4500, rarity:'legendary', week:7, data:{base:'#101624', stripeA:'#101624', stripeB:'#161E30', far:'#0A0F1C', track:'#39FF14', boards:['#39FF14','#FF2BD6','#00D3A7','#FFD447'], night:true}},
+  {id:'stad_gold',  type:'stadium', name:['אצטדיון זהב','Gold stadium','ملعب ذهبي','Золотой стадион'], price:0, gems:90, rarity:'legendary', data:{base:'#C9A227', stripeA:'#C9A227', stripeB:'#D9B43A', far:'#A8861C', track:'#5A3A1E', boards:['#F5C542','#111111','#FFF3B8','#111111'], night:true}},
+  // --- title packs ---
+  {id:'title_pack3',type:'title', name:['תארים: האריה / הנשר / הכריש','Titles: Lion / Eagle / Shark','ألقاب: الأسد / النسر / القرش','Титулы: Лев / Орёл / Акула'], price:400, rarity:'rare', data:{titles:[['🦁 האריה','🦁 The Lion','🦁 الأسد','🦁 Лев'],['🦅 הנשר','🦅 The Eagle','🦅 النسر','🦅 Орёл'],['🦈 הכריש','🦈 The Shark','🦈 القرش','🦈 Акула']]}},
+  {id:'title_pack4',type:'title', name:['תארים: הברק / האש / הקרח','Titles: Lightning / Fire / Ice','ألقاب: البرق / النار / الجليد','Титулы: Молния / Огонь / Лёд'], price:500, rarity:'rare', week:1, data:{titles:[['⚡ הברק','⚡ Lightning','⚡ البرق','⚡ Молния'],['🔥 האש','🔥 The Fire','🔥 النار','🔥 Огонь'],['❄️ הקרח','❄️ The Ice','❄️ الجليد','❄️ Лёд']]}},
+  {id:'title_pack5',type:'title', name:['תארים: האלוף / המנצח / היהלום','Titles: Champion / Winner / Diamond','ألقاب: البطل / الفائز / الماسة','Титулы: Чемпион / Победитель / Бриллиант'], price:900, rarity:'epic', week:2, data:{titles:[['🏆 האלוף','🏆 The Champion','🏆 البطل','🏆 Чемпион'],['🥇 המנצח','🥇 The Winner','🥇 الفائز','🥇 Победитель'],['💎 היהלום','💎 The Diamond','💎 الماسة','💎 Бриллиант']]}},
+  {id:'title_pack6',type:'title', name:['תארים: הישראלי / הצבר / מהחוף','Titles: Israeli / Sabra / Beach boy','ألقاب: الإسرائيلي / الصبّار / ابن الشاطئ','Титулы: Израильтянин / Сабра / С пляжа'], price:500, rarity:'rare', data:{titles:[['🇮🇱 הישראלי','🇮🇱 The Israeli','🇮🇱 الإسرائيلي','🇮🇱 Израильтянин'],['🌵 הצבר','🌵 The Sabra','🌵 الصبّار','🌵 Сабра'],['🏖️ מהחוף','🏖️ Beach boy','🏖️ ابن الشاطئ','🏖️ С пляжа']]}},
+  {id:'title_pack7',type:'title', name:['תארים: החייזר / הרובוט / גיבור-העל','Titles: Alien / Robot / Superhero','ألقاب: الفضائي / الروبوت / البطل الخارق','Титулы: Пришелец / Робот / Супергерой'], price:0, gems:40, rarity:'legendary', week:8, data:{titles:[['👽 החייזר','👽 The Alien','👽 الفضائي','👽 Пришелец'],['🤖 הרובוט','🤖 The Robot','🤖 الروبوت','🤖 Робот'],['🦸 גיבור-העל','🦸 Superhero','🦸 البطل الخارق','🦸 Супергерой']]}},
+
+  /* ===== character skins: one character each, a whole new look (any playerSVG field), legendary, gems only ===== */
+  {id:'skin_messi_gold',   type:'skin', char:'messi',   name:['מסי זהב','Gold Messi','ميسي الذهبي','Золотой Месси'], price:0, gems:90, rarity:'legendary', data:{jersey:'#F5C542', stripes:'#FFF3B8', shorts:'#8A5A00', socks:'#F5C542', numColor:'#8A5A00', hairColor:'#D9A300', beardColor:'#B8860B', boots:'#F5C542'}},
+  {id:'skin_ronaldo_neon', type:'skin', char:'ronaldo', name:['רונאלדו ניאון','Neon Ronaldo','رونالدو نيون','Неоновый Роналду'], price:0, gems:80, rarity:'legendary', data:{jersey:'#39FF14', stripes:null, shorts:'#111111', socks:'#39FF14', numColor:'#111111', hairColor:'#39FF14', boots:'#39FF14'}},
+  {id:'skin_mbappe_space', type:'skin', char:'mbappe',  name:['אמבפה חלל','Space Mbappé','مبابي الفضاء','Космический Мбаппе'], price:0, gems:85, rarity:'legendary', data:{jersey:'#2B1B6B', stripes:'#8E5CF6', shorts:'#1B1040', socks:'#2B1B6B', numColor:'#FFD447', hairColor:'#8E5CF6', boots:'#8E5CF6'}},
+  {id:'skin_neymar_rainbow', type:'skin', char:'neymar', name:['ניימאר קשת','Rainbow Neymar','نيمار قوس قزح','Радужный Неймар'], price:0, gems:80, rarity:'legendary', data:{jersey:'#FF4E9B', stripes:'#4DA6FF', shorts:'#FFD447', socks:'#3FC35F', numColor:'#FFFFFF', hairColor:'#FF4E9B', hairSide:'#4DA6FF', boots:'#FFD447'}},
+  {id:'skin_haaland_viking', type:'skin', char:'haaland', name:['הולאנד ויקינג','Viking Haaland','هالاند الفايكنغ','Холанд-викинг'], price:0, gems:75, rarity:'legendary', week:1, data:{jersey:'#8B0000', stripes:'#F5C542', shorts:'#111111', socks:'#8B0000', numColor:'#F5C542', beard:true, beardColor:'#C9A84A', boots:'#5A3A1E'}},
+  {id:'skin_salah_pharaoh', type:'skin', char:'salah',   name:['סלאח פרעה','Pharaoh Salah','صلاح الفرعون','Салах-фараон'], price:0, gems:70, rarity:'legendary', week:2, data:{jersey:'#F5C542', stripes:'#1D6FE8', shorts:'#1D6FE8', socks:'#F5C542', numColor:'#1D6FE8', boots:'#F5C542'}},
+  {id:'skin_yamal_fire',   type:'skin', char:'yamal',   name:['יאמאל אש','Fire Yamal','يامال النار','Огненный Ямаль'], price:0, gems:75, rarity:'legendary', data:{jersey:'#FF3D00', stripes:'#FFD447', shorts:'#111111', socks:'#FF3D00', numColor:'#FFD447', hairColor:'#FF7A3D', boots:'#FF3D00'}},
+  {id:'skin_vini_samba',   type:'skin', char:'vini',    name:['ויני סמבה','Samba Vini','فيني سامبا','Самба Вини'], price:0, gems:65, rarity:'legendary', week:3, data:{jersey:'#FFDC00', stripes:'#009C3B', shorts:'#1A3DA8', socks:'#009C3B', numColor:'#009C3B', boots:'#FFDC00'}},
+  {id:'skin_bellingham_ice', type:'skin', char:'bellingham', name:['בלינגהאם קרח','Ice Bellingham','بيلينغهام الجليد','Ледяной Беллингем'], price:0, gems:70, rarity:'legendary', week:4, data:{jersey:'#BFEFFF', stripes:'#FFFFFF', shorts:'#1B2A4E', socks:'#BFEFFF', numColor:'#1B2A4E', hairColor:'#7ED3FF', boots:'#7ED3FF'}},
+  {id:'skin_pele_king',    type:'skin', char:'pele',    name:['פלה המלך','King Pelé','بيليه الملك','Король Пеле'], price:0, gems:90, rarity:'legendary', data:{jersey:'#FFFFFF', stripes:'#F5C542', shorts:'#F5C542', socks:'#FFFFFF', numColor:'#F5C542', boots:'#F5C542'}},
+  {id:'skin_zidane_galaxy', type:'skin', char:'zidane', name:['זידאן גלקסיה','Galaxy Zidane','زيدان المجرة','Галактический Зидан'], price:0, gems:85, rarity:'legendary', week:5, data:{jersey:'#1B1040', stripes:'#00D3A7', shorts:'#2B1B6B', socks:'#1B1040', numColor:'#00D3A7', boots:'#00D3A7'}},
+  {id:'skin_ronaldinho_carnival', type:'skin', char:'ronaldinho', name:['רונאלדיניו קרנבל','Carnival Ronaldinho','رونالدينيو الكرنفال','Карнавальный Роналдиньо'], price:0, gems:80, rarity:'legendary', week:6, data:{jersey:'#FF5FA2', stripes:'#FFD447', shorts:'#3FC35F', socks:'#FF7A3D', numColor:'#FFFFFF', bandColor:'#FFD447', boots:'#FF5FA2'}},
+  {id:'skin_zahavi_gold',  type:'skin', char:'zahavi',  name:['זהבי זהב','Gold Zahavi','زهافي الذهبي','Золотой Захави'], price:0, gems:60, rarity:'legendary', data:{jersey:'#F5C542', stripes:'#111111', shorts:'#111111', socks:'#F5C542', numColor:'#111111', boots:'#F5C542'}},
+  {id:'skin_solomon_neon', type:'skin', char:'solomon', name:['סולומון ניאון','Neon Solomon','سولومون نيون','Неоновый Соломон'], price:0, gems:60, rarity:'legendary', week:7, data:{jersey:'#FF2BD6', stripes:'#39FF14', shorts:'#111111', socks:'#FF2BD6', numColor:'#39FF14', boots:'#39FF14'}},
 ];
 const cosById = id => COSMETICS.find(c=>c.id===id);
 const cosName = c => { const i=({he:0,en:1,ar:2,ru:3})[lang]||0; return c.name[i]||c.name[0]; };

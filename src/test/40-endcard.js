@@ -20,9 +20,7 @@
   TASSERT('breakdown lists every part', last.pay.parts.length>=3 && last.pay.parts.every(p=>partsTxt.includes(T(p[0])) && partsTxt.includes('+'+fmtNum(p[1]))));
   TASSERT('win parts include win + goals + clean sheet', partsTxt.includes(T('end.pWin')) && partsTxt.includes(T('end.pGoals')) && partsTxt.includes(T('end.pClean')));
   TASSERT('multiplier chip only when mult>1', (last.pay.mult>1) === partsTxt.includes('×'));
-  TASSERT('daily cap bar shows today', !!$('#endcard-cap-bar') && $('.ec-cap').textContent.includes(fmtNum(dayCounter('coinDay').n)) && $('.ec-cap').textContent.includes(fmtNum(coinCapToday())));
-  const capW=parseInt($('#endcard-cap-bar>i').style.width)||0;
-  TASSERT('cap bar width = used %', capW===Math.min(100, Math.round(dayCounter('coinDay').n/coinCapToday()*100)));
+  TASSERT('no daily cap row while the cap is infinite (the default)', !isFinite(coinCapToday()) && !$('#endcard-cap-bar') && !document.querySelector('#endcard-earn .ec-cap') && !/XP/.test($('#endcard-earn').textContent));
   TASSERT('XP bar at level progress', !!$('#endcard-xp-bar') && parseInt($('#endcard-xp-bar>i').style.width)===levelProgress().pct && $('#endcard-xp').textContent==='⭐ +'+last.earn.xp);
   TASSERT('trophy line', !!$('#endcard-trophies') && $('#endcard-trophies').textContent.includes('+'+last.trophies));
   TASSERT('key line (medium win pays a key)', last.earn.keys===1 && !!$('#endcard-keys'));
@@ -33,6 +31,13 @@
   TASSERT('button labels localized', $('#btn-ec-more').textContent===T('ec.more') && $('#btn-ec-again').textContent===T('ec.again'));
   TASSERT('buttons tall enough for thumbs', $('#btn-ec-more').offsetHeight>=44 && $('#btn-ec-home').offsetHeight>=44);
   TASSERT('panel fits the stage', $('#end .panel').getBoundingClientRect().height <= $('#stage').getBoundingClientRect().height+1);
+  // with a finite cap (set for these lines only) the cap bar is back: today's count, used %
+  { const cap0=[ECON.capCoins, ECON.capSunday]; ECON.capCoins=600; ECON.capSunday=900; endcardRender(last); endcardSkip(); await wait(30);
+    TASSERT('finite cap → daily cap bar shows today', !!$('#endcard-cap-bar') && $('.ec-cap').textContent.includes(fmtNum(dayCounter('coinDay').n)) && $('.ec-cap').textContent.includes(fmtNum(coinCapToday())));
+    const capW=parseInt($('#endcard-cap-bar>i').style.width)||0;
+    TASSERT('cap bar width = used %', capW===Math.min(100, Math.round(dayCounter('coinDay').n/coinCapToday()*100)));
+    ECON.capCoins=cap0[0]; ECON.capSunday=cap0[1]; endcardRender(last); endcardSkip(); await wait(30);
+    TASSERT('cap back to Infinity → the row is gone again', !$('#endcard-cap-bar')); }
 
   // ---- ▶ more: a NEW opponent, same level
   const prevOp=opChar, prevLv=level.i;

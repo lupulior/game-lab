@@ -7,9 +7,9 @@ const ECON = {
   formats: { quick:{time:90, target:2, mult:1, golden:30}, classic:{time:240, target:0, mult:2.5, golden:0}, golden:{time:120, target:1, mult:1, golden:0} },
   win:[20,30,40,50,60,80], online:50, draw:10, loss:8, goal:3, clean:10, threeStar:5, goldenBonus:10,
   xpWin:[10,15,20,30,40,60], xpOnline:25, xpDraw:5, xpLoss:3, xpGoal:2, xpMotd:30,
-  matchMax:250, capCoins:600, capSunday:900, overCapPay:5,
+  matchMax:Infinity, capCoins:Infinity, capSunday:Infinity, overCapPay:5,   // no daily coin maximum (the owner's wish); a finite value brings the cap back
   keysPerDay:3, keyMinLevel:1, keyCap:10,
-  gemWeekCap:60,
+  gemWeekCap:Infinity,
   levelCoins:100, level5Gems:5,
   achMult:5, achGems:{win_master:5, cup_master:5, win_impossible:10},
   chalGems:2, chalXP:100,
@@ -29,7 +29,13 @@ const Hooks = {
 function I18N_ADD(o){ Object.assign(I18N_RAW, o); }          // {key:[he,en,ar,ru]}
 const _coreApplyLang=applyLang; applyLang=function(){ if(!window.MODS_READY) return; return _coreApplyLang.apply(this, arguments); };   // modules call applyLang() at load; only the init line's pass does real work
 function STATIC_ADD(o){ Object.assign(STATIC_I18N, o); }     // {'#selector':'key'}
-const fmtNum = n => Number(n||0).toLocaleString('en-US');
+/* numbers for kids: below a million the usual 12,345; from a million "1.5 מיליון" / "100 מיליון" / "2 מיליארד" (one decimal at most, never ".0").
+   fmtNum → plain text; fmtNumHTML → the word in <small class="mag"> so it stays small inside a pill (safe to inject: only digits and an escaped word) */
+function fmtMag(n){ let v=Math.round(n/1e5)/10, key='num.million'; if(v>=1000){ v=Math.round(n/1e8)/10; key='num.billion'; } return {num:v.toLocaleString('en-US',{maximumFractionDigits:1}), word:T(key)}; }
+function fmtNum(n){ n=Number(n)||0; if(!isFinite(n)) return '∞'; const neg=n<0; n=Math.abs(n); if(n<1e6) return (neg?'-':'')+n.toLocaleString('en-US'); const m=fmtMag(n); return (neg?'-':'')+m.num+' '+m.word; }
+function fmtNumHTML(n){ n=Number(n)||0; if(!isFinite(n)) return '∞'; const neg=n<0; n=Math.abs(n); if(n<1e6) return (neg?'-':'')+n.toLocaleString('en-US'); const m=fmtMag(n); return (neg?'-':'')+m.num+'<small class="mag">'+esc(m.word)+'</small>'; }
+/* a wallet field as a whole number: never `|0` (that wraps above 2,147,483,647 — a wallet may hold any amount) */
+const walletNum = v => { v=Math.floor(Number(v)); return Number.isFinite(v) ? v : 0; };
 const pad2 = n => (n<10?'0':'')+n;
 
 /* ----- server-synced time: dayKey/weekKey use it, so changing the phone clock does not hand out rewards ----- */
@@ -49,19 +55,19 @@ function levelProgress(){ const n=levelOf(prog.xpTotal|0), a=xpForLevel(n), b=xp
 let matchEarn=null;                                                      // while a match runs: rewards are collected here and shown on the end card, not toasted
 const inMatch = () => ['play','celebrate','replay','countdown','penalty','corner','end'].includes(state);   // 'end': the result card is still collecting
 function addCoins(n, why){
-  n=Math.round(n); if(!(n>0)) return 0;
-  prog.coins=(prog.coins|0)+n; saveProg();
+  n=Math.round(n); if(!(n>0) || !isFinite(n)) return 0;                  // no maximum: the wallet grows without a clamp (only a finite, positive amount is a real gift)
+  prog.coins=walletNum(prog.coins)+n; saveProg();
   if(matchEarn && inMatch()) matchEarn.coins+=n; else toast(T('coins.gain', fmtNum(n)),'xp');
   updateXpBadge(); Hooks.emit('coins', n, why||''); return n;
 }
-function spendCoins(n){ n=Math.round(n); if((prog.coins|0)<n) return false; prog.coins-=n; saveProg(); updateXpBadge(); Hooks.emit('spend', n); return true; }
+function spendCoins(n){ n=Math.round(n); if(walletNum(prog.coins)<n) return false; prog.coins=walletNum(prog.coins)-n; saveProg(); updateXpBadge(); Hooks.emit('spend', n); return true; }
 function addGems(n, why){
-  n=Math.round(n); if(!(n>0)) return 0;
-  prog.gems=(prog.gems|0)+n; saveProg();
-  if(matchEarn && inMatch()) matchEarn.gems+=n; else toast(T('gems.gain', n),'ach');
+  n=Math.round(n); if(!(n>0) || !isFinite(n)) return 0;
+  prog.gems=walletNum(prog.gems)+n; saveProg();
+  if(matchEarn && inMatch()) matchEarn.gems+=n; else toast(T('gems.gain', fmtNum(n)),'ach');
   updateXpBadge(); Hooks.emit('gems', n, why||''); return n;
 }
-function spendGems(n){ n=Math.round(n); if((prog.gems|0)<n) return false; prog.gems-=n; saveProg(); updateXpBadge(); return true; }
+function spendGems(n){ n=Math.round(n); if(walletNum(prog.gems)<n) return false; prog.gems=walletNum(prog.gems)-n; saveProg(); updateXpBadge(); return true; }
 function addKeys(n, why){
   n=Math.round(n); if(!(n>0)) return 0;
   const room=Math.max(0, ECON.keyCap-(prog.keys|0)); n=Math.min(n, room); if(!n){ toast(T('keys.full'),'warn'); return 0; }
@@ -77,8 +83,8 @@ function addXP(n, silent){
   const L=levelOf(prog.xpTotal);
   while((prog.lvClaimed|0)<L){
     prog.lvClaimed=(prog.lvClaimed|0)+1; const lv=prog.lvClaimed+1;
-    const coins=ECON.levelCoins*lv; prog.coins=(prog.coins|0)+coins; if(matchEarn && inMatch()) matchEarn.coins+=coins;
-    if(lv%5===0){ prog.gems=(prog.gems|0)+ECON.level5Gems; if(matchEarn && inMatch()) matchEarn.gems+=ECON.level5Gems; }
+    const coins=ECON.levelCoins*lv; prog.coins=walletNum(prog.coins)+coins; if(matchEarn && inMatch()) matchEarn.coins+=coins;
+    if(lv%5===0){ prog.gems=walletNum(prog.gems)+ECON.level5Gems; if(matchEarn && inMatch()) matchEarn.gems+=ECON.level5Gems; }
     const show=()=>{ toast(T('lvl.up', lv, fmtNum(coins)),'ach'); try{ sfx.win(); }catch(e){} };
     if(matchEarn && inMatch()) matchEarn.levelUps.push(lv); else setTimeout(show, 300);
     Hooks.emit('levelUp', lv);
@@ -89,7 +95,7 @@ function addXP(n, silent){
 function dayCounter(field){ const k=dayKey(); if(!prog[field] || prog[field].key!==k) prog[field]={key:k, n:0}; return prog[field]; }
 function weekCounter(field){ const k=weekKey(); if(!prog[field] || prog[field].key!==k) prog[field]={key:k, n:0}; return prog[field]; }
 function coinCapToday(){ return isSunday() ? ECON.capSunday : ECON.capCoins; }
-function coinCapLeft(){ return Math.max(0, coinCapToday()-dayCounter('coinDay').n); }
+function coinCapLeft(){ const cap=coinCapToday(); if(!isFinite(cap)) return Infinity; return Math.max(0, cap-dayCounter('coinDay').n); }   // Infinity = no cap today (never NaN)
 
 /* ----- match formats ----- */
 let matchFmt='classic', overtime=false, matchDay=null, matchSunday=null;   // matchDay/matchSunday: the server day the running match started on
@@ -120,9 +126,9 @@ function payout(o){
   const sunday = (typeof matchSunday!=='undefined' && matchSunday!=null) ? matchSunday : isSunday();
   const mult = Math.max(o.motd ? ECON.motdMult : 1, sunday ? ECON.sundayMult : 1, (typeof eventMult==='function' ? eventMult() : 1));
   let coins=Math.round(base*(1+bonus)*mult);
-  coins=Math.min(coins, ECON.matchMax);
-  const left=coinCapLeft(); let capped=false;
-  if(coins>left){ capped=true; coins = left>0 ? left : ECON.overCapPay; }
+  if(isFinite(ECON.matchMax)) coins=Math.min(coins, ECON.matchMax);
+  const left=coinCapLeft(); let capped=false;                               // left is Infinity while there is no daily cap: nothing is clamped
+  if(isFinite(left) && coins>left){ capped=true; coins = left>0 ? left : ECON.overCapPay; }
   let xp = o.outcome==='win' ? (o.online ? ECON.xpOnline : ECON.xpWin[lvl]) : o.outcome==='draw' ? ECON.xpDraw : ECON.xpLoss;
   xp += (o.goals|0)*ECON.xpGoal; if(o.motd) xp+=ECON.xpMotd;
   const kd=dayCounter('keyDay');
@@ -221,6 +227,7 @@ I18N_ADD({
  'welcome.text':['ה-XP שלך הפך למטבעות 🪙 (אותו מספר!). עכשיו יש גם יהלומים 💎, מפתחות 🔑 ותיבות. הנה מתנה:','Your XP became coins 🪙 (same number!). There are gems 💎, keys 🔑 and chests now. Here is a gift:','تحولت نقاطك إلى عملات 🪙 (نفس الرقم!). الآن توجد جواهر 💎 ومفاتيح 🔑 وصناديق. إليك هدية:','Твой опыт стал монетами 🪙 (то же число!). Теперь есть алмазы 💎, ключи 🔑 и сундуки. Вот подарок:'],
  'welcome.take':['🎁 קח את המתנה','🎁 Take the gift','🎁 خذ الهدية','🎁 Забрать подарок'],
  'cap.today':['היום: {0}/{1} 🪙','Today: {0}/{1} 🪙','اليوم: {0}/{1} 🪙','Сегодня: {0}/{1} 🪙'],
+ 'num.million':['מיליון','million','مليون','млн'], 'num.billion':['מיליארד','billion','مليار','млрд'],
 });
 
 /* ----- the ball and the golden-goal flash ----- */

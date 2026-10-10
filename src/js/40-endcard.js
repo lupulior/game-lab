@@ -120,10 +120,13 @@ function endcardRender(info){
       if(pay && pay.mult>1) chips+=endcardChip(endcardMultLabel(pay.mult, ENDCARD.motd), 'ec-mult');
       const span=document.createElement('span'); span.id='endcard-parts'; span.innerHTML=chips; r.appendChild(span);
       rows.push(r);
-      // the daily cap bar
-      const dc=dayCounter('coinDay'), cap=coinCapToday(), pct=Math.min(100, Math.round(dc.n/cap*100));
-      const c=endcardRow('ec-cap'+(dc.n>=cap ? ' ec-full' : ''), '<span class="ec-bar" id="endcard-cap-bar"><i></i></span><span class="ec-small">'+esc(T('cap.today', fmtNum(dc.n), fmtNum(cap)))+'</span>'+(pay && pay.capped ? '<span class="ec-capped" id="endcard-capped">'+esc(T('end.capped'))+'</span>' : ''));
-      c._bar=[c.querySelector('.ec-bar>i'), pct]; rows.push(c);
+      // the daily cap bar — only while a daily cap exists (ECON.capCoins is Infinity by default: no row at all)
+      const dc=dayCounter('coinDay'), cap=coinCapToday();
+      if(isFinite(cap) && cap>0){
+        const pct=Math.min(100, Math.round(dc.n/cap*100));
+        const c=endcardRow('ec-cap'+(dc.n>=cap ? ' ec-full' : ''), '<span class="ec-bar" id="endcard-cap-bar"><i></i></span><span class="ec-small">'+esc(T('cap.today', fmtNum(dc.n), fmtNum(cap)))+'</span>'+(pay && pay.capped ? '<span class="ec-capped" id="endcard-capped">'+esc(T('end.capped'))+'</span>' : ''));
+        c._bar=[c.querySelector('.ec-bar>i'), pct]; rows.push(c);
+      }
     }
     // ⭐ XP bar + level-ups
     const lp=levelProgress(), ups=(e.levelUps||[]);

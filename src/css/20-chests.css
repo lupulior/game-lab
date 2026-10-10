@@ -37,7 +37,17 @@
 
 /* ===== the drop: full stage ===== */
 #chest-drop{position:absolute;inset:0;z-index:46;overflow:hidden;user-select:none}
-#chest-drop .cd-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,#4a5a8a,#1B2A4E 70%);transition:background 1.2s}
+/* the whole drop shakes on every "⬆ שדרוג!" moment (the background overscans 24px so the shake never shows the edges) */
+#chest-drop.cd-shake{animation:cdShake .38s ease-in-out}
+#chest-drop.cd-shake.big{animation:cdShakeBig .5s ease-in-out}
+@keyframes cdShake{0%,100%{transform:none}15%{transform:translate(-9px,5px) rotate(-.5deg)}30%{transform:translate(9px,-5px) rotate(.5deg)}45%{transform:translate(-7px,3px)}60%{transform:translate(7px,-3px)}75%{transform:translate(-4px,2px)}90%{transform:translate(3px,-1px)}}
+@keyframes cdShakeBig{0%,100%{transform:none}12%{transform:translate(-16px,9px) rotate(-1deg)}24%{transform:translate(16px,-9px) rotate(1deg)}36%{transform:translate(-13px,6px)}48%{transform:translate(13px,-6px)}60%{transform:translate(-9px,4px)}72%{transform:translate(9px,-4px)}84%{transform:translate(-4px,2px)}}
+/* the background SNAPS to the new rarity colour (no transition: a gradient transition only delays the flip by half its time) */
+#chest-drop .cd-bg{position:absolute;inset:-24px;background:radial-gradient(circle at 50% 42%,#4a5a8a,#1B2A4E 70%)}
+/* white flash over everything, 250 ms, on every upgrade */
+#chest-drop .cd-flash{position:absolute;inset:-24px;background:#fff;opacity:0;pointer-events:none;z-index:5}
+#chest-drop .cd-flash.on{animation:cdFlash .25s ease-out}
+@keyframes cdFlash{0%{opacity:1}100%{opacity:0}}
 #chest-drop[data-r="rare"] .cd-bg{background:radial-gradient(circle at 50% 42%,#7fe49a,#1E9E4A 70%)}
 #chest-drop[data-r="superrare"] .cd-bg{background:radial-gradient(circle at 50% 42%,#a8e4ff,#1D8FD6 70%)}
 #chest-drop[data-r="epic"] .cd-bg{background:radial-gradient(circle at 50% 42%,#c9a6ff,#5B34B5 70%)}
@@ -59,11 +69,16 @@
 @keyframes chestBurst{0%{transform:scale(1.15) rotate(0)}40%{transform:scale(1.5) rotate(-10deg);filter:brightness(1.6) drop-shadow(0 0 40px #fff)}100%{transform:scale(.1) rotate(30deg);opacity:0}}
 .cd-hint{font-size:40px;animation:tapPulse 1s ease-in-out infinite}
 @keyframes tapPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-.cd-rarity{font-size:64px;font-weight:900;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.35),0 0 30px rgba(255,255,255,.5);animation:rarityPop .5s cubic-bezier(.2,1.6,.4,1)}
-.cd-rarity.up{animation:rarityUp .5s ease-out}
+/* the rarity name: the first one grows in (.pop), every upgrade STAMPS in from big to normal (.up) */
+.cd-rarity{font-size:72px;line-height:1.1;font-weight:900;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.35),0 0 30px rgba(255,255,255,.5)}
+.cd-rarity.pop{animation:rarityPop .5s cubic-bezier(.2,1.6,.4,1)}
+.cd-rarity.up{animation:rarityStamp .45s cubic-bezier(.2,1.4,.4,1)}
 @keyframes rarityPop{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
-@keyframes rarityUp{0%{transform:translateY(40px) scale(.8);opacity:0}60%{transform:translateY(-14px) scale(1.15)}100%{transform:none;opacity:1}}
-.cd-rarity small{display:block;font-size:22px;opacity:.9;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+@keyframes rarityStamp{0%{transform:scale(2.6);opacity:0}55%{transform:scale(.92);opacity:1}100%{transform:scale(1)}}
+/* "⬆ שדרוג!" above the name on every upgrade moment */
+.cd-up{font-size:34px;font-weight:900;color:#fff;background:rgba(0,0,0,.38);border:3px solid rgba(255,255,255,.7);border-radius:22px;padding:4px 24px;text-shadow:0 2px 0 rgba(0,0,0,.4);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.cd-up.pop{animation:cdUpPop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes cdUpPop{0%{transform:translateY(30px) scale(.4);opacity:0}100%{transform:none;opacity:1}}
 .cd-pick{font-size:28px;font-weight:900;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.35)}
 .cd-cards{display:flex;gap:22px;justify-content:center;perspective:1000px;margin:4px 0}
 .ccard{width:220px;height:260px;position:relative;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,.2,.2,1);cursor:pointer;border:0;background:none;padding:0;font-family:inherit}
@@ -73,7 +88,14 @@
 .ccard .back{background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,.08));border:5px solid rgba(255,255,255,.8);font-size:90px;color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.3)}
 .ccard .back::before{content:'';position:absolute;inset:14px;border-radius:14px;border:3px dashed rgba(255,255,255,.5)}
 .ccard .front{background:#fff;transform:rotateY(180deg);border:5px solid #fff;color:var(--navy)}
-.ccard.lost{opacity:.45;transform:rotateY(180deg) scale(.9)}
+/* an unchosen card: flipped to its FRONT, still readable (no blur), slightly smaller, greyed frame + a red "✖ לא נבחר" ribbon */
+.ccard.lost{transform:rotateY(180deg) scale(.92);pointer-events:none}   /* no opacity here: opacity flattens the 3D flip and the back face would show instead of the content */
+.ccard.lost .front{background:linear-gradient(#f3f4f7,#dfe3ea);border-color:#c4cad6;color:#5b6474;box-shadow:0 6px 0 rgba(0,0,0,.18),0 10px 18px rgba(0,0,0,.22)}
+.ccard.lost .front .pv,.ccard.lost .front .pname,.ccard.lost .front .ptype{opacity:.75}
+.ccard.lost .front::after{content:"";position:absolute;inset:0;border-radius:22px;background:rgba(110,118,135,.28);pointer-events:none}
+.ccard.lost .front .lost-tag{z-index:2}
+.ccard .lost-tag{position:absolute;top:18px;left:-12px;right:-12px;z-index:2;background:linear-gradient(#FF5A5A,#D32F2F);color:#fff;font-size:19px;font-weight:900;line-height:1.1;padding:5px 0;text-align:center;letter-spacing:.3px;transform:rotate(-7deg);border-radius:8px;border:2px solid #fff;box-shadow:0 4px 0 #9E1B1B,0 7px 14px rgba(0,0,0,.35);text-shadow:0 2px 0 rgba(0,0,0,.3);animation:lostTag .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes lostTag{0%{transform:rotate(-7deg) scale(2);opacity:0}100%{transform:rotate(-7deg) scale(1);opacity:1}}
 .ccard.chosen .front{box-shadow:0 0 0 7px rgba(255,255,255,.9),0 0 40px #fff,0 8px 0 rgba(0,0,0,.25)}
 .cd-cards.done .ccard{pointer-events:none}
 .ccard .pv{width:120px;height:140px;display:flex;align-items:center;justify-content:center;flex:none}

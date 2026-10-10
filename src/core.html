@@ -1193,11 +1193,11 @@ body.touch #touch{display:block}
         <div class="adm-box">
           <div class="adm-h" id="adm-powers-h">⚡ כוחות</div>
           <div class="setrow"><span id="adm-super-l">🦸 כוחות-על במשחק (נגד המחשב)</span><label class="switch"><input type="checkbox" id="adm-super"><span></span></label></div>
-          <div class="adm-row"><button class="btn small yellow" id="btn-adm-xp1">⭐ +1,000 XP</button><button class="btn small yellow" id="btn-adm-xp2">⭐ +10,000 XP</button></div>
+          <div class="adm-row"><button class="btn small yellow" id="btn-adm-xp1">🪙 +1,000</button><button class="btn small yellow" id="btn-adm-xp2">🪙 +10,000</button></div>
           <div class="adm-row"><button class="btn small green" id="btn-adm-unlock">🔓 פתח הכל</button><button class="btn small red" id="btn-adm-reset">🧹 אפס התקדמות</button></div>
           <div class="adm-h" id="adm-codes-h">🎁 קוד חדש לשחקנים</div>
-          <div class="adm-row"><input id="adm-code" maxlength="16" placeholder="קוד" autocomplete="off" spellcheck="false"><input id="adm-code-xp" type="number" min="1" value="500" title="XP"><input id="adm-code-uses" type="number" min="1" value="10" title="uses"><button class="btn small purple" id="btn-adm-code-go">צור</button></div>
-          <div class="hint" id="adm-codes-hint">קוד · כמה XP · לכמה שחקנים</div>
+          <div class="adm-row"><input id="adm-code" maxlength="16" placeholder="קוד" autocomplete="off" spellcheck="false"><input id="adm-code-xp" type="number" min="1" value="500" title="מטבעות"><input id="adm-code-uses" type="number" min="1" value="10" title="uses"><button class="btn small purple" id="btn-adm-code-go">צור</button></div>
+          <div class="hint" id="adm-codes-hint">קוד · כמה מטבעות 🪙 · לכמה שחקנים</div>
           <div class="adm-list" id="adm-codes"></div>
         </div>
         <div class="adm-box">
@@ -1270,7 +1270,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-10-10.3';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-10-10.4';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1519,7 +1519,7 @@ const I18N_RAW={
  'adm.resetQ':['לאפס את כל ההתקדמות שלך? (החברים והאדמין נשארים)','Reset all your progress? (friends and admin stay)','إعادة ضبط كل تقدمك؟ (يبقى الأصدقاء والمشرف)','Сбросить весь прогресс? (друзья и админ останутся)'],
  'adm.reset':['ההתקדמות אופסה','Progress reset','تمت إعادة ضبط التقدم','Прогресс сброшен'],
  'adm.newCode':['🎁 קוד חדש לשחקנים','🎁 New code for players','🎁 كود جديد للاعبين','🎁 Новый код для игроков'],
- 'adm.codesHint':['קוד · כמה XP · לכמה שחקנים','code · XP · how many players','الكود · XP · كم لاعبًا','код · XP · сколько игроков'],
+ 'adm.codesHint':['קוד · כמה מטבעות 🪙 · לכמה שחקנים','code · coins 🪙 · how many players','الكود · عملات 🪙 · كم لاعبًا','код · монеты 🪙 · сколько игроков'],
  'adm.create':['צור','Create','إنشاء','Создать'],
  'adm.codeMade':['הקוד {0} נוצר ✔','Code {0} created ✔','تم إنشاء الكود {0} ✔','Код {0} создан ✔'],
  'adm.codeUsers':['מי השתמש בקוד:','Who used this code:','من استخدم هذا الكود:','Кто использовал код:'],
@@ -1557,7 +1557,7 @@ const I18N_RAW={
  'pw.off':['⛔ כבה','⛔ Turn off','⛔ إيقاف','⛔ Выключить'],
  'fire.name':['🔥 כוח אש','🔥 Fire Power','🔥 قوة النار','🔥 Сила огня'],
  'fire.desc':['F במשחק: הכדור נופל, נשרף ונעלם, ומופיע שוב באמצע המגרש. טעינה 20 שניות. לתמיד!','Press F: the ball drops, burns away and reappears at the centre. 20s cooldown. Forever!','F في المباراة: تسقط الكرة وتحترق وتختفي ثم تظهر في المنتصف. تبريد 20 ثانية. للأبد!','F в матче: мяч падает, сгорает и появляется в центре. Перезарядка 20 с. Навсегда!'],
- 'fire.confirm':['לקנות את כוח האש תמורת {0} XP? (לתמיד)','Buy the Fire Power for {0} XP? (permanent)','شراء قوة النار مقابل {0} XP؟ (للأبد)','Купить Силу огня за {0} XP? (навсегда)'],
+ 'fire.confirm':['לקנות את כוח האש תמורת 🪙 {0} מטבעות? (לתמיד)','Buy the Fire Power for 🪙 {0} coins? (permanent)','شراء قوة النار مقابل 🪙 {0} عملة؟ (للأبد)','Купить Силу огня за 🪙 {0} монет? (навсегда)'],
  'fire.bought':['🔥 כוח האש שלך! לחץ F במשחק','🔥 Fire Power is yours! Press F in a match','🔥 قوة النار لك! اضغط F في المباراة','🔥 Сила огня твоя! Нажми F в матче'],
  'fire.what':['הכוח פעיל?','Power on?','القوة مفعّلة؟','Сила включена?'],
  'fire.on':['🔥 פעיל','🔥 On','🔥 مفعّل','🔥 Вкл'],
@@ -1570,7 +1570,7 @@ const I18N_RAW={
  'end.again':['🔄 שוב','🔄 Again','🔄 مرة أخرى','🔄 Ещё раз'],
  'end.more':['🔄 עוד משחק','🔄 Another game','🔄 لعبة أخرى','🔄 Ещё игра'],
  'end.home':['🏠 בית','🏠 Home','🏠 الرئيسية','🏠 Домой'],
- 'end.xp':['⭐ +{0} XP','⭐ +{0} XP','⭐ +{0} XP','⭐ +{0} XP'],
+ 'end.xp':['⭐ +{0} נקודות','⭐ +{0} points','⭐ +{0} نقطة','⭐ +{0} очк.'],
  'level.goalsToWin':['{0} גולים לניצחון','{0} goals to win','{0} أهداف للفوز','{0} гола для победы'],
  'level.brain':['חוכמה','Brain','ذكاء','Ум'],
  'goal.own':['גול עצמי – {0}','Own goal – {0}','هدف عكسي – {0}','Автогол – {0}'],
@@ -1638,26 +1638,26 @@ const I18N_RAW={
  'chal.cup1':['זכה בגביע העולם בפנדלים','Win the penalty World Cup','افز بكأس العالم لركلات الجزاء','Выиграй Кубок мира по пенальти'],
  'v2.random':['🎲 אקראי','🎲 Random','🎲 عشوائي','🎲 Случайно'],
  'intro.tap':['לחצו כדי להתחיל ⚽','Tap to start ⚽','انقر للبدء ⚽','Нажми, чтобы начать ⚽'],
- 'stats.xp':['⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}','⭐ XP: {0}'],
+ 'stats.xp':['🪙 מטבעות: {0}','🪙 Coins: {0}','🪙 عملات: {0}','🪙 Монеты: {0}'],
  'stats.ach':['🏅 הישגים','🏅 Achievements','🏅 الإنجازات','🏅 Достижения'],
  'stats.board':['📊 לוח שיאים','📊 Leaderboard','📊 لوحة المتصدرين','📊 Таблица лидеров'],
  'ach.title':['🏅 הישגים','🏅 Achievements','🏅 الإنجازات','🏅 Достижения'],
- 'ach.count':['{0} מתוך {1} הושגו · ⭐ {2} XP','{0} of {1} unlocked · ⭐ {2} XP','تم تحقيق {0} من {1} · ⭐ {2} XP','Открыто {0} из {1} · ⭐ {2} XP'],
- 'ach.new':['🏅 הישג חדש: {0} (+{1} XP)','🏅 Achievement: {0} (+{1} XP)','🏅 إنجاز جديد: {0} (+{1} XP)','🏅 Достижение: {0} (+{1} XP)'],
- 'xp.gain':['+{0} XP','+{0} XP','+{0} XP','+{0} XP'],
- 'shop.locked':['🔒 {0} XP','🔒 {0} XP','🔒 {0} XP','🔒 {0} XP'],
- 'shop.unlock':['🔓 פתח ב-{0} XP','🔓 Unlock for {0} XP','🔓 افتح مقابل {0} XP','🔓 Открыть за {0} XP'],
- 'shop.confirm':['לפתוח את {0} תמורת {1} XP?','Unlock {0} for {1} XP?','هل تفتح {0} مقابل {1} XP؟','Открыть {0} за {1} XP?'],
- 'shop.noXp':['חסר XP 😕 יש לך {0}, צריך {1}','Not enough XP 😕 you have {0}, need {1}','XP غير كافٍ 😕 لديك {0}، تحتاج {1}','Не хватает XP 😕 у тебя {0}, нужно {1}'],
+ 'ach.count':['{0} מתוך {1} הושגו · 🪙 {2} מטבעות','{0} of {1} unlocked · 🪙 {2} coins','تم تحقيق {0} من {1} · 🪙 {2} عملة','Открыто {0} из {1} · 🪙 {2} монет'],
+ 'ach.new':['🏅 הישג חדש: {0} (🪙 +{1})','🏅 Achievement: {0} (🪙 +{1})','🏅 إنجاز جديد: {0} (🪙 +{1})','🏅 Достижение: {0} (🪙 +{1})'],
+ 'xp.gain':['⭐ +{0} נקודות','⭐ +{0} points','⭐ +{0} نقطة','⭐ +{0} очк.'],
+ 'shop.locked':['🔒 🪙 {0}','🔒 🪙 {0}','🔒 🪙 {0}','🔒 🪙 {0}'],
+ 'shop.unlock':['🔓 פתח ב-🪙 {0}','🔓 Unlock for 🪙 {0}','🔓 افتح مقابل 🪙 {0}','🔓 Открыть за 🪙 {0}'],
+ 'shop.confirm':['לפתוח את {0} תמורת 🪙 {1} מטבעות?','Unlock {0} for 🪙 {1} coins?','هل تفتح {0} مقابل 🪙 {1} عملة؟','Открыть {0} за 🪙 {1} монет?'],
+ 'shop.noXp':['חסרים מטבעות 😕 יש לך 🪙 {0}, צריך 🪙 {1}','Not enough coins 😕 you have 🪙 {0}, need 🪙 {1}','العملات غير كافية 😕 لديك 🪙 {0}، تحتاج 🪙 {1}','Не хватает монет 😕 у тебя 🪙 {0}, нужно 🪙 {1}'],
  'shop.bought':['🔓 {0} נפתח! 🎉','🔓 {0} unlocked! 🎉','🔓 تم فتح {0}! 🎉','🔓 {0} открыт! 🎉'],
- 'shop.hint':['⭐ יש לך {0} XP · מרוויחים XP מניצחונות, גולים, הישגים והמשחק היומי','⭐ You have {0} XP · earn XP from wins, goals, achievements and the daily match','⭐ لديك {0} XP · اكسب XP من الانتصارات والأهداف والإنجازات ومباراة اليوم','⭐ У тебя {0} XP · зарабатывай XP за победы, голы, достижения и матч дня'],
+ 'shop.hint':['🪙 יש לך {0} מטבעות · מרוויחים מטבעות מניצחונות, גולים, הישגים והמשחק היומי','🪙 You have {0} coins · earn coins from wins, goals, achievements and the daily match','🪙 لديك {0} عملة · اكسب العملات من الانتصارات والأهداف والإنجازات ومباراة اليوم','🪙 У тебя {0} монет · зарабатывай монеты за победы, голы, достижения и матч дня'],
  'daily.title':['📅 המשחק היומי','📅 Daily match','📅 مباراة اليوم','📅 Матч дня'],
- 'daily.desc':['היום: נגד {0} ברמה {1}. ניצחון = +{2} XP','Today: vs {0}, level {1}. Win = +{2} XP','اليوم: ضد {0}، المستوى {1}. الفوز = +{2} XP','Сегодня: против {0}, уровень {1}. Победа = +{2} XP'],
+ 'daily.desc':['היום: נגד {0} ברמה {1}. ניצחון = 🪙 מטבעות כפולים + 🏆','Today: vs {0}, level {1}. Win = 🪙 double coins + 🏆','اليوم: ضد {0}، المستوى {1}. الفوز = 🪙 عملات مضاعفة + 🏆','Сегодня: против {0}, уровень {1}. Победа = 🪙 монеты ×2 + 🏆'],
  'daily.done':['✔ ניצחת היום! חזור מחר למשחק חדש','✔ You won today! Come back tomorrow','✔ فزت اليوم! عد غدًا','✔ Ты победил сегодня! Возвращайся завтра'],
  'daily.btn':['📅 המשחק היומי','📅 Daily match','📅 مباراة اليوم','📅 Матч дня'],
  'board.title':['📊 לוח שיאים','📊 Leaderboard','📊 لوحة المتصدرين','📊 Таблица лидеров'],
  'board.you':['אתה','You','أنت','Ты'],
- 'board.cols':['שחקן|ניצחונות|גולים|XP|גביעים','Player|Wins|Goals|XP|Cups','اللاعب|انتصارات|أهداف|XP|كؤوس','Игрок|Победы|Голы|XP|Кубки'],
+ 'board.cols':['שחקן|ניצחונות|גולים|🪙 מטבעות|גביעים','Player|Wins|Goals|🪙 Coins|Cups','اللاعب|انتصارات|أهداف|🪙 عملات|كؤوس','Игрок|Победы|Голы|🪙 Монеты|Кубки'],
  'board.empty':['שחקו אונליין עם חברים וכל חבר יופיע כאן עם השיאים שלו','Play online with friends and each one shows up here with their record','العب أونلاين مع أصدقاء وسيظهر كل صديق هنا مع أرقامه','Играй онлайн с друзьями, и каждый появится здесь со своими рекордами'],
  'stats.friends':['👥 חברים','👥 Friends','👥 الأصدقاء','👥 Друзья'],
  'ceo.wa':['📱 היכנסו לקבוצת הווצאפ שלנו ותקבלו קודים חינם!','📱 Join our WhatsApp group and get free codes!','📱 انضموا إلى مجموعة الواتساب لدينا واحصلوا على أكواد مجانية!','📱 Вступай в нашу группу WhatsApp и получай бесплатные коды!'],
@@ -1735,7 +1735,7 @@ const I18N_RAW={
  'level.doom':['☠️ הרמה הקשה ביותר שיש ☠️','☠️ The hardest level there is ☠️','☠️ أصعب مستوى على الإطلاق ☠️','☠️ Самый сложный уровень ☠️'],
  'ice.name':['❄️ כוח קרח','❄️ Ice Power','❄️ قوة الجليد','❄️ Сила льда'],
  'ice.desc':['E במשחק: מקפיא את היריב לשנייה, או חומת קרח על השער שלך (בוחרים כאן). טעינה 15 שניות. לתמיד!','Freezes the opponent for 1s. Press E. 15s cooldown. Yours forever!','يجمّد الخصم لثانية. زر E. إعادة تعبئة 15 ث. ملكك للأبد!','Замораживает соперника на 1 с. Клавиша E. Перезарядка 15 с. Навсегда!'],
- 'ice.confirm':['לקנות את כוח הקרח תמורת {0} XP? (לתמיד)','Buy the Ice Power for {0} XP? (permanent)','شراء قوة الجليد مقابل {0} XP؟ (دائمة)','Купить Силу льда за {0} XP? (навсегда)'],
+ 'ice.confirm':['לקנות את כוח הקרח תמורת 🪙 {0} מטבעות? (לתמיד)','Buy the Ice Power for 🪙 {0} coins? (permanent)','شراء قوة الجليد مقابل 🪙 {0} عملة؟ (دائمة)','Купить Силу льда за 🪙 {0} монет? (навсегда)'],
  'ice.bought':['❄️ כוח הקרח שלך! לחץ E במשחק','❄️ Ice Power is yours! Press E in a match','❄️ قوة الجليد لك! اضغط E في المباراة','❄️ Сила льда твоя! Нажми E в матче'],
  'ice.owned':['✔ נקנה','✔ Owned','✔ تم الشراء','✔ Куплено'],
  'c.ice':['🎙️ ❄️ קרח! היריב קפוא!','🎙️ ❄️ Ice! The opponent is frozen!','🎙️ ❄️ جليد! الخصم متجمد!','🎙️ ❄️ Лёд! Соперник замёрз!'],
@@ -1780,7 +1780,7 @@ const PRICES={
 Object.keys(PRICES).forEach((id,i)=>{ if(i%2===0) PRICES[id]=Math.round(PRICES[id]*1.2/100)*100; });   // about half the players cost a little more
 const priceOf = c => PRICES[c.id] || 1000;
 const ICE_PRICE=10000, ICE_CD=15, ICE_DUR=1;        // ice power: permanent once bought, 15s cooldown, freezes opponents for 1s
-const fmtXp = n => Number(n).toLocaleString('en-US');
+const fmtXp = n => fmtNum(n);                        // same formatting as the wallet (00-econ.js: "1.5 מיליון" above a million); only called at runtime
 /* play style per player: [speed, kick power, slide speed, jump] – 1 = average */
 const CHAR_ST={
   mbappe:[1.18,1,1,1.05], messi:[1.08,.95,.95,.9], ronaldo:[1.02,1.12,1,1.18], neymar:[1.1,.95,1.12,1], haaland:[1.05,1.2,1,1.05], salah:[1.12,1,1,1],
@@ -2573,7 +2573,7 @@ function buildAch(){
   const g=$('#ach-grid'); g.innerHTML='';
   const done=ACH.filter(a=>prog.ach[a[0]]).length;
   $('#ach-sub').textContent=T('ach.count',done,ACH.length,fmtNum(prog.coins|0));
-  ACH.forEach(([id,xp])=>{ const d=document.createElement('div'); d.className='achc '+(prog.ach[id]?'done':'todo'); d.innerHTML=`<div class="ic">${ACH_ICON[id]||'🏅'}</div><div class="nm">${T('a.'+id)}</div><div class="xp">+${xp} XP</div>`; g.appendChild(d); });
+  ACH.forEach(([id,xp])=>{ const d=document.createElement('div'); d.className='achc '+(prog.ach[id]?'done':'todo'); d.innerHTML=`<div class="ic">${ACH_ICON[id]||'🏅'}</div><div class="nm">${T('a.'+id)}</div><div class="xp">🪙 +${xp*(ECON.achMult||1)}</div>`; g.appendChild(d); });
 }
 $('#btn-stats-ach').addEventListener('click', ()=>{ sfx.click(); $('#stats-modal').classList.remove('show'); buildAch(); showScreen('ach'); });
 $('#btn-ach-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); });
@@ -2760,7 +2760,7 @@ async function viewFriend(name){
   const st=statusOf(f);
   $('#fm-name').textContent=(f.online?'🟢 ':'⚪ ')+name;
   $('#fm-status').textContent = f.t ? (f.online ? statusText(st) : T('friends.lastSeen', new Date(f.t).toLocaleDateString())) : T('friends.noData');
-  $('#fm-stats').innerHTML = `<div class="stat win"><div class="n">${f.w|0}</div><div class="l">${T('stats.w')}</div></div><div class="stat trophy"><div class="n">${f.tr|0}</div><div class="l">🏆</div></div><div class="stat draw"><div class="n">${f.goals|0}</div><div class="l">⚽</div></div><div class="stat loss"><div class="n">${f.l|0}</div><div class="l">${T('stats.l')}</div></div><div class="stat cup"><div class="n">${f.xp|0}</div><div class="l">⭐ XP</div></div>`;
+  $('#fm-stats').innerHTML = `<div class="stat win"><div class="n">${f.w|0}</div><div class="l">${T('stats.w')}</div></div><div class="stat trophy"><div class="n">${f.tr|0}</div><div class="l">🏆</div></div><div class="stat draw"><div class="n">${f.goals|0}</div><div class="l">⚽</div></div><div class="stat loss"><div class="n">${f.l|0}</div><div class="l">${T('stats.l')}</div></div><div class="stat cup"><div class="n">${f.xp|0}</div><div class="l">🪙</div></div>`;
   const ach=f.ach||[]; $('#fm-ach').innerHTML = `<div class="hint">${T('ach.count',ach.length,ACH.length,f.xp|0)}</div><div class="fm-badges">${ACH.map(([id])=>`<span class="bd ${ach.includes(id)?'on':''}" title="${esc(T('a.'+id))}">${ACH_ICON[id]||'🏅'}</span>`).join('')}</div>`;
   $('#btn-fm-invite').dataset.name=name; $('#btn-fm-invite').hidden=st!=='online';
   $('#btn-fm-watch').dataset.name=name; $('#btn-fm-watch').hidden=st!=='match';

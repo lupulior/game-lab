@@ -100,8 +100,26 @@
 .shop-item .btn.small{font-size:15px;padding:6px 10px;min-height:40px;width:100%;box-sizing:border-box}
 .shop-item.on{background:#E9FBEF;border-color:var(--green)!important}
 .shop-item.owned .pr{color:var(--green)}
+/* looks: a two-button switch (my locker / skins) above the list */
+.shop-lfilters{position:absolute;top:0;right:0;width:596px;display:flex;gap:8px;justify-content:center}
+.shop-lfilters .btn.small{font-size:17px;padding:4px 18px;min-height:40px}
+.shop-lfilters .btn.on{outline:4px solid var(--yellow)}
+.shop-looks .shop-locker,.shop-skins{top:48px}
+.shop-skins{position:absolute;right:0;width:596px;bottom:0;overflow-y:auto;overflow-x:hidden;padding:4px 6px;scrollbar-width:thin}
+.shop-skins::-webkit-scrollbar{width:8px}.shop-skins::-webkit-scrollbar-thumb{background:rgba(27,42,78,.4);border-radius:8px}
+.shop-skins .shop-row{justify-content:center;gap:10px;padding-top:8px}
+.shop-skins .shop-item{width:150px}
+.shop-skins .shop-item .vis{height:96px}.shop-skins .shop-item .vis .sprite{width:64px;height:96px}.shop-skins .shop-item .vis svg{max-height:96px}
+/* skin cards: whose skin it is + the "belongs to" hint when another character is selected */
+.shop-item .ch{font-size:12px;font-weight:900;color:#fff;background:var(--navy);border-radius:8px;padding:1px 8px;white-space:nowrap;max-width:100%;box-sizing:border-box;overflow:hidden}
+.shop-item .ch.mine{background:var(--green)}
+.shop-item .skhint{font-size:11px;font-weight:700;color:#8a5a00;background:#FFF3B8;border-radius:8px;padding:1px 6px;line-height:1.15}
+.shop-item .btn.small.sell{font-size:13px;min-height:36px;padding:3px 6px;white-space:nowrap;overflow:hidden}
+.shop-preview .skin{font-size:15px;font-weight:900;color:#fff;background:var(--purple,#8E5CF6);border-radius:12px;padding:2px 12px}
+.shop-preview .skin.off{background:#8a93a8}
 .shop-gems{position:absolute;inset:10px;display:flex;flex-direction:column;gap:6px}
-.shop-gems .shop-row{justify-content:center;gap:12px}
+.shop-gems .shop-row{justify-content:center;gap:12px;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;align-content:flex-start;padding:6px 4px;scrollbar-width:thin}
+.shop-gems .shop-row::-webkit-scrollbar{width:8px}.shop-gems .shop-row::-webkit-scrollbar-thumb{background:rgba(27,42,78,.4);border-radius:8px}
 .shop-gems .shop-item{width:168px}
 .shop-gems .shop-item .vis{height:120px}.shop-gems .shop-item .vis .sprite{width:80px;height:120px}.shop-gems .shop-item .vis svg{max-height:120px}
 .shop-gems .shop-item .nm{font-size:16px}.shop-gems .shop-item .btn.small{font-size:18px;min-height:44px}
@@ -109,7 +127,10 @@
 .shop-item .nc,.shop-slot .nc,.shop-preview .nc{font-size:26px;font-weight:900;padding:4px 10px;border-radius:10px;background:var(--navy)}
 .shop-nc-gold{color:#F5C542}.shop-nc-neon{color:#39FF14;text-shadow:0 0 8px #39FF14}
 .shop-nc-rainbow{background:linear-gradient(90deg,#FF4E4E,#FFB347,#FFF34D,#4DFF88,#4DA6FF,#C04DFF);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:0;text-shadow:none}
-.shop-preview .nm b{font-weight:900}.shop-preview .nm b.shop-nc-gold,.shop-preview .nm b.shop-nc-neon{-webkit-text-stroke:1px var(--navy)}
+.shop-nc-pink{color:#FF5FA2}.shop-nc-silver{color:#E6EAF0;text-shadow:0 0 6px #fff}.shop-nc-emerald{color:#00D3A7;text-shadow:0 0 8px #00D3A7}.shop-nc-ice{color:#7ED3FF;text-shadow:0 0 8px #BFEFFF}
+.shop-nc-fire{background:linear-gradient(90deg,#FFD447,#FF7A3D,#E53935);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:0;text-shadow:none}
+.shop-nc-galaxy{background:linear-gradient(90deg,#8E5CF6,#4DA6FF,#FF4E9B,#8E5CF6);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:0;text-shadow:none}
+.shop-preview .nm b{font-weight:900}.shop-preview .nm b.shop-nc-gold,.shop-preview .nm b.shop-nc-neon,.shop-preview .nm b.shop-nc-pink,.shop-preview .nm b.shop-nc-silver,.shop-preview .nm b.shop-nc-emerald,.shop-preview .nm b.shop-nc-ice{-webkit-text-stroke:1px var(--navy)}
 .shop-num{display:flex;align-items:center;justify-content:center;gap:6px}
 .shop-num .btn.small{width:44px;min-height:44px;padding:4px 0;font-size:24px}
 .shop-num b{font-size:30px;min-width:56px;color:var(--navy)}

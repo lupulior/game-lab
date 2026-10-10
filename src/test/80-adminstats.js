@@ -45,7 +45,7 @@
   TASSERT('admin panel opens with a metrics box', $('#admin-modal').classList.contains('show') && !!$('#adm-stats') && !$('#adm-stats').hidden);
   const tot=renderStats({days:STATS, users:USERS});
   TASSERT('renderStats: 14 bars, totals and D1 from bitmasks', $('#ast-bars').querySelectorAll('.ast-col').length===14 && tot.matches===39 && tot.dau===9
-    && $('#ast-d1 b').textContent==='50%' && $('#ast-mpd b').textContent==='4.3' && $('#ast-flags b').textContent==='2' && $('#ast-coins b').textContent.includes('1,000,500'));
+    && $('#ast-d1 b').textContent==='50%' && $('#ast-mpd b').textContent==='4.3' && $('#ast-flags b').textContent==='2' && $('#ast-coins b').textContent.includes(fmtNum(1000500)));
   TASSERT('metrics heading in Hebrew, 4-language strings present', $('#adm-stats-h').textContent===T('adm.stats') && I18N_RAW['ast.d1'].length===4 && I18N_RAW['ast.hide'].length===4);
   // --- red flags in the online list + one-tap hide
   await refreshAdminLists();

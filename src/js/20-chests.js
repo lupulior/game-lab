@@ -1,7 +1,9 @@
 /* ===================================================================================================
    CHESTS — a chest is a DROP (Brawl-Stars Starr-Drop style): tap it open, it rolls a rarity
-   (נדיר 🟢 · נדיר במיוחד 🔵 · אדיר 🟣 · מדהים 🔴 · אגדי 🟡), climbing up with a flash for every step,
-   then three FACE-DOWN cards of that rarity appear; pick one and it flips. Better chests → better odds.
+   (נדיר 🟢 · נדיר במיוחד 🔵 · אדיר 🟣 · מדהים 🔴 · אגדי 🟡): the first rarity rests, then every further step is a distinct
+   "⬆ שדרוג!" moment (white flash, screen shake, rising sound, colour snap, name stamp — timings in ECON.chests.climb),
+   then three FACE-DOWN cards of that rarity appear; pick one and it flips; the two others flip too, greyed with a red
+   "✖ לא נבחר" ribbon so the kid sees what was inside. Better chests → better odds.
    A legendary is guaranteed after ECON.chests.pity drops without one.
    Public: giveChest(kind) openChestsScreen() closeChestsScreen() openChest(kind) openWelcomeChest()
            claimDailyBronze() chestsBadge() chestCanOpen(kind) refreshChestsBadge() buildChests() chestTap()
@@ -15,10 +17,13 @@ Object.assign(ECON, { chests: {
   rarities:['rare','superrare','epic','mythic','legendary'],
   bronze: { keys:1, coins:150, gems:0,  odds:[60,25,10,4,1] },
   silver: { keys:3, coins:500, gems:0,  odds:[35,33,20,9,3] },
-  gold:   { keys:8, coins:0,   gems:25, odds:[10,28,32,20,10] },
-  legend: { keys:0, coins:0,   gems:40, odds:[0,10,35,35,20] },
+  gold:   { keys:8, coins:0,   gems:35, odds:[10,28,32,20,10] },
+  legend: { keys:0, coins:0,   gems:60, odds:[0,10,35,35,20] },
   welcome:{ cards:[{t:'cos',id:'kit_il'},{t:'coins',n:100},{t:'keys',n:1}] },
   pity:40,              // a legendary is guaranteed after this many drops without one
+  /* the rarity climb (ms): the first rarity rests `first`, every "⬆ שדרוג!" moment lasts `step` (white flash `flash`), the final rarity rests `hold` before the cards.
+     A legendary = 480 (burst) + first + 3·step + hold ≈ 4.8 s — the slots test waits ~4.9 s for the cards, keep it under that */
+  climb:{ first:900, step:800, hold:1000, flash:250 },
   /* what each rarity can hold: coins are small on purpose — the exciting things are players, looks, gems, keys, powers */
   pool:{
     rare:      { coins:[30,50],   keys:1, xp:30,  cos:'rare',      charMax:1000 },
@@ -60,9 +65,10 @@ I18N_ADD({
  'chests.r.rare':['נדיר','Rare','نادر','Редкий'], 'chests.r.superrare':['נדיר במיוחד','Super rare','نادر جدًا','Сверхредкий'],
  'chests.r.epic':['אדיר','Epic','ملحمي','Эпический'], 'chests.r.mythic':['מדהים','Mythic','أسطوري خارق','Мифический'], 'chests.r.legendary':['אגדי','Legendary','أسطوري','Легендарный'],
  'chests.r.welcome':['ברוכים הבאים!','Welcome!','مرحبًا بك!','Добро пожаловать!'],
- 'chests.up':['⬆ משתדרג!','⬆ Upgrading!','⬆ ترقية!','⬆ Повышение!'],
+ 'chests.up':['⬆ שדרוג!','⬆ Upgrade!','⬆ ترقية!','⬆ Повышение!'],
+ 'chests.lost':['✖ לא נבחר','✖ Not picked','✖ لم يُختر','✖ Не выбрано'],
  'chests.c.coins':['🪙 {0} מטבעות','🪙 {0} coins','🪙 {0} عملة','🪙 {0} монет'], 'chests.c.gems':['💎 {0} יהלומים','💎 {0} gems','💎 {0} جواهر','💎 {0} алмазов'],
- 'chests.c.keys':['🔑 {0} מפתחות','🔑 {0} keys','🔑 {0} مفاتيح','🔑 {0} ключей'], 'chests.c.xp':['⭐ {0} XP','⭐ {0} XP','⭐ {0} XP','⭐ {0} XP'],
+ 'chests.c.keys':['🔑 {0} מפתחות','🔑 {0} keys','🔑 {0} مفاتيح','🔑 {0} ключей'], 'chests.c.xp':['⭐ {0} נקודות','⭐ {0} points','⭐ {0} نقطة','⭐ {0} очк.'],
  'chests.c.char':['שחקן חדש!','New player!','لاعب جديد!','Новый игрок!'], 'chests.c.ice':['❄️ כוח הקרח!','❄️ Ice power!','❄️ قوة الجليد!','❄️ Сила льда!'], 'chests.c.fire':['🔥 כוח האש!','🔥 Fire power!','🔥 قوة النار!','🔥 Сила огня!'],
  'chests.t.kit':['מדים','Kit','طقم','Форма'], 'chests.t.boots':['נעליים','Boots','حذاء','Бутсы'], 'chests.t.ball':['כדור','Ball','كرة','Мяч'],
  'chests.t.stadium':['אצטדיון','Stadium','ملعب','Стадион'], 'chests.t.celeb':['חגיגה','Celebration','احتفال','Празднование'], 'chests.t.title':['תארים','Titles','ألقاب','Титулы'],
@@ -232,16 +238,17 @@ function chestConfetti(n){
   const cv=$('#chests-confetti'); if(!cv) return;
   try{ chestsConfetti = chestsConfetti || makeConfetti(cv, ['#FFD447','#F5C542','#fff7c2','#FF7A3D','#8E5CF6','#fff']); cv.hidden=false; chestsConfetti.burst(n); setTimeout(()=>{ cv.hidden=true; }, 4500); }catch(e){}
 }
-const DROP={ phase:'idle', taps:0, timers:[] };
+const DROP={ phase:'idle', taps:0, timers:[], upgrades:0 };   // upgrades = how many "⬆ שדרוג!" moments the current climb has shown
 function dropTimer(fn, ms){ const t=setTimeout(fn, ms); DROP.timers.push(t); return t; }
 function dropClear(){ DROP.timers.forEach(clearTimeout); DROP.timers=[]; }
 function chestDropStart(kind, pick){
   const d=$('#chest-drop'); if(!d) return;
-  dropClear(); DROP.phase='tap'; DROP.taps=0; DROP.pick=pick;
-  d.removeAttribute('data-r'); d.hidden=false;
+  dropClear(); DROP.phase='tap'; DROP.taps=0; DROP.pick=pick; DROP.upgrades=0;
+  d.removeAttribute('data-r'); d.classList.remove('cd-shake','big'); d.hidden=false;
   $('#cd-kind').textContent=chestName(kind);
   const ch=$('#cd-chest'); ch.textContent=chestIcon(kind); ch.className='cd-chest'; ch.hidden=false;
   $('#cd-hint').hidden=false; $('#cd-hint').textContent='👆 '+T('chests.tap');
+  const fl=$('#cd-flash'); if(fl) fl.classList.remove('on'); const up=$('#cd-up'); if(up){ up.hidden=true; up.classList.remove('pop'); }
   $('#cd-rarity').hidden=true; $('#cd-pick').hidden=true; $('#cd-cards').hidden=true; $('#cd-cards').innerHTML=''; $('#cd-got').hidden=true; $('#btn-chest-done').hidden=true;
 }
 /* a pending pick after a reload: straight to the cards */
@@ -262,22 +269,38 @@ function chestTap(){
   try{ sfx.kick(); }catch(e){}
   dropTimer(()=>{ ch.hidden=true; chestRarityClimb(DROP.pick); }, 480);
 }
-/* the rarity climbs from rare up to the rolled one, flashing a new colour at every step */
+/* the rarity climb, Brawl-Stars style: after the burst the FIRST rarity (always rare) appears big with its colour and rests
+   ECON.chests.climb.first ms; every further rarity is a distinct "⬆ שדרוג!" moment — a white flash over the whole drop (#cd-flash),
+   a screen shake (#chest-drop.cd-shake, .big for legendary), a rising sound, the background SNAPPING to the new colour (data-r),
+   the name stamping in (.cd-rarity.up) with the "⬆ שדרוג!" label above it (#cd-up), small confetti for mythic/legendary;
+   the final rarity rests climb.hold ms, then the cards. A plain rare has no upgrade moment at all. Everything runs on dropTimer
+   (cleared by chestCloseOpen); a reload never replays the climb — chestDropResume goes straight to the cards. */
+function chestUpSound(final){ try{ sfx.click(); setTimeout(()=>sfx.count(1), 90); if(final) setTimeout(()=>sfx.win(), 220); }catch(e){} }
 function chestRarityClimb(pick){
-  DROP.phase='rarity';
-  const R=ECON.chests.rarities, d=$('#chest-drop'), r=$('#cd-rarity');
+  DROP.phase='rarity'; DROP.upgrades=0;
+  const R=ECON.chests.rarities, C=ECON.chests.climb||{first:900, step:800, hold:1000, flash:250};
+  const d=$('#chest-drop'), r=$('#cd-rarity'), up=$('#cd-up'), fl=$('#cd-flash');
   const target = pick.rarity==='welcome' ? 'legendary' : pick.rarity;
   const steps = R.slice(0, R.indexOf(target)+1);
-  let i=0;
-  const step=()=>{
-    const rr=steps[i]; d.setAttribute('data-r', rr);
-    r.hidden=false; r.className='cd-rarity'+(i>0?' up':''); r.innerHTML=(pick.rarity==='welcome' && i===steps.length-1 ? rarityName('welcome') : rarityName(rr))+(i<steps.length-1 ? `<small>${T('chests.up')}</small>` : '');
-    try{ sfx.click(); }catch(e){}
-    i++;
-    if(i<steps.length) dropTimer(step, 650);
-    else { if(target==='legendary' || target==='mythic'){ chestConfetti(target==='legendary'?300:120); try{ sfx.win(); }catch(e){} } dropTimer(()=>chestShowCards(pick), 1100); }
+  const repop=(el,cls)=>{ if(!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+  const show=i=>{
+    const rr=steps[i], last=i===steps.length-1;
+    d.setAttribute('data-r', rr);
+    r.hidden=false; r.className='cd-rarity'; r.textContent = (pick.rarity==='welcome' && last) ? rarityName('welcome') : rarityName(rr);
+    if(i===0){ repop(r,'pop'); if(up) up.hidden=true; try{ sfx.click(); }catch(e){} }
+    else {
+      DROP.upgrades++;
+      repop(r,'up');
+      if(fl){ repop(fl,'on'); dropTimer(()=>fl.classList.remove('on'), C.flash); }
+      d.classList.toggle('big', rr==='legendary'); repop(d,'cd-shake');
+      if(up){ up.hidden=false; up.textContent=T('chests.up'); repop(up,'pop'); if(last) dropTimer(()=>{ up.hidden=true; }, 900); }
+      if(rr==='mythic') chestConfetti(80); else if(rr==='legendary') chestConfetti(220);
+      chestUpSound(last && (rr==='mythic' || rr==='legendary'));
+    }
+    if(!last) dropTimer(()=>show(i+1), i===0 ? C.first : C.step);
+    else dropTimer(()=>{ d.classList.remove('cd-shake','big'); chestShowCards(pick); }, C.hold);
   };
-  step();
+  show(0);
 }
 /* three face-down cards; the chosen one flips, the others flip dimmed afterwards */
 function chestShowCards(pick){
@@ -306,10 +329,18 @@ function chestPickCard(i, btn){
   const ok=chestGrant(c, pick.paid);
   $('#cd-pick').hidden=true;
   dropTimer(()=>{ const g=$('#cd-got'); g.hidden=false; g.textContent = ok ? T('chests.picked', chestCardName(c)) : T('chests.capped'); try{ sfx.win(); }catch(e){} if(pick.rarity==='legendary') chestConfetti(200); }, 500);
-  dropTimer(()=>{ box.querySelectorAll('.ccard').forEach(b=>{ if(b!==btn) b.classList.add('flipped','lost'); }); }, 900);
-  dropTimer(()=>{ $('#btn-chest-done').hidden=false; }, 1200);
+  /* 900 ms later the two unchosen cards flip face-up one after another (350 ms apart), greyed with a red "not picked" ribbon */
+  dropTimer(()=>{ [...box.querySelectorAll('.ccard')].filter(b=>b!==btn).forEach((b,j)=>dropTimer(()=>chestLoseCard(b), j*350)); }, 900);
+  dropTimer(()=>{ $('#btn-chest-done').hidden=false; }, 1300);
   Hooks.emit('chestPick', c); refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
   return true;
+}
+/* an unchosen card: flips to its FRONT (readable), desaturated frame, a red "✖ לא נבחר" ribbon across the top — the kid sees what was inside */
+function chestLoseCard(b){
+  if(!b || b.classList.contains('lost')) return;
+  if(!b.querySelector('.lost-tag')){ const t=document.createElement('div'); t.className='lost-tag'; t.textContent=T('chests.lost'); (b.querySelector('.front')||b).appendChild(t); }
+  b.classList.add('flipped','lost');
+  try{ sfx.bounce(); }catch(e){}
 }
 function chestFinishAll(pick){
   if(!prog.chestPick || !prog.chestPick.all) return;

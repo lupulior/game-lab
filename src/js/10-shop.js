@@ -2,21 +2,30 @@
    SHOP + COSMETICS + LOCKER — the daily rotating shop (seeded by the server day, same for everyone),
    the 80 characters with rarity frames, the locker (equip what you own), the gem tab, the powers tab,
    and the cosmetics rendering hooks the core already checks for (skinFor / ballSkin) + stadium themes.
-   Ownership: prog.cos={items:[ids]}   Equipped: prog.eq={kit,boots,ball,stadium,celeb,title,titlePack,color,number}
+   Ownership: prog.cos={items:[ids]}   Equipped: prog.eq={skin,kit,boots,ball,stadium,celeb,title,titlePack,color,number}
    Shop state: prog.shop={bought:{dayKey[r]:slot → id, dayKey:free → 'free_<type>'}, reroll:dayKey, seen:dayKey, seenWeek:n}
    The free gift of the day (first card of the today tab) rotates by the day index: coins → key → gem → bronze chest.
+   Skins (type 'skin', char:'messi'): a whole new look for ONE character, merged under the kit/boots/number in skinFor() when that
+   character is selected. Selling: every owned item (except the welcome kit) sells back for half its listed price (coins or gems).
    =================================================================================================== */
-Object.assign(ECON, { shop:{ launch:'2026-10-12', charOff:.3, rerollGems:5, silverDeal:450, silverPrice:500, goldDealGems:20, goldGems:25,
-  colors:{gold:40, neon:60, rainbow:80}, numberPrice:500, gemCycle:10, free:{coins:40, keys:1, gems:1, chest:'bronze', chestCoins:60}, urgentMs:36e5 } });
+Object.assign(ECON, { shop:{ launch:'2026-10-12', charOff:.3, charGemDiv:70, rerollGems:7, silverDeal:450, silverPrice:500, goldDealGems:26, goldGems:33,
+  colors:{gold:55, neon:80, rainbow:105, pink:45, silver:45, emerald:55, ice:60, fire:65, galaxy:110}, numberPrice:500, gemCycle:10, sellRate:.5,
+  free:{coins:40, keys:1, gems:1, chest:'bronze', chestCoins:60}, urgentMs:36e5 } });
 
 /* items sold by the shop that are not in the catalogue (name colours, the shirt number) — same shape as COSMETICS */
 const SHOP_EXTRA=[
   {id:'color_gold',    type:'color',  name:['שם זהב','Gold name','اسم ذهبي','Золотое имя'],        price:0, gems:ECON.shop.colors.gold,    rarity:'epic',      data:{color:'gold'}},
   {id:'color_neon',    type:'color',  name:['שם ניאון','Neon name','اسم نيون','Неоновое имя'],     price:0, gems:ECON.shop.colors.neon,    rarity:'epic',      data:{color:'neon'}},
   {id:'color_rainbow', type:'color',  name:['שם קשת','Rainbow name','اسم قوس قزح','Радужное имя'], price:0, gems:ECON.shop.colors.rainbow, rarity:'legendary', data:{color:'rainbow'}},
+  {id:'color_pink',    type:'color',  name:['שם ורוד','Pink name','اسم وردي','Розовое имя'],       price:0, gems:ECON.shop.colors.pink,    rarity:'epic',      data:{color:'pink'}},
+  {id:'color_silver',  type:'color',  name:['שם כסף','Silver name','اسم فضي','Серебряное имя'],    price:0, gems:ECON.shop.colors.silver,  rarity:'epic',      data:{color:'silver'}},
+  {id:'color_emerald', type:'color',  name:['שם אזמרגד','Emerald name','اسم زمردي','Изумрудное имя'], price:0, gems:ECON.shop.colors.emerald, rarity:'epic',   data:{color:'emerald'}},
+  {id:'color_ice',     type:'color',  name:['שם קרח','Ice name','اسم جليدي','Ледяное имя'],        price:0, gems:ECON.shop.colors.ice,     rarity:'epic',      data:{color:'ice'}},
+  {id:'color_fire',    type:'color',  name:['שם אש','Fire name','اسم ناري','Огненное имя'],        price:0, gems:ECON.shop.colors.fire,    rarity:'epic',      data:{color:'fire'}},
+  {id:'color_galaxy',  type:'color',  name:['שם גלקסיה','Galaxy name','اسم المجرة','Галактическое имя'], price:0, gems:ECON.shop.colors.galaxy, rarity:'legendary', data:{color:'galaxy'}},
   {id:'number_pick',   type:'number', name:['מספר חולצה משלי','My shirt number','رقم قميصي','Свой номер'], price:ECON.shop.numberPrice, rarity:'rare', data:{}},
 ];
-const SHOP_TYPES=['kit','boots','ball','stadium','celeb','title','color','number'];
+const SHOP_TYPES=['skin','kit','boots','ball','stadium','celeb','title','color','number'];
 const shopItem = id => cosById(id) || SHOP_EXTRA.find(c=>c.id===id) || null;
 const shopOwned = id => cosOwned(id);
 const shopItemName = it => cosName(it);
@@ -37,7 +46,14 @@ function shopShuffle(arr, rng){ const a=arr.slice(); for(let i=a.length-1;i>0;i-
 /* ----- character rarity by price ----- */
 function charRarity(c){ if(c.trophyOnly) return 'trophy'; const p=priceOf(c); return p<=1000 ? 'bronze' : p<=3000 ? 'silver' : p<=7200 ? 'gold' : 'icon'; }
 const charDealCoins = c => Math.round(priceOf(c)*(1-ECON.shop.charOff)/10)*10;
-const charDealGems  = c => Math.ceil(priceOf(c)/100);
+const charDealGems  = c => Math.ceil(priceOf(c)/ECON.shop.charGemDiv);
+/* skins: the character a skin belongs to, and the hint shown when it is not the selected one */
+const shopSkinChar = it => (it && it.char && CHARS.find(c=>c.id===it.char)) || CHARS[selected] || CHARS[0];
+const shopSkinMine = it => !!(it && it.type==='skin' && CHARS[selected] && it.char===CHARS[selected].id);
+/* selling back: half the listed price, in the currency the item is listed in */
+const shopSellValue = it => it.gems ? {coins:0, gems:Math.floor(it.gems*ECON.shop.sellRate)} : {coins:Math.floor((it.price|0)*ECON.shop.sellRate), gems:0};
+const shopCanSell = it => { if(!it || it.welcome || !shopOwned(it.id)) return false; const v=shopSellValue(it); return v.coins>0 || v.gems>0; };
+const shopSellText = it => { const v=shopSellValue(it); return v.gems ? T('shop.gemsN', v.gems) : T('shop.coinsN', fmtNum(v.coins)); };
 
 /* ===== today's rotation: 5 slots, same for everyone on the same day; a reroll re-seeds it for this player only ===== */
 function shopDaySalt(){ const s=shopProg(); return dayKey()+(s.reroll===dayKey() ? 'r' : ''); }
@@ -54,13 +70,15 @@ function shopRotation(){
   const coinPool=shopShuffle(COSMETICS.filter(c=>shopAvailable(c) && c.price>0 && !c.gems), rng);
   const picks=[]; for(const c of coinPool){ if(picks.length>=2) break; if(!shopOwned(c.id)) picks.push(c); } for(const c of coinPool){ if(picks.length>=2) break; if(!picks.includes(c)) picks.push(c); }
   for(let i=0;i<2;i++){ const b=s.bought[salt+':'+(i+1)]; const it=(b && shopItem(b)) || picks[i] || null; slots.push({slot:'cos', item:it}); }
-  // 4) one gem item: a 10-day cycle in which every gem exclusive appears exactly once; the other days offer a Gold chest deal
+  // 4) one gem item: a 10-day cycle over a per-cycle shuffle of the gem exclusives (skins, legendary looks, name colours); an owned pick walks
+  //    to the next unowned one; a day without a gem item (or when everything is owned) offers a Gold chest deal instead
   const gemPool=COSMETICS.filter(c=>shopAvailable(c) && c.gems>0).concat(SHOP_EXTRA.filter(c=>c.gems>0));
   const d=shopDayIndex(), N=ECON.shop.gemCycle, cyc=Math.floor(d/N), p=((d%N)+N)%N;
   const perm=shopShuffle(gemPool, shopRng(shopHash('gem:'+cyc+(s.reroll===dayKey()?'r':''))));
   const b3=s.bought[salt+':3'];
+  let gemIt=null; if(!b3 && p<perm.length){ for(let k=0;k<perm.length;k++){ const c=perm[(p+k)%perm.length]; if(!shopOwned(c.id)){ gemIt=c; break; } } }
   if(b3 && b3!=='chest_gold' && shopItem(b3)) slots.push({slot:'gem', item:shopItem(b3)});
-  else if(!b3 && p<perm.length) slots.push({slot:'gem', item:perm[p]});
+  else if(gemIt) slots.push({slot:'gem', item:gemIt});
   else slots.push({slot:'gem', chest:'gold', gems:ECON.shop.goldDealGems, fullGems:ECON.shop.goldGems});
   // 5) the chest deal
   slots.push({slot:'chest', chest:'silver', coins:ECON.shop.silverDeal, full:ECON.shop.silverPrice});
@@ -107,12 +125,33 @@ function equipCosmetic(id){
   if(it.type==='title') return equipTitle(id, 0);
   if(it.type==='color') prog.eq.color=it.data.color;
   else if(it.type==='number') return true;                      // the number itself is set with setShirtNumber()
+  else if(it.type==='skin'){ prog.eq.skin=id; if(shopSkinMine(it)){ delete prog.eq.kit; delete prog.eq.boots; } }   // a skin is a whole look: the kit/boots come off so it shows (they stay owned, equip them again on top)
   else prog.eq[it.type]=id;
   saveProg(); shopApplyEquip(it.type); Hooks.emit('equip', {type:it.type, id}); return true;
 }
 function unequipType(type){
   shopProg(); if(type==='title'){ delete prog.eq.title; delete prog.eq.titlePack; } else delete prog.eq[type];
   saveProg(); shopApplyEquip(type); Hooks.emit('equip', {type, id:null}); return true;
+}
+/* is this item the one currently worn (titles: the pack, colours: the colour, the number: any custom number)? */
+function shopIsEquipped(it){
+  const eq=prog.eq||{}; if(!it) return false;
+  if(it.type==='title') return eq.titlePack===it.id;
+  if(it.type==='color') return eq.color===it.data.color;
+  if(it.type==='number') return eq.number>0;
+  return eq[it.type]===it.id;
+}
+/* ----- selling back: half the listed price; the item leaves the locker and comes off if it was worn ----- */
+async function shopSellItem(id){
+  const it=shopItem(id); if(!shopCanSell(it)) return false;
+  const v=shopSellValue(it);
+  if(!(await ask(T('shop.sellAsk', shopItemName(it), shopSellText(it))))) return false;
+  shopProg();
+  if(shopIsEquipped(it)){ if(it.type==='number') delete prog.eq.number; else if(it.type==='title'){ delete prog.eq.title; delete prog.eq.titlePack; } else delete prog.eq[it.type]; }
+  prog.cos.items=prog.cos.items.filter(x=>x!==id); saveProg();
+  if(v.gems) addGems(v.gems,'sell'); else addCoins(v.coins,'sell');
+  sfx.click(); Hooks.emit('sell', it);
+  shopApplyEquip(it.type); return true;                       // redraws the ball / home / the open shop tab
 }
 function equipTitle(packId, i){ const it=shopItem(packId); if(!it || it.type!=='title' || !shopOwned(packId)) return false; const n=(it.data.titles||[]).length; if(!(i>=0 && i<n)) return false; shopProg(); prog.eq.titlePack=packId; prog.eq.title=i; saveProg(); Hooks.emit('equip',{type:'title', id:packId, i}); return true; }
 function setShirtNumber(n){ shopProg(); if(!shopOwned('number_pick')) return false; if(n>0 && n<=99) prog.eq.number=n|0; else delete prog.eq.number; saveProg(); shopApplyEquip('kit'); return true; }
@@ -131,6 +170,7 @@ function skinFor(c){
   if(training || (typeof spectating!=='undefined' && spectating)) return null;
   const me=CHARS[selected]; if(!me || c.id!==me.id) return null;
   const eq=prog.eq, s={}; let any=false;
+  const sk=eq.skin && shopItem(eq.skin); if(sk && sk.type==='skin' && sk.char===c.id && shopOwned(sk.id)){ Object.assign(s, sk.data); any=true; }   // the skin goes under; kit / boots / number on top
   const kit=eq.kit && shopItem(eq.kit); if(kit && kit.type==='kit' && shopOwned(kit.id)){ Object.assign(s, kit.data); any=true; }
   const bo=eq.boots && shopItem(eq.boots); if(bo && bo.type==='boots' && shopOwned(bo.id)){ s.boots=bo.data.boots; any=true; }
   if(eq.number>0 && shopOwned('number_pick')){ s.number=eq.number; any=true; }
@@ -178,6 +218,7 @@ function shopVisual(it){
   const me=CHARS[selected];
   switch(it.type){
     case 'kit':     return `<div class="sprite">${playerSVG(me,'happy',Object.assign({}, it.data))}</div>`;
+    case 'skin':    return `<div class="sprite">${playerSVG(shopSkinChar(it),'happy',Object.assign({}, it.data))}</div>`;   // the character it belongs to, wearing it
     case 'boots':   return shopBootSVG(it.data.boots);
     case 'ball':    return shopBallSVG(it.data);
     case 'stadium': return shopStadiumSVG(it.data);
@@ -249,7 +290,7 @@ function shopWallet(){ const c=$('#shop-coins'), g=$('#shop-gems'); if(c) c.text
 function shopRefresh(){ shopWallet(); if($('#shop').classList.contains('active')) shopBuildTab(); }
 function shopBuildTab(){
   document.querySelectorAll('#shop-tabs .shop-tab').forEach(b=>b.classList.toggle('on', b.dataset.tab===shopTab));
-  const body=$('#shop-body'); const keepScroll=body.scrollTop; const innerScroll=[...body.querySelectorAll('.shop-grid,.shop-locker')].map(e=>[e.classList.contains('shop-grid')?'.shop-grid':'.shop-locker', e.scrollTop]); body.innerHTML='';
+  const body=$('#shop-body'); const keepScroll=body.scrollTop; const innerScroll=[...body.querySelectorAll('.shop-grid,.shop-locker,.shop-skins,.shop-gems .shop-row')].map(e=>[e.classList.contains('shop-grid')?'.shop-grid':e.classList.contains('shop-locker')?'.shop-locker':e.classList.contains('shop-skins')?'.shop-skins':'.shop-gems .shop-row', e.scrollTop]); body.innerHTML='';
   ({today:shopBuildToday, players:shopBuildPlayers, looks:shopBuildLooks, gems:shopBuildGems, powers:shopBuildPowers})[shopTab](body);
   body.scrollTop=keepScroll; innerScroll.forEach(([sel,top])=>{ const e=body.querySelector(sel); if(e) e.scrollTop=top; });   // re-rendering (equip / choose a player) keeps the scroll position of the list
 }
@@ -347,10 +388,37 @@ function shopBuildPlayers(body){
   wrap.appendChild(pv); body.appendChild(wrap);
 }
 
-/* --- looks: the locker --- */
+/* --- one item card (locker, skins list, gem tab): picture, name, [skin: whose + hint], [rarity + price], buttons --- */
+function shopItemCard(it, o){
+  o=o||{}; const owned=shopOwned(it.id), on=owned && shopIsEquipped(it);
+  const d=document.createElement('div'); d.className='shop-item rar-'+it.rarity+(owned?' owned':'')+(on?' on':'')+(it.type==='skin'?' skin':''); d.dataset.id=it.id;
+  let h=`<div class="vis">${shopVisual(it)}</div><div class="nm">${esc(shopItemName(it))}</div>`;
+  if(it.type==='skin'){ const mine=shopSkinMine(it); h+=`<span class="ch${mine?' mine':''}">🎭 ${esc(nm(shopSkinChar(it)))}</span>`; if(!mine) h+=`<div class="skhint">${T('shop.skinOf', nm(shopSkinChar(it)))}</div>`; }
+  if(o.price) h+=`<span class="shop-rtag ${it.rarity}">${T('shop.rar.'+it.rarity)}</span><div class="pr">${owned ? T('shop.owned2') : shopPriceText(it)}</div>`;
+  d.innerHTML=h;
+  if(!owned) d.appendChild(shopBtn(it.gems?'blue':'yellow', T('shop.buy')+' '+shopPriceText(it), ()=>shopBuyItem(it), {buy:it.id}));
+  else d.appendChild(on ? shopBtn('red', T('shop.unequip'), ()=>unequipType(it.type), {act:'unequip'}) : shopBtn('green', T('shop.equip'), ()=>equipCosmetic(it.id), {act:'equip'}));
+  if(o.sell && shopCanSell(it)) d.appendChild(shopBtn('red sell', T('shop.sell', shopSellText(it)), ()=>shopSellItem(it.id), {act:'sell'}));
+  return d;
+}
+const shopFitCards = root => root.querySelectorAll('.shop-item .btn,.shop-item .ch,.shop-item .pr').forEach(el=>fitText(el, 10));   // long prices / names stay inside the narrow cards
+
+/* --- looks: the locker (what you own, equip / sell) or the skins catalogue --- */
+let shopLooksView='locker';
 function shopBuildLooks(body){
   shopProg();
   const wrap=document.createElement('div'); wrap.className='shop-looks';
+  const f=document.createElement('div'); f.className='shop-lfilters';
+  for(const k of ['locker','skins']) f.appendChild(shopBtn('blue'+(shopLooksView===k?' on':''), T('shop.looks.'+k), ()=>{ shopLooksView=k; shopBuildTab(); }, {lv:k}));
+  wrap.appendChild(f);
+  wrap.appendChild(shopLooksView==='skins' ? shopBuildSkins() : shopBuildLocker());
+  const pv=document.createElement('div'); pv.className='shop-preview'; pv.id='shop-lpv';
+  const me=CHARS[selected], ttl=titleText(), nc=nameColorClass(), sk=prog.eq.skin && shopItem(prog.eq.skin);
+  pv.innerHTML=`<div class="shop-hint">${T('shop.myLook')}</div><div class="sprite">${playerSVG(me)}</div><div class="nm">${nc ? `<b class="${nc}">${esc(nm(me))}</b>` : esc(nm(me))}</div>${ttl?`<div class="ttl">${esc(ttl)}</div>`:''}${sk && shopOwned(sk.id) ? `<div class="skin${shopSkinMine(sk)?'':' off'}">${esc(shopItemName(sk))}</div>` : ''}<div class="ball">${ballSVG()}</div>`;
+  wrap.appendChild(pv); body.appendChild(wrap);
+  shopFitCards(wrap);
+}
+function shopBuildLocker(){
   const L=document.createElement('div'); L.className='shop-locker'; L.id='shop-locker';
   const hint=document.createElement('div'); hint.className='shop-hint'; hint.textContent=T('shop.lockerHint'); L.appendChild(hint);
   let any=false;
@@ -363,31 +431,37 @@ function shopBuildLooks(body){
       if(type==='title'){ (it.data.titles||[]).forEach((t,i)=>{ const on=prog.eq.titlePack===it.id && (prog.eq.title|0)===i; const d=document.createElement('div'); d.className='shop-item owned rar-'+it.rarity+(on?' on':''); d.dataset.id=it.id; d.dataset.i=i;
           d.innerHTML=`<div class="vis"><span class="emo">🏷️</span></div><div class="nm">${esc(t[LI[lang]]||t[0])}</div>`;
           d.appendChild(on ? shopBtn('red', T('shop.unequip'), ()=>unequipType('title'), {act:'unequip'}) : shopBtn('green', T('shop.equip'), ()=>{ equipTitle(it.id, i); shopRefresh(); }, {act:'equip'}));
+          if(shopCanSell(it)) d.appendChild(shopBtn('red sell', T('shop.sell', shopSellText(it)), ()=>shopSellItem(it.id), {act:'sell'}));   // sells the whole pack
           row.appendChild(d); }); continue; }
-      const d=document.createElement('div'); d.className='shop-item owned rar-'+it.rarity; d.dataset.id=it.id;
-      d.innerHTML=`<div class="vis">${shopVisual(it)}</div><div class="nm">${esc(shopItemName(it))}</div>`;
       if(type==='number'){
+        const d=document.createElement('div'); d.className='shop-item owned rar-'+it.rarity; d.dataset.id=it.id;
+        d.innerHTML=`<div class="vis">${shopVisual(it)}</div><div class="nm">${esc(shopItemName(it))}</div>`;
         const n=prog.eq.number|0, cur=n||(CHARS[selected].number|0)||10; const box=document.createElement('div'); box.className='shop-num';
         box.appendChild(shopBtn('blue','−',()=>setShirtNumber(Math.max(1,cur-1)), {act:'numDown'}));
         const b=document.createElement('b'); b.textContent=cur; box.appendChild(b);
         box.appendChild(shopBtn('blue','+',()=>setShirtNumber(Math.min(99,cur+1)), {act:'numUp'}));
         d.appendChild(box); d.classList.toggle('on', n>0);
         if(n>0) d.appendChild(shopBtn('red', T('shop.numberDefault'), ()=>setShirtNumber(0), {act:'unequip'}));
+        if(shopCanSell(it)) d.appendChild(shopBtn('red sell', T('shop.sell', shopSellText(it)), ()=>shopSellItem(it.id), {act:'sell'}));
         row.appendChild(d); continue;
       }
-      const on = type==='color' ? prog.eq.color===it.data.color : prog.eq[type]===it.id;
-      d.classList.toggle('on', on);
-      d.appendChild(on ? shopBtn('red', T('shop.unequip'), ()=>unequipType(type), {act:'unequip'}) : shopBtn('green', T('shop.equip'), ()=>equipCosmetic(it.id), {act:'equip'}));
-      row.appendChild(d);
+      row.appendChild(shopItemCard(it, {sell:true}));
     }
     sec.appendChild(row); L.appendChild(sec);
   }
   if(!any){ const e=document.createElement('div'); e.className='shop-empty'; e.textContent=T('shop.lockerEmpty'); L.appendChild(e); L.appendChild(shopBtn('yellow', '🛒 '+T('shop.tab.today'), ()=>{ shopTab='today'; shopBuildTab(); })); }
-  wrap.appendChild(L);
-  const pv=document.createElement('div'); pv.className='shop-preview'; pv.id='shop-lpv';
-  const me=CHARS[selected], ttl=titleText(), nc=nameColorClass();
-  pv.innerHTML=`<div class="shop-hint">${T('shop.myLook')}</div><div class="sprite">${playerSVG(me)}</div><div class="nm">${nc ? `<b class="${nc}">${esc(nm(me))}</b>` : esc(nm(me))}</div>${ttl?`<div class="ttl">${esc(ttl)}</div>`:''}<div class="ball">${ballSVG()}</div>`;
-  wrap.appendChild(pv); body.appendChild(wrap);
+  return L;
+}
+/* the skins catalogue: the selected character's skins first, then owned ones, then the rest; each card is the character wearing it */
+function shopSkins(){ return COSMETICS.filter(c=>c.type==='skin' && (shopAvailable(c) || shopOwned(c.id))); }
+function shopBuildSkins(){
+  const S=document.createElement('div'); S.className='shop-skins'; S.id='shop-skins';
+  const hint=document.createElement('div'); hint.className='shop-hint'; hint.textContent=T('shop.skinsHint'); S.appendChild(hint);
+  const items=shopSkins().sort((a,b)=>(shopSkinMine(b)-shopSkinMine(a)) || (shopOwned(b.id)-shopOwned(a.id)));
+  const row=document.createElement('div'); row.className='shop-row';
+  for(const it of items){ const d=shopItemCard(it, {price:true}); if(shopIsNew(it)) d.insertAdjacentHTML('afterbegin', `<span class="shop-badge-new">${T('shop.new')}</span>`); row.appendChild(d); }
+  if(!items.length){ const e=document.createElement('div'); e.className='shop-empty'; e.textContent=T('shop.skinsNone'); S.appendChild(e); }
+  S.appendChild(row); return S;
 }
 
 /* --- gems --- */
@@ -396,15 +470,9 @@ function shopBuildGems(body){
   const hint=document.createElement('div'); hint.className='shop-hint'; hint.textContent=T('shop.gemHint'); wrap.appendChild(hint);
   const row=document.createElement('div'); row.className='shop-row';
   const items=COSMETICS.filter(c=>shopAvailable(c) && c.gems>0).concat(SHOP_EXTRA.filter(c=>c.gems>0));
-  for(const it of items){
-    const owned=shopOwned(it.id), on = owned && (it.type==='color' ? prog.eq.color===it.data.color : prog.eq[it.type]===it.id);
-    const d=document.createElement('div'); d.className='shop-item rar-'+it.rarity+(owned?' owned':'')+(on?' on':''); d.dataset.id=it.id;
-    d.innerHTML=`<div class="vis">${shopVisual(it)}</div><div class="nm">${esc(shopItemName(it))}</div><span class="shop-rtag ${it.rarity}">${T('shop.rar.'+it.rarity)}</span><div class="pr">${owned ? T('shop.owned2') : shopPriceText(it)}</div>`;
-    if(!owned) d.appendChild(shopBtn('blue', T('shop.buy')+' 💎 '+it.gems, ()=>shopBuyItem(it), {buy:it.id}));
-    else d.appendChild(on ? shopBtn('red', T('shop.unequip'), ()=>unequipType(it.type), {act:'unequip'}) : shopBtn('green', T('shop.equip'), ()=>equipCosmetic(it.id), {act:'equip'}));
-    row.appendChild(d);
-  }
+  for(const it of items) row.appendChild(shopItemCard(it, {price:true}));
   wrap.appendChild(row); body.appendChild(wrap);
+  shopFitCards(wrap);
 }
 
 /* --- powers --- */
@@ -431,6 +499,16 @@ for(const [id,tab] of [['#xp-badge','players'],['#gem-badge','gems']]){ const el
 NextUp.add(()=> shopFreeClaimed() ? null : {prio:40, icon:'🎁', text:T('shop.nextFree'), action:()=>openShop('today')});
 NextUp.add(()=>{ const sl=shopRotation()[0]; const c=sl.char; if(!c || sl.sold || isUnlocked(c)) return null; if((prog.coins|0)<sl.coins && (prog.gems|0)<sl.gems) return null; return {prio:20, icon:'🛒', text:T('shop.nextUp', nm(c)), action:()=>openShop('today')}; });
 const _shopApplyLang=applyLang; applyLang=function(){ _shopApplyLang(); if($('#shop').classList.contains('active')) shopBuildTab(); };
+/* chest cards (20-chests.js loads after this module, hence the deferred wrap): a skin card shows the character wearing it, not a tag emoji */
+setTimeout(()=>{
+  if(typeof chestCardPreview!=='function' || chestCardPreview.shopSkin) return;
+  const _p=chestCardPreview;
+  chestCardPreview=function(c){
+    if(c && c.t==='cos'){ const x=cosById(c.id); if(x && x.type==='skin'){ try{ const d=document.createElement('div'); d.className='pv'; d.innerHTML=playerSVG(shopSkinChar(x),'happy',Object.assign({}, x.data)); return d; }catch(e){} } }
+    return _p.apply(this, arguments);
+  };
+  chestCardPreview.shopSkin=true;
+}, 0);
 
 I18N_ADD({
  'shop.title':['🛒 החנות','🛒 Shop','🛒 المتجر','🛒 Магазин'],
@@ -464,6 +542,13 @@ I18N_ADD({
  'shop.type.kit':['👕 חולצות','👕 Kits','👕 أطقم','👕 Формы'], 'shop.type.boots':['👟 נעליים','👟 Boots','👟 أحذية','👟 Бутсы'], 'shop.type.ball':['⚽ כדורים','⚽ Balls','⚽ كرات','⚽ Мячи'],
  'shop.type.stadium':['🏟️ אצטדיונים','🏟️ Stadiums','🏟️ ملاعب','🏟️ Стадионы'], 'shop.type.celeb':['🎉 חגיגות','🎉 Celebrations','🎉 احتفالات','🎉 Празднования'],
  'shop.type.title':['🏷️ תארים','🏷️ Titles','🏷️ ألقاب','🏷️ Титулы'], 'shop.type.color':['🌈 צבע השם','🌈 Name colour','🌈 لون الاسم','🌈 Цвет имени'], 'shop.type.number':['🔢 מספר חולצה','🔢 Shirt number','🔢 رقم القميص','🔢 Номер на футболке'],
+ 'shop.type.skin':['🎭 סקינים','🎭 Skins','🎭 أشكال','🎭 Скины'], 'chests.t.skin':['סקין','Skin','شكل','Скин'],
+ 'shop.looks.locker':['👕 הארון שלי','👕 My locker','👕 خزانتي','👕 Мой шкаф'], 'shop.looks.skins':['🎭 סקינים','🎭 Skins','🎭 أشكال','🎭 Скины'],
+ 'shop.skinsHint':['🎭 סקין מחליף את כל המראה של דמות אחת · נלבש כשהדמות נבחרת · 💎 בלבד','🎭 A skin changes one player\'s whole look · worn when that player is selected · 💎 only','🎭 الشكل يغيّر مظهر لاعب واحد بالكامل · يظهر عند اختيار ذلك اللاعب · 💎 فقط','🎭 Скин меняет весь облик одного игрока · надевается, когда он выбран · только 💎'],
+ 'shop.skinsNone':['עוד אין סקינים 🎭 חכו ליום ראשון!','No skins yet 🎭 wait for Sunday!','لا توجد أشكال بعد 🎭 انتظر يوم الأحد!','Скинов пока нет 🎭 жди воскресенья!'],
+ 'shop.skinOf':['הסקין הזה שייך ל-{0}','This skin belongs to {0}','هذا الشكل يخص {0}','Этот скин принадлежит {0}'],
+ 'shop.sell':['💰 מכור ב-{0}','💰 Sell for {0}','💰 بِع مقابل {0}','💰 Продать за {0}'],
+ 'shop.sellAsk':['למכור את {0} ב-{1}?','Sell {0} for {1}?','هل تبيع {0} مقابل {1}؟','Продать {0} за {1}?'],
  'shop.lockerEmpty':['עוד אין לך פריטים 👕 קנו משהו בחנות או פתחו תיבה!','No items yet 👕 buy something in the shop or open a chest!','لا توجد أغراض بعد 👕 اشترِ شيئًا من المتجر أو افتح صندوقًا!','Пока нет вещей 👕 купи что-нибудь в магазине или открой сундук!'],
  'shop.lockerHint':['הפריטים שלך · לחצו כדי ללבוש','Your items · tap to equip','أغراضك · اضغط للارتداء','Твои вещи · нажми, чтобы надеть'],
  'shop.myLook':['המראה שלי','My look','مظهري','Мой образ'],

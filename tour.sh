@@ -49,6 +49,10 @@ cat > /tmp/tour-tail.js <<'EOF'
     else if(scene==='emote'){ if(typeof ECON!=='undefined' && ECON.emotes) ECON.emotes.show=60000; startOfflineMatch(1); await w(4200); for(let i=0;i<30 && state!=='play';i++) await w(200); document.dispatchEvent(new KeyboardEvent('keydown',{key:'1',code:'Digit1',bubbles:true})); await w(500); }
     else if(scene==='levels'){ prog.unlocked=['messi','ronaldo']; prog.shards={messi:10}; prog.charLv={ronaldo:3}; saveProg(); openShop('players'); await w(400); }
     else if(scene==='leaders'){ $('#btn-top').click(); await w(1500); }
+    else if(scene==='chest-climb'){ if(ECON.chests.climb) ECON.chests.climb.step=60000; chestRollRarity=()=>'legendary'; prog.chestPick=null; prog.chests={gold:1}; saveProg(); openChestsScreen(); await w(300); openChest('gold'); await w(300); for(let i=0;i<3;i++){ chestTap(); await w(80); } await w(2200); }
+    else if(scene==='shop-skins'){ prog.unlocked=['messi','ronaldo']; prog.gems=500; saveProg(); openShop('looks'); await w(300); const b=[...document.querySelectorAll('#shop button')].find(x=>x.textContent.includes('🎭')); if(b) b.click(); await w(400); }
+    else if(scene==='name'){ settings.name=''; saveSettings(); showScreen('intro'); await w(100); showScreen('home'); await w(900); }
+    else if(scene==='clubs-official'){ prog.admin=true; prog.official={id:'off1',name:'המועדון של ליאור',emoji:'📣',msg:'שלום לכולם! השבוע יעד של 150 גולים 💪',by:'ליאור',auto:true,code:'LIOR77',tot:83,target:150,n:12}; prog.officialId='off1'; saveProg(); if(typeof clubOpen==='function') clubOpen('official'); await w(800); }
     else if(scene==='admin'){ prog.admin=true; saveProg(); setupAdminUI(); openAdmin(); await w(800); }
     if(scene.startsWith('home')){ await w(900); document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show')); }
     await w(600);

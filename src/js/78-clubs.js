@@ -10,6 +10,17 @@
           prog.clubPrize = weekKey() once this week's prize was taken.
    Reads are bounded: one GET of clubs/<id> when the club screen opens (cached 10 min, 🔄 forces), one
    PATCH after every match, one GET on the claim button. Everything degrades: undefined = "no connection".
+   THE OFFICIAL CLUB (run by the admin, everyone is in automatically — in ADDITION to the personal club):
+     official/club   = {id, name:<free text ≤24>, emoji, msg:<free text ≤300>, by:<admin name>, auto:true|false, code, updated}
+     clubs/<id>      = a normal club node with name:<string> and official:true (members/week as usual)
+   Only the admin writes official/* (client-side isAdmin() checks; the rules are open today — see PLAN Appendix A).
+   name and msg are the only free text in the game: both are rendered through esc() only.
+   Local: prog.official   = the sanitised official/club node (+ tot/target/n cache for the home pill)
+          prog.officialId = the official club I am a member of, prog.officialMe = {wk,g,w,m,dirty?} my weekly counters there
+          prog.officialSeen = when official/club was last fetched from load/home (at most once an hour)
+          prog.clubPrizeOf = {<clubId>: weekKey} the weekly prize, per club (migrated from the old prog.clubPrize)
+   Reads: load/home → one GET of official/club per hour (+ one PATCH of my member node the first time);
+          modal open → one GET of official/club + one GET of clubs/<id> (cached 10 min). Target = 10 × members, min 50.
    =================================================================================================== */
 const CLUB_ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';            // join codes and ids: no 0/O/1/I
 const CLUB_NAMES=[
@@ -24,7 +35,9 @@ const CLUB_NAMES=[
 ];
 const CLUB_EMOJIS=['🦁','⚡','🦈','🐯','🦅','🐉','🚀','⭐','🏆','🔥','🤖','🐺'];
 const CLUB_NAME_EMOJI=['🦁','⚡','🦈','🐯','🦅','🐉','🐺','🏆','🚀','⭐','🏆','🐯','⚡','🏆','⭐','🔥','🤖','⚡','🦁','🏆','🚀','🐉','🔥','⭐'];   // the default emoji per preset name
-Object.assign(ECON, { clubs:{ create:20, max:20, goalPer:15, goalMin:30, prizeMatches:5, prizeGems:10, prizeCoins:300, prizeCoinsGold:600, refreshMs:10*60000 } });
+const OFFICIAL_EMOJIS=['📣'].concat(CLUB_EMOJIS);                 // the admin's emoji picker for the official club
+Object.assign(ECON, { clubs:{ create:30, max:20, goalPer:15, goalMin:30, prizeMatches:5, prizeGems:10, prizeCoins:300, prizeCoinsGold:600, refreshMs:10*60000,
+  oGoalPer:10, oGoalMin:50, oTop:20, oSeenMs:60*60000, oRetryMs:5*60000, nameMax:24, msgMax:300 } });   // o* = the official club
 
 I18N_ADD({
  'clubs.title':['🏟️ מועדון','🏟️ Club','🏟️ النادي','🏟️ Клуб'],
@@ -79,13 +92,52 @@ I18N_ADD({
  'clubs.prizeSilver':['🎁 פרס המועדון: תיבת כסף + 10💎!','🎁 Club prize: Silver chest + 10💎!','🎁 جائزة النادي: صندوق فضي + 10💎!','🎁 Приз клуба: серебряный сундук + 10💎!'],
  'clubs.prizeGold':['🥇 פרס המועדון: תיבת זהב + 10💎!','🥇 Club prize: Gold chest + 10💎!','🥇 جائزة النادي: صندوق ذهبي + 10💎!','🥇 Приз клуба: золотой сундук + 10💎!'],
  'clubs.back':['חזרה','Back','رجوع','Назад'],
+ /* the official club */
+ 'clubs.tabMine':['🏟️ המועדון שלי','🏟️ My club','🏟️ ناديي','🏟️ Мой клуб'],
+ 'clubs.tabAdmin':['⚙️ המועדון הרשמי','⚙️ The official club','⚙️ النادي الرسمي','⚙️ Официальный клуб'],
+ 'clubs.oTitle':['📣 המועדון הרשמי','📣 The official club','📣 النادي الرسمي','📣 Официальный клуб'],
+ 'clubs.oBoardFrom':['📣 הודעה מ-{0}','📣 A message from {0}','📣 رسالة من {0}','📣 Сообщение от {0}'],
+ 'clubs.oBoard':['📣 הודעה','📣 Message','📣 رسالة','📣 Сообщение'],
+ 'clubs.oNoMsg':['עוד אין הודעה 🙂','No message yet 🙂','لا توجد رسالة بعد 🙂','Сообщения пока нет 🙂'],
+ 'clubs.oMembers':['👥 חברים ({0})','👥 Members ({0})','👥 الأعضاء ({0})','👥 Участники ({0})'],
+ 'clubs.oMore':['ועוד {0} חברים','and {0} more members','و{0} أعضاء آخرين','и ещё {0} участников'],
+ 'clubs.oIntro':['כולם במועדון הרשמי! לחצו כדי להצטרף','Everyone is in the official club! Tap to join','الجميع في النادي الرسمي! اضغطوا للانضمام','Все в официальном клубе! Нажми, чтобы вступить'],
+ 'clubs.oIntroCode':['מצטרפים למועדון הרשמי עם קוד מהאדמין','Join the official club with a code from the admin','انضموا إلى النادي الرسمي برمز من المشرف','В официальный клуб — по коду от админа'],
+ 'clubs.oJoin':['🚀 הצטרף','🚀 Join','🚀 انضم','🚀 Войти'],
+ 'clubs.oNoLeave':['כולם במועדון הרשמי — אי אפשר לעזוב','Everyone is in the official club — no leaving','الجميع في النادي الرسمي — لا يمكن المغادرة','Все в официальном клубе — выйти нельзя'],
+ 'clubs.oAlready':['אתם כבר במועדון הרשמי','You are already in the official club','أنتم بالفعل في النادي الرسمي','Ты уже в официальном клубе'],
+ 'clubs.oHint':['המועדון של כולם: שם חופשי, הודעה לכולם, וכולם מצטרפים אוטומטית','The club of everyone: a free name, a message to all, and everyone joins automatically','نادي الجميع: اسم حر، رسالة للجميع، والجميع ينضمون تلقائيًا','Клуб для всех: свободное название, сообщение всем, и все вступают автоматически'],
+ 'clubs.oName':['שם המועדון (עד 24 תווים)','Club name (up to 24 characters)','اسم النادي (حتى 24 حرفًا)','Название клуба (до 24 знаков)'],
+ 'clubs.oNamePh':['שם המועדון','Club name','اسم النادي','Название клуба'],
+ 'clubs.oNameShort':['השם צריך לפחות 2 תווים','The name needs at least 2 characters','الاسم يحتاج إلى حرفين على الأقل','В названии нужно минимум 2 знака'],
+ 'clubs.oCreate':['➕ צור את המועדון הרשמי','➕ Create the official club','➕ أنشئ النادي الرسمي','➕ Создать официальный клуб'],
+ 'clubs.oCreateQ':['ליצור את המועדון הרשמי {0} {1}? כולם יצטרפו אליו אוטומטית','Create the official club {0} {1}? Everyone joins it automatically','إنشاء النادي الرسمي {0} {1}؟ سينضم الجميع تلقائيًا','Создать официальный клуб {0} {1}? Все вступят автоматически'],
+ 'clubs.oCreated':['🎉 המועדון הרשמי {0} {1} נוצר! הקוד: {2}','🎉 The official club {0} {1} is ready! Code: {2}','🎉 تم إنشاء النادي الرسمي {0} {1}! الرمز: {2}','🎉 Официальный клуб {0} {1} создан! Код: {2}'],
+ 'clubs.oSaveName':['💾 שמור שם','💾 Save name','💾 احفظ الاسم','💾 Сохранить название'],
+ 'clubs.oSaved':['✅ נשמר','✅ Saved','✅ تم الحفظ','✅ Сохранено'],
+ 'clubs.oMsgLabel':['הודעה לכולם (עד 300 תווים)','A message to everyone (up to 300 characters)','رسالة للجميع (حتى 300 حرف)','Сообщение всем (до 300 знаков)'],
+ 'clubs.oMsgPh':['כתבו הודעה לכל השחקנים…','Write a message to all players…','اكتبوا رسالة لكل اللاعبين…','Напиши сообщение всем игрокам…'],
+ 'clubs.oSaveMsg':['📣 שמור הודעה','📣 Save message','📣 احفظ الرسالة','📣 Сохранить сообщение'],
+ 'clubs.oAuto':['כולם במועדון אוטומטית','Everyone joins automatically','الجميع في النادي تلقائيًا','Все вступают автоматически'],
+ 'clubs.oAutoOn':['✅ כולם מצטרפים אוטומטית','✅ Everyone joins automatically','✅ الجميع ينضمون تلقائيًا','✅ Все вступают автоматически'],
+ 'clubs.oAutoOff':['🚪 מצטרפים עם קוד בלבד — אפשר לעזוב','🚪 Join by code only — leaving is allowed','🚪 الانضمام بالرمز فقط — يمكن المغادرة','🚪 Вход только по коду — выйти можно'],
+ 'clubs.oAdminOnly':['רק האדמין יכול לעשות את זה','Only the admin can do that','المشرف فقط يستطيع ذلك','Это может только админ'],
 });
 STATIC_ADD({'#club-title':'clubs.title', '#btn-club-close':'clubs.back', '#btn-club':'clubs.btn'});
 
-const CLUB={ data:null, fetched:0, offline:false, busy:false, loading:null, view:'none', pick:{name:0, emoji:CLUB_NAME_EMOJI[0], emojiSet:false}, pending:null, pendingBusy:false };
+const CLUB={ data:null, fetched:0, offline:false, busy:false, loading:null, view:'none', pick:{name:0, emoji:CLUB_NAME_EMOJI[0], emojiSet:false}, pending:null, pendingBusy:false,
+  tab:'mine', oview:'main', opick:'📣', odata:null, ofetched:0, ooffline:false, oloading:null, osync:null, ogone:null };   // o* = the official club (its own cache, same 10-min rule)
 
 /* ----- small helpers ----- */
 function clubName(i, l){ const row=CLUB_NAMES[i|0]||CLUB_NAMES[0]; return row[LI[l||lang]]||row[0]; }
+/* the name to show: preset index (personal clubs) or the admin's free text (official club) — free text goes through esc() at render time */
+function clubDisplay(c){ if(!c) return ''; return typeof c.name==='number' ? clubName(c.name) : String(c.name||''); }
+/* the weekly prize is per club: prog.clubPrizeOf={<clubId>:weekKey}; the old single prog.clubPrize (the personal club) migrates once */
+function clubPrizeOf(){
+  if(!prog.clubPrizeOf || typeof prog.clubPrizeOf!=='object') prog.clubPrizeOf={};
+  if('clubPrize' in prog){ const c=myClub(); if(prog.clubPrize && c && !prog.clubPrizeOf[c.id]) prog.clubPrizeOf[c.id]=prog.clubPrize; delete prog.clubPrize; saveProg(); }
+  return prog.clubPrizeOf;
+}
 function clubRand(n){ const a=new Uint8Array(n); try{ crypto.getRandomValues(a); }catch(e){ for(let i=0;i<n;i++) a[i]=Math.random()*256|0; } return Array.from(a, b=>CLUB_ALPHA[b%32]).join(''); }
 function clubValidCode(c){ return /^[A-Z0-9]{6}$/.test(String(c||'')); }
 function clubNormCode(s){ return String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6); }
@@ -96,20 +148,22 @@ function clubDaysLeft(){ const d=new Date(now()); return 7-((d.getDay()+6)%7); }
 /* my weekly counters, restarted when the (server) week changes */
 function clubMe(){ const c=myClub(); const wk=weekKey(); if(!c) return {wk, g:0, w:0, m:0}; if(!c.me || c.me.wk!==wk) c.me={wk, g:0, w:0, m:0}; return c.me; }
 function clubMemberBody(me){ me=me||clubMe(); return {name:normName(settings.name), lv:myLevel(), g:me.g|0, w:me.w|0, m:me.m|0, wk:me.wk, t:{'.sv':'timestamp'}}; }
-/* the week as the club sees it: members whose wk is the current week count; my own local counters may be ahead of the server (a PATCH that failed) → the better of the two */
-function clubWeekStats(data){
-  const wk=weekKey(), ms=(data && data.members && typeof data.members==='object') ? data.members : {}, my=clubMyKey(), me=clubMe();
+/* the week as the club sees it: members whose wk is the current week count; my own local counters may be ahead of the server (a PATCH that failed) → the better of the two.
+   o = {me, member, target} picks the club: the personal club by default, the official club through officialStats() */
+function clubWeekStats(data, o){
+  o=o||{}; const me=o.me||clubMe(), member=('member' in o) ? !!o.member : !!myClub(), targetOf=typeof o.target==='function' ? o.target : clubTarget;
+  const wk=weekKey(), ms=(data && data.members && typeof data.members==='object') ? data.members : {}, my=clubMyKey();
   const list=Object.keys(ms).map(k=>{ const m=ms[k]||{}; const cur=m.wk===wk; return {key:k, name:String(m.name||'?').slice(0,14), lv:m.lv|0, g:cur?m.g|0:0, w:cur?m.w|0:0, m:cur?m.m|0:0, me:k===my}; });
   const totalServer=list.reduce((s,x)=>s+x.g, 0);
   let mine=list.find(x=>x.me);
-  if(!mine && my && myClub()){ mine={key:my, name:normName(settings.name), lv:myLevel(), g:0, w:0, m:0, me:true}; list.push(mine); }
+  if(!mine && my && member){ mine={key:my, name:normName(settings.name), lv:myLevel(), g:0, w:0, m:0, me:true}; list.push(mine); }
   if(mine && me.wk===wk){ mine.g=Math.max(mine.g, me.g|0); mine.w=Math.max(mine.w, me.w|0); mine.m=Math.max(mine.m, me.m|0); }
   list.sort((a,b)=>b.g-a.g || b.w-a.w || a.name.localeCompare(b.name));
   const n=Math.max(1, list.length), total=list.reduce((s,x)=>s+x.g, 0);
-  return {wk, n, total, totalServer, target:clubTarget(n), list, myM: mine ? mine.m : 0};
+  return {wk, n, total, totalServer, target:targetOf(n), list, myM: mine ? mine.m : 0};
 }
-function clubPrizeState(st){
-  if(prog.clubPrize===st.wk) return 'claimed';
+function clubPrizeState(st, id){
+  if(clubPrizeOf()[id]===st.wk) return 'claimed';
   if(st.total<st.target) return 'far';
   if(st.myM<ECON.clubs.prizeMatches) return 'need';
   return st.total>=st.target*2 ? 'ready2' : 'ready';
@@ -143,7 +197,7 @@ async function clubRefresh(force){
     const r=await fbReq('clubs/'+c.id, 'GET');
     if(r===undefined){ CLUB.offline=true; return null; }
     CLUB.offline=false;
-    if(r===null || typeof r!=='object'){ delete prog.club; prog.clubPrize=null; saveProg(); CLUB.data=null; toast(T('clubs.gone'),'warn'); clubHomePill(); return null; }   // pruned/deleted
+    if(r===null || typeof r!=='object'){ delete prog.club; delete clubPrizeOf()[c.id]; saveProg(); CLUB.data=null; toast(T('clubs.gone'),'warn'); clubHomePill(); return null; }   // pruned/deleted
     CLUB.data=r; CLUB.fetched=now();
     if(typeof r.name==='number') c.name=r.name|0; if(r.emoji) c.emoji=String(r.emoji).slice(0,8); if(r.code && clubValidCode(r.code)) c.code=r.code;
     const st=clubWeekStats(r); c.tot=st.total; c.target=st.target; c.n=st.n; saveProg();
@@ -183,13 +237,15 @@ async function clubCreate(nameI, emoji){
   }catch(e){ console.error('club create', e); return false; }
   finally{ CLUB.busy=false; }
 }
-/* join by code: clubCodes/<code> → id → clubs/<id> (not full) → PATCH my member node */
+/* join by code: clubCodes/<code> → id → clubs/<id> (not full) → PATCH my member node.
+   The official club's code (official:true) joins the official club IN ADDITION to the personal one (a rejoin after the admin turned auto off) */
 async function clubJoin(code){
   code=clubNormCode(code);
   if(!clubValidCode(code)){ toast(T('clubs.badCode'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
   if(CLUB.busy) return false;
   if(!clubNeedName()) return false;
-  if(myClub()){ toast(T('clubs.already'),'warn'); return false; }
+  const o=officialInfo();
+  if(myClub() && !(o && o.code===code)){ toast(T('clubs.already'),'warn'); return false; }
   if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
   CLUB.busy=true;
   try{
@@ -199,6 +255,8 @@ async function clubJoin(code){
     const data=await fbReq('clubs/'+id, 'GET');
     if(data===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
     if(!data || typeof data!=='object'){ toast(T('clubs.notFound'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+    if(data.official===true) return await officialJoinWith(id, code, data);
+    if(myClub()){ toast(T('clubs.already'),'warn'); return false; }
     const ms=(data.members && typeof data.members==='object') ? data.members : {}, k=clubMyKey();
     if(Object.keys(ms).length>=ECON.clubs.max && !ms[k]){ toast(T('clubs.full', ECON.clubs.max),'warn'); try{ sfx.lose(); }catch(e){} return false; }
     const me={wk:weekKey(), g:0, w:0, m:0}, node=clubMemberBody(me);
@@ -226,19 +284,20 @@ async function clubLeave(){
     toast(T('clubs.left'),'warn'); clubHomePill(); clubRender(); return true;
   } finally{ CLUB.busy=false; }
 }
-/* the weekly prize: the club total (server) ≥ target and I played ≥5 real matches this week → once per week */
-async function clubClaim(){
-  const c=myClub(); if(!c || CLUB.busy) return false;
-  const wk=weekKey(); if(prog.clubPrize===wk){ toast(T('clubs.claimed'),'warn'); return false; }
+/* the weekly prize: the club total (server) ≥ target and I played ≥5 real matches this week → once per week, per club.
+   ctx = {id, refresh(force), stats(data), still()} — the personal club (clubClaim) or the official club (officialClaim) */
+async function clubClaimFor(ctx){
+  const id=ctx && ctx.id; if(!id || CLUB.busy) return false;
+  const wk=weekKey(), po=clubPrizeOf(); if(po[id]===wk){ toast(T('clubs.claimed'),'warn'); return false; }
   CLUB.busy=true;
   try{
-    const r=await clubRefresh(true);
-    if(!r){ if(myClub()) toast(T('clubs.noConn'),'warn'); return false; }
-    const st=clubWeekStats(r);
+    const r=await ctx.refresh(true);
+    if(!r){ if(ctx.still()) toast(T('clubs.noConn'),'warn'); return false; }
+    const st=ctx.stats(r);
     if(st.totalServer<st.target){ toast(T('clubs.notYet', fmtNum(st.totalServer), fmtNum(st.target)),'warn'); try{ sfx.lose(); }catch(e){} clubRender(); return false; }
     if(st.myM<ECON.clubs.prizeMatches){ toast(T('clubs.needMatches', ECON.clubs.prizeMatches-st.myM),'warn'); try{ sfx.lose(); }catch(e){} clubRender(); return false; }
     const gold=st.totalServer>=st.target*2;
-    prog.clubPrize=wk; saveProg();
+    po[id]=wk; saveProg();
     let chest=false; if(typeof giveChest==='function'){ try{ chest=!!giveChest(gold ? 'gold' : 'silver'); }catch(e){ chest=false; } }
     if(!chest) addCoins(gold ? ECON.clubs.prizeCoinsGold : ECON.clubs.prizeCoins, 'club');
     addGems(ECON.clubs.prizeGems, 'club');
@@ -246,19 +305,23 @@ async function clubClaim(){
     clubRender(); return true;
   } finally{ CLUB.busy=false; }
 }
+function clubClaim(){ const c=myClub(); if(!c) return Promise.resolve(false); return clubClaimFor({id:c.id, refresh:clubRefresh, stats:clubWeekStats, still:()=>!!myClub()}); }
+function officialClaim(){ const id=officialId(); if(!id) return Promise.resolve(false); return clubClaimFor({id, refresh:officialRefresh, stats:officialStats, still:()=>!!officialId()}); }
 
 /* ----- invite: the share helper of 70-social when it exists (system share sheet / WhatsApp), the code inside the text and as ?club= ----- */
-function clubLink(){ const c=myClub(); const base=(typeof SOCIAL_LINK==='string' && SOCIAL_LINK) ? SOCIAL_LINK : 'https://lupulior.github.io/game-lab/'; return c ? base+'?club='+c.code : base; }
-function clubInviteText(){ const c=myClub(); if(!c) return ''; return T('clubs.inviteText', c.emoji, clubName(c.name), c.code, clubLink()); }
-function clubInvite(){
-  const c=myClub(); if(!c) return false; try{ sfx.click(); }catch(e){}
-  const text=clubInviteText(); prog.clubInvites=(prog.clubInvites|0)+1; saveProg();
+function clubLink(c){ c=c||myClub(); const base=(typeof SOCIAL_LINK==='string' && SOCIAL_LINK) ? SOCIAL_LINK : 'https://lupulior.github.io/game-lab/'; return c && c.code ? base+'?club='+c.code : base; }
+function clubInviteText(c){ c=c||myClub(); if(!c || !c.code) return ''; return T('clubs.inviteText', c.emoji, clubDisplay(c), c.code, clubLink(c)); }
+function clubInviteFor(c){
+  if(!c || !c.code) return false; try{ sfx.click(); }catch(e){}
+  const text=clubInviteText(c); prog.clubInvites=(prog.clubInvites|0)+1; saveProg();
   if(typeof shareText==='function') return shareText(text);
   try{ window.open('https://wa.me/?text='+encodeURIComponent(text), '_blank', 'noopener'); }catch(e){}
   return 'wa';
 }
-async function clubCopyCode(){
-  const c=myClub(); if(!c) return false; const code=c.code; let ok=false;
+function clubInvite(){ return clubInviteFor(myClub()); }
+function officialInvite(){ return officialId() ? clubInviteFor(officialInfo()) : false; }
+async function clubCopyCode(code){
+  if(code===undefined){ const c=myClub(); if(!c) return false; code=c.code; } if(!clubValidCode(code)) return false; let ok=false;
   try{ if(navigator.clipboard && navigator.clipboard.writeText) ok=await navigator.clipboard.writeText(code).then(()=>true, ()=>false); }catch(e){}
   if(!ok){ try{ const ta=document.createElement('textarea'); ta.value=code; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); ok=!!document.execCommand('copy'); ta.remove(); }catch(e){} }
   toast(ok ? T('clubs.copied') : T('clubs.copyFail', code), ok ? 'ach' : 'warn'); return ok;
@@ -282,23 +345,268 @@ async function clubPendingTick(){
   finally{ CLUB.pendingBusy=false; }
 }
 
+/* =====================================================================================================
+   THE OFFICIAL CLUB — run by the admin, everyone is a member automatically (in addition to the personal club)
+   ===================================================================================================== */
+function officialInfo(){ const o=prog.official; return (o && typeof o==='object' && typeof o.id==='string' && o.id) ? o : null; }
+function officialId(){ return (typeof prog.officialId==='string' && /^[A-Z0-9]{4,16}$/.test(prog.officialId)) ? prog.officialId : ''; }
+function officialTarget(n){ return Math.max(ECON.clubs.oGoalMin, ECON.clubs.oGoalPer*Math.max(1, n|0)); }
+/* the only free text in the game: control characters out, spaces collapsed, hard length caps (rendered through esc() only) */
+function officialNormName(s){ return String(s||'').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim().slice(0, ECON.clubs.nameMax).trim(); }
+function officialNormMsg(s){ return String(s||'').replace(/\r\n?/g,'\n').replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g,' ').replace(/[^\S\n]+/g,' ').replace(/\n{3,}/g,'\n\n').trim().slice(0, ECON.clubs.msgMax); }
+/* the official/club node as the client trusts it (null = no official club) */
+function officialSan(r){
+  if(!r || typeof r!=='object' || typeof r.id!=='string' || !/^[A-Z0-9]{4,16}$/.test(r.id)) return null;
+  return { id:r.id, name:officialNormName(r.name)||'⭐', emoji:String(r.emoji||'📣').slice(0,8), msg:officialNormMsg(r.msg), by:normName(String(r.by||'')), auto:r.auto===true, code:clubValidCode(r.code) ? r.code : '', updated:+r.updated||0 };
+}
+/* my weekly counters in the official club (restart with the server week); a throw-away object while I am not a member */
+function officialMe(){ const wk=weekKey(); if(!officialId()) return {wk, g:0, w:0, m:0}; let m=prog.officialMe; if(!m || typeof m!=='object' || m.wk!==wk) m=prog.officialMe={wk, g:0, w:0, m:0}; return m; }
+function officialStats(data){ return clubWeekStats(data, {me:officialMe(), member:!!officialId(), target:officialTarget}); }
+/* one GET of official/club → prog.official (null = none, undefined = no connection) */
+async function officialGet(){
+  if(!fbOn()) return null;
+  const r=await fbReq('official/club', 'GET');
+  if(r===undefined){ CLUB.ooffline=true; return undefined; }
+  CLUB.ooffline=false;
+  const o=officialSan(r);
+  if(!o){ if(prog.official || prog.officialId){ delete prog.official; delete prog.officialId; delete prog.officialMe; CLUB.odata=null; CLUB.ofetched=0; saveProg(); clubHomePill(); } return null; }
+  const prev=(prog.official && prog.official.id===o.id) ? prog.official : {};
+  prog.official=Object.assign({}, o, {tot:prev.tot|0, target:prev.target|0, n:prev.n|0}); if(prev.codeDirty) prog.official.codeDirty=true;
+  if(prog.officialId && prog.officialId!==o.id){ delete prog.officialId; delete prog.officialMe; CLUB.odata=null; CLUB.ofetched=0; }   // the admin made a new official club: the old membership is dropped
+  saveProg(); return prog.official;
+}
+/* make sure my member node exists (auto → everyone; loud → the player tapped "join"); a player without a name is simply not added */
+async function officialEnsure(o, loud){
+  o=o||officialInfo(); if(!o || !o.id) return false;
+  if(officialId()===o.id) return true;
+  if(!o.auto && !loud) return false;
+  if(CLUB.ogone===o.id) return false;                                                            // clubs/<id> vanished this session: do not recreate a stub
+  const k=clubMyKey(); if(!k){ if(loud) clubNeedName(); return false; }
+  if(!fbOn()){ if(loud) toast(T('clubs.noConn'),'warn'); return false; }
+  const me={wk:weekKey(), g:0, w:0, m:0}, node=clubMemberBody(me);
+  const r=await fbReq('clubs/'+o.id+'/members/'+k, 'PATCH', node);
+  if(r===undefined){ if(loud) toast(T('clubs.noConn'),'warn'); return false; }
+  prog.officialId=o.id; prog.officialMe=me; saveProg();
+  if(CLUB.odata){ CLUB.odata.members=CLUB.odata.members||{}; CLUB.odata.members[k]=r && typeof r==='object' ? r : node; }
+  if(loud){ toast(T('clubs.joined', o.emoji, o.name),'ach'); try{ sfx.win(); confetti.burst(120); }catch(e){} }
+  clubHomePill(); return true;
+}
+/* load/home: at most once an hour (prog.officialSeen) — one GET, plus the member PATCH the first time; force = the modal / tests */
+async function officialSync(force){
+  if(!fbOn()) return false;
+  if(!force && now()-(+prog.officialSeen||0)<ECON.clubs.oSeenMs) return false;
+  if(CLUB.osync) return CLUB.osync;
+  CLUB.osync=(async()=>{
+    prog.officialSeen=now(); saveProg();
+    const o=await officialGet();
+    if(o===undefined){ prog.officialSeen=now()-ECON.clubs.oSeenMs+ECON.clubs.oRetryMs; saveProg(); return false; }   // no connection: try again in 5 minutes
+    if(o && o.auto) await officialEnsure(o);
+    clubHomePill(); return !!o;
+  })();
+  try{ return await CLUB.osync; } finally{ CLUB.osync=null; }
+}
+/* the modal: one GET of official/club, the auto-join when needed, then the club node (cached 10 min) */
+async function officialOpenSync(){
+  if(!fbOn()){ CLUB.ooffline=true; return false; }
+  const o=await officialGet(); if(o===undefined) return false;
+  if(o && o.auto) await officialEnsure(o);
+  if(officialId()) await officialRefresh();
+  return !!o;
+}
+/* one GET of clubs/<officialId> (cached 10 min unless forced); null = no data this time */
+async function officialRefresh(force){
+  const oid=officialId(); if(!oid) return null;
+  if(!fbOn()){ CLUB.ooffline=true; return null; }
+  if(!force && CLUB.odata && now()-CLUB.ofetched<ECON.clubs.refreshMs) return CLUB.odata;
+  if(CLUB.oloading) return CLUB.oloading;
+  CLUB.oloading=(async()=>{
+    const r=await fbReq('clubs/'+oid, 'GET');
+    if(r===undefined){ CLUB.ooffline=true; return null; }
+    CLUB.ooffline=false;
+    if(r===null || typeof r!=='object'){ delete prog.officialId; delete prog.officialMe; delete clubPrizeOf()[oid]; saveProg(); CLUB.odata=null; CLUB.ofetched=0; CLUB.ogone=oid; clubHomePill(); return null; }   // pruned/deleted
+    CLUB.odata=r; CLUB.ofetched=now();
+    const o=officialInfo(), mine=o && o.id===oid;
+    if(mine){ if(typeof r.name==='string' && officialNormName(r.name)) o.name=officialNormName(r.name); if(r.emoji) o.emoji=String(r.emoji).slice(0,8); if(clubValidCode(r.code)) o.code=r.code; }
+    const st=officialStats(r); if(mine){ o.tot=st.total; o.target=st.target; o.n=st.n; } saveProg();
+    const me=officialMe(); if(me.dirty) officialPush();                                                // a counter PATCH that failed earlier
+    if(mine && o.codeDirty && o.code) fbReq('clubCodes/'+o.code, 'PUT', oid).then(x=>{ if(x!==undefined){ delete o.codeDirty; saveProg(); } });
+    if(!r.week || r.week.key!==st.wk || (r.week.goals|0)!==st.totalServer) fbReq('clubs/'+oid+'/week', 'PUT', {key:st.wk, goals:st.totalServer});
+    return r;
+  })();
+  try{ return await CLUB.oloading; } finally{ CLUB.oloading=null; }
+}
+/* PATCH my member node in the official club (absolute weekly counters) */
+async function officialPush(){
+  const oid=officialId(), k=clubMyKey(); if(!oid || !k || !fbOn()) return false;
+  const me=officialMe();
+  const r=await fbReq('clubs/'+oid+'/members/'+k, 'PATCH', clubMemberBody(me));
+  if(r===undefined){ me.dirty=true; saveProg(); return false; }
+  delete me.dirty; saveProg();
+  if(CLUB.odata){ CLUB.odata.members=CLUB.odata.members||{}; CLUB.odata.members[k]=Object.assign({}, CLUB.odata.members[k]||{}, r && typeof r==='object' ? r : clubMemberBody(me)); }
+  return true;
+}
+/* the player taps "join" on the official tab (auto on, not added yet — e.g. the name came later) */
+async function officialJoinNow(){
+  const o=officialInfo(); if(!o || CLUB.busy) return false;
+  if(!clubNeedName()) return false;
+  CLUB.busy=true; try{ const ok=await officialEnsure(o, true); if(ok){ CLUB.tab='official'; CLUB.oview='main'; await officialRefresh(); clubRender(); } return ok; } finally{ CLUB.busy=false; }
+}
+/* joined by its code (clubJoin found official:true) — membership in ADDITION to the personal club, no member cap */
+async function officialJoinWith(id, code, data){
+  if(officialId()===id){ toast(T('clubs.oAlready'),'warn'); return false; }
+  const k=clubMyKey(), me={wk:weekKey(), g:0, w:0, m:0}, node=clubMemberBody(me);
+  const r=await fbReq('clubs/'+id+'/members/'+k, 'PATCH', node);
+  if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+  let o=officialInfo();
+  if(!o || o.id!==id){ o=officialSan({id, name:data.name, emoji:data.emoji, code, auto:false}); prog.official=Object.assign(o, {tot:0, target:0, n:0}); officialGet(); }   // the board arrives with the next GET
+  prog.officialId=id; prog.officialMe=me; saveProg();
+  data.members=Object.assign({}, data.members && typeof data.members==='object' ? data.members : {}); data.members[k]=r && typeof r==='object' ? r : node;
+  CLUB.odata=data; CLUB.ofetched=now(); CLUB.ooffline=false; CLUB.ogone=null; CLUB.tab='official'; CLUB.oview='main';
+  const st=officialStats(data); o.tot=st.total; o.target=st.target; o.n=st.n; saveProg();
+  toast(T('clubs.joined', o.emoji, o.name),'ach'); try{ sfx.win(); confetti.burst(120); }catch(e){}
+  clubHomePill(); clubRender(); return true;
+}
+/* leave: only while auto is off (the admin decides); my node is deleted on the server first */
+async function officialLeave(){
+  const o=officialInfo(), oid=officialId(); if(!oid || CLUB.busy) return false;
+  if(o && o.id===oid && o.auto){ toast(T('clubs.oNoLeave'),'warn'); return false; }
+  if(!(await ask(T('clubs.leaveQ'), T('clubs.leave')))) return false;
+  CLUB.busy=true;
+  try{
+    const k=clubMyKey();
+    if(fbOn() && k){ const r=await fbReq('clubs/'+oid+'/members/'+k, 'DELETE'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } }
+    delete prog.officialId; delete prog.officialMe; saveProg(); CLUB.odata=null; CLUB.ofetched=0; CLUB.oview='main';
+    toast(T('clubs.left'),'warn'); clubHomePill(); clubRender(); return true;
+  } finally{ CLUB.busy=false; }
+}
+/* ----- admin writes (client-side gate: isAdmin(); the server rules are open today) ----- */
+function officialAdminOnly(){ if(isAdmin()) return true; toast(T('clubs.oAdminOnly'),'warn'); return false; }
+/* create: a free-text name (≤24) + an emoji; clubs/<id> like any club with official:true, then official/club points at it; free (admin) */
+async function officialCreate(name, emoji){
+  if(!officialAdminOnly() || CLUB.busy) return false;
+  name=officialNormName(name); emoji=OFFICIAL_EMOJIS.includes(emoji) ? emoji : OFFICIAL_EMOJIS[0];
+  if(name.length<2){ toast(T('clubs.oNameShort'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+  if(!clubNeedName()) return false;
+  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  if(!(await ask(T('clubs.oCreateQ', emoji, name)))) return false;
+  CLUB.busy=true;
+  try{
+    let code=null;
+    for(let i=0;i<3 && !code;i++){ const cand=clubRand(6); const r=await fbReq('clubCodes/'+cand, 'GET'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } if(r===null) code=cand; }
+    if(!code){ toast(T('clubs.noConn'),'warn'); return false; }
+    const id=clubRand(8), wk=weekKey(), k=clubMyKey(), me={wk, g:0, w:0, m:0}, by=normName(settings.name);
+    const body={name, emoji, code, created:{'.sv':'timestamp'}, official:true, members:{}, week:{key:wk, goals:0}}; body.members[k]=clubMemberBody(me);
+    const r1=await fbReq('clubs/'+id, 'PUT', body);
+    if(r1===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    const r2=await fbReq('clubCodes/'+code, 'PUT', id);
+    const info={id, name, emoji, msg:'', by, auto:true, code, updated:{'.sv':'timestamp'}};
+    const r3=await fbReq('official/club', 'PUT', info);
+    if(r3===undefined){ toast(T('clubs.noConn'),'warn'); return false; }                           // the club node exists but is not the official one yet: the admin simply creates again
+    prog.official=Object.assign(officialSan(Object.assign({}, info, {updated:now()})), {tot:0, target:officialTarget(1), n:1}); if(r2===undefined) prog.official.codeDirty=true;
+    prog.officialId=id; prog.officialMe=me; prog.officialSeen=now(); saveProg();
+    CLUB.odata=Object.assign({}, body, {members:Object.assign({}, body.members)}); CLUB.ofetched=now(); CLUB.ooffline=false; CLUB.ogone=null; CLUB.tab='official'; CLUB.oview='main';
+    toast(T('clubs.oCreated', emoji, name, code),'ach'); try{ sfx.win(); confetti.burst(160); }catch(e){}
+    clubHomePill(); clubRender(); return true;
+  }catch(e){ console.error('official create', e); return false; }
+  finally{ CLUB.busy=false; }
+}
+/* rename / new emoji: official/club and clubs/<id> both */
+async function officialRename(name, emoji){
+  const o=officialInfo(); if(!o || !officialAdminOnly() || CLUB.busy) return false;
+  name=officialNormName(name); emoji=OFFICIAL_EMOJIS.includes(emoji) ? emoji : o.emoji;
+  if(name.length<2){ toast(T('clubs.oNameShort'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+  if(name===o.name && emoji===o.emoji){ CLUB.oview='main'; clubRender(); return true; }
+  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  CLUB.busy=true;
+  try{
+    const by=normName(settings.name)||o.by;
+    const r=await fbReq('official/club', 'PATCH', {name, emoji, by, updated:{'.sv':'timestamp'}});
+    if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    fbReq('clubs/'+o.id, 'PATCH', {name, emoji});
+    o.name=name; o.emoji=emoji; o.by=by; o.updated=now(); saveProg();
+    if(CLUB.odata){ CLUB.odata.name=name; CLUB.odata.emoji=emoji; }
+    toast(T('clubs.oSaved'),'ach'); CLUB.oview='main'; clubHomePill(); clubRender(); return true;
+  } finally{ CLUB.busy=false; }
+}
+/* the message board (≤300 chars) — written only by the admin, shown through esc() */
+async function officialSetMsg(msg){
+  const o=officialInfo(); if(!o || !officialAdminOnly() || CLUB.busy) return false;
+  msg=officialNormMsg(msg);
+  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  CLUB.busy=true;
+  try{
+    const by=normName(settings.name)||o.by;
+    const r=await fbReq('official/club', 'PATCH', {msg, by, updated:{'.sv':'timestamp'}});
+    if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    o.msg=msg; o.by=by; o.updated=now(); saveProg();
+    toast(T('clubs.oSaved'),'ach'); CLUB.oview='main'; clubRender(); return true;
+  } finally{ CLUB.busy=false; }
+}
+/* the switch: auto on = everyone is added and nobody can leave; off = join by code only, leaving allowed */
+async function officialSetAuto(on){
+  const o=officialInfo(); if(!o || !officialAdminOnly() || CLUB.busy){ clubRender(); return false; }
+  on=!!on;
+  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); clubRender(); return false; }
+  CLUB.busy=true;
+  try{
+    const r=await fbReq('official/club', 'PATCH', {auto:on, updated:{'.sv':'timestamp'}});
+    if(r===undefined){ toast(T('clubs.noConn'),'warn'); clubRender(); return false; }
+    o.auto=on; o.updated=now(); saveProg();
+    toast(T(on ? 'clubs.oAutoOn' : 'clubs.oAutoOff'),'ach'); clubRender(); return true;
+  } finally{ CLUB.busy=false; }
+}
+
 /* ----- the screen (a modal inside #stage) ----- */
 function clubOpen(view){
   const m=$('#club-modal'); if(!m) return false;
   CLUB.view = myClub() ? 'club' : (view==='create' || view==='join') ? view : 'none';
+  CLUB.tab = (view==='official' && (officialInfo() || isAdmin())) ? 'official' : 'mine'; CLUB.oview='main';
   try{ const ms=$('#more-sheet'); if(ms) ms.classList.remove('show'); }catch(e){}
   m.classList.add('show'); clubRender();
-  if(myClub()) clubRefresh().then(()=>{ clubRender(); clubHomePill(); });
+  if(myClub()) clubRefresh().then(()=>{ clubRerender(); clubHomePill(); });
+  officialOpenSync().then(()=>{ clubRerender(); clubHomePill(); });                           // one GET of official/club per open (+ the club node, cached)
   return true;
 }
-function clubClose(){ CLUB.view='none'; const m=$('#club-modal'); if(m) m.classList.remove('show'); }
+function clubClose(){ CLUB.view='none'; CLUB.oview='main'; const m=$('#club-modal'); if(m) m.classList.remove('show'); }
+/* a re-render after a server answer: never under the player's fingers (a code / the admin's text being typed) — then only the tabs */
+function clubRerender(){
+  const m=$('#club-modal'); if(!m || !m.classList.contains('show')) return;
+  const a=document.activeElement, body=$('#club-body');
+  if(a && body && body.contains(a) && /^(INPUT|TEXTAREA)$/.test(a.tagName)){ clubRenderTabs(); return; }
+  clubRender();
+}
 function clubBoxes(v){ const b=$('#club-boxes'); if(!b) return; v=String(v||''); Array.from(b.children).forEach((s,i)=>{ s.textContent=v[i]||''; s.classList.toggle('on', i===v.length); s.classList.toggle('has', !!v[i]); }); }
+/* the join-by-code form (shared by the "mine" tab and the official tab when auto is off) */
+function clubJoinHTML(){
+  return `<div class="hint club-intro">${esc(T('clubs.codeHint'))}</div>
+      <div class="club-boxes" id="club-boxes">${'<span></span>'.repeat(6)}</div>
+      <input id="club-code-input" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC234">
+      <div class="club-btns"><button class="btn green" id="btn-club-do-join" data-act="doJoin">${esc(T('clubs.join'))}</button><button class="btn blue small" data-act="back">${esc(T('clubs.back'))}</button></div>`;
+}
+function clubJoinWire(){
+  const inp=$('#club-code-input'); if(!inp) return;
+  inp.addEventListener('input', ()=>{ inp.value=clubNormCode(inp.value); clubBoxes(inp.value); });
+  inp.addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') clubJoin(inp.value); if(e.key==='Escape') clubClose(); });
+  $('#club-boxes').addEventListener('click', ()=>{ try{ inp.focus(); }catch(e){} });
+  clubBoxes(''); setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 60);
+}
+/* the two tabs: "my club" and "📣 <emoji> <official name>" (hidden when there is no official club — the admin always sees it, to create one) */
+function clubRenderTabs(){
+  const tabs=$('#club-tabs'); if(!tabs) return;
+  const o=officialInfo(), show=!!o || isAdmin();
+  tabs.hidden=!show; if(!show){ CLUB.tab='mine'; tabs.innerHTML=''; return; }
+  if(CLUB.tab!=='official') CLUB.tab='mine';
+  tabs.innerHTML=`<button class="club-tab${CLUB.tab==='mine' ? ' on' : ''}" id="club-tab-mine" data-tab="mine">${esc(T('clubs.tabMine'))}</button><button class="club-tab${CLUB.tab==='official' ? ' on' : ''}" id="club-tab-official" data-tab="official">${o ? esc('📣 '+o.emoji+' '+o.name) : esc(T('clubs.tabAdmin'))}</button>`;
+}
 function clubRender(){
   const body=$('#club-body'); if(!body) return;
-  const c=myClub(); const v = c ? 'club' : (CLUB.view==='create' || CLUB.view==='join') ? CLUB.view : 'none';
-  const title=$('#club-title'); if(title) title.textContent = c ? c.emoji+' '+clubName(c.name) : T('clubs.title');
+  clubRenderTabs();
   const close=$('#btn-club-close'); if(close) close.textContent=T('clubs.back');
-  body.dataset.view=v;
+  if(CLUB.tab==='official' && (officialInfo() || isAdmin())){ clubRenderOfficial(body); return; }
+  CLUB.tab='mine';
+  const c=myClub(); const v = c ? 'club' : (CLUB.view==='create' || CLUB.view==='join') ? CLUB.view : 'none';
+  const title=$('#club-title'); if(title) title.textContent = c ? c.emoji+' '+clubDisplay(c) : T('clubs.title');
+  body.dataset.view=v; delete body.dataset.oview;
   const cost=isAdmin() ? 0 : ECON.clubs.create, createLabel=cost ? T('clubs.createCost', cost) : T('clubs.createFree');
   if(v==='none'){
     body.innerHTML=`<div class="club-hero">🏟️</div><div class="hint club-intro">${esc(T('clubs.intro'))}</div>
@@ -315,20 +623,9 @@ function clubRender(){
       <div class="club-btns"><button class="btn green" id="btn-club-do-create" data-act="doCreate">${esc(createLabel)}</button><button class="btn blue small" data-act="back">${esc(T('clubs.back'))}</button></div>`;
     return;
   }
-  if(v==='join'){
-    body.innerHTML=`<div class="hint club-intro">${esc(T('clubs.codeHint'))}</div>
-      <div class="club-boxes" id="club-boxes">${'<span></span>'.repeat(6)}</div>
-      <input id="club-code-input" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC234">
-      <div class="club-btns"><button class="btn green" id="btn-club-do-join" data-act="doJoin">${esc(T('clubs.join'))}</button><button class="btn blue small" data-act="back">${esc(T('clubs.back'))}</button></div>`;
-    const inp=$('#club-code-input');
-    inp.addEventListener('input', ()=>{ inp.value=clubNormCode(inp.value); clubBoxes(inp.value); });
-    inp.addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') clubJoin(inp.value); if(e.key==='Escape') clubClose(); });
-    $('#club-boxes').addEventListener('click', ()=>{ try{ inp.focus(); }catch(e){} });
-    clubBoxes(''); setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 60);
-    return;
-  }
+  if(v==='join'){ body.innerHTML=clubJoinHTML(); clubJoinWire(); return; }
   // ----- the club itself
-  const st=clubWeekStats(CLUB.data), days=clubDaysLeft(), pct=Math.max(0, Math.min(100, Math.round(st.total/st.target*100))), prize=clubPrizeState(st);
+  const st=clubWeekStats(CLUB.data), days=clubDaysLeft(), pct=Math.max(0, Math.min(100, Math.round(st.total/st.target*100))), prize=clubPrizeState(st, c.id);
   const status = CLUB.offline ? (CLUB.data ? T('clubs.offlineCached') : T('clubs.noConn')) : '';
   const rows=st.list.map(x=>`<div class="club-row${x.me?' me':''}"><span class="club-nm">${esc(x.name)}${x.me ? ' <small>('+esc(T('clubs.me'))+')</small>' : ''}</span><span class="club-lv">Lv ${x.lv}</span><span class="club-st">${esc(T('clubs.memberStats', x.g, x.w, x.m))}</span></div>`).join('');
   const claimLabel = prize==='claimed' ? T('clubs.claimed') : prize==='ready2' ? T('clubs.claimGold') : prize==='ready' ? T('clubs.claim') : prize==='need' ? T('clubs.claimNeed', Math.max(1, ECON.clubs.prizeMatches-st.myM)) : T('clubs.claimFar');
@@ -340,16 +637,70 @@ function clubRender(){
     <div class="club-members" id="club-members">${rows}</div>
     <div class="club-btns"><button class="btn ${prize==='ready' || prize==='ready2' ? 'green pulse' : 'yellow off'}" id="btn-club-claim" data-act="claim">${esc(claimLabel)}</button><button class="btn purple" id="btn-club-invite" data-act="invite">${esc(T('clubs.invite'))}</button><button class="btn red small" id="btn-club-leave" data-act="leave">${esc(T('clubs.leave'))}</button></div>`;
 }
-/* the home pill: "🏟️ האריות 83/150" (or just "🏟️ מועדון"), a third small pill in #home-trophy — placed ABOVE the trophy pill so the corner stays the trophy's */
+/* ----- the official tab: the admin's board (a speech bubble), the shared goal, the top-20 members, the code; the admin's ⚙️ form ----- */
+function clubRenderOfficial(body){
+  const o=officialInfo(), adm=isAdmin(), title=$('#club-title');
+  body.dataset.view='official';
+  if(CLUB.oview==='admin' && adm){ clubRenderOfficialAdmin(body, o); return; }
+  if(!o){ if(adm){ CLUB.oview='admin'; clubRenderOfficialAdmin(body, null); return; } CLUB.tab='mine'; clubRender(); return; }
+  if(title) title.textContent=o.emoji+' '+o.name;
+  const member=officialId()===o.id;
+  const board=`<div class="club-board" id="club-board"><div class="club-board-h" id="club-board-h">${esc(o.by ? T('clubs.oBoardFrom', o.by) : T('clubs.oBoard'))}</div><div class="club-board-msg" id="club-board-msg">${o.msg ? esc(o.msg) : '<span class="club-board-empty">'+esc(T('clubs.oNoMsg'))+'</span>'}</div></div>`;
+  const admBtn=adm ? `<button class="btn blue small" id="btn-club-oadmin" data-act="oAdmin">${esc(T('clubs.tabAdmin'))}</button>` : '';
+  if(CLUB.oview==='join' && !member){ body.dataset.oview='join'; body.innerHTML=board+clubJoinHTML(); clubJoinWire(); return; }
+  if(!member){
+    body.dataset.oview='out';
+    body.innerHTML=`${board}<div class="club-hero">📣</div><div class="hint club-intro">${esc(o.auto ? T('clubs.oIntro') : T('clubs.oIntroCode'))}</div>
+      <div class="club-btns">${o.auto ? `<button class="btn green" id="btn-club-ojoin" data-act="oJoin">${esc(T('clubs.oJoin'))}</button>` : `<button class="btn purple" id="btn-club-ojoin-code" data-act="oJoinCode">${esc(T('clubs.joinBtn'))}</button>`}${admBtn}</div>`;
+    return;
+  }
+  body.dataset.oview='main';
+  const st=officialStats(CLUB.odata), days=clubDaysLeft(), pct=Math.max(0, Math.min(100, Math.round(st.total/st.target*100))), prize=clubPrizeState(st, o.id);
+  const status = CLUB.ooffline ? (CLUB.odata ? T('clubs.offlineCached') : T('clubs.noConn')) : '';
+  const top=st.list.slice(0, ECON.clubs.oTop), mine=st.list.find(x=>x.me); if(mine && !top.includes(mine)) top.push(mine);
+  const more=Math.max(0, st.list.length-top.length);
+  const rows=top.map(x=>`<div class="club-row${x.me?' me':''}"><span class="club-nm">${esc(x.name)}${x.me ? ' <small>('+esc(T('clubs.me'))+')</small>' : ''}</span><span class="club-lv">Lv ${x.lv}</span><span class="club-st">${esc(T('clubs.memberStats', x.g, x.w, x.m))}</span></div>`).join('')
+    + (more ? `<div class="club-more" id="club-omore">${esc(T('clubs.oMore', fmtNum(more)))}</div>` : '');
+  const claimLabel = prize==='claimed' ? T('clubs.claimed') : prize==='ready2' ? T('clubs.claimGold') : prize==='ready' ? T('clubs.claim') : prize==='need' ? T('clubs.claimNeed', Math.max(1, ECON.clubs.prizeMatches-st.myM)) : T('clubs.claimFar');
+  body.innerHTML=`${board}
+    <div class="club-top">${o.code ? `<button class="club-code" id="club-ocode" data-act="oCopy" title="${esc(T('clubs.copy'))}">${esc(T('clubs.code', o.code))} 📋</button>` : '<span></span>'}<span class="club-days" id="club-odays">${esc(days<=1 ? T('clubs.lastDay') : T('clubs.daysLeft', days))}</span><button class="btn blue small club-refresh" id="btn-club-orefresh" data-act="oRefresh" title="🔄">🔄</button></div>
+    <div class="club-progress"><div class="club-bar${st.total>=st.target ? ' done' : ''}" id="club-obar"><i style="width:${pct}%"></i></div><div class="club-ptext" id="club-oprogress-text">${esc(T('clubs.progress', fmtNum(st.total), fmtNum(st.target)))}</div></div>
+    <div class="club-prize" id="club-oprize-line">${esc(T('clubs.prizeLine', ECON.clubs.prizeMatches))}</div>
+    ${status ? `<div class="club-status" id="club-ostatus">${esc(status)}</div>` : ''}
+    <div class="club-sub" id="club-omembers-h">${esc(T('clubs.oMembers', fmtNum(st.n)))}</div>
+    <div class="club-members" id="club-omembers">${rows}</div>
+    <div class="club-btns"><button class="btn ${prize==='ready' || prize==='ready2' ? 'green pulse' : 'yellow off'}" id="btn-club-oclaim" data-act="oClaim">${esc(claimLabel)}</button>${o.code ? `<button class="btn purple" id="btn-club-oinvite" data-act="oInvite">${esc(T('clubs.invite'))}</button>` : ''}${admBtn}${o.auto ? '' : `<button class="btn red small" id="btn-club-oleave" data-act="oLeave">${esc(T('clubs.leave'))}</button>`}</div>`;
+}
+/* the admin's form: free-text name + emoji, the message board, the auto switch (only rendered for isAdmin(); every write re-checks) */
+function clubRenderOfficialAdmin(body, o){
+  const title=$('#club-title'); if(title) title.textContent=T('clubs.tabAdmin');
+  body.dataset.oview='admin';
+  const emoji=OFFICIAL_EMOJIS.includes(CLUB.opick) ? CLUB.opick : (o ? o.emoji : OFFICIAL_EMOJIS[0]); CLUB.opick=emoji;
+  body.innerHTML=`<div class="club-oadm">
+      ${o ? '' : `<div class="hint club-intro">${esc(T('clubs.oHint'))}</div>`}
+      <div class="club-sub">${esc(T('clubs.oName'))}</div>
+      <input id="club-oname" maxlength="${ECON.clubs.nameMax}" autocomplete="off" spellcheck="false" placeholder="${esc(T('clubs.oNamePh'))}" value="${esc(o ? o.name : '')}">
+      <div class="club-emos">${OFFICIAL_EMOJIS.map(e=>`<button class="club-emo${e===emoji ? ' on' : ''}" data-oemo="${e}">${e}</button>`).join('')}</div>
+      <div class="club-btns"><button class="btn green" id="btn-club-osave" data-act="oSave">${esc(o ? T('clubs.oSaveName') : T('clubs.oCreate'))}</button></div>
+      ${o ? `<div class="club-sub">${esc(T('clubs.oMsgLabel'))}</div>
+      <textarea id="club-omsg" maxlength="${ECON.clubs.msgMax}" spellcheck="false" placeholder="${esc(T('clubs.oMsgPh'))}">${esc(o.msg)}</textarea>
+      <div class="club-btns"><button class="btn purple" id="btn-club-omsg" data-act="oMsg">${esc(T('clubs.oSaveMsg'))}</button></div>
+      <div class="setrow club-oauto"><span id="club-oauto-l">${esc(T('clubs.oAuto'))}</span><label class="switch"><input type="checkbox" id="club-oauto"${o.auto ? ' checked' : ''}><span></span></label></div>` : ''}
+      <div class="club-btns"><button class="btn blue small" id="btn-club-oback" data-act="oBack">${esc(T('clubs.back'))}</button></div>
+    </div>`;
+  for(const el of body.querySelectorAll('input,textarea')) el.addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Escape') clubClose(); });
+}
+/* the home pill: "🏟️ האריות 83/150" (or "📣 83/150" for the official club when there is no personal one, or just "🏟️ מועדון"), a third small pill in #home-trophy — placed ABOVE the trophy pill so the corner stays the trophy's */
 function clubHomePill(){
   const home=$('#home'); if(!home) return null;
   let p=$('#home-club');
-  if(!p){ p=document.createElement('button'); p.id='home-club'; p.className='pill club'; p.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubOpen(); }); }
+  if(!p){ p=document.createElement('button'); p.id='home-club'; p.className='pill club'; p.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubOpen(!myClub() && officialId() && officialInfo() ? 'official' : undefined); }); }
   const host=$('#home-trophy');
   if(host){ if(p.parentNode!==host || host.firstChild!==p) host.insertBefore(p, host.firstChild); p.classList.remove('free'); }
   else if(!p.parentNode){ p.classList.add('free'); home.appendChild(p); }
-  const c=myClub();
-  if(c){ const st=CLUB.data ? clubWeekStats(CLUB.data) : null; const tot=st ? st.total : Math.max(0, c.tot|0), target=st ? st.target : (c.target || clubTarget(c.n||1)); p.textContent=T('clubs.pill', c.emoji, clubName(c.name), fmtNum(tot), fmtNum(target)); p.classList.toggle('done', tot>=target); }
+  const c=myClub(), o=officialInfo();
+  if(c){ const st=CLUB.data ? clubWeekStats(CLUB.data) : null; const tot=st ? st.total : Math.max(0, c.tot|0), target=st ? st.target : (c.target || clubTarget(c.n||1)); p.textContent=T('clubs.pill', c.emoji, clubDisplay(c), fmtNum(tot), fmtNum(target)); p.classList.toggle('done', tot>=target); }
+  else if(o && officialId()===o.id){ const st=CLUB.odata ? officialStats(CLUB.odata) : null; const tot=st ? st.total : Math.max(0, o.tot|0), target=st ? st.target : (o.target || officialTarget(o.n||1)); p.textContent=T('clubs.pill', '📣', o.name, fmtNum(tot), fmtNum(target)); p.classList.toggle('done', tot>=target); }
   else { p.textContent=T('clubs.pillNone'); p.classList.remove('done'); }
   if(typeof fitText==='function') fitText(p, 11);
   return p;
@@ -361,15 +712,17 @@ function clubHomePill(){
   if(grid && !$('#btn-club')){ const b=document.createElement('button'); b.className='btn blue'; b.id='btn-club'; b.textContent=T('clubs.btn'); b.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubOpen(); }); grid.appendChild(b); }
   const close=$('#btn-club-close'); if(close) close.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubClose(); });
   const m=$('#club-modal'); if(m) m.addEventListener('click', e=>{ if(e.target===m) clubClose(); });
+  const tabs=$('#club-tabs'); if(tabs) tabs.addEventListener('click', e=>{ const t=e.target.closest('[data-tab]'); if(!t) return; try{ sfx.click(); }catch(x){} CLUB.tab=t.dataset.tab==='official' ? 'official' : 'mine'; CLUB.oview='main'; clubRender(); });
   const body=$('#club-body'); if(!body) return;
   body.addEventListener('click', e=>{
     const nb=e.target.closest('[data-name]'); if(nb){ try{ sfx.click(); }catch(x){} CLUB.pick.name=+nb.dataset.name|0; if(!CLUB.pick.emojiSet) CLUB.pick.emoji=CLUB_NAME_EMOJI[CLUB.pick.name]||CLUB_EMOJIS[0]; clubRender(); return; }
     const eb=e.target.closest('[data-emo]'); if(eb){ try{ sfx.click(); }catch(x){} CLUB.pick.emoji=eb.dataset.emo; CLUB.pick.emojiSet=true; clubRender(); return; }
+    const ob=e.target.closest('[data-oemo]'); if(ob){ try{ sfx.click(); }catch(x){} CLUB.opick=ob.dataset.oemo; for(const x of body.querySelectorAll('[data-oemo]')) x.classList.toggle('on', x.dataset.oemo===CLUB.opick); return; }   // in place: the typed name stays
     const b=e.target.closest('[data-act]'); if(!b) return; try{ sfx.click(); }catch(x){}
     switch(b.dataset.act){
       case 'create': CLUB.view='create'; clubRender(); break;
       case 'join': CLUB.view='join'; clubRender(); break;
-      case 'back': CLUB.view='none'; clubRender(); break;
+      case 'back': if(CLUB.tab==='official') CLUB.oview='main'; else CLUB.view='none'; clubRender(); break;
       case 'doCreate': clubCreate(CLUB.pick.name, CLUB.pick.emoji); break;
       case 'doJoin': clubJoin(($('#club-code-input')||{}).value); break;
       case 'copy': clubCopyCode(); break;
@@ -377,19 +730,34 @@ function clubHomePill(){
       case 'claim': clubClaim(); break;
       case 'invite': clubInvite(); break;
       case 'leave': clubLeave(); break;
+      /* the official tab */
+      case 'oAdmin': if(!isAdmin()) break; CLUB.tab='official'; CLUB.oview='admin'; CLUB.opick=(officialInfo()||{}).emoji||OFFICIAL_EMOJIS[0]; clubRender(); break;
+      case 'oBack': CLUB.oview='main'; clubRender(); break;
+      case 'oSave': { const name=($('#club-oname')||{}).value||''; if(officialInfo()) officialRename(name, CLUB.opick); else officialCreate(name, CLUB.opick); } break;
+      case 'oMsg': officialSetMsg(($('#club-omsg')||{}).value||''); break;
+      case 'oJoin': officialJoinNow(); break;
+      case 'oJoinCode': CLUB.oview='join'; clubRender(); break;
+      case 'oCopy': clubCopyCode((officialInfo()||{}).code||''); break;
+      case 'oRefresh': officialRefresh(true).then(()=>{ clubRender(); clubHomePill(); }); break;
+      case 'oClaim': officialClaim(); break;
+      case 'oInvite': officialInvite(); break;
+      case 'oLeave': officialLeave(); break;
     }
   });
+  body.addEventListener('change', e=>{ if(e.target && e.target.id==='club-oauto') officialSetAuto(e.target.checked); });
 })();
-/* real matches feed my member node (training never counts); the PATCH goes out right after the result card */
+/* real matches feed my member node in BOTH clubs (training never counts); the PATCHes go out right after the result card */
 Hooks.on('matchEnd', info=>{
-  const c=myClub(); if(!c || !info || info.training) return;
-  const me=clubMe(), goals=Math.max(0, (info.score && info.score.me)|0);
-  me.g+=goals; if(info.outcome==='win') me.w++; me.m++; c.tot=(c.tot|0)+goals; c.dirty=true; saveProg();
-  clubHomePill(); setTimeout(()=>{ clubPush().then(()=>clubHomePill()); }, 120);
+  if(!info || info.training) return;
+  const c=myClub(), oid=officialId(), goals=Math.max(0, (info.score && info.score.me)|0); if(!c && !oid) return;
+  if(c){ const me=clubMe(); me.g+=goals; if(info.outcome==='win') me.w++; me.m++; c.tot=(c.tot|0)+goals; c.dirty=true; }
+  if(oid){ const om=officialMe(); om.g+=goals; if(info.outcome==='win') om.w++; om.m++; om.dirty=true; const o=officialInfo(); if(o && o.id===oid) o.tot=(o.tot|0)+goals; }
+  saveProg(); clubHomePill();
+  setTimeout(()=>{ if(c) clubPush().then(()=>clubHomePill()); if(oid) officialPush().then(()=>clubHomePill()); }, 120);
 });
 Hooks.on('heartbeat', body=>{ const c=myClub(); body.club = c ? c.id : null; });
-Hooks.on('home', ()=>setTimeout(()=>{ const g=$('#more-grid'), b=$('#btn-club'); if(g && b && g.lastElementChild!==b) g.appendChild(b); clubHomePill(); }, 0));
-Hooks.on('screen', id=>{ if(id==='home'){ setTimeout(clubHomePill, 60); setTimeout(clubPendingTick, 500); } });
+Hooks.on('home', ()=>setTimeout(()=>{ const g=$('#more-grid'), b=$('#btn-club'); if(g && b && g.lastElementChild!==b) g.appendChild(b); clubHomePill(); officialSync(); }, 0));   // officialSync: at most once an hour
+Hooks.on('screen', id=>{ if(id==='home'){ setTimeout(clubHomePill, 60); setTimeout(clubPendingTick, 500); setTimeout(officialSync, 700); } });
 if(typeof setLang==='function'){ const _csl=setLang; setLang=function(){ const r=_csl.apply(this, arguments); try{ clubHomePill(); if($('#club-modal') && $('#club-modal').classList.contains('show')) clubRender(); }catch(e){} return r; }; }
 { const _csn=submitName; submitName=function(){ const r=_csn.apply(this, arguments); if(normName(settings.name)) setTimeout(clubPendingTick, 400); return r; }; }
 CLUB.pending=clubParseSearch(clubInitialSearch());

@@ -8,18 +8,20 @@
     <button class="btn green" id="chests-welcome" hidden>🎁 תיבת ברוכים הבאים — פתח!</button>
     <button class="btn purple" id="chests-pending" hidden>🎴 יש לך קלף לבחור!</button>
   </section>
-  <!-- the drop takes the whole stage; its background follows the rarity being revealed -->
+  <!-- the drop takes the whole stage; its background snaps to the rarity being revealed; #cd-up + #cd-flash are the "⬆ שדרוג!" moment -->
   <div id="chest-drop" hidden>
     <div class="cd-bg" id="cd-bg"></div>
     <div class="cd-stage" id="cd-stage">
       <div class="cd-kind" id="cd-kind"></div>
       <div class="cd-chest" id="cd-chest">🎁</div>
       <div class="cd-hint" id="cd-hint">👆</div>
+      <div class="cd-up" id="cd-up" hidden>⬆ שדרוג!</div>
       <div class="cd-rarity" id="cd-rarity" hidden></div>
       <div class="cd-pick" id="cd-pick" hidden></div>
       <div class="cd-cards" id="cd-cards" hidden></div>
       <div class="cd-got" id="cd-got" hidden></div>
       <button class="btn green big" id="btn-chest-done" hidden>✔ סיימתי</button>
     </div>
+    <div class="cd-flash" id="cd-flash"></div>
   </div>
   <canvas id="chests-confetti" width="1000" height="620" hidden></canvas>

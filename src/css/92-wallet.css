@@ -1,0 +1,2 @@
+/* 92-wallet: the magnitude word ("מיליון" / "מיליארד") stays small next to the number inside every pill */
+small.mag{font-size:.55em;opacity:.85;margin-inline-start:3px;font-weight:inherit;white-space:nowrap}

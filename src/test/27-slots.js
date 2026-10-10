@@ -52,18 +52,18 @@
   TASSERT('the countdown is repainted every second while on the home', SLOTS.timer!==0 && tiles('#chest-slots')[1].querySelector('.s-cd').textContent!==t0 && tiles('#chest-slots')[1].querySelector('.s-cd').textContent.startsWith('⏳ 2:59:5'));
   showScreen('chars'); await tick(50); TASSERT('timer stops off-home', SLOTS.timer===0); showScreen('home'); await tick(50); TASSERT('timer back on the home', SLOTS.timer!==0);
   // --- gem skip cost: ceil(remaining hours × rate), min 1, capped
-  TASSERT('skip costs: bronze 59 min → 3, silver 3 h → 8 (cap), gold 8 h → 18 (cap)', slotSkipCost(0)===3 && slotSkipCost(1)===8 && slotSkipCost(2)===18);
-  prog.slots[2].at=now()+H; TASSERT('gold with 1 h left → 3 (2.5/h rounded up)', slotSkipCost(2)===3);
+  TASSERT('skip costs: bronze 59 min → 4, silver 3 h → 11 (cap), gold 8 h → 24 (cap)', slotSkipCost(0)===4 && slotSkipCost(1)===11 && slotSkipCost(2)===24);
+  prog.slots[2].at=now()+H; TASSERT('gold with 1 h left → 4 (3.5/h rounded up)', slotSkipCost(2)===4);
   prog.slots[0].at=now()+60e3; TASSERT('one minute left → still 1 💎', slotSkipCost(0)===1);
   prog.slots[0].at=now()+59*60e3+12e3; slotsRender();
   // no gems → the question, yes → refused, slot keeps ticking
-  prog.gems=0; tiles('#chest-slots')[0].click(); await tick();
-  TASSERT('tap a ticking tile → "open now for 💎 3?"', $('#ask-modal').classList.contains('show') && $('#ask-text').textContent===T('slots.skipQ',3));
+  prog.gems=0; const skipC=slotSkipCost(0); tiles('#chest-slots')[0].click(); await tick();
+  TASSERT('tap a ticking tile → "open now for 💎 3?"', $('#ask-modal').classList.contains('show') && $('#ask-text').textContent===T('slots.skipQ',skipC));
   $('#btn-ask-no').click(); await tick(); TASSERT('no → nothing changes', !$('#ask-modal').classList.contains('show') && now()<prog.slots[0].at && prog.gems===0);
   tiles('#chest-slots')[0].click(); await tick(); $('#btn-ask-yes').click(); await tick();
-  TASSERT('yes without gems → refused with a toast, slot still ticking', lastToast()===T('slots.noGems',3) && now()<prog.slots[0].at);
+  TASSERT('yes without gems → refused with a toast, slot still ticking', lastToast()===T('slots.noGems',skipC) && now()<prog.slots[0].at);
   prog.gems=10; tiles('#chest-slots')[0].click(); await tick(); $('#btn-ask-yes').click(); await tick(60);
-  TASSERT('yes with gems → 3 💎 spent, slot ready, tile bounces "פתח!"', prog.gems===7 && slotReady(0) && tiles('#chest-slots')[0].classList.contains('ready') && tiles('#chest-slots')[0].querySelector('.s-cd').textContent===T('slots.open'));
+  TASSERT('yes with gems → 3 💎 spent, slot ready, tile bounces "פתח!"', prog.gems===10-skipC && slotReady(0) && tiles('#chest-slots')[0].classList.contains('ready') && tiles('#chest-slots')[0].querySelector('.s-cd').textContent===T('slots.open'));
   TASSERT('badge + next-up count the ready slot', slotsReadyCount()===1 && (!hasChests || chestsBadge()>=1) && slotsNextUp() && slotsNextUp().prio===45);
   // --- ready → open: the slot empties, the drop opens on the chests screen
   if(hasChests){
@@ -80,7 +80,7 @@
     const bc=$('#chests-row .chest-card[data-kind="bronze"]'), sc=$('#chests-row .chest-card[data-kind="silver"]'), gc=$('#chests-row .chest-card[data-kind="gold"]');
     TASSERT('bronze/silver: price line says coins or slots, no 🔑', bc.querySelector('.price').textContent===T('slots.priceCoins','150') && sc.querySelector('.price').textContent===T('slots.priceCoins','500') && !bc.querySelector('.price').textContent.includes('🔑'));
     TASSERT('bronze/silver unaffordable → "comes from the slots"', bc.querySelector('.btn.open').classList.contains('off') && bc.querySelector('.btn.open').textContent===T('slots.fromSlots') && sc.querySelector('.btn.open').textContent===T('slots.fromSlots'));
-    TASSERT('gold still 🔑 8 or 💎 25', gc.querySelector('.price').textContent===T('chests.price', 8, '💎 25') && gc.querySelector('.btn.open').textContent===T('chests.need', 8));
+    TASSERT('gold still 🔑 8 or 💎 '+ECON.chests.gold.gems, gc.querySelector('.price').textContent===T('chests.price', 8, '💎 '+ECON.chests.gold.gems) && gc.querySelector('.btn.open').textContent===T('chests.need', 8));
     bc.querySelector('.btn.open').click(); await tick();
     TASSERT('tapping the grey bronze button explains the slots (no "not enough keys" toast, no drop)', lastToast()===T('slots.hint') && $('#chest-drop').hidden);
     { const s=$('#stage').getBoundingClientRect(), sc=s.width/1000; const box=el=>{ const b=el.getBoundingClientRect(); return {l:(b.left-s.left)/sc, t:(b.top-s.top)/sc, r:(b.right-s.left)/sc, b:(b.bottom-s.top)/sc}; }; const hit=(a,b)=>!(a.r<=b.l || a.l>=b.r || a.b<=b.t || a.t>=b.b);

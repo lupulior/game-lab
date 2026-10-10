@@ -56,3 +56,22 @@
 #home-club.pill.club.done{background:linear-gradient(#FFE8B0,#F5B400)}
 #home-club.pill.club.free{position:absolute;left:760px;top:452px;z-index:3}
 #btn-club{white-space:nowrap}
+/* ===== the official club: the two tabs, the admin's board (a speech bubble), the admin's form ===== */
+.club-tabs{display:flex;gap:8px;flex:0 0 auto}
+.club-tab{flex:1 1 0;min-width:0;border:0;cursor:pointer;font-family:inherit;font-weight:900;font-size:20px;color:#5b6a8a;background:#EEF2FA;border-radius:14px;min-height:44px;padding:0 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:inset 0 -4px 0 rgba(27,42,78,.12)}
+.club-tab:active{transform:translateY(2px)}
+.club-tab.on{background:#FFF0B3;color:var(--navy);box-shadow:inset 0 -5px 0 var(--yellow)}
+.club-board{position:relative;background:#fff;border:4px solid #8ED3FF;border-radius:20px;padding:6px 16px 8px;text-align:start;box-shadow:0 6px 0 rgba(27,42,78,.12);margin-bottom:8px;flex:0 0 auto}
+.club-board::after{content:"";position:absolute;bottom:-22px;inset-inline-start:36px;border:10px solid transparent;border-top-color:#8ED3FF}
+.club-board-h{font-size:17px;font-weight:900;color:#2a7fd6;line-height:1.3}
+.club-board-msg{font-size:22px;font-weight:900;color:var(--navy);line-height:1.3;white-space:pre-wrap;overflow-wrap:anywhere;max-height:84px;overflow-y:auto}
+.club-board-empty{color:#8a94aa;font-size:19px}
+.club-more{font-size:15px;font-weight:900;color:#5b6a8a;text-align:center;padding:2px 0}
+#club-body[data-view="official"] .club-members{max-height:118px}
+#club-body[data-view="official"] .club-hero{font-size:64px}
+.club-oadm{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-height:0}
+.club-oadm input,.club-oadm textarea{font-family:inherit;font-weight:900;font-size:22px;color:var(--navy);border:4px solid var(--purple);border-radius:14px;padding:6px 14px;width:100%;max-width:640px;box-sizing:border-box;margin:0 auto;display:block;outline:none;background:#fff;min-height:48px}
+.club-oadm textarea{height:92px;resize:none;font-size:20px;line-height:1.3}
+.club-oadm input:focus,.club-oadm textarea:focus{border-color:var(--blue)}
+.club-oadm .club-oauto{justify-content:center;gap:18px;margin:0;font-size:22px;color:var(--navy)}
+.club-oadm .club-emos .club-emo{width:56px;min-height:46px;font-size:28px}

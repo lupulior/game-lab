@@ -26,9 +26,14 @@
   r=payout({outcome:'win', fmt:'quick', levelI:0, goals:0}); TASSERT('easy win: no key', r.key===0);
   r=payout({outcome:'win', fmt:'quick', levelI:1, goals:0, online:true}); TASSERT('online win 50', r.coins===Math.round(50*(sun?2:1)));
   prog.streak=4; r=payout({outcome:'win', fmt:'quick', levelI:1, goals:0}); TASSERT('win streak +30%', r.coins===Math.round(30*1.3*(sun?2:1)));
-  prog.streak=1; prog.coinDay={key:dayKey(), n:coinCapToday()-10}; r=payout({outcome:'win', fmt:'classic', levelI:4, goals:3});
-  TASSERT('daily cap clamps', r.coins===10 && r.capped);
-  prog.coinDay={key:dayKey(), n:coinCapToday()}; r=payout({outcome:'win', fmt:'classic', levelI:4, goals:3}); TASSERT('over cap pays 5', r.coins===5);
+  // the daily cap is off by default (Infinity); the cap logic is still tested with a finite cap set for these lines only
+  TASSERT('no daily cap by default', ECON.capCoins===Infinity && ECON.capSunday===Infinity && ECON.gemWeekCap===Infinity && coinCapLeft()===Infinity);
+  prog.streak=1; prog.coinDay={key:dayKey(), n:5000}; r=payout({outcome:'win', fmt:'classic', levelI:4, goals:3}); TASSERT('no cap: a big day still pays in full, no NaN', Number.isFinite(r.coins) && r.coins>10 && r.capped===false);
+  { const cap0=[ECON.capCoins, ECON.capSunday]; ECON.capCoins=600; ECON.capSunday=900;
+    prog.streak=1; prog.coinDay={key:dayKey(), n:coinCapToday()-10}; r=payout({outcome:'win', fmt:'classic', levelI:4, goals:3});
+    TASSERT('daily cap clamps (finite cap)', r.coins===10 && r.capped);
+    prog.coinDay={key:dayKey(), n:coinCapToday()}; r=payout({outcome:'win', fmt:'classic', levelI:4, goals:3}); TASSERT('over cap pays 5 (finite cap)', r.coins===5);
+    ECON.capCoins=cap0[0]; ECON.capSunday=cap0[1]; }
   prog.coinDay={key:dayKey(), n:0}; prog.keyDay={key:dayKey(), n:3}; r=payout({outcome:'win', fmt:'quick', levelI:3}); TASSERT('3 keys a day', r.key===0);
   TASSERT('training pays nothing', payout({training:true, outcome:'win'}).coins===0);
   // --- applyMatchRewards + streak days
@@ -87,7 +92,8 @@ async function econTest3(){
   prog.streak=20; r=payout({outcome:'win', fmt:'quick', levelI:1, goals:0}); TASSERT('20 in a row: every-10 reward', r.parts.some(p=>p[0]==='end.pStreakWin' && p[1]===300) && r.streakGems===5);
   prog.streak=0;
   showScreen('home'); const b=$('#xp-badge'); prog.coins=123456789; updateXpBadge(); await new Promise(r=>setTimeout(r,320));
-  TASSERT('a huge coin number shrinks instead of widening the pill', b.scrollWidth<=b.clientWidth+1 && b.offsetWidth<=152 && parseFloat(b.style.fontSize)<22);
+  TASSERT('a huge coin number stays inside the pill (123.5 מיליון, shrunk if needed)', b.scrollWidth<=b.clientWidth+1 && b.offsetWidth<=152 && b.textContent.includes('123.5') && (!b.style.fontSize || parseFloat(b.style.fontSize)<=24));
+  TASSERT('fmtNum: thousands keep the comma, millions get the word', fmtNum(999999)==='999,999' && fmtNum(1500000)==='1.5 '+T('num.million') && fmtNum(100000000)==='100 '+T('num.million') && fmtNum(2000000000)==='2 '+T('num.billion'));
   prog.coins=12; updateXpBadge(); await new Promise(r=>setTimeout(r,320)); TASSERT('a small number gets its size back', !b.style.fontSize || parseFloat(b.style.fontSize)>=20);
   TDONE();
 }
