@@ -223,9 +223,9 @@ function shopWallet(){ const c=$('#shop-coins'), g=$('#shop-gems'); if(c) c.text
 function shopRefresh(){ shopWallet(); if($('#shop').classList.contains('active')) shopBuildTab(); }
 function shopBuildTab(){
   document.querySelectorAll('#shop-tabs .shop-tab').forEach(b=>b.classList.toggle('on', b.dataset.tab===shopTab));
-  const body=$('#shop-body'); const keepScroll=body.scrollTop; body.innerHTML='';
+  const body=$('#shop-body'); const keepScroll=body.scrollTop; const innerScroll=[...body.querySelectorAll('.shop-grid,.shop-locker')].map(e=>[e.classList.contains('shop-grid')?'.shop-grid':'.shop-locker', e.scrollTop]); body.innerHTML='';
   ({today:shopBuildToday, players:shopBuildPlayers, looks:shopBuildLooks, gems:shopBuildGems, powers:shopBuildPowers})[shopTab](body);
-  body.scrollTop=keepScroll;                                           // re-rendering (equip/unequip) keeps the scroll position
+  body.scrollTop=keepScroll; innerScroll.forEach(([sel,top])=>{ const e=body.querySelector(sel); if(e) e.scrollTop=top; });   // re-rendering (equip / choose a player) keeps the scroll position of the list
 }
 const shopBtn=(cls, txt, fn, extra)=>{ const b=document.createElement('button'); b.className='btn small '+cls; b.innerHTML=txt; if(extra) Object.assign(b.dataset, extra); b.addEventListener('click', e=>{ e.stopPropagation(); sfx.click(); fn(); }); return b; };
 
