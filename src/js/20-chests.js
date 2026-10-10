@@ -1,25 +1,33 @@
 /* ===================================================================================================
-   CHESTS — keys 🔑 open fixed bundles (no loot boxes): Bronze / Silver / Gold, printed contents,
-   the only choice inside is "pick 1 of 3" face-up cosmetic cards (never an owned item).
+   CHESTS — a chest is a DROP (Brawl-Stars Starr-Drop style): tap it open, it rolls a rarity
+   (נדיר 🟢 · נדיר במיוחד 🔵 · אדיר 🟣 · מדהים 🔴 · אגדי 🟡), climbing up with a flash for every step,
+   then three FACE-DOWN cards of that rarity appear; pick one and it flips. Better chests → better odds.
+   A legendary is guaranteed after ECON.chests.pity drops without one.
    Public: giveChest(kind) openChestsScreen() closeChestsScreen() openChest(kind) openWelcomeChest()
-           claimDailyBronze() chestsBadge() chestCanOpen(kind) chestPickOffer(kind) refreshChestsBadge()
-           chestCoinReturn(kind) chestCoinPrice(kind) chestPayCoins(n,why) — chest coins count toward the daily coin cap
-   prog: prog.chests={bronze,silver,gold,welcome}  prog.packs  prog.chestDay{key,n}  prog.chestOpened{kind:n}
-         prog.chestPick={kind,rarity,ids,seed} (an unpicked offer survives a reload)  prog.welcomeChest=true once granted
-   Hooks emitted: 'chest'(kind) when a chest is handed out, 'chestOpen'(kind, rewards) after one is opened, 'chestPick'(id)
+           claimDailyBronze() chestsBadge() chestCanOpen(kind) refreshChestsBadge() buildChests() chestTap()
+   prog: prog.chests={bronze,silver,gold,legend,welcome}  prog.chestDay{key,n}  prog.chestOpened{kind:n}
+         prog.chestPity (drops since the last legendary)  prog.chestPick={kind,rarity,cards,paid,all} (survives a reload)
+   Hooks emitted: 'chest'(kind) when a chest is handed out, 'chestOpen'(kind,{rarity}) when one is opened, 'chestPick'(card)
    =================================================================================================== */
-Object.assign(ECON, { chests: { taps:3,                                   // taps needed to open a freshly paid chest (each one shakes it harder)
-  bronze: { keys:1, coins:150, gems:0,  give:{coins:80,  packs:1, gems:0}, pick:null,   kitAlways:false },
-  silver: { keys:3, coins:500, gems:0,  give:{coins:300, packs:2, gems:0}, pick:'rare', kitAlways:false },
-  gold:   { keys:8, coins:0,   gems:25, give:{coins:900, packs:3, gems:5}, pick:'epic', kitAlways:true  },
-  welcome:{ give:{coins:100, packs:0, gems:0}, kit:'kit_il' },
-  packCoins:0,          // sticker packs pay nothing until the album exists (prog.packs still counts them for the future album)
-  missingCard:100,      // coins per card when the cosmetic pools run dry
-  /* invariant (tested): a kind sold for coins costs more than it can return (give.coins + packs×packCoins + a dry-pool coin card) —
-     chestCoinPrice() hides the coin route otherwise, and every chest coin goes through chestPayCoins() = the daily coin cap */
-  pickCount:3,
-  dailyBronze:1,        // free Bronze chests per day through claimDailyBronze()
-  kinds:['bronze','silver','gold'],
+Object.assign(ECON, { chests: {
+  taps:3,
+  kinds:['bronze','silver','gold','legend'],
+  rarities:['rare','superrare','epic','mythic','legendary'],
+  bronze: { keys:1, coins:150, gems:0,  odds:[60,25,10,4,1] },
+  silver: { keys:3, coins:500, gems:0,  odds:[35,33,20,9,3] },
+  gold:   { keys:8, coins:0,   gems:25, odds:[10,28,32,20,10] },
+  legend: { keys:0, coins:0,   gems:40, odds:[0,10,35,35,20] },
+  welcome:{ cards:[{t:'cos',id:'kit_il'},{t:'coins',n:100},{t:'keys',n:1}] },
+  pity:40,              // a legendary is guaranteed after this many drops without one
+  /* what each rarity can hold: coins are small on purpose — the exciting things are players, looks, gems, keys, powers */
+  pool:{
+    rare:      { coins:[30,50],   keys:1, xp:30,  cos:'rare',      charMax:1000 },
+    superrare: { coins:[70,100],  keys:2, gems:2, cos:'rare',      charMax:2500 },
+    epic:      { coins:[150,150], keys:3, gems:5, cos:'epic',      charMax:5000 },
+    mythic:    { coins:[300,300], gems:12, cos:'epic', cos2:'legendary', charMax:8000 },
+    legendary: { coins:[600,600], gems:30, cos:'legendary', charMax:99999, power:true },
+  },
+  dailyBronze:1,
 }});
 
 I18N_ADD({
@@ -27,81 +35,132 @@ I18N_ADD({
  'chests.bronze':['תיבת ברונזה','Bronze chest','صندوق برونزي','Бронзовый сундук'],
  'chests.silver':['תיבת כסף','Silver chest','صندوق فضي','Серебряный сундук'],
  'chests.gold':['תיבת זהב','Gold chest','صندوق ذهبي','Золотой сундук'],
+ 'chests.legend':['תיבה אגדית','Legendary chest','صندوق أسطوري','Легендарный сундук'],
  'chests.welcome':['תיבת ברוכים הבאים','Welcome chest','صندوق الترحيب','Приветственный сундук'],
  'chests.have':['יש לך {0}','You have {0}','لديك {0}','У тебя {0}'],
  'chests.haveNone':['אין לך עדיין','None yet','لا تملك بعد','Пока нет'],
- 'chests.coins':['🪙 +{0}','🪙 +{0}','🪙 +{0}','🪙 +{0}'],
- 'chests.gems':['💎 +{0}','💎 +{0}','💎 +{0}','💎 +{0}'],
- 'chests.packs':['🎴 {0} חבילות מדבקות (בקרוב)','🎴 {0} sticker packs (soon)','🎴 {0} حزم ملصقات (قريبًا)','🎴 {0} набора наклеек (скоро)'],
- 'chests.pack1':['🎴 חבילת מדבקות (בקרוב)','🎴 Sticker pack (soon)','🎴 حزمة ملصقات (قريبًا)','🎴 Набор наклеек (скоро)'],
- 'chests.capped':['🪙 הגעת לתקרה היומית','🪙 Daily coin cap reached','🪙 وصلت إلى الحد اليومي','🪙 Дневной лимит монет'],
- 'chests.packNow':['🎴 חבילה = 🪙 {0}','🎴 pack = 🪙 {0}','🎴 حزمة = 🪙 {0}','🎴 набор = 🪙 {0}'],
- 'chests.pickRare':['🎴 בחר 1 מ-3 נדירים','🎴 Pick 1 of 3 rare','🎴 اختر 1 من 3 نادرة','🎴 Выбери 1 из 3 редких'],
- 'chests.pickEpic':['🎴 בחר 1 מ-3 אפיים (תמיד מדים!)','🎴 Pick 1 of 3 epic (a kit always!)','🎴 اختر 1 من 3 ملحمية (طقم دائمًا!)','🎴 Выбери 1 из 3 эпических (всегда форма!)'],
  'chests.price':['🔑 {0} או {1}','🔑 {0} or {1}','🔑 {0} أو {1}','🔑 {0} или {1}'],
+ 'chests.priceGems':['💎 {0}','💎 {0}','💎 {0}','💎 {0}'],
  'chests.openOwned':['🎁 פתח!','🎁 Open!','🎁 افتح!','🎁 Открыть!'],
  'chests.openKeys':['פתח ב-🔑 {0}','Open for 🔑 {0}','افتح بـ 🔑 {0}','Открыть за 🔑 {0}'],
  'chests.openCoins':['פתח ב-🪙 {0}','Open for 🪙 {0}','افتح بـ 🪙 {0}','Открыть за 🪙 {0}'],
  'chests.openGems':['פתח ב-💎 {0}','Open for 💎 {0}','افتح بـ 💎 {0}','Открыть за 💎 {0}'],
  'chests.need':['חסר 🔑 {0}','Need 🔑 {0}','ينقص 🔑 {0}','Нужно 🔑 {0}'],
+ 'chests.needGems':['חסר 💎 {0}','Need 💎 {0}','ينقص 💎 {0}','Нужно 💎 {0}'],
  'chests.askKeys':['לפתוח {0} ב-🔑 {1}?','Open {0} for 🔑 {1}?','هل تفتح {0} بـ 🔑 {1}؟','Открыть {0} за 🔑 {1}?'],
  'chests.askCoins':['לפתוח {0} ב-🪙 {1}?','Open {0} for 🪙 {1}?','هل تفتح {0} بـ 🪙 {1}؟','Открыть {0} за 🪙 {1}?'],
  'chests.askGems':['לפתוח {0} ב-💎 {1}?','Open {0} for 💎 {1}?','هل تفتح {0} بـ 💎 {1}؟','Открыть {0} за 💎 {1}?'],
- 'chests.noMoney':['אין מספיק 😕 נצח משחקים ברמה בינונית ומעלה למפתחות','Not enough 😕 win at Medium or above for keys','غير كافٍ 😕 افز في المستوى المتوسط أو أعلى للمفاتيح','Не хватает 😕 побеждай на среднем уровне и выше ради ключей'],
+ 'chests.noMoney':['אין מספיק 😕 נצח משחקים ברמה בינונית ומעלה למפתחות','Not enough 😕 win at Medium or above for keys','غير كافٍ 😕 افز في المستوى المتوسط أو أعلى للمفاتيح','Не хватает 😕 побеждай на Среднем и выше ради ключей'],
  'chests.got':['🎁 קיבלת {0}!','🎁 You got a {0}!','🎁 حصلت على {0}!','🎁 Ты получил: {0}!'],
- 'chests.opening':['{0} נפתחת!','{0} opens!','{0} يُفتح!','{0} открывается!'],
- 'chests.pickOne':['בחר קלף אחד! 👇','Pick one card! 👇','اختر بطاقة واحدة! 👇','Выбери одну карту! 👇'],
+ 'chests.tap':['לחץ על התיבה!','Tap the chest!','اضغط على الصندوق!','Нажми на сундук!'],
+ 'chests.pickOne':['בחר קלף! 👇','Pick a card! 👇','اختر بطاقة! 👇','Выбери карту! 👇'],
  'chests.picked':['✨ {0} שלך!','✨ {0} is yours!','✨ {0} لك!','✨ {0} твоё!'],
+ 'chests.yours':['🎁 הכול שלך!','🎁 All yours!','🎁 كله لك!','🎁 Всё твоё!'],
  'chests.done':['✔ סיימתי','✔ Done','✔ انتهيت','✔ Готово'],
- 'chests.coinCard':['🪙 {0} מטבעות','🪙 {0} coins','🪙 {0} عملة','🪙 {0} монет'],
- 'chests.rare':['נדיר','Rare','نادر','Редкий'], 'chests.epic':['אפי','Epic','ملحمي','Эпический'], 'chests.legendary':['אגדי','Legendary','أسطوري','Легендарный'],
+ 'chests.r.rare':['נדיר','Rare','نادر','Редкий'], 'chests.r.superrare':['נדיר במיוחד','Super rare','نادر جدًا','Сверхредкий'],
+ 'chests.r.epic':['אדיר','Epic','ملحمي','Эпический'], 'chests.r.mythic':['מדהים','Mythic','أسطوري خارق','Мифический'], 'chests.r.legendary':['אגדי','Legendary','أسطوري','Легендарный'],
+ 'chests.r.welcome':['ברוכים הבאים!','Welcome!','مرحبًا بك!','Добро пожаловать!'],
+ 'chests.up':['⬆ משתדרג!','⬆ Upgrading!','⬆ ترقية!','⬆ Повышение!'],
+ 'chests.c.coins':['🪙 {0} מטבעות','🪙 {0} coins','🪙 {0} عملة','🪙 {0} монет'], 'chests.c.gems':['💎 {0} יהלומים','💎 {0} gems','💎 {0} جواهر','💎 {0} алмазов'],
+ 'chests.c.keys':['🔑 {0} מפתחות','🔑 {0} keys','🔑 {0} مفاتيح','🔑 {0} ключей'], 'chests.c.xp':['⭐ {0} XP','⭐ {0} XP','⭐ {0} XP','⭐ {0} XP'],
+ 'chests.c.char':['שחקן חדש!','New player!','لاعب جديد!','Новый игрок!'], 'chests.c.ice':['❄️ כוח הקרח!','❄️ Ice power!','❄️ قوة الجليد!','❄️ Сила льда!'], 'chests.c.fire':['🔥 כוח האש!','🔥 Fire power!','🔥 قوة النار!','🔥 Сила огня!'],
  'chests.t.kit':['מדים','Kit','طقم','Форма'], 'chests.t.boots':['נעליים','Boots','حذاء','Бутсы'], 'chests.t.ball':['כדור','Ball','كرة','Мяч'],
  'chests.t.stadium':['אצטדיון','Stadium','ملعب','Стадион'], 'chests.t.celeb':['חגיגה','Celebration','احتفال','Празднование'], 'chests.t.title':['תארים','Titles','ألقاب','Титулы'],
+ 'chests.can':['מה אפשר לקבל: {0}','You can get: {0}','يمكنك الحصول على: {0}','Можно получить: {0}'],
+ 'chests.pity':['⭐ אגדי מובטח בעוד {0} תיבות','⭐ Legendary guaranteed in {0} chests','⭐ أسطوري مضمون بعد {0} صناديق','⭐ Легендарный гарантирован через {0}'],
+ 'chests.pityNow':['⭐ התיבה הבאה: אגדי מובטח!','⭐ Next chest: legendary guaranteed!','⭐ الصندوق التالي: أسطوري مضمون!','⭐ Следующий сундук: легендарный точно!'],
+ 'chests.coll':['🧑 {0}/{1} שחקנים · 👕 {2}/{3} פריטים','🧑 {0}/{1} players · 👕 {2}/{3} items','🧑 {0}/{1} لاعبين · 👕 {2}/{3} عناصر','🧑 {0}/{1} игроков · 👕 {2}/{3} предметов'],
  'chests.welcomeBtn':['🎁 תיבת ברוכים הבאים — פתח!','🎁 Welcome chest — open!','🎁 صندوق الترحيب — افتح!','🎁 Приветственный сундук — открой!'],
  'chests.pendingBtn':['🎴 יש לך קלף לבחור!','🎴 You have a card to pick!','🎴 لديك بطاقة لتختارها!','🎴 Тебе нужно выбрать карту!'],
  'chests.nextUp':['יש לך תיבה לפתוח!','You have a chest to open!','لديك صندوق لتفتحه!','У тебя есть сундук!'],
- 'chests.keysFull':['🔑 מלא! פתח תיבות','🔑 Full! Open chests','🔑 ممتلئ! افتح الصناديق','🔑 Полно! Открой сундуки'],
  'chests.cosGot':['✨ קיבלת: {0}','✨ You got: {0}','✨ حصلت على: {0}','✨ Получено: {0}'],
- 'chests.dailyFree':['🎁 תיבת ברונזה חינם להיום!','🎁 Free Bronze chest for today!','🎁 صندوق برونزي مجاني لليوم!','🎁 Бесплатный бронзовый сундук!'],
+ 'chests.dailyFree':['🎁 תיבת ברונזה חינם להיום!','🎁 Free Bronze chest for today!','🎁 صندوق برونزي مجاني لليوم!','🎁 Бесплатный бронзовый сундук на сегодня!'],
+ 'chests.capped':['🪙 הגעת לתקרה היומית','🪙 Daily coin cap reached','🪙 وصلت إلى الحد اليومي','🪙 Дневной лимит монет'],
 });
 STATIC_ADD({ '#chests-title':'chests.title', '#btn-chests-back':'btn.back', '#chests-welcome':'chests.welcomeBtn', '#chests-pending':'chests.pendingBtn', '#btn-chest-done':'chests.done' });
 
 /* ----- state helpers ----- */
-function chestInv(){ prog.chests = prog.chests || {}; for(const k of ['bronze','silver','gold','welcome']) prog.chests[k]=prog.chests[k]|0; return prog.chests; }
+function chestInv(){ prog.chests = prog.chests || {}; for(const k of ['bronze','silver','gold','legend','welcome']) prog.chests[k]=prog.chests[k]|0; return prog.chests; }
 const chestName = kind => T('chests.'+kind);
-const chestIcon = kind => ({bronze:'📦', silver:'🎁', gold:'👑', welcome:'🎁'})[kind] || '🎁';
+const chestIcon = kind => ({bronze:'📦', silver:'🎁', gold:'👑', legend:'🌟', welcome:'🎁'})[kind] || '🎁';
 function chestCfg(kind){ return ECON.chests[kind]; }
-/* which cosmetics may a chest offer: unowned, right rarity, not reserved for a future Sunday drop (the shop module knows which week it is) */
+const rarityName = r => T('chests.r.'+r);
 function chestCosAvailable(c){ if(cosOwned(c.id)) return false; return typeof shopAvailable==='function' ? !!shopAvailable(c) : !c.week; }
-/* the most coins a chest can hand back (its coins + packs + a dry-pool coin card); the coin route exists only when the price is higher */
-function chestCoinReturn(kind){ const cfg=chestCfg(kind); if(!cfg || !cfg.give) return 0; return (cfg.give.coins|0) + (cfg.give.packs|0)*(ECON.chests.packCoins|0) + (cfg.pick ? ECON.chests.missingCard|0 : 0); }
-function chestCoinPrice(kind){ const cfg=chestCfg(kind); return cfg && cfg.coins>chestCoinReturn(kind) && coinCapLeft()>0 ? cfg.coins : 0; }   // no coin route once the daily cap is full: a kid never pays for nothing
-/* chest coins count toward the daily coin cap like match coins: pays what is left under the cap, returns what was actually given */
+function chestCoinPrice(kind){ const cfg=chestCfg(kind); return cfg && cfg.coins && coinCapLeft()>0 ? cfg.coins : 0; }
+/* chest coins bought WITH coins count toward the daily cap (no coin printer); keys/gems/owned chests pay in full */
 function chestPayCoins(n, why, uncapped){
   if(uncapped){ addCoins(n, why); return n; }
   n=Math.round(n); if(!(n>0)) return 0;
   const give=Math.min(n, coinCapLeft()); if(give<=0) return 0;
   dayCounter('coinDay').n+=give; addCoins(give, why||'chest'); return give;
 }
-function chestPool(rarity){ return COSMETICS.filter(c=>c.rarity===rarity && chestCosAvailable(c)); }
-/* deterministic RNG (mulberry32) from a string seed: the same day + kind + count gives the same three cards */
 function chestSeed(str){ let h=2166136261; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h, 16777619); } return h>>>0; }
 function chestRng(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)>>>0; let t=a; t=Math.imul(t^(t>>>15), t|1); t^=t+Math.imul(t^(t>>>7), t|61); return ((t^(t>>>14))>>>0)/4294967296; }; }
-/* the three face-up cards for a chest: ids of unowned cosmetics (or 'coins' cards when the pools are dry) */
-function chestPickOffer(kind, count){
-  const cfg=chestCfg(kind); if(!cfg || !cfg.pick) return null;
-  const n=ECON.chests.pickCount, other = cfg.pick==='epic' ? 'rare' : 'epic';
-  const seedStr = dayKey()+'|'+kind+'|'+(count!=null ? count : ((prog.chestOpened||{})[kind]|0));
-  const rnd=chestRng(chestSeed(seedStr));
-  const take=(arr)=>{ const i=Math.floor(rnd()*arr.length); return arr.splice(i,1)[0]; };
-  let main=chestPool(cfg.pick), fallback=chestPool(other); const ids=[];
-  if(cfg.kitAlways){ const kits=main.filter(c=>c.type==='kit'); const kits2=fallback.filter(c=>c.type==='kit'); const src = kits.length ? kits : kits2; if(src.length){ const k=take(src); ids.push(k.id); main=main.filter(c=>c.id!==k.id); fallback=fallback.filter(c=>c.id!==k.id); } }
-  while(ids.length<n && main.length) ids.push(take(main).id);
-  while(ids.length<n && fallback.length) ids.push(take(fallback).id);
-  while(ids.length<n) ids.push('coins');
-  return { kind, rarity:cfg.pick, ids, seed:seedStr };
+
+/* ----- the roll: which rarity does this drop give? (pity makes a legendary certain) ----- */
+function chestRollRarity(kind, rnd){
+  const R=ECON.chests.rarities, odds=chestCfg(kind).odds;
+  if((prog.chestPity|0)>=ECON.chests.pity-1) return 'legendary';
+  let x=(rnd||Math.random)()*100; for(let i=0;i<R.length;i++){ x-=odds[i]; if(x<0) return R[i]; }
+  return R[R.length-1];
 }
-/* can this chest be opened right now, and how? → 'owned' | 'keys' | 'coins' | 'gems' | null */
+/* the three cards of a rarity: distinct kinds of reward, only things the kid does not have yet */
+function chestCards(rarity, rnd){
+  const P=ECON.chests.pool[rarity]; rnd=rnd||Math.random;
+  const pick=a=>a[Math.floor(rnd()*a.length)];
+  const options=[];
+  options.push({t:'coins', n: P.coins[0]+Math.round(rnd()*(P.coins[1]-P.coins[0])/10)*10});
+  if(P.gems) options.push({t:'gems', n:P.gems});
+  if(P.keys && (prog.keys|0)<ECON.keyCap) options.push({t:'keys', n:P.keys});
+  if(P.xp) options.push({t:'xp', n:P.xp});
+  const cos=COSMETICS.filter(c=>(c.rarity===P.cos || c.rarity===P.cos2) && chestCosAvailable(c)); if(cos.length) options.push({t:'cos', id:pick(cos).id});
+  const chars=CHARS.filter(c=>!isUnlocked(c) && !c.trophyOnly && priceOf(c)<=P.charMax && (rarity!=='legendary' || priceOf(c)>=5000 || !CHARS.some(x=>!isUnlocked(x) && !x.trophyOnly && priceOf(x)>=5000)));
+  if(chars.length) options.push({t:'char', id:pick(chars).id});
+  if(P.power){ const pw=['ice','fire'].filter(p=>!prog[p]); if(pw.length) options.push({t:'power', id:pick(pw)}); }
+  /* three distinct options, the exciting ones (char / cos / power / gems) first */
+  const prio={char:0, cos:1, power:1, gems:2, keys:3, coins:4, xp:5};
+  options.sort((a,b)=>prio[a.t]-prio[b.t] + (rnd()-.5));
+  const cards=options.slice(0,3);
+  while(cards.length<3) cards.push({t:'coins', n:P.coins[0]});
+  return cards.sort(()=>rnd()-.5);
+}
+function chestCardName(c){
+  if(c.t==='coins') return T('chests.c.coins', fmtNum(c.n)); if(c.t==='gems') return T('chests.c.gems', c.n); if(c.t==='keys') return T('chests.c.keys', c.n); if(c.t==='xp') return T('chests.c.xp', c.n);
+  if(c.t==='cos'){ const x=cosById(c.id); return x ? cosName(x) : c.id; } if(c.t==='char'){ const x=CHARS.find(k=>k.id===c.id); return x ? nm(x) : c.id; } if(c.t==='power') return T('chests.c.'+c.id);
+  return '?';
+}
+function chestCardType(c){ if(c.t==='cos'){ const x=cosById(c.id); return x ? T('chests.t.'+x.type) : ''; } if(c.t==='char') return T('chests.c.char'); return ''; }
+function chestCardPreview(c){
+  const d=document.createElement('div'); d.className='pv';
+  if(c.t==='char'){ const x=CHARS.find(k=>k.id===c.id); try{ d.innerHTML=playerSVG(x,'happy',null); }catch(e){ d.classList.add('emoji'); d.textContent='🧑'; } return d; }
+  if(c.t==='cos'){ const x=cosById(c.id); if(!x){ d.classList.add('emoji'); d.textContent='👕'; return d; }
+    if(x.type==='kit' || x.type==='boots'){ try{ d.innerHTML=playerSVG(CHARS[selected]||CHARS[0], 'happy', x.data); }catch(e){ d.classList.add('emoji'); d.textContent=x.type==='kit'?'👕':'👟'; } }
+    else if(x.type==='ball'){ d.classList.add('ball'); d.style.background=`repeating-conic-gradient(${x.data.a} 0 30deg, ${x.data.b} 30deg 60deg)`; }
+    else if(x.type==='stadium'){ d.classList.add('stad'); d.style.background=`linear-gradient(${x.data.night?'#1B2A4E':'#7ED3FF'} 0 30%, ${x.data.track} 30% 40%, ${x.data.stripeA} 40% 55%, ${x.data.stripeB} 55% 70%, ${x.data.stripeA} 70% 85%, ${x.data.stripeB} 85%)`; }
+    else { d.classList.add('emoji'); d.textContent = x.type==='celeb' ? '🕺' : '🏷️'; }
+    return d; }
+  d.classList.add('emoji'); d.textContent = c.t==='coins' ? '🪙' : c.t==='gems' ? '💎' : c.t==='keys' ? '🔑' : c.t==='xp' ? '⭐' : c.id==='ice' ? '❄️' : '🔥';
+  return d;
+}
+/* hand the chosen card's content to the player */
+function chestGrant(c, paid){
+  if(c.t==='coins'){ return chestPayCoins(c.n, 'chest', paid!=='coins')>0; }
+  if(c.t==='gems'){ addGems(c.n,'chest'); return true; }
+  if(c.t==='keys'){ return addKeys(c.n,'chest')>0; }
+  if(c.t==='xp'){ addXP(c.n); return true; }
+  if(c.t==='cos'){ return chestGiveCosmetic(c.id); }
+  if(c.t==='char'){ const x=CHARS.find(k=>k.id===c.id); if(!x || isUnlocked(x)) return false; prog.unlocked.push(c.id); saveProg(); toast(T('chests.cosGot', nm(x)),'ach'); try{ buildGallery(); }catch(e){} return true; }
+  if(c.t==='power'){ if(prog[c.id]) return false; prog[c.id]=true; saveProg(); toast(T('chests.c.'+c.id),'ach'); return true; }
+  return false;
+}
+function chestGiveCosmetic(id){
+  if(cosOwned(id)) return false;
+  if(typeof giveCosmetic==='function'){ giveCosmetic(id); return true; }
+  prog.cos=prog.cos||{}; prog.cos.items=prog.cos.items||[]; prog.cos.items.push(id); saveProg();
+  const c=cosById(id); toast(T('chests.cosGot', c ? cosName(c) : id),'ach'); return true;
+}
+
+/* ----- can this chest be opened, and how? ----- */
 function chestCanOpen(kind){
   const inv=chestInv(), cfg=chestCfg(kind); if(!cfg) return null;
   if(kind==='welcome') return inv.welcome>0 ? 'owned' : null;
@@ -111,41 +170,24 @@ function chestCanOpen(kind){
   if(cfg.gems && (prog.gems|0)>=cfg.gems) return 'gems';
   return null;
 }
-/* number of chests the kid can open now: every chest in the inventory + one per kind affordable with keys (for the home button badge) */
 function chestsBadge(){
-  const inv=chestInv(); let n=inv.bronze+inv.silver+inv.gold+inv.welcome;
-  for(const k of ECON.chests.kinds){ if(!inv[k] && (prog.keys|0)>=chestCfg(k).keys) n++; }
+  const inv=chestInv(); let n=inv.bronze+inv.silver+inv.gold+inv.legend+inv.welcome;
+  for(const k of ECON.chests.kinds){ if(!inv[k] && chestCfg(k).keys && (prog.keys|0)>=chestCfg(k).keys) n++; }
   return n;
 }
 function refreshChestsBadge(){
   const n=chestsBadge(); const el=$('#chests-badge'); if(el){ el.textContent=n ? String(n) : ''; el.hidden=!n; el.classList.toggle('full', (prog.keys|0)>=ECON.keyCap); }
   const b=$('#btn-chests'); if(b) b.classList.toggle('has-chest', n>0);
 }
-
-/* ----- handing out chests ----- */
 function giveChest(kind, silent){
   const inv=chestInv(); if(!(kind in inv)) return false;
   inv[kind]++; saveProg(); if(!silent) toast(T('chests.got', chestName(kind)),'ach');
   Hooks.emit('chest', kind); refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
   return true;
 }
-/* the free daily Bronze chest (the daily-pickup module calls this; once per server day) */
 function claimDailyBronze(){
   const d=dayCounter('chestDay'); if(d.n>=ECON.chests.dailyBronze) return false;
   d.n++; saveProg(); giveChest('bronze'); return true;
-}
-/* sticker packs: the album does not exist yet → each pack pays coins now and is remembered in prog.packs */
-function chestGivePacks(n){
-  n=n|0; if(n<=0) return 0;
-  if(typeof givePack==='function'){ for(let i=0;i<n;i++) givePack('chest'); return 0; }
-  prog.packs=(prog.packs|0)+n; saveProg(); return n*ECON.chests.packCoins;
-}
-/* a cosmetic lands in the locker: through the shop module when it exists, else straight into prog.cos */
-function chestGiveCosmetic(id){
-  if(cosOwned(id)) return false;
-  if(typeof giveCosmetic==='function'){ giveCosmetic(id); return true; }
-  prog.cos=prog.cos||{}; prog.cos.items=prog.cos.items||[]; prog.cos.items.push(id); saveProg();
-  const c=cosById(id); toast(T('chests.cosGot', c ? cosName(c) : id),'ach'); return true;
 }
 
 /* ----- opening ----- */
@@ -153,7 +195,7 @@ let chestBusy=false;
 async function openChest(kind){
   const cfg=chestCfg(kind); if(!cfg || chestBusy) return false;
   if(kind==='welcome') return openWelcomeChest();
-  if(prog.chestPick){ chestShowPick(prog.chestPick); return false; }         // finish the pending pick first
+  if(prog.chestPick){ chestDropResume(); return false; }                  // finish the pending pick first
   const how=chestCanOpen(kind);
   if(!how){ toast(T('chests.noMoney'),'warn'); return false; }
   chestBusy=true;
@@ -162,128 +204,128 @@ async function openChest(kind){
     else if(how==='coins'){ const cp=chestCoinPrice(kind); if(!cp || !(await ask(T('chests.askCoins', chestName(kind), fmtNum(cp)))) || !spendCoins(cp)) return false; }
     else if(how==='gems'){ if(!(await ask(T('chests.askGems', chestName(kind), cfg.gems))) || !spendGems(cfg.gems)) return false; }
     else { chestInv()[kind]--; }
-    prog.chestOpened=prog.chestOpened||{}; const count=prog.chestOpened[kind]|0;
-    const offer = cfg.pick ? chestPickOffer(kind, count) : null;
-    prog.chestOpened[kind]=count+1;
-    const packCoins=chestGivePacks(cfg.give.packs);
-    const rewards={ coins:cfg.give.coins, packs:cfg.give.packs, packCoins, gems:cfg.give.gems|0, capped:false };
-    if(offer) prog.chestPick=offer;
+    prog.chestOpened=prog.chestOpened||{}; prog.chestOpened[kind]=(prog.chestOpened[kind]|0)+1;
+    const rarity=chestRollRarity(kind);
+    prog.chestPity = rarity==='legendary' ? 0 : (prog.chestPity|0)+1;
+    const cards=chestCards(rarity);
+    prog.chestPick={kind, rarity, cards, paid:how, all:false, seen:false};
     saveProg();
-    const want=rewards.coins+packCoins, got=chestPayCoins(want, 'chest', how!=='coins');   // a chest bought with coins counts toward the daily cap; keys/gems/owned chests pay in full
-    if(got<want){ rewards.capped=true; rewards.packCoins=Math.min(packCoins, got); rewards.coins=got-rewards.packCoins; }
-    if(rewards.gems) addGems(rewards.gems, 'chest');
-    chestShowOpen(kind, rewards, offer, true);
-    Hooks.emit('chestOpen', kind, rewards); refreshChestsBadge(); buildChests();
+    chestDropStart(kind, prog.chestPick);
+    Hooks.emit('chestOpen', kind, {rarity}); refreshChestsBadge(); buildChests();
     return true;
   } finally { chestBusy=false; }
 }
-/* the welcome chest: fixed 100 coins + the starter kit, exactly once (prog.welcomeChest); the onboarding calls this */
+/* the welcome chest: three face-down cards that ALL flip and are all yours (kit, coins, a key), exactly once */
 function openWelcomeChest(){
   if(prog.welcomeChest) return false;
-  const cfg=ECON.chests.welcome; prog.welcomeChest=true; const inv=chestInv(); if(inv.welcome>0) inv.welcome--;
+  prog.welcomeChest=true; const inv=chestInv(); if(inv.welcome>0) inv.welcome--;
+  prog.chestPick={kind:'welcome', rarity:'welcome', cards:ECON.chests.welcome.cards.map(c=>Object.assign({},c)), paid:'owned', all:true, seen:false};
   saveProg();
-  addCoins(cfg.give.coins, 'welcome');
-  const kit = chestGiveCosmetic(cfg.kit) ? cfg.kit : null;
-  chestShowOpen('welcome', {coins:cfg.give.coins, packs:0, packCoins:0, gems:0, kit}, null, true);
-  Hooks.emit('chestOpen', 'welcome', {coins:cfg.give.coins, kit}); refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
+  chestDropStart('welcome', prog.chestPick);
+  Hooks.emit('chestOpen', 'welcome', {rarity:'welcome'}); refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
   return true;
 }
 
-/* ----- the opening modal ----- */
+/* ----- the drop (full stage) ----- */
 let chestsConfetti=null;
 function chestConfetti(n){
   const cv=$('#chests-confetti'); if(!cv) return;
   try{ chestsConfetti = chestsConfetti || makeConfetti(cv, ['#FFD447','#F5C542','#fff7c2','#FF7A3D','#8E5CF6','#fff']); cv.hidden=false; chestsConfetti.burst(n); setTimeout(()=>{ cv.hidden=true; }, 4500); }catch(e){}
 }
-/* a freshly paid chest arrives CLOSED: the kid taps it ECON.chests.taps times, each tap shakes it harder, the last one bursts it open */
-const CHEST_TAP = { left:0, kind:null, r:null, offer:null };
+const DROP={ phase:'idle', taps:0, timers:[] };
+function dropTimer(fn, ms){ const t=setTimeout(fn, ms); DROP.timers.push(t); return t; }
+function dropClear(){ DROP.timers.forEach(clearTimeout); DROP.timers=[]; }
+function chestDropStart(kind, pick){
+  const d=$('#chest-drop'); if(!d) return;
+  dropClear(); DROP.phase='tap'; DROP.taps=0; DROP.pick=pick;
+  d.removeAttribute('data-r'); d.hidden=false;
+  $('#cd-kind').textContent=chestName(kind);
+  const ch=$('#cd-chest'); ch.textContent=chestIcon(kind); ch.className='cd-chest'; ch.hidden=false;
+  $('#cd-hint').hidden=false; $('#cd-hint').textContent='👆 '+T('chests.tap');
+  $('#cd-rarity').hidden=true; $('#cd-pick').hidden=true; $('#cd-cards').hidden=true; $('#cd-cards').innerHTML=''; $('#cd-got').hidden=true; $('#btn-chest-done').hidden=true;
+}
+/* a pending pick after a reload: straight to the cards */
+function chestDropResume(){
+  const pick=prog.chestPick; if(!pick) return;
+  chestDropStart(pick.kind, pick); DROP.phase='cards';
+  $('#cd-chest').hidden=true; $('#cd-hint').hidden=true;
+  $('#chest-drop').setAttribute('data-r', pick.rarity==='welcome' ? 'legendary' : pick.rarity);
+  const r=$('#cd-rarity'); r.hidden=false; r.className='cd-rarity'; r.textContent=rarityName(pick.rarity);
+  chestShowCards(pick);
+}
 function chestTap(){
-  const ch=$('#copen-chest'); if(!ch || !ch.classList.contains('locked') || CHEST_TAP.left<=0) return;
-  CHEST_TAP.left--;
-  const n=(ECON.chests.taps||3)-CHEST_TAP.left;
+  if(DROP.phase!=='tap') return;
+  const ch=$('#cd-chest'); DROP.taps++;
   try{ sfx.click(); }catch(e){}
-  if(CHEST_TAP.left>0){
-    ch.classList.remove('shake1','shake2','shake3'); void ch.offsetWidth; ch.classList.add('shake'+Math.min(3,n));
-    $('#copen-tap').textContent=T('chests.tapN', CHEST_TAP.left);
-    return;
-  }
-  ch.classList.remove('locked','shake1','shake2','shake3'); ch.classList.add('burst'); $('#copen-tap').hidden=true;
+  if(DROP.taps<(ECON.chests.taps|0)){ ch.classList.remove('shake1','shake2','shake3'); void ch.offsetWidth; ch.classList.add('shake'+Math.min(3,DROP.taps)); return; }
+  DROP.phase='burst'; ch.classList.remove('shake1','shake2','shake3'); ch.classList.add('burst'); $('#cd-hint').hidden=true;
   try{ sfx.kick(); }catch(e){}
-  setTimeout(()=>{ ch.classList.remove('burst'); chestReveal(CHEST_TAP.kind, CHEST_TAP.r, CHEST_TAP.offer); }, 420);
+  dropTimer(()=>{ ch.hidden=true; chestRarityClimb(DROP.pick); }, 480);
 }
-function chestShowOpen(kind, r, offer, tapToOpen){
-  const m=$('#chest-open-modal'); if(!m) return;
-  const ch=$('#copen-chest'); ch.textContent=chestIcon(kind);
-  if(tapToOpen && (ECON.chests.taps|0)>0){
-    CHEST_TAP.left=ECON.chests.taps|0; CHEST_TAP.kind=kind; CHEST_TAP.r=r; CHEST_TAP.offer=offer;
-    $('#copen-title').textContent=T('chests.tap');
-    ch.className='copen-chest locked'; ch.style.animation='';
-    const tap=$('#copen-tap'); tap.hidden=false; tap.textContent=T('chests.tapN', CHEST_TAP.left);
-    $('#copen-rewards').innerHTML=''; $('#copen-pick-title').hidden=true; $('#copen-cards').hidden=true; $('#copen-cards').innerHTML=''; $('#btn-chest-done').hidden=true;
-    m.classList.add('show');
-    return;
-  }
-  $('#copen-tap').hidden=true;
-  chestReveal(kind, r, offer);
+/* the rarity climbs from rare up to the rolled one, flashing a new colour at every step */
+function chestRarityClimb(pick){
+  DROP.phase='rarity';
+  const R=ECON.chests.rarities, d=$('#chest-drop'), r=$('#cd-rarity');
+  const target = pick.rarity==='welcome' ? 'legendary' : pick.rarity;
+  const steps = R.slice(0, R.indexOf(target)+1);
+  let i=0;
+  const step=()=>{
+    const rr=steps[i]; d.setAttribute('data-r', rr);
+    r.hidden=false; r.className='cd-rarity'+(i>0?' up':''); r.innerHTML=(pick.rarity==='welcome' && i===steps.length-1 ? rarityName('welcome') : rarityName(rr))+(i<steps.length-1 ? `<small>${T('chests.up')}</small>` : '');
+    try{ sfx.click(); }catch(e){}
+    i++;
+    if(i<steps.length) dropTimer(step, 650);
+    else { if(target==='legendary' || target==='mythic'){ chestConfetti(target==='legendary'?300:120); try{ sfx.win(); }catch(e){} } dropTimer(()=>chestShowCards(pick), 1100); }
+  };
+  step();
 }
-function chestReveal(kind, r, offer){
-  const m=$('#chest-open-modal'); if(!m) return;
-  $('#copen-title').textContent=T('chests.opening', chestName(kind));
-  const ch=$('#copen-chest'); ch.textContent=chestIcon(kind); ch.className='copen-chest'+(offer?' small':''); ch.style.animation='none'; void ch.offsetWidth; ch.style.animation='';
-  const box=$('#copen-rewards'); box.innerHTML='';
-  const chip=(txt,cls)=>{ const s=document.createElement('span'); if(cls) s.className=cls; s.textContent=txt; box.appendChild(s); };
-  if(r.coins) chip(T('chests.coins', fmtNum(r.coins)));
-  if(r.packs) chip((r.packs>1 ? T('chests.packs', r.packs) : T('chests.pack1')) + (r.packCoins ? ' = 🪙 +'+fmtNum(r.packCoins) : ''));
-  if(r.gems) chip(T('chests.gems', r.gems), 'gem');
-  if(r.kit){ const c=cosById(r.kit); chip('👕 '+(c ? cosName(c) : r.kit), 'kit'); }
-  if(r.capped) chip(T('chests.capped'), 'capped');
-  $('#btn-chest-done').hidden=!!offer;
-  $('#copen-pick-title').hidden=!offer; $('#copen-cards').hidden=!offer; $('#copen-cards').innerHTML='';
-  if(offer) chestBuildCards(offer);
-  m.classList.add('show');
-  try{ sfx.win(); }catch(e){}
-  if(kind==='gold') chestConfetti(260);
-}
-function chestShowPick(offer){ chestShowOpen(offer.kind, {coins:0,packs:0,packCoins:0,gems:0}, offer); }
-function chestCardPreview(c){
-  const d=document.createElement('div'); d.className='pv';
-  if(!c){ d.classList.add('emoji'); d.textContent='🪙'; return d; }
-  if(c.type==='kit' || c.type==='boots'){ d.classList.add(c.type); try{ d.innerHTML=playerSVG(CHARS[selected]||CHARS[0], 'happy', c.data); }catch(e){ d.classList.add('emoji'); d.textContent=c.type==='kit'?'👕':'👟'; } }
-  else if(c.type==='ball'){ d.classList.add('ball'); d.style.background=`repeating-conic-gradient(${c.data.a} 0 30deg, ${c.data.b} 30deg 60deg)`; }
-  else if(c.type==='stadium'){ d.classList.add('stad'); d.style.background=`linear-gradient(${c.data.night?'#1B2A4E':'#7ED3FF'} 0 30%, ${c.data.track} 30% 40%, ${c.data.stripeA} 40% 55%, ${c.data.stripeB} 55% 70%, ${c.data.stripeA} 70% 85%, ${c.data.stripeB} 85%)`; }
-  else { d.classList.add('emoji'); d.textContent = c.type==='celeb' ? '🕺' : '🏷️'; }
-  return d;
-}
-function chestBuildCards(offer){
-  const box=$('#copen-cards'); box.innerHTML=''; box.classList.remove('done');
-  $('#copen-pick-title').textContent=T('chests.pickOne');
-  offer.ids.forEach(id=>{
-    const c = id==='coins' ? null : cosById(id);
-    const b=document.createElement('button'); b.type='button'; b.className='cpick '+(c ? c.rarity : 'coin'); b.dataset.id=id;
-    b.appendChild(chestCardPreview(c));
-    const nm=document.createElement('div'); nm.className='pname'; nm.textContent = c ? cosName(c) : T('chests.coinCard', fmtNum(ECON.chests.missingCard)); b.appendChild(nm);
-    const tp=document.createElement('div'); tp.className='ptype'; tp.textContent = c ? (T('chests.t.'+c.type)+' · '+T('chests.'+c.rarity)) : '🪙'; b.appendChild(tp);
-    b.addEventListener('click', ()=>chestPickCard(id, b));
+/* three face-down cards; the chosen one flips, the others flip dimmed afterwards */
+function chestShowCards(pick){
+  DROP.phase='cards';
+  const box=$('#cd-cards'); box.innerHTML=''; box.classList.remove('done'); box.hidden=false;
+  $('#cd-pick').hidden=false; $('#cd-pick').textContent = pick.all ? T('chests.yours') : T('chests.pickOne');
+  pick.cards.forEach((c,i)=>{
+    const b=document.createElement('button'); b.type='button'; b.className='ccard'; b.dataset.i=i;
+    const back=document.createElement('div'); back.className='face back'; back.textContent='?'; b.appendChild(back);
+    const front=document.createElement('div'); front.className='face front'; front.appendChild(chestCardPreview(c));
+    const nm=document.createElement('div'); nm.className='pname'; nm.textContent=chestCardName(c); front.appendChild(nm);
+    const tp=chestCardType(c); if(tp){ const t=document.createElement('div'); t.className='ptype r-'+(pick.rarity==='welcome'?'legendary':pick.rarity); t.textContent=tp; front.appendChild(t); }
+    b.appendChild(front);
+    b.addEventListener('click', ()=>chestPickCard(i, b));
     box.appendChild(b);
   });
+  if(pick.all){ dropTimer(()=>{ box.querySelectorAll('.ccard').forEach((b,i)=>dropTimer(()=>b.classList.add('flipped'), i*350)); dropTimer(()=>chestFinishAll(pick), 1300); }, 300); }
 }
-function chestPickCard(id, btn){
-  const offer=prog.chestPick; if(!offer || !offer.ids.includes(id)) return false;
+function chestPickCard(i, btn){
+  const pick=prog.chestPick; if(!pick || pick.all || DROP.phase!=='cards') return false;
+  DROP.phase='done'; const c=pick.cards[i]; if(!c) return false;
   try{ sfx.click(); }catch(e){}
-  const box=$('#copen-cards'); box.classList.add('done');
-  box.querySelectorAll('.cpick').forEach(b=>b.classList.toggle('lost', b!==btn)); if(btn) btn.classList.add('chosen');
+  const box=$('#cd-cards'); box.classList.add('done');
+  btn.classList.add('flipped','chosen');
   prog.chestPick=null; saveProg();
-  if(id==='coins'){ const got=chestPayCoins(ECON.chests.missingCard, 'chest'); if(got<ECON.chests.missingCard) $('#copen-pick-title').textContent=T('chests.capped'); }
-  else { chestGiveCosmetic(id); const c=cosById(id); $('#copen-pick-title').textContent=T('chests.picked', c ? cosName(c) : id); }
-  Hooks.emit('chestPick', id);
-  $('#btn-chest-done').hidden=false; refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
+  const ok=chestGrant(c, pick.paid);
+  $('#cd-pick').hidden=true;
+  dropTimer(()=>{ const g=$('#cd-got'); g.hidden=false; g.textContent = ok ? T('chests.picked', chestCardName(c)) : T('chests.capped'); try{ sfx.win(); }catch(e){} if(pick.rarity==='legendary') chestConfetti(200); }, 500);
+  dropTimer(()=>{ box.querySelectorAll('.ccard').forEach(b=>{ if(b!==btn) b.classList.add('flipped','lost'); }); }, 900);
+  dropTimer(()=>{ $('#btn-chest-done').hidden=false; }, 1200);
+  Hooks.emit('chestPick', c); refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
   return true;
 }
-function chestCloseOpen(){ $('#chest-open-modal').classList.remove('show'); if($('#chests').classList.contains('active')) buildChests(); }
+function chestFinishAll(pick){
+  if(!prog.chestPick || !prog.chestPick.all) return;
+  prog.chestPick=null; saveProg(); DROP.phase='done';
+  pick.cards.forEach(c=>chestGrant(c, 'owned'));
+  const g=$('#cd-got'); g.hidden=false; g.textContent=T('chests.yours'); try{ sfx.win(); }catch(e){} chestConfetti(160);
+  $('#btn-chest-done').hidden=false; refreshChestsBadge(); if($('#chests').classList.contains('active')) buildChests();
+}
+function chestCloseOpen(){ dropClear(); DROP.phase='idle'; const d=$('#chest-drop'); if(d) d.hidden=true; if($('#chests').classList.contains('active')) buildChests(); }
+$('#chest-drop').addEventListener('pointerdown', e=>{ if(e.target.closest('button')) return; if(DROP.phase==='tap'){ e.preventDefault(); chestTap(); } });
+$('#btn-chest-done').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} chestCloseOpen(); });
 
 /* ----- the screen ----- */
-function openChestsScreen(){ showScreen('chests'); buildChests(); if(prog.chestPick) chestShowPick(prog.chestPick); }
+function openChestsScreen(){ showScreen('chests'); buildChests(); if(prog.chestPick) chestDropResume(); }
 function closeChestsScreen(){ chestCloseOpen(); showScreen('home'); }
+function chestOddsHTML(kind){ const R=ECON.chests.rarities, odds=chestCfg(kind).odds; return R.map((r,i)=>odds[i] ? `<span class="r-${r}">${rarityName(r)} ${odds[i]}%</span>` : '').join(''); }
 function buildChests(){
   const inv=chestInv(), row=$('#chests-row'); if(!row) return;
   const w=$('#chests-wallet'); w.innerHTML='';
@@ -297,36 +339,31 @@ function buildChests(){
     const box=document.createElement('div'); box.className='cbox'+(n?' has':''); box.textContent=chestIcon(kind);
     if(n){ const c=document.createElement('span'); c.className='cnt'; c.textContent='×'+n; box.appendChild(c); } card.appendChild(box);
     const have=document.createElement('div'); have.className='have'+(n?'':' none'); have.textContent = n ? T('chests.have', n) : T('chests.haveNone'); card.appendChild(have);
-    const gives=document.createElement('div'); gives.className='gives';
-    const g=(txt,cls)=>{ const s=document.createElement('span'); if(cls) s.className=cls; s.textContent=txt; gives.appendChild(s); };
-    g(T('chests.coins', fmtNum(cfg.give.coins)));
-    g(cfg.give.packs>1 ? T('chests.packs', cfg.give.packs) : T('chests.pack1'));
-    if(cfg.give.gems) g(T('chests.gems', cfg.give.gems));
-    if(cfg.pick) g(T(cfg.pick==='epic' ? 'chests.pickEpic' : 'chests.pickRare'), 'pick');
-    card.appendChild(gives);
+    const odds=document.createElement('div'); odds.className='odds'; odds.innerHTML=chestOddsHTML(kind); card.appendChild(odds);
+    const can=document.createElement('div'); can.className='can'; can.textContent='🪙 🔑 💎 👕 🧑'+(kind==='gold'||kind==='legend' ? ' ❄️ 🔥' : ''); can.title=T('chests.can',''); card.appendChild(can);
     const cp=chestCoinPrice(kind);
-    const price=document.createElement('div'); price.className='price'; price.textContent=T('chests.price', cfg.keys, cp ? '🪙 '+fmtNum(cp) : '💎 '+cfg.gems); card.appendChild(price);
+    const price=document.createElement('div'); price.className='price'; price.textContent = cfg.keys ? T('chests.price', cfg.keys, cp ? '🪙 '+fmtNum(cp) : '💎 '+cfg.gems) : T('chests.priceGems', cfg.gems); card.appendChild(price);
     const b=document.createElement('button'); b.type='button'; b.className='btn open '+(how==='owned'?'green':how?'yellow':'off'); b.dataset.open=kind;
-    b.textContent = how==='owned' ? T('chests.openOwned') : how==='keys' ? T('chests.openKeys', cfg.keys) : how==='coins' ? T('chests.openCoins', fmtNum(cp)) : how==='gems' ? T('chests.openGems', cfg.gems) : T('chests.need', cfg.keys);
+    b.textContent = how==='owned' ? T('chests.openOwned') : how==='keys' ? T('chests.openKeys', cfg.keys) : how==='coins' ? T('chests.openCoins', fmtNum(cp)) : how==='gems' ? T('chests.openGems', cfg.gems) : (cfg.keys ? T('chests.need', cfg.keys-(prog.keys|0)) : T('chests.needGems', cfg.gems-(prog.gems|0)));
     b.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} openChest(kind); });
     card.appendChild(b); row.appendChild(card);
   }
+  const foot=$('#chests-foot'); foot.innerHTML='';
+  const left=ECON.chests.pity-(prog.chestPity|0);
+  const pity=document.createElement('div'); pity.className='pity'; pity.innerHTML=`<span>${left<=1 ? T('chests.pityNow') : T('chests.pity', left)}</span><span class="bar"><i style="width:${Math.round(Math.min(1,(prog.chestPity|0)/ECON.chests.pity)*100)}%"></i></span>`; foot.appendChild(pity);
+  const ownedChars=CHARS.filter(c=>isUnlocked(c)).length, totalChars=CHARS.length, ownedCos=(prog.cos&&prog.cos.items||[]).length, totalCos=COSMETICS.filter(c=>!c.week).length;
+  const coll=document.createElement('div'); coll.className='coll'; coll.textContent=T('chests.coll', ownedChars, totalChars, ownedCos, totalCos); foot.appendChild(coll);
   const wb=$('#chests-welcome'); wb.hidden=!(inv.welcome>0 && !prog.welcomeChest);
-  const pb=$('#chests-pending'); pb.hidden = !prog.chestPick || !wb.hidden;        // one banner at a time: the welcome chest wins
+  const pb=$('#chests-pending'); pb.hidden = !prog.chestPick || !wb.hidden;
 }
 $('#btn-chests-back').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} closeChestsScreen(); });
 $('#chests-welcome').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} openWelcomeChest(); });
-$('#chests-pending').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} if(prog.chestPick) chestShowPick(prog.chestPick); });
-$('#btn-chest-done').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} chestCloseOpen(); });
+$('#chests-pending').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} if(prog.chestPick) chestDropResume(); });
 
-/* ----- home integration: badge refresh, next-up candidate ----- */
+/* ----- home integration ----- */
 Hooks.on('home', refreshChestsBadge);
 Hooks.on('wallet', refreshChestsBadge);
-Hooks.on('screen', id=>{ if(id==='chests') buildChests(); });
+Hooks.on('screen', id=>{ if(id==='chests') buildChests(); else if(DROP.phase!=='idle' && DROP.phase!=='cards') chestCloseOpen(); });
 NextUp.add(()=> chestsBadge()>0 ? { prio:40, icon:'🎁', text:T('chests.nextUp'), action:openChestsScreen } : null);
 chestInv();
 applyLang();
-/* tap-to-open: the chest (or anywhere on the panel) while it is locked */
-$('#chest-open-modal').addEventListener('pointerdown', e=>{ if(e.target.closest('button') || e.target.closest('.cpick')) return; if($('#copen-chest').classList.contains('locked')){ e.preventDefault(); chestTap(); } });
-I18N_ADD({ 'chests.tap':['לחץ על התיבה כדי לפתוח!','Tap the chest to open it!','اضغط على الصندوق لفتحه!','Нажми на сундук, чтобы открыть!'],
-           'chests.tapN':['👆 עוד {0}','👆 {0} more','👆 {0} أخرى','👆 ещё {0}'] });

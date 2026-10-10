@@ -1,21 +1,24 @@
-  <!-- ===== CHESTS: keys + fixed bundles, pick 1 of 3 face-up cards ===== -->
+  <!-- ===== CHESTS: keys buy a drop; the drop rolls a rarity (Brawl-Stars style), then 3 face-down cards, pick one, it flips ===== -->
   <section id="chests" class="screen">
     <h2 id="chests-title">🎁 תיבות</h2>
     <button class="btn blue small" id="btn-chests-back">➜ חזרה</button>
     <div class="chests-wallet" id="chests-wallet"></div>
     <div class="chests-row" id="chests-row"></div>
+    <div class="chests-foot" id="chests-foot"></div>
     <button class="btn green" id="chests-welcome" hidden>🎁 תיבת ברוכים הבאים — פתח!</button>
     <button class="btn purple" id="chests-pending" hidden>🎴 יש לך קלף לבחור!</button>
   </section>
-  <!-- the chest opens here: rewards, then the three face-up cards -->
-  <div class="overlay" id="chest-open-modal">
-    <div class="panel">
-      <div class="copen-title" id="copen-title"></div>
-      <div class="copen-chest" id="copen-chest">🎁</div>
-      <div class="copen-tap" id="copen-tap" hidden>👆 עוד 3</div>
-      <div class="copen-rewards" id="copen-rewards"></div>
-      <div class="copen-pick-title" id="copen-pick-title" hidden></div>
-      <div class="copen-cards" id="copen-cards" hidden></div>
+  <!-- the drop takes the whole stage; its background follows the rarity being revealed -->
+  <div id="chest-drop" hidden>
+    <div class="cd-bg" id="cd-bg"></div>
+    <div class="cd-stage" id="cd-stage">
+      <div class="cd-kind" id="cd-kind"></div>
+      <div class="cd-chest" id="cd-chest">🎁</div>
+      <div class="cd-hint" id="cd-hint">👆</div>
+      <div class="cd-rarity" id="cd-rarity" hidden></div>
+      <div class="cd-pick" id="cd-pick" hidden></div>
+      <div class="cd-cards" id="cd-cards" hidden></div>
+      <div class="cd-got" id="cd-got" hidden></div>
       <button class="btn green big" id="btn-chest-done" hidden>✔ סיימתי</button>
     </div>
   </div>

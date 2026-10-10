@@ -21,7 +21,8 @@ cat > /tmp/tour-tail.js <<'EOF'
     else if(scene==='shop-players'){ openShop('players'); }
     else if(scene==='shop-looks'){ prog.cos={items:['kit_il','boots_gold','ball_flame']}; prog.eq={kit:'kit_il',boots:'boots_gold',ball:'ball_flame'}; saveProg(); openShop('looks'); }
     else if(scene==='chests'){ openChestsScreen(); }
-    else if(scene==='chest-open'){ openChestsScreen(); await w(300); openChest('silver'); await w(200); $('#btn-ask-yes').click(); await w(300); for(let i=0;i<3;i++) chestTap(); await w(2500); }
+    else if(scene==='chest-open'){ openChestsScreen(); await w(300); openChest('silver'); await w(200); $('#btn-ask-yes').click(); await w(300); for(let i=0;i<3;i++) chestTap(); await w(3200); }
+    else if(scene==='chest-flip'){ prog.chestPick={kind:'gold', rarity:'legendary', cards:chestCards('legendary'), paid:'keys', all:false}; openChestsScreen(); await w(300); chestDropResume(); await w(300); document.querySelector('#cd-cards .ccard').click(); await w(1500); }
     else if(scene==='chest-tap'){ openChestsScreen(); await w(300); openChest('silver'); await w(200); $('#btn-ask-yes').click(); await w(800); }
     else if(scene==='pickup'){ openDailyPickup(); }
     else if(scene==='missions'){ if(typeof missionsOpen==='function') missionsOpen(); }
