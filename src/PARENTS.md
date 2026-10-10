@@ -55,3 +55,23 @@
 
 ## הערה על החוקים (גרסה ראשונה)
 בגרסה הזאת שורות השחקנים בטבלה (`users`) עדיין נשמרות לפי השם ולא לפי המזהה האנונימי, לכן החוקים מרשים לכל מי שמחובר (אנונימית) לכתוב בטבלה. זה עוצר כתיבה מבחוץ (מי שאין לו את המשחק), אבל ילד עם ידע טכני עדיין יכול לשנות את השורה של מישהו אחר. המעבר למפתח לפי מזהה (שחוסם גם את זה) מתוכנן לגרסה הבאה.
+
+## חוקי Firebase שצריך עכשיו (2026-10-10) — בלי זה המועדונים, הגיבוי והסטטיסטיקה מראים "אין חיבור"
+בשרת היום מותר לכתוב רק ל-`users` ו-`codes`; הצמתים `clubs`, `clubCodes`, `official`, `saves`, `stats` חסומים (HTTP 401).
+ב-Firebase Console → Realtime Database → Rules, מדביקים (אותה רמת פתיחות כמו `users` היום; הקשחה אמיתית לפי Appendix A ב-PLAN.md כשיהיה FB_KEY):
+```json
+{
+  "rules": {
+    "users":     { ".read": true, ".write": true },
+    "codes":     { ".read": true, ".write": true },
+    "saves":     { ".read": true, ".write": true },
+    "stats":     { ".read": true, ".write": true },
+    "clubs":     { ".read": true, ".write": true },
+    "clubCodes": { ".read": true, ".write": true },
+    "official":  { ".read": true, ".write": true },
+    "hidden":    { ".read": true, ".write": false },
+    "admins":    { ".read": true, ".write": false }
+  }
+}
+```
+אחרי "Publish" המועדונים עובדים מיד, בלי לבנות גרסה חדשה.

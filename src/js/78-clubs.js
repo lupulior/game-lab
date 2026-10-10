@@ -63,6 +63,7 @@ I18N_ADD({
  'clubs.already':['אתם כבר במועדון — עזבו אותו קודם','You are already in a club — leave it first','أنتم بالفعل في نادٍ — غادروه أولًا','Ты уже в клубе — сначала выйди'],
  'clubs.needName':['צריך שם קודם','You need a name first','تحتاج إلى اسم أولًا','Сначала нужно имя'],
  'clubs.needGems':['צריך {0}💎 כדי ליצור מועדון','You need {0}💎 to create a club','تحتاج إلى {0}💎 لإنشاء نادٍ','Нужно {0}💎, чтобы создать клуб'],
+ 'clubs.blocked':['השרת חוסם את המועדונים 🔒 צריך לעדכן את חוקי Firebase (ראו PARENTS.md)','The server blocks clubs 🔒 the Firebase rules need an update (see PARENTS.md)','الخادم يحظر الأندية 🔒 يجب تحديث قواعد Firebase (انظر PARENTS.md)','Сервер блокирует клубы 🔒 нужно обновить правила Firebase (см. PARENTS.md)'],
  'clubs.noConn':['אין חיבור — נסו שוב עוד רגע','No connection — try again in a moment','لا يوجد اتصال — حاولوا بعد قليل','Нет связи — попробуй через минуту'],
  'clubs.offlineCached':['אין חיבור — מציג את הנתונים האחרונים','No connection — showing the last data','لا يوجد اتصال — عرض آخر البيانات','Нет связи — показаны последние данные'],
  'clubs.code':['קוד: {0}','Code: {0}','الرمز: {0}','Код: {0}'],
@@ -214,20 +215,20 @@ async function clubCreate(nameI, emoji){
   nameI=Math.max(0, Math.min(CLUB_NAMES.length-1, nameI|0)); emoji=CLUB_EMOJIS.includes(emoji) ? emoji : CLUB_NAME_EMOJI[nameI]||CLUB_EMOJIS[0];
   if(!clubNeedName()) return false;
   if(myClub()){ toast(T('clubs.already'),'warn'); return false; }
-  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  if(!fbOn()){ toast(clubNoConnText(),'warn'); return false; }
   const cost=isAdmin() ? 0 : ECON.clubs.create;
   if(cost && (prog.gems|0)<cost){ toast(T('clubs.needGems', cost),'warn'); try{ sfx.lose(); }catch(e){} return false; }
   if(!(await ask(cost ? T('clubs.createQ', emoji, clubName(nameI), cost) : T('clubs.createQFree', emoji, clubName(nameI))))) return false;
   CLUB.busy=true;
   try{
     let code=null;
-    for(let i=0;i<3 && !code;i++){ const cand=clubRand(6); const r=await fbReq('clubCodes/'+cand, 'GET'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } if(r===null) code=cand; }
-    if(!code){ toast(T('clubs.noConn'),'warn'); return false; }
+    for(let i=0;i<3 && !code;i++){ const cand=clubRand(6); const r=await fbReq('clubCodes/'+cand, 'GET'); if(r===undefined){ toast(clubNoConnText(),'warn'); return false; } if(r===null) code=cand; }
+    if(!code){ toast(clubNoConnText(),'warn'); return false; }
     if(cost && !spendGems(cost)){ toast(T('clubs.needGems', cost),'warn'); return false; }
     const id=clubRand(8), wk=weekKey(), k=clubMyKey(), me={wk, g:0, w:0, m:0};
     const body={name:nameI, emoji, code, created:{'.sv':'timestamp'}, members:{}, week:{key:wk, goals:0}}; body.members[k]=clubMemberBody(me);
     const r1=await fbReq('clubs/'+id, 'PUT', body);
-    if(r1===undefined){ clubRefund(cost); toast(T('clubs.noConn'),'warn'); return false; }
+    if(r1===undefined){ clubRefund(cost); toast(clubNoConnText(),'warn'); return false; }
     const r2=await fbReq('clubCodes/'+code, 'PUT', id);
     prog.club={id, code, name:nameI, emoji, joined:now(), me, dirty:false, tot:0, target:clubTarget(1), n:1}; if(r2===undefined) prog.club.codeDirty=true;   // the code is re-written on the next open
     saveProg();
@@ -246,14 +247,14 @@ async function clubJoin(code){
   if(!clubNeedName()) return false;
   const o=officialInfo();
   if(myClub() && !(o && o.code===code)){ toast(T('clubs.already'),'warn'); return false; }
-  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  if(!fbOn()){ toast(clubNoConnText(),'warn'); return false; }
   CLUB.busy=true;
   try{
     const id=await fbReq('clubCodes/'+code, 'GET');
-    if(id===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(id===undefined){ toast(clubNoConnText(),'warn'); return false; }
     if(typeof id!=='string' || !/^[A-Z0-9]{4,16}$/.test(id)){ toast(T('clubs.notFound'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
     const data=await fbReq('clubs/'+id, 'GET');
-    if(data===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(data===undefined){ toast(clubNoConnText(),'warn'); return false; }
     if(!data || typeof data!=='object'){ toast(T('clubs.notFound'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
     if(data.official===true) return await officialJoinWith(id, code, data);
     if(myClub()){ toast(T('clubs.already'),'warn'); return false; }
@@ -261,7 +262,7 @@ async function clubJoin(code){
     if(Object.keys(ms).length>=ECON.clubs.max && !ms[k]){ toast(T('clubs.full', ECON.clubs.max),'warn'); try{ sfx.lose(); }catch(e){} return false; }
     const me={wk:weekKey(), g:0, w:0, m:0}, node=clubMemberBody(me);
     const r=await fbReq('clubs/'+id+'/members/'+k, 'PATCH', node);
-    if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(r===undefined){ toast(clubNoConnText(),'warn'); return false; }
     const emoji=String(data.emoji||CLUB_EMOJIS[0]).slice(0,8), nameI=data.name|0;
     prog.club={id, code, name:nameI, emoji, joined:now(), me, dirty:false}; saveProg();
     data.members=Object.assign({}, ms); data.members[k]=r && typeof r==='object' ? r : node;
@@ -279,7 +280,7 @@ async function clubLeave(){
   CLUB.busy=true;
   try{
     const k=clubMyKey();
-    if(fbOn() && k){ const r=await fbReq('clubs/'+c.id+'/members/'+k, 'DELETE'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } }
+    if(fbOn() && k){ const r=await fbReq('clubs/'+c.id+'/members/'+k, 'DELETE'); if(r===undefined){ toast(clubNoConnText(),'warn'); return false; } }
     delete prog.club; saveProg(); CLUB.data=null; CLUB.fetched=0; CLUB.view='none';
     toast(T('clubs.left'),'warn'); clubHomePill(); clubRender(); return true;
   } finally{ CLUB.busy=false; }
@@ -292,7 +293,7 @@ async function clubClaimFor(ctx){
   CLUB.busy=true;
   try{
     const r=await ctx.refresh(true);
-    if(!r){ if(ctx.still()) toast(T('clubs.noConn'),'warn'); return false; }
+    if(!r){ if(ctx.still()) toast(clubNoConnText(),'warn'); return false; }
     const st=ctx.stats(r);
     if(st.totalServer<st.target){ toast(T('clubs.notYet', fmtNum(st.totalServer), fmtNum(st.target)),'warn'); try{ sfx.lose(); }catch(e){} clubRender(); return false; }
     if(st.myM<ECON.clubs.prizeMatches){ toast(T('clubs.needMatches', ECON.clubs.prizeMatches-st.myM),'warn'); try{ sfx.lose(); }catch(e){} clubRender(); return false; }
@@ -382,10 +383,10 @@ async function officialEnsure(o, loud){
   if(!o.auto && !loud) return false;
   if(CLUB.ogone===o.id) return false;                                                            // clubs/<id> vanished this session: do not recreate a stub
   const k=clubMyKey(); if(!k){ if(loud) clubNeedName(); return false; }
-  if(!fbOn()){ if(loud) toast(T('clubs.noConn'),'warn'); return false; }
+  if(!fbOn()){ if(loud) toast(clubNoConnText(),'warn'); return false; }
   const me={wk:weekKey(), g:0, w:0, m:0}, node=clubMemberBody(me);
   const r=await fbReq('clubs/'+o.id+'/members/'+k, 'PATCH', node);
-  if(r===undefined){ if(loud) toast(T('clubs.noConn'),'warn'); return false; }
+  if(r===undefined){ if(loud) toast(clubNoConnText(),'warn'); return false; }
   prog.officialId=o.id; prog.officialMe=me; saveProg();
   if(CLUB.odata){ CLUB.odata.members=CLUB.odata.members||{}; CLUB.odata.members[k]=r && typeof r==='object' ? r : node; }
   if(loud){ toast(T('clubs.joined', o.emoji, o.name),'ach'); try{ sfx.win(); confetti.burst(120); }catch(e){} }
@@ -456,7 +457,7 @@ async function officialJoinWith(id, code, data){
   if(officialId()===id){ toast(T('clubs.oAlready'),'warn'); return false; }
   const k=clubMyKey(), me={wk:weekKey(), g:0, w:0, m:0}, node=clubMemberBody(me);
   const r=await fbReq('clubs/'+id+'/members/'+k, 'PATCH', node);
-  if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+  if(r===undefined){ toast(clubNoConnText(),'warn'); return false; }
   let o=officialInfo();
   if(!o || o.id!==id){ o=officialSan({id, name:data.name, emoji:data.emoji, code, auto:false}); prog.official=Object.assign(o, {tot:0, target:0, n:0}); officialGet(); }   // the board arrives with the next GET
   prog.officialId=id; prog.officialMe=me; saveProg();
@@ -474,7 +475,7 @@ async function officialLeave(){
   CLUB.busy=true;
   try{
     const k=clubMyKey();
-    if(fbOn() && k){ const r=await fbReq('clubs/'+oid+'/members/'+k, 'DELETE'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } }
+    if(fbOn() && k){ const r=await fbReq('clubs/'+oid+'/members/'+k, 'DELETE'); if(r===undefined){ toast(clubNoConnText(),'warn'); return false; } }
     delete prog.officialId; delete prog.officialMe; saveProg(); CLUB.odata=null; CLUB.ofetched=0; CLUB.oview='main';
     toast(T('clubs.left'),'warn'); clubHomePill(); clubRender(); return true;
   } finally{ CLUB.busy=false; }
@@ -487,21 +488,21 @@ async function officialCreate(name, emoji){
   name=officialNormName(name); emoji=OFFICIAL_EMOJIS.includes(emoji) ? emoji : OFFICIAL_EMOJIS[0];
   if(name.length<2){ toast(T('clubs.oNameShort'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
   if(!clubNeedName()) return false;
-  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  if(!fbOn()){ toast(clubNoConnText(),'warn'); return false; }
   if(!(await ask(T('clubs.oCreateQ', emoji, name)))) return false;
   CLUB.busy=true;
   try{
     let code=null;
-    for(let i=0;i<3 && !code;i++){ const cand=clubRand(6); const r=await fbReq('clubCodes/'+cand, 'GET'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } if(r===null) code=cand; }
-    if(!code){ toast(T('clubs.noConn'),'warn'); return false; }
+    for(let i=0;i<3 && !code;i++){ const cand=clubRand(6); const r=await fbReq('clubCodes/'+cand, 'GET'); if(r===undefined){ toast(clubNoConnText(),'warn'); return false; } if(r===null) code=cand; }
+    if(!code){ toast(clubNoConnText(),'warn'); return false; }
     const id=clubRand(8), wk=weekKey(), k=clubMyKey(), me={wk, g:0, w:0, m:0}, by=normName(settings.name);
     const body={name, emoji, code, created:{'.sv':'timestamp'}, official:true, members:{}, week:{key:wk, goals:0}}; body.members[k]=clubMemberBody(me);
     const r1=await fbReq('clubs/'+id, 'PUT', body);
-    if(r1===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(r1===undefined){ toast(clubNoConnText(),'warn'); return false; }
     const r2=await fbReq('clubCodes/'+code, 'PUT', id);
     const info={id, name, emoji, msg:'', by, auto:true, code, updated:{'.sv':'timestamp'}};
     const r3=await fbReq('official/club', 'PUT', info);
-    if(r3===undefined){ toast(T('clubs.noConn'),'warn'); return false; }                           // the club node exists but is not the official one yet: the admin simply creates again
+    if(r3===undefined){ toast(clubNoConnText(),'warn'); return false; }                           // the club node exists but is not the official one yet: the admin simply creates again
     prog.official=Object.assign(officialSan(Object.assign({}, info, {updated:now()})), {tot:0, target:officialTarget(1), n:1}); if(r2===undefined) prog.official.codeDirty=true;
     prog.officialId=id; prog.officialMe=me; prog.officialSeen=now(); saveProg();
     CLUB.odata=Object.assign({}, body, {members:Object.assign({}, body.members)}); CLUB.ofetched=now(); CLUB.ooffline=false; CLUB.ogone=null; CLUB.tab='official'; CLUB.oview='main';
@@ -516,12 +517,12 @@ async function officialRename(name, emoji){
   name=officialNormName(name); emoji=OFFICIAL_EMOJIS.includes(emoji) ? emoji : o.emoji;
   if(name.length<2){ toast(T('clubs.oNameShort'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
   if(name===o.name && emoji===o.emoji){ CLUB.oview='main'; clubRender(); return true; }
-  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  if(!fbOn()){ toast(clubNoConnText(),'warn'); return false; }
   CLUB.busy=true;
   try{
     const by=normName(settings.name)||o.by;
     const r=await fbReq('official/club', 'PATCH', {name, emoji, by, updated:{'.sv':'timestamp'}});
-    if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(r===undefined){ toast(clubNoConnText(),'warn'); return false; }
     fbReq('clubs/'+o.id, 'PATCH', {name, emoji});
     o.name=name; o.emoji=emoji; o.by=by; o.updated=now(); saveProg();
     if(CLUB.odata){ CLUB.odata.name=name; CLUB.odata.emoji=emoji; }
@@ -532,12 +533,12 @@ async function officialRename(name, emoji){
 async function officialSetMsg(msg){
   const o=officialInfo(); if(!o || !officialAdminOnly() || CLUB.busy) return false;
   msg=officialNormMsg(msg);
-  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  if(!fbOn()){ toast(clubNoConnText(),'warn'); return false; }
   CLUB.busy=true;
   try{
     const by=normName(settings.name)||o.by;
     const r=await fbReq('official/club', 'PATCH', {msg, by, updated:{'.sv':'timestamp'}});
-    if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(r===undefined){ toast(clubNoConnText(),'warn'); return false; }
     o.msg=msg; o.by=by; o.updated=now(); saveProg();
     toast(T('clubs.oSaved'),'ach'); CLUB.oview='main'; clubRender(); return true;
   } finally{ CLUB.busy=false; }
@@ -546,11 +547,11 @@ async function officialSetMsg(msg){
 async function officialSetAuto(on){
   const o=officialInfo(); if(!o || !officialAdminOnly() || CLUB.busy){ clubRender(); return false; }
   on=!!on;
-  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); clubRender(); return false; }
+  if(!fbOn()){ toast(clubNoConnText(),'warn'); clubRender(); return false; }
   CLUB.busy=true;
   try{
     const r=await fbReq('official/club', 'PATCH', {auto:on, updated:{'.sv':'timestamp'}});
-    if(r===undefined){ toast(T('clubs.noConn'),'warn'); clubRender(); return false; }
+    if(r===undefined){ toast(clubNoConnText(),'warn'); clubRender(); return false; }
     o.auto=on; o.updated=now(); saveProg();
     toast(T(on ? 'clubs.oAutoOn' : 'clubs.oAutoOff'),'ach'); clubRender(); return true;
   } finally{ CLUB.busy=false; }
@@ -626,7 +627,7 @@ function clubRender(){
   if(v==='join'){ body.innerHTML=clubJoinHTML(); clubJoinWire(); return; }
   // ----- the club itself
   const st=clubWeekStats(CLUB.data), days=clubDaysLeft(), pct=Math.max(0, Math.min(100, Math.round(st.total/st.target*100))), prize=clubPrizeState(st, c.id);
-  const status = CLUB.offline ? (CLUB.data ? T('clubs.offlineCached') : T('clubs.noConn')) : '';
+  const status = CLUB.offline ? (CLUB.data ? clubNoConnText(true) : clubNoConnText()) : '';
   const rows=st.list.map(x=>`<div class="club-row${x.me?' me':''}"><span class="club-nm">${esc(x.name)}${x.me ? ' <small>('+esc(T('clubs.me'))+')</small>' : ''}</span><span class="club-lv">Lv ${x.lv}</span><span class="club-st">${esc(T('clubs.memberStats', x.g, x.w, x.m))}</span></div>`).join('');
   const claimLabel = prize==='claimed' ? T('clubs.claimed') : prize==='ready2' ? T('clubs.claimGold') : prize==='ready' ? T('clubs.claim') : prize==='need' ? T('clubs.claimNeed', Math.max(1, ECON.clubs.prizeMatches-st.myM)) : T('clubs.claimFar');
   body.innerHTML=`<div class="club-top"><button class="club-code" id="club-code" data-act="copy" title="${esc(T('clubs.copy'))}">${esc(T('clubs.code', c.code))} 📋</button><span class="club-days" id="club-days">${esc(days<=1 ? T('clubs.lastDay') : T('clubs.daysLeft', days))}</span><button class="btn blue small club-refresh" id="btn-club-refresh" data-act="refresh" title="🔄">🔄</button></div>
@@ -656,7 +657,7 @@ function clubRenderOfficial(body){
   }
   body.dataset.oview='main';
   const st=officialStats(CLUB.odata), days=clubDaysLeft(), pct=Math.max(0, Math.min(100, Math.round(st.total/st.target*100))), prize=clubPrizeState(st, o.id);
-  const status = CLUB.ooffline ? (CLUB.odata ? T('clubs.offlineCached') : T('clubs.noConn')) : '';
+  const status = CLUB.ooffline ? (CLUB.odata ? clubNoConnText(true) : clubNoConnText()) : '';
   const top=st.list.slice(0, ECON.clubs.oTop), mine=st.list.find(x=>x.me); if(mine && !top.includes(mine)) top.push(mine);
   const more=Math.max(0, st.list.length-top.length);
   const rows=top.map(x=>`<div class="club-row${x.me?' me':''}"><span class="club-nm">${esc(x.name)}${x.me ? ' <small>('+esc(T('clubs.me'))+')</small>' : ''}</span><span class="club-lv">Lv ${x.lv}</span><span class="club-st">${esc(T('clubs.memberStats', x.g, x.w, x.m))}</span></div>`).join('')
@@ -762,3 +763,5 @@ if(typeof setLang==='function'){ const _csl=setLang; setLang=function(){ const r
 { const _csn=submitName; submitName=function(){ const r=_csn.apply(this, arguments); if(normName(settings.name)) setTimeout(clubPendingTick, 400); return r; }; }
 CLUB.pending=clubParseSearch(clubInitialSearch());
 applyLang();
+/* 'no connection' vs. 'the server rules block clubs' (HTTP 401/403 recorded by fbReq) */
+function clubNoConnText(cached){ const s=window.fbLastStatus|0; if(s===401 || s===403) return T('clubs.blocked'); return T(cached ? 'clubs.offlineCached' : 'clubs.noConn'); }
