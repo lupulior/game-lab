@@ -148,14 +148,11 @@ function squadHomeBtn(){
   const who=$('#home-centre .who'); if(!who) return;
   let b=$('#btn-squad');
   if(!b){
-    b=document.createElement('button'); b.className='btn pink'; b.id='btn-squad'; b.type='button';
+    b=document.createElement('button'); b.className='btn pink wide'; b.id='btn-squad'; b.type='button';
     b.addEventListener('click', ()=>{ sfx.click(); squadOpen(); });
     const looks=$('#btn-looks'); if(looks && looks.parentNode===who) looks.insertAdjacentElement('afterend', b); else who.appendChild(b);
   }
   b.textContent=T('squad.btn');
-  const g=$('#more-grid'); let m=$('#btn-squad-more');
-  if(g && !m){ m=document.createElement('button'); m.className='btn pink'; m.id='btn-squad-more'; m.type='button'; m.addEventListener('click', ()=>{ sfx.click(); const sh=$('#more-sheet'); if(sh) sh.classList.remove('show'); squadOpen(); }); g.appendChild(m); }
-  if(m) m.textContent=T('squad.btn');
 }
 Hooks.on('home', ()=>{ squad(); if($('#home-centre .who')) squadHomeBtn(); else setTimeout(squadHomeBtn, 0); });   // the home module builds its row after this hook on the first pass
 squad();

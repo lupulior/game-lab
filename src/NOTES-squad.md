@@ -1,5 +1,5 @@
 # 35-squad — squad of 3 with substitutions (2026-10-10)
 - `prog.squad=[starterId, id|null, id|null]`; slot 0 always mirrors `CHARS[selected]` (`squad()` re-syncs; the 'select' hook saves). Changing slot 0 from the modal goes through `squadChoose(i)` (= the core's choose button, incl. the party pick send).
 - Offline 1v1 only (not training/mp/2v2/pk/spectating): after each of MY goals, once `afterGoal` puts the game back in 'play', the next non-empty slot comes on: `P1.ch`, `myChar`, sprite (my kit), `.tag`, `#n-me`, commentator line `squad.sub` (local `showLine`, never `say()`), a "🔁 החלפה" burst, `Hooks 'squadSub'(char, slot)`.
-- UI: `#squad-modal` (3 slots + a picker of unlocked players, swap semantics, ✖ empties a bench slot); `#btn-squad` next to `#btn-looks` on the home, `#btn-squad-more` in the more sheet.
+- UI: `#squad-modal` (3 slots + a picker of unlocked players, swap semantics, ✖ empties a bench slot); `#btn-squad` is the wide centre button on the home (the looks button is hidden: the shop is the one entry to looks); no duplicate in the more sheet.
 - Public: `squad() squadCharAt(k) squadMembers() squadSet(k,id|null) squadChoose(i) squadSubstitute() squadOpen() squadClose() squadRender()`; state `SQUAD{idx,pending,active}`. No core edit (wraps beginMatch/scoreGoal/afterGoal).

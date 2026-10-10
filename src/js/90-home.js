@@ -10,7 +10,7 @@ I18N_ADD({
  'home.tryHarder':['נסה קשה יותר 🔥','Try harder 🔥','جرّب الأصعب 🔥','Попробуй сложнее 🔥'],
  'home.today':['היום','Today','اليوم','Сегодня'], 'home.more':['⋯ עוד','⋯ More','⋯ المزيد','⋯ Ещё'],
  'home.shop':['🛒 חנות','🛒 Shop','🛒 المتجر','🛒 Магазин'], 'home.chests':['🎁 תיבות','🎁 Chests','🎁 الصناديق','🎁 Сундуки'],
- 'home.looks':['👕 מראה','👕 Looks','👕 المظهر','👕 Образ'], 'home.changeChar':['🧑 דמות','🧑 Player','🧑 الشخصية','🧑 Игрок'],
+ 'home.looks':['👕 מראה','👕 Looks','👕 المظهر','👕 Образ'], 'home.friendsTop':['👥 חברים ומובילים','👥 Friends & leaders','👥 الأصدقاء والمتصدرون','👥 Друзья и лидеры'], 'home.changeChar':['🧑 דמות','🧑 Player','🧑 الشخصية','🧑 Игрок'],
  'home.nextUp':['מה הבא?','Next up','ما التالي؟','Что дальше'], 'home.go':['קדימה','Go','هيا','Вперёд'],
  'home.playMore':['שחק עוד משחק','Play another match','العب مباراة أخرى','Сыграй ещё матч'],
  'home.streakDay':['🔥 יום {0}','🔥 Day {0}','🔥 اليوم {0}','🔥 День {0}'],
@@ -44,7 +44,7 @@ function buildHomeV2(){
   // centre: name row, next-up, PLAY, chips
   const centre=el('div','',''); centre.id='home-centre';
   const who=el('div','who',''); const charsBtn=$('#btn-chars'); who.appendChild(charsBtn); charsBtn.classList.add('small'); charsBtn.hidden=true;   // choosing a player lives in the shop (players tab)
-  const looks=el('button','btn purple wide',T('home.looks')); looks.id='btn-looks'; looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
+  const looks=el('button','btn purple wide',T('home.looks')); looks.id='btn-looks'; looks.hidden=true; /* one entry to the shop: the looks tab lives inside it */ looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
   centre.appendChild(who);
   const nu=el('div','',''); nu.id='nextup'; nu.hidden=true; centre.appendChild(nu);   // the next-up line is gone from the home (NextUp still drives the tab title)
   const play=el('button','btn green',''); play.id='btn-play-big'; play.addEventListener('click', homePlay); centre.appendChild(play);
@@ -61,7 +61,7 @@ function buildHomeV2(){
   const right=el('div','',''); right.id='home-right';
   const chests=el('button','btn yellow',T('home.chests')); chests.id='btn-chests'; chests.addEventListener('click', ()=>{ sfx.click(); if(typeof openChestsScreen==='function') openChestsScreen(); else toast('🎁','xp'); }); right.appendChild(chests);
   const shop=el('button','btn orange',T('home.shop')); shop.id='btn-shop'; shop.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('today'); else $('#btn-chars').click(); }); right.appendChild(shop);
-  right.appendChild($('#btn-mp')); right.appendChild($('#btn-top')); right.appendChild($('#btn-friends'));
+  { const top=$('#btn-top'); right.appendChild($('#btn-mp')); right.appendChild(top); top.hidden=true; right.appendChild($('#btn-friends')); }   // one entry to the friends screen: the leaderboard is a tab inside it
   const more=el('button','btn blue',T('home.more')); more.id='btn-more'; more.addEventListener('click', ()=>{ sfx.click(); openMoreSheet(); }); right.appendChild(more);
   home.appendChild(right);
   const fs=$('#btn-fs'), ex=$('#btn-exit'); if(fs && ex && ex.parentNode){ ex.parentNode.insertBefore(fs, ex.nextSibling); }   // fullscreen sits next to exit
@@ -97,7 +97,7 @@ function refreshHomeV2(){
   play.classList.toggle('pulse', homeNewcomer());
   $('#chip-level').innerHTML=LEVEL_ICON[lv]+' '+T('home.level', T('lvl.'+lv))+(rec>lv ? ' <span class="up">'+T('home.tryHarder')+'</span>' : '');
   $('#chip-mode').textContent=T('home.mode', T(MODE_NAMES[md]||'fmt.quick'));
-  $('#btn-more').textContent=T('home.more'); $('#btn-shop').innerHTML=T('home.shop'); $('#btn-chests').innerHTML=T('home.chests'); $('#btn-looks').textContent=T('home.looks');
+  $('#btn-more').textContent=T('home.more'); $('#btn-shop').innerHTML=T('home.shop'); $('#btn-chests').innerHTML=T('home.chests'); $('#btn-looks').textContent=T('home.looks'); $('#btn-friends').textContent=T('home.friendsTop');
   $('#btn-mp').innerHTML=T('home.online');                                       // #53: the short column label (the mp screen keeps 'btn.mp')
   $('#more-title').textContent=T('home.more'); $('#lvl-title').textContent=T('home.lvlTitle'); $('#mode-title').textContent=T('home.modeTitle');
   $('#btn-more-close').textContent=T('home.close'); $('#btn-lvl-close').textContent=T('btn.back2'); $('#btn-mode-close').textContent=T('btn.back2');

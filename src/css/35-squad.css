@@ -29,3 +29,4 @@
 /* the substitution burst over my player (1.2 s) */
 .player .sq-burst{position:absolute;left:50%;top:-76px;transform:translateX(-50%) scale(0);font-size:22px;font-weight:900;color:#fff;background:var(--pink);border-radius:14px;padding:4px 14px;white-space:nowrap;box-shadow:0 4px 0 rgba(0,0,0,.25);pointer-events:none;z-index:5;animation:sqBurst 1.2s ease-out forwards}
 @keyframes sqBurst{0%{transform:translateX(-50%) scale(0);opacity:0}20%{transform:translateX(-50%) scale(1.15);opacity:1}35%{transform:translateX(-50%) scale(1)}80%{transform:translateX(-50%) translateY(-10px) scale(1);opacity:1}100%{transform:translateX(-50%) translateY(-30px) scale(.9);opacity:0}}
+#home-centre .who #btn-squad.wide{max-width:none;width:260px}   /* the squad button is the centre button now (the looks button is hidden) */

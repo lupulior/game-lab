@@ -35,8 +35,8 @@
       if(chestCards('rare').some(c=>c.t==='shards')) inRare++;
     }
     TLOG('shard cards in 480 superrare+ draws', found);
-    TASSERT('shard cards appear in superrare+ drops (3 distinct cards, the right amount, an owned player)', found>60 && found<300 && bad===0 && badN===0 && badOwn===0);
-    TASSERT('never in a rare drop', inRare===0);
+    TASSERT('shard cards appear in superrare+ drops (3 distinct cards, the right amount, an owned player)', found>200 && found<=480 && bad===0 && badN===0 && badOwn===0);
+    TASSERT('also in rare drops (2 points), about half of them', inRare>20 && inRare<110 && chestCards('rare', ()=>0.1).some(c=>c.t==='shards' && c.n===2));
     TASSERT('shards go to owned players only (free ones + haaland)', [...ids].every(id=>FREE_CHARS.includes(id) || id==='haaland') && ids.size>1);
     const seeded=chestCards('epic', ()=>0.1); TASSERT('seeded rnd below the chance → a 5-shard card for mbappe', seeded.some(c=>c.t==='shards' && c.n===5 && c.id==='mbappe') && seeded.length===3);
     TASSERT('seeded rnd above the chance → no shard card', !chestCards('epic', ()=>0.9).some(c=>c.t==='shards'));
@@ -53,12 +53,12 @@
     // the drop screen renders a shard card through the helpers
     prog.chestPick={kind:'silver', rarity:'epic', cards:[{t:'shards',id:'messi',n:5},{t:'coins',n:150},{t:'gems',n:5}], paid:'keys', all:false};
     openChestsScreen(); await tick();
-    TASSERT('chests screen lists 🧩 among the drops', [...document.querySelectorAll('#chests-row .chest-card .can')].every(e=>e.textContent.includes('🧩')));
+    TASSERT('chests screen lists ⚡ among the drops', [...document.querySelectorAll('#chests-row .chest-card .can')].every(e=>e.textContent.includes('⚡')));
     chestDropResume(); await tick();
     const card0=document.querySelectorAll('#cd-cards .ccard')[0];
-    TASSERT('shard card shown: player sprite + 🧩 badge + name + type', DROP.phase==='cards' && !!card0 && !!card0.querySelector('.pv.lv-shardpv svg') && !!card0.querySelector('.lv-shardbadge') && card0.querySelector('.pname').textContent===T('lv.shardCard',5,nm(me)) && card0.querySelector('.ptype').textContent===T('lv.shardType'));
+    TASSERT('shard card shown: player sprite + ⚡ badge + name + type', DROP.phase==='cards' && !!card0 && !!card0.querySelector('.pv.lv-shardpv svg') && !!card0.querySelector('.lv-shardbadge') && card0.querySelector('.pname').textContent===T('lv.shardCard',5,nm(me)) && card0.querySelector('.ptype').textContent===T('lv.shardType'));
     card0.click(); await tick(1400);
-    TASSERT('picking it grants the shards', prog.shards.messi===5 && !prog.chestPick && $('#cd-got').textContent.includes('🧩'));
+    TASSERT('picking it grants the shards', prog.shards.messi===5 && !prog.chestPick && $('#cd-got').textContent.includes('⚡'));
     $('#btn-chest-done').click(); await tick(); closeChestsScreen(); await tick();
   } else TLOG('chests module not in this build', 'shard card tests skipped');
   // --- level-up through charLevelUp (silent)
@@ -97,7 +97,7 @@
     TASSERT('the select button is still there', !!$('#shop-ppv .btn[data-act=select]') || shopPick===selected);
     // --- next up
     prog.charLv={messi:1}; prog.shards={messi:10}; prog.coins=200; showScreen('home'); await tick();
-    const mine=()=>NextUp.fns.map(f=>{ try{ return f(); }catch(e){ return null; } }).find(x=>x && x.icon==='🧩');
+    const mine=()=>NextUp.fns.map(f=>{ try{ return f(); }catch(e){ return null; } }).find(x=>x && x.icon==='⚡');
     const nu=mine(); TASSERT('next-up entry when a player can be upgraded', !!nu && nu.prio===30 && nu.text===T('lv.nextUp', nm(me)));
     nu.action(); await tick();
     TASSERT('next-up opens the players tab on that player with the green button', $('#shop').classList.contains('active') && shopTab==='players' && shopPick===meI && !!$('#shop-ppv .lv-upbtn.green'));

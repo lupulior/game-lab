@@ -709,7 +709,7 @@ function clubHomePill(){
 /* ----- wiring ----- */
 (function clubBuildUI(){
   const grid=$('#more-grid');
-  if(grid && !$('#btn-club')){ const b=document.createElement('button'); b.className='btn blue'; b.id='btn-club'; b.textContent=T('clubs.btn'); b.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubOpen(); }); grid.appendChild(b); }
+  // no more-sheet button: the home pill (#home-club) is the one entry to the club screen
   const close=$('#btn-club-close'); if(close) close.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubClose(); });
   const m=$('#club-modal'); if(m) m.addEventListener('click', e=>{ if(e.target===m) clubClose(); });
   const tabs=$('#club-tabs'); if(tabs) tabs.addEventListener('click', e=>{ const t=e.target.closest('[data-tab]'); if(!t) return; try{ sfx.click(); }catch(x){} CLUB.tab=t.dataset.tab==='official' ? 'official' : 'mine'; CLUB.oview='main'; clubRender(); });
@@ -756,7 +756,7 @@ Hooks.on('matchEnd', info=>{
   setTimeout(()=>{ if(c) clubPush().then(()=>clubHomePill()); if(oid) officialPush().then(()=>clubHomePill()); }, 120);
 });
 Hooks.on('heartbeat', body=>{ const c=myClub(); body.club = c ? c.id : null; });
-Hooks.on('home', ()=>setTimeout(()=>{ const g=$('#more-grid'), b=$('#btn-club'); if(g && b && g.lastElementChild!==b) g.appendChild(b); clubHomePill(); officialSync(); }, 0));   // officialSync: at most once an hour
+Hooks.on('home', ()=>setTimeout(()=>{ clubHomePill(); officialSync(); }, 0));   // officialSync: at most once an hour
 Hooks.on('screen', id=>{ if(id==='home'){ setTimeout(clubHomePill, 60); setTimeout(clubPendingTick, 500); setTimeout(officialSync, 700); } });
 if(typeof setLang==='function'){ const _csl=setLang; setLang=function(){ const r=_csl.apply(this, arguments); try{ clubHomePill(); if($('#club-modal') && $('#club-modal').classList.contains('show')) clubRender(); }catch(e){} return r; }; }
 { const _csn=submitName; submitName=function(){ const r=_csn.apply(this, arguments); if(normName(settings.name)) setTimeout(clubPendingTick, 400); return r; }; }

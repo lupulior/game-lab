@@ -1104,7 +1104,7 @@ body.touch #touch{display:block}
 /* ===== 27-slots.css ===== */
 /* ===== chest slots: three tiles on the home (right side, under the column) and a wide row on the chests screen ===== */
 .chest-slots{display:flex;gap:6px;z-index:2}
-#chest-slots{position:absolute;right:30px;top:438px;width:240px;justify-content:center}
+#chest-slots{position:absolute;right:30px;top:404px;width:240px;justify-content:center}
 #chest-slots .slot{width:76px;height:66px;flex:none}
 #chest-slots .s-nm{display:none}
 .slot{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:0;cursor:pointer;font-family:inherit;color:var(--navy);background:rgba(255,255,255,.94);border-radius:16px;box-shadow:0 5px 0 rgba(27,42,78,.22),0 8px 12px rgba(0,0,0,.12);padding:3px 4px;box-sizing:border-box;overflow:hidden;border-bottom:4px solid transparent}
@@ -1238,6 +1238,7 @@ body.touch #touch{display:block}
 /* the substitution burst over my player (1.2 s) */
 .player .sq-burst{position:absolute;left:50%;top:-76px;transform:translateX(-50%) scale(0);font-size:22px;font-weight:900;color:#fff;background:var(--pink);border-radius:14px;padding:4px 14px;white-space:nowrap;box-shadow:0 4px 0 rgba(0,0,0,.25);pointer-events:none;z-index:5;animation:sqBurst 1.2s ease-out forwards}
 @keyframes sqBurst{0%{transform:translateX(-50%) scale(0);opacity:0}20%{transform:translateX(-50%) scale(1.15);opacity:1}35%{transform:translateX(-50%) scale(1)}80%{transform:translateX(-50%) translateY(-10px) scale(1);opacity:1}100%{transform:translateX(-50%) translateY(-30px) scale(.9);opacity:0}}
+#home-centre .who #btn-squad.wide{max-width:none;width:260px}   /* the squad button is the centre button now (the looks button is hidden) */
 
 /* ===== 37-levels.css ===== */
 /* ===== player levels (37-levels): badges on the shop's player cards, the level box + upgrade button in the preview, the shard card in a drop, the home tag ===== */
@@ -2479,7 +2480,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-10-10.4';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-10-10.5';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -8811,14 +8812,11 @@ function squadHomeBtn(){
   const who=$('#home-centre .who'); if(!who) return;
   let b=$('#btn-squad');
   if(!b){
-    b=document.createElement('button'); b.className='btn pink'; b.id='btn-squad'; b.type='button';
+    b=document.createElement('button'); b.className='btn pink wide'; b.id='btn-squad'; b.type='button';
     b.addEventListener('click', ()=>{ sfx.click(); squadOpen(); });
     const looks=$('#btn-looks'); if(looks && looks.parentNode===who) looks.insertAdjacentElement('afterend', b); else who.appendChild(b);
   }
   b.textContent=T('squad.btn');
-  const g=$('#more-grid'); let m=$('#btn-squad-more');
-  if(g && !m){ m=document.createElement('button'); m.className='btn pink'; m.id='btn-squad-more'; m.type='button'; m.addEventListener('click', ()=>{ sfx.click(); const sh=$('#more-sheet'); if(sh) sh.classList.remove('show'); squadOpen(); }); g.appendChild(m); }
-  if(m) m.textContent=T('squad.btn');
 }
 Hooks.on('home', ()=>{ squad(); if($('#home-centre .who')) squadHomeBtn(); else setTimeout(squadHomeBtn, 0); });   // the home module builds its row after this hook on the first pass
 squad();
@@ -8827,8 +8825,8 @@ applyLang();
 /* ===== 37-levels.js ===== */
 /* ===================================================================================================
    PLAYER LEVELS — shards + coins raise an OWNED player from level 1 up to 5 (Rumble-Stars style).
-   Shards come from chests: a card of a player the kid already owns becomes a 🧩 shard card
-   (superrare 3 · epic 5 · mythic 8 · legendary 10, ~35% of those drops). 10 shards + coins = one level.
+   Player points come from chests: a card of a player the kid already owns becomes a ⚡ player-points card
+   (rare 2 · superrare 3 · epic 5 · mythic 8 · legendary 10; chance per rarity in chestChanceBy). 10 points + coins = one level.
    Each level above 1 gives MY player +2.5% speed and +2.5% kick power in OFFLINE matches only
    (never online, never hot-seat: both sides stay fair). The core's `st(p)` consults charBoost(p.ch).
    Public: charLevel(c) charShards(c) charBoost(c) charLevelPrice(lv) charCanLevel(c) charLevelUp(c)
@@ -8842,8 +8840,8 @@ applyLang();
 Object.assign(ECON, { levels:{
   max:5, shards:10, boost:.025,
   price:{2:200, 3:400, 4:800, 5:1500},                       // coins to REACH that level (plus 10 shards)
-  chestChance:.35,                                            // chance that a superrare+ drop holds a shard card
-  chestShards:{superrare:3, epic:5, mythic:8, legendary:10},  // shards on that card, per rarity
+  chestChanceBy:{rare:.5, superrare:.6, epic:.7, mythic:.8, legendary:1}, chestChance:.6,   // chance that a drop holds a player-points card (chestChance = fallback)
+  chestShards:{rare:2, superrare:3, epic:5, mythic:8, legendary:10},  // player points on that card, per rarity
 }});
 
 I18N_ADD({
@@ -8851,16 +8849,16 @@ I18N_ADD({
  'lv.bonus':['+{0}% ⚡💥','+{0}% ⚡💥','+{0}% ⚡💥','+{0}% ⚡💥'],
  'lv.max':['מקס','MAX','الأقصى','МАКС'],
  'lv.maxed':['⭐ רמה מקסימלית!','⭐ Max level!','⭐ المستوى الأقصى!','⭐ Максимальный уровень!'],
- 'lv.shards':['🧩 {0}/{1}','🧩 {0}/{1}','🧩 {0}/{1}','🧩 {0}/{1}'],
+  'lv.shards':['⚡ {0}/{1}','⚡ {0}/{1}','⚡ {0}/{1}','⚡ {0}/{1}'],
  'lv.upgrade':['⬆ שדרג! 🪙 {0}','⬆ Upgrade! 🪙 {0}','⬆ طوّر! 🪙 {0}','⬆ Улучшить! 🪙 {0}'],
- 'lv.ask':['לשדרג את {0} לרמה {1} תמורת 🪙 {2} ו-🧩 {3} שברים?','Upgrade {0} to level {1} for 🪙 {2} and 🧩 {3} shards?','هل تطوّر {0} إلى المستوى {1} مقابل 🪙 {2} و🧩 {3} قطع؟','Улучшить {0} до уровня {1} за 🪙 {2} и 🧩 {3} осколков?'],
+  'lv.ask':['לשדרג את {0} לרמה {1} תמורת 🪙 {2} ו-⚡ {3} נקודות שחקן?','Upgrade {0} to level {1} for 🪙 {2} and ⚡ {3} player points?','هل تطوّر {0} إلى المستوى {1} مقابل 🪙 {2} و⚡ {3} نقاط لاعب؟','Улучшить {0} до уровня {1} за 🪙 {2} и ⚡ {3} очков игрока?'],
  'lv.up':['⭐ {0} עלה לרמה {1}!','⭐ {0} reached level {1}!','⭐ {0} وصل إلى المستوى {1}!','⭐ {0} достиг уровня {1}!'],
  'lv.noCoins':['חסרים מטבעות 😕 יש לך {0}, צריך {1}','Not enough coins 😕 you have {0}, need {1}','لا تكفي العملات 😕 لديك {0}، تحتاج {1}','Не хватает монет 😕 у тебя {0}, нужно {1}'],
- 'lv.noShards':['חסרים שברים 🧩 יש לך {0}, צריך {1} · שברים מגיעים מתיבות 🎁','Not enough shards 🧩 you have {0}, need {1} · shards come from chests 🎁','لا تكفي القطع 🧩 لديك {0}، تحتاج {1} · القطع تأتي من الصناديق 🎁','Не хватает осколков 🧩 у тебя {0}, нужно {1} · осколки приходят из сундуков 🎁'],
- 'lv.shardCard':['🧩 {0} שברים · {1}','🧩 {0} shards · {1}','🧩 {0} قطع · {1}','🧩 {0} осколков · {1}'],
- 'lv.shardType':['שברי שחקן','Player shards','قطع لاعب','Осколки игрока'],
- 'lv.shardsGot':['🧩 +{0} שברים של {1} ({2}/{3})','🧩 +{0} {1} shards ({2}/{3})','🧩 +{0} قطع {1} ({2}/{3})','🧩 +{0} осколков {1} ({2}/{3})'],
- 'lv.nextUp':['אפשר לשדרג את {0}!','You can upgrade {0}!','يمكنك تطوير {0}!','Можно улучшить {0}!'],   // the 🧩 is the entry's icon
+  'lv.noShards':['חסרות נקודות שחקן ⚡ יש לך {0}, צריך {1} · נקודות שחקן מגיעות מתיבות 🎁','Not enough player points ⚡ you have {0}, need {1} · player points come from chests 🎁','لا تكفي نقاط اللاعب ⚡ لديك {0}، تحتاج {1} · نقاط اللاعب تأتي من الصناديق 🎁','Не хватает очков игрока ⚡ у тебя {0}, нужно {1} · очки игрока приходят из сундуков 🎁'],
+  'lv.shardCard':['⚡ {0} נקודות שחקן · {1}','⚡ {0} player points · {1}','⚡ {0} نقاط لاعب · {1}','⚡ {0} очков игрока · {1}'],
+  'lv.shardType':['נקודות שחקן','Player points','نقاط لاعب','Очки игрока'],
+  'lv.shardsGot':['⚡ +{0} נקודות שחקן של {1} ({2}/{3})','⚡ +{0} {1} player points ({2}/{3})','⚡ +{0} نقاط لاعب {1} ({2}/{3})','⚡ +{0} очков игрока {1} ({2}/{3})'],
+ 'lv.nextUp':['אפשר לשדרג את {0}!','You can upgrade {0}!','يمكنك تطوير {0}!','Можно улучшить {0}!'],   // the ⚡ is the entry's icon
 });
 
 /* ----- state ----- */
@@ -8914,7 +8912,7 @@ if(typeof chestCards==='function'){
     const cs=_lvChestCards(rarity, rnd); rnd=rnd||Math.random;
     try{
       const n=ECON.levels.chestShards[rarity]|0; if(!n || !Array.isArray(cs) || cs.some(c=>c && c.t==='shards')) return cs;
-      if(rnd()>=ECON.levels.chestChance) return cs;
+      { const by=ECON.levels.chestChanceBy||{}; const ch=(by[rarity]!=null) ? by[rarity] : ECON.levels.chestChance; if(rnd()>=ch) return cs; }
       const owned=lvOwnedBelowMax(); if(!owned.length) return cs;
       /* the least exciting card makes room: xp → coins → keys → gems; never a player / look / power */
       let i=-1; for(const t of ['xp','coins','keys','gems']){ i=cs.findIndex(c=>c && c.t===t); if(i>=0) break; }
@@ -8933,7 +8931,7 @@ if(typeof chestCards==='function'){
     if(c && c.t==='shards'){
       const d=document.createElement('div'); d.className='pv lv-shardpv'; const x=lvChar(c.id);
       try{ d.innerHTML=playerSVG(x,'happy',null); }catch(e){ d.textContent='🧑'; }
-      const b=document.createElement('span'); b.className='lv-shardbadge'; b.textContent='🧩'; d.appendChild(b);
+      const b=document.createElement('span'); b.className='lv-shardbadge'; b.textContent='⚡'; d.appendChild(b);
       return d;
     }
     return _lvChestCardPreview.apply(this, arguments);
@@ -8949,7 +8947,7 @@ if(typeof chestCards==='function'){
   };
   if(typeof buildChests==='function'){
     const _lvBuildChests=buildChests;
-    buildChests=function(){ const r=_lvBuildChests.apply(this, arguments); try{ document.querySelectorAll('#chests-row .chest-card .can').forEach(e=>{ if(!e.textContent.includes('🧩')) e.textContent+=' 🧩'; }); }catch(e){} return r; };
+    buildChests=function(){ const r=_lvBuildChests.apply(this, arguments); try{ document.querySelectorAll('#chests-row .chest-card .can').forEach(e=>{ if(!e.textContent.includes('⚡')) e.textContent+=' ⚡'; }); }catch(e){} return r; };
   }
 }
 
@@ -9001,7 +8999,7 @@ function lvHomeTag(){
 NextUp.add(()=>{
   if(typeof openShop!=='function') return null;
   const c=charUpgradable(); if(!c) return null;
-  return {prio:30, icon:'🧩', text:T('lv.nextUp', nm(c)), action:()=>{ try{ shopPick=CHARS.indexOf(c); }catch(e){} openShop('players'); }};
+  return {prio:30, icon:'⚡', text:T('lv.nextUp', nm(c)), action:()=>{ try{ shopPick=CHARS.indexOf(c); }catch(e){} openShop('players'); }};
 });
 lvProg();
 applyLang();
@@ -11423,7 +11421,7 @@ function clubHomePill(){
 /* ----- wiring ----- */
 (function clubBuildUI(){
   const grid=$('#more-grid');
-  if(grid && !$('#btn-club')){ const b=document.createElement('button'); b.className='btn blue'; b.id='btn-club'; b.textContent=T('clubs.btn'); b.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubOpen(); }); grid.appendChild(b); }
+  // no more-sheet button: the home pill (#home-club) is the one entry to the club screen
   const close=$('#btn-club-close'); if(close) close.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubClose(); });
   const m=$('#club-modal'); if(m) m.addEventListener('click', e=>{ if(e.target===m) clubClose(); });
   const tabs=$('#club-tabs'); if(tabs) tabs.addEventListener('click', e=>{ const t=e.target.closest('[data-tab]'); if(!t) return; try{ sfx.click(); }catch(x){} CLUB.tab=t.dataset.tab==='official' ? 'official' : 'mine'; CLUB.oview='main'; clubRender(); });
@@ -11470,7 +11468,7 @@ Hooks.on('matchEnd', info=>{
   setTimeout(()=>{ if(c) clubPush().then(()=>clubHomePill()); if(oid) officialPush().then(()=>clubHomePill()); }, 120);
 });
 Hooks.on('heartbeat', body=>{ const c=myClub(); body.club = c ? c.id : null; });
-Hooks.on('home', ()=>setTimeout(()=>{ const g=$('#more-grid'), b=$('#btn-club'); if(g && b && g.lastElementChild!==b) g.appendChild(b); clubHomePill(); officialSync(); }, 0));   // officialSync: at most once an hour
+Hooks.on('home', ()=>setTimeout(()=>{ clubHomePill(); officialSync(); }, 0));   // officialSync: at most once an hour
 Hooks.on('screen', id=>{ if(id==='home'){ setTimeout(clubHomePill, 60); setTimeout(clubPendingTick, 500); setTimeout(officialSync, 700); } });
 if(typeof setLang==='function'){ const _csl=setLang; setLang=function(){ const r=_csl.apply(this, arguments); try{ clubHomePill(); if($('#club-modal') && $('#club-modal').classList.contains('show')) clubRender(); }catch(e){} return r; }; }
 { const _csn=submitName; submitName=function(){ const r=_csn.apply(this, arguments); if(normName(settings.name)) setTimeout(clubPendingTick, 400); return r; }; }
@@ -11794,7 +11792,7 @@ I18N_ADD({
  'home.tryHarder':['נסה קשה יותר 🔥','Try harder 🔥','جرّب الأصعب 🔥','Попробуй сложнее 🔥'],
  'home.today':['היום','Today','اليوم','Сегодня'], 'home.more':['⋯ עוד','⋯ More','⋯ المزيد','⋯ Ещё'],
  'home.shop':['🛒 חנות','🛒 Shop','🛒 المتجر','🛒 Магазин'], 'home.chests':['🎁 תיבות','🎁 Chests','🎁 الصناديق','🎁 Сундуки'],
- 'home.looks':['👕 מראה','👕 Looks','👕 المظهر','👕 Образ'], 'home.changeChar':['🧑 דמות','🧑 Player','🧑 الشخصية','🧑 Игрок'],
+ 'home.looks':['👕 מראה','👕 Looks','👕 المظهر','👕 Образ'], 'home.friendsTop':['👥 חברים ומובילים','👥 Friends & leaders','👥 الأصدقاء والمتصدرون','👥 Друзья и лидеры'], 'home.changeChar':['🧑 דמות','🧑 Player','🧑 الشخصية','🧑 Игрок'],
  'home.nextUp':['מה הבא?','Next up','ما التالي؟','Что дальше'], 'home.go':['קדימה','Go','هيا','Вперёд'],
  'home.playMore':['שחק עוד משחק','Play another match','العب مباراة أخرى','Сыграй ещё матч'],
  'home.streakDay':['🔥 יום {0}','🔥 Day {0}','🔥 اليوم {0}','🔥 День {0}'],
@@ -11828,7 +11826,7 @@ function buildHomeV2(){
   // centre: name row, next-up, PLAY, chips
   const centre=el('div','',''); centre.id='home-centre';
   const who=el('div','who',''); const charsBtn=$('#btn-chars'); who.appendChild(charsBtn); charsBtn.classList.add('small'); charsBtn.hidden=true;   // choosing a player lives in the shop (players tab)
-  const looks=el('button','btn purple wide',T('home.looks')); looks.id='btn-looks'; looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
+  const looks=el('button','btn purple wide',T('home.looks')); looks.id='btn-looks'; looks.hidden=true; /* one entry to the shop: the looks tab lives inside it */ looks.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('looks'); else $('#btn-chars').click(); }); who.appendChild(looks);
   centre.appendChild(who);
   const nu=el('div','',''); nu.id='nextup'; nu.hidden=true; centre.appendChild(nu);   // the next-up line is gone from the home (NextUp still drives the tab title)
   const play=el('button','btn green',''); play.id='btn-play-big'; play.addEventListener('click', homePlay); centre.appendChild(play);
@@ -11845,7 +11843,7 @@ function buildHomeV2(){
   const right=el('div','',''); right.id='home-right';
   const chests=el('button','btn yellow',T('home.chests')); chests.id='btn-chests'; chests.addEventListener('click', ()=>{ sfx.click(); if(typeof openChestsScreen==='function') openChestsScreen(); else toast('🎁','xp'); }); right.appendChild(chests);
   const shop=el('button','btn orange',T('home.shop')); shop.id='btn-shop'; shop.addEventListener('click', ()=>{ sfx.click(); if(typeof openShop==='function') openShop('today'); else $('#btn-chars').click(); }); right.appendChild(shop);
-  right.appendChild($('#btn-mp')); right.appendChild($('#btn-top')); right.appendChild($('#btn-friends'));
+  { const top=$('#btn-top'); right.appendChild($('#btn-mp')); right.appendChild(top); top.hidden=true; right.appendChild($('#btn-friends')); }   // one entry to the friends screen: the leaderboard is a tab inside it
   const more=el('button','btn blue',T('home.more')); more.id='btn-more'; more.addEventListener('click', ()=>{ sfx.click(); openMoreSheet(); }); right.appendChild(more);
   home.appendChild(right);
   const fs=$('#btn-fs'), ex=$('#btn-exit'); if(fs && ex && ex.parentNode){ ex.parentNode.insertBefore(fs, ex.nextSibling); }   // fullscreen sits next to exit
@@ -11881,7 +11879,7 @@ function refreshHomeV2(){
   play.classList.toggle('pulse', homeNewcomer());
   $('#chip-level').innerHTML=LEVEL_ICON[lv]+' '+T('home.level', T('lvl.'+lv))+(rec>lv ? ' <span class="up">'+T('home.tryHarder')+'</span>' : '');
   $('#chip-mode').textContent=T('home.mode', T(MODE_NAMES[md]||'fmt.quick'));
-  $('#btn-more').textContent=T('home.more'); $('#btn-shop').innerHTML=T('home.shop'); $('#btn-chests').innerHTML=T('home.chests'); $('#btn-looks').textContent=T('home.looks');
+  $('#btn-more').textContent=T('home.more'); $('#btn-shop').innerHTML=T('home.shop'); $('#btn-chests').innerHTML=T('home.chests'); $('#btn-looks').textContent=T('home.looks'); $('#btn-friends').textContent=T('home.friendsTop');
   $('#btn-mp').innerHTML=T('home.online');                                       // #53: the short column label (the mp screen keeps 'btn.mp')
   $('#more-title').textContent=T('home.more'); $('#lvl-title').textContent=T('home.lvlTitle'); $('#mode-title').textContent=T('home.modeTitle');
   $('#btn-more-close').textContent=T('home.close'); $('#btn-lvl-close').textContent=T('btn.back2'); $('#btn-mode-close').textContent=T('btn.back2');

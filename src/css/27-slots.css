@@ -1,6 +1,6 @@
 /* ===== chest slots: three tiles on the home (right side, under the column) and a wide row on the chests screen ===== */
 .chest-slots{display:flex;gap:6px;z-index:2}
-#chest-slots{position:absolute;right:30px;top:438px;width:240px;justify-content:center}
+#chest-slots{position:absolute;right:30px;top:404px;width:240px;justify-content:center}
 #chest-slots .slot{width:76px;height:66px;flex:none}
 #chest-slots .s-nm{display:none}
 .slot{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:0;cursor:pointer;font-family:inherit;color:var(--navy);background:rgba(255,255,255,.94);border-radius:16px;box-shadow:0 5px 0 rgba(27,42,78,.22),0 8px 12px rgba(0,0,0,.12);padding:3px 4px;box-sizing:border-box;overflow:hidden;border-bottom:4px solid transparent}

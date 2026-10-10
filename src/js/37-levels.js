@@ -1,7 +1,7 @@
 /* ===================================================================================================
    PLAYER LEVELS — shards + coins raise an OWNED player from level 1 up to 5 (Rumble-Stars style).
-   Shards come from chests: a card of a player the kid already owns becomes a 🧩 shard card
-   (superrare 3 · epic 5 · mythic 8 · legendary 10, ~35% of those drops). 10 shards + coins = one level.
+   Player points come from chests: a card of a player the kid already owns becomes a ⚡ player-points card
+   (rare 2 · superrare 3 · epic 5 · mythic 8 · legendary 10; chance per rarity in chestChanceBy). 10 points + coins = one level.
    Each level above 1 gives MY player +2.5% speed and +2.5% kick power in OFFLINE matches only
    (never online, never hot-seat: both sides stay fair). The core's `st(p)` consults charBoost(p.ch).
    Public: charLevel(c) charShards(c) charBoost(c) charLevelPrice(lv) charCanLevel(c) charLevelUp(c)
@@ -15,8 +15,8 @@
 Object.assign(ECON, { levels:{
   max:5, shards:10, boost:.025,
   price:{2:200, 3:400, 4:800, 5:1500},                       // coins to REACH that level (plus 10 shards)
-  chestChance:.35,                                            // chance that a superrare+ drop holds a shard card
-  chestShards:{superrare:3, epic:5, mythic:8, legendary:10},  // shards on that card, per rarity
+  chestChanceBy:{rare:.5, superrare:.6, epic:.7, mythic:.8, legendary:1}, chestChance:.6,   // chance that a drop holds a player-points card (chestChance = fallback)
+  chestShards:{rare:2, superrare:3, epic:5, mythic:8, legendary:10},  // player points on that card, per rarity
 }});
 
 I18N_ADD({
@@ -24,16 +24,16 @@ I18N_ADD({
  'lv.bonus':['+{0}% ⚡💥','+{0}% ⚡💥','+{0}% ⚡💥','+{0}% ⚡💥'],
  'lv.max':['מקס','MAX','الأقصى','МАКС'],
  'lv.maxed':['⭐ רמה מקסימלית!','⭐ Max level!','⭐ المستوى الأقصى!','⭐ Максимальный уровень!'],
- 'lv.shards':['🧩 {0}/{1}','🧩 {0}/{1}','🧩 {0}/{1}','🧩 {0}/{1}'],
+  'lv.shards':['⚡ {0}/{1}','⚡ {0}/{1}','⚡ {0}/{1}','⚡ {0}/{1}'],
  'lv.upgrade':['⬆ שדרג! 🪙 {0}','⬆ Upgrade! 🪙 {0}','⬆ طوّر! 🪙 {0}','⬆ Улучшить! 🪙 {0}'],
- 'lv.ask':['לשדרג את {0} לרמה {1} תמורת 🪙 {2} ו-🧩 {3} שברים?','Upgrade {0} to level {1} for 🪙 {2} and 🧩 {3} shards?','هل تطوّر {0} إلى المستوى {1} مقابل 🪙 {2} و🧩 {3} قطع؟','Улучшить {0} до уровня {1} за 🪙 {2} и 🧩 {3} осколков?'],
+  'lv.ask':['לשדרג את {0} לרמה {1} תמורת 🪙 {2} ו-⚡ {3} נקודות שחקן?','Upgrade {0} to level {1} for 🪙 {2} and ⚡ {3} player points?','هل تطوّر {0} إلى المستوى {1} مقابل 🪙 {2} و⚡ {3} نقاط لاعب؟','Улучшить {0} до уровня {1} за 🪙 {2} и ⚡ {3} очков игрока?'],
  'lv.up':['⭐ {0} עלה לרמה {1}!','⭐ {0} reached level {1}!','⭐ {0} وصل إلى المستوى {1}!','⭐ {0} достиг уровня {1}!'],
  'lv.noCoins':['חסרים מטבעות 😕 יש לך {0}, צריך {1}','Not enough coins 😕 you have {0}, need {1}','لا تكفي العملات 😕 لديك {0}، تحتاج {1}','Не хватает монет 😕 у тебя {0}, нужно {1}'],
- 'lv.noShards':['חסרים שברים 🧩 יש לך {0}, צריך {1} · שברים מגיעים מתיבות 🎁','Not enough shards 🧩 you have {0}, need {1} · shards come from chests 🎁','لا تكفي القطع 🧩 لديك {0}، تحتاج {1} · القطع تأتي من الصناديق 🎁','Не хватает осколков 🧩 у тебя {0}, нужно {1} · осколки приходят из сундуков 🎁'],
- 'lv.shardCard':['🧩 {0} שברים · {1}','🧩 {0} shards · {1}','🧩 {0} قطع · {1}','🧩 {0} осколков · {1}'],
- 'lv.shardType':['שברי שחקן','Player shards','قطع لاعب','Осколки игрока'],
- 'lv.shardsGot':['🧩 +{0} שברים של {1} ({2}/{3})','🧩 +{0} {1} shards ({2}/{3})','🧩 +{0} قطع {1} ({2}/{3})','🧩 +{0} осколков {1} ({2}/{3})'],
- 'lv.nextUp':['אפשר לשדרג את {0}!','You can upgrade {0}!','يمكنك تطوير {0}!','Можно улучшить {0}!'],   // the 🧩 is the entry's icon
+  'lv.noShards':['חסרות נקודות שחקן ⚡ יש לך {0}, צריך {1} · נקודות שחקן מגיעות מתיבות 🎁','Not enough player points ⚡ you have {0}, need {1} · player points come from chests 🎁','لا تكفي نقاط اللاعب ⚡ لديك {0}، تحتاج {1} · نقاط اللاعب تأتي من الصناديق 🎁','Не хватает очков игрока ⚡ у тебя {0}, нужно {1} · очки игрока приходят из сундуков 🎁'],
+  'lv.shardCard':['⚡ {0} נקודות שחקן · {1}','⚡ {0} player points · {1}','⚡ {0} نقاط لاعب · {1}','⚡ {0} очков игрока · {1}'],
+  'lv.shardType':['נקודות שחקן','Player points','نقاط لاعب','Очки игрока'],
+  'lv.shardsGot':['⚡ +{0} נקודות שחקן של {1} ({2}/{3})','⚡ +{0} {1} player points ({2}/{3})','⚡ +{0} نقاط لاعب {1} ({2}/{3})','⚡ +{0} очков игрока {1} ({2}/{3})'],
+ 'lv.nextUp':['אפשר לשדרג את {0}!','You can upgrade {0}!','يمكنك تطوير {0}!','Можно улучшить {0}!'],   // the ⚡ is the entry's icon
 });
 
 /* ----- state ----- */
@@ -87,7 +87,7 @@ if(typeof chestCards==='function'){
     const cs=_lvChestCards(rarity, rnd); rnd=rnd||Math.random;
     try{
       const n=ECON.levels.chestShards[rarity]|0; if(!n || !Array.isArray(cs) || cs.some(c=>c && c.t==='shards')) return cs;
-      if(rnd()>=ECON.levels.chestChance) return cs;
+      { const by=ECON.levels.chestChanceBy||{}; const ch=(by[rarity]!=null) ? by[rarity] : ECON.levels.chestChance; if(rnd()>=ch) return cs; }
       const owned=lvOwnedBelowMax(); if(!owned.length) return cs;
       /* the least exciting card makes room: xp → coins → keys → gems; never a player / look / power */
       let i=-1; for(const t of ['xp','coins','keys','gems']){ i=cs.findIndex(c=>c && c.t===t); if(i>=0) break; }
@@ -106,7 +106,7 @@ if(typeof chestCards==='function'){
     if(c && c.t==='shards'){
       const d=document.createElement('div'); d.className='pv lv-shardpv'; const x=lvChar(c.id);
       try{ d.innerHTML=playerSVG(x,'happy',null); }catch(e){ d.textContent='🧑'; }
-      const b=document.createElement('span'); b.className='lv-shardbadge'; b.textContent='🧩'; d.appendChild(b);
+      const b=document.createElement('span'); b.className='lv-shardbadge'; b.textContent='⚡'; d.appendChild(b);
       return d;
     }
     return _lvChestCardPreview.apply(this, arguments);
@@ -122,7 +122,7 @@ if(typeof chestCards==='function'){
   };
   if(typeof buildChests==='function'){
     const _lvBuildChests=buildChests;
-    buildChests=function(){ const r=_lvBuildChests.apply(this, arguments); try{ document.querySelectorAll('#chests-row .chest-card .can').forEach(e=>{ if(!e.textContent.includes('🧩')) e.textContent+=' 🧩'; }); }catch(e){} return r; };
+    buildChests=function(){ const r=_lvBuildChests.apply(this, arguments); try{ document.querySelectorAll('#chests-row .chest-card .can').forEach(e=>{ if(!e.textContent.includes('⚡')) e.textContent+=' ⚡'; }); }catch(e){} return r; };
   }
 }
 
@@ -174,7 +174,7 @@ function lvHomeTag(){
 NextUp.add(()=>{
   if(typeof openShop!=='function') return null;
   const c=charUpgradable(); if(!c) return null;
-  return {prio:30, icon:'🧩', text:T('lv.nextUp', nm(c)), action:()=>{ try{ shopPick=CHARS.indexOf(c); }catch(e){} openShop('players'); }};
+  return {prio:30, icon:'⚡', text:T('lv.nextUp', nm(c)), action:()=>{ try{ shopPick=CHARS.indexOf(c); }catch(e){} openShop('players'); }};
 });
 lvProg();
 applyLang();

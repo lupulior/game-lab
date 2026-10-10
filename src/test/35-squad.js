@@ -48,7 +48,7 @@
     await tick(20);
     TASSERT('squad button next to looks', !!$('#btn-squad') && $('#btn-squad').previousElementSibling===$('#btn-looks') && $('#btn-squad').textContent===T('squad.btn'));
     TASSERT('row fits the centre column', $('#home-centre .who').getBoundingClientRect().width <= $('#home-centre').getBoundingClientRect().width+1);
-    TASSERT('more sheet has a squad button', !!$('#more-grid #btn-squad-more'));
+    TASSERT('no duplicate squad button in the more sheet; the centre button is wide', !$('#more-grid #btn-squad-more') && $('#btn-squad').classList.contains('wide'));
     $('#btn-squad').click(); await tick(); TASSERT('home button opens the modal', $('#squad-modal').classList.contains('show')); squadClose();
   } else TLOG('home module not loaded', 'skipped the home button checks');
   // --- a real offline match: after my goal the next squad member comes on

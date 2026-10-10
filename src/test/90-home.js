@@ -31,7 +31,7 @@
   // #52: thumb-sized controls that still fit the 1000×620 stage without touching the foot row
   refreshNextUp();
   const h44=sel=>[...document.querySelectorAll(sel)].every(b=>b.offsetHeight>=44);
-  TASSERT('#52 chips / name row / next-up / foot >= 44px', h44('.chip') && h44('#home-centre .who .btn:not([hidden])') && h44('#home.v2 .home-foot .row .btn.small') && h44('#home-right .btn'));
+  TASSERT('#52 chips / name row / next-up / foot >= 44px', h44('.chip') && (!$('#home-centre .who .btn:not([hidden])') || h44('#home-centre .who .btn:not([hidden])')) && h44('#home.v2 .home-foot .row .btn.small') && h44('#home-right .btn:not([hidden])'));
   const st=$('#stage').getBoundingClientRect(), ch=$('#home-chips').getBoundingClientRect(), ft=$('#home .home-foot .row').getBoundingClientRect();
   const overlap=!(ch.right<ft.left || ch.left>ft.right || ch.bottom<ft.top || ch.top>ft.bottom);
   TASSERT('#52 centre column inside the stage, clear of the foot row', ch.bottom<=st.bottom+1 && !overlap);
@@ -109,7 +109,7 @@
   // next-up shows something
   refreshNextUp(); TASSERT('next-up line hidden on the home', $('#nextup').hidden && getComputedStyle($('#nextup')).display==='none');
   TASSERT('no change-player button, wide looks button, fullscreen next to exit', $('#btn-chars').hidden && $('#btn-looks').classList.contains('wide') && $('#btn-fs').previousElementSibling===$('#btn-exit'));
-  { const s=$('#stage').getBoundingClientRect(), sc=s.width/1000; const r=$('#home-chips').getBoundingClientRect(), h=$('#home-name').getBoundingClientRect(), tt=$('#btn-looks').getBoundingClientRect(); TASSERT('chips inside the stage, column starts under the name', (r.bottom-s.top)/sc<=620 && tt.top>=h.bottom-2); }
+  { const s=$('#stage').getBoundingClientRect(), sc=s.width/1000; const r=$('#home-chips').getBoundingClientRect(), h=$('#home-name').getBoundingClientRect(), tt=($('#home-centre .who .btn:not([hidden])')||$('#btn-play-big')).getBoundingClientRect(); TASSERT('chips inside the stage, column starts under the name', (r.bottom-s.top)/sc<=620 && tt.top>=h.bottom-2); }
   // back closes a modal
   $('#chip-level').click(); await new Promise(r=>setTimeout(r,60));
   window.dispatchEvent(new PopStateEvent('popstate')); await new Promise(r=>setTimeout(r,60));

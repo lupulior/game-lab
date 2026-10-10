@@ -18,7 +18,7 @@
     const box=el=>{ const b=el.getBoundingClientRect(); return {l:(b.left-s.left)/sc, t:(b.top-s.top)/sc, r:(b.right-s.left)/sc, b:(b.bottom-s.top)/sc}; };
     const hit=(a,b)=>!(a.r<=b.l || a.l>=b.r || a.b<=b.t || a.t>=b.b);
     const me=box($('#chest-slots')), others=['#home-right','#home-centre','#today-card','#home-trophy','#home .home-foot','#btn-play-big','#home-chips'].map(q=>$(q)).filter(Boolean).map(box);
-    TASSERT('tiles sit in the free area on the right (x 730–970, y 438–504), clear of everything', me.l>=720 && me.r<=980 && me.t>=430 && me.b<=515 && !others.some(o=>hit(me,o)));
+    TASSERT('tiles sit in the free area on the right (x 730–970, y 404–470), clear of everything', me.l>=720 && me.r<=980 && me.t>=396 && me.b<=515 && !others.some(o=>hit(me,o)));
     TASSERT('#52 tiles >= 44px tall', tiles('#chest-slots').every(b=>b.offsetHeight>=44));
   }
   // --- which chest a win gives

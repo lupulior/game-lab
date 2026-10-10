@@ -28,7 +28,7 @@
   prog.gems=30; prog.coins=0; saveProg(); CLUB.data=null; CLUB.fetched=0; CLUB.offline=false; CLUB.pending=null; CLUB.odata=null; CLUB.ofetched=0; CLUB.ooffline=false; CLUB.ogone=null; CLUB.tab='mine'; CLUB.oview='main';
   // ----- entry points
   showScreen('home'); await tick(150);
-  TASSERT('more-sheet button exists', !!$('#btn-club') && $('#more-grid').contains($('#btn-club')) && $('#btn-club').textContent===T('clubs.btn'));
+  TASSERT('no more-sheet club button (the home pill is the one entry)', !$('#btn-club') && !!$('#home-club'));
   TASSERT('home pill exists (in #home-trophy when the home v2 is built)', !!$('#home-club') && (!$('#home-trophy') || $('#home-trophy').contains($('#home-club'))) && $('#home-club').textContent===T('clubs.pillNone'));
   TASSERT('pill is at least 36px tall', !$('#home-trophy') || $('#home-club').getBoundingClientRect().height/($('#stage').getBoundingClientRect().width/1000)>=35);
   // ----- pure helpers
@@ -39,7 +39,7 @@
   TASSERT('days left 1..7', clubDaysLeft()>=1 && clubDaysLeft()<=7);
   TASSERT('24 preset names × 4 languages, 12 emojis', CLUB_NAMES.length===24 && CLUB_NAMES.every(r=>r.length===4 && r.every(s=>s.length>1)) && CLUB_EMOJIS.length===12 && clubName(0,'en')==='The Lions' && clubName(0,'he')==='האריות');
   // ----- open: no club yet
-  $('#btn-club').click(); await tick();
+  clubOpen(); await tick();
   TASSERT('club modal opens on the "no club" view', $('#club-modal').classList.contains('show') && $('#club-body').dataset.view==='none' && !!$('#btn-club-create') && !!$('#btn-club-join'));
   TASSERT('create button names the price', $('#btn-club-create').textContent.includes(String(ECON.clubs.create)));
   // ----- create
