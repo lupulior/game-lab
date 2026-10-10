@@ -1,0 +1,31 @@
+/* ===== squad: the modal (3 slots + the picker), the home button, the substitution burst ===== */
+.sq-panel{min-width:640px;max-width:860px;padding:16px 30px 18px}
+.sq-panel h2{font-size:36px;margin-bottom:4px}
+.sq-hint{font-size:18px;font-weight:700;color:#5b6a8a;margin-bottom:10px}
+.sq-slots{display:flex;gap:22px;justify-content:center;margin:12px 0 16px}
+.sq-slot{position:relative;width:170px;height:214px;border-radius:22px;background:linear-gradient(#fff,#EEF3FF);border:5px solid #C9D6F2;box-shadow:0 7px 0 rgba(27,42,78,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;user-select:none;box-sizing:border-box}
+.sq-slot:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(27,42,78,.18)}
+.sq-slot.main{border-color:var(--yellow);background:linear-gradient(#fff,#FFF3C4)}
+.sq-slot.empty{border-style:dashed;background:rgba(255,255,255,.75)}
+.sq-slot .sq-no{position:absolute;top:-16px;inset-inline-start:-14px;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.sq-slot .sq-sprite{width:84px;height:126px}
+.sq-slot .sq-sprite svg,.sq-card .sq-sprite svg{width:100%;height:100%;display:block}
+.sq-slot .sq-plus{font-size:56px;line-height:1.1;opacity:.55}
+.sq-slot .sq-name{font-size:21px;font-weight:900;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.sq-slot .sq-main{font-size:15px;font-weight:900;color:#7a5c00;background:#FFE27A;border-radius:12px;padding:2px 10px;white-space:nowrap}
+.sq-slot .sq-x{position:absolute;top:-16px;inset-inline-end:-14px;min-height:38px;font-size:16px;padding:0 12px}
+.sq-pick-title{font-size:24px;font-weight:900;color:var(--navy);margin:0 0 8px}
+.sq-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-height:330px;overflow-y:auto;padding:12px 6px 8px;box-sizing:border-box}
+.sq-card{position:relative;width:112px;height:150px;border-radius:16px;background:#fff;border:4px solid #fff;box-shadow:0 5px 0 rgba(27,42,78,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;user-select:none;box-sizing:border-box}
+.sq-card:active{transform:translateY(2px)}
+.sq-card.cur{border-color:var(--yellow);background:#FFF6CF}
+.sq-card.in{border-color:#9FB4E8;background:#EEF3FF}
+.sq-card .sq-sprite{width:62px;height:93px}
+.sq-card .sq-name{font-size:16px;font-weight:900;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+.sq-card .sq-badge{position:absolute;top:-10px;inset-inline-end:-6px;background:var(--blue);color:#fff;font-size:13px;font-weight:900;border-radius:10px;padding:2px 8px;white-space:nowrap;box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.sq-btns{display:flex;gap:12px;justify-content:center;margin-top:6px}
+/* home: the squad button sits next to the wide "looks" button in the centre row (260 + 8 + ≤150 px fits the 420 px column) */
+#home-centre .who #btn-squad{font-size:19px;padding:0 16px;min-height:44px;white-space:nowrap;box-sizing:border-box;max-width:150px;overflow:hidden;text-overflow:ellipsis;justify-content:center}
+/* the substitution burst over my player (1.2 s) */
+.player .sq-burst{position:absolute;left:50%;top:-76px;transform:translateX(-50%) scale(0);font-size:22px;font-weight:900;color:#fff;background:var(--pink);border-radius:14px;padding:4px 14px;white-space:nowrap;box-shadow:0 4px 0 rgba(0,0,0,.25);pointer-events:none;z-index:5;animation:sqBurst 1.2s ease-out forwards}
+@keyframes sqBurst{0%{transform:translateX(-50%) scale(0);opacity:0}20%{transform:translateX(-50%) scale(1.15);opacity:1}35%{transform:translateX(-50%) scale(1)}80%{transform:translateX(-50%) translateY(-10px) scale(1);opacity:1}100%{transform:translateX(-50%) translateY(-30px) scale(.9);opacity:0}}

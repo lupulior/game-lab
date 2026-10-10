@@ -10,14 +10,16 @@
   TASSERT('seed is deterministic', JSON.stringify(dmPick(today,0))===JSON.stringify(dmPick(today,0)));
   // force a known set and drive them through Hooks 'ev'
   prog.dm={key:today, ids:['play2','goals5','win1'], prog:{}, done:[], reroll:0, bonus:false}; prog.coins=0; prog.gems=0; prog.keys=0; prog.xpTotal=0; prog.lvClaimed=0; training=null; state='idle';
+  const hasChests=typeof giveChest==='function'; if(prog.chests) prog.chests.bronze=0;   // the all-3 bonus is a Bronze chest (its coin value without the chests module)
   Hooks.emit('ev','goal',3);
   TASSERT('goal ×3 → goals5 at 3/5', prog.dm.prog.goals5===3 && !prog.dm.done.includes('goals5'));
   Hooks.emit('ev','goal',5);
   TASSERT('goals5 done: +40 coins +10 xp, capped at n', prog.dm.done.includes('goals5') && prog.dm.prog.goals5===5 && prog.coins===40 && prog.xpTotal===10);
   const st=dailyMissionStatus(); TASSERT('dailyMissionStatus shape', st.length===3 && st[1].id==='goals5' && st[1].done && st[1].prog===5 && st[1].n===5 && typeof st[1].text==='string' && st[1].text.includes('5'));
   Hooks.emit('ev','win',1); Hooks.emit('ev','play',1); Hooks.emit('ev','play',1);
-  TASSERT('all three done → +1 key +25 xp (3×10+25)', prog.dm.done.length===3 && prog.dm.bonus===true && prog.keys===1 && prog.xpTotal===55 && prog.coins===120);
-  Hooks.emit('ev','play',1); TASSERT('bonus paid once', prog.keys===1 && prog.xpTotal===55);
+  const bonusChest = hasChests ? (prog.chests.bronze|0)===1 && prog.coins===120 : prog.coins===120+ECON.daily.chestFallback.bronze;
+  TASSERT('all three done → Bronze chest +25 xp (3×10+25), no key', prog.dm.done.length===3 && prog.dm.bonus===true && prog.keys===0 && prog.xpTotal===55 && bonusChest);
+  Hooks.emit('ev','play',1); TASSERT('bonus paid once', prog.keys===0 && prog.xpTotal===55 && (!hasChests || (prog.chests.bronze|0)===1));
   // --- next-up: one step from done
   prog.dm={key:today, ids:['play2','goals5','win1'], prog:{goals5:4}, done:[], reroll:0, bonus:false};
   prog.cal={claimed:0, last:today, bronze:today, pack:null}; prog.daily=today;
@@ -39,12 +41,13 @@
   prog.dm={key:today, ids:['play2','power2','chest1'], prog:{}, done:[], reroll:0, bonus:false}; window.openChest=()=>false;
   Hooks.emit('chest','bronze'); TASSERT('chests module present: a GIVEN chest does not count', !(prog.dm.prog.chest1|0));
   Hooks.emit('chestOpen','bronze',{}); TASSERT('a real chestOpen counts once', prog.dm.done.includes('chest1') && prog.dm.prog.chest1===1); delete window.openChest;
-  // #14: the all-3 key is owed while the wallet is full and paid when a chest makes room
-  prog.dm={key:today, ids:['play2','goals5','win1'], prog:{goals5:5, play2:2}, done:['goals5','play2'], reroll:0, bonus:false}; prog.keys=ECON.keyCap; prog.dailyKeyOwed=0; const xp0=prog.xpTotal|0;
+  // #14: the all-3 bonus is a Bronze chest, so a full key wallet owes nothing; owed keys (calendar) still land when a chest makes room
+  prog.dm={key:today, ids:['play2','goals5','win1'], prog:{goals5:5, play2:2}, done:['goals5','play2'], reroll:0, bonus:false}; prog.keys=ECON.keyCap; prog.dailyKeyOwed=0; const xp0=prog.xpTotal|0, bc0=hasChests ? (prog.chests.bronze|0) : 0, cc0=prog.coins|0;
   Hooks.emit('ev','win',1);
-  TASSERT('full wallet: bonus marked, XP paid once, key owed', prog.dm.bonus===true && prog.keys===ECON.keyCap && prog.dailyKeyOwed===1 && prog.xpTotal===xp0+10+25);
-  Hooks.emit('ev','win',1); TASSERT('no double bonus', prog.dailyKeyOwed===1 && prog.xpTotal===xp0+35);
-  spendKeys(1); TASSERT('a chest makes room → the owed key lands', prog.keys===ECON.keyCap && prog.dailyKeyOwed===0);
+  const bonusChest2 = hasChests ? (prog.chests.bronze|0)===bc0+1 : prog.coins===cc0+ECON.daily.missionCoins+ECON.daily.chestFallback.bronze;
+  TASSERT('full wallet: bonus marked, XP paid once, Bronze chest given, no key owed', prog.dm.bonus===true && prog.keys===ECON.keyCap && (prog.dailyKeyOwed|0)===0 && bonusChest2 && prog.xpTotal===xp0+10+25);
+  Hooks.emit('ev','win',1); TASSERT('no double bonus', (prog.dailyKeyOwed|0)===0 && prog.xpTotal===xp0+35 && (!hasChests || (prog.chests.bronze|0)===bc0+1));
+  prog.dailyKeyOwed=1; spendKeys(1); TASSERT('a chest makes room → an owed key lands', prog.keys===ECON.keyCap && prog.dailyKeyOwed===0);
   prog.keys=ECON.keyCap; dailyGrant({keys:1}, 'calendar'); TASSERT('calendar key on a full wallet is owed too', prog.dailyKeyOwed===1); prog.keys=9; prog.dailyKeyOwed=0;
   // #58/#59: a match that crosses midnight is credited to the day it started (matchDay) — only while settling
   { const md=matchDay; matchDay='2000-01-02'; state='end'; delete prog.streakRewardDay; prog.streakDays=2; Hooks.emit('streakDay',2);

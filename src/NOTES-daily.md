@@ -52,7 +52,7 @@ Streak (gentle 7-day cycle + milestones + free freezes + "save the streak"), 3 d
 - Reads: `prog.streakDays/streakBroken/freezes/matches/daily/welcomeDue/packs` (`prog.packs` existing → a sticker-pack row worth 100 🪙 appears in the pickup).
 
 ## ECON.daily
-cycle `[50,75,100,125,150,200,0]`, cycleKeyDay 3, cycleChestDay 7 (silver + 3 gems), milestones, freezeMax 2 / freezeWeekly 1 / freezeCalDay 10, saveDays 30 / saveHours 48, missionCoins 40 / missionXP 10 / allKey 1 / allXP 25 / freeRerolls 1 / rerollGems 5, calDays 28 / calMin 40 / calMax 120 / calKeyDays [3,10] / calChestDay 7 / calGemsDay 14 (5) / calPackDay 21 (150 🪙) / calKitDay 28 (300 🪙 + 10 💎 until a monthly kit exists), bronzeCoins 80, packCoins 100, chestFallback, autoOpenMs 500, celebMs 450.
+cycle `[50,75,100,125,150,200,0]`, cycleKeyDay 3, cycleChestDay 7 (silver + 3 gems), milestones, freezeMax 2 / freezeWeekly 1 / freezeCalDay 10, saveDays 30 / saveHours 48, missionCoins 40 / missionXP 10 / allChest bronze (was allKey 1) / allXP 25 / freeRerolls 1 / rerollGems 5, calDays 28 / calMin 40 / calMax 120 / calKeyDays [3,10] / calChestDay 7 / calGemsDay 14 (5) / calPackDay 21 (150 🪙) / calKitDay 28 (300 🪙 + 10 💎 until a monthly kit exists), bronzeCoins 80, packCoins 100, chestFallback, autoOpenMs 500, celebMs 450.
 
 ## What the home screen must wire
 - A container `#today-card` (the home module already does this and calls `dailyCardHTML()`); nothing else — the pickup button, mission bars and MOTD row inside it work through `data-daily` delegation.

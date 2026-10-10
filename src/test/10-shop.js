@@ -11,7 +11,36 @@
   TASSERT('shop screen opens', $('#shop').classList.contains('active') && $('#home').classList.contains('active')===false);
   TASSERT('5 tabs, today selected', document.querySelectorAll('#shop-tabs .shop-tab').length===5 && $('#shop-tabs .shop-tab.on').dataset.tab==='today');
   TASSERT('wallet pills show coins and gems', $('#shop-coins').textContent.includes('🪙') && $('#shop-gems').textContent.includes('💎'));
-  TASSERT('shopHasNew false after opening', shopHasNew()===false);
+  // --- the countdown pill: on top, H:MM:SS, ticking every second, red under an hour
+  const tmEl=$('#shop-timer');
+  TASSERT('countdown pill on top of the today tab shows H:MM:SS', !!tmEl && tmEl.parentElement.classList.contains('shop-today-top') && /\d+:\d\d:\d\d/.test(tmEl.textContent) && tmEl.textContent===T('shop.renewFull', shopTimeLeftFull()));
+  TASSERT('shopTimeLeftFull = H:MM:SS, shopTimeLeft = H:MM, both from the same ms', /^\d+:\d\d:\d\d$/.test(shopTimeLeftFull()) && /^\d+:\d\d$/.test(shopTimeLeft()) && shopTimeLeftFull().startsWith(shopTimeLeft()) && shopTimeLeftMs()>0 && shopTimeLeftMs()<=864e5);
+  TASSERT('urgent (red pulse) only under 1 hour', tmEl.classList.contains('urgent')===(shopTimeLeftMs()<36e5));
+  const t0=tmEl.textContent, ms0=shopTimeLeftMs(); await new Promise(r=>setTimeout(r,1100)); const t1=$('#shop-timer').textContent; TLOG('countdown', t0+' → '+t1);
+  TASSERT('countdown ticks every second while the shop is open', shopTimer>0 && t1!==t0 && /\d+:\d\d:\d\d/.test(t1) && shopTimeLeftMs()<ms0);
+  // --- the free gift of the day: first card, once a day, drives the home dot and NextUp
+  const gift=shopFreeGift(); TLOG('free gift', gift.t+(gift.n?' '+gift.n:' '+gift.kind));
+  const cards=document.querySelectorAll('#shop-body .shop-slot');
+  TASSERT('6 cards: the free gift first, then the 5 deals', cards.length===6 && cards[0].dataset.slot==='free' && cards[0].classList.contains('free') && cards[1].dataset.slot==='char' && cards[5].dataset.slot==='chest');
+  TASSERT('every card is tagged "today only"', document.querySelectorAll('#shop-body .shop-slot .shop-tonly').length===6 && cards[0].querySelector('.shop-tonly').textContent===T('shop.todayOnly'));
+  TASSERT('free card: FREE badge + take button, not taken yet', !!cards[0].querySelector('.shop-free-badge') && !!cards[0].querySelector('.btn[data-buy=free]') && !shopFreeClaimed() && !cards[0].classList.contains('sold'));
+  TASSERT('free gift rotates by the day index, keyed today:free', ['coins','keys','gems','chest'].includes(gift.t) && gift.key===dayKey()+':free' && (gift.t!=='chest' || typeof giveChest==='function') && cards[0].dataset.gift===gift.t);
+  TASSERT('deal of the day: glowing frame + −30% ribbon on the character, −10% on the silver chest', cards[1].classList.contains('deal') && cards[1].querySelector('.shop-badge-off').textContent==='−30%' && cards[5].classList.contains('deal') && cards[5].querySelector('.shop-badge-off').textContent==='−10%');
+  const nuFree=()=>NextUp.fns.map(f=>{ try{ return f(); }catch(e){ return null; } }).find(c=>c && c.prio===40 && c.text===T('shop.nextFree'));
+  TASSERT('NextUp: free gift (prio 40) while unclaimed', !!nuFree() && typeof nuFree().action==='function');
+  TASSERT('shopHasNew true while the gift waits (seen today, seenWeek current)', prog.shop.seen===dayKey() && prog.shop.seenWeek===shopWeek() && shopHasNew()===true);
+  prog.coins=0; prog.keys=0; prog.gems=0; prog.chests=prog.chests||{}; prog.chests.bronze=0;
+  const frees=[]; Hooks.on('shopFree', g=>frees.push(g));
+  $('#shop-body .shop-slot[data-slot=free] .btn[data-buy=free]').click(); await tick();
+  const got = gift.t==='coins' ? prog.coins===gift.n && !prog.keys && !prog.gems : gift.t==='keys' ? prog.keys===gift.n && !prog.coins && !prog.gems : gift.t==='gems' ? prog.gems===gift.n && !prog.coins && !prog.keys : (prog.chests.bronze|0)===1 && !prog.coins && !prog.gems;
+  TASSERT('take! grants the reward of the day once', got && frees.length===1 && frees[0].t===gift.t);
+  const fc=$('#shop-body .shop-slot[data-slot=free]');
+  TASSERT('taken: prog.shop.bought[today:free], card sold, "taken" + "more tomorrow", no button', prog.shop.bought[dayKey()+':free']==='free_'+gift.t && shopFreeClaimed() && fc.classList.contains('sold') && fc.textContent.includes(T('shop.freeTaken')) && fc.textContent.includes(T('shop.freeTomorrow')) && !fc.querySelector('.btn'));
+  const c0=prog.coins, k0=prog.keys, g0=prog.gems, ch0=prog.chests.bronze|0;
+  TASSERT('a second claim is refused, nothing granted twice', shopClaimFree()===false && prog.coins===c0 && prog.keys===k0 && prog.gems===g0 && (prog.chests.bronze|0)===ch0 && frees.length===1);
+  TASSERT('shopHasNew false after taking the gift', shopHasNew()===false);
+  TASSERT('NextUp free-gift entry gone after taking', !nuFree());
+  prog.coins=0; prog.gems=0; prog.keys=0;
   // --- Sunday drop clock
   TLOG('shopWeek', shopWeek());
   TASSERT('shopWeek is a non-negative integer', Number.isInteger(shopWeek()) && shopWeek()>=0);
@@ -27,17 +56,17 @@
   TASSERT('coin slots hold unowned coin cosmetics', rot[1].item && rot[2].item && rot[1].item.id!==rot[2].item.id && [rot[1],rot[2]].every(s=>s.item.price>0 && !s.item.gems && !cosOwned(s.item.id)));
   TASSERT('gem slot is a gem item or a gold chest deal', (rot[3].item && rot[3].item.gems>0) || (rot[3].chest==='gold' && rot[3].gems===20));
   TASSERT('chest deal: silver for 450', rot[4].chest==='silver' && rot[4].coins===450);
-  TASSERT('5 slot cards in the DOM', document.querySelectorAll('#shop-body .shop-slot').length===5);
-  TASSERT('countdown to midnight H:MM', /^\D*\d+:\d\d$/.test($('#shop-timer').textContent.trim()));
-  // --- NextUp candidate
-  prog.coins=rot[0].coins; const best=NextUp.best();
+  TASSERT('5 deal cards + the free card in the DOM, indexed by rotation slot', document.querySelectorAll('#shop-body .shop-slot[data-i]').length===5 && $('#shop-body .shop-slot[data-i="0"]').dataset.slot==='char' && $('#shop-body .shop-slot[data-i="4"]').dataset.slot==='chest');
+  // --- NextUp candidate (found by priority: other modules may register louder entries)
+  const nuChar=()=>NextUp.fns.map(f=>{ try{ return f(); }catch(e){ return null; } }).find(c=>c && c.prio===20);
+  prog.coins=rot[0].coins; const best=nuChar();
   TASSERT('NextUp: character of the day when affordable', !!best && best.prio===20 && best.text.includes(nm(cd)));
   // --- buy the character of the day with coins through the DOM
   $('#shop-body .shop-slot[data-slot=char] .btn[data-buy=coins]').click(); await tick();
   TASSERT('char deal asks first', $('#ask-modal').classList.contains('show')); $('#btn-ask-yes').click(); await tick(); await tick();
   TASSERT('char deal bought: unlocked, coins spent, slot SOLD', isUnlocked(cd) && prog.coins===0 && $('#shop-body .shop-slot[data-slot=char]').classList.contains('sold') && prog.shop.bought[rot[0].key]===cd.id);
   TASSERT('purchase hook fired for the character', purchases.some(o=>o.type==='char' && o.id===cd.id && o.price===rot[0].coins));
-  TASSERT('NextUp candidate gone after buying', NextUp.best()===null || NextUp.best().prio!==20);
+  TASSERT('NextUp candidate gone after buying', !nuChar());
   // --- buy a coin cosmetic through the DOM
   const it=rot[1].item; prog.coins=it.price+5;
   TASSERT('slots 2-5 unchanged after buying the character', shopRotation()[1].item.id===it.id && shopRotation()[2].item.id===rot[2].item.id);
@@ -52,7 +81,7 @@
   prog.gems=10; const ids0=shopRotation().map(s=>(s.char&&s.char.id)||(s.item&&s.item.id)||s.chest).join();
   $('#shop-reroll').click(); await tick(); $('#btn-ask-yes').click(); await tick(); await tick();
   TASSERT('reroll: 5 gems, once a day, new seed', prog.gems===5 && prog.shop.reroll===dayKey() && $('#shop-reroll').classList.contains('done') && shopRotation().map(s=>(s.char&&s.char.id)||(s.item&&s.item.id)||s.chest).join()!==ids0);
-  TASSERT('rerolled slots are not SOLD', document.querySelectorAll('#shop-body .shop-slot.sold').length===0);
+  TASSERT('rerolled slots are not SOLD (the taken free gift stays taken)', document.querySelectorAll('#shop-body .shop-slot[data-i].sold').length===0 && $('#shop-body .shop-slot[data-slot=free]').classList.contains('sold'));
   $('#shop-reroll').click(); await tick();
   TASSERT('second reroll refused', !$('#ask-modal').classList.contains('show') && prog.gems===5);
   // --- giveCosmetic / welcome kit

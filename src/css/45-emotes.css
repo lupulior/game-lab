@@ -1,0 +1,19 @@
+/* ===== 45-emotes: speech-bubble emotes over the players, the 😀 touch button and its 4-emoji strip ===== */
+.player .emote{position:absolute;left:50%;top:-100px;transform:translateX(-50%);font-size:44px;line-height:1;background:#fff;color:var(--navy);padding:8px 12px;border-radius:22px;
+  box-shadow:0 4px 0 rgba(0,0,0,.25);pointer-events:none;z-index:5;white-space:nowrap;animation:emotePop 1.6s ease-out forwards}
+.player .emote::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+@keyframes emotePop{0%{opacity:0;transform:translateX(-50%) scale(.2)}18%{opacity:1;transform:translateX(-50%) scale(1.18)}32%{transform:translateX(-50%) scale(1)}78%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-18px) scale(.9)}}
+/* the 😀 button: top-left under the level tag (the pause button is hidden online; the scoreboard owns the top-right); phones only */
+#btn-emote{position:absolute;top:66px;left:116px;width:60px;height:52px;border:0;border-radius:14px;background:#fff;color:var(--navy);font-size:28px;line-height:1;cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.3);z-index:7;display:none;align-items:center;justify-content:center;padding:0;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+body.touch #btn-emote{display:flex}
+#btn-emote:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+#btn-emote.cool{opacity:.45}
+#game.watching #btn-emote,#game.watching #emote-strip{display:none!important}
+#emote-strip{position:absolute;top:66px;left:186px;display:flex;gap:10px;z-index:9;background:rgba(27,42,78,.85);border-radius:18px;padding:6px;box-shadow:0 4px 0 rgba(0,0,0,.3);direction:ltr;animation:emoteStripIn .18s ease-out}
+#emote-strip[hidden]{display:none!important}
+#emote-strip .eb{width:56px;height:52px;border:0;border-radius:14px;background:#fff;font-size:30px;line-height:1;cursor:pointer;padding:0;touch-action:manipulation;user-select:none;-webkit-user-select:none;display:flex;align-items:center;justify-content:center}
+#emote-strip .eb:active{transform:scale(.92);background:#FFF0B3}
+@keyframes emoteStripIn{from{transform:translateX(-10px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+/* one help line under the controls card */
+#emote-help{font-size:17px;font-weight:900;color:var(--navy);background:#F3F6FB;border-radius:14px;padding:6px 14px;margin:-6px 0 12px;display:inline-block;direction:ltr}

@@ -1,6 +1,8 @@
 /* chests as drops: rarity roll with pity, face-down cards that flip, rewards granted on the pick */
 (async()=>{
   await new Promise(r=>setTimeout(r,250));
+  /* the slots module (27-slots) makes keys open only the gold chest; this suite exercises the key route on bronze/silver, so give them key prices for its duration */
+  const _slotKeys=[ECON.chests.bronze.keys, ECON.chests.silver.keys]; ECON.chests.bronze.keys=1; ECON.chests.silver.keys=3;
   const errs0=window.__errs.length; const tick=(ms=30)=>new Promise(r=>setTimeout(r,ms));
   const clickYes=async()=>{ await tick(); TASSERT('ask() shows before paying', $('#ask-modal').classList.contains('show')); $('#btn-ask-yes').click(); await tick(); };
   const tapOpen=async()=>{ for(let i=0;i<(ECON.chests.taps||3);i++){ chestTap(); await tick(); } await tick(650); for(let i=0;i<6;i++){ if(DROP.phase==='cards') break; await tick(700); } };
@@ -60,6 +62,7 @@
   prog.keys=1; TASSERT('badge counts an affordable bronze', chestsBadge()>=1);
   prog.chestDay={key:dayKey(), n:0}; const b0=prog.chests.bronze|0; TASSERT('free daily bronze once', claimDailyBronze()===true && prog.chests.bronze===b0+1 && claimDailyBronze()===false);
   closeChestsScreen();
+  ECON.chests.bronze.keys=_slotKeys[0]; ECON.chests.silver.keys=_slotKeys[1];   // back to the live prices (keys only for gold when the slots module is present)
   TASSERT('no script errors', window.__errs.length===errs0); if(window.__errs.length) TLOG('errors', window.__errs);
   TDONE();
 })();

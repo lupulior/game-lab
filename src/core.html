@@ -1270,7 +1270,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-10-10.2';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-10-10.3';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -1792,7 +1792,7 @@ const CHAR_ST={
   gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02], zahavi:[1,1.2,1,1.05], benayoun:[1.08,1.05,1,1], revivo:[1.02,1.15,1,1], berkovic:[1.05,1.08,.95,.95], solomon:[1.18,1,1,1], gloukh:[1.1,1.08,1,1], dabbur:[1.02,1.1,1,1.12], spiegler:[1,1.12,1,1.08], goldstar:[1.2,1.2,1.1,1.15], streetking:[1.15,1.25,1.2,1.05], brunof:[1,1.15,1,1], rodri:[.95,1.05,1.2,1.05], pedri:[1.08,1,1,1], gavi:[1.1,.95,1.15,1], rodrygo:[1.15,1,1,1], endrick:[1.1,1.1,1,1.05], osimhen:[1.1,1.1,1,1.2], hakimi:[1.2,.95,1.1,1], kvara:[1.15,1.05,1,1], leao:[1.2,1.05,1,1], palmer:[1,1.15,1,1], wirtz:[1.1,1.08,1,1], kroos:[.95,1.2,1,1], neuer:[.95,1,1.15,1.25], buffon:[.9,1,1.2,1.25], maldini:[1,1,1.3,1.1], robertocarlos:[1.15,1.3,1.05,1], figo:[1.08,1.1,1,1], batistuta:[1,1.3,1,1.1], totti:[1,1.2,1,1], pirlo:[.95,1.25,1,1], vanbasten:[1.05,1.25,1,1.15], eusebio:[1.2,1.2,1,1], eto:[1.18,1.12,1,1.05], weah:[1.18,1.1,1,1.1], platini:[1,1.2,1,1], beckenbauer:[1.05,1.1,1.3,1.1], garrincha:[1.25,1.05,1,1] };
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
-const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
+const st = p => { const s=charStats(p.ch); const b=(p===P1 && !mp && typeof charBoost==='function') ? charBoost(p.ch) : 1; if(b!==1){ s.speed*=b; s.power*=b; } return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers · player levels (37-levels.js): +2.5% speed/power per level, offline only
 const DEF_PROG={xp:0,coins:0,gems:0,keys:0,xpTotal:0,lvClaimed:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false,trophies:0,road:[]};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 function saveProg(){ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} }

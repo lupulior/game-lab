@@ -804,28 +804,41 @@ body.touch #touch{display:block}
 .shop-rtag.bronze{background:#c77b3a}.shop-rtag.silver{background:#8f9bb0}.shop-rtag.gold{background:#d9a300}.shop-rtag.icon{background:#2aa8e8}.shop-rtag.trophy{background:#8E5CF6}
 .shop-rtag.rare{background:#3D8BFF}.shop-rtag.epic{background:#8E5CF6}.shop-rtag.legendary{background:#d9a300}
 
-/* ---- today ---- */
+/* ---- today: the countdown pill on top, then 6 cards (free gift + 5 deals) ---- */
 .shop-today{position:absolute;inset:10px;display:flex;flex-direction:column;gap:8px}
-.shop-slots{display:flex;gap:10px;flex:1;min-height:0}
+.shop-today-top{display:flex;align-items:center;justify-content:space-between;gap:12px;height:54px;flex:none}
+#shop-timer{flex:1;min-width:0;height:50px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:var(--navy);background:linear-gradient(#fff,#EAF2FF);border:4px solid #fff;border-radius:18px;padding:0 18px;box-shadow:0 5px 0 rgba(27,42,78,.25);white-space:nowrap;overflow:hidden}
+#shop-timer.urgent{background:linear-gradient(#FF6B6B,#E53935);color:#fff;border-color:#FFD2D2;box-shadow:0 5px 0 #A82C2C;animation:shop-pulse 1s ease-in-out infinite}
+@keyframes shop-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+#shop-reroll{font-size:19px;padding:8px 18px;min-height:44px;flex:none}
+#shop-reroll.done{background:#8a93a8;box-shadow:0 8px 0 #5c6477}
+.shop-slots{display:flex;gap:8px;flex:1;min-height:0}
 .shop-slot{flex:1;min-width:0;background:#fff;border:5px solid #fff;border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 6px 8px;box-shadow:0 6px 0 rgba(27,42,78,.2);position:relative;text-align:center}
-.shop-slot .tag{font-size:15px;font-weight:900;color:#fff;background:var(--navy);border-radius:10px;padding:2px 10px;white-space:nowrap}
-.shop-slot .vis{height:150px;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.shop-slot .vis svg{max-height:150px;max-width:100%}
-.shop-slot .vis .sprite{width:92px;height:138px}
+.shop-slot .tag{font-size:15px;font-weight:900;color:#fff;background:var(--navy);border-radius:10px;padding:2px 10px;white-space:nowrap;max-width:100%;box-sizing:border-box;overflow:hidden}
+.shop-tonly{font-size:12px;font-weight:900;color:#3f4e70;background:#EEF2FA;border-radius:8px;padding:0 8px;line-height:16px;white-space:nowrap}
+.shop-slot .vis{height:128px;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.shop-slot .vis svg{max-height:128px;max-width:100%}
+.shop-slot .vis .sprite{width:86px;height:128px}
 .shop-slot .nm{font-size:18px;font-weight:900;color:var(--navy);line-height:1.15;min-height:42px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.shop-slot .pr{font-size:15px;font-weight:700;color:#5b6a8a;min-height:20px}
+.shop-slot .pr{font-size:15px;font-weight:700;color:#5b6a8a;min-height:20px;white-space:nowrap;max-width:100%;overflow:hidden}
 .shop-slot .pr s{color:#a0a8b8;margin-inline-end:6px}
 .shop-slot .btns{display:flex;flex-direction:column;gap:6px;width:100%;margin-top:auto}
-.shop-slot .btn.small{font-size:18px;padding:8px 10px;min-height:44px;width:100%;box-sizing:border-box}
+.shop-slot .btn.small{font-size:18px;padding:8px 6px;min-height:44px;width:100%;box-sizing:border-box;gap:6px}
 .shop-slot.sold .vis,.shop-slot.sold .nm{opacity:.5}
 .shop-sold{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
 .shop-sold span{font-size:30px;font-weight:900;color:#fff;background:var(--green);border-radius:16px;padding:6px 18px;transform:rotate(-12deg);box-shadow:0 6px 0 #22883C;border:4px solid #fff}
-.shop-today-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;height:54px}
-#shop-timer{font-size:22px;font-weight:900;color:var(--navy);background:rgba(255,255,255,.85);border-radius:16px;padding:8px 18px}
-#shop-reroll{font-size:19px;padding:8px 18px;min-height:44px}
-#shop-reroll.done{background:#8a93a8;box-shadow:0 8px 0 #5c6477}
 .shop-badge-new{position:absolute;top:-10px;left:8px;font-size:13px;font-weight:900;background:var(--red);color:#fff;border-radius:10px;padding:2px 8px;z-index:2}
-.shop-badge-off{position:absolute;top:-10px;right:8px;font-size:14px;font-weight:900;background:var(--red);color:#fff;border-radius:10px;padding:2px 8px;z-index:2}
+/* deal of the day: a glowing frame + a "−30%" ribbon on the leading corner */
+.shop-slot.deal{box-shadow:0 0 0 3px #FFB020,0 6px 0 #C97A00,0 0 18px rgba(255,176,32,.55)}
+.shop-badge-off{position:absolute;top:46px;right:-8px;font-size:15px;font-weight:900;background:linear-gradient(#FF6B6B,#E53935);color:#fff;border:3px solid #fff;border-radius:12px;padding:1px 8px;transform:rotate(10deg);box-shadow:0 4px 0 #A82C2C;z-index:2}   /* on the empty corner of the picture, clear of the slot tag */
+/* the free gift card */
+.shop-slot.free{border-color:var(--green)!important;background:linear-gradient(#fff,#E9FBEF)}
+.shop-slot.free .tag{background:var(--green)}
+.shop-slot .vis .emo.big{font-size:84px}
+.shop-free-badge{display:inline-block;font-size:22px;font-weight:900;color:#fff;background:var(--green);border:3px solid #fff;border-radius:14px;padding:3px 14px;box-shadow:0 5px 0 #22883C;transform:rotate(-6deg);animation:shop-free-pulse 1.2s ease-in-out infinite}
+@keyframes shop-free-pulse{0%,100%{transform:rotate(-6deg) scale(1)}50%{transform:rotate(-6deg) scale(1.08)}}
+.shop-slot.free .pr{overflow:visible}
+.shop-slot.free.sold .pr{font-size:15px;font-weight:900;color:var(--green);white-space:normal;line-height:1.15}
 
 /* ---- players ---- */
 .shop-players{position:absolute;inset:10px}
@@ -984,6 +997,107 @@ body.touch #touch{display:block}
 #btn-chest-done{min-width:240px}
 #chests-confetti{position:absolute;inset:0;width:1000px;height:620px;pointer-events:none;z-index:47}
 
+/* ===== 25-arenas.css ===== */
+/* ===== arenas: home background per arena, the arena pill, the arenas modal, the new-arena celebration, lock labels, fan tints ===== */
+/* the home sky follows the arena (arena 1 keeps the default stage sky); the frame outside the stage is untouched */
+#home[data-arena="2"]{background:linear-gradient(#4C8FE0,#9CC8F5 55%,#CFE3F7)}
+#home[data-arena="3"]{background:linear-gradient(#2FC0EE,#9FE8FF 50%,#FFE9A8)}
+#home[data-arena="4"]{background:linear-gradient(#141C3D,#2C2A6E 55%,#5B3A9E)}
+#home[data-arena="5"]{background:linear-gradient(#9ED8FF,#DDF1FF 55%,#F6FBFF)}
+#home[data-arena="6"]{background:linear-gradient(#3B1F6E,#6E3BB0 50%,#D9A93A)}
+/* the arena pill sits right above the trophy pill (same width), two lines: name + trophies to the next arena */
+#home #home-arena{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font-family:inherit;border:0;cursor:pointer;color:var(--navy);
+  background:linear-gradient(#E8F7FF,#9ED8FF);border-radius:18px;padding:4px 10px 5px;width:190px;min-height:44px;box-sizing:border-box;line-height:1.15;white-space:nowrap;overflow:hidden;
+  box-shadow:0 5px 0 #4FA3DD,0 8px 14px rgba(0,0,0,.15);font-weight:900;text-align:center}
+#home #home-arena:active{transform:translateY(3px);box-shadow:0 2px 0 #4FA3DD}
+#home #home-arena .arn-name{font-size:17px;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+#home #home-arena .arn-next{font-size:12px;opacity:.85;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+#home #home-arena[data-arena="4"]{background:linear-gradient(#D9CFFF,#9C7BF0);box-shadow:0 5px 0 #5B34B5,0 8px 14px rgba(0,0,0,.15)}
+#home #home-arena[data-arena="5"]{background:linear-gradient(#ffffff,#C9ECFF);box-shadow:0 5px 0 #6FA9D8,0 8px 14px rgba(0,0,0,.15)}
+#home #home-arena[data-arena="6"]{background:linear-gradient(#FFF3B8,#F5C400);box-shadow:0 5px 0 #C99A10,0 8px 14px rgba(0,0,0,.15)}
+#home.v2.inparty #home-arena{display:none}   /* a party uses that corner for the team bar */
+#home:not(.v2) #home-arena{position:absolute;left:28px;bottom:14px;z-index:3}   /* without the home-v2 module the pill still sits in the free bottom-left corner */
+/* ----- the arenas modal ----- */
+#arena-modal .panel{padding:12px 28px 14px;max-height:604px;overflow-y:auto;box-sizing:border-box;min-width:640px;max-width:760px}
+#arena-modal h2{font-size:34px;margin:0}
+#arena-sub{font-size:16px;font-weight:900;color:var(--navy);opacity:.8;margin:0 0 6px}
+#arena-list{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.arn-row{display:flex;align-items:center;gap:12px;background:rgba(27,42,78,.06);border-radius:16px;padding:3px 12px;min-height:58px;color:var(--navy);font-weight:900;text-align:start}
+.arn-row.locked{opacity:.75}
+.arn-row.got:not(.here){background:#DDF7E4}
+.arn-row.here{background:#FFF6CF;outline:3px solid var(--yellow);opacity:1}
+.arn-emo{font-size:32px;width:44px;text-align:center;line-height:1}
+.arn-mid{flex:1;display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.arn-mid b{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arn-mid small{font-size:14px;opacity:.85}
+.arn-sw svg{width:60px;height:40px;border-radius:6px;box-shadow:0 2px 0 rgba(0,0,0,.2);display:block}
+.arn-ch{display:flex;align-items:center;gap:6px;width:150px;font-size:13px;line-height:1.1}
+.arn-ch svg{width:30px;height:46px;flex:none}
+.arn-row.locked .arn-ch:not(.own) svg{filter:grayscale(1) brightness(.8);opacity:.7}
+.arn-st{font-size:22px;width:32px;text-align:center}
+#btn-arena-close{min-height:44px}
+/* ----- the new-arena celebration ----- */
+#arena-new-modal .panel{min-width:460px;max-width:600px;padding:12px 34px 20px}
+#arena-new-modal h2{font-size:36px;margin:0}
+.arn-new-emo{font-size:80px;line-height:1;animation:arnBounce 1s ease-in-out infinite alternate;filter:drop-shadow(0 8px 10px rgba(0,0,0,.25))}
+@keyframes arnBounce{from{transform:translateY(0) scale(1)}to{transform:translateY(-10px) scale(1.08)}}
+#arena-new-name{font-size:30px;font-weight:900;color:var(--navy);margin:0 0 6px}
+#arena-new-sw svg{width:180px;height:120px;border-radius:12px;box-shadow:0 6px 0 rgba(27,42,78,.25);display:block;margin:0 auto 8px}
+#arena-new-gift{font-size:24px;font-weight:900;color:var(--navy);background:#FFF0B3;border-radius:14px;padding:4px 16px;display:inline-block;margin-bottom:6px}
+#arena-new-char{display:flex;align-items:center;justify-content:center;gap:10px;font-size:18px;font-weight:900;color:var(--navy);margin-bottom:8px}
+#arena-new-char .sprite svg{width:40px;height:60px;display:block}
+#btn-arena-new-ok{min-height:52px}
+/* ----- lock labels on player cards (gallery + shop) ----- */
+.card .lock.arena-lock{font-size:13px;background:#5B34B5;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shop-pcard .pr.arena-lock{color:#5B34B5;font-size:11px;white-space:normal;line-height:1.05;text-align:center;padding:0 2px;max-width:100%}
+.shop-preview .pr.arena-lock{color:#5B34B5}
+.shop-preview .btn[data-act=arena]{font-size:18px;padding:8px 18px;min-height:44px}
+/* ----- the fans follow the arena (only when an arena pitch is drawn) ----- */
+#game[data-arena="3"] #fans svg{filter:saturate(1.15) brightness(1.06)}
+#game[data-arena="4"] #fans svg{filter:brightness(.7) saturate(.9) hue-rotate(15deg)}
+#game[data-arena="5"] #fans svg{filter:brightness(1.12) saturate(.6)}
+#game[data-arena="6"] #fans svg{filter:sepia(.35) saturate(1.4) brightness(1.05)}
+
+/* ===== 27-slots.css ===== */
+/* ===== chest slots: three tiles on the home (right side, under the column) and a wide row on the chests screen ===== */
+.chest-slots{display:flex;gap:6px;z-index:2}
+#chest-slots{position:absolute;right:30px;top:438px;width:240px;justify-content:center}
+#chest-slots .slot{width:76px;height:66px;flex:none}
+#chest-slots .s-nm{display:none}
+.slot{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:0;cursor:pointer;font-family:inherit;color:var(--navy);background:rgba(255,255,255,.94);border-radius:16px;box-shadow:0 5px 0 rgba(27,42,78,.22),0 8px 12px rgba(0,0,0,.12);padding:3px 4px;box-sizing:border-box;overflow:hidden;border-bottom:4px solid transparent}
+.slot:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,78,.22)}
+.slot .s-ic{font-size:26px;line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15));flex:none}
+.slot .s-tx{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;text-align:center;min-width:0}
+.slot .s-cd{font-size:12px;font-weight:900;white-space:nowrap}
+.slot .s-nm{font-size:16px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.slot.ck-bronze{border-bottom-color:#c77b3a}
+.slot.ck-silver{border-bottom-color:#b9c3d1}
+.slot.ck-gold{border-bottom-color:#f5c542}
+/* empty: faded, waiting for a win */
+.slot.empty{background:rgba(255,255,255,.6);box-shadow:0 5px 0 rgba(27,42,78,.12);cursor:default;color:#5b6a8a;border-bottom-color:transparent}
+.slot.empty:active{transform:none;box-shadow:0 5px 0 rgba(27,42,78,.12)}
+.slot.empty .s-ic{opacity:.35;filter:grayscale(1)}
+.slot.empty .s-cd{white-space:normal;font-size:11px;font-weight:700}
+/* ticking: the countdown */
+.slot.tick .s-cd{color:#5b6a8a}
+/* ready: gold glow + a bouncing chest */
+.slot.ready{background:linear-gradient(#FFE27A,#F5C400);box-shadow:0 5px 0 #C99A10,0 0 18px rgba(255,212,71,.8);animation:slotGlow 1.2s ease-in-out infinite alternate}
+.slot.ready .s-ic{animation:slotBounce .6s ease-in-out infinite alternate}
+.slot.ready .s-cd{font-size:14px;color:var(--navy)}
+@keyframes slotBounce{from{transform:translateY(0) scale(1)}to{transform:translateY(-5px) scale(1.14)}}
+@keyframes slotGlow{from{box-shadow:0 5px 0 #C99A10,0 0 10px rgba(255,212,71,.5)}to{box-shadow:0 5px 0 #C99A10,0 0 24px rgba(255,212,71,1)}}
+/* the chests screen: a wide row of the same tiles between the wallet and the cards */
+#chests-slots{position:absolute;left:24px;right:24px;top:82px;height:68px;gap:12px;justify-content:center;align-items:stretch}
+#chests-slots .slot{width:226px;height:68px;flex:none;flex-direction:row;gap:10px;padding:4px 14px}
+#chests-slots .slot .s-ic{font-size:38px}
+#chests-slots .slot .s-tx{align-items:flex-start;flex:1 1 auto}
+#chests-slots .slot .s-cd{font-size:19px}
+#chests-slots .slot.empty .s-cd{font-size:17px;white-space:nowrap}
+#chests-slots .slot.ready .s-cd{font-size:22px}
+#chests.slots-on .chests-row{top:158px}
+/* the end card line: "📦 chest in a slot, opens in …" */
+.ec-row.ec-slot .ec-big{font-size:20px}
+
 /* ===== 30-daily.css ===== */
 /* ===== daily loop: pickup / calendar / missions / streak modals + the home "היום" card (all scoped to d* ids and classes) ===== */
 .dpk-panel,.dms-panel{min-width:560px;max-width:700px;padding:18px 34px 20px}
@@ -1049,6 +1163,64 @@ body.touch #touch{display:block}
 .dcard-mn{width:40px;text-align:center;font-size:15px;flex:none}
 .dcard-motd{font-size:17px;cursor:pointer;background:rgba(27,42,78,.06);border-radius:12px;padding:6px 10px;min-height:44px;display:flex;align-items:center;justify-content:space-between;box-sizing:border-box}
 
+/* ===== 35-squad.css ===== */
+/* ===== squad: the modal (3 slots + the picker), the home button, the substitution burst ===== */
+.sq-panel{min-width:640px;max-width:860px;padding:16px 30px 18px}
+.sq-panel h2{font-size:36px;margin-bottom:4px}
+.sq-hint{font-size:18px;font-weight:700;color:#5b6a8a;margin-bottom:10px}
+.sq-slots{display:flex;gap:22px;justify-content:center;margin:12px 0 16px}
+.sq-slot{position:relative;width:170px;height:214px;border-radius:22px;background:linear-gradient(#fff,#EEF3FF);border:5px solid #C9D6F2;box-shadow:0 7px 0 rgba(27,42,78,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;user-select:none;box-sizing:border-box}
+.sq-slot:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(27,42,78,.18)}
+.sq-slot.main{border-color:var(--yellow);background:linear-gradient(#fff,#FFF3C4)}
+.sq-slot.empty{border-style:dashed;background:rgba(255,255,255,.75)}
+.sq-slot .sq-no{position:absolute;top:-16px;inset-inline-start:-14px;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.sq-slot .sq-sprite{width:84px;height:126px}
+.sq-slot .sq-sprite svg,.sq-card .sq-sprite svg{width:100%;height:100%;display:block}
+.sq-slot .sq-plus{font-size:56px;line-height:1.1;opacity:.55}
+.sq-slot .sq-name{font-size:21px;font-weight:900;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.sq-slot .sq-main{font-size:15px;font-weight:900;color:#7a5c00;background:#FFE27A;border-radius:12px;padding:2px 10px;white-space:nowrap}
+.sq-slot .sq-x{position:absolute;top:-16px;inset-inline-end:-14px;min-height:38px;font-size:16px;padding:0 12px}
+.sq-pick-title{font-size:24px;font-weight:900;color:var(--navy);margin:0 0 8px}
+.sq-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-height:330px;overflow-y:auto;padding:12px 6px 8px;box-sizing:border-box}
+.sq-card{position:relative;width:112px;height:150px;border-radius:16px;background:#fff;border:4px solid #fff;box-shadow:0 5px 0 rgba(27,42,78,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;user-select:none;box-sizing:border-box}
+.sq-card:active{transform:translateY(2px)}
+.sq-card.cur{border-color:var(--yellow);background:#FFF6CF}
+.sq-card.in{border-color:#9FB4E8;background:#EEF3FF}
+.sq-card .sq-sprite{width:62px;height:93px}
+.sq-card .sq-name{font-size:16px;font-weight:900;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+.sq-card .sq-badge{position:absolute;top:-10px;inset-inline-end:-6px;background:var(--blue);color:#fff;font-size:13px;font-weight:900;border-radius:10px;padding:2px 8px;white-space:nowrap;box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.sq-btns{display:flex;gap:12px;justify-content:center;margin-top:6px}
+/* home: the squad button sits next to the wide "looks" button in the centre row (260 + 8 + ≤150 px fits the 420 px column) */
+#home-centre .who #btn-squad{font-size:19px;padding:0 16px;min-height:44px;white-space:nowrap;box-sizing:border-box;max-width:150px;overflow:hidden;text-overflow:ellipsis;justify-content:center}
+/* the substitution burst over my player (1.2 s) */
+.player .sq-burst{position:absolute;left:50%;top:-76px;transform:translateX(-50%) scale(0);font-size:22px;font-weight:900;color:#fff;background:var(--pink);border-radius:14px;padding:4px 14px;white-space:nowrap;box-shadow:0 4px 0 rgba(0,0,0,.25);pointer-events:none;z-index:5;animation:sqBurst 1.2s ease-out forwards}
+@keyframes sqBurst{0%{transform:translateX(-50%) scale(0);opacity:0}20%{transform:translateX(-50%) scale(1.15);opacity:1}35%{transform:translateX(-50%) scale(1)}80%{transform:translateX(-50%) translateY(-10px) scale(1);opacity:1}100%{transform:translateX(-50%) translateY(-30px) scale(.9);opacity:0}}
+
+/* ===== 37-levels.css ===== */
+/* ===== player levels (37-levels): badges on the shop's player cards, the level box + upgrade button in the preview, the shard card in a drop, the home tag ===== */
+.shop-pcard .lv-row{display:flex;gap:4px;align-items:center;justify-content:center;white-space:nowrap;margin-top:1px;max-width:100%}
+.shop-pcard .lv-badge{font-size:12px;font-weight:900;color:#fff;background:#8E5CF6;border-radius:8px;padding:0 6px;line-height:16px}
+.shop-pcard .lv-shards{font-size:12px;font-weight:900;color:#5b6a8a;background:#EEF1F7;border-radius:8px;padding:0 6px;line-height:16px}
+.shop-pcard .lv-row.ready .lv-shards{background:var(--green);color:#fff;animation:lv-pulse .9s infinite alternate}
+.shop-pcard .lv-row.max .lv-badge{background:#d9a300}
+.shop-pcard.lv-ready{box-shadow:0 4px 0 rgba(27,42,78,.2),0 0 0 3px rgba(63,195,95,.55)}
+@keyframes lv-pulse{from{transform:scale(1)}to{transform:scale(1.1)}}
+.shop-preview.lv-has{gap:4px}
+.shop-preview.lv-has .sprite{width:100px;height:150px}
+.shop-preview .lv-box{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;max-width:100%}
+.shop-preview .lv-lvl{font-size:16px;font-weight:900;color:#fff;background:#8E5CF6;border-radius:12px;padding:2px 10px;white-space:nowrap;line-height:22px}
+.shop-preview .lv-box.max .lv-lvl{background:#d9a300}
+.shop-preview .lv-bar{position:relative;display:block;width:150px;height:26px;border-radius:13px;background:#dfe5f0;overflow:hidden;box-shadow:inset 0 2px 0 rgba(27,42,78,.15)}
+.shop-preview .lv-bar i{position:absolute;top:0;bottom:0;inset-inline-start:0;background:linear-gradient(90deg,#3FC35F,#8ee36b);border-radius:13px;transition:width .3s}
+.shop-preview .lv-box.ready .lv-bar i{background:linear-gradient(90deg,#FFD447,#F5C542)}
+.shop-preview .lv-bar span{position:relative;display:block;text-align:center;line-height:26px;font-size:15px;font-weight:900;color:var(--navy)}
+.shop-preview .btn.lv-upbtn{font-size:20px;min-height:44px;padding:8px 18px}
+.shop-preview .btn.lv-upbtn.off{background:#B7BECD;box-shadow:0 6px 0 #8A93A8,0 12px 18px rgba(0,0,0,.12);color:#F2F4F8}
+.shop-preview .btn.lv-upbtn.off:active{transform:none}
+.ccard .pv.lv-shardpv{position:relative}
+.ccard .pv.lv-shardpv .lv-shardbadge{position:absolute;inset-inline-end:-10px;bottom:-4px;font-size:44px;line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
+#home-name .lv-tag{display:inline-block;vertical-align:middle;margin-inline-start:8px;font-size:15px;font-weight:900;color:#fff;background:#8E5CF6;border-radius:10px;padding:1px 9px;line-height:20px;-webkit-text-stroke:0;text-shadow:none;box-shadow:0 3px 0 rgba(27,42,78,.35)}
+
 /* ===== 40-endcard.css ===== */
 /* ===== 40-endcard: the reward ceremony on the result card ===== */
 .endcard-panel{width:780px;max-width:800px;max-height:604px;box-sizing:border-box;padding:12px 30px 16px;overflow:hidden}
@@ -1085,6 +1257,27 @@ body.touch #touch{display:block}
 #endcard-btns .btn{font-size:24px;padding:9px 22px;min-height:50px;touch-action:manipulation}
 #endcard-btns .btn.ec-icon{padding:9px 16px;font-size:26px}
 @media (prefers-reduced-motion:reduce){.ec-row{transition:none;opacity:1;transform:none}.ec-bar>i{transition:none}}
+
+/* ===== 45-emotes.css ===== */
+/* ===== 45-emotes: speech-bubble emotes over the players, the 😀 touch button and its 4-emoji strip ===== */
+.player .emote{position:absolute;left:50%;top:-100px;transform:translateX(-50%);font-size:44px;line-height:1;background:#fff;color:var(--navy);padding:8px 12px;border-radius:22px;
+  box-shadow:0 4px 0 rgba(0,0,0,.25);pointer-events:none;z-index:5;white-space:nowrap;animation:emotePop 1.6s ease-out forwards}
+.player .emote::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+@keyframes emotePop{0%{opacity:0;transform:translateX(-50%) scale(.2)}18%{opacity:1;transform:translateX(-50%) scale(1.18)}32%{transform:translateX(-50%) scale(1)}78%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-18px) scale(.9)}}
+/* the 😀 button: top-left under the level tag (the pause button is hidden online; the scoreboard owns the top-right); phones only */
+#btn-emote{position:absolute;top:66px;left:116px;width:60px;height:52px;border:0;border-radius:14px;background:#fff;color:var(--navy);font-size:28px;line-height:1;cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.3);z-index:7;display:none;align-items:center;justify-content:center;padding:0;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+body.touch #btn-emote{display:flex}
+#btn-emote:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+#btn-emote.cool{opacity:.45}
+#game.watching #btn-emote,#game.watching #emote-strip{display:none!important}
+#emote-strip{position:absolute;top:66px;left:186px;display:flex;gap:10px;z-index:9;background:rgba(27,42,78,.85);border-radius:18px;padding:6px;box-shadow:0 4px 0 rgba(0,0,0,.3);direction:ltr;animation:emoteStripIn .18s ease-out}
+#emote-strip[hidden]{display:none!important}
+#emote-strip .eb{width:56px;height:52px;border:0;border-radius:14px;background:#fff;font-size:30px;line-height:1;cursor:pointer;padding:0;touch-action:manipulation;user-select:none;-webkit-user-select:none;display:flex;align-items:center;justify-content:center}
+#emote-strip .eb:active{transform:scale(.92);background:#FFF0B3}
+@keyframes emoteStripIn{from{transform:translateX(-10px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+/* one help line under the controls card */
+#emote-help{font-size:17px;font-weight:900;color:var(--navy);background:#F3F6FB;border-radius:14px;padding:6px 14px;margin:-6px 0 12px;display:inline-block;direction:ltr}
 
 /* ===== 50-bot.css ===== */
 /* ===== 50-bot: personality tag on the countdown, sleeping bot, trickster emote ===== */
@@ -1147,6 +1340,116 @@ body.touch #touch{display:block}
 .social-status{font-size:18px;font-weight:700;color:#5b6a8a;margin-top:8px;min-height:22px}
 .social-link{display:block;margin:14px auto 0;background:none;border:0;cursor:pointer;font-family:inherit;font-size:20px;font-weight:800;color:var(--purple);text-decoration:underline;padding:10px 16px;min-height:44px}
 .social-link:active{opacity:.7}
+
+/* ===== 75-league.css ===== */
+/* ===== 75-league: home pill, league badges on the leaderboard, the league modal and the end-of-season prize modal ===== */
+/* league colours: 0 bronze · 1 silver · 2 gold · 3 platinum · 4 diamond · 5 champion */
+.lg-0{--lgA:#E8C9A8;--lgB:#B9793F;--lgT:#5a3310}
+.lg-1{--lgA:#F1F3F8;--lgB:#B7C0D0;--lgT:#3a4660}
+.lg-2{--lgA:#FFE8A3;--lgB:#F5B400;--lgT:#6b4300}
+.lg-3{--lgA:#DDF6FF;--lgB:#6FCBE8;--lgT:#0d4a66}
+.lg-4{--lgA:#E6E0FF;--lgB:#9B7BFF;--lgT:#3b1f8f}
+.lg-5{--lgA:#FFD9D9;--lgB:#FF5C5C;--lgT:#7a0e0e}
+/* the home pill: above the trophy pill in the bottom-left column (home v2), or beside the core trophy pill without it */
+.pill.league{background:linear-gradient(var(--lgA,#F1F3F8),var(--lgB,#B7C0D0));color:var(--lgT,var(--navy));font-size:16px;padding:5px 10px;box-sizing:border-box;justify-content:center;white-space:nowrap;overflow:hidden;min-height:34px}
+#home-trophy .pill.league{width:190px}
+/* league badge chip on the leaderboard rows and in the modal */
+.lg-badge{display:inline-flex;align-items:center;gap:4px;font-size:16px;font-weight:900;border-radius:12px;padding:2px 10px;white-space:nowrap;background:var(--lgA,#eef2fb);color:var(--lgT,#44527a);flex:none}
+.frow.top.lg .fstat{min-width:64px;text-align:center}
+.frow.top .btn.small.lg-watch{font-size:18px;padding:8px 14px;min-height:44px;flex:none}
+/* the league modal */
+.lg-panel{min-width:620px;max-width:760px;padding:12px 30px 14px}
+.lg-panel h2{margin-bottom:4px}
+.lg-hero{display:flex;align-items:center;justify-content:center;gap:16px;margin:2px 0 6px}
+.lg-icon{font-size:56px;line-height:1;width:84px;height:84px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:linear-gradient(var(--lgA,#F1F3F8),var(--lgB,#B7C0D0));box-shadow:0 6px 0 rgba(27,42,78,.2);flex:none}
+.lg-hero-txt{text-align:start}
+.lg-name{font-size:26px;font-weight:900;color:var(--navy)}
+.lg-trline{font-size:20px;font-weight:900;color:#5b6a8a}
+.lg-bar{height:16px;border-radius:9px;background:#e4e8f3;overflow:hidden;direction:ltr;margin:4px 30px}
+.lg-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--lgA,#FFE8A3),var(--lgB,#F5B400));border-radius:9px;transition:width .5s}
+.lg-next{font-size:19px;font-weight:900;color:var(--navy)}
+.lg-days{font-size:17px;font-weight:800;color:#c2521f;margin-top:2px}
+.lg-how{font-size:15px;font-weight:700;color:#5b6a8a;margin-top:2px}
+.lg-prizes-h{font-size:19px;font-weight:900;color:var(--navy);margin-top:6px}
+.lg-table{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.lg-row{display:flex;align-items:center;gap:10px;background:#f3f5fb;border-radius:12px;padding:3px 10px;font-size:16px;font-weight:900;color:#44527a}
+.lg-row.cur{background:var(--lgA,#FFF0B3);outline:3px solid var(--lgB,#F5B400)}
+.lg-cell.lg-who{width:150px;text-align:start;flex:none}
+.lg-cell.lg-min{width:70px;flex:none}
+.lg-cell.lg-gift{flex:1;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start}
+.lg-prize{background:#fff;border-radius:10px;padding:1px 9px;white-space:nowrap}
+.lg-btns{margin-top:8px;display:flex;gap:10px;justify-content:center}
+.lg-btns .btn{min-height:44px}
+/* the end-of-season prize modal */
+.lgp-panel{min-width:560px;max-width:720px}
+.lgp-icon{font-size:72px;line-height:1;width:110px;height:110px;margin:4px auto;display:flex;align-items:center;justify-content:center;border-radius:50%;background:linear-gradient(var(--lgA,#FFE8A3),var(--lgB,#F5B400));box-shadow:0 8px 0 rgba(27,42,78,.2);animation:lgPop .6s ease-out}
+@keyframes lgPop{0%{transform:scale(.4)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.lgp-sub{font-size:26px;font-weight:900;color:var(--navy);margin:4px 0 8px}
+.lgp-list{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.lgp-list .lg-prize{font-size:24px;font-weight:900;color:var(--navy);background:#FFF0B3;border-radius:14px;padding:6px 16px;box-shadow:0 4px 0 rgba(27,42,78,.15)}
+.lgp-new{font-size:16px;font-weight:800;color:#5b6a8a;margin-top:10px}
+/* the end card line */
+.lg-ec{color:#6a2fd6}
+
+/* ===== 78-clubs.css ===== */
+/* ===== clubs: the club modal (inside #stage), the home pill, the "more" sheet button ===== */
+.club-panel{width:920px;max-width:940px;max-height:596px;padding:14px 26px 16px;display:flex;flex-direction:column;gap:8px;overflow:hidden;text-align:center}
+.club-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.club-head h2{margin:0;font-size:34px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.club-head .btn.small{font-size:18px;padding:0 18px;min-height:44px}
+#club-body{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-height:0}
+.club-hero{font-size:84px;line-height:1.1;filter:drop-shadow(0 6px 0 rgba(0,0,0,.15))}
+.club-panel .hint.club-intro{font-size:22px;line-height:1.4}
+.club-sub{font-size:18px;font-weight:900;color:#5b6a8a;text-align:start}
+/* create: preset names + emoji chips (no typing) */
+.club-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.club-chip,.club-emo{border:0;cursor:pointer;font-family:inherit;font-weight:900;color:var(--navy);background:#EEF2FA;border-radius:14px;min-height:44px;font-size:18px;padding:0 6px;box-shadow:0 4px 0 rgba(27,42,78,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.club-chip:active,.club-emo:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(27,42,78,.18)}
+.club-chip.on,.club-emo.on{background:#FFF0B3;outline:5px solid var(--yellow)}
+.club-emos{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.club-emo{font-size:30px;width:60px;min-height:48px;padding:0}
+.club-prev{font-size:36px;font-weight:900;color:var(--navy);line-height:1.2}
+/* join: the 6 boxes mirror the single input underneath (the only typed field in the feature) */
+.club-boxes{display:flex;gap:10px;justify-content:center;direction:ltr;cursor:text}
+.club-boxes span{width:58px;height:70px;border-radius:16px;background:#FFF6D1;border:4px dashed var(--yellow);font-size:40px;font-weight:900;color:var(--navy);display:flex;align-items:center;justify-content:center}
+.club-boxes span.has{border-style:solid;background:#fff}
+.club-boxes span.on{border-color:var(--blue);background:#E3F0FF}
+#club-code-input{font-family:inherit;font-weight:900;font-size:30px;text-align:center;letter-spacing:6px;direction:ltr;text-transform:uppercase;padding:6px 12px;border-radius:14px;border:4px solid var(--purple);width:320px;max-width:92%;margin:0 auto;outline:none;color:var(--navy)}
+#club-code-input:focus{border-color:var(--blue)}
+/* the club */
+.club-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.club-code{border:0;cursor:pointer;font-family:inherit;font-weight:900;font-size:24px;color:var(--navy);background:#FFF6D1;border:4px dashed var(--yellow);border-radius:16px;padding:4px 16px;min-height:44px;white-space:nowrap}
+.club-code:active{opacity:.8}
+.club-days{font-size:20px;font-weight:900;color:var(--navy);white-space:nowrap}
+.club-refresh{font-size:20px;padding:0 14px;min-height:44px;min-width:44px}
+.club-progress{display:flex;flex-direction:column;gap:4px}
+.club-bar{height:28px;border-radius:15px;background:rgba(27,42,78,.15);overflow:hidden;box-shadow:inset 0 3px 0 rgba(0,0,0,.08)}
+.club-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3FC35F,#FFD447);border-radius:15px;transition:width .5s}
+.club-bar.done i{background:linear-gradient(90deg,#FFD447,#FF7A3D)}
+.club-ptext{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2}
+.club-prize{font-size:16px;font-weight:900;color:#5b6a8a;line-height:1.3;white-space:normal}
+.club-status{font-size:18px;font-weight:900;color:#fff;background:var(--red);border-radius:12px;padding:4px 14px;display:inline-block;margin:0 auto}
+.club-members{max-height:168px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;background:rgba(27,42,78,.06);border-radius:16px;padding:6px 10px;text-align:start}
+.club-row{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:900;color:var(--navy);padding:3px 10px;border-radius:10px;min-height:32px}
+.club-row.me{background:#FFF0B3}
+.club-row .club-nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.club-row .club-nm small{font-size:13px;color:#5b6a8a}
+.club-row .club-lv{font-size:14px;color:#5b6a8a;white-space:nowrap}
+.club-row .club-st{white-space:nowrap;direction:ltr}
+.club-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.club-btns .btn{font-size:21px;min-height:48px;padding:8px 20px}
+.club-btns .btn.small{font-size:18px;padding:0 16px}
+#club-modal .btn.off{background:#B7BECD;color:#F2F4F8;text-shadow:none;box-shadow:0 8px 0 #8A93A8,0 14px 20px rgba(0,0,0,.15)}
+#club-modal .btn.off:active{transform:none}
+#club-modal .btn.pulse{animation:clubPulse .9s ease-in-out infinite alternate}
+@keyframes clubPulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+/* the home pill (a third small pill in #home-trophy, above the trophy pill; .free = no trophy column, stands on its own in the free right-side area).
+   #home-club.pill.club outranks 90-home's "#home-trophy .pill" (which is later in the cascade) */
+#home-club.pill.club{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;border:0;cursor:pointer;font-size:16px;font-weight:900;color:var(--navy);background:linear-gradient(#D6F0FF,#8ED3FF);border-radius:18px;padding:5px 10px;width:190px;box-sizing:border-box;min-height:36px;white-space:nowrap;overflow:hidden;box-shadow:0 5px 0 rgba(27,42,78,.3),0 8px 14px rgba(0,0,0,.15)}
+#home-club.pill.club:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,78,.3)}
+#home-club.pill.club.done{background:linear-gradient(#FFE8B0,#F5B400)}
+#home-club.pill.club.free{position:absolute;left:760px;top:452px;z-index:3}
+#btn-club{white-space:nowrap}
 
 /* ===== 80-adminstats.css ===== */
 /* ===== 80-adminstats: the admin "📈 מדדים" section, red flags, reduced motion ===== */
@@ -1263,7 +1566,9 @@ body.touch #touch{display:block}
 #home-trophy .pill.trophy .road i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#FFD447);border-radius:6px;transition:width .4s}
 #home-trophy .pill.trophy .next{font-size:13px;text-align:center;white-space:nowrap;opacity:.9}
 #home.v2.inparty #party .party-bar{left:30px;bottom:130px}
-#home-trophy{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+#home-trophy{display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;width:190px;align-items:stretch}
+#home-trophy #home-league,#home-trophy #home-club{width:92px;flex:0 0 92px;font-size:15px;padding:5px 6px;justify-content:center;white-space:nowrap;overflow:hidden;box-sizing:border-box;min-height:36px}   /* the league and club pills share one row so the column stays short */
+#home-trophy #home-arena,#home-trophy .pill.trophy,#home-trophy .pill.wstreak{width:190px;box-sizing:border-box}
 #home-trophy .pill.wstreak{background:linear-gradient(#FFE1D6,#FF9A6A);font-size:16px;padding:5px 10px;width:190px;box-sizing:border-box;justify-content:center;white-space:nowrap;overflow:hidden;min-height:0}
 #home-centre{gap:5px}
 #home-centre .who .btn.wide{width:260px;font-size:19px;padding:0 18px;min-height:44px;justify-content:center;box-sizing:border-box}
@@ -1874,6 +2179,28 @@ body:not(.touch) #ctrl-labels .cl-kick,body:not(.touch) #ctrl-labels .cl-jump,bo
   </div>
   <canvas id="chests-confetti" width="1000" height="620" hidden></canvas>
 
+<!-- ===== 25-arenas.html ===== -->
+  <!-- ===== ARENAS: the six arenas (by trophies) and the new-arena celebration ===== -->
+  <div class="overlay" id="arena-modal">
+    <div class="panel arn-panel">
+      <h2 id="arena-title">🏟️ הארנות</h2>
+      <div id="arena-sub"></div>
+      <div id="arena-list"></div>
+      <button class="btn small blue" id="btn-arena-close">סגור</button>
+    </div>
+  </div>
+  <div class="overlay" id="arena-new-modal">
+    <div class="panel arn-new-panel">
+      <div class="arn-new-emo" id="arena-new-emoji">🏟️</div>
+      <h2 id="arena-new-title">🏟️ ארנה חדשה!</h2>
+      <div id="arena-new-name"></div>
+      <div id="arena-new-sw"></div>
+      <div id="arena-new-gift"></div>
+      <div id="arena-new-char" hidden></div>
+      <button class="btn green big" id="btn-arena-new-ok">יש! 🎉</button>
+    </div>
+  </div>
+
 <!-- ===== 30-daily.html ===== -->
 <!-- ===== DAILY LOOP: the one-tap pickup, the 28-day calendar, today's missions, the streak celebration, save-the-streak ===== -->
 <div class="overlay" id="daily-pickup-modal">
@@ -1921,6 +2248,21 @@ body:not(.touch) #ctrl-labels .cl-kick,body:not(.touch) #ctrl-labels .cl-jump,bo
   </div>
 </div>
 
+<!-- ===== 35-squad.html ===== -->
+  <!-- ===== SQUAD: three players; after each of my goals (offline 1v1) the next one comes on ===== -->
+  <div class="overlay" id="squad-modal">
+    <div class="panel sq-panel">
+      <h2 id="sq-title">👥 הנבחרת שלי</h2>
+      <div class="sq-hint" id="sq-hint">אחרי כל גול שלך השחקן הבא נכנס למגרש!</div>
+      <div class="sq-slots" id="sq-slots"></div>
+      <div id="sq-pick" hidden>
+        <div class="sq-pick-title" id="sq-pick-title"></div>
+        <div class="sq-grid" id="sq-grid"></div>
+      </div>
+      <div class="sq-btns"><button class="btn small blue" id="btn-sq-back" hidden>➜ חזרה</button><button class="btn small" id="btn-sq-close">סגור</button></div>
+    </div>
+  </div>
+
 <!-- ===== 50-bot.html ===== -->
 <!-- 50-bot: the opponent's personality, shown over the countdown number for the 3 seconds before kick-off -->
 <div id="bot-tag" hidden><span id="bot-tag-ico">🧱</span> <span id="bot-tag-name"></span><small id="bot-tag-desc"></small></div>
@@ -1966,6 +2308,41 @@ body:not(.touch) #ctrl-labels .cl-kick,body:not(.touch) #ctrl-labels .cl-jump,bo
       <div class="hint" id="social-code-hint">עם הקוד הזה ההתקדמות חוזרת בכל מכשיר. שמרו אותו — רק לכם!</div>
       <div class="social-status" id="social-code-status"></div>
       <div class="social-btns"><button class="btn yellow" id="btn-social-copy">📋 העתק</button> <button class="btn small blue" id="btn-social-code-close">חזרה</button></div>
+    </div>
+  </div>
+
+<!-- ===== 75-league.html ===== -->
+<!-- ===== 75-league: the monthly league modal (from the home pill) and the end-of-season prize modal ===== -->
+<div class="overlay" id="league-modal">
+  <div class="panel lg-panel">
+    <h2 id="lg-title">🏅 הליגה החודשית</h2>
+    <div class="lg-hero"><span class="lg-icon lg-0" id="lg-icon">🥉</span><div class="lg-hero-txt"><div class="lg-name" id="lg-name"></div><div class="lg-trline" id="lg-tr"></div></div></div>
+    <div class="lg-bar lg-0" id="lg-bar"><i></i></div>
+    <div class="lg-next" id="lg-next"></div>
+    <div class="lg-days" id="lg-days"></div>
+    <div class="lg-how" id="lg-how"></div>
+    <div class="lg-prizes-h" id="lg-prizes-h">🎁 פרסים בסוף החודש</div>
+    <div class="lg-table" id="lg-table"></div>
+    <div class="lg-btns"><button class="btn purple small" id="btn-lg-board">🏅 הטבלה</button> <button class="btn small blue" id="btn-lg-close">סגור</button></div>
+  </div>
+</div>
+<div class="overlay" id="league-prize-modal">
+  <div class="panel lgp-panel">
+    <h2 id="lgp-title">🏆 העונה הסתיימה!</h2>
+    <div class="lgp-icon lg-1" id="lgp-icon">🥈</div>
+    <div class="lgp-sub" id="lgp-sub"></div>
+    <div class="lgp-list" id="lgp-list"></div>
+    <button class="btn green big" id="btn-lg-take">קבל! 🎉</button>
+    <div class="lgp-new" id="lgp-new"></div>
+  </div>
+</div>
+
+<!-- ===== 78-clubs.html ===== -->
+  <!-- ===== CLUBS: a shared weekly goal with friends — no chat, no typed names (the join code is the only typed input) ===== -->
+  <div class="overlay" id="club-modal">
+    <div class="panel club-panel">
+      <div class="club-head"><h2 id="club-title">🏟️ מועדון</h2><button class="btn blue small" id="btn-club-close">חזרה</button></div>
+      <div id="club-body"></div>
     </div>
   </div>
 
@@ -2032,7 +2409,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-10-10.2';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-10-10.3';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -2554,7 +2931,7 @@ const CHAR_ST={
   gerrard:[1,1.15,1.15,1], aguero:[1.06,1.1,1,.95], vandijk:[.9,.95,1.2,1.2], baggio:[1,1.06,1,1], mane:[1.15,1,1,1], musiala:[1.12,.9,1,1], saka:[1.1,1,1,1], foden:[1.05,1,1,1], khalaili:[1.15,1.02,1,1.02], zahavi:[1,1.2,1,1.05], benayoun:[1.08,1.05,1,1], revivo:[1.02,1.15,1,1], berkovic:[1.05,1.08,.95,.95], solomon:[1.18,1,1,1], gloukh:[1.1,1.08,1,1], dabbur:[1.02,1.1,1,1.12], spiegler:[1,1.12,1,1.08], goldstar:[1.2,1.2,1.1,1.15], streetking:[1.15,1.25,1.2,1.05], brunof:[1,1.15,1,1], rodri:[.95,1.05,1.2,1.05], pedri:[1.08,1,1,1], gavi:[1.1,.95,1.15,1], rodrygo:[1.15,1,1,1], endrick:[1.1,1.1,1,1.05], osimhen:[1.1,1.1,1,1.2], hakimi:[1.2,.95,1.1,1], kvara:[1.15,1.05,1,1], leao:[1.2,1.05,1,1], palmer:[1,1.15,1,1], wirtz:[1.1,1.08,1,1], kroos:[.95,1.2,1,1], neuer:[.95,1,1.15,1.25], buffon:[.9,1,1.2,1.25], maldini:[1,1,1.3,1.1], robertocarlos:[1.15,1.3,1.05,1], figo:[1.08,1.1,1,1], batistuta:[1,1.3,1,1.1], totti:[1,1.2,1,1], pirlo:[.95,1.25,1,1], vanbasten:[1.05,1.25,1,1.15], eusebio:[1.2,1.2,1,1], eto:[1.18,1.12,1,1.05], weah:[1.18,1.1,1,1.1], platini:[1,1.2,1,1], beckenbauer:[1.05,1.1,1.3,1.1], garrincha:[1.25,1.05,1,1] };
 const STAT_KEYS=['speed','power','slide','jump'];
 const charStats = c => { const a=(c&&CHAR_ST[c.id])||[1,1,1,1]; return {speed:a[0],power:a[1],slide:a[2],jump:a[3]}; };
-const st = p => { const s=charStats(p.ch); return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers
+const st = p => { const s=charStats(p.ch); const b=(p===P1 && !mp && typeof charBoost==='function') ? charBoost(p.ch) : 1; if(b!==1){ s.speed*=b; s.power*=b; } return (p===P1 && superOn()) ? {speed:s.speed*1.35, power:s.power*1.35, slide:s.slide*1.2, jump:s.jump*1.15} : s; };   // admin super powers · player levels (37-levels.js): +2.5% speed/power per level, offline only
 const DEF_PROG={xp:0,coins:0,gems:0,keys:0,xpTotal:0,lvClaimed:0,unlocked:[],ach:{},streak:0,daily:null,friends:{},goals:0,wins:0,ice:false,trophies:0,road:[]};
 const prog=(()=>{ try{ const p=JSON.parse(localStorage.getItem(PROG_KEY)); if(p&&typeof p==='object') return Object.assign({},DEF_PROG,p); }catch(e){} return Object.assign({},DEF_PROG); })();
 function saveProg(){ try{ localStorage.setItem(PROG_KEY, JSON.stringify(prog)); }catch(e){} }
@@ -6214,10 +6591,11 @@ const cosOwned = id => !!(prog.cos && (prog.cos.items||[]).includes(id));
    the 80 characters with rarity frames, the locker (equip what you own), the gem tab, the powers tab,
    and the cosmetics rendering hooks the core already checks for (skinFor / ballSkin) + stadium themes.
    Ownership: prog.cos={items:[ids]}   Equipped: prog.eq={kit,boots,ball,stadium,celeb,title,titlePack,color,number}
-   Shop state: prog.shop={bought:{dayKey[r]:slot → id}, reroll:dayKey, seen:dayKey, seenWeek:n}
+   Shop state: prog.shop={bought:{dayKey[r]:slot → id, dayKey:free → 'free_<type>'}, reroll:dayKey, seen:dayKey, seenWeek:n}
+   The free gift of the day (first card of the today tab) rotates by the day index: coins → key → gem → bronze chest.
    =================================================================================================== */
 Object.assign(ECON, { shop:{ launch:'2026-10-12', charOff:.3, rerollGems:5, silverDeal:450, silverPrice:500, goldDealGems:20, goldGems:25,
-  colors:{gold:40, neon:60, rainbow:80}, numberPrice:500, gemCycle:10 } });
+  colors:{gold:40, neon:60, rainbow:80}, numberPrice:500, gemCycle:10, free:{coins:40, keys:1, gems:1, chest:'bronze', chestCoins:60}, urgentMs:36e5 } });
 
 /* items sold by the shop that are not in the catalogue (name colours, the shirt number) — same shape as COSMETICS */
 const SHOP_EXTRA=[
@@ -6278,8 +6656,32 @@ function shopRotation(){
   return slots;
 }
 function shopMarkSold(key, id){ const s=shopProg(); s.bought[key]=id||true; const today=dayKey(); for(const k of Object.keys(s.bought)) if(!k.startsWith(today)) delete s.bought[k]; saveProg(); }
-function shopTimeLeft(){ const d=new Date(now()); const next=new Date(d.getFullYear(), d.getMonth(), d.getDate()+1).getTime(); const ms=Math.max(0, next-now()); return Math.floor(ms/36e5)+':'+pad2(Math.floor(ms%36e5/6e4)); }
-function shopHasNew(){ const s=prog.shop||{}; if(s.seen!==dayKey()) return true; const drop=COSMETICS.some(c=>shopIsNew(c) && !shopOwned(c.id)); return drop && s.seenWeek!==shopWeek(); }
+/* ----- the countdown to the next rotation (local midnight on the server clock) ----- */
+function shopTimeLeftMs(){ const d=new Date(now()); const next=new Date(d.getFullYear(), d.getMonth(), d.getDate()+1).getTime(); return Math.max(0, next-now()); }
+function shopTimeLeft(){ const ms=shopTimeLeftMs(); return Math.floor(ms/36e5)+':'+pad2(Math.floor(ms%36e5/6e4)); }                                   // "H:MM"
+function shopTimeLeftFull(){ const ms=shopTimeLeftMs(); return Math.floor(ms/36e5)+':'+pad2(Math.floor(ms%36e5/6e4))+':'+pad2(Math.floor(ms%6e4/1e3)); }   // "H:MM:SS"
+
+/* ===== the free gift of the day: one per day, the same for everyone, not touched by a reroll ===== */
+const SHOP_FREE_CYCLE=['coins','keys','gems','chest'];
+function shopFreeKey(){ return dayKey()+':free'; }
+function shopFreeGift(){
+  const F=ECON.shop.free, n=SHOP_FREE_CYCLE.length, d=shopDayIndex(); let t=SHOP_FREE_CYCLE[((d%n)+n)%n];
+  if(t==='chest' && typeof giveChest!=='function') return {t:'coins', n:F.chestCoins, icon:'🪙', key:shopFreeKey()};   // no chests module in this build
+  if(t==='keys' && (prog.keys|0)>=ECON.keyCap) t='coins';                                                              // a full key ring would swallow the gift
+  const g = t==='coins' ? {t, n:F.coins, icon:'🪙'} : t==='keys' ? {t, n:F.keys, icon:'🔑'} : t==='gems' ? {t, n:F.gems, icon:'💎'} : {t, kind:F.chest, icon:'🎁'};
+  g.key=shopFreeKey(); return g;
+}
+function shopFreeClaimed(){ const b=prog.shop && prog.shop.bought; return !!(b && b[shopFreeKey()]); }
+function shopFreeName(g){ return g.t==='chest' ? (typeof chestName==='function' ? chestName(g.kind) : T('shop.gift.chest')) : T('shop.gift.'+g.t, g.n); }
+function shopClaimFree(){
+  if(shopFreeClaimed()){ toast(T('shop.freeAlready'),'warn'); return false; }
+  const g=shopFreeGift();
+  shopMarkSold(g.key, 'free_'+g.t);                        // marked before the grant: whatever a reward toast does, the gift can never be handed out twice
+  if(g.t==='coins') addCoins(g.n,'shopFree'); else if(g.t==='keys') addKeys(g.n,'shopFree'); else if(g.t==='gems') addGems(g.n,'shopFree'); else giveChest(g.kind);
+  sfx.win(); try{ confetti.burst(80); }catch(e){}
+  Hooks.emit('shopFree', g); shopRefresh(); if($('#home').classList.contains('active')) refreshHome(); return true;
+}
+function shopHasNew(){ if(!shopFreeClaimed()) return true; const s=prog.shop||{}; if(s.seen!==dayKey()) return true; const drop=COSMETICS.some(c=>shopIsNew(c) && !shopOwned(c.id)); return drop && s.seenWeek!==shopWeek(); }
 
 /* ===== ownership and equipping (public API) ===== */
 function giveCosmetic(id){
@@ -6425,11 +6827,12 @@ let shopTab='today', shopTimer=0, shopFilter='all', shopPick=-1, shopBuiltDay=''
 function openShop(tab){
   const s=shopProg(); s.seen=dayKey(); s.seenWeek=shopWeek(); saveProg();
   shopTab = ['today','players','looks','gems','powers'].includes(tab) ? tab : 'today';
-  shopWallet(); shopBuildTab(); showScreen('shop');
-  clearInterval(shopTimer); shopTimer=setInterval(shopTick, 30000);
+  showScreen('shop'); shopWallet(); shopBuildTab();                 // the screen first: fitText needs real widths
+  clearInterval(shopTimer); shopTimer=setInterval(shopTick, 1000);  // 1 s: the countdown shows seconds; stopped as soon as the shop closes
 }
 function shopStopTimer(){ clearInterval(shopTimer); shopTimer=0; }
-function shopTick(){ if(!$('#shop').classList.contains('active')) return shopStopTimer(); if(shopTab==='today' && shopBuiltDay!==dayKey()) return shopBuildTab(); const t=$('#shop-timer'); if(t) t.textContent=T('shop.renew', shopTimeLeft()); }
+function shopTick(){ if(!$('#shop').classList.contains('active')) return shopStopTimer(); if(shopTab==='today' && shopBuiltDay!==dayKey()) return shopBuildTab(); shopTimerDraw(); }
+function shopTimerDraw(){ const t=$('#shop-timer'); if(!t) return; t.textContent=T('shop.renewFull', shopTimeLeftFull()); t.classList.toggle('urgent', shopTimeLeftMs()<ECON.shop.urgentMs); }
 function shopWallet(){ const c=$('#shop-coins'), g=$('#shop-gems'); if(c) c.textContent='🪙 '+fmtNum(prog.coins|0); if(g) g.textContent='💎 '+fmtNum(prog.gems|0); }
 function shopRefresh(){ shopWallet(); if($('#shop').classList.contains('active')) shopBuildTab(); }
 function shopBuildTab(){
@@ -6444,17 +6847,32 @@ const shopBtn=(cls, txt, fn, extra)=>{ const b=document.createElement('button');
 function shopBuildToday(body){
   shopBuiltDay=dayKey();
   const wrap=document.createElement('div'); wrap.className='shop-today';
+  // the countdown pill (ticks every second while the shop is open) + the reroll button
+  const top=document.createElement('div'); top.className='shop-today-top';
+  const tm=document.createElement('span'); tm.id='shop-timer'; top.appendChild(tm);
+  const done=shopProg().reroll===dayKey();
+  const rb=shopBtn('purple'+(done?' done':''), done ? T('shop.rerolled') : T('shop.reroll', ECON.shop.rerollGems), shopReroll); rb.id='shop-reroll'; top.appendChild(rb);
+  wrap.appendChild(top);
   const row=document.createElement('div'); row.className='shop-slots';
+  const tonly=`<div class="shop-tonly">${T('shop.todayOnly')}</div>`;
+  // 1) the free gift of the day — the first card, once a day
+  { const g=shopFreeGift(), taken=shopFreeClaimed();
+    const d=document.createElement('div'); d.className='shop-slot free'+(taken?' sold':''); d.dataset.slot='free'; d.dataset.gift=g.t;
+    d.innerHTML=`<div class="tag">${T('shop.slot.free')}</div>${tonly}<div class="vis"><span class="emo big">${g.icon}</span></div><div class="nm">${esc(shopFreeName(g))}</div><div class="pr">${taken ? T('shop.freeTomorrow') : `<span class="shop-free-badge">${T('shop.free')}</span>`}</div>`;
+    const bb=document.createElement('div'); bb.className='btns'; if(!taken) bb.appendChild(shopBtn('green', T('shop.take'), shopClaimFree, {buy:'free'})); d.appendChild(bb);
+    if(taken) d.insertAdjacentHTML('beforeend', `<div class="shop-sold"><span>${T('shop.freeTaken')}</span></div>`);
+    row.appendChild(d); }
+  // 2) the five deals of the rotation
   const slots=shopRotation();
   slots.forEach((sl,i)=>{
     const d=document.createElement('div'); d.className='shop-slot'; d.dataset.slot=sl.slot; d.dataset.i=i;
-    let vis='', name='', price='', rar='', badges='', btns=[];
+    let vis='', name='', price='', rar='', badges='', btns=[], off=0;
     if(sl.slot==='char'){
       const c=sl.char;
       if(!c){ vis='<span class="emo">🏆</span>'; name=T('shop.allOwned'); }
       else {
         rar='rar-'+charRarity(c); vis=`<div class="sprite">${playerSVG(c,'happy',null)}</div>`; name=esc(nm(c));
-        badges=`<span class="shop-badge-off">−${Math.round(ECON.shop.charOff*100)}%</span>`;
+        off=Math.round(ECON.shop.charOff*100);
         price=`<s>🪙 ${fmtNum(sl.full)}</s>`;
         if(!sl.sold && !isUnlocked(c)){ btns.push(shopBtn('yellow', '🪙 '+fmtNum(sl.coins), ()=>shopBuyChar(c,false,sl.key), {buy:'coins'})); btns.push(shopBtn('blue', '💎 '+sl.gems, ()=>shopBuyChar(c,true,sl.key), {buy:'gems'})); }
       }
@@ -6471,20 +6889,19 @@ function shopBuildToday(body){
       const gold=sl.chest==='gold'; rar=gold?'rar-legendary':'rar-rare';
       vis=`<span class="emo">${gold?'🏆':'🎁'}</span>`; name=T(gold?'shop.chestGold':'shop.chestSilver');
       price=`<s>${gold ? '💎 '+sl.fullGems : '🪙 '+fmtNum(sl.full)}</s>`;
+      off = gold ? (sl.fullGems ? Math.round((1-sl.gems/sl.fullGems)*100) : 0) : (sl.full ? Math.round((1-sl.coins/sl.full)*100) : 0);
       if(!sl.sold) btns.push(shopBtn(gold?'blue':'yellow', (gold ? '💎 '+sl.gems : '🪙 '+fmtNum(sl.coins)), ()=>shopBuyChest(sl.chest, sl.coins|0, sl.gems|0, sl.key), {buy:'chest_'+sl.chest}));
     }
+    if(off>0){ d.classList.add('deal'); badges+=`<span class="shop-badge-off">−${off}%</span>`; }   // deal of the day: glowing frame + ribbon
     if(rar) d.classList.add(rar); if(sl.sold) d.classList.add('sold');
-    d.innerHTML=`${badges}<div class="tag">${T('shop.slot.'+sl.slot)}</div><div class="vis">${vis}</div><div class="nm">${name}</div><div class="pr">${price}</div>`;
+    d.innerHTML=`${badges}<div class="tag">${T('shop.slot.'+sl.slot)}</div>${tonly}<div class="vis">${vis}</div><div class="nm">${name}</div><div class="pr">${price}</div>`;
     const bb=document.createElement('div'); bb.className='btns'; btns.forEach(b=>bb.appendChild(b)); d.appendChild(bb);
     if(sl.sold) d.insertAdjacentHTML('beforeend', `<div class="shop-sold"><span>${T('shop.sold')}</span></div>`);
     row.appendChild(d);
   });
-  wrap.appendChild(row);
-  const bar=document.createElement('div'); bar.className='shop-today-bar';
-  const tm=document.createElement('span'); tm.id='shop-timer'; tm.textContent=T('shop.renew', shopTimeLeft()); bar.appendChild(tm);
-  const done=shopProg().reroll===dayKey();
-  const rb=shopBtn('purple'+(done?' done':''), done ? T('shop.rerolled') : T('shop.reroll', ECON.shop.rerollGems), shopReroll); rb.id='shop-reroll'; bar.appendChild(rb);
-  wrap.appendChild(bar); body.appendChild(wrap);
+  wrap.appendChild(row); body.appendChild(wrap);
+  shopTimerDraw();
+  wrap.querySelectorAll('#shop-timer,.shop-slot .tag,.shop-slot .pr,.shop-slot .btn').forEach(el=>fitText(el));   // long prices stay inside the narrow cards
 }
 
 /* --- players --- */
@@ -6595,9 +7012,11 @@ function shopBuildPowers(body){
 $('#shop-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); refreshHome(); });
 document.querySelectorAll('#shop-tabs .shop-tab').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); shopTab=b.dataset.tab; shopBuildTab(); }));
 Hooks.on('wallet', ()=>{ if($('#shop').classList.contains('active')) shopWallet(); });
-Hooks.on('home', ()=>{ const b=$('#btn-shop'); if(b){ let d=b.querySelector('.shop-dot'); if(shopHasNew()){ if(!d){ d=document.createElement('span'); d.className='shop-dot'; if(!b.style.position) b.style.position='relative'; b.appendChild(d); } } else if(d) d.remove(); } });
+/* the red dot on the home shop button: home v2 draws its own `.dot` from shopHasNew(); the fallback below is for the old home only */
+Hooks.on('home', ()=>{ const b=$('#btn-shop'); if(!b) return; let d=b.querySelector('.shop-dot'); if(shopHasNew() && typeof refreshHomeV2!=='function'){ if(!d){ d=document.createElement('span'); d.className='shop-dot'; if(!b.style.position) b.style.position='relative'; b.appendChild(d); } } else if(d) d.remove(); });
 /* the wallet pills on the home screen open the shop (coins → players, gems → the gem tab) */
 for(const [id,tab] of [['#xp-badge','players'],['#gem-badge','gems']]){ const el=$(id); if(el && !el.dataset.shopWired){ el.dataset.shopWired='1'; el.addEventListener('click', ()=>{ sfx.click(); openShop(tab); }); } }
+NextUp.add(()=> shopFreeClaimed() ? null : {prio:40, icon:'🎁', text:T('shop.nextFree'), action:()=>openShop('today')});
 NextUp.add(()=>{ const sl=shopRotation()[0]; const c=sl.char; if(!c || sl.sold || isUnlocked(c)) return null; if((prog.coins|0)<sl.coins && (prog.gems|0)<sl.gems) return null; return {prio:20, icon:'🛒', text:T('shop.nextUp', nm(c)), action:()=>openShop('today')}; });
 const _shopApplyLang=applyLang; applyLang=function(){ _shopApplyLang(); if($('#shop').classList.contains('active')) shopBuildTab(); };
 
@@ -6605,7 +7024,15 @@ I18N_ADD({
  'shop.title':['🛒 החנות','🛒 Shop','🛒 المتجر','🛒 Магазин'],
  'shop.tab.today':['היום','Today','اليوم','Сегодня'], 'shop.tab.players':['שחקנים','Players','اللاعبون','Игроки'], 'shop.tab.looks':['מראה','Looks','المظهر','Образ'],
  'shop.tab.gems':['יהלומים','Gems','جواهر','Алмазы'], 'shop.tab.powers':['כוחות','Powers','القوى','Силы'],
- 'shop.renew':['⏳ מתחדש בעוד {0}','⏳ Refreshes in {0}','⏳ يتجدد خلال {0}','⏳ Обновится через {0}'],
+ 'shop.renewFull':['⏳ ההצעות מתחלפות בעוד {0}','⏳ Offers change in {0}','⏳ تتغير العروض خلال {0}','⏳ Предложения сменятся через {0}'],
+ 'shop.todayOnly':['⏳ היום בלבד','⏳ Today only','⏳ اليوم فقط','⏳ Только сегодня'],
+ 'shop.slot.free':['🎁 מתנה חינם','🎁 Free gift','🎁 هدية مجانية','🎁 Подарок'],
+ 'shop.free':['חינם! 🎁','FREE! 🎁','مجانًا! 🎁','Бесплатно! 🎁'], 'shop.take':['קח!','Take!','خذ!','Взять!'],
+ 'shop.freeTaken':['✔ נלקח','✔ Taken','✔ أُخذت','✔ Получено'], 'shop.freeTomorrow':['מחר יש עוד 🎁','More tomorrow 🎁','غدًا المزيد 🎁','Завтра будет ещё 🎁'],
+ 'shop.freeAlready':['כבר לקחת היום 🎁 מחר יש עוד','Already taken today 🎁 more tomorrow','أخذتها اليوم 🎁 غدًا المزيد','Уже взято сегодня 🎁 завтра будет ещё'],
+ 'shop.nextFree':['🎁 מתנה חינם מחכה בחנות!','🎁 A free gift is waiting in the shop!','🎁 هدية مجانية تنتظرك في المتجر!','🎁 В магазине ждёт бесплатный подарок!'],
+ 'shop.gift.coins':['{0} מטבעות','{0} coins','{0} عملة','{0} монет'], 'shop.gift.keys':['מפתח {0}','{0} key','مفتاح {0}','{0} ключ'],
+ 'shop.gift.gems':['יהלום {0}','{0} gem','جوهرة {0}','{0} алмаз'], 'shop.gift.chest':['תיבת ברונזה','Bronze chest','صندوق برونزي','Бронзовый сундук'],
  'shop.reroll':['🔁 החלף מבחר ({0} 💎)','🔁 Reroll ({0} 💎)','🔁 تغيير العرض ({0} 💎)','🔁 Обновить ({0} 💎)'],
  'shop.rerolled':['✔ הוחלף היום','✔ Rerolled today','✔ تم التغيير اليوم','✔ Уже обновлено'],
  'shop.rerollAsk':['להחליף את המבחר של היום תמורת {0} 💎?','Reroll today\'s picks for {0} 💎?','هل تغيّر عرض اليوم مقابل {0} 💎؟','Обновить сегодняшний набор за {0} 💎?'],
@@ -7015,6 +7442,456 @@ NextUp.add(()=> chestsBadge()>0 ? { prio:40, icon:'🎁', text:T('chests.nextUp'
 chestInv();
 applyLang();
 
+/* ===== 25-arenas.js ===== */
+/* ===================================================================================================
+   ARENAS — six arenas unlocked by lifetime trophies (Rumble-Stars style). Every arena has its own
+   pitch look (PITCH_THEMES.arenaN, drawn instead of the plain 'day' pitch), tints the home background
+   (#home[data-arena]) and the fans (#game[data-arena]), and holds ONE exclusive player that can be
+   bought (normal price) only once the arena is reached. Crossing into a new arena after a match shows
+   a celebration with confetti and a coin gift, once (prog.arenaSeen = highest arena celebrated).
+   Public: ARENAS, arenaIndex(t?), arenaCurrent(), arenaNextOf(), arenaOf(i), arenaName(a),
+           arenaFor(char), arenaLocked(char), arenaLockText(a), arenaSwatch(a,w,h), openArenas(),
+           arenaHomeRefresh(), arenaCheckNew(delay), arenaShowNew(), closeArenaNew()
+   Wraps: buildPitch, tryBuy, buildGallery, refreshPreview, shopBuildPlayers, shopBuyChar, shopRotation
+   prog: prog.arenaSeen   ECON: ECON.arenas={thresholds, giftPer, showDelay}
+   =================================================================================================== */
+I18N_ADD({
+ 'arena.1':['מגרש השכונה','Neighbourhood Pitch','ملعب الحي','Дворовое поле'],
+ 'arena.2':['אצטדיון העיר','City Stadium','ملعب المدينة','Городской стадион'],
+ 'arena.3':['ארנת החוף','Beach Arena','ساحة الشاطئ','Пляжная арена'],
+ 'arena.4':['אצטדיון הלילה','Night Stadium','ملعب الليل','Ночной стадион'],
+ 'arena.5':['ארנת הקרח','Ice Arena','ساحة الجليد','Ледовая арена'],
+ 'arena.6':['ארנת האלופים','Champions Arena','ساحة الأبطال','Арена чемпионов'],
+ 'arena.title':['🏟️ הארנות','🏟️ Arenas','🏟️ الساحات','🏟️ Арены'],
+ 'arena.sub':['יש לך {0} 🏆 · ארנה {1} מתוך 6','You have {0} 🏆 · arena {1} of 6','لديك {0} 🏆 · الساحة {1} من 6','У тебя {0} 🏆 · арена {1} из 6'],
+ 'arena.next':['עוד {0} 🏆 לארנה הבאה','{0} 🏆 more to the next arena','{0} 🏆 أخرى للساحة التالية','Ещё {0} 🏆 до следующей арены'],
+ 'arena.top':['הארנה האחרונה!','The top arena!','الساحة الأخيرة!','Последняя арена!'],
+ 'arena.here':['אתה כאן','You are here','أنت هنا','Ты здесь'],
+ 'arena.excl':['שחקן בלעדי','Exclusive player','لاعب حصري','Эксклюзивный игрок'],
+ 'arena.lock':['🏟️ נפתח בארנה {0} ({1} 🏆)','🏟️ Unlocks in arena {0} ({1} 🏆)','🏟️ يُفتح في الساحة {0} ({1} 🏆)','🏟️ Откроется на арене {0} ({1} 🏆)'],
+ 'arena.lockBtn':['🔒 נפתח בארנה {0} ({1} 🏆)','🔒 Unlocks in arena {0} ({1} 🏆)','🔒 يُفتح في الساحة {0} ({1} 🏆)','🔒 Откроется на арене {0} ({1} 🏆)'],
+ 'arena.lockToast':['🔒 {0} נפתח רק ב{1} — צריך {2} 🏆','🔒 {0} unlocks only in {1} — you need {2} 🏆','🔒 {0} يُفتح فقط في {1} — تحتاج {2} 🏆','🔒 {0} откроется только на {1} — нужно {2} 🏆'],
+ 'arena.newTitle':['🏟️ ארנה חדשה!','🏟️ New arena!','🏟️ ساحة جديدة!','🏟️ Новая арена!'],
+ 'arena.gift':['מתנה: 🪙 {0}','Gift: 🪙 {0}','هدية: 🪙 {0}','Подарок: 🪙 {0}'],
+ 'arena.newChar':['עכשיו אפשר לקנות את {0}!','Now you can buy {0}!','الآن يمكنك شراء {0}!','Теперь можно купить {0}!'],
+ 'arena.newPitch':['המגרש החדש שלך','Your new pitch','ملعبك الجديد','Твоё новое поле'],
+ 'arena.ok':['יש! 🎉','Yes! 🎉','رائع! 🎉','Ура! 🎉'],
+ 'arena.close':['סגור','Close','إغلاق','Закрыть'],
+});
+STATIC_ADD({'#arena-title':'arena.title', '#btn-arena-close':'arena.close', '#arena-new-title':'arena.newTitle', '#btn-arena-new-ok':'arena.ok'});
+
+Object.assign(ECON, { arenas:{ thresholds:[0,25,75,150,300,600], giftPer:100, showDelay:600 } });   // gift = giftPer × arena index
+
+/* the six arenas: threshold in lifetime trophies, emoji, pitch theme, the exclusive player (arenas 2..6) */
+const ARENAS=[
+  {i:1, t:ECON.arenas.thresholds[0], emoji:'🏘️', theme:'day',    char:null},
+  {i:2, t:ECON.arenas.thresholds[1], emoji:'🏙️', theme:'arena2', char:'yamal'},
+  {i:3, t:ECON.arenas.thresholds[2], emoji:'🏖️', theme:'arena3', char:'r9'},
+  {i:4, t:ECON.arenas.thresholds[3], emoji:'🌃', theme:'arena4', char:'ronaldinho'},
+  {i:5, t:ECON.arenas.thresholds[4], emoji:'❄️', theme:'arena5', char:'zlatan'},
+  {i:6, t:ECON.arenas.thresholds[5], emoji:'👑', theme:'arena6', char:'pele'},
+];
+/* a clearly different pitch per arena (grass / surroundings / track / boards) */
+Object.assign(PITCH_THEMES, {
+  arena2:{ base:'#36A657', stripeA:'#36A657', stripeB:'#41BA64', far:'#2B8A47', track:'#737B8C', boards:['#3D8BFF','#ffffff','#1B2A4E','#FFD447','#3D8BFF','#ffffff','#1B2A4E','#FF7A3D'] },   // city: asphalt track, blue/white boards
+  arena3:{ base:'#86CF4E', stripeA:'#86CF4E', stripeB:'#96DB60', far:'#F0D894', track:'#F7E4A8', boards:['#00C2D1','#FF8A5B','#FFE27A','#ffffff','#00C2D1','#FF8A5B','#FFE27A','#ffffff'] },   // beach: light grass, sand all around
+  arena4:{ base:'#237A44', stripeA:'#237A44', stripeB:'#2C8E52', far:'#17562F', track:'#3D2A6E', boards:['#8E5CF6','#FF4E9B','#00D3A7','#ffffff','#8E5CF6','#FF4E9B','#00D3A7','#FFD447'] },   // night: dark grass, purple track, neon boards
+  arena5:{ base:'#8FCDEB', stripeA:'#8FCDEB', stripeB:'#A4D9F2', far:'#EDF7FC', track:'#5E9FD1', boards:['#1B6FB8','#ffffff','#9ED8FF','#1B6FB8','#ffffff','#9ED8FF','#1B6FB8','#ffffff'] },   // ice: frozen pitch, snow around
+  arena6:{ base:'#2E9E4F', stripeA:'#2E9E4F', stripeB:'#3BB562', far:'#23803E', track:'#B8902A', boards:['#FFD447','#8E5CF6','#ffffff','#FFD447','#8E5CF6','#ffffff','#FFD447','#8E5CF6'] },   // champions: gold track, gold/purple boards
+});
+/* defensive: an exclusive must be a real, buyable player that the trophy road does not hand out */
+for(const a of ARENAS){
+  if(!a.char) continue;
+  const c=CHARS.find(x=>x.id===a.char);
+  if(!c || FREE_CHARS.includes(c.id) || c.trophyOnly || (typeof roadFor==='function' && roadFor(c.id)!=null)) a.char=null;
+}
+const ARENA={ pending:null, drawn:0 };          // drawn = arena index of the pitch currently drawn (0 = not an arena pitch)
+
+/* ----- arena lookups ----- */
+function arenaIndex(t){ t = t==null ? (prog.trophies|0) : t; let i=1; for(const a of ARENAS) if(t>=a.t) i=a.i; return i; }
+function arenaOf(i){ return ARENAS[Math.max(1, Math.min(ARENAS.length, i|0))-1]; }
+function arenaCurrent(){ return arenaOf(arenaIndex()); }
+function arenaNextOf(){ const i=arenaIndex(); return i<ARENAS.length ? ARENAS[i] : null; }
+function arenaName(a){ return T('arena.'+a.i); }
+function arenaFor(c){ if(!c) return null; return ARENAS.find(a=>a.char===c.id)||null; }                 // the arena a player is exclusive to
+function arenaLocked(c){ const a=arenaFor(c); if(!a || isUnlocked(c)) return null; return arenaIndex()<a.i ? a : null; }
+function arenaLockText(a){ return T('arena.lock', a.i, a.t); }
+function arenaRefuse(c, a){ sfx.lose(); toast(T('arena.lockToast', nm(c), arenaName(a), a.t),'warn'); }
+
+/* ----- the pitch: an offline 1v1 'day' match without an equipped stadium look plays in the current arena ----- */
+function arenaPitchFree(){
+  if(typeof mp!=='undefined' && mp) return false;
+  if(typeof v2!=='undefined' && v2) return false;
+  if(typeof spectating!=='undefined' && spectating) return false;
+  const id=prog.eq && prog.eq.stadium; if(id && PITCH_THEMES[id] && (typeof cosOwned!=='function' || cosOwned(id))) return false;
+  return true;
+}
+function arenaPitchWant(){ const a=arenaCurrent(); return (arenaPitchFree() && a.i>1 && PITCH_THEMES[a.theme]) ? a.i : 0; }
+const _arenaBuildPitch=buildPitch;
+buildPitch=function(themeName){
+  const want=themeName||'day'; let t=want, idx=0;
+  if(want==='day'){ idx=arenaPitchWant(); if(idx) t=arenaOf(idx).theme; }
+  _arenaBuildPitch(t);
+  pitchTheme=want;                                                            // the core compares against the name it asked for
+  ARENA.drawn=idx;
+  const g=$('#game'); if(g){ if(idx) g.setAttribute('data-arena', idx); else g.removeAttribute('data-arena'); }
+};
+function arenaPitchInvalidate(){ if(arenaPitchWant()!==ARENA.drawn) pitchTheme=''; }   // the next match redraws the pitch
+
+/* ----- buying: refused below the arena ----- */
+const _arenaTryBuy=tryBuy;
+tryBuy=async function(c){ const a=arenaLocked(c); if(a){ arenaRefuse(c, a); return false; } return _arenaTryBuy.apply(this, arguments); };
+if(typeof shopBuyChar==='function'){
+  const _arenaShopBuyChar=shopBuyChar;
+  shopBuyChar=async function(c){ const a=arenaLocked(c); if(a){ arenaRefuse(c, a); return false; } return _arenaShopBuyChar.apply(this, arguments); };
+}
+/* the character of the day is never one the kid cannot buy yet: walk the shop's own pool to the next one */
+if(typeof shopRotation==='function'){
+  const _arenaShopRotation=shopRotation;
+  shopRotation=function(){
+    const slots=_arenaShopRotation.apply(this, arguments);
+    const s=slots && slots[0]; if(!s || s.slot!=='char' || !s.char || !arenaLocked(s.char)) return slots;
+    const pool=CHARS.filter(c=>!c.trophyOnly && !FREE_CHARS.includes(c.id)), j=pool.indexOf(s.char);
+    for(let k=1;k<pool.length;k++){ const c=pool[(j+k)%pool.length]; if(!isUnlocked(c) && !arenaLocked(c)){ s.char=c; s.coins=charDealCoins(c); s.gems=charDealGems(c); s.full=priceOf(c); break; } }
+    return slots;
+  };
+}
+
+/* ----- lock labels on the rendered cards (gallery + shop players tab) ----- */
+function arenaMarkGallery(){
+  document.querySelectorAll('#gallery .card[data-i]').forEach(card=>{
+    const c=CHARS[+card.dataset.i], a=c && arenaLocked(c); if(!a) return;
+    card.classList.add('arena-locked');
+    let l=card.querySelector('.lock'); if(!l){ l=document.createElement('div'); l.className='lock'; card.appendChild(l); }
+    l.classList.add('arena-lock'); l.textContent=arenaLockText(a);
+  });
+}
+const _arenaBuildGallery=buildGallery;
+buildGallery=function(){ const r=_arenaBuildGallery.apply(this, arguments); arenaMarkGallery(); return r; };
+const _arenaRefreshPreview=refreshPreview;
+refreshPreview=function(){
+  const r=_arenaRefreshPreview.apply(this, arguments);
+  const c=CHARS[previewIdx], a=c && arenaLocked(c), b=$('#btn-choose'); if(a && b) b.textContent=T('arena.lockBtn', a.i, a.t);
+  return r;
+};
+if(typeof shopBuildPlayers==='function'){
+  const _arenaShopPlayers=shopBuildPlayers;
+  shopBuildPlayers=function(body){
+    const r=_arenaShopPlayers.apply(this, arguments);
+    document.querySelectorAll('#shop-pgrid .shop-pcard[data-i]').forEach(d=>{
+      const c=CHARS[+d.dataset.i], a=c && arenaLocked(c); if(!a) return;
+      d.classList.add('arena-locked'); const pr=d.querySelector('.pr'); if(pr){ pr.classList.add('arena-lock'); pr.textContent=arenaLockText(a); }
+    });
+    const pv=$('#shop-ppv'), c=CHARS[typeof shopPick==='number' ? shopPick : -1], a=pv && c && arenaLocked(c);
+    if(a){
+      const pr=pv.querySelector('.pr'); if(pr){ pr.classList.add('arena-lock'); pr.textContent=arenaLockText(a); }
+      const buy=pv.querySelector('.btn[data-act=buy]'); if(buy) buy.remove();
+      const go=document.createElement('button'); go.className='btn small blue'; go.dataset.act='arena'; go.textContent=T('arena.title');
+      go.addEventListener('click', e=>{ e.stopPropagation(); sfx.click(); openArenas(); }); pv.appendChild(go);
+    }
+    return r;
+  };
+}
+
+/* ----- a 60×40 swatch of an arena's pitch ----- */
+function arenaSwatch(a, w, h){
+  const th=PITCH_THEMES[a.theme]||PITCH_THEMES.day, bc=th.boards||['#fff'];
+  let s=`<svg viewBox="0 0 60 40" width="${w||60}" height="${h||40}" xmlns="http://www.w3.org/2000/svg">`;
+  s+=`<rect width="60" height="40" fill="${th.far}"/><rect y="6" width="60" height="5" fill="${th.track}"/>`;
+  for(let i=0;i<6;i++) s+=`<rect x="${i*10+.5}" y="0" width="9" height="5" rx="1" fill="${bc[i%bc.length]}"/>`;
+  for(let i=0;i<6;i++) s+=`<rect x="${i*10}" y="11" width="10" height="29" fill="${i%2?th.stripeA:th.stripeB}"/>`;
+  s+=`<rect x="4" y="14" width="52" height="23" fill="none" stroke="#fff" stroke-width="1.5" opacity=".9"/><line x1="30" y1="14" x2="30" y2="37" stroke="#fff" stroke-width="1.5" opacity=".9"/><circle cx="30" cy="25.5" r="5" fill="none" stroke="#fff" stroke-width="1.5" opacity=".9"/>`;
+  return s+'</svg>';
+}
+
+/* ----- home: background per arena + the pill above the trophy pill ----- */
+function arenaHomeRefresh(){
+  const home=$('#home'); if(!home) return;
+  const a=arenaCurrent(), nx=arenaNextOf(), t=prog.trophies|0;
+  home.setAttribute('data-arena', a.i);
+  const tp=$('#trophy-pill'); if(!tp || !tp.parentNode) return;
+  let pill=$('#home-arena');
+  if(!pill){ pill=document.createElement('button'); pill.id='home-arena'; pill.className='pill arena'; pill.addEventListener('click', ()=>{ sfx.click(); openArenas(); }); }
+  if(pill.parentNode!==tp.parentNode || pill.nextElementSibling!==tp) tp.parentNode.insertBefore(pill, tp);   // always right before the trophy pill, wherever the home module keeps it
+  pill.setAttribute('data-arena', a.i);
+  pill.innerHTML=`<span class="arn-name">🏟️ ${esc(arenaName(a))}</span><span class="arn-next">${esc(nx ? T('arena.next', nx.t-t) : T('arena.top'))}</span>`;
+}
+
+/* ----- the arenas modal ----- */
+function openArenas(){
+  const t=prog.trophies|0, cur=arenaIndex();
+  $('#arena-sub').textContent=T('arena.sub', fmtNum(t), cur);
+  $('#arena-list').innerHTML=ARENAS.map(a=>{
+    const c=a.char && CHARS.find(x=>x.id===a.char), reached=t>=a.t, here=a.i===cur, st=here ? '📍' : reached ? '✔' : '🔒';
+    return `<div class="arn-row ${reached?'got':'locked'}${here?' here':''}" data-arena="${a.i}">
+      <span class="arn-emo">${a.emoji}</span>
+      <span class="arn-mid"><b>${esc(arenaName(a))}</b><small>🏆 ${a.t}${here ? ' · '+esc(T('arena.here')) : ''}</small></span>
+      <span class="arn-sw">${arenaSwatch(a)}</span>
+      <span class="arn-ch${c && isUnlocked(c) ? ' own' : ''}">${c ? playerSVG(c)+'<small>'+esc(nm(c))+'</small>' : ''}</span>
+      <span class="arn-st">${st}</span></div>`;
+  }).join('');
+  $('#arena-modal').classList.add('show');
+  const here=$('#arena-list .arn-row.here'); if(here) setTimeout(()=>{ try{ here.scrollIntoView({block:'nearest'}); }catch(e){} }, 30);
+}
+$('#btn-arena-close').addEventListener('click', ()=>{ sfx.click(); $('#arena-modal').classList.remove('show'); });
+$('#arena-modal').addEventListener('click', e=>{ if(e.target===$('#arena-modal')) $('#arena-modal').classList.remove('show'); });
+
+/* ----- a new arena: gift + celebration, once per arena ----- */
+function arenaCheckNew(delay){
+  const cur=arenaIndex(), seen=prog.arenaSeen|0;
+  if(cur<=seen) return false;
+  const a=arenaOf(cur), gift=ECON.arenas.giftPer*cur;
+  prog.arenaSeen=cur; saveProg();
+  addCoins(gift,'arena');
+  ARENA.pending={a, gift};
+  arenaPitchInvalidate();
+  setTimeout(arenaShowNew, delay||0);
+  return true;
+}
+function arenaShowNew(){
+  const p=ARENA.pending; if(!p) return;
+  if(['play','countdown','celebrate','replay','penalty','corner','training'].includes(state)) return;   // a match is on: the next home visit shows it
+  const a=p.a, c=a.char && CHARS.find(x=>x.id===a.char);
+  $('#arena-new-emoji').textContent=a.emoji; $('#arena-new-name').textContent=arenaName(a);
+  $('#arena-new-sw').innerHTML=arenaSwatch(a, 180, 120); $('#arena-new-sw').title=T('arena.newPitch');
+  $('#arena-new-gift').textContent=T('arena.gift', fmtNum(p.gift));
+  const ch=$('#arena-new-char');
+  if(c){ ch.hidden=false; ch.innerHTML=`<span class="sprite">${playerSVG(c)}</span><span>${esc(T('arena.newChar', nm(c)))}</span>`; } else { ch.hidden=true; ch.innerHTML=''; }
+  ARENA.pending=null;
+  $('#arena-new-modal').classList.add('show');
+  try{ sfx.win(); }catch(e){} try{ confetti.burst(160); }catch(e){}
+}
+function closeArenaNew(){ $('#arena-new-modal').classList.remove('show'); }
+$('#btn-arena-new-ok').addEventListener('click', ()=>{ sfx.click(); closeArenaNew(); if($('#home').classList.contains('active')) arenaHomeRefresh(); });
+
+/* ----- wiring ----- */
+if(prog.arenaSeen==null){ prog.arenaSeen=arenaIndex(); saveProg(); }          // existing players start at their arena without a retroactive celebration
+Hooks.on('home', ()=>{ arenaHomeRefresh(); arenaPitchInvalidate(); if(ARENA.pending) arenaShowNew(); });
+Hooks.on('wallet', ()=>{ if($('#home').classList.contains('active') && $('#home-arena')) arenaHomeRefresh(); });
+Hooks.on('screen', id=>{
+  if(id==='home'){ arenaHomeRefresh(); arenaPitchInvalidate(); if(ARENA.pending) arenaShowNew(); }
+  if(id==='game'){ $('#arena-modal').classList.remove('show'); closeArenaNew(); }
+});
+Hooks.on('matchEnd', info=>{ if(info && info.training) return; arenaCheckNew(ECON.arenas.showDelay); });
+applyLang();
+
+/* ===== 27-slots.js ===== */
+/* ===================================================================================================
+   CHEST SLOTS — three timed slots (Clash-Royale / Rumble-Stars style). A WIN in a real match drops a
+   chest into the first free slot; it unlocks after bronze 1 h / silver 3 h / gold 8 h (server time,
+   survives a reload) or right away for a few gems. The tiles live on the home (right side, under the
+   column) and on the chests screen. Keys now open only the GOLD chest: bronze and silver come from the
+   slots, the daily pickup, the missions bonus or coins.
+   Public: slotsInv() slotKindForWin(info) slotGive(kind)→i slotReady(i) slotRemaining(i)→ms slotSkipCost(i)
+           slotSkip(i) slotOpen(i) slotTap(i) slotsRender() slotsTick() slotsFmt(ms) slotsReadyCount() slotsNextUp()
+   prog:   prog.slots=[null|{kind, at}, ×3]  (at = the now() timestamp the chest becomes ready)
+   Hooks emitted: 'slotGiven'(i, kind) when a win lands a chest, 'slotOpen'(i, kind) when a ready slot is opened
+   Wraps: buildChests (adds the slot row + fixes the bronze/silver card texts), chestsBadge (+ ready slots)
+   =================================================================================================== */
+Object.assign(ECON, { slots: {
+  n:3,
+  hours:{bronze:1, silver:3, gold:8},
+  rate:{bronze:3, silver:3, gold:2.5},          // 💎 per remaining hour …
+  max:{bronze:3, silver:8, gold:18},            // … capped here
+  goldPct:5, silverPct:25,                      // a lucky win upgrades the chest
+  silverLevel:3, goldLevel:5,                   // a win at this level or above guarantees silver / gold (5 = Impossible, the BOSS)
+  fallback:{bronze:80, silver:300, gold:900},   // coins instead of a chest when no chests module exists
+}});
+/* keys only for the gold chest (gold stays 8 🔑 or 25 💎, legendary 40 💎) */
+if(ECON.chests){ if(ECON.chests.bronze) ECON.chests.bronze.keys=0; if(ECON.chests.silver) ECON.chests.silver.keys=0; }
+
+I18N_ADD({
+ 'slots.empty':['ריק – נצח משחק','Empty – win a match','فارغ – افز بمباراة','Пусто – выиграй матч'],
+ 'slots.open':['פתח!','Open!','افتح!','Открыть!'],
+ 'slots.full':['📦 כל התאים מלאים – פתח תיבה כדי לפנות מקום','📦 All slots are full – open a chest to make room','📦 كل الخانات ممتلئة – افتح صندوقًا لإخلاء مكان','📦 Все ячейки заняты – открой сундук, чтобы освободить место'],
+ 'slots.got':['📦 {0} נכנסה לתא! נפתחת בעוד ⏳ {1}','📦 {0} is in a slot! Opens in ⏳ {1}','📦 {0} في خانة! يُفتح بعد ⏳ {1}','📦 {0} в ячейке! Откроется через ⏳ {1}'],
+ 'slots.skipQ':['לפתוח עכשיו ב-💎 {0}?','Open now for 💎 {0}?','هل تفتح الآن بـ 💎 {0}؟','Открыть сейчас за 💎 {0}?'],
+ 'slots.noGems':['חסר 💎 – צריך {0}','Not enough 💎 – you need {0}','لا تكفي 💎 – تحتاج {0}','Не хватает 💎 – нужно {0}'],
+ 'slots.fromSlots':['מגיע מהתאים ⏳','Comes from the slots ⏳','يأتي من الخانات ⏳','Приходит из ячеек ⏳'],
+ 'slots.priceCoins':['🪙 {0} או מהתאים ⏳','🪙 {0} or from the slots ⏳','🪙 {0} أو من الخانات ⏳','🪙 {0} или из ячеек ⏳'],
+ 'slots.nextUp':['יש תיבה מוכנה בתא!','A chest is ready in a slot!','هناك صندوق جاهز في الخانة!','В ячейке готов сундук!'],
+ 'slots.ready':['📦 {0} מוכנה! לחץ לפתוח','📦 {0} is ready! Tap to open','📦 {0} جاهز! اضغط لفتحه','📦 {0} готов! Нажми, чтобы открыть'],
+ 'slots.hint':['📦 תיבות ברונזה וכסף מגיעות מהתאים – נצח משחק!','📦 Bronze and silver chests come from the slots – win a match!','📦 الصناديق البرونزية والفضية تأتي من الخانات – افز بمباراة!','📦 Бронзовые и серебряные сундуки приходят из ячеек – выиграй матч!'],
+});
+
+/* ----- state ----- */
+const SLOTS={ timer:0, toasted:{} };
+const slotMs = kind => (ECON.slots.hours[kind]||1)*3600e3;
+const slotIcon = kind => (typeof chestIcon==='function' ? chestIcon(kind) : ({bronze:'📦', silver:'🎁', gold:'👑'})[kind]) || '📦';
+const slotChestName = kind => I18N_RAW['chests.'+kind] ? T('chests.'+kind) : I18N_RAW['dm.chest.'+kind] ? T('dm.chest.'+kind) : kind;
+/* prog.slots, always n entries; a bad entry becomes empty, a timer longer than the chest's full time (a clock set forward when it was given) is clamped */
+function slotsInv(){
+  const n=ECON.slots.n|0; if(!Array.isArray(prog.slots)) prog.slots=[];
+  while(prog.slots.length<n) prog.slots.push(null); if(prog.slots.length>n) prog.slots.length=n;
+  for(let i=0;i<n;i++){
+    const s=prog.slots[i];
+    if(!s || typeof s!=='object' || !ECON.slots.hours[s.kind] || !(s.at>0)){ prog.slots[i]=null; continue; }
+    const full=slotMs(s.kind); if(s.at-now()>full) s.at=now()+full;
+  }
+  return prog.slots;
+}
+function slotReady(i){ const s=slotsInv()[i]; return !!s && now()>=s.at; }
+function slotRemaining(i){ const s=slotsInv()[i]; return s ? Math.max(0, s.at-now()) : 0; }
+function slotsReadyCount(){ return slotsInv().filter(s=>s && now()>=s.at).length; }
+function slotsFmt(ms){ let t=Math.max(0, Math.ceil(ms/1000)); const h=Math.floor(t/3600), m=Math.floor(t%3600/60), s=t%60; return h+':'+pad2(m)+':'+pad2(s); }
+/* 💎 to open now: ceil(remaining hours × rate), at least 1, at most the kind's cap */
+function slotSkipCost(i){
+  const s=slotsInv()[i]; if(!s) return 0;
+  const hrs=slotRemaining(i)/3600e3; if(hrs<=0) return 0;
+  const cost=Math.ceil(Math.round(hrs*(ECON.slots.rate[s.kind]||3)*1000)/1000);
+  return Math.max(1, Math.min(ECON.slots.max[s.kind]||99, cost));
+}
+/* which chest a win earns: Impossible (the BOSS) → gold; 5% gold; level ≥ 3 or online → silver; 25% silver; else bronze */
+function slotKindForWin(info){
+  info=info||{}; const S=ECON.slots, lv=info.level|0;
+  if(lv>=S.goldLevel) return 'gold';
+  if(Math.random()*100<S.goldPct) return 'gold';
+  if(lv>=S.silverLevel || info.online) return 'silver';
+  if(Math.random()*100<S.silverPct) return 'silver';
+  return 'bronze';
+}
+/* put a chest into the first free slot → its index, or -1 when every slot is taken */
+function slotGive(kind){
+  const inv=slotsInv(); if(!ECON.slots.hours[kind]) return -1;
+  const i=inv.indexOf(null); if(i<0) return -1;
+  inv[i]={kind, at: now()+slotMs(kind)}; saveProg();
+  Hooks.emit('slotGiven', i, kind); slotsRender(); return i;
+}
+
+/* ----- opening ----- */
+async function slotSkip(i){
+  const s=slotsInv()[i]; if(!s || slotReady(i)) return false;
+  const cost=slotSkipCost(i);
+  if(!(await ask(T('slots.skipQ', cost)))) return false;
+  const cur=slotsInv()[i]; if(!cur || cur!==s) return false;                 // the slot changed while the question was open
+  if(!spendGems(cost)){ toast(T('slots.noGems', cost),'warn'); return false; }
+  s.at=now(); saveProg(); try{ sfx.win(); }catch(e){}
+  slotsRender(); slotsBadge(); return true;
+}
+/* a ready slot: the chest leaves the slot, lands in the inventory and its drop opens on the chests screen */
+function slotOpen(i){
+  const inv=slotsInv(), s=inv[i]; if(!s || !slotReady(i)) return false;
+  inv[i]=null; saveProg(); Hooks.emit('slotOpen', i, s.kind);
+  if(typeof giveChest==='function' && typeof openChest==='function'){
+    giveChest(s.kind, true);
+    if(typeof openChestsScreen==='function') openChestsScreen();
+    openChest(s.kind);                                                      // owned → opens for free (a pending pick is finished first; the chest waits in the inventory)
+  } else addCoins(ECON.slots.fallback[s.kind]||0, 'slot');
+  slotsRender(); slotsBadge(); return true;
+}
+function slotTap(i){
+  try{ sfx.click(); }catch(e){}
+  const s=slotsInv()[i]; if(!s) return false;
+  return slotReady(i) ? slotOpen(i) : slotSkip(i);
+}
+
+/* ----- the tiles ----- */
+function slotsMountHome(){ const home=$('#home'); if(!home || $('#chest-slots')) return; const row=document.createElement('div'); row.id='chest-slots'; row.className='chest-slots'; home.appendChild(row); }
+function slotsMountChests(){
+  const sc=$('#chests'); if(!sc) return;
+  if(!$('#chests-slots')){ const row=document.createElement('div'); row.id='chests-slots'; row.className='chest-slots wide'; const anchor=$('#chests-row'); if(anchor && anchor.parentNode===sc) sc.insertBefore(row, anchor); else sc.appendChild(row); }
+  sc.classList.add('slots-on');
+}
+function slotsContainers(){ return ['#chest-slots','#chests-slots'].map(q=>$(q)).filter(Boolean); }
+function slotState(s){ return !s ? 'empty' : now()>=s.at ? 'ready' : 'tick'; }
+function slotLabel(s){ const st=slotState(s); return st==='empty' ? T('slots.empty') : st==='ready' ? T('slots.open') : '⏳ '+slotsFmt(s.at-now()); }
+function slotsRender(){
+  const inv=slotsInv();
+  for(const box of slotsContainers()){
+    box.innerHTML='';
+    inv.forEach((s,i)=>{
+      const b=document.createElement('button'); b.type='button'; b.dataset.slot=i;
+      const st=slotState(s); b.className='slot '+st+(s ? ' ck-'+s.kind : '');
+      const ic=document.createElement('span'); ic.className='s-ic'; ic.textContent = s ? slotIcon(s.kind) : '📦'; b.appendChild(ic);
+      const tx=document.createElement('span'); tx.className='s-tx';
+      const nm=document.createElement('b'); nm.className='s-nm'; if(s) nm.textContent=slotChestName(s.kind); else nm.hidden=true; tx.appendChild(nm);
+      const cd=document.createElement('span'); cd.className='s-cd'; cd.textContent=slotLabel(s); tx.appendChild(cd);
+      b.appendChild(tx);
+      if(s) b.addEventListener('click', ()=>slotTap(i));
+      box.appendChild(b);
+    });
+  }
+  slotsTimerSync();
+}
+function slotsOnScreen(){ return ['home','chests'].some(id=>{ const el=$('#'+id); return !!el && el.classList.contains('active'); }); }
+/* once a second while the home or the chests screen shows: countdown text in place; a state change rebuilds the tiles */
+function slotsTick(){
+  if(!slotsOnScreen()){ slotsTimerStop(); return; }
+  const inv=slotsInv(); let changed=false;
+  for(const box of slotsContainers()){
+    box.querySelectorAll('.slot').forEach((b,i)=>{
+      const s=inv[i], st=slotState(s);
+      if(!b.classList.contains(st)){ changed=true; return; }
+      const cd=b.querySelector('.s-cd'); if(cd) cd.textContent=slotLabel(s);
+      const nm=b.querySelector('.s-nm'); if(nm && s) nm.textContent=slotChestName(s.kind);
+    });
+  }
+  inv.forEach(s=>{ if(!s || now()<s.at) return; const key=s.kind+'@'+s.at; if(SLOTS.toasted[key]) return; SLOTS.toasted[key]=true; if(changed) toast(T('slots.ready', slotChestName(s.kind)),'ach'); });
+  if(changed){ slotsRender(); slotsBadge(); }
+  else slotsTimerSync();
+}
+function slotsTimerSync(){
+  const need = slotsOnScreen() && slotsInv().some(s=>s && now()<s.at);
+  if(need && !SLOTS.timer) SLOTS.timer=setInterval(slotsTick, 1000);
+  else if(!need && SLOTS.timer) slotsTimerStop();
+}
+function slotsTimerStop(){ if(SLOTS.timer){ clearInterval(SLOTS.timer); SLOTS.timer=0; } }
+/* the chests badge (home button + the 🎁 count) also counts ready slots */
+function slotsBadge(){
+  if(typeof refreshChestsBadge==='function') refreshChestsBadge();
+  if(typeof refreshHomeV2==='function' && $('#home') && $('#home').classList.contains('active')) refreshHomeV2();
+}
+if(typeof chestsBadge==='function'){ const _slotsCB=chestsBadge; chestsBadge=function(){ return (_slotsCB.apply(this, arguments)|0)+slotsReadyCount(); }; }
+
+/* ----- the chests screen: the slot row above the cards; bronze / silver cards say where they come from ----- */
+function slotsFixCards(){
+  if(!ECON.chests) return;
+  for(const kind of ['bronze','silver']){
+    const cfg=ECON.chests[kind]; if(!cfg || cfg.keys) continue;                 // only while keys do not open this chest
+    const card=document.querySelector('#chests-row .chest-card[data-kind="'+kind+'"]'); if(!card) continue;
+    const price=card.querySelector('.price'); if(price) price.textContent = cfg.coins ? T('slots.priceCoins', fmtNum(cfg.coins)) : T('slots.fromSlots');
+    const b=card.querySelector('.btn.open');
+    if(b && b.classList.contains('off')){
+      b.textContent=T('slots.fromSlots');
+      /* a tap on the grey button explains the slots (capture phase on the card: it never reaches the chests module's "not enough … keys" toast) */
+      card.addEventListener('click', e=>{ if(e.target!==b && !b.contains(e.target)) return; e.stopPropagation(); e.preventDefault(); try{ sfx.click(); }catch(x){} toast(T('slots.hint'),'warn'); }, true);
+    }
+  }
+}
+if(typeof buildChests==='function'){ const _slotsBC=buildChests; buildChests=function(){ const r=_slotsBC.apply(this, arguments); try{ slotsMountChests(); slotsRender(); slotsFixCards(); }catch(e){ console.error('slots', e); } return r; }; }
+
+/* ----- a win → a chest in a slot (the end card gets a line; a toast when every slot is taken) ----- */
+function slotEndcardLine(kind, when){
+  if(typeof endcardRow!=='function') return false;
+  setTimeout(()=>{
+    const earn=$('#endcard-earn'); if(!earn || earn.hidden) return;
+    const n=earn.querySelectorAll('.ec-row').length;
+    const r=endcardRow('ec-slot', '<span class="ec-big">'+slotIcon(kind)+' '+esc(T('slots.got', slotChestName(kind), when))+'</span>');
+    earn.appendChild(r);
+    setTimeout(()=>r.classList.add('ec-on'), earn.classList.contains('ec-now') ? 0 : 250+n*300);
+  }, 0);
+  return true;
+}
+Hooks.on('matchEnd', info=>{
+  if(!info || info.outcome!=='win' || info.training) return;
+  if(typeof spectating!=='undefined' && spectating) return;
+  const kind=slotKindForWin(info), i=slotGive(kind);
+  if(i<0){ toast(T('slots.full'),'warn'); return; }
+  const when=slotsFmt(slotRemaining(i));
+  if(!slotEndcardLine(kind, when)) toast(T('slots.got', slotChestName(kind), when),'ach');
+});
+
+/* ----- wiring ----- */
+function slotsNextUp(){ return slotsReadyCount()>0 ? {prio:45, icon:'📦', text:T('slots.nextUp'), action:()=>{ if(typeof openChestsScreen==='function') openChestsScreen(); }} : null; }
+NextUp.add(slotsNextUp);
+Hooks.on('home', ()=>{ slotsMountHome(); slotsRender(); });
+Hooks.on('screen', id=>{
+  if(id==='home'){ slotsMountHome(); slotsRender(); }
+  else if(id==='chests'){ slotsMountChests(); slotsRender(); }
+  else slotsTimerStop();
+});
+slotsInv(); slotsMountHome(); applyLang();
+
 /* ===== 30-daily.js ===== */
 /* ===================================================================================================
    DAILY LOOP — the gentle streak (7-day reward cycle, milestones, free freezes, "save the streak"),
@@ -7026,7 +7903,7 @@ Object.assign(ECON, { daily: {
   cycleKeyDay:3, cycleChestDay:7, cycleChest:'silver', cycleGems:3,
   milestones:[[7,3],[14,5],[30,10],[60,20],[100,50],[365,150]],   // [streak days, gems] + a title each
   freezeMax:2, freezeWeekly:1, freezeCalDay:10, saveDays:30, saveHours:48,
-  missionCoins:40, missionXP:10, allKey:1, allXP:25, freeRerolls:1, rerollGems:5,
+  missionCoins:40, missionXP:10, allChest:'bronze', allXP:25, freeRerolls:1, rerollGems:5,   // all three missions → a Bronze chest + XP (allKey is gone: keys open only the gold chest)
   calDays:28, calMin:40, calMax:120, calKeyDays:[3,10], calChestDay:7, calChest:'bronze', calGemsDay:14, calGems:5,
   calPackDay:21, calPackCoins:150, calKitDay:28, calKitCoins:300, calKitGems:10,
   bronzeCoins:80, packCoins:100,              // the free daily Bronze chest / sticker pack, when no chests / album module exists
@@ -7196,7 +8073,7 @@ function dmEvent(ev, n=1){
     if(dm.prog[id]>=m.n){
       dm.done.push(id); addCoins(ECON.daily.missionCoins,'mission'); addXP(ECON.daily.missionXP, true);
       if(!(matchEarn && inMatch())){ toast(T('dm.done', dmText(m)),'ach'); try{ sfx.win(); }catch(e){} }
-      if(dm.done.length>=3 && !dm.bonus){ dm.bonus=true; dailyAddKeys(ECON.daily.allKey,'missions'); addXP(ECON.daily.allXP, true); if(!(matchEarn && inMatch())) toast(T('dm.all'),'ach'); }   // a full wallet owes the key (dailyAddKeys)
+      if(dm.done.length>=3 && !dm.bonus){ dm.bonus=true; dailyGiveChest(ECON.daily.allChest,'missions'); addXP(ECON.daily.allXP, true); if(!(matchEarn && inMatch())) toast(T('dm.all'),'ach'); }   // the bonus is a Bronze chest (coins when no chests module exists)
     }
   }
   if(changed){ saveProg(); refreshDailyCard(); }
@@ -7215,7 +8092,7 @@ function dailyReroll(){
 function missionsRender(){
   const dm=dailyMissions(), st=dailyMissionStatus(), D=ECON.daily;
   $('#dms-list').innerHTML=st.map(s=>`<div class="dmr ${s.done?'done':''}"><span class="dmi">${s.icon}</span><span class="dmt">${esc(s.text)}</span><span class="dmb"><i style="width:${Math.round(s.prog/s.n*100)}%"></i></span><span class="dmn">${s.done?'✔':s.prog+'/'+s.n}</span><span class="dmx">${s.done?'✔':'🪙 '+D.missionCoins}</span></div>`).join('');
-  const all=dm.done.length>=3; $('#dms-bonus').textContent=(all?'✔ ':'')+T('dm.bonus', D.allKey, D.allXP); $('#dms-bonus').classList.toggle('on', all);
+  const all=dm.done.length>=3; $('#dms-bonus').textContent=(all?'✔ ':'')+T('dm.bonus', T('dm.chest.'+D.allChest), D.allXP); $('#dms-bonus').classList.toggle('on', all);
   const cost=dailyRerollCost(), can=dm.ids.some(id=>id!=='play2' && !dm.done.includes(id));
   const rb=$('#btn-dms-reroll'); rb.textContent=cost ? T('dm.rerollGems', cost) : T('dm.rerollFree'); rb.disabled=!can; rb.classList.toggle('d-off', !can);
 }
@@ -7396,8 +8273,8 @@ I18N_ADD({
  'dm.israeli1':['הבקע גול עם שחקן ישראלי 🇮🇱','Score with an Israeli player 🇮🇱','سجّل بلاعب إسرائيلي 🇮🇱','Забей израильским игроком 🇮🇱'],
  'dm.margin2':['נצח בהפרש של 2 גולים ומעלה','Win by 2+ goals','افز بفارق هدفين أو أكثر','Выиграй с разницей в 2+ гола'],
  'dm.done':['🎯 משימה הושלמה: {0}','🎯 Mission done: {0}','🎯 اكتملت المهمة: {0}','🎯 Задание выполнено: {0}'],
- 'dm.all':['🔑 כל המשימות הושלמו! +1 מפתח','🔑 All missions done! +1 key','🔑 اكتملت كل المهام! +1 مفتاح','🔑 Все задания выполнены! +1 ключ'],
- 'dm.bonus':['כל השלוש: 🔑 {0} + ⭐ {1}','All three: 🔑 {0} + ⭐ {1}','الثلاث كلها: 🔑 {0} + ⭐ {1}','Все три: 🔑 {0} + ⭐ {1}'],
+ 'dm.all':['🎁 כל המשימות הושלמו! תיבת ברונזה','🎁 All missions done! A Bronze chest','🎁 اكتملت كل المهام! صندوق برونزي','🎁 Все задания выполнены! Бронзовый сундук'],
+ 'dm.bonus':['כל השלוש: 🎁 {0} + ⭐ {1}','All three: 🎁 {0} + ⭐ {1}','الثلاث كلها: 🎁 {0} + ⭐ {1}','Все три: 🎁 {0} + ⭐ {1}'],
  'dm.rerollFree':['🔄 החלף משימה (חינם)','🔄 Reroll (free)','🔄 بدّل المهمة (مجانًا)','🔄 Заменить (бесплатно)'],
  'dm.rerollGems':['🔄 החלף משימה ({0} 💎)','🔄 Reroll ({0} 💎)','🔄 بدّل المهمة ({0} 💎)','🔄 Заменить ({0} 💎)'],
  'dm.rerollNone':['אין משימה להחליף','Nothing to reroll','لا توجد مهمة للتبديل','Нечего менять'],
@@ -7429,6 +8306,352 @@ STATIC_ADD({ '#dpk-title':'dm.pickupTitle', '#btn-dpk-cal':'dm.calBtn', '#btn-dp
 applyLang();
 /* load-time: lazy defaults, this week's free freeze, keys owed from a full wallet */
 dailyMissions(); dailyCal(); dailyFreezeRefill(); dailyPayOwedKeys();
+
+/* ===== 35-squad.js ===== */
+/* ===== SQUAD ("נבחרת"): three players; after each of my goals in an offline 1v1 match the next one comes on =====
+   prog.squad = [charId, charId|null, charId|null]  — slot 0 is always the selected character (kept in sync both ways).
+   Public: squad() squadCharAt(k) squadSet(k, id|null) squadOpen() squadClose() squadRender() squadSubstitute()
+   Hooks emitted: 'squadSub'(char, slot) after a substitution.  No physics / controls are touched. */
+I18N_ADD({
+ 'squad.btn':['👥 נבחרת','👥 Squad','👥 الفريق','👥 Состав'],
+ 'squad.title':['👥 הנבחרת שלי','👥 My squad','👥 فريقي','👥 Мой состав'],
+ 'squad.hint':['אחרי כל גול שלך השחקן הבא נכנס למגרש!','After each of your goals the next player comes on!','بعد كل هدف لك يدخل اللاعب التالي إلى الملعب!','После каждого твоего гола на поле выходит следующий игрок!'],
+ 'squad.main':['⭐ מתחיל','⭐ Starter','⭐ أساسي','⭐ Первый'],
+ 'squad.empty':['➕ הוסף','➕ Add','➕ أضف','➕ Добавить'],
+ 'squad.pickTitle':['מי נכנס למקום {0}?','Who takes spot {0}?','من يأخذ المكان {0}؟','Кто займёт место {0}?'],
+ 'squad.inSlot':['במקום {0}','In spot {0}','في المكان {0}','На месте {0}'],
+ 'squad.noMove':['קודם בחר מתחיל אחר','Pick another starter first','اختر لاعبًا أساسيًا آخر أولاً','Сначала выбери другого первого игрока'],
+ 'squad.sub':['🔁 החלפה! {0} נכנס למגרש','🔁 Substitution! {0} comes on','🔁 تبديل! {0} يدخل الملعب','🔁 Замена! {0} выходит на поле'],
+ 'squad.burst':['🔁 החלפה','🔁 Sub','🔁 تبديل','🔁 Замена'],
+ 'squad.back':['➜ חזרה','➜ Back','➜ رجوع','➜ Назад'],
+ 'squad.close':['סגור','Close','إغلاق','Закрыть'],
+});
+STATIC_ADD({'#sq-title':'squad.title', '#sq-hint':'squad.hint', '#btn-sq-back':'squad.back', '#btn-sq-close':'squad.close'});
+
+const SQUAD={ idx:0, pending:false, active:false, pick:null };
+
+/* ----- data ----- */
+const squadCharById = id => id ? CHARS.find(c=>c.id===id) || null : null;
+/* the squad array, always 3 long, slot 0 synced to `selected` (a character moved into slot 0 from another slot swaps with the old starter) */
+function squad(){
+  let s=prog.squad;
+  if(!Array.isArray(s) || s.length!==3){ s=prog.squad=[null,null,null]; }
+  for(let k=0;k<3;k++){ if(s[k]!=null && !squadCharById(s[k])) s[k]=null; }
+  const me=CHARS[selected] ? CHARS[selected].id : null;
+  if(me && s[0]!==me){ const j=s.indexOf(me); if(j>0) s[j]=s[0]; s[0]=me; }
+  if(s[1] && s[1]===s[0]) s[1]=null; if(s[2] && (s[2]===s[0] || s[2]===s[1])) s[2]=null;
+  return s;
+}
+function squadCharAt(k){ return squadCharById(squad()[k|0]); }
+/* members who can actually play now (unlocked), as [{k, c}] */
+function squadMembers(){ const out=[]; squad().forEach((id,k)=>{ const c=squadCharById(id); if(c && isUnlocked(c)) out.push({k, c}); }); return out; }
+
+/* choosing a starter from the squad UI behaves exactly like the core's "choose" button */
+function squadChoose(i){
+  if(!(i>=0) || i===selected) return;
+  selected=i; Hooks.emit('select', selected); refreshHome();
+  if(mp && mp.role==='guest' && mp.connected){ try{ mp.conn.send({t:'pick', i:selected}); }catch(e){} }
+  if(mp && mp.role==='host' && typeof mpBroadcastLobby==='function') mpBroadcastLobby();
+  if(typeof partyRefresh==='function') partyRefresh();
+}
+/* put character `id` into slot k (null empties slots 1/2). Returns true when something changed. */
+function squadSet(k, id){
+  const s=squad(); k=k|0; if(k<0 || k>2) return false;
+  if(id==null){ if(k===0) return false; if(s[k]==null) return false; s[k]=null; saveProg(); squadRender(); return true; }
+  const c=squadCharById(id); if(!c || !isUnlocked(c)) return false;
+  const j=s.indexOf(id);
+  if(j===k) return false;
+  if(j===0 && !s[k]){ toast(T('squad.noMove'),'warn'); return false; }    // the starter cannot move away and leave slot 0 empty
+  const old=s[k];
+  if(j>=0) s[j]=old;                                                        // swap with the slot it came from
+  else if(k===0 && old){ const e=s.findIndex((x,i)=>i>0 && !x); if(e>0) s[e]=old; }   // a new starter: the old one keeps a free bench slot
+  s[k]=id;
+  if(s[0]!==(CHARS[selected]||{}).id){ squadChoose(CHARS.findIndex(x=>x.id===s[0])); }   // slot 0 changed → the selected character follows
+  saveProg(); squadRender(); return true;
+}
+Hooks.on('select', ()=>{ squad(); saveProg(); });
+
+/* ----- the match: a substitution after each of my goals (offline 1v1 only) ----- */
+function squadNext(){
+  const s=squad();
+  for(let step=1; step<=2; step++){ const k=(SQUAD.idx+step)%3; const c=squadCharById(s[k]); if(c && isUnlocked(c)) return k; }
+  return null;
+}
+function squadBurst(el){
+  if(!el) return; const b=document.createElement('div'); b.className='sq-burst'; b.textContent=T('squad.burst'); el.appendChild(b);
+  setTimeout(()=>{ try{ b.remove(); }catch(e){} }, 1250);
+}
+function squadSubstitute(){
+  const k=squadNext(); if(k==null || k===SQUAD.idx) return false;
+  const c=squadCharById(squad()[k]); if(!c) return false;
+  SQUAD.idx=k; P1.ch=c; myChar=c;
+  const sp=P1.el.querySelector('.sprite'); if(sp) sprite(sp, c, 'happy', undefined);   // undefined = my own kit, like beginMatch
+  const tag=P1.el.querySelector('.tag'); if(tag) tag.textContent=T('game.me', nm(c));
+  const n=$('#n-me'); if(n) n.textContent=nm(c);
+  showLine(T('squad.sub', nm(c)), true);                                    // local commentator only (say() would relay online)
+  squadBurst(P1.el);
+  Hooks.emit('squadSub', c, k);
+  return true;
+}
+const _sqBeginMatch=beginMatch;
+beginMatch=function(c1, c2, opts){
+  _sqBeginMatch(c1, c2, opts);
+  SQUAD.idx=0; SQUAD.pending=false;
+  SQUAD.active = !training && !mp && !v2 && !spectating && !pk && !opts && players.length===2 && P1.ch===CHARS[selected];
+};
+const _sqScoreGoal=scoreGoal;
+scoreGoal=function(who){
+  const s0=state; _sqScoreGoal(who);
+  if(who==='me' && s0==='play' && state==='celebrate' && SQUAD.active && !training) SQUAD.pending=true;
+};
+const _sqAfterGoal=afterGoal;
+afterGoal=function(){
+  _sqAfterGoal();
+  if(!SQUAD.pending) return; SQUAD.pending=false;
+  if(SQUAD.active && state==='play' && !training && !mp && !v2 && !spectating) squadSubstitute();   // the game is back in play, positions reset: swap the sprite now
+};
+Hooks.on('screen', id=>{ if(id!=='game'){ SQUAD.active=false; SQUAD.pending=false; } });
+
+/* ----- the modal ----- */
+function squadOpen(){ SQUAD.pick=null; squadRender(); const m=$('#squad-modal'); if(m) m.classList.add('show'); }
+function squadClose(){ const m=$('#squad-modal'); if(m) m.classList.remove('show'); SQUAD.pick=null; }
+function squadRender(){
+  const s=squad(), box=$('#sq-slots'), pick=$('#sq-pick'); if(!box || !pick) return;
+  const picking = SQUAD.pick!=null;
+  box.hidden=picking; pick.hidden=!picking;
+  const hint=$('#sq-hint'); if(hint) hint.hidden=picking;
+  const bk=$('#btn-sq-back'); if(bk) bk.hidden=!picking;
+  const cl=$('#btn-sq-close'); if(cl) cl.hidden=picking;
+  if(!picking){
+    box.innerHTML='';
+    s.forEach((id,k)=>{
+      const c=squadCharById(id);
+      const d=document.createElement('div'); d.className='sq-slot'+(c?'':' empty')+(k===0?' main':''); d.dataset.k=k; d.tabIndex=0;
+      d.innerHTML = `<div class="sq-no">${k+1}</div>`
+        + (c ? `<div class="sq-sprite">${playerSVG(c)}</div><div class="sq-name">${esc(nm(c))}</div>` : `<div class="sq-plus">➕</div><div class="sq-name">${T('squad.empty')}</div>`)
+        + (k===0 ? `<div class="sq-main">${T('squad.main')}</div>` : (c ? `<button class="btn red small sq-x" data-x="${k}" type="button">✖</button>` : ''));
+      d.addEventListener('click', e=>{ sfx.click(); if(e.target.closest('.sq-x')){ squadSet(k, null); return; } SQUAD.pick=k; squadRender(); });
+      d.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); d.click(); } });
+      box.appendChild(d);
+    });
+  } else {
+    const k=SQUAD.pick, t=$('#sq-pick-title'); if(t) t.textContent=T('squad.pickTitle', k+1);
+    const g=$('#sq-grid'); g.innerHTML='';
+    CHARS.forEach(c=>{
+      if(!isUnlocked(c)) return; const j=s.indexOf(c.id);
+      const d=document.createElement('div'); d.className='sq-card'+(j===k?' cur':j>=0?' in':''); d.dataset.id=c.id; d.tabIndex=0;
+      d.innerHTML=`<div class="sq-sprite">${playerSVG(c)}</div><div class="sq-name">${esc(nm(c))}</div>`+(j>=0?`<div class="sq-badge">${j===k?'✔':T('squad.inSlot', j+1)}</div>`:'');
+      d.addEventListener('click', ()=>{ sfx.click(); if(j===k){ SQUAD.pick=null; squadRender(); return; } if(squadSet(k, c.id)){ SQUAD.pick=null; squadRender(); } });
+      d.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); d.click(); } });
+      g.appendChild(d);
+    });
+  }
+}
+(function(){
+  const bk=$('#btn-sq-back'); if(bk) bk.addEventListener('click', ()=>{ sfx.click(); SQUAD.pick=null; squadRender(); });
+  const cl=$('#btn-sq-close'); if(cl) cl.addEventListener('click', ()=>{ sfx.click(); squadClose(); });
+  const m=$('#squad-modal'); if(m) m.addEventListener('click', e=>{ if(e.target===m) squadClose(); });
+})();
+
+/* ----- home: a small button next to "looks" in the centre row, and one in the "more" sheet ----- */
+function squadHomeBtn(){
+  const who=$('#home-centre .who'); if(!who) return;
+  let b=$('#btn-squad');
+  if(!b){
+    b=document.createElement('button'); b.className='btn pink'; b.id='btn-squad'; b.type='button';
+    b.addEventListener('click', ()=>{ sfx.click(); squadOpen(); });
+    const looks=$('#btn-looks'); if(looks && looks.parentNode===who) looks.insertAdjacentElement('afterend', b); else who.appendChild(b);
+  }
+  b.textContent=T('squad.btn');
+  const g=$('#more-grid'); let m=$('#btn-squad-more');
+  if(g && !m){ m=document.createElement('button'); m.className='btn pink'; m.id='btn-squad-more'; m.type='button'; m.addEventListener('click', ()=>{ sfx.click(); const sh=$('#more-sheet'); if(sh) sh.classList.remove('show'); squadOpen(); }); g.appendChild(m); }
+  if(m) m.textContent=T('squad.btn');
+}
+Hooks.on('home', ()=>{ squad(); if($('#home-centre .who')) squadHomeBtn(); else setTimeout(squadHomeBtn, 0); });   // the home module builds its row after this hook on the first pass
+squad();
+applyLang();
+
+/* ===== 37-levels.js ===== */
+/* ===================================================================================================
+   PLAYER LEVELS — shards + coins raise an OWNED player from level 1 up to 5 (Rumble-Stars style).
+   Shards come from chests: a card of a player the kid already owns becomes a 🧩 shard card
+   (superrare 3 · epic 5 · mythic 8 · legendary 10, ~35% of those drops). 10 shards + coins = one level.
+   Each level above 1 gives MY player +2.5% speed and +2.5% kick power in OFFLINE matches only
+   (never online, never hot-seat: both sides stay fair). The core's `st(p)` consults charBoost(p.ch).
+   Public: charLevel(c) charShards(c) charBoost(c) charLevelPrice(lv) charCanLevel(c) charLevelUp(c)
+           charUpgradable() addShards(c,n) lvDecorateShop(body)
+   prog: prog.charLv={charId:1..5} (missing = 1)   prog.shards={charId:n}
+   Hooks emitted: 'charLevel'(id, lv) after a level-up · 'shards'(id, n) when shards are added
+   Wraps (never edits): chestCards chestCardName chestCardType chestCardPreview chestGrant buildChests
+                        shopBuildPlayers refreshHome
+   Core edit (the only one, line ~1795): `st` multiplies speed and power by charBoost(p.ch) for P1 when !mp.
+   =================================================================================================== */
+Object.assign(ECON, { levels:{
+  max:5, shards:10, boost:.025,
+  price:{2:200, 3:400, 4:800, 5:1500},                       // coins to REACH that level (plus 10 shards)
+  chestChance:.35,                                            // chance that a superrare+ drop holds a shard card
+  chestShards:{superrare:3, epic:5, mythic:8, legendary:10},  // shards on that card, per rarity
+}});
+
+I18N_ADD({
+ 'lv.badge':['⭐ רמה {0}','⭐ Lv {0}','⭐ مستوى {0}','⭐ Ур. {0}'],
+ 'lv.bonus':['+{0}% ⚡💥','+{0}% ⚡💥','+{0}% ⚡💥','+{0}% ⚡💥'],
+ 'lv.max':['מקס','MAX','الأقصى','МАКС'],
+ 'lv.maxed':['⭐ רמה מקסימלית!','⭐ Max level!','⭐ المستوى الأقصى!','⭐ Максимальный уровень!'],
+ 'lv.shards':['🧩 {0}/{1}','🧩 {0}/{1}','🧩 {0}/{1}','🧩 {0}/{1}'],
+ 'lv.upgrade':['⬆ שדרג! 🪙 {0}','⬆ Upgrade! 🪙 {0}','⬆ طوّر! 🪙 {0}','⬆ Улучшить! 🪙 {0}'],
+ 'lv.ask':['לשדרג את {0} לרמה {1} תמורת 🪙 {2} ו-🧩 {3} שברים?','Upgrade {0} to level {1} for 🪙 {2} and 🧩 {3} shards?','هل تطوّر {0} إلى المستوى {1} مقابل 🪙 {2} و🧩 {3} قطع؟','Улучшить {0} до уровня {1} за 🪙 {2} и 🧩 {3} осколков?'],
+ 'lv.up':['⭐ {0} עלה לרמה {1}!','⭐ {0} reached level {1}!','⭐ {0} وصل إلى المستوى {1}!','⭐ {0} достиг уровня {1}!'],
+ 'lv.noCoins':['חסרים מטבעות 😕 יש לך {0}, צריך {1}','Not enough coins 😕 you have {0}, need {1}','لا تكفي العملات 😕 لديك {0}، تحتاج {1}','Не хватает монет 😕 у тебя {0}, нужно {1}'],
+ 'lv.noShards':['חסרים שברים 🧩 יש לך {0}, צריך {1} · שברים מגיעים מתיבות 🎁','Not enough shards 🧩 you have {0}, need {1} · shards come from chests 🎁','لا تكفي القطع 🧩 لديك {0}، تحتاج {1} · القطع تأتي من الصناديق 🎁','Не хватает осколков 🧩 у тебя {0}, нужно {1} · осколки приходят из сундуков 🎁'],
+ 'lv.shardCard':['🧩 {0} שברים · {1}','🧩 {0} shards · {1}','🧩 {0} قطع · {1}','🧩 {0} осколков · {1}'],
+ 'lv.shardType':['שברי שחקן','Player shards','قطع لاعب','Осколки игрока'],
+ 'lv.shardsGot':['🧩 +{0} שברים של {1} ({2}/{3})','🧩 +{0} {1} shards ({2}/{3})','🧩 +{0} قطع {1} ({2}/{3})','🧩 +{0} осколков {1} ({2}/{3})'],
+ 'lv.nextUp':['אפשר לשדרג את {0}!','You can upgrade {0}!','يمكنك تطوير {0}!','Можно улучшить {0}!'],   // the 🧩 is the entry's icon
+});
+
+/* ----- state ----- */
+function lvProg(){ prog.charLv = (prog.charLv && typeof prog.charLv==='object') ? prog.charLv : {}; prog.shards = (prog.shards && typeof prog.shards==='object') ? prog.shards : {}; return prog; }
+const lvId = c => (c && typeof c==='object') ? c.id : c;
+const lvChar = c => (c && typeof c==='object') ? c : CHARS.find(k=>k.id===c);
+function charLevel(c){ const lv=lvProg().charLv[lvId(c)]|0; return Math.max(1, Math.min(ECON.levels.max, lv||1)); }
+function charShards(c){ return Math.max(0, lvProg().shards[lvId(c)]|0); }
+/* the stat multiplier the core applies to MY player offline: 1 at level 1, +2.5% per level, +10% at level 5 (1 during hot-seat penalties) */
+function charBoost(c){
+  try{ if(typeof hs!=='undefined' && hs) return 1; }catch(e){}
+  return 1 + ECON.levels.boost*(charLevel(c)-1);
+}
+function charLevelPrice(lv){ return ECON.levels.price[lv]|0; }
+/* everything the UI needs to know about one player's level */
+function charCanLevel(c){
+  const lv=charLevel(c), max=lv>=ECON.levels.max, next=max ? lv : lv+1, shards=charShards(c), need=ECON.levels.shards, price=max ? 0 : charLevelPrice(next);
+  const ready=!max && shards>=need, afford=(prog.coins|0)>=price;
+  return {lv, next, max, shards, need, price, ready, afford, can:ready && afford};
+}
+function addShards(c, n){
+  const id=lvId(c); n=Math.round(n); if(!id || !(n>0)) return charShards(id);
+  const p=lvProg(); p.shards[id]=(p.shards[id]|0)+n; saveProg(); Hooks.emit('shards', id, n); return p.shards[id];
+}
+const lvOwnedBelowMax = () => CHARS.filter(c=>isUnlocked(c) && charLevel(c)<ECON.levels.max);
+/* the first owned player that can be upgraded right now (shards AND coins) */
+function charUpgradable(){
+  const mine=CHARS[selected]; if(mine && isUnlocked(mine) && charCanLevel(mine).can) return mine;
+  return CHARS.find(c=>isUnlocked(c) && charCanLevel(c).can) || null;
+}
+/* 10 shards + coins → one level; asks first (unless opts.silent), celebrates, re-renders */
+async function charLevelUp(c, opts){
+  const x=lvChar(c); if(!x || !isUnlocked(x)) return false;
+  const s=charCanLevel(x); if(s.max) return false;
+  if(!s.ready){ try{ sfx.lose(); }catch(e){} toast(T('lv.noShards', s.shards, s.need),'warn'); return false; }
+  if(!s.afford){ try{ sfx.lose(); }catch(e){} toast(T('lv.noCoins', fmtNum(prog.coins|0), fmtNum(s.price)),'warn'); return false; }
+  if(!(opts && opts.silent) && !(await ask(T('lv.ask', nm(x), s.next, fmtNum(s.price), s.need)))) return false;
+  if(!spendCoins(s.price)) return false;
+  const p=lvProg(); p.shards[x.id]=Math.max(0, (p.shards[x.id]|0)-s.need); p.charLv[x.id]=s.next; saveProg();
+  try{ sfx.win(); }catch(e){} try{ confetti.burst(120); }catch(e){} toast(T('lv.up', nm(x), s.next),'ach');
+  Hooks.emit('charLevel', x.id, s.next);
+  if(typeof shopRefresh==='function') shopRefresh();
+  if($('#home').classList.contains('active')) refreshHome();
+  return true;
+}
+
+/* ----- chests: a card of an owned player becomes a shard card (wrapping, never editing 20-chests.js) ----- */
+if(typeof chestCards==='function'){
+  const _lvChestCards=chestCards;
+  chestCards=function(rarity, rnd){
+    const cs=_lvChestCards(rarity, rnd); rnd=rnd||Math.random;
+    try{
+      const n=ECON.levels.chestShards[rarity]|0; if(!n || !Array.isArray(cs) || cs.some(c=>c && c.t==='shards')) return cs;
+      if(rnd()>=ECON.levels.chestChance) return cs;
+      const owned=lvOwnedBelowMax(); if(!owned.length) return cs;
+      /* the least exciting card makes room: xp → coins → keys → gems; never a player / look / power */
+      let i=-1; for(const t of ['xp','coins','keys','gems']){ i=cs.findIndex(c=>c && c.t===t); if(i>=0) break; }
+      if(i<0) return cs;
+      const x=owned[Math.floor(rnd()*owned.length)];
+      cs[i]={t:'shards', id:x.id, n};
+    }catch(e){ console.error('levels: chestCards', e); }
+    return cs;
+  };
+  const _lvChestCardName=chestCardName;
+  chestCardName=function(c){ if(c && c.t==='shards'){ const x=lvChar(c.id); return T('lv.shardCard', c.n, x ? nm(x) : c.id); } return _lvChestCardName.apply(this, arguments); };
+  const _lvChestCardType=chestCardType;
+  chestCardType=function(c){ if(c && c.t==='shards') return T('lv.shardType'); return _lvChestCardType.apply(this, arguments); };
+  const _lvChestCardPreview=chestCardPreview;
+  chestCardPreview=function(c){
+    if(c && c.t==='shards'){
+      const d=document.createElement('div'); d.className='pv lv-shardpv'; const x=lvChar(c.id);
+      try{ d.innerHTML=playerSVG(x,'happy',null); }catch(e){ d.textContent='🧑'; }
+      const b=document.createElement('span'); b.className='lv-shardbadge'; b.textContent='🧩'; d.appendChild(b);
+      return d;
+    }
+    return _lvChestCardPreview.apply(this, arguments);
+  };
+  const _lvChestGrant=chestGrant;
+  chestGrant=function(c, paid){
+    if(c && c.t==='shards'){
+      const x=lvChar(c.id); if(!x) return false;
+      const have=addShards(x.id, c.n); toast(T('lv.shardsGot', c.n, nm(x), Math.min(have, ECON.levels.shards), ECON.levels.shards),'ach');
+      return true;
+    }
+    return _lvChestGrant.apply(this, arguments);
+  };
+  if(typeof buildChests==='function'){
+    const _lvBuildChests=buildChests;
+    buildChests=function(){ const r=_lvBuildChests.apply(this, arguments); try{ document.querySelectorAll('#chests-row .chest-card .can').forEach(e=>{ if(!e.textContent.includes('🧩')) e.textContent+=' 🧩'; }); }catch(e){} return r; };
+  }
+}
+
+/* ----- the shop's players tab: level badge + shard bar on owned cards, level box + upgrade button in the preview ----- */
+function lvDecorateShop(body){
+  body=body||$('#shop-body'); if(!body) return;
+  body.querySelectorAll('#shop-pgrid .shop-pcard').forEach(d=>{
+    const c=CHARS[+d.dataset.i]; if(!c || !isUnlocked(c) || d.querySelector('.lv-row')) return;
+    const s=charCanLevel(c);
+    const row=document.createElement('div'); row.className='lv-row'+(s.ready?' ready':'')+(s.max?' max':'');
+    const badge=document.createElement('span'); badge.className='lv-badge'; badge.textContent=T('lv.badge', s.lv); row.appendChild(badge);
+    if(!s.max){ const sh=document.createElement('span'); sh.className='lv-shards'; sh.textContent=T('lv.shards', Math.min(s.shards, s.need), s.need)+(s.ready?' ⬆':''); row.appendChild(sh); }
+    d.appendChild(row); d.classList.add('lv-has'); d.classList.toggle('lv-ready', s.ready);
+  });
+  const pv=body.querySelector('#shop-ppv'); if(!pv || pv.querySelector('.lv-box')) return;
+  const i=(typeof shopPick==='number') ? shopPick : -1; const c=CHARS[i]; if(!c || !isUnlocked(c)) return;
+  const s=charCanLevel(c); pv.classList.add('lv-has');
+  const box=document.createElement('div'); box.className='lv-box'+(s.max?' max':'')+(s.ready?' ready':'');
+  const lvl=document.createElement('span'); lvl.className='lv-lvl'; lvl.textContent=T('lv.badge', s.lv)+(s.max ? ' · '+T('lv.max') : s.lv>1 ? ' · '+T('lv.bonus', Math.round((charBoost(c)-1)*1000)/10) : ''); box.appendChild(lvl);
+  if(!s.max){
+    const bar=document.createElement('span'); bar.className='lv-bar';
+    const fill=document.createElement('i'); fill.style.width=Math.round(Math.min(1, s.shards/s.need)*100)+'%'; bar.appendChild(fill);
+    const txt=document.createElement('span'); txt.textContent=T('lv.shards', Math.min(s.shards, s.need), s.need); bar.appendChild(txt);
+    box.appendChild(bar);
+  }
+  const anchor=pv.querySelector('.pr'); if(anchor && anchor.nextSibling) pv.insertBefore(box, anchor.nextSibling); else pv.appendChild(box);
+  if(!s.max){
+    const b=document.createElement('button'); b.type='button'; b.className='btn small lv-upbtn '+(s.can?'green':'off'); b.dataset.act='levelup';
+    b.textContent=T('lv.upgrade', fmtNum(s.price));
+    b.addEventListener('click', e=>{ e.stopPropagation(); try{ sfx.click(); }catch(x){} charLevelUp(c); });
+    pv.insertBefore(b, box.nextSibling);
+  }
+}
+if(typeof shopBuildPlayers==='function'){
+  const _lvShopBuildPlayers=shopBuildPlayers;
+  shopBuildPlayers=function(body){ const r=_lvShopBuildPlayers.apply(this, arguments); try{ lvDecorateShop(body); }catch(e){ console.error('levels: shop', e); } return r; };
+}
+
+/* ----- home: a tiny "⭐ Lv N" tag beside the hero name (level 2 and up) ----- */
+function lvHomeTag(){
+  const n=$('#home-name'); if(!n) return; const c=CHARS[selected]; const lv=c ? charLevel(c) : 1;
+  let t=n.querySelector('.lv-tag'); if(lv<2){ if(t) t.remove(); return; }
+  if(!t){ t=document.createElement('span'); t.className='lv-tag'; n.appendChild(t); }
+  t.textContent=T('lv.badge', lv);
+}
+{ const _lvRefreshHome=refreshHome; refreshHome=function(){ const r=_lvRefreshHome.apply(this, arguments); try{ lvHomeTag(); }catch(e){} return r; }; }
+
+/* ----- next up: when a player can be upgraded, say so (opens the players tab on that player) ----- */
+NextUp.add(()=>{
+  if(typeof openShop!=='function') return null;
+  const c=charUpgradable(); if(!c) return null;
+  return {prio:30, icon:'🧩', text:T('lv.nextUp', nm(c)), action:()=>{ try{ shopPick=CHARS.indexOf(c); }catch(e){} openShop('players'); }};
+});
+lvProg();
+applyLang();
 
 /* ===== 40-endcard.js ===== */
 /* ===================================================================================================
@@ -7686,6 +8909,163 @@ beginMatch=function(){ endcardClose(); return _endcardBeginMatch.apply(this, arg
 const _endcardApplyLang=applyLang;
 applyLang=function(){ const r=_endcardApplyLang.apply(this, arguments); endcardLabels(); return r; };
 endcardEls(); endcardLabels();
+
+/* ===== 45-emotes.js ===== */
+/* ===================================================================================================
+   EMOTES (45-emotes) — 4 in-match emotes 😂 😎 🔥 👏 (PLAN §5.4), also online.
+   Keys 1–4 on a keyboard; on phones a small 😀 button (top-left) opens a 4-emoji strip for 3 s.
+   A speech bubble (.emote) pops over the sender's player for 1.6 s; 4-s cooldown per player.
+   Online: host → netEv('emote:<slot>:<id>') inside the snapshot (applySnapshot wrapper shows it);
+           guest → mp.conn.send({t:'emote', i}) → the host (mpOnMsg wrapper) shows it and relays it.
+   Offline: bots emote back sometimes (after a goal, or when you emote) — 30 %, one second later.
+   settings.emotesOff hides OTHER people's (and bots') emotes; your own always show.
+   =================================================================================================== */
+Object.assign(ECON, { emotes:{
+  list:['😂','😎','🔥','👏'],   // ids 0..3
+  cooldown:4000,                // ms between two emotes of the same player
+  show:1600,                    // ms a bubble stays
+  strip:3000,                   // ms the touch strip stays open
+  botReply:.3, botDelay:1000,   // bots emote back: chance, delay
+}});
+I18N_ADD({
+  'emote.btn':      ["אימוג'י", 'Emote', 'إيموجي', 'Эмодзи'],
+  'emote.helpKeys': ['😂 😎 🔥 👏 — מקשים 1 2 3 4', '😂 😎 🔥 👏 — keys 1 2 3 4', '😂 😎 🔥 👏 — المفاتيح 1 2 3 4', '😂 😎 🔥 👏 — клавиши 1 2 3 4'],
+  'emote.helpTouch':['😀 ואז 😂 😎 🔥 👏', '😀 then 😂 😎 🔥 👏', '😀 ثم 😂 😎 🔥 👏', '😀, потом 😂 😎 🔥 👏'],
+  'emote.setting':  ["😀 אימוג'ים של שחקנים אחרים", '😀 Emotes from other players', '😀 إيموجي اللاعبين الآخرين', '😀 Эмодзи других игроков'],
+});
+const EMOTES={ lastT:0, stripTimer:0, coolTimer:0 };    // lastT: my last emote (performance.now()); tests reset it
+
+/* ----- the bubble ----- */
+/* p: a player object ({el}), a slot name ('P1'..'P4') or an element. Returns the bubble element (or null). */
+function emoteShow(p, id){
+  const el = p && p.el ? p.el : (typeof p==='string' ? (SLOT_P[p] ? SLOT_P[p].el : null) : p);
+  const ch=ECON.emotes.list[id|0];
+  if(!el || !(el instanceof Element) || !ch) return null;
+  el.querySelectorAll('.emote').forEach(x=>x.remove());
+  const d=document.createElement('div'); d.className='emote'; d.textContent=ch; el.appendChild(d);
+  setTimeout(()=>d.remove(), ECON.emotes.show);
+  return d;
+}
+const emoteMySlot = () => (mp && mp.role==='guest') ? (mp.slot||'P2') : 'P1';
+/* may I emote right now? in a running match (play / celebrate), not watching, not on the penalty screens, cooldown over */
+function emoteCanSend(){
+  if(spectating || (typeof pk!=='undefined' && pk)) return false;
+  if(state!=='play' && state!=='celebrate') return false;
+  return performance.now()-EMOTES.lastT >= ECON.emotes.cooldown;
+}
+/* host (or offline with friends watching): put the event into the next snapshot — unless a guest runs an older build (same guard as say()) */
+function emoteRelay(slot, id){
+  if(mp && mp.conns && mp.conns.some(c=>!c.ver || c.ver<GAME_VERSION)) return;
+  netEv('emote:'+slot+':'+id);
+}
+/* my emote: bubble over my player, then the network / the bots */
+function emoteSend(id){
+  id=id|0;
+  if(!ECON.emotes.list[id] || !emoteCanSend()) return false;
+  EMOTES.lastT=performance.now(); emoteStripClose();
+  const b=$('#btn-emote'); if(b){ b.classList.add('cool'); clearTimeout(EMOTES.coolTimer); EMOTES.coolTimer=setTimeout(()=>b.classList.remove('cool'), ECON.emotes.cooldown); }
+  const slot=emoteMySlot(); emoteShow(slot, id);
+  try{ sfx.click(); }catch(e){}
+  if(mp && mp.role==='guest'){ if(mp.conn && mp.connected){ try{ mp.conn.send({t:'emote', i:id}); }catch(e){} } }
+  else { emoteRelay(slot, id); if(!mp) for(const p of (teamR||[])) if(p.src==='ai') emoteBotReply(p, [0,1,2,3]); }
+  Hooks.emit('emote', slot, id);
+  return true;
+}
+/* a bot answers (offline only): 30 % chance, one second later, one of the given emote ids */
+function emoteBotReply(p, pool){
+  if(!p || !p.el || Math.random()>=ECON.emotes.botReply) return;
+  setTimeout(()=>{
+    if(settings.emotesOff || mp || spectating) return;
+    if(state!=='play' && state!=='celebrate' && state!=='replay') return;
+    if(p.el.hidden || p.el.classList.contains('bot-emote')) return;      // the Trickster is already laughing (50-bot)
+    emoteShow(p, pool[Math.floor(Math.random()*pool.length)]);
+  }, ECON.emotes.botDelay);
+}
+
+/* ----- touch: the 😀 button and the strip ----- */
+function emoteStripOpen(){
+  const s=$('#emote-strip'); if(!s || !emoteCanSend()) return false;
+  s.hidden=false; clearTimeout(EMOTES.stripTimer); EMOTES.stripTimer=setTimeout(emoteStripClose, ECON.emotes.strip);
+  return true;
+}
+function emoteStripClose(){ const s=$('#emote-strip'); if(s) s.hidden=true; clearTimeout(EMOTES.stripTimer); EMOTES.stripTimer=0; }
+(function emoteBuildUI(){
+  const g=$('#game'); if(!g || $('#btn-emote')) return;
+  const b=document.createElement('button'); b.type='button'; b.id='btn-emote'; b.textContent='😀'; b.title=T('emote.btn');
+  b.addEventListener('click', e=>{ e.stopPropagation(); if($('#emote-strip').hidden){ if(emoteStripOpen()) try{ sfx.click(); }catch(_){} } else emoteStripClose(); });
+  const s=document.createElement('div'); s.id='emote-strip'; s.hidden=true; s.title=T('emote.btn');
+  ECON.emotes.list.forEach((ch,i)=>{ const x=document.createElement('button'); x.type='button'; x.className='eb'; x.dataset.i=i; x.textContent=ch; x.addEventListener('click', e=>{ e.stopPropagation(); emoteSend(i); }); s.appendChild(x); });
+  g.appendChild(b); g.appendChild(s);
+})();
+Hooks.on('screen', id=>{ if(id!=='game') emoteStripClose(); });
+
+/* ----- keyboard: 1 2 3 4 (top row only — the numpad belongs to the 2v2 key sets) ----- */
+window.addEventListener('keydown', e=>{
+  if(e.repeat || e.ctrlKey || e.altKey || e.metaKey) return;
+  const m=/^Digit([1-4])$/.exec(e.code||''); if(!m) return;
+  const t=e.target; if(t && t!==window && t!==document && t!==document.body && (t.tagName==='INPUT' || t.tagName==='TEXTAREA' || t.isContentEditable)) return;
+  if(emoteSend(+m[1]-1)) e.preventDefault();
+});
+
+/* ----- online: snapshot events (guests + spectators) ----- */
+function emoteOnNetEv(e){                              // 'emote:<slot>:<id>'
+  const a=String(e).split(':'); const slot=a[1], id=+a[2];
+  if(!SLOT_P[slot] || !(id>=0)) return;
+  if(mp && mp.role==='guest' && slot===mp.slot) return;   // my own emote coming back from the host: it was shown when I sent it
+  if(settings.emotesOff) return;
+  emoteShow(slot, id);
+}
+const _emoteApplySnapshot=applySnapshot;
+applySnapshot=function(s, teamL, isPlayer){
+  if(s && Array.isArray(s.ev)) for(const e of s.ev){ if(typeof e==='string' && e.startsWith('emote:')) emoteOnNetEv(e); }
+  return _emoteApplySnapshot.apply(this, arguments);
+};
+/* ----- online: a guest's emote reaches the host ----- */
+function emoteFromGuest(m, c){
+  if(!mp || mp.role!=='host' || !c || !c.slot) return;
+  const id=m.i|0; if(!ECON.emotes.list[id]) return;
+  if(state!=='play' && state!=='celebrate' && state!=='replay') return;
+  const now=performance.now(); if(c.emoteT && now-c.emoteT<ECON.emotes.cooldown) return; c.emoteT=now;
+  if(!settings.emotesOff) emoteShow(c.slot, id);
+  emoteRelay(c.slot, id);
+  Hooks.emit('emote', c.slot, id);
+}
+const _emoteMpOnMsg=mpOnMsg;
+mpOnMsg=function(m, c){
+  if(m && m.t==='emote'){ if(c) emoteFromGuest(m, c); return; }
+  return _emoteMpOnMsg.apply(this, arguments);
+};
+
+/* ----- offline: the bot reacts to goals (scored: 😎 🔥, conceded: 👏 😂) ----- */
+const _emoteScoreGoal=scoreGoal;
+scoreGoal=function(who){
+  const s0=state; const r=_emoteScoreGoal.apply(this, arguments);
+  if(s0==='play' && state==='celebrate' && !training && !mp && !spectating) for(const p of (teamR||[])) if(p.src==='ai') emoteBotReply(p, who==='op' ? [1,2] : [3,0]);
+  return r;
+};
+
+/* ----- settings: show other people's emotes (on by default) ----- */
+(function emoteSettingsRow(){
+  const v=$('#set-voice'); const row=v && v.closest('.setrow'); if(!row || $('#set-emotes')) return;
+  const d=document.createElement('div'); d.className='setrow';
+  d.innerHTML='<span id="set-emotes-l"></span><label class="switch"><input type="checkbox" id="set-emotes"><span></span></label>';
+  row.after(d);
+  const cb=$('#set-emotes'); cb.checked=!settings.emotesOff;
+  cb.addEventListener('change', ()=>{ settings.emotesOff=!cb.checked; saveSettings(); try{ sfx.click(); }catch(e){} });
+  STATIC_ADD({'#set-emotes-l':'emote.setting'});
+})();
+
+/* ----- one help line under the controls card (95-onboard loads later, so the wrap waits for the page to finish loading) ----- */
+setTimeout(()=>{
+  if(typeof showControlsHelp!=='function') return;
+  const _h=showControlsHelp;
+  showControlsHelp=function(){
+    const r=_h.apply(this, arguments);
+    try{ const g=$('#ctrl-grid'); if(g){ let d=$('#emote-help'); if(!d){ d=document.createElement('div'); d.id='emote-help'; g.after(d); } d.textContent=T(document.body.classList.contains('touch') ? 'emote.helpTouch' : 'emote.helpKeys'); } }catch(e){}
+    return r;
+  };
+}, 0);
+applyLang();
 
 /* ===== 50-bot.js ===== */
 /* ===================================================================================================
@@ -8737,6 +10117,642 @@ setTimeout(()=>cloudBackup(), 4000);
 setTimeout(socialStorageProbe, 1500);
 applyLang();
 
+/* ===== 75-league.js ===== */
+/* ===================================================================================================
+   75-league — the monthly league (PLAN §7.1) + the league view on the leaderboard (§7.2, light) + "watch live".
+   Season trophies live in prog.season={key:'YYYY-MM', tr, peak, floor}; lifetime prog.trophies are untouched.
+   Per real match: win +4/+6/+8/+10/+12/+15 by level (online +10, classic +2 extra), draw +2, loss −4 but never
+   below `floor` and never while in Bronze. Leagues: Bronze 0 · Silver 20 · Gold 50 · Platinum 100 · Diamond 200 ·
+   Champion 400; crossing a threshold sets `floor` to it. When the month changes: prizes from the finished season's
+   peak league (claimed from a modal, pending in prog.seasonPrize so a reload cannot lose it), then
+   tr=min(100, floor(peak/2)), floor = tr>=20 ? 20 : 0, peak=tr.
+   Public: seasonState() seasonPoints(info) seasonApply(info) leagueIndex(tr) leagueTier(tr) leagueName(i)
+           leagueCheckRollover() leagueShowPrize() leagueClaimPrize() openLeagueModal() closeLeagueModal()
+           leagueRowsFromUsers(usersObj) leagueTopHTML(rows) leagueRenderTop() leagueAddWatchButtons(box)
+           leagueRefreshPill() leagueDaysLeft() leagueMonthKey()
+   Heartbeat fields added: str (season trophies), sk (season key), lg (league index).
+   Hooks emitted: 'leaguePrize'(leagueIndex) after a claim, 'leagueUp'(leagueIndex) on a promotion.
+   =================================================================================================== */
+I18N_ADD({
+ 'lg.t0':['ברונזה','Bronze','برونز','Бронза'], 'lg.t1':['כסף','Silver','فضة','Серебро'], 'lg.t2':['זהב','Gold','ذهب','Золото'],
+ 'lg.t3':['פלטינה','Platinum','بلاتين','Платина'], 'lg.t4':['יהלום','Diamond','ماس','Алмаз'], 'lg.t5':['אלוף','Champion','بطل','Чемпион'],
+ 'lg.n0':['ליגת ברונזה','Bronze League','دوري البرونز','Бронзовая лига'], 'lg.n1':['ליגת כסף','Silver League','دوري الفضة','Серебряная лига'],
+ 'lg.n2':['ליגת זהב','Gold League','دوري الذهب','Золотая лига'], 'lg.n3':['ליגת פלטינה','Platinum League','دوري البلاتين','Платиновая лига'],
+ 'lg.n4':['ליגת יהלום','Diamond League','دوري الماس','Алмазная лига'], 'lg.n5':['ליגת אלוף','Champion League','دوري الأبطال','Лига чемпионов'],
+ 'lg.pill':['🏅 {0} · {1}','🏅 {0} · {1}','🏅 {0} · {1}','🏅 {0} · {1}'],
+ 'lg.tab':['🏅 ליגה החודש','🏅 This month','🏅 دوري الشهر','🏅 Лига месяца'],
+ 'lg.watch':['👀 צפה','👀 Watch','👀 شاهد','👀 Смотреть'],
+ 'lg.title':['🏅 הליגה החודשית','🏅 Monthly league','🏅 الدوري الشهري','🏅 Лига месяца'],
+ 'lg.yours':['אתה ב{0}','You are in the {0}','أنت في {0}','Твоя лига: {0}'],
+ 'lg.tr':['🏅 {0} גביעי עונה','🏅 {0} season trophies','🏅 {0} كؤوس الموسم','🏅 {0} кубков сезона'],
+ 'lg.toNext':['עוד {0} 🏅 ל{1}','{0} 🏅 to the {1}','{0} 🏅 حتى {1}','Ещё {0} 🏅 до: {1}'],
+ 'lg.top':['🏆 אתה בליגה הכי גבוהה!','🏆 You are in the top league!','🏆 أنت في أعلى دوري!','🏆 Ты в высшей лиге!'],
+ 'lg.daysLeft':['⏳ עוד {0} ימים בעונה','⏳ {0} days left in the season','⏳ باقي {0} أيام في الموسم','⏳ Дней до конца сезона: {0}'],
+ 'lg.lastDay':['⏳ היום האחרון של העונה!','⏳ Last day of the season!','⏳ آخر يوم في الموسم!','⏳ Последний день сезона!'],
+ 'lg.prizes':['🎁 פרסים בסוף החודש','🎁 Prizes at the end of the month','🎁 جوائز نهاية الشهر','🎁 Призы в конце месяца'],
+ 'lg.how':['ניצחון +4 עד +15 · תיקו +2 · הפסד −4','Win +4 to +15 · draw +2 · loss −4','فوز +4 إلى +15 · تعادل +2 · خسارة −4','Победа +4…+15 · ничья +2 · поражение −4'],
+ 'lg.board':['🏅 הטבלה','🏅 Table','🏅 الجدول','🏅 Таблица'],
+ 'lg.close':['סגור','Close','إغلاق','Закрыть'],
+ 'lg.over':['🏆 העונה הסתיימה!','🏆 The season is over!','🏆 انتهى الموسم!','🏆 Сезон окончен!'],
+ 'lg.finished':['סיימת ב{0}!','You finished in the {0}!','أنهيت الموسم في {0}!','Ты закончил сезон в: {0}!'],
+ 'lg.take':['קבל! 🎉','Claim! 🎉','خذ! 🎉','Забрать! 🎉'],
+ 'lg.chest':['🎁 תיבת כסף','🎁 Silver chest','🎁 صندوق فضي','🎁 Серебряный сундук'],
+ 'lg.newSeason':['עונה חדשה התחילה — מתחילים עם {0} 🏅','A new season starts — you begin with {0} 🏅','بدأ موسم جديد — تبدأ بـ {0} 🏅','Новый сезон — начинаешь с {0} 🏅'],
+ 'lg.ecDelta':['🏅 {0} לעונה','🏅 {0} season','🏅 {0} للموسم','🏅 {0} сезон'],
+ 'lg.up':['🎉 עלית ל{0}!','🎉 Promoted to the {0}!','🎉 صعدت إلى {0}!','🎉 Ты в: {0}!'],
+});
+Object.assign(ECON, { league: {
+  tiers:[{min:0, icon:'🥉'}, {min:20, icon:'🥈'}, {min:50, icon:'🥇'}, {min:100, icon:'💠'}, {min:200, icon:'💎'}, {min:400, icon:'👑'}],
+  win:[4,6,8,10,12,15], online:10, classic:2, draw:2, loss:-4, carryMax:100,
+  prizes:[null, {coins:100}, {coins:200, keys:1}, {coins:300, gems:10}, {coins:500, gems:25}, {coins:800, gems:50}],   // by league index; everyone ≥ Silver also gets a silver chest
+  chestFrom:1,
+}});
+const LEAGUE = { view:'top', pillBound:false };
+
+/* ----- season state ----- */
+function leagueMonthKey(){ return dayKey().slice(0,7); }
+function seasonState(){
+  if(!prog.season || typeof prog.season!=='object'){ prog.season={key:leagueMonthKey(), tr:0, peak:0, floor:0}; saveProg(); }
+  const s=prog.season; if(!s.key) s.key=leagueMonthKey(); s.tr=s.tr|0; s.floor=s.floor|0; s.peak=Math.max(s.peak|0, s.tr);
+  return s;
+}
+function leagueIndex(tr){ const t=ECON.league.tiers; let i=0; for(let k=0;k<t.length;k++) if((tr|0)>=t[k].min) i=k; return i; }
+function leagueTier(tr){ return ECON.league.tiers[leagueIndex(tr)]; }
+function leagueName(i){ return T('lg.n'+Math.max(0,Math.min(5,i|0))); }
+function leagueShort(i){ return T('lg.t'+Math.max(0,Math.min(5,i|0))); }
+function leagueIcon(i){ return ECON.league.tiers[Math.max(0,Math.min(5,i|0))].icon; }
+function leagueBadge(i){ i=Math.max(0,Math.min(5,i|0)); return '<span class="lg-badge lg-'+i+'">'+leagueIcon(i)+' '+esc(leagueShort(i))+'</span>'; }
+function leagueDaysLeft(){ const p=dayKey().split('-').map(Number); const dim=new Date(p[0], p[1], 0).getDate(); return Math.max(0, dim-p[2]); }
+/* pure: how many season trophies a finished match is worth (before floor rules) */
+function seasonPoints(info){
+  if(!info || info.training) return 0; const L=ECON.league;
+  if(info.outcome==='win'){ let p = info.online ? L.online : L.win[Math.max(0, Math.min(5, info.level|0))]; if(info.fmt==='classic') p+=L.classic; return p; }
+  if(info.outcome==='draw') return L.draw;
+  if(info.outcome==='lose') return L.loss;
+  return 0;
+}
+/* applies a match to prog.season: the floor rule, the Bronze no-loss rule, peak and floor tracking */
+function seasonApply(info){
+  const s=seasonState(), want=seasonPoints(info), before=s.tr|0, lgBefore=leagueIndex(before);
+  let after=before;
+  if(want>0) after=before+want;
+  else if(want<0 && before>=ECON.league.tiers[1].min) after=Math.max(s.floor|0, before+want);
+  s.tr=after; if(after>(s.peak|0)) s.peak=after;
+  const fl=leagueTier(after).min; if(fl>(s.floor|0)) s.floor=fl;
+  saveProg();
+  return {want, delta:after-before, tr:after, lgBefore, lgAfter:leagueIndex(after)};
+}
+/* a new month: remember the prize of the finished season, carry half the peak (max 100), reset the floor */
+function leagueCheckRollover(){
+  const s=seasonState(), cur=leagueMonthKey(); if(s.key===cur) return false;
+  const peak=Math.max(s.peak|0, s.tr|0), lg=leagueIndex(peak);
+  if(lg>=ECON.league.chestFrom && !prog.seasonPrize) prog.seasonPrize={key:s.key, league:lg};
+  const tr=Math.min(ECON.league.carryMax, Math.floor(peak/2));
+  s.key=cur; s.tr=tr; s.floor = tr>=ECON.league.tiers[1].min ? ECON.league.tiers[1].min : 0; s.peak=tr;
+  saveProg(); return true;
+}
+function leaguePrizeHTML(i){
+  const p=ECON.league.prizes[Math.max(0,Math.min(5,i|0))]; if(!p) return '';
+  const bits=[]; if(p.coins) bits.push('🪙 '+fmtNum(p.coins)); if(p.keys) bits.push('🔑 '+p.keys); if(p.gems) bits.push('💎 '+p.gems);
+  if(i>=ECON.league.chestFrom) bits.push(T('lg.chest'));
+  return bits.map(b=>'<span class="lg-prize">'+b+'</span>').join('');
+}
+/* the end-of-season modal: shown once on the home screen while a prize is pending */
+function leagueShowPrize(){
+  const p=prog.seasonPrize; if(!p) return false;
+  const m=$('#league-prize-modal'); if(!m || m.classList.contains('show')) return false;
+  if((typeof mp!=='undefined' && mp) || state!=='idle' || !$('#home').classList.contains('active')) return false;
+  const lg=Math.max(1, Math.min(5, p.league|0));
+  $('#lgp-title').textContent=T('lg.over'); $('#lgp-icon').textContent=leagueIcon(lg); $('#lgp-icon').className='lgp-icon lg-'+lg;
+  $('#lgp-sub').textContent=T('lg.finished', leagueName(lg)); $('#lgp-list').innerHTML=leaguePrizeHTML(lg);
+  $('#lgp-new').textContent=T('lg.newSeason', seasonState().tr|0); $('#btn-lg-take').textContent=T('lg.take');
+  m.classList.add('show'); return true;
+}
+function leagueClaimPrize(){
+  const p=prog.seasonPrize; if(!p) return false;
+  const lg=Math.max(1, Math.min(5, p.league|0)), pr=ECON.league.prizes[lg]||{};
+  delete prog.seasonPrize; saveProg();
+  const m=$('#league-prize-modal'); if(m) m.classList.remove('show');
+  if(pr.coins) addCoins(pr.coins, 'league'); if(pr.gems) addGems(pr.gems, 'league'); if(pr.keys) addKeys(pr.keys, 'league');
+  if(lg>=ECON.league.chestFrom && typeof giveChest==='function') giveChest('silver');
+  try{ sfx.win(); confetti.burst(220); }catch(e){}
+  Hooks.emit('leaguePrize', lg); leagueRefreshPill(); return true;
+}
+
+/* ----- the league modal (from the home pill) ----- */
+function openLeagueModal(){
+  const m=$('#league-modal'); if(!m) return; const s=seasonState(), i=leagueIndex(s.tr), tiers=ECON.league.tiers, next=tiers[i+1]||null;
+  $('#lg-title').textContent=T('lg.title'); $('#lg-icon').textContent=leagueIcon(i); $('#lg-icon').className='lg-icon lg-'+i;
+  $('#lg-name').textContent=T('lg.yours', leagueName(i)); $('#lg-tr').textContent=T('lg.tr', s.tr|0);
+  const from=tiers[i].min, to=next ? next.min : from, pct = next ? Math.min(100, Math.round(((s.tr|0)-from)/(to-from)*100)) : 100;
+  $('#lg-bar i').style.width=pct+'%'; $('#lg-bar').className='lg-bar lg-'+i;
+  $('#lg-next').textContent = next ? T('lg.toNext', Math.max(0, to-(s.tr|0)), leagueName(i+1)) : T('lg.top');
+  const d=leagueDaysLeft(); $('#lg-days').textContent = d>0 ? T('lg.daysLeft', d) : T('lg.lastDay');
+  $('#lg-how').textContent=T('lg.how'); $('#lg-prizes-h').textContent=T('lg.prizes');
+  $('#lg-table').innerHTML = tiers.map((t,k)=>'<div class="lg-row lg-'+k+(k===i?' cur':'')+'"><span class="lg-cell lg-who">'+leagueBadge(k)+'</span><span class="lg-cell lg-min">🏅 '+t.min+'</span><span class="lg-cell lg-gift">'+(leaguePrizeHTML(k)||'—')+'</span></div>').join('');
+  $('#btn-lg-board').textContent=T('lg.board'); $('#btn-lg-close').textContent=T('lg.close');
+  m.classList.add('show');
+}
+function closeLeagueModal(){ const m=$('#league-modal'); if(m) m.classList.remove('show'); }
+
+/* ----- the home pill: "🏅 ליגת כסף · 23" inside #home-trophy (bottom-left column), above the trophy pill ----- */
+function leagueEnsurePill(){
+  let b=$('#home-league'); if(b) return b;
+  const col=$('#home-trophy'), tp=$('#trophy-pill'); if(!col && !tp) return null;
+  b=document.createElement('button'); b.className='pill league'; b.id='home-league'; b.type='button';
+  b.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} openLeagueModal(); });
+  if(col) col.insertBefore(b, col.firstChild); else tp.parentNode.insertBefore(b, tp);   // home v2 column, or (without 90-home) right before the core's trophy pill
+  return b;
+}
+function leagueRefreshPill(){
+  const b=leagueEnsurePill(); if(!b) return;
+  const s=seasonState(), i=leagueIndex(s.tr);
+  b.textContent=T('lg.pill', leagueShort(i), s.tr|0); b.className='pill league lg-'+i; if(typeof fitText==='function') fitText(b, 12);
+}
+function leagueHomeTick(){ leagueCheckRollover(); leagueRefreshPill(); if(prog.seasonPrize) setTimeout(leagueShowPrize, 700); }
+
+/* ----- leaderboard: the league view + watch buttons ----- */
+function leagueWatchButtonHTML(){ return '<button class="btn small purple lg-watch" data-act="watch">'+esc(T('lg.watch'))+'</button>'; }
+/* adds "👀 watch" to every rendered row whose player is in a match right now (the core's #fr-top click handler routes data-act=watch to watchFriend) */
+function leagueAddWatchButtons(box){
+  box=box||$('#fr-top'); if(!box) return 0; let n=0;
+  box.querySelectorAll('.frow[data-name]').forEach(row=>{
+    if(row.classList.contains('mine') || !row.querySelector('.dot.match') || row.querySelector('[data-act=watch]')) return;
+    const st=row.querySelector('.fstat'); const b=document.createElement('span'); b.innerHTML=leagueWatchButtonHTML(); const btn=b.firstChild;
+    if(st && st.nextSibling) row.insertBefore(btn, st.nextSibling); else row.appendChild(btn); n++;
+  });
+  return n;
+}
+function leagueHiddenRow(r){
+  if(typeof isHiddenId==='function') return isHiddenId(r.key, r.name);
+  const hidden=new Set((typeof HIDDEN_NAMES!=='undefined' ? HIDDEN_NAMES : []).concat((typeof LEADER_BOTS!=='undefined' ? LEADER_BOTS : []).map(b=>b.name)).map(n=>n.toLowerCase()));
+  return hidden.has((r.name||'').toLowerCase());
+}
+/* pure: users/<key> objects → rows with this month's season trophies (a stale season key counts as 0) */
+function leagueRowsFromUsers(all){
+  const cur=leagueMonthKey(); if(!all || typeof all!=='object') return [];
+  return Object.entries(all).filter(([k,u])=>u && u.name).map(([k,u])=>({key:k, name:normName(u.name), w:u.w|0, c:u.c|0, xp:u.xp|0, tr:u.tr|0, str: u.sk===cur ? (u.str|0) : 0, lg: u.sk===cur ? leagueIndex(u.str|0) : 0, online:fbOnline(u), st:u.st, adm:!!u.adm})).filter(r=>!leagueHiddenRow(r));
+}
+/* pure: the league table markup from rows {name,w,c,str,online,st,adm,me?} — sorted by season trophies, then wins, then cups; my row highlighted */
+function leagueTopHTML(rows){
+  const me=normName(settings.name).toLowerCase();
+  rows=(rows||[]).slice().sort((a,b)=>(b.str|0)-(a.str|0) || (b.w|0)-(a.w|0) || (b.c|0)-(a.c|0)).slice(0,25);
+  const medal=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';
+  if(!rows.length) return '<div class="hint" style="text-align:center;margin-top:20px">'+T('friends.empty')+'</div>';
+  return rows.map((r,i)=>{ const mine=r.me||(r.name||'').toLowerCase()===me, lg=leagueIndex(r.str|0), live=!!r.online && r.st==='match';
+    return '<div class="frow top lg '+(mine?'mine':'')+'" data-name="'+esc(r.name)+'"><span class="rank">'+medal(i)+'</span><span class="dot '+(r.online?(live?'match':'online'):'offline')+'"></span><span class="fname">'+esc(crown(r.name, r.adm||(mine&&isAdmin())))+(mine?' <small>('+T('mp.you')+')</small>':'')+'</span>'+leagueBadge(lg)+'<span class="fstat">🏅 '+(r.str|0)+'</span>'
+      +(live && !mine ? leagueWatchButtonHTML() : '')
+      +(mine||r.bot ? '' : '<button class="btn small blue" data-act="view">'+T('friends.view')+'</button>'+(prog.friends[r.name] ? '' : '<button class="btn small yellow" data-act="add">'+T('friends.add')+'</button>'))+'</div>'; }).join('');
+}
+/* the league view of #fr-top: one more read of users/ (the wins view already made its own) */
+async function leagueRenderTop(){
+  const box=$('#fr-top'); if(!box) return; box.innerHTML='<div class="hint" style="text-align:center;margin-top:20px">'+T('friends.checking')+'</div>';
+  let rows=null, server=false;
+  if(fbOn()){ const all=await fbReq('users','GET'); if(all){ server=true; rows=leagueRowsFromUsers(all); } }
+  if(LEAGUE.view!=='league' || !box.isConnected) return;                       // the kid switched tabs while we were reading
+  const myName=normName(settings.name), s=seasonState();
+  if(!rows){ rows=Object.keys(prog.friends).filter(n=>n.toLowerCase()!==myName.toLowerCase()).map(n=>({name:n, w:prog.friends[n].w|0, c:prog.friends[n].c|0, str:0, online:!!prog.friends[n].online, st:prog.friends[n].st})); }
+  if(!rows.some(r=>r.me || (r.name||'').toLowerCase()===myName.toLowerCase())) rows.push({name:myName||T('mp.you'), w:loadStats().w|0, c:loadStats().c|0, str:s.tr|0, online:true, me:true});
+  box.innerHTML=(server ? '' : '<div class="hint" style="text-align:center">'+T('friends.topNeedsServer')+'</div>')+leagueTopHTML(rows);
+}
+function leagueAfterTop(){ if(LEAGUE.view==='league') return leagueRenderTop(); leagueAddWatchButtons($('#fr-top')); }
+/* the tab button + the wrappers; installed after every module loaded (80-adminstats replaces buildTop outright) */
+function leagueInstall(){
+  const tabs=document.querySelector('#friends .fr-tabs');
+  if(tabs && !$('#fr-tab-league')){ const b=document.createElement('button'); b.className='btn small purple'; b.id='fr-tab-league'; b.textContent=T('lg.tab'); b.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} showFrTab('league'); }); tabs.appendChild(b); }
+  if(typeof buildTop==='function' && !buildTop._league){ const orig=buildTop; buildTop=async function(){ const r=await orig.apply(this, arguments); try{ await leagueAfterTop(); }catch(e){ console.error('league top', e); } return r; }; buildTop._league=true; }
+  if(typeof showFrTab==='function' && !showFrTab._league){ const orig=showFrTab; showFrTab=function(which){ LEAGUE.view = which==='league' ? 'league' : 'top'; const r=orig.call(this, which==='league' ? 'top' : which); const lt=$('#fr-tab-league'); if(lt) lt.classList.toggle('on', which==='league'); if(which==='league') $('#fr-tab-top').classList.remove('on'); return r; }; showFrTab._league=true; }
+}
+
+/* ----- wiring ----- */
+Hooks.on('matchEnd', info=>{
+  if(!info || info.training || (typeof spectating!=='undefined' && spectating)) return;
+  const res=seasonApply(info); leagueRefreshPill();
+  const txt=T('lg.ecDelta', (res.delta>0?'+':'')+res.delta);
+  const earn=$('#endcard-earn');
+  if(typeof endcardRow==='function' && earn && !earn.hidden){
+    const span=document.createElement('span'); span.className='ec-big lg-ec lg-'+res.lgAfter; span.id='endcard-league'; span.textContent=txt;
+    const extra=earn.querySelector('.ec-row.ec-extra');
+    if(extra) extra.appendChild(span);
+    else {
+      const r=endcardRow('ec-extra ec-league'); r.appendChild(span); earn.appendChild(r);
+      const n=earn.querySelectorAll('.ec-row').length, reveal=()=>r.classList.add('ec-on');
+      if(typeof endcardNoMotion==='function' && endcardNoMotion()) reveal(); else { const t=setTimeout(reveal, 250+300*n); if(typeof ENDCARD!=='undefined' && ENDCARD && ENDCARD.timers) ENDCARD.timers.push(t); }
+    }
+  } else if(res.delta) setTimeout(()=>toast(txt,'xp'), 900);
+  if(res.lgAfter>res.lgBefore){ setTimeout(()=>{ toast(T('lg.up', leagueName(res.lgAfter)),'ach'); try{ confetti.burst(160); }catch(e){} }, 1400); Hooks.emit('leagueUp', res.lgAfter); }
+});
+Hooks.on('heartbeat', body=>{ const s=seasonState(); body.str=s.tr|0; body.sk=s.key; body.lg=leagueIndex(s.tr); });
+Hooks.on('home', leagueHomeTick);
+Hooks.on('wallet', ()=>{ if($('#home-league')) leagueRefreshPill(); });
+Hooks.on('screen', id=>{ if(id==='home') setTimeout(leagueHomeTick, 60); });
+$('#btn-lg-take').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} leagueClaimPrize(); });
+$('#btn-lg-close').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} closeLeagueModal(); });
+$('#btn-lg-board').addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} closeLeagueModal(); if(typeof openFriends==='function'){ openFriends(); showFrTab('league'); } });
+$('#league-modal').addEventListener('click', e=>{ if(e.target===$('#league-modal')) closeLeagueModal(); });
+STATIC_ADD({'#fr-tab-league':'lg.tab', '#lg-title':'lg.title', '#btn-lg-close':'lg.close', '#btn-lg-board':'lg.board', '#lgp-title':'lg.over', '#btn-lg-take':'lg.take'});
+{ const _lgApplyLang=applyLang; applyLang=function(){ const r=_lgApplyLang.apply(this, arguments); if($('#home-league')) leagueRefreshPill(); return r; }; }
+leagueCheckRollover(); leagueInstall(); setTimeout(leagueInstall, 0);
+applyLang();
+
+/* ===== 78-clubs.js ===== */
+/* ===================================================================================================
+   CLUBS — a shared weekly goal, no chat, no free text (PLAN §9.8 simplified, Rumble-Stars style).
+   Server (Firebase REST through fbReq):
+     clubs/<id>      = {name:<presetIndex>, emoji, code, created, members:{<fbKey>:{name,lv,g,w,m,wk,t}}, week:{key,goals}}
+     clubCodes/<CODE> = <id>
+   Every member's REAL matches PATCH its own member node with absolute weekly counters (goals g, wins w,
+   matches m, week key wk) — when the week key changes the counters restart. The club total is the sum
+   of g over the members whose wk is the current week; target = 15 goals × members (min 30).
+   Local: prog.club = {id, code, name:<presetIndex>, emoji, joined, me:{wk,g,w,m}, dirty?, codeDirty?, tot?, target?, n?}
+          prog.clubPrize = weekKey() once this week's prize was taken.
+   Reads are bounded: one GET of clubs/<id> when the club screen opens (cached 10 min, 🔄 forces), one
+   PATCH after every match, one GET on the claim button. Everything degrades: undefined = "no connection".
+   =================================================================================================== */
+const CLUB_ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';            // join codes and ids: no 0/O/1/I
+const CLUB_NAMES=[
+  ['האריות','The Lions','الأسود','Львы'], ['הברקים','The Lightnings','البروق','Молнии'], ['הכרישים','The Sharks','القروش','Акулы'],
+  ['הנמרים','The Tigers','النمور','Тигры'], ['הנשרים','The Eagles','النسور','Орлы'], ['הדרקונים','The Dragons','التنانين','Драконы'],
+  ['הזאבים','The Wolves','الذئاب','Волки'], ['הדובים','The Bears','الدببة','Медведи'], ['הרקטות','The Rockets','الصواريخ','Ракеты'],
+  ['הכוכבים','The Stars','النجوم','Звёзды'], ['האלופים','The Champions','الأبطال','Чемпионы'], ['הפנתרים','The Panthers','الفهود','Пантеры'],
+  ['הסופות','The Storms','العواصف','Бури'], ['הפיראטים','The Pirates','القراصنة','Пираты'], ['הגיבורים','The Heroes','الأبطال الخارقون','Герои'],
+  ['הקוסמים','The Wizards','السحرة','Волшебники'], ['הרובוטים','The Robots','الروبوتات','Роботы'], ['הנינג׳ות','The Ninjas','النينجا','Ниндзя'],
+  ['הקופים','The Monkeys','القرود','Обезьяны'], ['הפילים','The Elephants','الفيلة','Слоны'], ['הסוסים','The Horses','الخيول','Кони'],
+  ['הצפרדעים','The Frogs','الضفادع','Лягушки'], ['האש','The Fire','النار','Огонь'], ['הקרח','The Ice','الجليد','Лёд'],
+];
+const CLUB_EMOJIS=['🦁','⚡','🦈','🐯','🦅','🐉','🚀','⭐','🏆','🔥','🤖','🐺'];
+const CLUB_NAME_EMOJI=['🦁','⚡','🦈','🐯','🦅','🐉','🐺','🏆','🚀','⭐','🏆','🐯','⚡','🏆','⭐','🔥','🤖','⚡','🦁','🏆','🚀','🐉','🔥','⭐'];   // the default emoji per preset name
+Object.assign(ECON, { clubs:{ create:20, max:20, goalPer:15, goalMin:30, prizeMatches:5, prizeGems:10, prizeCoins:300, prizeCoinsGold:600, refreshMs:10*60000 } });
+
+I18N_ADD({
+ 'clubs.title':['🏟️ מועדון','🏟️ Club','🏟️ النادي','🏟️ Клуб'],
+ 'clubs.btn':['🏟️ מועדון','🏟️ Club','🏟️ النادي','🏟️ Клуб'],
+ 'clubs.pillNone':['🏟️ מועדון','🏟️ Club','🏟️ النادي','🏟️ Клуб'],
+ 'clubs.pill':['{0} {2}/{3}','{0} {2}/{3}','{0} {2}/{3}','{0} {2}/{3}'],   /* short: the pill shares a row with the league pill */
+ 'clubs.intro':['שחקו יחד עם חברים למטרה שבועית ⚽ כל גול נספר!','Play with friends toward a weekly goal ⚽ every goal counts!','العبوا مع الأصدقاء نحو هدف أسبوعي ⚽ كل هدف يُحتسب!','Играй с друзьями к недельной цели ⚽ каждый гол считается!'],
+ 'clubs.createCost':['➕ צור מועדון · {0}💎','➕ Create a club · {0}💎','➕ أنشئ ناديًا · {0}💎','➕ Создать клуб · {0}💎'],
+ 'clubs.createFree':['➕ צור מועדון · חינם','➕ Create a club · free','➕ أنشئ ناديًا · مجانًا','➕ Создать клуб · бесплатно'],
+ 'clubs.joinBtn':['🔑 הצטרף עם קוד','🔑 Join with a code','🔑 انضم برمز','🔑 Войти по коду'],
+ 'clubs.pickName':['בחרו שם','Pick a name','اختاروا اسمًا','Выбери имя'],
+ 'clubs.pickEmoji':['בחרו סמל','Pick an emoji','اختاروا رمزًا','Выбери эмодзи'],
+ 'clubs.createQ':['ליצור את המועדון {0} {1} תמורת {2}💎?','Create the club {0} {1} for {2}💎?','إنشاء النادي {0} {1} مقابل {2}💎؟','Создать клуб {0} {1} за {2}💎?'],
+ 'clubs.createQFree':['ליצור את המועדון {0} {1}?','Create the club {0} {1}?','إنشاء النادي {0} {1}؟','Создать клуб {0} {1}?'],
+ 'clubs.created':['🎉 המועדון {0} {1} נוצר! הקוד: {2}','🎉 Club {0} {1} created! Code: {2}','🎉 تم إنشاء النادي {0} {1}! الرمز: {2}','🎉 Клуб {0} {1} создан! Код: {2}'],
+ 'clubs.codeHint':['בקשו מחבר את קוד המועדון (6 אותיות)','Ask a friend for the club code (6 letters)','اطلبوا من صديق رمز النادي (6 أحرف)','Попроси у друга код клуба (6 знаков)'],
+ 'clubs.join':['🚀 הצטרף','🚀 Join','🚀 انضم','🚀 Войти'],
+ 'clubs.joinQ':['להצטרף למועדון עם הקוד {0}?','Join the club with code {0}?','الانضمام إلى النادي بالرمز {0}؟','Войти в клуб с кодом {0}?'],
+ 'clubs.joined':['🎉 הצטרפת למועדון {0} {1}!','🎉 You joined {0} {1}!','🎉 انضممت إلى {0} {1}!','🎉 Ты в клубе {0} {1}!'],
+ 'clubs.badCode':['הקוד הוא 6 אותיות או ספרות','The code is 6 letters or digits','الرمز 6 أحرف أو أرقام','Код — 6 букв или цифр'],
+ 'clubs.notFound':['אין מועדון עם הקוד הזה','No club with that code','لا يوجد نادٍ بهذا الرمز','Нет клуба с таким кодом'],
+ 'clubs.full':['המועדון מלא ({0} חברים)','The club is full ({0} members)','النادي ممتلئ ({0} أعضاء)','Клуб полон ({0} участников)'],
+ 'clubs.already':['אתם כבר במועדון — עזבו אותו קודם','You are already in a club — leave it first','أنتم بالفعل في نادٍ — غادروه أولًا','Ты уже в клубе — сначала выйди'],
+ 'clubs.needName':['צריך שם קודם','You need a name first','تحتاج إلى اسم أولًا','Сначала нужно имя'],
+ 'clubs.needGems':['צריך {0}💎 כדי ליצור מועדון','You need {0}💎 to create a club','تحتاج إلى {0}💎 لإنشاء نادٍ','Нужно {0}💎, чтобы создать клуб'],
+ 'clubs.noConn':['אין חיבור — נסו שוב עוד רגע','No connection — try again in a moment','لا يوجد اتصال — حاولوا بعد قليل','Нет связи — попробуй через минуту'],
+ 'clubs.offlineCached':['אין חיבור — מציג את הנתונים האחרונים','No connection — showing the last data','لا يوجد اتصال — عرض آخر البيانات','Нет связи — показаны последние данные'],
+ 'clubs.code':['קוד: {0}','Code: {0}','الرمز: {0}','Код: {0}'],
+ 'clubs.copy':['📋 העתק קוד','📋 Copy code','📋 نسخ الرمز','📋 Копировать код'],
+ 'clubs.copied':['📋 הקוד הועתק!','📋 Code copied!','📋 تم نسخ الرمز!','📋 Код скопирован!'],
+ 'clubs.copyFail':['לא הצלחנו להעתיק — הקוד: {0}','Could not copy — the code: {0}','لم ننجح في النسخ — الرمز: {0}','Не удалось скопировать — код: {0}'],
+ 'clubs.invite':['📣 הזמן חברים','📣 Invite friends','📣 ادعُ الأصدقاء','📣 Пригласить друзей'],
+ 'clubs.inviteText':['בואו למועדון שלי {0} {1} בכוכב הכדורגל ⚽ הקוד: {2}\n{3}','Join my club {0} {1} in Football Star ⚽ code: {2}\n{3}','انضموا إلى ناديي {0} {1} في نجم كرة القدم ⚽ الرمز: {2}\n{3}','Вступай в мой клуб {0} {1} в Звезде футбола ⚽ код: {2}\n{3}'],
+ 'clubs.leave':['🚪 עזוב','🚪 Leave','🚪 غادر','🚪 Выйти'],
+ 'clubs.leaveQ':['לעזוב את המועדון? הגולים שלכם השבוע יורדים מהמועדון','Leave the club? Your goals this week leave with you','مغادرة النادي؟ أهدافكم هذا الأسبوع تُحذف من النادي','Выйти из клуба? Твои голы за неделю уйдут с тобой'],
+ 'clubs.left':['עזבתם את המועדון','You left the club','غادرتم النادي','Ты вышел из клуба'],
+ 'clubs.gone':['המועדון כבר לא קיים','The club no longer exists','النادي لم يعد موجودًا','Клуба больше нет'],
+ 'clubs.progress':['⚽ {0} / {1} השבוע','⚽ {0} / {1} this week','⚽ {0} / {1} هذا الأسبوع','⚽ {0} / {1} на этой неделе'],
+ 'clubs.daysLeft':['⏳ נשארו {0} ימים','⏳ {0} days left','⏳ بقي {0} أيام','⏳ осталось {0} дн.'],
+ 'clubs.lastDay':['⏳ היום האחרון!','⏳ Last day!','⏳ اليوم الأخير!','⏳ Последний день!'],
+ 'clubs.prizeLine':['🎁 יעד = תיבת כסף + 10💎 לכל מי ששיחק {0} משחקים · פי 2 = תיבת זהב','🎁 Goal = Silver chest + 10💎 for everyone with {0} matches · 2× = Gold chest','🎁 الهدف = صندوق فضي + 10💎 لكل من لعب {0} مباريات · ×2 = صندوق ذهبي','🎁 Цель = серебряный сундук + 10💎 всем с {0} матчами · 2× = золотой сундук'],
+ 'clubs.members':['👥 חברים ({0}/{1})','👥 Members ({0}/{1})','👥 الأعضاء ({0}/{1})','👥 Участники ({0}/{1})'],
+ 'clubs.memberStats':['⚽ {0} · 🏆 {1} · 🎮 {2}','⚽ {0} · 🏆 {1} · 🎮 {2}','⚽ {0} · 🏆 {1} · 🎮 {2}','⚽ {0} · 🏆 {1} · 🎮 {2}'],
+ 'clubs.me':['אני','me','أنا','я'],
+ 'clubs.claim':['🎁 קח את הפרס!','🎁 Take the prize!','🎁 خذ الجائزة!','🎁 Забрать приз!'],
+ 'clubs.claimGold':['🥇 קח את תיבת הזהב!','🥇 Take the Gold chest!','🥇 خذ الصندوق الذهبي!','🥇 Забрать золотой сундук!'],
+ 'clubs.claimed':['✅ קיבלת את הפרס השבוע','✅ Prize taken this week','✅ أخذت الجائزة هذا الأسبوع','✅ Приз за неделю получен'],
+ 'clubs.claimFar':['🎁 הפרס מחכה ביעד','🎁 The prize waits at the goal','🎁 الجائزة تنتظر عند الهدف','🎁 Приз ждёт у цели'],
+ 'clubs.claimNeed':['🎁 עוד {0} משחקים לפרס','🎁 {0} more matches for the prize','🎁 {0} مباريات أخرى للجائزة','🎁 Ещё {0} матчей до приза'],
+ 'clubs.notYet':['המועדון עוד לא הגיע ליעד ({0}/{1})','The club has not reached the goal yet ({0}/{1})','لم يصل النادي إلى الهدف بعد ({0}/{1})','Клуб ещё не достиг цели ({0}/{1})'],
+ 'clubs.needMatches':['שחקו עוד {0} משחקים השבוע כדי לקבל את הפרס','Play {0} more matches this week to get the prize','العبوا {0} مباريات أخرى هذا الأسبوع لنيل الجائزة','Сыграй ещё {0} матчей на этой неделе, чтобы получить приз'],
+ 'clubs.prizeSilver':['🎁 פרס המועדון: תיבת כסף + 10💎!','🎁 Club prize: Silver chest + 10💎!','🎁 جائزة النادي: صندوق فضي + 10💎!','🎁 Приз клуба: серебряный сундук + 10💎!'],
+ 'clubs.prizeGold':['🥇 פרס המועדון: תיבת זהב + 10💎!','🥇 Club prize: Gold chest + 10💎!','🥇 جائزة النادي: صندوق ذهبي + 10💎!','🥇 Приз клуба: золотой сундук + 10💎!'],
+ 'clubs.back':['חזרה','Back','رجوع','Назад'],
+});
+STATIC_ADD({'#club-title':'clubs.title', '#btn-club-close':'clubs.back', '#btn-club':'clubs.btn'});
+
+const CLUB={ data:null, fetched:0, offline:false, busy:false, loading:null, view:'none', pick:{name:0, emoji:CLUB_NAME_EMOJI[0], emojiSet:false}, pending:null, pendingBusy:false };
+
+/* ----- small helpers ----- */
+function clubName(i, l){ const row=CLUB_NAMES[i|0]||CLUB_NAMES[0]; return row[LI[l||lang]]||row[0]; }
+function clubRand(n){ const a=new Uint8Array(n); try{ crypto.getRandomValues(a); }catch(e){ for(let i=0;i<n;i++) a[i]=Math.random()*256|0; } return Array.from(a, b=>CLUB_ALPHA[b%32]).join(''); }
+function clubValidCode(c){ return /^[A-Z0-9]{6}$/.test(String(c||'')); }
+function clubNormCode(s){ return String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6); }
+function myClub(){ return (prog.club && typeof prog.club==='object' && prog.club.id) ? prog.club : null; }
+function clubMyKey(){ const n=normName(settings.name); return n ? fbKey(n) : ''; }
+function clubTarget(n){ return Math.max(ECON.clubs.goalMin, ECON.clubs.goalPer*Math.max(1, n|0)); }
+function clubDaysLeft(){ const d=new Date(now()); return 7-((d.getDay()+6)%7); }   // weeks start on Monday (weekKey): Monday 7 … Sunday 1
+/* my weekly counters, restarted when the (server) week changes */
+function clubMe(){ const c=myClub(); const wk=weekKey(); if(!c) return {wk, g:0, w:0, m:0}; if(!c.me || c.me.wk!==wk) c.me={wk, g:0, w:0, m:0}; return c.me; }
+function clubMemberBody(me){ me=me||clubMe(); return {name:normName(settings.name), lv:myLevel(), g:me.g|0, w:me.w|0, m:me.m|0, wk:me.wk, t:{'.sv':'timestamp'}}; }
+/* the week as the club sees it: members whose wk is the current week count; my own local counters may be ahead of the server (a PATCH that failed) → the better of the two */
+function clubWeekStats(data){
+  const wk=weekKey(), ms=(data && data.members && typeof data.members==='object') ? data.members : {}, my=clubMyKey(), me=clubMe();
+  const list=Object.keys(ms).map(k=>{ const m=ms[k]||{}; const cur=m.wk===wk; return {key:k, name:String(m.name||'?').slice(0,14), lv:m.lv|0, g:cur?m.g|0:0, w:cur?m.w|0:0, m:cur?m.m|0:0, me:k===my}; });
+  const totalServer=list.reduce((s,x)=>s+x.g, 0);
+  let mine=list.find(x=>x.me);
+  if(!mine && my && myClub()){ mine={key:my, name:normName(settings.name), lv:myLevel(), g:0, w:0, m:0, me:true}; list.push(mine); }
+  if(mine && me.wk===wk){ mine.g=Math.max(mine.g, me.g|0); mine.w=Math.max(mine.w, me.w|0); mine.m=Math.max(mine.m, me.m|0); }
+  list.sort((a,b)=>b.g-a.g || b.w-a.w || a.name.localeCompare(b.name));
+  const n=Math.max(1, list.length), total=list.reduce((s,x)=>s+x.g, 0);
+  return {wk, n, total, totalServer, target:clubTarget(n), list, myM: mine ? mine.m : 0};
+}
+function clubPrizeState(st){
+  if(prog.clubPrize===st.wk) return 'claimed';
+  if(st.total<st.target) return 'far';
+  if(st.myM<ECON.clubs.prizeMatches) return 'need';
+  return st.total>=st.target*2 ? 'ready2' : 'ready';
+}
+function clubNeedName(){
+  if(normName(settings.name)) return true;
+  toast(T('clubs.needName'),'warn'); clubClose();
+  try{ if(typeof askNameIfMissing==='function') askNameIfMissing(); else if($('#btn-settings')) $('#btn-settings').click(); }catch(e){}
+  return false;
+}
+function clubRefund(n){ if(n>0){ prog.gems=(prog.gems|0)+n; saveProg(); try{ updateXpBadge(); }catch(e){} } }
+
+/* ----- server I/O (all bounded, all tolerant: undefined = no connection) ----- */
+/* PATCH my own member node (absolute weekly counters) */
+async function clubPush(){
+  const c=myClub(), k=clubMyKey(); if(!c || !k || !fbOn()) return false;
+  const r=await fbReq('clubs/'+c.id+'/members/'+k, 'PATCH', clubMemberBody());
+  if(r===undefined){ c.dirty=true; saveProg(); return false; }
+  c.dirty=false; saveProg();
+  if(CLUB.data){ CLUB.data.members=CLUB.data.members||{}; CLUB.data.members[k]=Object.assign({}, CLUB.data.members[k]||{}, r && typeof r==='object' ? r : clubMemberBody()); }
+  if(r && typeof r.t==='number' && typeof syncClock==='function') syncClock(r.t);
+  return true;
+}
+/* one GET of the whole club (cached 10 min unless forced); null = no data this time */
+async function clubRefresh(force){
+  const c=myClub(); if(!c) return null;
+  if(!fbOn()){ CLUB.offline=true; return null; }
+  if(!force && CLUB.data && now()-CLUB.fetched<ECON.clubs.refreshMs) return CLUB.data;
+  if(CLUB.loading) return CLUB.loading;
+  CLUB.loading=(async()=>{
+    const r=await fbReq('clubs/'+c.id, 'GET');
+    if(r===undefined){ CLUB.offline=true; return null; }
+    CLUB.offline=false;
+    if(r===null || typeof r!=='object'){ delete prog.club; prog.clubPrize=null; saveProg(); CLUB.data=null; toast(T('clubs.gone'),'warn'); clubHomePill(); return null; }   // pruned/deleted
+    CLUB.data=r; CLUB.fetched=now();
+    if(typeof r.name==='number') c.name=r.name|0; if(r.emoji) c.emoji=String(r.emoji).slice(0,8); if(r.code && clubValidCode(r.code)) c.code=r.code;
+    const st=clubWeekStats(r); c.tot=st.total; c.target=st.target; c.n=st.n; saveProg();
+    if(c.dirty) clubPush();                                                                         // a counter PATCH that failed earlier
+    if(c.codeDirty) fbReq('clubCodes/'+c.code, 'PUT', c.id).then(x=>{ if(x!==undefined){ delete c.codeDirty; saveProg(); } });
+    if(!r.week || r.week.key!==st.wk || (r.week.goals|0)!==st.totalServer) fbReq('clubs/'+c.id+'/week', 'PUT', {key:st.wk, goals:st.totalServer});   // the cached weekly summary, only when it changed
+    return r;
+  })();
+  try{ return await CLUB.loading; } finally{ CLUB.loading=null; }
+}
+/* create: 20 gems (free for admins), a preset name + an emoji, a fresh 6-char code */
+async function clubCreate(nameI, emoji){
+  if(CLUB.busy) return false;
+  nameI=Math.max(0, Math.min(CLUB_NAMES.length-1, nameI|0)); emoji=CLUB_EMOJIS.includes(emoji) ? emoji : CLUB_NAME_EMOJI[nameI]||CLUB_EMOJIS[0];
+  if(!clubNeedName()) return false;
+  if(myClub()){ toast(T('clubs.already'),'warn'); return false; }
+  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  const cost=isAdmin() ? 0 : ECON.clubs.create;
+  if(cost && (prog.gems|0)<cost){ toast(T('clubs.needGems', cost),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+  if(!(await ask(cost ? T('clubs.createQ', emoji, clubName(nameI), cost) : T('clubs.createQFree', emoji, clubName(nameI))))) return false;
+  CLUB.busy=true;
+  try{
+    let code=null;
+    for(let i=0;i<3 && !code;i++){ const cand=clubRand(6); const r=await fbReq('clubCodes/'+cand, 'GET'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } if(r===null) code=cand; }
+    if(!code){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(cost && !spendGems(cost)){ toast(T('clubs.needGems', cost),'warn'); return false; }
+    const id=clubRand(8), wk=weekKey(), k=clubMyKey(), me={wk, g:0, w:0, m:0};
+    const body={name:nameI, emoji, code, created:{'.sv':'timestamp'}, members:{}, week:{key:wk, goals:0}}; body.members[k]=clubMemberBody(me);
+    const r1=await fbReq('clubs/'+id, 'PUT', body);
+    if(r1===undefined){ clubRefund(cost); toast(T('clubs.noConn'),'warn'); return false; }
+    const r2=await fbReq('clubCodes/'+code, 'PUT', id);
+    prog.club={id, code, name:nameI, emoji, joined:now(), me, dirty:false, tot:0, target:clubTarget(1), n:1}; if(r2===undefined) prog.club.codeDirty=true;   // the code is re-written on the next open
+    saveProg();
+    CLUB.data=Object.assign({}, body, {members:Object.assign({}, body.members)}); CLUB.fetched=now(); CLUB.offline=false; CLUB.view='club';
+    toast(T('clubs.created', emoji, clubName(nameI), code),'ach'); try{ sfx.win(); confetti.burst(120); }catch(e){}
+    clubHomePill(); clubRender(); return true;
+  }catch(e){ console.error('club create', e); return false; }
+  finally{ CLUB.busy=false; }
+}
+/* join by code: clubCodes/<code> → id → clubs/<id> (not full) → PATCH my member node */
+async function clubJoin(code){
+  code=clubNormCode(code);
+  if(!clubValidCode(code)){ toast(T('clubs.badCode'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+  if(CLUB.busy) return false;
+  if(!clubNeedName()) return false;
+  if(myClub()){ toast(T('clubs.already'),'warn'); return false; }
+  if(!fbOn()){ toast(T('clubs.noConn'),'warn'); return false; }
+  CLUB.busy=true;
+  try{
+    const id=await fbReq('clubCodes/'+code, 'GET');
+    if(id===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(typeof id!=='string' || !/^[A-Z0-9]{4,16}$/.test(id)){ toast(T('clubs.notFound'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+    const data=await fbReq('clubs/'+id, 'GET');
+    if(data===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    if(!data || typeof data!=='object'){ toast(T('clubs.notFound'),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+    const ms=(data.members && typeof data.members==='object') ? data.members : {}, k=clubMyKey();
+    if(Object.keys(ms).length>=ECON.clubs.max && !ms[k]){ toast(T('clubs.full', ECON.clubs.max),'warn'); try{ sfx.lose(); }catch(e){} return false; }
+    const me={wk:weekKey(), g:0, w:0, m:0}, node=clubMemberBody(me);
+    const r=await fbReq('clubs/'+id+'/members/'+k, 'PATCH', node);
+    if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; }
+    const emoji=String(data.emoji||CLUB_EMOJIS[0]).slice(0,8), nameI=data.name|0;
+    prog.club={id, code, name:nameI, emoji, joined:now(), me, dirty:false}; saveProg();
+    data.members=Object.assign({}, ms); data.members[k]=r && typeof r==='object' ? r : node;
+    CLUB.data=data; CLUB.fetched=now(); CLUB.offline=false; CLUB.view='club';
+    const st=clubWeekStats(data); prog.club.tot=st.total; prog.club.target=st.target; prog.club.n=st.n; saveProg();
+    toast(T('clubs.joined', emoji, clubName(nameI)),'ach'); try{ sfx.win(); confetti.burst(120); }catch(e){}
+    clubHomePill(); clubRender(); return true;
+  }catch(e){ console.error('club join', e); return false; }
+  finally{ CLUB.busy=false; }
+}
+/* leave (confirmed): my member node is deleted on the server first, so no ghost member stays behind */
+async function clubLeave(){
+  const c=myClub(); if(!c || CLUB.busy) return false;
+  if(!(await ask(T('clubs.leaveQ'), T('clubs.leave')))) return false;
+  CLUB.busy=true;
+  try{
+    const k=clubMyKey();
+    if(fbOn() && k){ const r=await fbReq('clubs/'+c.id+'/members/'+k, 'DELETE'); if(r===undefined){ toast(T('clubs.noConn'),'warn'); return false; } }
+    delete prog.club; saveProg(); CLUB.data=null; CLUB.fetched=0; CLUB.view='none';
+    toast(T('clubs.left'),'warn'); clubHomePill(); clubRender(); return true;
+  } finally{ CLUB.busy=false; }
+}
+/* the weekly prize: the club total (server) ≥ target and I played ≥5 real matches this week → once per week */
+async function clubClaim(){
+  const c=myClub(); if(!c || CLUB.busy) return false;
+  const wk=weekKey(); if(prog.clubPrize===wk){ toast(T('clubs.claimed'),'warn'); return false; }
+  CLUB.busy=true;
+  try{
+    const r=await clubRefresh(true);
+    if(!r){ if(myClub()) toast(T('clubs.noConn'),'warn'); return false; }
+    const st=clubWeekStats(r);
+    if(st.totalServer<st.target){ toast(T('clubs.notYet', fmtNum(st.totalServer), fmtNum(st.target)),'warn'); try{ sfx.lose(); }catch(e){} clubRender(); return false; }
+    if(st.myM<ECON.clubs.prizeMatches){ toast(T('clubs.needMatches', ECON.clubs.prizeMatches-st.myM),'warn'); try{ sfx.lose(); }catch(e){} clubRender(); return false; }
+    const gold=st.totalServer>=st.target*2;
+    prog.clubPrize=wk; saveProg();
+    let chest=false; if(typeof giveChest==='function'){ try{ chest=!!giveChest(gold ? 'gold' : 'silver'); }catch(e){ chest=false; } }
+    if(!chest) addCoins(gold ? ECON.clubs.prizeCoinsGold : ECON.clubs.prizeCoins, 'club');
+    addGems(ECON.clubs.prizeGems, 'club');
+    toast(T(gold ? 'clubs.prizeGold' : 'clubs.prizeSilver'),'ach'); try{ sfx.win(); confetti.burst(200); }catch(e){}
+    clubRender(); return true;
+  } finally{ CLUB.busy=false; }
+}
+
+/* ----- invite: the share helper of 70-social when it exists (system share sheet / WhatsApp), the code inside the text and as ?club= ----- */
+function clubLink(){ const c=myClub(); const base=(typeof SOCIAL_LINK==='string' && SOCIAL_LINK) ? SOCIAL_LINK : 'https://lupulior.github.io/game-lab/'; return c ? base+'?club='+c.code : base; }
+function clubInviteText(){ const c=myClub(); if(!c) return ''; return T('clubs.inviteText', c.emoji, clubName(c.name), c.code, clubLink()); }
+function clubInvite(){
+  const c=myClub(); if(!c) return false; try{ sfx.click(); }catch(e){}
+  const text=clubInviteText(); prog.clubInvites=(prog.clubInvites|0)+1; saveProg();
+  if(typeof shareText==='function') return shareText(text);
+  try{ window.open('https://wa.me/?text='+encodeURIComponent(text), '_blank', 'noopener'); }catch(e){}
+  return 'wa';
+}
+async function clubCopyCode(){
+  const c=myClub(); if(!c) return false; const code=c.code; let ok=false;
+  try{ if(navigator.clipboard && navigator.clipboard.writeText) ok=await navigator.clipboard.writeText(code).then(()=>true, ()=>false); }catch(e){}
+  if(!ok){ try{ const ta=document.createElement('textarea'); ta.value=code; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); ok=!!document.execCommand('copy'); ta.remove(); }catch(e){} }
+  toast(ok ? T('clubs.copied') : T('clubs.copyFail', code), ok ? 'ach' : 'warn'); return ok;
+}
+
+/* ----- deep link ?club=CODE: never auto-join — a question on the home screen once there is a name ----- */
+function clubParseSearch(s){ try{ const p=new URLSearchParams(String(s||'')); const c=clubNormCode(p.get('club')||''); return clubValidCode(c) ? c : null; }catch(e){ return null; } }
+/* 70-social may already have cleaned the URL at its load time: the navigation entry still carries the original query */
+function clubInitialSearch(){ let s=location.search||''; if(!s){ try{ const e=performance.getEntriesByType('navigation')[0]; if(e && e.name){ const i=e.name.indexOf('?'); if(i>=0) s=e.name.slice(i).replace(/#.*$/,''); } }catch(e){} } return s; }
+if(typeof parseDeepLinks==='function'){ const _pdl=parseDeepLinks; parseDeepLinks=function(s){ const o=_pdl.apply(this, arguments)||{}; const c=clubParseSearch(s); if(c) o.club=c; return o; }; }
+async function clubPendingTick(){
+  const code=CLUB.pending; if(!code || CLUB.pendingBusy) return false;
+  if(!normName(settings.name) || ($('#name-modal') && $('#name-modal').classList.contains('show'))) return false;
+  if(!$('#home') || !$('#home').classList.contains('active')) return false;
+  CLUB.pendingBusy=true; CLUB.pending=null;
+  try{
+    if(myClub()){ toast(T('clubs.already'),'warn'); return false; }
+    if(!(await ask(T('clubs.joinQ', code), T('clubs.join')))) return false;
+    const ok=await clubJoin(code); if(ok) clubOpen(); return ok;
+  }catch(e){ console.error('club link', e); return false; }
+  finally{ CLUB.pendingBusy=false; }
+}
+
+/* ----- the screen (a modal inside #stage) ----- */
+function clubOpen(view){
+  const m=$('#club-modal'); if(!m) return false;
+  CLUB.view = myClub() ? 'club' : (view==='create' || view==='join') ? view : 'none';
+  try{ const ms=$('#more-sheet'); if(ms) ms.classList.remove('show'); }catch(e){}
+  m.classList.add('show'); clubRender();
+  if(myClub()) clubRefresh().then(()=>{ clubRender(); clubHomePill(); });
+  return true;
+}
+function clubClose(){ CLUB.view='none'; const m=$('#club-modal'); if(m) m.classList.remove('show'); }
+function clubBoxes(v){ const b=$('#club-boxes'); if(!b) return; v=String(v||''); Array.from(b.children).forEach((s,i)=>{ s.textContent=v[i]||''; s.classList.toggle('on', i===v.length); s.classList.toggle('has', !!v[i]); }); }
+function clubRender(){
+  const body=$('#club-body'); if(!body) return;
+  const c=myClub(); const v = c ? 'club' : (CLUB.view==='create' || CLUB.view==='join') ? CLUB.view : 'none';
+  const title=$('#club-title'); if(title) title.textContent = c ? c.emoji+' '+clubName(c.name) : T('clubs.title');
+  const close=$('#btn-club-close'); if(close) close.textContent=T('clubs.back');
+  body.dataset.view=v;
+  const cost=isAdmin() ? 0 : ECON.clubs.create, createLabel=cost ? T('clubs.createCost', cost) : T('clubs.createFree');
+  if(v==='none'){
+    body.innerHTML=`<div class="club-hero">🏟️</div><div class="hint club-intro">${esc(T('clubs.intro'))}</div>
+      <div class="club-btns"><button class="btn green" id="btn-club-create" data-act="create">${esc(createLabel)}</button><button class="btn purple" id="btn-club-join" data-act="join">${esc(T('clubs.joinBtn'))}</button></div>`;
+    return;
+  }
+  if(v==='create'){
+    const p=CLUB.pick;
+    body.innerHTML=`<div class="club-sub">${esc(T('clubs.pickName'))}</div>
+      <div class="club-grid">${CLUB_NAMES.map((r,i)=>`<button class="club-chip${i===p.name?' on':''}" data-name="${i}">${esc(clubName(i))}</button>`).join('')}</div>
+      <div class="club-sub">${esc(T('clubs.pickEmoji'))}</div>
+      <div class="club-emos">${CLUB_EMOJIS.map(e=>`<button class="club-emo${e===p.emoji?' on':''}" data-emo="${e}">${e}</button>`).join('')}</div>
+      <div class="club-prev" id="club-prev">${p.emoji} ${esc(clubName(p.name))}</div>
+      <div class="club-btns"><button class="btn green" id="btn-club-do-create" data-act="doCreate">${esc(createLabel)}</button><button class="btn blue small" data-act="back">${esc(T('clubs.back'))}</button></div>`;
+    return;
+  }
+  if(v==='join'){
+    body.innerHTML=`<div class="hint club-intro">${esc(T('clubs.codeHint'))}</div>
+      <div class="club-boxes" id="club-boxes">${'<span></span>'.repeat(6)}</div>
+      <input id="club-code-input" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC234">
+      <div class="club-btns"><button class="btn green" id="btn-club-do-join" data-act="doJoin">${esc(T('clubs.join'))}</button><button class="btn blue small" data-act="back">${esc(T('clubs.back'))}</button></div>`;
+    const inp=$('#club-code-input');
+    inp.addEventListener('input', ()=>{ inp.value=clubNormCode(inp.value); clubBoxes(inp.value); });
+    inp.addEventListener('keydown', e=>{ e.stopPropagation(); if(e.key==='Enter') clubJoin(inp.value); if(e.key==='Escape') clubClose(); });
+    $('#club-boxes').addEventListener('click', ()=>{ try{ inp.focus(); }catch(e){} });
+    clubBoxes(''); setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 60);
+    return;
+  }
+  // ----- the club itself
+  const st=clubWeekStats(CLUB.data), days=clubDaysLeft(), pct=Math.max(0, Math.min(100, Math.round(st.total/st.target*100))), prize=clubPrizeState(st);
+  const status = CLUB.offline ? (CLUB.data ? T('clubs.offlineCached') : T('clubs.noConn')) : '';
+  const rows=st.list.map(x=>`<div class="club-row${x.me?' me':''}"><span class="club-nm">${esc(x.name)}${x.me ? ' <small>('+esc(T('clubs.me'))+')</small>' : ''}</span><span class="club-lv">Lv ${x.lv}</span><span class="club-st">${esc(T('clubs.memberStats', x.g, x.w, x.m))}</span></div>`).join('');
+  const claimLabel = prize==='claimed' ? T('clubs.claimed') : prize==='ready2' ? T('clubs.claimGold') : prize==='ready' ? T('clubs.claim') : prize==='need' ? T('clubs.claimNeed', Math.max(1, ECON.clubs.prizeMatches-st.myM)) : T('clubs.claimFar');
+  body.innerHTML=`<div class="club-top"><button class="club-code" id="club-code" data-act="copy" title="${esc(T('clubs.copy'))}">${esc(T('clubs.code', c.code))} 📋</button><span class="club-days" id="club-days">${esc(days<=1 ? T('clubs.lastDay') : T('clubs.daysLeft', days))}</span><button class="btn blue small club-refresh" id="btn-club-refresh" data-act="refresh" title="🔄">🔄</button></div>
+    <div class="club-progress"><div class="club-bar${st.total>=st.target ? ' done' : ''}" id="club-bar"><i style="width:${pct}%"></i></div><div class="club-ptext" id="club-progress-text">${esc(T('clubs.progress', fmtNum(st.total), fmtNum(st.target)))}</div></div>
+    <div class="club-prize" id="club-prize-line">${esc(T('clubs.prizeLine', ECON.clubs.prizeMatches))}</div>
+    ${status ? `<div class="club-status" id="club-status">${esc(status)}</div>` : ''}
+    <div class="club-sub">${esc(T('clubs.members', st.n, ECON.clubs.max))}</div>
+    <div class="club-members" id="club-members">${rows}</div>
+    <div class="club-btns"><button class="btn ${prize==='ready' || prize==='ready2' ? 'green pulse' : 'yellow off'}" id="btn-club-claim" data-act="claim">${esc(claimLabel)}</button><button class="btn purple" id="btn-club-invite" data-act="invite">${esc(T('clubs.invite'))}</button><button class="btn red small" id="btn-club-leave" data-act="leave">${esc(T('clubs.leave'))}</button></div>`;
+}
+/* the home pill: "🏟️ האריות 83/150" (or just "🏟️ מועדון"), a third small pill in #home-trophy — placed ABOVE the trophy pill so the corner stays the trophy's */
+function clubHomePill(){
+  const home=$('#home'); if(!home) return null;
+  let p=$('#home-club');
+  if(!p){ p=document.createElement('button'); p.id='home-club'; p.className='pill club'; p.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubOpen(); }); }
+  const host=$('#home-trophy');
+  if(host){ if(p.parentNode!==host || host.firstChild!==p) host.insertBefore(p, host.firstChild); p.classList.remove('free'); }
+  else if(!p.parentNode){ p.classList.add('free'); home.appendChild(p); }
+  const c=myClub();
+  if(c){ const st=CLUB.data ? clubWeekStats(CLUB.data) : null; const tot=st ? st.total : Math.max(0, c.tot|0), target=st ? st.target : (c.target || clubTarget(c.n||1)); p.textContent=T('clubs.pill', c.emoji, clubName(c.name), fmtNum(tot), fmtNum(target)); p.classList.toggle('done', tot>=target); }
+  else { p.textContent=T('clubs.pillNone'); p.classList.remove('done'); }
+  if(typeof fitText==='function') fitText(p, 11);
+  return p;
+}
+
+/* ----- wiring ----- */
+(function clubBuildUI(){
+  const grid=$('#more-grid');
+  if(grid && !$('#btn-club')){ const b=document.createElement('button'); b.className='btn blue'; b.id='btn-club'; b.textContent=T('clubs.btn'); b.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubOpen(); }); grid.appendChild(b); }
+  const close=$('#btn-club-close'); if(close) close.addEventListener('click', ()=>{ try{ sfx.click(); }catch(e){} clubClose(); });
+  const m=$('#club-modal'); if(m) m.addEventListener('click', e=>{ if(e.target===m) clubClose(); });
+  const body=$('#club-body'); if(!body) return;
+  body.addEventListener('click', e=>{
+    const nb=e.target.closest('[data-name]'); if(nb){ try{ sfx.click(); }catch(x){} CLUB.pick.name=+nb.dataset.name|0; if(!CLUB.pick.emojiSet) CLUB.pick.emoji=CLUB_NAME_EMOJI[CLUB.pick.name]||CLUB_EMOJIS[0]; clubRender(); return; }
+    const eb=e.target.closest('[data-emo]'); if(eb){ try{ sfx.click(); }catch(x){} CLUB.pick.emoji=eb.dataset.emo; CLUB.pick.emojiSet=true; clubRender(); return; }
+    const b=e.target.closest('[data-act]'); if(!b) return; try{ sfx.click(); }catch(x){}
+    switch(b.dataset.act){
+      case 'create': CLUB.view='create'; clubRender(); break;
+      case 'join': CLUB.view='join'; clubRender(); break;
+      case 'back': CLUB.view='none'; clubRender(); break;
+      case 'doCreate': clubCreate(CLUB.pick.name, CLUB.pick.emoji); break;
+      case 'doJoin': clubJoin(($('#club-code-input')||{}).value); break;
+      case 'copy': clubCopyCode(); break;
+      case 'refresh': clubRefresh(true).then(()=>{ clubRender(); clubHomePill(); }); break;
+      case 'claim': clubClaim(); break;
+      case 'invite': clubInvite(); break;
+      case 'leave': clubLeave(); break;
+    }
+  });
+})();
+/* real matches feed my member node (training never counts); the PATCH goes out right after the result card */
+Hooks.on('matchEnd', info=>{
+  const c=myClub(); if(!c || !info || info.training) return;
+  const me=clubMe(), goals=Math.max(0, (info.score && info.score.me)|0);
+  me.g+=goals; if(info.outcome==='win') me.w++; me.m++; c.tot=(c.tot|0)+goals; c.dirty=true; saveProg();
+  clubHomePill(); setTimeout(()=>{ clubPush().then(()=>clubHomePill()); }, 120);
+});
+Hooks.on('heartbeat', body=>{ const c=myClub(); body.club = c ? c.id : null; });
+Hooks.on('home', ()=>setTimeout(()=>{ const g=$('#more-grid'), b=$('#btn-club'); if(g && b && g.lastElementChild!==b) g.appendChild(b); clubHomePill(); }, 0));
+Hooks.on('screen', id=>{ if(id==='home'){ setTimeout(clubHomePill, 60); setTimeout(clubPendingTick, 500); } });
+if(typeof setLang==='function'){ const _csl=setLang; setLang=function(){ const r=_csl.apply(this, arguments); try{ clubHomePill(); if($('#club-modal') && $('#club-modal').classList.contains('show')) clubRender(); }catch(e){} return r; }; }
+{ const _csn=submitName; submitName=function(){ const r=_csn.apply(this, arguments); if(normName(settings.name)) setTimeout(clubPendingTick, 400); return r; }; }
+CLUB.pending=clubParseSearch(clubInitialSearch());
+applyLang();
+
 /* ===== 80-adminstats.js ===== */
 /* ===================================================================================================
    MEASUREMENT + ADMIN DASHBOARD + POLISH  (module 80-adminstats)
@@ -9314,7 +11330,7 @@ I18N_ADD({
  'onb.go':['הבנתי, קדימה! ▶','Got it, let\'s go! ▶','فهمت، هيا! ▶','Понял, вперёд! ▶'], 'onb.close':['סגור','Close','إغلاق','Закрыть'],
  'onb.sleep':['😴 הבוט ישן… עוד {0}','😴 The bot is asleep… {0}','😴 الروبوت نائم… {0}','😴 Бот спит… {0}'], 'onb.wake':['😮 הבוט התעורר!','😮 The bot woke up!','😮 استيقظ الروبوت!','😮 Бот проснулся!'],
  'onb.keyTitle':['הנה המפתח הראשון שלך 🔑','Here is your first key 🔑','هذا أول مفتاح لك 🔑','Вот твой первый ключ 🔑'],
- 'onb.keyText':['מפתחות פותחים תיבות עם מטבעות ובגדים. קיבלת גם תיבת ברוכים הבאים!','Keys open chests with coins and kits. You also got a welcome chest!','المفاتيح تفتح صناديق فيها عملات وأطقم. حصلت أيضًا على صندوق ترحيب!','Ключи открывают сундуки с монетами и формой. Ещё ты получил приветственный сундук!'],
+ 'onb.keyText':['מפתחות פותחים את תיבת הזהב 👑. תיבות ברונזה וכסף מגיעות מניצחונות (לתאים), מהמשימות ומהאיסוף היומי. קיבלת גם תיבת ברוכים הבאים!','Keys open the Gold chest 👑. Bronze and Silver chests come from wins (into the slots), missions and the daily pickup. You also got a welcome chest!','المفاتيح تفتح الصندوق الذهبي 👑. صناديق البرونز والفضة تأتي من الفوز (إلى الخانات) ومن المهام والجمع اليومي. حصلت أيضًا على صندوق ترحيب!','Ключи открывают золотой сундук 👑. Бронзовые и серебряные сундуки приходят за победы (в ячейки), за задания и ежедневный сбор. Ещё ты получил приветственный сундук!'],
  'onb.openChest':['🎁 פתח את התיבה','🎁 Open the chest','🎁 افتح الصندوق','🎁 Открыть сундук'],
  'onb.pickupTitle':['כל יום מחכה לך מתנה 🎁','A gift waits every day 🎁','كل يوم تنتظرك هدية 🎁','Каждый день тебя ждёт подарок 🎁'],
  'onb.pickupText':['לחיצה אחת על "איסוף יומי" לוקחת הכול. מחר: 75 🪙, ובעוד 7 ימים תיבה!','One tap on "daily pickup" takes everything. Tomorrow: 75 🪙, and a chest in 7 days!','ضغطة واحدة على "الجمع اليومي" تأخذ كل شيء. غدًا: 75 🪙، وبعد 7 أيام صندوق!','Одно нажатие на «ежедневный сбор» забирает всё. Завтра: 75 🪙, а через 7 дней сундук!'],

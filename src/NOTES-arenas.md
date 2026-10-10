@@ -1,0 +1,7 @@
+# 25-arenas — arenas by trophies (2026-10-10)
+Six arenas unlocked by lifetime `prog.trophies` (`ECON.arenas.thresholds` = 0/25/75/150/300/600): מגרש השכונה 🏘️ · אצטדיון העיר 🏙️ · ארנת החוף 🏖️ · אצטדיון הלילה 🌃 · ארנת הקרח ❄️ · ארנת האלופים 👑.
+- Each arena has its own `PITCH_THEMES.arenaN` (grass/track/boards) and tints the fans via `#game[data-arena]`. `buildPitch` is wrapped (after the shop's stadium wrapper): a 'day' request with no equipped stadium, offline 1v1, draws the current arena.
+- Exclusive players: arena 2 yamal, 3 r9, 4 ronaldinho, 5 zlatan, 6 pele (`arenaFor(c)`, `arenaLocked(c)`): `tryBuy` and `shopBuyChar` refuse before the arena; gallery/shop cards show "🏟️ נפתח בארנה N (X 🏆)"; `shopRotation` never offers a locked one as the deal of the day.
+- Home: `#home[data-arena]` background gradients; `#home-arena` pill in `#home-trophy` ("🏟️ name" + "עוד N 🏆 לארנה הבאה") → `openArenas()` modal `#arena-modal`. New arena → `#arena-new-modal` with 🪙 100 × arena (once, `prog.arenaSeen`), checked on 'matchEnd' (deferred to the next home visit if a match is running).
+- Public: `ARENAS`, `arenaIndex(t?)`, `arenaOf(i)`, `arenaCurrent()`, `arenaNextOf()`, `arenaName(a)`, `arenaFor(c)`, `arenaLocked(c)`, `arenaLockText(a)`, `arenaSwatch(a,w,h)`, `arenaPitchInvalidate()`, `arenaHomeRefresh()`, `openArenas()`, `arenaCheckNew()`, `arenaShowNew()`, `closeArenaNew()`; state `ARENA`. Hooks used: home, wallet, screen, matchEnd. prog: `arenaSeen`.
+- Open: chests can still gift a locked player (only the purchase is gated).

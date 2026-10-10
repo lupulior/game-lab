@@ -390,6 +390,18 @@ Today 453 KB / 5,100 lines. Budget: wave 1 ≤ 650 KB, hard cap 800 KB for `game
 ```
 (Admins delete/prune with the same `admins` rule; the author adds a `.write` admin clause to any node that needs pruning. Keep `users` readable for the leaderboard; everything personal stays in localStorage/saves.)
 
+**Clubs (78-clubs, shipped as "a shared weekly goal", no chat):** two nodes, open write for now like the rest of today's nodes — **TODO for the parents' hardening** (§1.9): `clubs/$id/members/$key` should become writable only by its owner (`$key == fbKey(auth name)` once rows are uid-keyed), with `g` ≤ `m`×10 and `m` ≤ 60 per week, `clubCodes/$c` written once (`!data.exists()`), both prunable by `admins` (`created` older than 90 days).
+```json
+  "clubs":     { ".read": true, "$id": { ".write": "auth != null",
+                 "name":  { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 40" },
+                 "emoji": { ".validate": "newData.isString() && newData.val().length <= 8" },
+                 "code":  { ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9]{6}$/)" },
+                 "members": { "$key": { "name": { ".validate": "newData.isString() && newData.val().length <= 16" },
+                                        "g": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 600" },
+                                        "m": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 60" } } } } },
+  "clubCodes": { "$c": { ".read": true, ".write": "auth != null", ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9]{8}$/)" } }
+```
+
 ## Appendix B — launch content backlog (24 items, all parameter data)
 Kits (10): Israel blue-white 600 (welcome), red-black 600, neon 1,200, gold foil 60💎, purple-stripes 800, green-hoops 800, pink 800, black-gold 1,500, sky-white 600, retro-70s 1,200. Boots (4): white 300, gold 900, neon-green 500, red 400. Balls (4): Israel flag 500, flame 1,200, galaxy 150💎, classic brown 300. Stadiums (3): beach 1,500, snow 2,000, night-lights 2,500. Celebration (1): knee slide 800. Titles (2 bought packs of 3, 400 each). Plus 6 reserved for the first 6 Sunday drops: desert stadium, space stadium, 2 kits, 2 boots. Event items are separate (Hanukkah ball + stadium, Purim kit, Pesach ball, Independence kit + stadium).
 

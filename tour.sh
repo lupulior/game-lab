@@ -13,7 +13,7 @@ cat > /tmp/tour-tail.js <<'EOF'
     prog.matches=6; prog.coins=1240; prog.gems=23; prog.keys=4; prog.xpTotal=900; prog.lvClaimed=levelOf(900); prog.trophies=12; prog.streakDays=5; prog.streakLast=dayKey(); prog.onboard={ctrl:true,welcome:true,pickup:true,shop:true,share:true}; prog.migrated='v2'; prog.welcomeDue=false;
     if(typeof giveChest==='function'){ prog.chests={bronze:1,silver:1,gold:0,welcome:0}; }
     saveProg(); updateXpBadge();
-    $('#intro').classList.remove('active'); showScreen('home'); refreshHome(); await w(300);
+    $('#intro').classList.remove('active'); showScreen('home'); refreshHome(); await w(900);
     document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show'));
     if(scene==='home'){ }
     else if(scene==='home-big'){ prog.coins=12345678; prog.gems=98765; prog.trophies=48765; prog.streak=7; saveProg(); updateXpBadge(); refreshHomeV2(); }
@@ -40,6 +40,15 @@ cat > /tmp/tour-tail.js <<'EOF'
     else if(scene==='ctrl'){ prog.matches=0; prog.onboard={}; saveProg(); refreshHome(); $('#btn-play-big').click(); }
     else if(scene==='hotseat'){ startHotseatPk(); await w(400); }
     else if(scene==='hotseat-kick'){ startHotseatPk(); await w(300); document.querySelector('#hs-goal .hs-zone').click(); await w(900); }
+    else if(scene==='arenas'){ prog.trophies=160; saveProg(); refreshHome(); await w(300); const b=document.querySelector('#home-arena'); if(b) b.click(); await w(400); }
+    else if(scene==='arena-match'){ prog.trophies=160; saveProg(); if(typeof arenaPitchInvalidate==='function') arenaPitchInvalidate(); startOfflineMatch(1); await w(4200); }
+    else if(scene==='squad'){ prog.unlocked=['messi','ronaldo','neymar']; saveProg(); if(typeof openSquad==='function') openSquad(); else { const b=document.querySelector('#btn-squad'); if(b) b.click(); } await w(400); }
+    else if(scene==='slots'){ prog.slots=[{kind:'bronze',at:now()+3500000},{kind:'gold',at:now()-10},null]; saveProg(); refreshHome(); if(typeof slotsRefresh==='function') slotsRefresh(); await w(600); }
+    else if(scene==='league'){ prog.season={key:(typeof seasonKey==='function'?seasonKey():''), tr:63, peak:63, floor:50}; saveProg(); refreshHome(); await w(300); const b=document.querySelector('#home-league'); if(b) b.click(); await w(400); }
+    else if(scene==='clubs'){ prog.club={id:'x',code:'ABC123',name:0,emoji:'🦁',joined:now()}; saveProg(); if(typeof openClub==='function') openClub(); else { const b=document.querySelector('#btn-club'); if(b) b.click(); } await w(800); }
+    else if(scene==='emote'){ if(typeof ECON!=='undefined' && ECON.emotes) ECON.emotes.show=60000; startOfflineMatch(1); await w(4200); for(let i=0;i<30 && state!=='play';i++) await w(200); document.dispatchEvent(new KeyboardEvent('keydown',{key:'1',code:'Digit1',bubbles:true})); await w(500); }
+    else if(scene==='levels'){ prog.unlocked=['messi','ronaldo']; prog.shards={messi:10}; prog.charLv={ronaldo:3}; saveProg(); openShop('players'); await w(400); }
+    else if(scene==='leaders'){ $('#btn-top').click(); await w(1500); }
     else if(scene==='admin'){ prog.admin=true; saveProg(); setupAdminUI(); openAdmin(); await w(800); }
     if(scene.startsWith('home')){ await w(900); document.querySelectorAll('.overlay.show').forEach(o=>o.classList.remove('show')); }
     await w(600);

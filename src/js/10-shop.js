@@ -3,10 +3,11 @@
    the 80 characters with rarity frames, the locker (equip what you own), the gem tab, the powers tab,
    and the cosmetics rendering hooks the core already checks for (skinFor / ballSkin) + stadium themes.
    Ownership: prog.cos={items:[ids]}   Equipped: prog.eq={kit,boots,ball,stadium,celeb,title,titlePack,color,number}
-   Shop state: prog.shop={bought:{dayKey[r]:slot → id}, reroll:dayKey, seen:dayKey, seenWeek:n}
+   Shop state: prog.shop={bought:{dayKey[r]:slot → id, dayKey:free → 'free_<type>'}, reroll:dayKey, seen:dayKey, seenWeek:n}
+   The free gift of the day (first card of the today tab) rotates by the day index: coins → key → gem → bronze chest.
    =================================================================================================== */
 Object.assign(ECON, { shop:{ launch:'2026-10-12', charOff:.3, rerollGems:5, silverDeal:450, silverPrice:500, goldDealGems:20, goldGems:25,
-  colors:{gold:40, neon:60, rainbow:80}, numberPrice:500, gemCycle:10 } });
+  colors:{gold:40, neon:60, rainbow:80}, numberPrice:500, gemCycle:10, free:{coins:40, keys:1, gems:1, chest:'bronze', chestCoins:60}, urgentMs:36e5 } });
 
 /* items sold by the shop that are not in the catalogue (name colours, the shirt number) — same shape as COSMETICS */
 const SHOP_EXTRA=[
@@ -67,8 +68,32 @@ function shopRotation(){
   return slots;
 }
 function shopMarkSold(key, id){ const s=shopProg(); s.bought[key]=id||true; const today=dayKey(); for(const k of Object.keys(s.bought)) if(!k.startsWith(today)) delete s.bought[k]; saveProg(); }
-function shopTimeLeft(){ const d=new Date(now()); const next=new Date(d.getFullYear(), d.getMonth(), d.getDate()+1).getTime(); const ms=Math.max(0, next-now()); return Math.floor(ms/36e5)+':'+pad2(Math.floor(ms%36e5/6e4)); }
-function shopHasNew(){ const s=prog.shop||{}; if(s.seen!==dayKey()) return true; const drop=COSMETICS.some(c=>shopIsNew(c) && !shopOwned(c.id)); return drop && s.seenWeek!==shopWeek(); }
+/* ----- the countdown to the next rotation (local midnight on the server clock) ----- */
+function shopTimeLeftMs(){ const d=new Date(now()); const next=new Date(d.getFullYear(), d.getMonth(), d.getDate()+1).getTime(); return Math.max(0, next-now()); }
+function shopTimeLeft(){ const ms=shopTimeLeftMs(); return Math.floor(ms/36e5)+':'+pad2(Math.floor(ms%36e5/6e4)); }                                   // "H:MM"
+function shopTimeLeftFull(){ const ms=shopTimeLeftMs(); return Math.floor(ms/36e5)+':'+pad2(Math.floor(ms%36e5/6e4))+':'+pad2(Math.floor(ms%6e4/1e3)); }   // "H:MM:SS"
+
+/* ===== the free gift of the day: one per day, the same for everyone, not touched by a reroll ===== */
+const SHOP_FREE_CYCLE=['coins','keys','gems','chest'];
+function shopFreeKey(){ return dayKey()+':free'; }
+function shopFreeGift(){
+  const F=ECON.shop.free, n=SHOP_FREE_CYCLE.length, d=shopDayIndex(); let t=SHOP_FREE_CYCLE[((d%n)+n)%n];
+  if(t==='chest' && typeof giveChest!=='function') return {t:'coins', n:F.chestCoins, icon:'🪙', key:shopFreeKey()};   // no chests module in this build
+  if(t==='keys' && (prog.keys|0)>=ECON.keyCap) t='coins';                                                              // a full key ring would swallow the gift
+  const g = t==='coins' ? {t, n:F.coins, icon:'🪙'} : t==='keys' ? {t, n:F.keys, icon:'🔑'} : t==='gems' ? {t, n:F.gems, icon:'💎'} : {t, kind:F.chest, icon:'🎁'};
+  g.key=shopFreeKey(); return g;
+}
+function shopFreeClaimed(){ const b=prog.shop && prog.shop.bought; return !!(b && b[shopFreeKey()]); }
+function shopFreeName(g){ return g.t==='chest' ? (typeof chestName==='function' ? chestName(g.kind) : T('shop.gift.chest')) : T('shop.gift.'+g.t, g.n); }
+function shopClaimFree(){
+  if(shopFreeClaimed()){ toast(T('shop.freeAlready'),'warn'); return false; }
+  const g=shopFreeGift();
+  shopMarkSold(g.key, 'free_'+g.t);                        // marked before the grant: whatever a reward toast does, the gift can never be handed out twice
+  if(g.t==='coins') addCoins(g.n,'shopFree'); else if(g.t==='keys') addKeys(g.n,'shopFree'); else if(g.t==='gems') addGems(g.n,'shopFree'); else giveChest(g.kind);
+  sfx.win(); try{ confetti.burst(80); }catch(e){}
+  Hooks.emit('shopFree', g); shopRefresh(); if($('#home').classList.contains('active')) refreshHome(); return true;
+}
+function shopHasNew(){ if(!shopFreeClaimed()) return true; const s=prog.shop||{}; if(s.seen!==dayKey()) return true; const drop=COSMETICS.some(c=>shopIsNew(c) && !shopOwned(c.id)); return drop && s.seenWeek!==shopWeek(); }
 
 /* ===== ownership and equipping (public API) ===== */
 function giveCosmetic(id){
@@ -214,11 +239,12 @@ let shopTab='today', shopTimer=0, shopFilter='all', shopPick=-1, shopBuiltDay=''
 function openShop(tab){
   const s=shopProg(); s.seen=dayKey(); s.seenWeek=shopWeek(); saveProg();
   shopTab = ['today','players','looks','gems','powers'].includes(tab) ? tab : 'today';
-  shopWallet(); shopBuildTab(); showScreen('shop');
-  clearInterval(shopTimer); shopTimer=setInterval(shopTick, 30000);
+  showScreen('shop'); shopWallet(); shopBuildTab();                 // the screen first: fitText needs real widths
+  clearInterval(shopTimer); shopTimer=setInterval(shopTick, 1000);  // 1 s: the countdown shows seconds; stopped as soon as the shop closes
 }
 function shopStopTimer(){ clearInterval(shopTimer); shopTimer=0; }
-function shopTick(){ if(!$('#shop').classList.contains('active')) return shopStopTimer(); if(shopTab==='today' && shopBuiltDay!==dayKey()) return shopBuildTab(); const t=$('#shop-timer'); if(t) t.textContent=T('shop.renew', shopTimeLeft()); }
+function shopTick(){ if(!$('#shop').classList.contains('active')) return shopStopTimer(); if(shopTab==='today' && shopBuiltDay!==dayKey()) return shopBuildTab(); shopTimerDraw(); }
+function shopTimerDraw(){ const t=$('#shop-timer'); if(!t) return; t.textContent=T('shop.renewFull', shopTimeLeftFull()); t.classList.toggle('urgent', shopTimeLeftMs()<ECON.shop.urgentMs); }
 function shopWallet(){ const c=$('#shop-coins'), g=$('#shop-gems'); if(c) c.textContent='🪙 '+fmtNum(prog.coins|0); if(g) g.textContent='💎 '+fmtNum(prog.gems|0); }
 function shopRefresh(){ shopWallet(); if($('#shop').classList.contains('active')) shopBuildTab(); }
 function shopBuildTab(){
@@ -233,17 +259,32 @@ const shopBtn=(cls, txt, fn, extra)=>{ const b=document.createElement('button');
 function shopBuildToday(body){
   shopBuiltDay=dayKey();
   const wrap=document.createElement('div'); wrap.className='shop-today';
+  // the countdown pill (ticks every second while the shop is open) + the reroll button
+  const top=document.createElement('div'); top.className='shop-today-top';
+  const tm=document.createElement('span'); tm.id='shop-timer'; top.appendChild(tm);
+  const done=shopProg().reroll===dayKey();
+  const rb=shopBtn('purple'+(done?' done':''), done ? T('shop.rerolled') : T('shop.reroll', ECON.shop.rerollGems), shopReroll); rb.id='shop-reroll'; top.appendChild(rb);
+  wrap.appendChild(top);
   const row=document.createElement('div'); row.className='shop-slots';
+  const tonly=`<div class="shop-tonly">${T('shop.todayOnly')}</div>`;
+  // 1) the free gift of the day — the first card, once a day
+  { const g=shopFreeGift(), taken=shopFreeClaimed();
+    const d=document.createElement('div'); d.className='shop-slot free'+(taken?' sold':''); d.dataset.slot='free'; d.dataset.gift=g.t;
+    d.innerHTML=`<div class="tag">${T('shop.slot.free')}</div>${tonly}<div class="vis"><span class="emo big">${g.icon}</span></div><div class="nm">${esc(shopFreeName(g))}</div><div class="pr">${taken ? T('shop.freeTomorrow') : `<span class="shop-free-badge">${T('shop.free')}</span>`}</div>`;
+    const bb=document.createElement('div'); bb.className='btns'; if(!taken) bb.appendChild(shopBtn('green', T('shop.take'), shopClaimFree, {buy:'free'})); d.appendChild(bb);
+    if(taken) d.insertAdjacentHTML('beforeend', `<div class="shop-sold"><span>${T('shop.freeTaken')}</span></div>`);
+    row.appendChild(d); }
+  // 2) the five deals of the rotation
   const slots=shopRotation();
   slots.forEach((sl,i)=>{
     const d=document.createElement('div'); d.className='shop-slot'; d.dataset.slot=sl.slot; d.dataset.i=i;
-    let vis='', name='', price='', rar='', badges='', btns=[];
+    let vis='', name='', price='', rar='', badges='', btns=[], off=0;
     if(sl.slot==='char'){
       const c=sl.char;
       if(!c){ vis='<span class="emo">🏆</span>'; name=T('shop.allOwned'); }
       else {
         rar='rar-'+charRarity(c); vis=`<div class="sprite">${playerSVG(c,'happy',null)}</div>`; name=esc(nm(c));
-        badges=`<span class="shop-badge-off">−${Math.round(ECON.shop.charOff*100)}%</span>`;
+        off=Math.round(ECON.shop.charOff*100);
         price=`<s>🪙 ${fmtNum(sl.full)}</s>`;
         if(!sl.sold && !isUnlocked(c)){ btns.push(shopBtn('yellow', '🪙 '+fmtNum(sl.coins), ()=>shopBuyChar(c,false,sl.key), {buy:'coins'})); btns.push(shopBtn('blue', '💎 '+sl.gems, ()=>shopBuyChar(c,true,sl.key), {buy:'gems'})); }
       }
@@ -260,20 +301,19 @@ function shopBuildToday(body){
       const gold=sl.chest==='gold'; rar=gold?'rar-legendary':'rar-rare';
       vis=`<span class="emo">${gold?'🏆':'🎁'}</span>`; name=T(gold?'shop.chestGold':'shop.chestSilver');
       price=`<s>${gold ? '💎 '+sl.fullGems : '🪙 '+fmtNum(sl.full)}</s>`;
+      off = gold ? (sl.fullGems ? Math.round((1-sl.gems/sl.fullGems)*100) : 0) : (sl.full ? Math.round((1-sl.coins/sl.full)*100) : 0);
       if(!sl.sold) btns.push(shopBtn(gold?'blue':'yellow', (gold ? '💎 '+sl.gems : '🪙 '+fmtNum(sl.coins)), ()=>shopBuyChest(sl.chest, sl.coins|0, sl.gems|0, sl.key), {buy:'chest_'+sl.chest}));
     }
+    if(off>0){ d.classList.add('deal'); badges+=`<span class="shop-badge-off">−${off}%</span>`; }   // deal of the day: glowing frame + ribbon
     if(rar) d.classList.add(rar); if(sl.sold) d.classList.add('sold');
-    d.innerHTML=`${badges}<div class="tag">${T('shop.slot.'+sl.slot)}</div><div class="vis">${vis}</div><div class="nm">${name}</div><div class="pr">${price}</div>`;
+    d.innerHTML=`${badges}<div class="tag">${T('shop.slot.'+sl.slot)}</div>${tonly}<div class="vis">${vis}</div><div class="nm">${name}</div><div class="pr">${price}</div>`;
     const bb=document.createElement('div'); bb.className='btns'; btns.forEach(b=>bb.appendChild(b)); d.appendChild(bb);
     if(sl.sold) d.insertAdjacentHTML('beforeend', `<div class="shop-sold"><span>${T('shop.sold')}</span></div>`);
     row.appendChild(d);
   });
-  wrap.appendChild(row);
-  const bar=document.createElement('div'); bar.className='shop-today-bar';
-  const tm=document.createElement('span'); tm.id='shop-timer'; tm.textContent=T('shop.renew', shopTimeLeft()); bar.appendChild(tm);
-  const done=shopProg().reroll===dayKey();
-  const rb=shopBtn('purple'+(done?' done':''), done ? T('shop.rerolled') : T('shop.reroll', ECON.shop.rerollGems), shopReroll); rb.id='shop-reroll'; bar.appendChild(rb);
-  wrap.appendChild(bar); body.appendChild(wrap);
+  wrap.appendChild(row); body.appendChild(wrap);
+  shopTimerDraw();
+  wrap.querySelectorAll('#shop-timer,.shop-slot .tag,.shop-slot .pr,.shop-slot .btn').forEach(el=>fitText(el));   // long prices stay inside the narrow cards
 }
 
 /* --- players --- */
@@ -384,9 +424,11 @@ function shopBuildPowers(body){
 $('#shop-back').addEventListener('click', ()=>{ sfx.click(); showScreen('home'); refreshHome(); });
 document.querySelectorAll('#shop-tabs .shop-tab').forEach(b=>b.addEventListener('click', ()=>{ sfx.click(); shopTab=b.dataset.tab; shopBuildTab(); }));
 Hooks.on('wallet', ()=>{ if($('#shop').classList.contains('active')) shopWallet(); });
-Hooks.on('home', ()=>{ const b=$('#btn-shop'); if(b){ let d=b.querySelector('.shop-dot'); if(shopHasNew()){ if(!d){ d=document.createElement('span'); d.className='shop-dot'; if(!b.style.position) b.style.position='relative'; b.appendChild(d); } } else if(d) d.remove(); } });
+/* the red dot on the home shop button: home v2 draws its own `.dot` from shopHasNew(); the fallback below is for the old home only */
+Hooks.on('home', ()=>{ const b=$('#btn-shop'); if(!b) return; let d=b.querySelector('.shop-dot'); if(shopHasNew() && typeof refreshHomeV2!=='function'){ if(!d){ d=document.createElement('span'); d.className='shop-dot'; if(!b.style.position) b.style.position='relative'; b.appendChild(d); } } else if(d) d.remove(); });
 /* the wallet pills on the home screen open the shop (coins → players, gems → the gem tab) */
 for(const [id,tab] of [['#xp-badge','players'],['#gem-badge','gems']]){ const el=$(id); if(el && !el.dataset.shopWired){ el.dataset.shopWired='1'; el.addEventListener('click', ()=>{ sfx.click(); openShop(tab); }); } }
+NextUp.add(()=> shopFreeClaimed() ? null : {prio:40, icon:'🎁', text:T('shop.nextFree'), action:()=>openShop('today')});
 NextUp.add(()=>{ const sl=shopRotation()[0]; const c=sl.char; if(!c || sl.sold || isUnlocked(c)) return null; if((prog.coins|0)<sl.coins && (prog.gems|0)<sl.gems) return null; return {prio:20, icon:'🛒', text:T('shop.nextUp', nm(c)), action:()=>openShop('today')}; });
 const _shopApplyLang=applyLang; applyLang=function(){ _shopApplyLang(); if($('#shop').classList.contains('active')) shopBuildTab(); };
 
@@ -394,7 +436,15 @@ I18N_ADD({
  'shop.title':['🛒 החנות','🛒 Shop','🛒 المتجر','🛒 Магазин'],
  'shop.tab.today':['היום','Today','اليوم','Сегодня'], 'shop.tab.players':['שחקנים','Players','اللاعبون','Игроки'], 'shop.tab.looks':['מראה','Looks','المظهر','Образ'],
  'shop.tab.gems':['יהלומים','Gems','جواهر','Алмазы'], 'shop.tab.powers':['כוחות','Powers','القوى','Силы'],
- 'shop.renew':['⏳ מתחדש בעוד {0}','⏳ Refreshes in {0}','⏳ يتجدد خلال {0}','⏳ Обновится через {0}'],
+ 'shop.renewFull':['⏳ ההצעות מתחלפות בעוד {0}','⏳ Offers change in {0}','⏳ تتغير العروض خلال {0}','⏳ Предложения сменятся через {0}'],
+ 'shop.todayOnly':['⏳ היום בלבד','⏳ Today only','⏳ اليوم فقط','⏳ Только сегодня'],
+ 'shop.slot.free':['🎁 מתנה חינם','🎁 Free gift','🎁 هدية مجانية','🎁 Подарок'],
+ 'shop.free':['חינם! 🎁','FREE! 🎁','مجانًا! 🎁','Бесплатно! 🎁'], 'shop.take':['קח!','Take!','خذ!','Взять!'],
+ 'shop.freeTaken':['✔ נלקח','✔ Taken','✔ أُخذت','✔ Получено'], 'shop.freeTomorrow':['מחר יש עוד 🎁','More tomorrow 🎁','غدًا المزيد 🎁','Завтра будет ещё 🎁'],
+ 'shop.freeAlready':['כבר לקחת היום 🎁 מחר יש עוד','Already taken today 🎁 more tomorrow','أخذتها اليوم 🎁 غدًا المزيد','Уже взято сегодня 🎁 завтра будет ещё'],
+ 'shop.nextFree':['🎁 מתנה חינם מחכה בחנות!','🎁 A free gift is waiting in the shop!','🎁 هدية مجانية تنتظرك في المتجر!','🎁 В магазине ждёт бесплатный подарок!'],
+ 'shop.gift.coins':['{0} מטבעות','{0} coins','{0} عملة','{0} монет'], 'shop.gift.keys':['מפתח {0}','{0} key','مفتاح {0}','{0} ключ'],
+ 'shop.gift.gems':['יהלום {0}','{0} gem','جوهرة {0}','{0} алмаз'], 'shop.gift.chest':['תיבת ברונזה','Bronze chest','صندوق برونزي','Бронзовый сундук'],
  'shop.reroll':['🔁 החלף מבחר ({0} 💎)','🔁 Reroll ({0} 💎)','🔁 تغيير العرض ({0} 💎)','🔁 Обновить ({0} 💎)'],
  'shop.rerolled':['✔ הוחלף היום','✔ Rerolled today','✔ تم التغيير اليوم','✔ Уже обновлено'],
  'shop.rerollAsk':['להחליף את המבחר של היום תמורת {0} 💎?','Reroll today\'s picks for {0} 💎?','هل تغيّر عرض اليوم مقابل {0} 💎؟','Обновить сегодняшний набор за {0} 💎?'],

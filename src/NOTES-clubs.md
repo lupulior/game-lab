@@ -1,0 +1,6 @@
+# 78-clubs — clubs without chat, a shared weekly goal (2026-10-10)
+- Firebase: `clubs/<id>={name:<presetIndex>, emoji, code, created, members:{<fbKey>:{name,lv,g,w,m,wk,t}}, week:{key,goals}}`, `clubCodes/<CODE>=<id>`; `users/<key>.club` via the heartbeat. Create 20💎 (admins free), join by a 6-char code, leave, max 20. Preset names ×24 (4 languages) + 12 emojis — no free text.
+- Weekly goal: target = max(30, 15 × members); each real match PATCHes my member node (goals/wins/matches, week key). Prize once per week (`prog.clubPrize`) for members with ≥5 matches: silver chest + 10💎, 2× target → gold chest.
+- UI: `#club-modal` (club / create / join views), `#btn-club` in the more sheet, `#home-club` pill ("🦁 83/150", shares a row with the league pill). Invite via the social share helper with a `?club=CODE` deep link (asks before joining).
+- Offline: every `fbReq` undefined → "אין חיבור", local counters kept and re-pushed (`dirty`).
+- Public: `myClub clubTarget clubWeekStats clubRefresh clubCreate clubJoin clubLeave clubClaim clubInvite clubOpen clubClose clubRender clubHomePill` and more; state `CLUB`; `ECON.clubs`. `prog.club={id,code,name,emoji,joined,me:{wk,g,w,m}}`. A rules snippet was appended to PLAN.md Appendix A (TODO for the parents' hardening).

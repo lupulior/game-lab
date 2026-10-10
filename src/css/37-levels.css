@@ -1,0 +1,23 @@
+/* ===== player levels (37-levels): badges on the shop's player cards, the level box + upgrade button in the preview, the shard card in a drop, the home tag ===== */
+.shop-pcard .lv-row{display:flex;gap:4px;align-items:center;justify-content:center;white-space:nowrap;margin-top:1px;max-width:100%}
+.shop-pcard .lv-badge{font-size:12px;font-weight:900;color:#fff;background:#8E5CF6;border-radius:8px;padding:0 6px;line-height:16px}
+.shop-pcard .lv-shards{font-size:12px;font-weight:900;color:#5b6a8a;background:#EEF1F7;border-radius:8px;padding:0 6px;line-height:16px}
+.shop-pcard .lv-row.ready .lv-shards{background:var(--green);color:#fff;animation:lv-pulse .9s infinite alternate}
+.shop-pcard .lv-row.max .lv-badge{background:#d9a300}
+.shop-pcard.lv-ready{box-shadow:0 4px 0 rgba(27,42,78,.2),0 0 0 3px rgba(63,195,95,.55)}
+@keyframes lv-pulse{from{transform:scale(1)}to{transform:scale(1.1)}}
+.shop-preview.lv-has{gap:4px}
+.shop-preview.lv-has .sprite{width:100px;height:150px}
+.shop-preview .lv-box{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;max-width:100%}
+.shop-preview .lv-lvl{font-size:16px;font-weight:900;color:#fff;background:#8E5CF6;border-radius:12px;padding:2px 10px;white-space:nowrap;line-height:22px}
+.shop-preview .lv-box.max .lv-lvl{background:#d9a300}
+.shop-preview .lv-bar{position:relative;display:block;width:150px;height:26px;border-radius:13px;background:#dfe5f0;overflow:hidden;box-shadow:inset 0 2px 0 rgba(27,42,78,.15)}
+.shop-preview .lv-bar i{position:absolute;top:0;bottom:0;inset-inline-start:0;background:linear-gradient(90deg,#3FC35F,#8ee36b);border-radius:13px;transition:width .3s}
+.shop-preview .lv-box.ready .lv-bar i{background:linear-gradient(90deg,#FFD447,#F5C542)}
+.shop-preview .lv-bar span{position:relative;display:block;text-align:center;line-height:26px;font-size:15px;font-weight:900;color:var(--navy)}
+.shop-preview .btn.lv-upbtn{font-size:20px;min-height:44px;padding:8px 18px}
+.shop-preview .btn.lv-upbtn.off{background:#B7BECD;box-shadow:0 6px 0 #8A93A8,0 12px 18px rgba(0,0,0,.12);color:#F2F4F8}
+.shop-preview .btn.lv-upbtn.off:active{transform:none}
+.ccard .pv.lv-shardpv{position:relative}
+.ccard .pv.lv-shardpv .lv-shardbadge{position:absolute;inset-inline-end:-10px;bottom:-4px;font-size:44px;line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
+#home-name .lv-tag{display:inline-block;vertical-align:middle;margin-inline-start:8px;font-size:15px;font-weight:900;color:#fff;background:#8E5CF6;border-radius:10px;padding:1px 9px;line-height:20px;-webkit-text-stroke:0;text-shadow:none;box-shadow:0 3px 0 rgba(27,42,78,.35)}

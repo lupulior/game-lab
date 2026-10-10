@@ -1,0 +1,38 @@
+/* ===== chest slots: three tiles on the home (right side, under the column) and a wide row on the chests screen ===== */
+.chest-slots{display:flex;gap:6px;z-index:2}
+#chest-slots{position:absolute;right:30px;top:438px;width:240px;justify-content:center}
+#chest-slots .slot{width:76px;height:66px;flex:none}
+#chest-slots .s-nm{display:none}
+.slot{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:0;cursor:pointer;font-family:inherit;color:var(--navy);background:rgba(255,255,255,.94);border-radius:16px;box-shadow:0 5px 0 rgba(27,42,78,.22),0 8px 12px rgba(0,0,0,.12);padding:3px 4px;box-sizing:border-box;overflow:hidden;border-bottom:4px solid transparent}
+.slot:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,78,.22)}
+.slot .s-ic{font-size:26px;line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15));flex:none}
+.slot .s-tx{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;text-align:center;min-width:0}
+.slot .s-cd{font-size:12px;font-weight:900;white-space:nowrap}
+.slot .s-nm{font-size:16px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.slot.ck-bronze{border-bottom-color:#c77b3a}
+.slot.ck-silver{border-bottom-color:#b9c3d1}
+.slot.ck-gold{border-bottom-color:#f5c542}
+/* empty: faded, waiting for a win */
+.slot.empty{background:rgba(255,255,255,.6);box-shadow:0 5px 0 rgba(27,42,78,.12);cursor:default;color:#5b6a8a;border-bottom-color:transparent}
+.slot.empty:active{transform:none;box-shadow:0 5px 0 rgba(27,42,78,.12)}
+.slot.empty .s-ic{opacity:.35;filter:grayscale(1)}
+.slot.empty .s-cd{white-space:normal;font-size:11px;font-weight:700}
+/* ticking: the countdown */
+.slot.tick .s-cd{color:#5b6a8a}
+/* ready: gold glow + a bouncing chest */
+.slot.ready{background:linear-gradient(#FFE27A,#F5C400);box-shadow:0 5px 0 #C99A10,0 0 18px rgba(255,212,71,.8);animation:slotGlow 1.2s ease-in-out infinite alternate}
+.slot.ready .s-ic{animation:slotBounce .6s ease-in-out infinite alternate}
+.slot.ready .s-cd{font-size:14px;color:var(--navy)}
+@keyframes slotBounce{from{transform:translateY(0) scale(1)}to{transform:translateY(-5px) scale(1.14)}}
+@keyframes slotGlow{from{box-shadow:0 5px 0 #C99A10,0 0 10px rgba(255,212,71,.5)}to{box-shadow:0 5px 0 #C99A10,0 0 24px rgba(255,212,71,1)}}
+/* the chests screen: a wide row of the same tiles between the wallet and the cards */
+#chests-slots{position:absolute;left:24px;right:24px;top:82px;height:68px;gap:12px;justify-content:center;align-items:stretch}
+#chests-slots .slot{width:226px;height:68px;flex:none;flex-direction:row;gap:10px;padding:4px 14px}
+#chests-slots .slot .s-ic{font-size:38px}
+#chests-slots .slot .s-tx{align-items:flex-start;flex:1 1 auto}
+#chests-slots .slot .s-cd{font-size:19px}
+#chests-slots .slot.empty .s-cd{font-size:17px;white-space:nowrap}
+#chests-slots .slot.ready .s-cd{font-size:22px}
+#chests.slots-on .chests-row{top:158px}
+/* the end card line: "📦 chest in a slot, opens in …" */
+.ec-row.ec-slot .ec-big{font-size:20px}

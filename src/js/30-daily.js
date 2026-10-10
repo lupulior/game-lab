@@ -8,7 +8,7 @@ Object.assign(ECON, { daily: {
   cycleKeyDay:3, cycleChestDay:7, cycleChest:'silver', cycleGems:3,
   milestones:[[7,3],[14,5],[30,10],[60,20],[100,50],[365,150]],   // [streak days, gems] + a title each
   freezeMax:2, freezeWeekly:1, freezeCalDay:10, saveDays:30, saveHours:48,
-  missionCoins:40, missionXP:10, allKey:1, allXP:25, freeRerolls:1, rerollGems:5,
+  missionCoins:40, missionXP:10, allChest:'bronze', allXP:25, freeRerolls:1, rerollGems:5,   // all three missions → a Bronze chest + XP (allKey is gone: keys open only the gold chest)
   calDays:28, calMin:40, calMax:120, calKeyDays:[3,10], calChestDay:7, calChest:'bronze', calGemsDay:14, calGems:5,
   calPackDay:21, calPackCoins:150, calKitDay:28, calKitCoins:300, calKitGems:10,
   bronzeCoins:80, packCoins:100,              // the free daily Bronze chest / sticker pack, when no chests / album module exists
@@ -178,7 +178,7 @@ function dmEvent(ev, n=1){
     if(dm.prog[id]>=m.n){
       dm.done.push(id); addCoins(ECON.daily.missionCoins,'mission'); addXP(ECON.daily.missionXP, true);
       if(!(matchEarn && inMatch())){ toast(T('dm.done', dmText(m)),'ach'); try{ sfx.win(); }catch(e){} }
-      if(dm.done.length>=3 && !dm.bonus){ dm.bonus=true; dailyAddKeys(ECON.daily.allKey,'missions'); addXP(ECON.daily.allXP, true); if(!(matchEarn && inMatch())) toast(T('dm.all'),'ach'); }   // a full wallet owes the key (dailyAddKeys)
+      if(dm.done.length>=3 && !dm.bonus){ dm.bonus=true; dailyGiveChest(ECON.daily.allChest,'missions'); addXP(ECON.daily.allXP, true); if(!(matchEarn && inMatch())) toast(T('dm.all'),'ach'); }   // the bonus is a Bronze chest (coins when no chests module exists)
     }
   }
   if(changed){ saveProg(); refreshDailyCard(); }
@@ -197,7 +197,7 @@ function dailyReroll(){
 function missionsRender(){
   const dm=dailyMissions(), st=dailyMissionStatus(), D=ECON.daily;
   $('#dms-list').innerHTML=st.map(s=>`<div class="dmr ${s.done?'done':''}"><span class="dmi">${s.icon}</span><span class="dmt">${esc(s.text)}</span><span class="dmb"><i style="width:${Math.round(s.prog/s.n*100)}%"></i></span><span class="dmn">${s.done?'✔':s.prog+'/'+s.n}</span><span class="dmx">${s.done?'✔':'🪙 '+D.missionCoins}</span></div>`).join('');
-  const all=dm.done.length>=3; $('#dms-bonus').textContent=(all?'✔ ':'')+T('dm.bonus', D.allKey, D.allXP); $('#dms-bonus').classList.toggle('on', all);
+  const all=dm.done.length>=3; $('#dms-bonus').textContent=(all?'✔ ':'')+T('dm.bonus', T('dm.chest.'+D.allChest), D.allXP); $('#dms-bonus').classList.toggle('on', all);
   const cost=dailyRerollCost(), can=dm.ids.some(id=>id!=='play2' && !dm.done.includes(id));
   const rb=$('#btn-dms-reroll'); rb.textContent=cost ? T('dm.rerollGems', cost) : T('dm.rerollFree'); rb.disabled=!can; rb.classList.toggle('d-off', !can);
 }
@@ -378,8 +378,8 @@ I18N_ADD({
  'dm.israeli1':['הבקע גול עם שחקן ישראלי 🇮🇱','Score with an Israeli player 🇮🇱','سجّل بلاعب إسرائيلي 🇮🇱','Забей израильским игроком 🇮🇱'],
  'dm.margin2':['נצח בהפרש של 2 גולים ומעלה','Win by 2+ goals','افز بفارق هدفين أو أكثر','Выиграй с разницей в 2+ гола'],
  'dm.done':['🎯 משימה הושלמה: {0}','🎯 Mission done: {0}','🎯 اكتملت المهمة: {0}','🎯 Задание выполнено: {0}'],
- 'dm.all':['🔑 כל המשימות הושלמו! +1 מפתח','🔑 All missions done! +1 key','🔑 اكتملت كل المهام! +1 مفتاح','🔑 Все задания выполнены! +1 ключ'],
- 'dm.bonus':['כל השלוש: 🔑 {0} + ⭐ {1}','All three: 🔑 {0} + ⭐ {1}','الثلاث كلها: 🔑 {0} + ⭐ {1}','Все три: 🔑 {0} + ⭐ {1}'],
+ 'dm.all':['🎁 כל המשימות הושלמו! תיבת ברונזה','🎁 All missions done! A Bronze chest','🎁 اكتملت كل المهام! صندوق برونزي','🎁 Все задания выполнены! Бронзовый сундук'],
+ 'dm.bonus':['כל השלוש: 🎁 {0} + ⭐ {1}','All three: 🎁 {0} + ⭐ {1}','الثلاث كلها: 🎁 {0} + ⭐ {1}','Все три: 🎁 {0} + ⭐ {1}'],
  'dm.rerollFree':['🔄 החלף משימה (חינם)','🔄 Reroll (free)','🔄 بدّل المهمة (مجانًا)','🔄 Заменить (бесплатно)'],
  'dm.rerollGems':['🔄 החלף משימה ({0} 💎)','🔄 Reroll ({0} 💎)','🔄 بدّل المهمة ({0} 💎)','🔄 Заменить ({0} 💎)'],
  'dm.rerollNone':['אין משימה להחליף','Nothing to reroll','لا توجد مهمة للتبديل','Нечего менять'],

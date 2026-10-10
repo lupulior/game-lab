@@ -1,0 +1,59 @@
+/* ===== arenas: home background per arena, the arena pill, the arenas modal, the new-arena celebration, lock labels, fan tints ===== */
+/* the home sky follows the arena (arena 1 keeps the default stage sky); the frame outside the stage is untouched */
+#home[data-arena="2"]{background:linear-gradient(#4C8FE0,#9CC8F5 55%,#CFE3F7)}
+#home[data-arena="3"]{background:linear-gradient(#2FC0EE,#9FE8FF 50%,#FFE9A8)}
+#home[data-arena="4"]{background:linear-gradient(#141C3D,#2C2A6E 55%,#5B3A9E)}
+#home[data-arena="5"]{background:linear-gradient(#9ED8FF,#DDF1FF 55%,#F6FBFF)}
+#home[data-arena="6"]{background:linear-gradient(#3B1F6E,#6E3BB0 50%,#D9A93A)}
+/* the arena pill sits right above the trophy pill (same width), two lines: name + trophies to the next arena */
+#home #home-arena{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font-family:inherit;border:0;cursor:pointer;color:var(--navy);
+  background:linear-gradient(#E8F7FF,#9ED8FF);border-radius:18px;padding:4px 10px 5px;width:190px;min-height:44px;box-sizing:border-box;line-height:1.15;white-space:nowrap;overflow:hidden;
+  box-shadow:0 5px 0 #4FA3DD,0 8px 14px rgba(0,0,0,.15);font-weight:900;text-align:center}
+#home #home-arena:active{transform:translateY(3px);box-shadow:0 2px 0 #4FA3DD}
+#home #home-arena .arn-name{font-size:17px;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+#home #home-arena .arn-next{font-size:12px;opacity:.85;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+#home #home-arena[data-arena="4"]{background:linear-gradient(#D9CFFF,#9C7BF0);box-shadow:0 5px 0 #5B34B5,0 8px 14px rgba(0,0,0,.15)}
+#home #home-arena[data-arena="5"]{background:linear-gradient(#ffffff,#C9ECFF);box-shadow:0 5px 0 #6FA9D8,0 8px 14px rgba(0,0,0,.15)}
+#home #home-arena[data-arena="6"]{background:linear-gradient(#FFF3B8,#F5C400);box-shadow:0 5px 0 #C99A10,0 8px 14px rgba(0,0,0,.15)}
+#home.v2.inparty #home-arena{display:none}   /* a party uses that corner for the team bar */
+#home:not(.v2) #home-arena{position:absolute;left:28px;bottom:14px;z-index:3}   /* without the home-v2 module the pill still sits in the free bottom-left corner */
+/* ----- the arenas modal ----- */
+#arena-modal .panel{padding:12px 28px 14px;max-height:604px;overflow-y:auto;box-sizing:border-box;min-width:640px;max-width:760px}
+#arena-modal h2{font-size:34px;margin:0}
+#arena-sub{font-size:16px;font-weight:900;color:var(--navy);opacity:.8;margin:0 0 6px}
+#arena-list{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.arn-row{display:flex;align-items:center;gap:12px;background:rgba(27,42,78,.06);border-radius:16px;padding:3px 12px;min-height:58px;color:var(--navy);font-weight:900;text-align:start}
+.arn-row.locked{opacity:.75}
+.arn-row.got:not(.here){background:#DDF7E4}
+.arn-row.here{background:#FFF6CF;outline:3px solid var(--yellow);opacity:1}
+.arn-emo{font-size:32px;width:44px;text-align:center;line-height:1}
+.arn-mid{flex:1;display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.arn-mid b{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arn-mid small{font-size:14px;opacity:.85}
+.arn-sw svg{width:60px;height:40px;border-radius:6px;box-shadow:0 2px 0 rgba(0,0,0,.2);display:block}
+.arn-ch{display:flex;align-items:center;gap:6px;width:150px;font-size:13px;line-height:1.1}
+.arn-ch svg{width:30px;height:46px;flex:none}
+.arn-row.locked .arn-ch:not(.own) svg{filter:grayscale(1) brightness(.8);opacity:.7}
+.arn-st{font-size:22px;width:32px;text-align:center}
+#btn-arena-close{min-height:44px}
+/* ----- the new-arena celebration ----- */
+#arena-new-modal .panel{min-width:460px;max-width:600px;padding:12px 34px 20px}
+#arena-new-modal h2{font-size:36px;margin:0}
+.arn-new-emo{font-size:80px;line-height:1;animation:arnBounce 1s ease-in-out infinite alternate;filter:drop-shadow(0 8px 10px rgba(0,0,0,.25))}
+@keyframes arnBounce{from{transform:translateY(0) scale(1)}to{transform:translateY(-10px) scale(1.08)}}
+#arena-new-name{font-size:30px;font-weight:900;color:var(--navy);margin:0 0 6px}
+#arena-new-sw svg{width:180px;height:120px;border-radius:12px;box-shadow:0 6px 0 rgba(27,42,78,.25);display:block;margin:0 auto 8px}
+#arena-new-gift{font-size:24px;font-weight:900;color:var(--navy);background:#FFF0B3;border-radius:14px;padding:4px 16px;display:inline-block;margin-bottom:6px}
+#arena-new-char{display:flex;align-items:center;justify-content:center;gap:10px;font-size:18px;font-weight:900;color:var(--navy);margin-bottom:8px}
+#arena-new-char .sprite svg{width:40px;height:60px;display:block}
+#btn-arena-new-ok{min-height:52px}
+/* ----- lock labels on player cards (gallery + shop) ----- */
+.card .lock.arena-lock{font-size:13px;background:#5B34B5;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shop-pcard .pr.arena-lock{color:#5B34B5;font-size:11px;white-space:normal;line-height:1.05;text-align:center;padding:0 2px;max-width:100%}
+.shop-preview .pr.arena-lock{color:#5B34B5}
+.shop-preview .btn[data-act=arena]{font-size:18px;padding:8px 18px;min-height:44px}
+/* ----- the fans follow the arena (only when an arena pitch is drawn) ----- */
+#game[data-arena="3"] #fans svg{filter:saturate(1.15) brightness(1.06)}
+#game[data-arena="4"] #fans svg{filter:brightness(.7) saturate(.9) hue-rotate(15deg)}
+#game[data-arena="5"] #fans svg{filter:brightness(1.12) saturate(.6)}
+#game[data-arena="6"] #fans svg{filter:sepia(.35) saturate(1.4) brightness(1.05)}

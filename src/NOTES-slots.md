@@ -1,0 +1,6 @@
+# 27-slots — timed chest slots, keys only for gold (2026-10-10)
+- `prog.slots=[null|{kind,at}×3]`, `at` = `now()` when ready. A win in a real match (matchEnd, not training) fills the first free slot: level ≥5/BOSS → gold, 5% gold, level ≥3 or online → silver, 25% silver, else bronze (`slotKindForWin`). Timers bronze 1 h, silver 3 h, gold 8 h (`ECON.slots.hours`). All full → toast "כל התאים מלאים". The end card gets a row "📦 … נפתחת בעוד ⏳".
+- Tiles `#chest-slots` on the home (right side, under "עוד") and `#chests-slots` on the chests screen: empty / ticking (1-s repaint while on home/chests) / ready (glow). Ticking tap → `slotSkip(i)` (💎 = ceil(remaining h × rate), capped bronze 3 / silver 8 / gold 18). Ready tap → `slotOpen(i)` → `giveChest(kind,true)` + `openChestsScreen()` + `openChest(kind)`.
+- Sets `ECON.chests.bronze.keys=0`, `silver.keys=0` (keys open only the gold chest; `buildChests` is wrapped to show "🪙 150 או מהתאים ⏳"). `chestsBadge` counts ready slots. NextUp prio 45 when a slot is ready.
+- 30-daily: the all-missions bonus is now a bronze chest (`ECON.daily.allChest`), not a key.
+- Public: `slotsInv slotKindForWin slotGive slotReady slotRemaining slotSkipCost slotSkip slotOpen slotTap slotsRender slotsTick slotsFmt slotsReadyCount slotsNextUp`. Hooks emitted: `slotGiven(i,kind)`, `slotOpen(i,kind)`.

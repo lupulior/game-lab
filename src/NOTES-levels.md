@@ -1,0 +1,6 @@
+# 37-levels — player levels with shards (2026-10-10)
+- `prog.charLv={id:1..5}`, `prog.shards={id:n}`. `ECON.levels={max:5, shards:10, boost:.025, price:{2:200,3:400,4:800,5:1500}, chestChance:.35, chestShards:{superrare:3,epic:5,mythic:8,legendary:10}}`.
+- Chests (20-chests untouched, its functions wrapped): in superrare+ drops, with p=.35 the least exciting card (xp → coins → keys → gems) becomes `{t:'shards', id, n}` for an owned player below level 5; name "🧩 N שברים · <name>", preview = sprite + 🧩, grant → `addShards`.
+- Level-up: 10 shards + coins (`charLevelUp(c)`: ask → spendCoins → +1 level, confetti/toast). Boost = 1 + .025·(lv−1) on speed and power for P1 in OFFLINE matches only — the single core edit is in `st(p)` (core.html ~1795), which consults `charBoost(c)`.
+- UI: the shop players tab is decorated (`shopBuildPlayers` wrapped): level badge, shard bar, "⬆ שדרג! 🪙 price" button in the preview; the home hero gets "⭐ רמה N" at level ≥2. NextUp prio 30 when an upgrade is affordable.
+- Public: `charLevel charShards charBoost charLevelPrice charCanLevel charLevelUp charUpgradable addShards lvDecorateShop`. Hooks emitted: `charLevel(id,lv)`, `shards(id,n)`.

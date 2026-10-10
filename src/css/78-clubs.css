@@ -1,0 +1,58 @@
+/* ===== clubs: the club modal (inside #stage), the home pill, the "more" sheet button ===== */
+.club-panel{width:920px;max-width:940px;max-height:596px;padding:14px 26px 16px;display:flex;flex-direction:column;gap:8px;overflow:hidden;text-align:center}
+.club-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.club-head h2{margin:0;font-size:34px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.club-head .btn.small{font-size:18px;padding:0 18px;min-height:44px}
+#club-body{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-height:0}
+.club-hero{font-size:84px;line-height:1.1;filter:drop-shadow(0 6px 0 rgba(0,0,0,.15))}
+.club-panel .hint.club-intro{font-size:22px;line-height:1.4}
+.club-sub{font-size:18px;font-weight:900;color:#5b6a8a;text-align:start}
+/* create: preset names + emoji chips (no typing) */
+.club-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.club-chip,.club-emo{border:0;cursor:pointer;font-family:inherit;font-weight:900;color:var(--navy);background:#EEF2FA;border-radius:14px;min-height:44px;font-size:18px;padding:0 6px;box-shadow:0 4px 0 rgba(27,42,78,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.club-chip:active,.club-emo:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(27,42,78,.18)}
+.club-chip.on,.club-emo.on{background:#FFF0B3;outline:5px solid var(--yellow)}
+.club-emos{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.club-emo{font-size:30px;width:60px;min-height:48px;padding:0}
+.club-prev{font-size:36px;font-weight:900;color:var(--navy);line-height:1.2}
+/* join: the 6 boxes mirror the single input underneath (the only typed field in the feature) */
+.club-boxes{display:flex;gap:10px;justify-content:center;direction:ltr;cursor:text}
+.club-boxes span{width:58px;height:70px;border-radius:16px;background:#FFF6D1;border:4px dashed var(--yellow);font-size:40px;font-weight:900;color:var(--navy);display:flex;align-items:center;justify-content:center}
+.club-boxes span.has{border-style:solid;background:#fff}
+.club-boxes span.on{border-color:var(--blue);background:#E3F0FF}
+#club-code-input{font-family:inherit;font-weight:900;font-size:30px;text-align:center;letter-spacing:6px;direction:ltr;text-transform:uppercase;padding:6px 12px;border-radius:14px;border:4px solid var(--purple);width:320px;max-width:92%;margin:0 auto;outline:none;color:var(--navy)}
+#club-code-input:focus{border-color:var(--blue)}
+/* the club */
+.club-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.club-code{border:0;cursor:pointer;font-family:inherit;font-weight:900;font-size:24px;color:var(--navy);background:#FFF6D1;border:4px dashed var(--yellow);border-radius:16px;padding:4px 16px;min-height:44px;white-space:nowrap}
+.club-code:active{opacity:.8}
+.club-days{font-size:20px;font-weight:900;color:var(--navy);white-space:nowrap}
+.club-refresh{font-size:20px;padding:0 14px;min-height:44px;min-width:44px}
+.club-progress{display:flex;flex-direction:column;gap:4px}
+.club-bar{height:28px;border-radius:15px;background:rgba(27,42,78,.15);overflow:hidden;box-shadow:inset 0 3px 0 rgba(0,0,0,.08)}
+.club-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3FC35F,#FFD447);border-radius:15px;transition:width .5s}
+.club-bar.done i{background:linear-gradient(90deg,#FFD447,#FF7A3D)}
+.club-ptext{font-size:26px;font-weight:900;color:var(--navy);line-height:1.2}
+.club-prize{font-size:16px;font-weight:900;color:#5b6a8a;line-height:1.3;white-space:normal}
+.club-status{font-size:18px;font-weight:900;color:#fff;background:var(--red);border-radius:12px;padding:4px 14px;display:inline-block;margin:0 auto}
+.club-members{max-height:168px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;background:rgba(27,42,78,.06);border-radius:16px;padding:6px 10px;text-align:start}
+.club-row{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:900;color:var(--navy);padding:3px 10px;border-radius:10px;min-height:32px}
+.club-row.me{background:#FFF0B3}
+.club-row .club-nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.club-row .club-nm small{font-size:13px;color:#5b6a8a}
+.club-row .club-lv{font-size:14px;color:#5b6a8a;white-space:nowrap}
+.club-row .club-st{white-space:nowrap;direction:ltr}
+.club-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.club-btns .btn{font-size:21px;min-height:48px;padding:8px 20px}
+.club-btns .btn.small{font-size:18px;padding:0 16px}
+#club-modal .btn.off{background:#B7BECD;color:#F2F4F8;text-shadow:none;box-shadow:0 8px 0 #8A93A8,0 14px 20px rgba(0,0,0,.15)}
+#club-modal .btn.off:active{transform:none}
+#club-modal .btn.pulse{animation:clubPulse .9s ease-in-out infinite alternate}
+@keyframes clubPulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+/* the home pill (a third small pill in #home-trophy, above the trophy pill; .free = no trophy column, stands on its own in the free right-side area).
+   #home-club.pill.club outranks 90-home's "#home-trophy .pill" (which is later in the cascade) */
+#home-club.pill.club{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;border:0;cursor:pointer;font-size:16px;font-weight:900;color:var(--navy);background:linear-gradient(#D6F0FF,#8ED3FF);border-radius:18px;padding:5px 10px;width:190px;box-sizing:border-box;min-height:36px;white-space:nowrap;overflow:hidden;box-shadow:0 5px 0 rgba(27,42,78,.3),0 8px 14px rgba(0,0,0,.15)}
+#home-club.pill.club:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(27,42,78,.3)}
+#home-club.pill.club.done{background:linear-gradient(#FFE8B0,#F5B400)}
+#home-club.pill.club.free{position:absolute;left:760px;top:452px;z-index:3}
+#btn-club{white-space:nowrap}
