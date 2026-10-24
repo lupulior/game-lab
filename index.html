@@ -2,13 +2,13 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<title>כוכב הכדורגל ⚽ Football Star</title>
+<title>Game Lab 🎮 המשחקים של ליאור</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="משחק כדורגל לילדים: 80 כוכבים, אונליין עם חברים, גביע פנדלים, מטבעות ותיבות. בחינם, בלי התקנה.">
+<meta name="description" content="תפריט המשחקים: כוכב הכדורגל ⚽ — משחק כדורגל לילדים עם 96 כוכבים, אונליין עם חברים, פנדלים, מועדונים ותיבות. בחינם, בלי התקנה.">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Football Star">
+<meta property="og:site_name" content="Game Lab">
 <meta property="og:title" content="כוכב הכדורגל ⚽ Football Star">
-<meta property="og:description" content="משחק כדורגל לילדים: 80 כוכבים, אונליין עם חברים, גביע פנדלים, מטבעות ותיבות. בחינם, בלי התקנה ⚽">
+<meta property="og:description" content="משחק כדורגל לילדים: 96 כוכבים, אונליין עם חברים, פנדלים, מועדונים ותיבות. בחינם, בלי התקנה ⚽">
 <meta property="og:image" content="https://lupulior.github.io/game-lab/art/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -17,23 +17,50 @@
 <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="כוכב הכדורגל ⚽ Football Star">
-<meta name="twitter:description" content="משחק כדורגל לילדים: 80 כוכבים, אונליין עם חברים, גביע פנדלים. בחינם, בלי התקנה ⚽">
+<meta name="twitter:description" content="משחק כדורגל לילדים: 96 כוכבים, אונליין עם חברים, פנדלים, מועדונים. בחינם, בלי התקנה ⚽">
 <meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/og.png">
 <meta name="theme-color" content="#3FB2F5">
-<!-- the game itself lives in game1.html; this page only carries the link preview and forwards the query string (?ref= ?join= ?code= ?mode=) -->
+<!-- shared links carry a query string (?ref= ?join= ?code= ?club= ?mode=): those go straight into the game, as before.
+     A plain visit shows the games menu. -->
 <script>
-  (function(){ try{ location.replace('game1.html'+location.search+location.hash); }catch(e){ location.href='game1.html'+location.search+location.hash; } })();
+  (function(){ if(location.search || location.hash){ try{ location.replace('game1.html'+location.search+location.hash); }catch(e){ location.href='game1.html'+location.search+location.hash; } } })();
 </script>
-<!-- without JS only: a second navigation from the meta refresh would cancel the one above and drop ?join/?ref/?code -->
-<noscript><meta http-equiv="refresh" content="0;url=game1.html"></noscript>
 <style>
-  html,body{height:100%;margin:0;background:linear-gradient(#3FB2F5,#A9E4FF);font-family:"Varela Round","Arial Rounded MT Bold",Arial,sans-serif;color:#1B2A4E;text-align:center}
-  body{display:flex;align-items:center;justify-content:center}
-  a{display:inline-block;background:#3FC35F;color:#fff;text-decoration:none;font-size:28px;font-weight:900;padding:16px 40px;border-radius:24px;box-shadow:0 8px 0 #22883C}
+  *{box-sizing:border-box}
+  html,body{min-height:100%;margin:0;background:linear-gradient(#3FB2F5,#A9E4FF 60%,#3FB35B);font-family:"Varela Round","Arial Rounded MT Bold",Arial,sans-serif;color:#1B2A4E;text-align:center}
+  body{display:flex;flex-direction:column;align-items:center;padding:28px 16px 40px}
+  h1{font-size:40px;margin:10px 0 2px;color:#fff;text-shadow:0 4px 0 rgba(27,42,78,.35)}
+  .sub{color:#fff;opacity:.95;font-size:18px;margin:0 0 26px;font-weight:700}
+  .grid{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;width:100%;max-width:1000px}
+  .card{background:#fff;border-radius:26px;box-shadow:0 10px 0 rgba(27,42,78,.25),0 14px 30px rgba(0,0,0,.18);width:min(100%,460px);overflow:hidden;text-decoration:none;color:inherit;transition:transform .15s}
+  .card:hover{transform:translateY(-4px)}
+  .card img{display:block;width:100%;aspect-ratio:1200/630;object-fit:cover;background:#3FB35B}
+  .card .body{padding:16px 18px 20px}
+  .card h2{margin:0 0 6px;font-size:28px}
+  .card p{margin:0 0 14px;font-size:16px;line-height:1.45;color:#44506b}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:14px}
+  .tag{background:#EAF6FF;color:#1B2A4E;border-radius:12px;padding:4px 10px;font-size:13px;font-weight:700}
+  .play{display:inline-block;background:#3FC35F;color:#fff;font-size:24px;font-weight:900;padding:12px 44px;border-radius:20px;box-shadow:0 7px 0 #22883C}
+  .soon{width:min(100%,460px);border:3px dashed rgba(255,255,255,.75);border-radius:26px;color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;min-height:180px;opacity:.9}
+  .foot{margin-top:30px;color:#fff;font-size:14px;opacity:.9}
+  .foot a{color:#fff}
 </style>
 </head>
 <body>
-  <div><h1>כוכב הכדורגל ⚽</h1><p><a id="go" href="game1.html">שחק ▶</a></p></div>
-  <script>(function(){ var a=document.getElementById('go'); if(a) a.href='game1.html'+location.search+location.hash; })();</script>
+  <h1>🎮 Game Lab</h1>
+  <p class="sub">המשחקים של ליאור · בחינם, בדפדפן, בלי התקנה</p>
+  <div class="grid">
+    <a class="card" href="game1.html">
+      <img src="art/og.png" alt="כוכב הכדורגל">
+      <div class="body">
+        <h2>⚽ כוכב הכדורגל</h2>
+        <p>משחק כדורגל 1 על 1: 96 כוכבים, אונליין עם חברים, פנדלים, ארנות, מועדונים ותיבות.</p>
+        <div class="tags"><span class="tag">👥 אונליין</span><span class="tag">📱 גם בטלפון</span><span class="tag">🇮🇱 עברית · English · العربية · Русский</span></div>
+        <span class="play">שחק ▶</span>
+      </div>
+    </a>
+    <div class="soon">🚧 עוד משחקים בקרוב…</div>
+  </div>
+  <p class="foot">Football Star · <a href="https://whatsapp.com/channel/0029Vb8YFue4SpkQTJY86O3C">ערוץ העדכונים בוואטסאפ 📣</a></p>
 </body>
 </html>
