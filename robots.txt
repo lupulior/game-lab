@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://lupulior.github.io/game-lab/sitemap.xml

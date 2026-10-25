@@ -2,9 +2,9 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<title>Game Lab 🎮 המשחקים של ליאור</title>
+<title>מעבדת משחקים 🎮 Game Lab – כוכב הכדורגל, משחק כדורגל חינם של לופו</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="תפריט המשחקים: כוכב הכדורגל ⚽ — משחק כדורגל לילדים עם 96 כוכבים, אונליין עם חברים, פנדלים, מועדונים ותיבות. בחינם, בלי התקנה.">
+<meta name="description" content="מעבדת המשחקים של לופו: כוכב הכדורגל ⚽ משחק כדורגל חינם לילדים בדפדפן – 96 כוכבים, אונליין עם חברים, פנדלים, מועדונים ותיבות. בלי התקנה, גם בטלפון.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Game Lab">
 <meta property="og:title" content="כוכב הכדורגל ⚽ Football Star">
@@ -20,6 +20,17 @@
 <meta name="twitter:description" content="משחק כדורגל לילדים: 96 כוכבים, אונליין עם חברים, פנדלים, מועדונים. בחינם, בלי התקנה ⚽">
 <meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/og.png">
 <meta name="theme-color" content="#3FB2F5">
+<meta name="keywords" content="מעבדת משחקים, משחק כדורגל, לופו כדורגל, המשחק של לופו, לופו, כוכב הכדורגל, משחק כדורגל לילדים, משחק כדורגל חינם, משחק כדורגל בדפדפן, משחק כדורגל אונליין, כדורגל אונליין עם חברים, משחק פנדלים, משחקי כדורגל, משחק כדורגל בלי התקנה, משחק כדורגל לטלפון, Game Lab, Lupu, Lupu Football, Football Star, football game for kids, free football game, online soccer game, lupulior">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://lupulior.github.io/game-lab/">
+<link rel="alternate" hreflang="he" href="https://lupulior.github.io/game-lab/">
+<link rel="alternate" hreflang="en" href="https://lupulior.github.io/game-lab/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebSite","@id":"https://lupulior.github.io/game-lab/#site","url":"https://lupulior.github.io/game-lab/","name":"Game Lab – מעבדת משחקים","alternateName":["מעבדת משחקים","המשחק של לופו","לופו","Lupu Game Lab","Lupu"],"inLanguage":["he","en","ar","ru"]},
+ {"@type":"VideoGame","@id":"https://lupulior.github.io/game-lab/game1.html#game","url":"https://lupulior.github.io/game-lab/game1.html","name":"כוכב הכדורגל – Football Star","alternateName":["משחק כדורגל","לופו כדורגל","המשחק של לופו","Lupu Football","Football Star","משחק כדורגל לילדים","משחק כדורגל אונליין","משחק פנדלים"],"description":"משחק כדורגל חינמי לילדים בדפדפן: 96 כוכבים, 1 על 1 מול המחשב או אונליין עם חברים, פנדלים, ארנות, מועדונים ותיבות. בלי התקנה, גם בטלפון.","genre":["Sports","Football","Soccer"],"gamePlatform":["Web browser","Android","iOS","Windows"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en","ar","ru"],"isAccessibleForFree":true,"image":"https://lupulior.github.io/game-lab/art/og.png","author":{"@type":"Person","name":"Lupu"},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"audience":{"@type":"PeopleAudience","suggestedMinAge":6}}
+]}
+</script>
 <!-- shared links carry a query string (?ref= ?join= ?code= ?club= ?mode=): those go straight into the game, as before.
      A plain visit shows the games menu. -->
 <script>
@@ -42,13 +53,16 @@
   .tag{background:#EAF6FF;color:#1B2A4E;border-radius:12px;padding:4px 10px;font-size:13px;font-weight:700}
   .play{display:inline-block;background:#3FC35F;color:#fff;font-size:24px;font-weight:900;padding:12px 44px;border-radius:20px;box-shadow:0 7px 0 #22883C}
   .soon{width:min(100%,460px);border:3px dashed rgba(255,255,255,.75);border-radius:26px;color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;min-height:180px;opacity:.9}
+  .about{max-width:760px;margin-top:34px;background:rgba(255,255,255,.55);border-radius:20px;padding:14px 18px;font-size:14px;line-height:1.6;color:#1B2A4E}
+  .about h2{font-size:17px;margin:0 0 6px}
+  .about p{margin:0}
   .foot{margin-top:30px;color:#fff;font-size:14px;opacity:.9}
   .foot a{color:#fff}
 </style>
 </head>
 <body>
   <h1>🎮 Game Lab</h1>
-  <p class="sub">המשחקים של ליאור · בחינם, בדפדפן, בלי התקנה</p>
+  <p class="sub">מעבדת המשחקים של לופו · בחינם, בדפדפן, בלי התקנה</p>
   <div class="grid">
     <a class="card" href="game1.html">
       <img src="art/og.png" alt="כוכב הכדורגל">
@@ -61,6 +75,10 @@
     </a>
     <div class="soon">🚧 עוד משחקים בקרוב…</div>
   </div>
+  <section class="about">
+    <h2>על מעבדת המשחקים של לופו</h2>
+    <p>מעבדת משחקים (Game Lab) היא האתר של לופו, ילד שבונה משחקים. המשחק הראשון הוא <strong>כוכב הכדורגל</strong> – משחק כדורגל לילדים שמשחקים בדפדפן, בחינם ובלי התקנה: כדורגל 1 על 1 מול המחשב, כדורגל אונליין עם חברים, משחק פנדלים, 96 כוכבי כדורגל, ארנות, מועדונים, תיבות ואוסף מראה. מחפשים "לופו כדורגל", "המשחק של לופו" או "משחק כדורגל חינם"? זה כאן. עובד גם בטלפון, בעברית, אנגלית, ערבית ורוסית.</p>
+  </section>
   <p class="foot">Football Star · <a href="https://whatsapp.com/channel/0029Vb8YFue4SpkQTJY86O3C">ערוץ העדכונים בוואטסאפ 📣</a></p>
 </body>
 </html>
