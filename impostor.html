@@ -1,0 +1,1133 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>אימפוסטר 🕵 מי מסתתר בינינו? – משחק חברה לטלפון של לופו</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="אימפוסטר 🕵 משחק חברה לטלפון אחד שעובר מיד ליד: כולם מקבלים מילה סודית, חוץ מהאימפוסטר. כל אחד אומר מילה אחת – מי מסתתר בינינו? 3–12 שחקנים, קטגוריות, רמות קושי, ניקוד והצבעה. בחינם, בלי התקנה, בעברית ובאנגלית.">
+<meta name="keywords" content="אימפוסטר, משחק אימפוסטר, משחק חברה לטלפון, מי מסתתר בינינו, משחק מילים לילדים, משחק חברה, משחק לטלפון אחד, impostor party game, impostor word game, imposter game, לופו">
+<meta name="theme-color" content="#2B1B4E">
+<link rel="canonical" href="https://lupulior.github.io/game-lab/impostor.html">
+<link rel="manifest" href="impostor.webmanifest">
+<link rel="apple-touch-icon" href="art/impostor-192.png">
+<link rel="icon" href="art/impostor-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Game Lab">
+<meta property="og:title" content="אימפוסטר 🕵 מי מסתתר בינינו?">
+<meta property="og:description" content="משחק חברה לטלפון אחד: כולם מקבלים מילה סודית חוץ מהאימפוסטר. כל אחד אומר מילה – ומצביעים מי מסתתר. 3–12 שחקנים, בחינם 🕵">
+<meta property="og:image" content="https://lupulior.github.io/game-lab/art/impostor-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="אימפוסטר – בלש מצויר עם זכוכית מגדלת על רקע סגול">
+<meta property="og:url" content="https://lupulior.github.io/game-lab/impostor.html">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="אימפוסטר 🕵 מי מסתתר בינינו?">
+<meta name="twitter:description" content="משחק חברה לטלפון אחד לילדים: מילה סודית, אימפוסטר אחד, הצבעה וניקוד. בחינם, בלי התקנה.">
+<meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/impostor-og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"אימפוסטר – מי מסתתר בינינו?","alternateName":["Impostor","משחק אימפוסטר","impostor party game"],"url":"https://lupulior.github.io/game-lab/impostor.html","image":"https://lupulior.github.io/game-lab/art/impostor-og.png","description":"משחק חברה לטלפון אחד: כולם מקבלים מילה סודית חוץ מהאימפוסטר. כל אחד אומר מילה אחת, ואז מצביעים מי מסתתר.","genre":["Party game","Word game"],"gamePlatform":["Web browser","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":3,"maxValue":12},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"isPartOf":{"@type":"WebSite","name":"מעבדת משחקים – Game Lab","url":"https://lupulior.github.io/game-lab/"}}
+</script>
+<style>
+:root{
+  --bg:#2B1B4E; --bg2:#1C1037; --card:#3A2766; --card2:#4A3380; --line:#5B4590;
+  --teal:#2EE6C5; --teal2:#17B89C; --purple:#9B6DFF; --yellow:#FFD166; --pink:#FF6B9D; --red:#FF5C5C; --green:#4ADE80;
+  --text:#F5F0FF; --muted:#BFB3E0; --ink:#1A0F33;
+  --r:22px; --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  font-family:"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-serif;
+  background:radial-gradient(1200px 600px at 50% -10%,#4A2F86 0%,var(--bg) 45%,var(--bg2) 100%) fixed;
+  color:var(--text); font-size:18px; line-height:1.35; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+button,input{font:inherit;font-family:inherit}
+#app{max-width:520px;margin:0 auto;padding:12px 16px 24px;min-height:100vh;display:flex;flex-direction:column}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0 10px}
+header.top .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:20px}
+header.top .brand .m{font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.icons{display:flex;gap:8px}
+.ib{min-width:44px;min-height:44px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--text);font-size:18px;cursor:pointer;padding:0 10px;font-weight:700}
+.ib:active{transform:scale(.95)}
+.screen{display:none;flex-direction:column;gap:14px;flex:1;animation:pop .25s ease}
+.screen.on{display:flex}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+h1{font-size:30px;margin:0;text-align:center;line-height:1.2}
+h2{font-size:24px;margin:0;text-align:center}
+p{margin:0}
+.sub{color:var(--muted);text-align:center;font-size:17px}
+.card{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.06)}
+.card .lbl{font-size:16px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:60px;padding:12px 18px;
+  border:none;border-radius:20px;font-size:22px;font-weight:700;cursor:pointer;color:var(--ink);
+  background:linear-gradient(180deg,#5BF5D9,var(--teal) 60%,var(--teal2));box-shadow:0 6px 0 #0E8A74,0 12px 24px rgba(0,0,0,.3);
+  transition:transform .08s,box-shadow .08s;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #0E8A74,0 6px 14px rgba(0,0,0,.3)}
+.btn.alt{background:linear-gradient(180deg,#B48CFF,var(--purple) 60%,#7A4DE0);color:#fff;box-shadow:0 6px 0 #5A33B5,0 12px 24px rgba(0,0,0,.3)}
+.btn.alt:active{box-shadow:0 2px 0 #5A33B5,0 6px 14px rgba(0,0,0,.3)}
+.btn.warn{background:linear-gradient(180deg,#FFE08A,var(--yellow) 60%,#E6B23C);box-shadow:0 6px 0 #B98A1E,0 12px 24px rgba(0,0,0,.3)}
+.btn.warn:active{box-shadow:0 2px 0 #B98A1E,0 6px 14px rgba(0,0,0,.3)}
+.btn.ghost{background:transparent;color:var(--text);box-shadow:none;border:2px solid var(--line);min-height:52px;font-size:18px}
+.btn.ghost:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{flex:1}
+.stepper{display:flex;align-items:center;justify-content:center;gap:14px}
+.stepper button{width:64px;height:64px;border-radius:50%;border:none;font-size:34px;font-weight:700;background:var(--purple);color:#fff;cursor:pointer;box-shadow:0 5px 0 #5A33B5}
+.stepper button:active{transform:translateY(3px);box-shadow:0 2px 0 #5A33B5}
+.stepper .num{font-size:48px;font-weight:700;min-width:80px;text-align:center;color:var(--yellow)}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;min-height:52px;border-radius:16px;border:2px solid var(--line);background:var(--bg2);color:var(--text);font-size:17px;font-weight:700;cursor:pointer}
+.seg button.on{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:8px 14px;border-radius:999px;border:2px solid var(--line);background:var(--bg2);color:var(--text);font-size:16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip.on{background:var(--teal);color:var(--ink);border-color:var(--teal)}
+.chip .ck{font-size:14px;opacity:.5}
+.chip.on .ck{opacity:1}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;cursor:pointer}
+.switch .txt{flex:1}
+.switch .txt small{display:block;color:var(--muted);font-size:15px}
+.tog{width:64px;height:36px;border-radius:999px;background:var(--bg2);border:2px solid var(--line);position:relative;flex:none;transition:background .2s}
+.tog::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .2s}
+.switch.on .tog{background:var(--teal);border-color:var(--teal)}
+.switch.on .tog::after{transform:translateX(28px)}
+[dir=rtl] .switch.on .tog::after{transform:translateX(-28px)}
+.switch.dis{opacity:.45;pointer-events:none}
+.names{display:flex;flex-direction:column;gap:8px}
+.names .nm{display:flex;align-items:center;gap:8px}
+.names .nm .av{width:44px;height:44px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.names input{flex:1;min-height:44px;border-radius:12px;border:2px solid var(--line);background:var(--bg2);color:var(--text);padding:8px 12px;font-size:17px;min-width:0}
+.names input:focus{outline:none;border-color:var(--teal)}
+.mascot{font-size:88px;text-align:center;line-height:1;filter:drop-shadow(0 8px 12px rgba(0,0,0,.45));animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+.big{font-size:64px;text-align:center;line-height:1}
+.center{text-align:center}
+.spacer{flex:1}
+footer{text-align:center;padding:16px 0 0;color:var(--muted);font-size:16px}
+footer a{color:var(--teal);text-decoration:none;font-weight:700}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--yellow);color:var(--ink);padding:10px 18px;border-radius:999px;font-weight:700;font-size:17px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+
+/* role card */
+.flip{perspective:1200px;min-height:260px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.flip .inner{position:relative;width:100%;min-height:260px;transition:transform .5s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.flip.open .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:var(--r);padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center}
+.face.front{background:repeating-linear-gradient(45deg,var(--card2) 0 14px,var(--card) 14px 28px);border:3px dashed var(--purple);box-shadow:var(--shadow)}
+.face.back{transform:rotateY(180deg);background:linear-gradient(160deg,#FFF6D6,#FFE39A);color:var(--ink);box-shadow:var(--shadow)}
+.face.back.imp{background:linear-gradient(160deg,#FF9DBE,#FF5C8A);color:#2A0A1A}
+.face .word{font-size:40px;font-weight:800;line-height:1.15;word-break:break-word}
+.face .cat{font-size:17px;opacity:.75}
+.face .hint{font-size:18px;background:rgba(0,0,0,.12);padding:8px 12px;border-radius:12px}
+.face .eye{font-size:56px}
+.plist{display:flex;flex-direction:column;gap:8px}
+.pl{display:flex;align-items:center;gap:10px;background:var(--bg2);border:2px solid var(--line);border-radius:16px;padding:8px 12px;min-height:52px;font-size:18px;font-weight:700}
+.pl .n{width:34px;height:34px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.pl .nm{flex:1;min-width:0;overflow-wrap:anywhere}
+.pl .tag{white-space:nowrap}
+.pl.first{border-color:var(--yellow)}
+.pl.first .n{background:var(--yellow);color:var(--ink)}
+.pl.sel{background:var(--pink);border-color:var(--pink);color:#2A0A1A}
+.pl.sel .n{background:#2A0A1A;color:#fff}
+.pl.imp{background:#5A1F3A;border-color:var(--pink)}
+.pl.votable{cursor:pointer}
+.pl.votable:active{transform:scale(.98)}
+.pl .sc{font-weight:800;color:var(--yellow);font-size:20px;min-width:34px;text-align:center}
+.pl .delta{font-size:15px;color:var(--green);min-width:34px;text-align:center}
+.pl .delta.neg{color:var(--muted)}
+.pl .tag{font-size:13px;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:999px}
+
+/* ring timer */
+.ring{position:relative;width:150px;height:150px;margin:0 auto}
+.ring svg{transform:rotate(-90deg);width:150px;height:150px}
+.ring circle{fill:none;stroke-width:12;stroke-linecap:round}
+.ring .track{stroke:rgba(255,255,255,.12)}
+.ring .prog{stroke:var(--teal);stroke-dasharray:408.4;stroke-dashoffset:0;transition:stroke-dashoffset .25s linear,stroke .3s}
+.ring.low .prog{stroke:var(--red)}
+.ring .time{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;font-variant-numeric:tabular-nums}
+.ring.low .time{color:var(--red);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.5}}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts .btn{min-height:70px;font-size:20px;padding:10px}
+@media (max-width:380px){.opts{grid-template-columns:1fr}}
+.result .big{animation:boom .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes boom{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+.banner{border-radius:var(--r);padding:16px;text-align:center;font-size:26px;font-weight:800}
+.banner.win{background:linear-gradient(160deg,#6EF2A7,#2EB873);color:#06301A}
+.banner.lose{background:linear-gradient(160deg,#FF9DBE,#FF5C8A);color:#2A0A1A}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
+.confetti i{position:absolute;top:-20px;width:12px;height:16px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+.hidden{display:none!important}
+#test-log{white-space:pre-wrap;font-family:monospace;font-size:12px;color:#fff;background:#000;padding:8px;direction:ltr}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand"><span class="m">🕵</span><span data-t="brand">אימפוסטר</span></div>
+    <div class="icons">
+      <button class="ib" id="b-lang" aria-label="language">EN</button>
+      <button class="ib" id="b-mute" aria-label="sound">🔊</button>
+    </div>
+  </header>
+
+  <!-- SETUP -->
+  <section class="screen" id="s-setup">
+    <div class="mascot">🕵</div>
+    <h1 data-t="title">מי מסתתר בינינו?</h1>
+    <p class="sub" data-t="tagline">משחק חברה לטלפון אחד שעובר מיד ליד</p>
+
+    <div class="card">
+      <div class="lbl"><span data-t="players">👥 מספר שחקנים</span></div>
+      <div class="stepper">
+        <button id="p-minus" aria-label="minus">−</button>
+        <div class="num" id="p-num">4</div>
+        <button id="p-plus" aria-label="plus">+</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl"><span data-t="difficulty">🎚 רמת קושי</span></div>
+      <div class="seg" id="diff">
+        <button data-d="easy" data-t="easy">😊 קל</button>
+        <button data-d="medium" data-t="medium">😤 בינוני</button>
+        <button data-d="hard" data-t="hard">💀 קשה</button>
+      </div>
+      <p class="sub" style="margin-top:8px;font-size:15px" data-t="hardNote">💀 בקשה האימפוסטר מקבל מילת רמז דומה – קשה יותר לתפוס אותו!</p>
+    </div>
+
+    <div class="card">
+      <div class="lbl"><span data-t="cats">🗂 קטגוריות</span><button class="chip" id="cats-all" style="min-height:36px;padding:4px 10px" data-t="allCats">הכול</button></div>
+      <div class="chips" id="cats"></div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:10px">
+      <div class="switch" id="sw-clean">
+        <div class="txt"><span data-t="clean">🧼 מצב ידיים נקיות</span><small data-t="cleanHint">לשחקן האחרון המילה מופיעה לבד אחרי 7 שניות ונעלמת אחרי 5</small></div>
+        <div class="tog"></div>
+      </div>
+      <div class="switch" id="sw-two">
+        <div class="txt"><span data-t="twoImp">🕵🕵 שני אימפוסטרים</span><small data-t="twoImpHint">אפשרי מ-6 שחקנים</small></div>
+        <div class="tog"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl"><span data-t="names">✏️ שמות השחקנים (לא חובה)</span><button class="chip" id="names-tog" style="min-height:36px;padding:4px 10px">▾</button></div>
+      <div class="names hidden" id="names"></div>
+    </div>
+
+    <button class="btn" id="b-start" data-t="start">🚀 התחל משחק</button>
+    <button class="btn ghost" id="b-reset-words" data-t="resetWords">🧹 אפס את "המילים שכבר יצאו"</button>
+    <p class="sub" id="used-count"></p>
+    <footer><a href="./" data-t="more">🎮 עוד משחקים</a> · <span id="score-hint"></span></footer>
+  </section>
+
+  <!-- PASS PHONE -->
+  <section class="screen" id="s-pass">
+    <div class="spacer"></div>
+    <div class="big">📱</div>
+    <h1 id="pass-title">שחקן 1 📱</h1>
+    <p class="sub" data-t="passText">הגישו את הטלפון לשחקן הזה בלבד. שאר השחקנים – אל תציצו!</p>
+    <p class="sub" id="pass-clean"></p>
+    <div class="spacer"></div>
+    <button class="btn alt" id="b-reveal" data-t="revealBtn">👁 ראה את תפקידך</button>
+    <p class="sub" id="pass-prog"></p>
+  </section>
+
+  <!-- ROLE CARD -->
+  <section class="screen" id="s-role">
+    <h2 id="role-title">שחקן 1</h2>
+    <p class="sub" id="role-hint" data-t="holdHint">לחצו והחזיקו את הכרטיס כדי לראות 👇</p>
+    <div class="flip" id="flip">
+      <div class="inner">
+        <div class="face front"><div class="eye">🙈</div><div data-t="tapToSee">לחצו כדי לראות</div></div>
+        <div class="face back" id="face-back"></div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="b-gotit" data-t="gotIt" disabled>✅ הבנתי – העבר הלאה</button>
+  </section>
+
+  <!-- PLAYING -->
+  <section class="screen" id="s-play">
+    <h2 data-t="playTitle">🎮 כולם יודעים את תפקידם!</h2>
+    <p class="sub" data-t="playText">כל שחקן בתורו אומר מילה אחת שמתארת את המילה הסודית. האימפוסטר צריך להסתתר – בהצלחה!</p>
+    <div class="ring" id="ring">
+      <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="65"/><circle class="prog" id="prog" cx="75" cy="75" r="65"/></svg>
+      <div class="time" id="time">3:00</div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" id="b-pause" data-t="pause">⏸ השהה</button>
+      <button class="btn ghost" id="b-addtime">+1 ⏱</button>
+    </div>
+    <div class="card">
+      <div class="lbl"><span data-t="order">🔁 סדר התורות</span></div>
+      <div class="plist" id="order"></div>
+    </div>
+    <button class="btn warn" id="b-tovote" data-t="toVote">🗳 להצבעה!</button>
+  </section>
+
+  <!-- VOTE -->
+  <section class="screen" id="s-vote">
+    <h2 data-t="voteTitle">🗳 הצבעה</h2>
+    <p class="sub" data-t="voteText">דברו, תחשדו, ואז לחצו על השחקן שכולם חושבים שהוא האימפוסטר</p>
+    <div class="plist" id="vote-list"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="b-vote" data-t="voteConfirm" disabled>✅ אשר הצבעה</button>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen result" id="s-result">
+    <div class="big" id="res-emoji">🎉</div>
+    <div class="banner" id="res-banner"></div>
+    <div class="card center">
+      <p class="sub" data-t="wordWasLbl">המילה הסודית הייתה:</p>
+      <p style="font-size:34px;font-weight:800;color:var(--yellow)" id="res-word"></p>
+      <p class="sub" id="res-cat"></p>
+    </div>
+    <div class="card center">
+      <p class="sub" id="res-imp-lbl"></p>
+      <p style="font-size:24px;font-weight:800" id="res-imp"></p>
+      <p class="sub" id="res-voted"></p>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn alt" id="b-res-next"></button>
+  </section>
+
+  <!-- IMPOSTOR GUESS -->
+  <section class="screen" id="s-guess">
+    <div class="big">🎯</div>
+    <h2 data-t="guessTitle">🎯 ניחוש של האימפוסטר</h2>
+    <p class="sub" id="guess-text"></p>
+    <div class="opts" id="guess-opts"></div>
+    <div class="card center hidden" id="guess-res"></div>
+    <div class="spacer"></div>
+    <button class="btn hidden" id="b-guess-next" data-t="toScore">📊 לטבלת הניקוד</button>
+  </section>
+
+  <!-- SCORE -->
+  <section class="screen" id="s-score">
+    <div class="big">🏆</div>
+    <h2 data-t="scoreTitle">📊 טבלת ניקוד</h2>
+    <p class="sub" id="score-round"></p>
+    <div class="plist" id="score-list"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="b-next-round" data-t="nextRound">🔄 סיבוב נוסף</button>
+    <button class="btn ghost" id="b-menu" data-t="toMenu">🏠 חזרה לתפריט</button>
+    <button class="btn ghost" id="b-reset-score" data-t="resetScore">🧽 אפס ניקוד</button>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+<div class="confetti" id="confetti"></div>
+<pre id="test-log" class="hidden"></pre>
+
+<script>
+(function(){
+'use strict';
+/* ---------- strings ---------- */
+var T = {
+he:{
+  brand:'אימפוסטר', title:'מי מסתתר בינינו?', tagline:'משחק חברה לטלפון אחד שעובר מיד ליד',
+  players:'👥 מספר שחקנים', difficulty:'🎚 רמת קושי', easy:'😊 קל', medium:'😤 בינוני', hard:'💀 קשה',
+  hardNote:'💀 בקשה האימפוסטר מקבל מילת רמז דומה – קשה יותר לתפוס אותו!',
+  cats:'🗂 קטגוריות', allCats:'הכול', clean:'🧼 מצב ידיים נקיות',
+  cleanHint:'לשחקן האחרון המילה מופיעה לבד אחרי 7 שניות ונעלמת אחרי 5',
+  twoImp:'🕵🕵 שני אימפוסטרים', twoImpHint:'אפשרי מ-6 שחקנים', names:'✏️ שמות השחקנים (לא חובה)',
+  start:'🚀 התחל משחק', resetWords:'🧹 אפס את "המילים שכבר יצאו"', more:'🎮 עוד משחקים',
+  usedCount:'יצאו כבר {n} מילים בסשן הזה', scoreHint:'סיבוב {n}',
+  passTitle:'שחקן {n} 📱', passNamed:'{name} 📱',
+  passText:'הגישו את הטלפון לשחקן הזה בלבד. שאר השחקנים – אל תציצו!',
+  passClean:'🧼 ידיים נקיות: הכרטיס ייפתח לבד בעוד {s} שניות',
+  passProg:'{i} מתוך {n}', revealBtn:'👁 ראה את תפקידך', holdHint:'לחצו והחזיקו את הכרטיס כדי לראות 👇',
+  autoHint:'🧼 הכרטיס ייפתח לבד… אל תיגעו', tapToSee:'לחצו כדי לראות',
+  secretLbl:'המילה הסודית שלך:', catLbl:'קטגוריה: {c}',
+  impostor:'🕵 אתה האימפוסטר!', impostorText:'אין לך את המילה – תנסה להסתתר',
+  impHint:'🤫 רמז: המילה דומה ל־"{h}"', gotIt:'✅ הבנתי – העבר הלאה',
+  playTitle:'🎮 כולם יודעים את תפקידם!',
+  playText:'כל שחקן בתורו אומר מילה אחת שמתארת את המילה הסודית. האימפוסטר צריך להסתתר – בהצלחה!',
+  pause:'⏸ השהה', resume:'▶ המשך', order:'🔁 סדר התורות', starts:'מתחיל', toVote:'🗳 להצבעה!', timeUp:'⏰ הזמן נגמר! להצבעה',
+  voteTitle:'🗳 הצבעה', voteText:'דברו, תחשדו, ואז לחצו על השחקן שכולם חושבים שהוא האימפוסטר', voteConfirm:'✅ אשר הצבעה',
+  caught:'🎉 תפסתם את האימפוסטר!', escaped:'😈 האימפוסטר ברח!', wordWasLbl:'המילה הסודית הייתה:',
+  impWas:'האימפוסטר היה:', impsWere:'האימפוסטרים היו:', votedFor:'הצבעתם נגד {name}', crewPts:'הצוות מקבל +1 לכל אחד',
+  impPts:'האימפוסטר מקבל +2', toGuess:'🎯 ניחוש של האימפוסטר', toScore:'📊 לטבלת הניקוד',
+  guessTitle:'🎯 ניחוש של האימפוסטר', guessText:'{name}, איזו מילה הייתה הסודית? ניחוש נכון = +1',
+  guessRight:'🎯 ניחוש נכון! +1 לאימפוסטר', guessWrong:'❌ לא נכון. המילה הייתה "{w}"',
+  scoreTitle:'📊 טבלת ניקוד', scoreRound:'אחרי {n} סיבובים', nextRound:'🔄 סיבוב נוסף', toMenu:'🏠 חזרה לתפריט', resetScore:'🧽 אפס ניקוד',
+  player:'שחקן {n}', noCats:'בחרו לפחות קטגוריה אחת', wordsReset:'המילים אופסו – אפשר להתחיל מחדש 🧹', scoreReset:'הניקוד אופס',
+  impTag:'🕵 אימפוסטר', crewTag:'👤 צוות', leader:'👑', min:'דק׳'
+},
+en:{
+  brand:'Impostor', title:'Who is hiding among us?', tagline:'A party game on one phone, passed around',
+  players:'👥 Players', difficulty:'🎚 Difficulty', easy:'😊 Easy', medium:'😤 Medium', hard:'💀 Hard',
+  hardNote:'💀 On Hard the impostor gets a similar hint word – harder to catch!',
+  cats:'🗂 Categories', allCats:'All', clean:'🧼 Clean-hands mode',
+  cleanHint:'For the last player the card opens by itself after 7 s and closes after 5',
+  twoImp:'🕵🕵 Two impostors', twoImpHint:'Available from 6 players', names:'✏️ Player names (optional)',
+  start:'🚀 Start game', resetWords:'🧹 Reset "words already used"', more:'🎮 More games',
+  usedCount:'{n} words used this session', scoreHint:'Round {n}',
+  passTitle:'Player {n} 📱', passNamed:'{name} 📱',
+  passText:'Hand the phone to this player only. Everyone else – no peeking!',
+  passClean:'🧼 Clean hands: the card opens by itself in {s} seconds',
+  passProg:'{i} of {n}', revealBtn:'👁 See your role', holdHint:'Press and hold the card to see 👇',
+  autoHint:'🧼 The card opens by itself… hands off', tapToSee:'Tap to see',
+  secretLbl:'Your secret word:', catLbl:'Category: {c}',
+  impostor:'🕵 You are the impostor!', impostorText:"You don't have the word – try to blend in",
+  impHint:'🤫 Hint: the word is similar to "{h}"', gotIt:'✅ Got it – pass it on',
+  playTitle:'🎮 Everyone knows their role!',
+  playText:'Each player in turn says one word that describes the secret word. The impostor must blend in – good luck!',
+  pause:'⏸ Pause', resume:'▶ Resume', order:'🔁 Turn order', starts:'starts', toVote:'🗳 Vote!', timeUp:"⏰ Time's up! Vote now",
+  voteTitle:'🗳 Vote', voteText:'Discuss, suspect, then tap the player everyone thinks is the impostor', voteConfirm:'✅ Confirm vote',
+  caught:'🎉 You caught the impostor!', escaped:'😈 The impostor escaped!', wordWasLbl:'The secret word was:',
+  impWas:'The impostor was:', impsWere:'The impostors were:', votedFor:'You voted against {name}', crewPts:'The crew gets +1 each',
+  impPts:'The impostor gets +2', toGuess:"🎯 Impostor's guess", toScore:'📊 Scoreboard',
+  guessTitle:"🎯 Impostor's guess", guessText:'{name}, which word was the secret? Correct guess = +1',
+  guessRight:'🎯 Correct! +1 for the impostor', guessWrong:'❌ Wrong. The word was "{w}"',
+  scoreTitle:'📊 Scoreboard', scoreRound:'After {n} rounds', nextRound:'🔄 Another round', toMenu:'🏠 Back to menu', resetScore:'🧽 Reset scores',
+  player:'Player {n}', noCats:'Pick at least one category', wordsReset:'Words reset – start fresh 🧹', scoreReset:'Scores reset',
+  impTag:'🕵 Impostor', crewTag:'👤 Crew', leader:'👑', min:'min'
+}};
+
+/* ---------- words: "he|en" or "he|en|hintHe|hintEn" (hard) ---------- */
+var CATS = [
+ {id:'animals', he:'🐾 חיות', en:'🐾 Animals',
+  easy:"כלב|Dog,חתול|Cat,פרה|Cow,סוס|Horse,אריה|Lion,פיל|Elephant,קוף|Monkey,ג'ירפה|Giraffe,זברה|Zebra,ארנב|Rabbit,צב|Turtle,דג|Fish,ציפור|Bird,נחש|Snake,דוב|Bear,תרנגול|Rooster,ברווז|Duck,כבשה|Sheep,עז|Goat,חזיר|Pig,עכבר|Mouse,פרפר|Butterfly,דולפין|Dolphin,פינגווין|Penguin,תנין|Crocodile,נמר|Tiger",
+  medium:"היפופוטם|Hippo,קרנף|Rhino,קנגורו|Kangaroo,קואלה|Koala,פנדה|Panda,גמל|Camel,ינשוף|Owl,נשר|Eagle,תוכי|Parrot,טווס|Peacock,יען|Ostrich,לוויתן|Whale,כריש|Shark,תמנון|Octopus,סרטן|Crab,מדוזה|Jellyfish,צפרדע|Frog,לטאה|Lizard,עכביש|Spider,דבורה|Bee,נמלה|Ant,חיפושית|Beetle,שועל|Fox,זאב|Wolf,צבי|Deer,קיפוד|Hedgehog,סנאי|Squirrel",
+  hard:"פלמינגו|Flamingo|חסידה|Stork,זיקית|Chameleon|לטאה|Lizard,ברדלס|Cheetah|יגואר|Jaguar,לאמה|Llama|גמל|Camel,בונה|Beaver|לוטרה|Otter,כלב ים|Seal|אריה ים|Sea lion,סוס ים|Seahorse|דג זהב|Goldfish,שפן סלע|Hyrax|ארנבון|Bunny,גורילה|Gorilla|שימפנזה|Chimpanzee,אורנגאוטן|Orangutan|בבון|Baboon,עטלף|Bat|ינשוף|Owl,צבוע|Hyena|תן|Jackal,איל הצפון|Reindeer|אייל|Moose,פומה|Puma|נמר|Leopard,חולד|Mole|חפרפרת|Shrew,פיתון|Python|קוברה|Cobra,איגואנה|Iguana|שממית|Gecko,סלמנדרה|Salamander|צפרדע|Frog,גמל שלמה|Praying mantis|גחלילית|Firefly,חגב|Grasshopper|חרגול|Cricket,דיונון|Squid|תמנון|Octopus,צדפה|Clam|חילזון|Snail,כוכב ים|Starfish|אלמוג|Coral,שלדג|Kingfisher|נקר|Woodpecker,קוקיה|Cuckoo|עורב|Crow,טפיר|Tapir|חזיר בר|Wild boar,אוקפי|Okapi|זברה|Zebra"},
+ {id:'food', he:'🍕 אוכל', en:'🍕 Food',
+  easy:"פיצה|Pizza,המבורגר|Hamburger,שניצל|Schnitzel,פסטה|Pasta,אורז|Rice,לחם|Bread,גבינה|Cheese,ביצה|Egg,תפוח|Apple,בננה|Banana,תות|Strawberry,אבטיח|Watermelon,גלידה|Ice cream,שוקולד|Chocolate,עוגה|Cake,עוגייה|Cookie,חלב|Milk,מים|Water,מיץ|Juice,פלאפל|Falafel,חומוס|Hummus,צ'יפס|Fries,סוכרייה|Candy,מלפפון|Cucumber,עגבנייה|Tomato,גזר|Carrot,תירס|Corn",
+  medium:"סושי|Sushi,לזניה|Lasagna,שקשוקה|Shakshuka,סלט|Salad,מרק|Soup,קציצה|Meatball,נקניקייה|Hot dog,טוסט|Toast,פנקייק|Pancake,וופל|Waffle,קרואסון|Croissant,בייגל|Bagel,יוגורט|Yogurt,חמאה|Butter,דבש|Honey,ריבה|Jam,פופקורן|Popcorn,פיתה|Pita,סביח|Sabich,שווארמה|Shawarma,ענבים|Grapes,אננס|Pineapple,מנגו|Mango,אפרסק|Peach,אגס|Pear,לימון|Lemon,תפוז|Orange,אבוקדו|Avocado",
+  hard:"קינואה|Quinoa|אורז|Rice,טופו|Tofu|גבינה|Cheese,רביולי|Ravioli|פסטה|Pasta,ניוקי|Gnocchi|פירה|Mashed potatoes,פאייה|Paella|ריזוטו|Risotto,קוסקוס|Couscous|בורגול|Bulgur,טחינה|Tahini|חומוס|Hummus,מג'דרה|Mujaddara|עדשים|Lentils,כובנה|Kubaneh|חלה|Challah,ג'חנון|Jachnun|מלאווח|Malawach,קנלוני|Cannelloni|לזניה|Lasagna,טירמיסו|Tiramisu|מוס שוקולד|Chocolate mousse,קרם ברולה|Crème brûlée|פודינג|Pudding,בקלאווה|Baklava|כנאפה|Knafeh,מקרון|Macaron|עוגייה|Cookie,פטריות|Mushrooms|כרובית|Cauliflower,ארטישוק|Artichoke|ברוקולי|Broccoli,חציל|Eggplant|קישוא|Zucchini,כרוב|Cabbage|חסה|Lettuce,רימון|Pomegranate|אשכולית|Grapefruit,קיווי|Kiwi|פסיפלורה|Passion fruit,פיסטוק|Pistachio|שקד|Almond,אגוז מלך|Walnut|קשיו|Cashew,בראוניז|Brownie|עוגת שוקולד|Chocolate cake,סלמון|Salmon|טונה|Tuna,קלמרי|Calamari|שרימפס|Shrimp"},
+ {id:'football', he:'⚽ כדורגל', en:'⚽ Football',
+  easy:"שער|Goal,כדור|Ball,שוער|Goalkeeper,שופט|Referee,קפטן|Captain,פנדל|Penalty,גביע|Trophy,מגרש|Pitch,קורנר|Corner kick,כרטיס צהוב|Yellow card,כרטיס אדום|Red card,נבחרת|National team,מאמן|Coach,קהל|Crowd,חולצה|Jersey,נעלי כדורגל|Football boots,בעיטה|Kick,מסירה|Pass,נגיחה|Header,מונדיאל|World Cup,אוהד|Fan,אימון|Training,מדליה|Medal,חצי גמר|Semi-final,גמר|Final,קבוצה|Team",
+  medium:"מסי|Messi,רונאלדו|Ronaldo,אמבפה|Mbappé,ניימאר|Neymar,הולנד|Haaland,ברצלונה|Barcelona,ריאל מדריד|Real Madrid,מנצ'סטר סיטי|Manchester City,ליברפול|Liverpool,מכבי תל אביב|Maccabi Tel Aviv,הפועל באר שבע|Hapoel Beer Sheva,מכבי חיפה|Maccabi Haifa,ליגת האלופות|Champions League,נבדל|Offside,שער עצמי|Own goal,הארכה|Extra time,בעיטה חופשית|Free kick,בלם|Centre-back,קשר|Midfielder,חלוץ|Striker,מגן|Full-back,מחליף|Substitute,ספסל|Bench,שריקה|Whistle,יציע|Stands,רחבה|Penalty box,קו האמצע|Halfway line",
+  hard:"שלושער|Hat-trick|צמד|Brace,הגבהה|Cross|מסירה|Pass,הכדרה|Dribble|סיבוב|Turn,טאקל|Tackle|חסימה|Block,תיקו|Draw|הפסד|Loss,ליגה|League|גביע|Cup,פלייאוף|Playoff|חצי גמר|Semi-final,בעיטת מספריים|Scissor kick|וולה|Volley,מספר 10|Number 10|קפטן|Captain,פרמייר ליג|Premier League|לה ליגה|La Liga,סרייה א|Serie A|בונדסליגה|Bundesliga,יובנטוס|Juventus|מילאן|AC Milan,באיירן מינכן|Bayern Munich|דורטמונד|Dortmund,פריז סן ז'רמן|PSG|מארסיי|Marseille,צ'לסי|Chelsea|ארסנל|Arsenal,טוטנהאם|Tottenham|מנצ'סטר יונייטד|Manchester United,אייאקס|Ajax|פורטו|Porto,ביתר ירושלים|Beitar Jerusalem|הפועל תל אביב|Hapoel Tel Aviv,גוארדיולה|Guardiola|קלופ|Klopp,מודריץ'|Modrić|דה בריינה|De Bruyne,פלה|Pelé|מראדונה|Maradona,זידאן|Zidane|רונאלדיניו|Ronaldinho,יורו|Euros|קופה אמריקה|Copa América,כדור הזהב|Ballon d'Or|נעל הזהב|Golden Boot,שער זהב|Golden goal|דו-קרב פנדלים|Penalty shootout,אצטדיון|Stadium|מגרש אימונים|Training ground,קאמפ נואו|Camp Nou|ברנבאו|Bernabéu"},
+ {id:'israel', he:'🇮🇱 מקומות בישראל', en:'🇮🇱 Places in Israel',
+  easy:"ירושלים|Jerusalem,תל אביב|Tel Aviv,חיפה|Haifa,אילת|Eilat,ים המלח|Dead Sea,הכנרת|Sea of Galilee,הכותל|Western Wall,באר שבע|Beersheba,הנגב|Negev,הגליל|Galilee,הכרמל|Mount Carmel,החרמון|Mount Hermon,נתניה|Netanya,אשדוד|Ashdod,ראשון לציון|Rishon LeZion,פתח תקווה|Petah Tikva,הירדן|Jordan River,מצדה|Masada,הים התיכון|Mediterranean Sea,חדרה|Hadera,רחובות|Rehovot,הרצליה|Herzliya,טבריה|Tiberias,עכו|Acre,הספארי|The Safari,הלונה פארק|Luna Park",
+  medium:"קיסריה|Caesarea,צפת|Safed,נצרת|Nazareth,עין גדי|Ein Gedi,מכתש רמון|Ramon Crater,ראש הנקרה|Rosh HaNikra,הבניאס|Banias,נהריה|Nahariya,זכרון יעקב|Zikhron Ya'akov,יפו|Jaffa,הר תבור|Mount Tabor,מצפה רמון|Mitzpe Ramon,ראש פינה|Rosh Pinna,רמת הגולן|Golan Heights,עמק יזרעאל|Jezreel Valley,חוף דור|Dor Beach,פארק הירקון|Yarkon Park,נמל תל אביב|Tel Aviv Port,השרון|HaSharon,הכנסת|The Knesset,מוזיאון ישראל|Israel Museum,נתב\"ג|Ben Gurion Airport,מודיעין|Modi'in,כפר סבא|Kfar Saba,אשקלון|Ashkelon,בת ים|Bat Yam,חולון|Holon,רעננה|Ra'anana",
+  hard:"שמורת החולה|Hula Reserve|עמק החולה|Hula Valley,נחל עמוד|Nahal Amud|נחל כזיב|Nahal Kziv,מערת הנטיפים|Stalactite Cave|מערות בית גוברין|Beit Guvrin Caves,הר מירון|Mount Meron|הר כנען|Mount Canaan,המכתש הגדול|Large Crater|המכתש הקטן|Small Crater,תמנע|Timna|חי-בר|Hai-Bar,נחל דוד|Nahal David|נחל ערוגות|Nahal Arugot,עין בוקק|Ein Bokek|נווה זוהר|Neve Zohar,חוף הבונים|HaBonim Beach|חוף נחשולים|Nahsholim Beach,אפולוניה|Apollonia|קיסריה|Caesarea,בית שאן|Beit She'an|ציפורי|Tzippori,גמלא|Gamla|מצודת נמרוד|Nimrod Fortress,מדרשת בן גוריון|Midreshet Ben-Gurion|שדה בוקר|Sde Boker,עין עבדת|Ein Avdat|עין עקב|Ein Akev,שדרות|Sderot|נתיבות|Netivot,כרמיאל|Karmiel|מעלות|Ma'alot,בית שמש|Beit Shemesh|מודיעין|Modi'in,יקנעם|Yokneam|טבעון|Tivon,גן הפעמון|Bell Garden|גן סאקר|Sacher Park,מגדל דוד|Tower of David|שער יפו|Jaffa Gate,מחנה יהודה|Mahane Yehuda Market|שוק הכרמל|Carmel Market,נווה צדק|Neve Tzedek|פלורנטין|Florentin,הגנים הבהאיים|Bahá'í Gardens|המושבה הגרמנית|German Colony,פארק אשכול|Eshkol Park|פארק הירקון|Yarkon Park,גבעת התחמושת|Ammunition Hill|הר הרצל|Mount Herzl,ערד|Arad|דימונה|Dimona,קריית שמונה|Kiryat Shmona|מטולה|Metula"},
+ {id:'jobs', he:'👩‍🚒 מקצועות', en:'👩‍🚒 Professions',
+  easy:"רופא|Doctor,מורה|Teacher,שוטר|Police officer,כבאי|Firefighter,טבח|Cook,נהג|Driver,טייס|Pilot,חייל|Soldier,שחקן כדורגל|Footballer,זמר|Singer,צייר|Painter,בנאי|Builder,גנן|Gardener,רופא שיניים|Dentist,אחות|Nurse,מוכר|Shopkeeper,ספר|Barber,שרברב|Plumber,חקלאי|Farmer,אסטרונאוט|Astronaut,מדען|Scientist,שופט|Judge,וטרינר|Vet,מלצר|Waiter,אופה|Baker,דייג|Fisherman",
+  medium:"עורך דין|Lawyer,מהנדס|Engineer,אדריכל|Architect,רואה חשבון|Accountant,מתכנת|Programmer,חשמלאי|Electrician,נגר|Carpenter,מכונאי|Mechanic,צלם|Photographer,עיתונאי|Journalist,שחקן|Actor,רקדן|Dancer,מוזיקאי|Musician,סופר|Writer,מאייר|Illustrator,מנתח|Surgeon,רוקח|Pharmacist,פסיכולוג|Psychologist,דיילת|Flight attendant,קברניט|Captain,ימאי|Sailor,מציל|Lifeguard,מאמן כושר|Fitness trainer,קוסם|Magician,ליצן|Clown,מנהל|Manager,מזכירה|Secretary",
+  hard:"ארכיאולוג|Archaeologist|גאולוג|Geologist,אסטרונום|Astronomer|אסטרולוג|Astrologer,ביולוג|Biologist|כימאי|Chemist,פיזיקאי|Physicist|מתמטיקאי|Mathematician,כוריאוגרף|Choreographer|במאי|Director,מנצח|Conductor|מלחין|Composer,פסל|Sculptor|קדר|Potter,צורף|Jeweler|שען|Watchmaker,סנדלר|Cobbler|חייט|Tailor,נפח|Blacksmith|מסגר|Locksmith,טכנאי|Technician|מכונאי|Mechanic,רנטגנאי|Radiographer|מרדים|Anesthesiologist,אופטומטריסט|Optometrist|אודיולוג|Audiologist,פיזיותרפיסט|Physiotherapist|קלינאית תקשורת|Speech therapist,דיאטנית|Dietitian|תזונאי|Nutritionist,מתורגמן|Interpreter|מתרגם|Translator,ספרן|Librarian|ארכיונאי|Archivist,נוטריון|Notary|עורך דין|Lawyer,יועץ מס|Tax advisor|רואה חשבון|Accountant,סוכן נסיעות|Travel agent|מדריך טיולים|Tour guide,טייס קרב|Fighter pilot|נווט|Navigator,בלש|Detective|חוקר פרטי|Private investigator,מפעיל מנוף|Crane operator|נהג משאית|Truck driver,כורה|Miner|חוצב|Quarryman,אפידמיולוג|Epidemiologist|וירולוג|Virologist,שמאי|Appraiser|מתווך|Realtor,קופירייטר|Copywriter|מעצב גרפי|Graphic designer"},
+ {id:'home', he:'🏠 חפצים בבית', en:'🏠 Household objects',
+  easy:"ספה|Sofa,מיטה|Bed,כיסא|Chair,שולחן|Table,טלוויזיה|TV,מקרר|Fridge,מזגן|Air conditioner,מנורה|Lamp,שטיח|Rug,כרית|Pillow,שמיכה|Blanket,מראה|Mirror,דלת|Door,חלון|Window,ארון|Closet,מברשת שיניים|Toothbrush,מגבת|Towel,כוס|Cup,צלחת|Plate,מזלג|Fork,כפית|Teaspoon,סיר|Pot,מחשב|Computer,טלפון|Phone,שלט|Remote control,שעון|Clock,מפתח|Key",
+  medium:"מיקרוגל|Microwave,תנור|Oven,מכונת כביסה|Washing machine,מדיח כלים|Dishwasher,שואב אבק|Vacuum cleaner,מגהץ|Iron,קומקום|Kettle,טוסטר|Toaster,בלנדר|Blender,מחבת|Frying pan,קרש חיתוך|Cutting board,מסננת|Strainer,פותחן|Can opener,סלסלה|Basket,אגרטל|Vase,מסגרת תמונה|Picture frame,וילון|Curtain,מדף|Shelf,שידה|Dresser,כורסה|Armchair,הדום|Footstool,קולב|Hanger,ברז|Faucet,כיור|Sink,אמבטיה|Bathtub,מקלחת|Shower,אסלה|Toilet,נייר טואלט|Toilet paper",
+  hard:"מערוך|Rolling pin|מטרפה|Whisk,מגרדת|Grater|קולפן|Peeler,כף מרק|Ladle|מרית|Spatula,מסחטה|Juicer|בלנדר|Blender,סיר לחץ|Pressure cooker|סיר|Pot,מכונת קפה|Coffee machine|קומקום|Kettle,מיקסר|Mixer|מעבד מזון|Food processor,מפה|Tablecloth|מפית|Napkin,פמוט|Candlestick|מנורה|Lamp,נברשת|Chandelier|אהיל|Lampshade,שעון קיר|Wall clock|שעון מעורר|Alarm clock,מייבש כביסה|Dryer|מכונת כביסה|Washing machine,מתקן ייבוש|Drying rack|קולב|Hanger,מברג|Screwdriver|פטיש|Hammer,פלייר|Pliers|מפתח ברגים|Wrench,מקדחה|Drill|מסור|Saw,מטאטא|Broom|מגב|Squeegee,יעה|Dustpan|דלי|Bucket,סמרטוט|Rag|ספוג|Sponge,מפזר חום|Fan heater|מאוורר|Fan,דוד שמש|Solar heater|מחמם מים|Water heater,כספת|Safe|מגירה|Drawer,ארון תרופות|Medicine cabinet|ארון אמבטיה|Bathroom cabinet,שטיחון|Doormat|שטיח|Rug,תריס|Shutter|וילון|Curtain,פעמון דלת|Doorbell|אינטרקום|Intercom,נורה|Light bulb|פנס|Flashlight"},
+ {id:'toons', he:'🎬 דמויות מצוירות וסרטים', en:'🎬 Cartoons & movies',
+  easy:"מיקי מאוס|Mickey Mouse,בוב ספוג|SpongeBob,אלזה|Elsa,סימבה|Simba,שרק|Shrek,ספיידרמן|Spider-Man,באטמן|Batman,סופרמן|Superman,פיקאצ'ו|Pikachu,מריו|Mario,בוב הבנאי|Bob the Builder,פפה פיג|Peppa Pig,דורה|Dora,הארי פוטר|Harry Potter,נמו|Nemo,וודי|Woody,באז שנות אור|Buzz Lightyear,מואנה|Moana,אולף|Olaf,המיניונים|Minions,טום וג'רי|Tom and Jerry,סקובי דו|Scooby-Doo,פו הדב|Winnie the Pooh,אלאדין|Aladdin,סינדרלה|Cinderella,פינוקיו|Pinocchio",
+  medium:"בלואי|Bluey,סוניק|Sonic,לואיג'י|Luigi,הנסיכה פיץ'|Princess Peach,איירון מן|Iron Man,קפטן אמריקה|Captain America,ת'ור|Thor,האלק|Hulk,וונדר וומן|Wonder Woman,יודה|Yoda,דארת' ויידר|Darth Vader,גרו|Gru,קונג פו פנדה|Kung Fu Panda,רמי|Remy,וול-E|WALL-E,לייטנינג מקווין|Lightning McQueen,מייק וזובסקי|Mike Wazowski,סאלי|Sulley,מיראבל|Mirabel,ראיה|Raya,רפונזל|Rapunzel,אריאל|Ariel,בל|Belle,מולאן|Mulan,מרידה|Merida,טיאנה|Tiana,גארפילד|Garfield,הדרדסים|Smurfs,מפרץ ההרפתקאות|PAW Patrol",
+  hard:"גנדלף|Gandalf|דמבלדור|Dumbledore,פרודו|Frodo|בילבו|Bilbo,גולום|Gollum|דובי|Dobby,הרמיוני|Hermione|ג'יני|Ginny,רון ויזלי|Ron Weasley|נוויל|Neville,וולדמורט|Voldemort|סנייפ|Snape,ת'אנוס|Thanos|לוקי|Loki,גרוט|Groot|רוקט|Rocket,בלאק פנתר|Black Panther|דוקטור סטריינג'|Doctor Strange,אנט-מן|Ant-Man|הוקאיי|Hawkeye,אקוומן|Aquaman|פלאש|Flash,הג'וקר|Joker|הפינגווין|Penguin,קאטוומן|Catwoman|הארלי קווין|Harley Quinn,טוטורו|Totoro|קיקי|Kiki,נארוטו|Naruto|גוקו|Goku,לופי|Luffy|זורו|Zoro,ברוס ויין|Bruce Wayne|קלארק קנט|Clark Kent,פיטר פארקר|Peter Parker|מיילס מוראלס|Miles Morales,אובי-וואן|Obi-Wan|אנאקין|Anakin,צ'ובאקה|Chewbacca|האן סולו|Han Solo,R2-D2|R2-D2|C-3PO|C-3PO,גרוגו|Grogu|המנדלוריאן|The Mandalorian,שמחה|Joy|עצב|Sadness,כעס|Anger|פחד|Fear,בינג בונג|Bing Bong|ריילי|Riley,דאקי|Ducky|באני|Bunny,פורקי|Forky|רקס|Rex"},
+ {id:'school', he:'🏫 בית ספר', en:'🏫 School',
+  easy:"עיפרון|Pencil,מחק|Eraser,מחברת|Notebook,ספר|Book,ילקוט|Backpack,קלמר|Pencil case,לוח|Whiteboard,טוש|Marker,צבעים|Crayons,סרגל|Ruler,מספריים|Scissors,דבק|Glue,שיעורי בית|Homework,הפסקה|Recess,פעמון|Bell,מורה|Teacher,תלמיד|Student,כיתה|Classroom,מנהל|Principal,חשבון|Math,אנגלית|English,ספורט|P.E.,מבחן|Test,ציון|Grade,לוח שנה|Calendar,שולחן כתיבה|Desk,סנדוויץ'|Sandwich",
+  medium:"מחדד|Sharpener,מהדק|Stapler,אטב|Paper clip,מדבקות|Stickers,גיר|Chalk,מקרן|Projector,מחשב נייד|Laptop,ספרייה|Library,מעבדה|Laboratory,חדר מוזיקה|Music room,חדר מורים|Teachers' lounge,מזכירות|Office,אולם ספורט|Gym,מגרש משחקים|Playground,חצר|Yard,מועצת תלמידים|Student council,תעודה|Report card,טיול שנתי|Annual trip,מסיבת סיום|Graduation party,יום הולדת|Birthday,יועצת|Counselor,מדע|Science,היסטוריה|History,גאוגרפיה|Geography,תנ\"ך|Bible,אומנות|Art,מחשבים|Computers,מערכת שעות|Timetable",
+  hard:"מצגת|Presentation|הרצאה|Lecture,חיבור|Essay|סיכום|Summary,דקדוק|Grammar|אוצר מילים|Vocabulary,שבר|Fraction|אחוז|Percent,גאומטריה|Geometry|אלגברה|Algebra,משוואה|Equation|נוסחה|Formula,מחוגה|Compass|מד זווית|Protractor,מיקרוסקופ|Microscope|טלסקופ|Telescope,מבחנה|Test tube|כוס מדידה|Beaker,אטלס|Atlas|גלובוס|Globe,מילון|Dictionary|אנציקלופדיה|Encyclopedia,תעודת הצטיינות|Certificate of excellence|מדליה|Medal,בגרות|Matriculation exam|מיצ\"ב|Standardized test,הצגה|Play|טקס|Ceremony,מקהלה|Choir|תזמורת|Orchestra,מגילה|Scroll|מחברת|Notebook,סדנה|Workshop|חוג|Club,הכתבה|Dictation|בוחן|Quiz,עבודת חקר|Research project|פרויקט|Project,שעת חינוך|Homeroom|שיעור חברה|Social lesson,תורנות|Duty roster|סידור|Arrangement,מדריך|Guide|סגן מנהל|Vice principal,מורה מחליף|Substitute teacher|סטודנט|Student teacher,שנת לימודים|School year|סמסטר|Semester,כתב יד|Handwriting|כתב דפוס|Print letters,ציור קיר|Mural|תערוכה|Exhibition,כרזה|Poster|חוברת|Booklet"},
+ {id:'sports', he:'🏅 ספורט', en:'🏅 Sports',
+  easy:"כדורגל|Football,כדורסל|Basketball,טניס|Tennis,שחייה|Swimming,ריצה|Running,אופניים|Cycling,כדורעף|Volleyball,קפיצה|Jumping,התעמלות|Gymnastics,קראטה|Karate,ג'ודו|Judo,סקייטבורד|Skateboarding,גלישה|Surfing,ריקוד|Dancing,הוקי|Hockey,בייסבול|Baseball,גולף|Golf,פינג פונג|Ping-pong,יוגה|Yoga,אגרוף|Boxing,סקי|Skiing,קפיצה בחבל|Jump rope,מחבט|Racket,מדליה|Medal,אולימפיאדה|Olympics,מרתון|Marathon",
+  medium:"בדמינטון|Badminton,סקווש|Squash,כדוריד|Handball,רוגבי|Rugby,פוטבול|American football,קריקט|Cricket,היאבקות|Wrestling,סייף|Fencing,חץ וקשת|Archery,קליעה|Shooting,הרמת משקולות|Weightlifting,טריאתלון|Triathlon,קיאקים|Kayaking,חתירה|Rowing,שייט|Sailing,גלישת רוח|Windsurfing,צלילה|Diving,קפיצה לרוחק|Long jump,קפיצה לגובה|High jump,זריקת כידון|Javelin,הדיפת כדור ברזל|Shot put,אתלטיקה|Athletics,קפוארה|Capoeira,טאקוונדו|Taekwondo,סנובורד|Snowboarding,החלקה על הקרח|Ice skating,רכיבה על סוסים|Horse riding,טיפוס|Climbing",
+  hard:"פנטתלון|Pentathlon|דקתלון|Decathlon,ביאתלון|Biathlon|טריאתלון|Triathlon,קרלינג|Curling|באולינג|Bowling,לקרוס|Lacrosse|הוקי שדה|Field hockey,פולו|Polo|כדורמים|Water polo,בובסלד|Bobsled|מזחלת|Luge,קפיצת סקי|Ski jumping|סקי אלפיני|Alpine skiing,טרמפולינה|Trampoline|קפיצה למים|Platform diving,פאדל|Padel|פיקלבול|Pickleball,פטאנק|Pétanque|בוצ'ה|Bocce,סומו|Sumo|ג'יו ג'יטסו|Jiu-jitsu,אייקידו|Aikido|קונג פו|Kung fu,קיקבוקס|Kickboxing|מואי תאי|Muay Thai,ריצת משוכות|Hurdles|ריצת שליחים|Relay,הליכה ספורטיבית|Racewalking|צעידה|Hiking,קפיצה במוט|Pole vault|קפיצה משולשת|Triple jump,זריקת דיסקוס|Discus|זריקת פטיש|Hammer throw,אולטימט|Ultimate frisbee|פריזבי|Frisbee,ראקטבול|Racquetball|סקווש|Squash,אופני הרים|Mountain biking|BMX|BMX,מוטוקרוס|Motocross|קרטינג|Karting,פורמולה 1|Formula 1|ראלי|Rally,קייטסרפינג|Kitesurfing|גלישת רוח|Windsurfing,סנוקר|Snooker|ביליארד|Billiards,שחמט|Chess|דמקה|Checkers,פארקור|Parkour|אקרובטיקה|Acrobatics,קרוספיט|CrossFit|פילאטיס|Pilates"},
+ {id:'nature', he:'🌿 טבע', en:'🌿 Nature',
+  easy:"שמש|Sun,ירח|Moon,כוכב|Star,עץ|Tree,פרח|Flower,ים|Sea,נהר|River,הר|Mountain,גשם|Rain,שלג|Snow,רוח|Wind,ענן|Cloud,קשת בענן|Rainbow,חול|Sand,אבן|Stone,דשא|Grass,עלה|Leaf,יער|Forest,מדבר|Desert,אגם|Lake,מפל|Waterfall,אי|Island,הר געש|Volcano,מערה|Cave,ברק|Lightning,סופה|Storm",
+  medium:"נחל|Stream,עמק|Valley,גבעה|Hill,צוק|Cliff,חוף|Beach,מפרץ|Bay,קרחון|Glacier,ג'ונגל|Jungle,סוואנה|Savanna,ביצה|Swamp,מעיין|Spring,נווה מדבר|Oasis,דיונה|Dune,שונית|Coral reef,גל|Wave,גאות|Tide,ערפל|Fog,קרה|Frost,ברד|Hail,רעם|Thunder,זריחה|Sunrise,שקיעה|Sunset,שמיים|Sky,אופק|Horizon,סלע|Rock,אדמה|Soil,שורש|Root,גזע|Trunk",
+  hard:"מכתש|Crater|קניון|Canyon,פיורד|Fjord|לגונה|Lagoon,טונדרה|Tundra|טייגה|Taiga,ערבה|Steppe|פרריה|Prairie,דלתא|Delta|שפך|Estuary,גייזר|Geyser|מעיין חם|Hot spring,סטלקטיט|Stalactite|סטלגמיט|Stalagmite,רעידת אדמה|Earthquake|צונאמי|Tsunami,טורנדו|Tornado|הוריקן|Hurricane,מפולת שלגים|Avalanche|מפולת סלעים|Rockslide,ליקוי חמה|Solar eclipse|ליקוי ירח|Lunar eclipse,זוהר הצפון|Northern lights|שביל החלב|Milky Way,כוכב שביט|Comet|מטאור|Meteor,קרחון צף|Iceberg|קרחון|Glacier,מנגרוב|Mangrove|ביצה|Swamp,חורש|Woodland|יער גשם|Rainforest,אזוב|Moss|חזזית|Lichen,שרך|Fern|שיח|Bush,פטרייה|Mushroom|כמהין|Truffle,סחף|Erosion|הצטברות|Sedimentation,לבה|Lava|מגמה|Magma,אבן חול|Sandstone|גרניט|Granite,גיר|Limestone|בזלת|Basalt,נציב מלח|Salt pillar|מלחה|Salt flat,בולען|Sinkhole|מערה|Cave,חצי אי|Peninsula|רצועת חוף|Coastline,קו המשווה|Equator|הקוטב|The Pole"}
+];
+var TIERS = ['easy','medium','hard'];
+var WORDS = {}; // WORDS[catId][tier] = [{he,en,hintHe,hintEn,cat}]
+CATS.forEach(function(c){
+  WORDS[c.id] = {};
+  TIERS.forEach(function(t){
+    WORDS[c.id][t] = c[t].split(',').map(function(s){
+      var p = s.split('|');
+      return {he:p[0], en:p[1], hintHe:p[2]||'', hintEn:p[3]||'', cat:c.id, tier:t};
+    });
+  });
+});
+
+/* ---------- pure helpers ---------- */
+function rnd(n){ return Math.floor(Math.random()*n); }
+function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=rnd(i+1), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+/** Pick a word from the chosen categories at the given tier that is not in `used` (array of "cat:he" keys). Returns null when exhausted. */
+function pickWord(cats, tier, used){
+  used = used || [];
+  var pool = [];
+  (cats||[]).forEach(function(id){
+    if (!WORDS[id]) return;
+    (WORDS[id][tier]||[]).forEach(function(w){ if (used.indexOf(w.cat+':'+w.he) < 0) pool.push(w); });
+  });
+  if (!pool.length) return null;
+  return pool[rnd(pool.length)];
+}
+/** Hint for the impostor on hard: the word's own similar word; otherwise another word of the same category+tier. */
+function hintFor(w){
+  if (w.hintHe) return {he:w.hintHe, en:w.hintEn};
+  var others = WORDS[w.cat][w.tier].filter(function(o){ return o.he !== w.he; });
+  var o = others[rnd(others.length)];
+  return {he:o.he, en:o.en};
+}
+/** n players, k impostors -> array of booleans (true = impostor), exactly k trues. */
+function assignRoles(n, k){
+  k = Math.max(1, Math.min(k, n-1));
+  var idx = shuffle(Array.apply(null, Array(n)).map(function(_,i){ return i; }));
+  var roles = []; for (var i=0;i<n;i++) roles.push(false);
+  for (var j=0;j<k;j++) roles[idx[j]] = true;
+  return roles;
+}
+/** roles: booleans; voted: index; guessRight: bool (only matters when not caught). Returns {caught, deltas[]} */
+function scoreRound(roles, voted, guessRight){
+  var caught = !!roles[voted];
+  var deltas = roles.map(function(isImp){
+    if (caught) return isImp ? 0 : 1;
+    return isImp ? 2 + (guessRight ? 1 : 0) : 0;
+  });
+  return {caught:caught, deltas:deltas};
+}
+/** 4 options for the impostor's guess: the secret + 3 others from the same category/tier, shuffled. */
+function guessOptions(secret){
+  var others = shuffle(WORDS[secret.cat][secret.tier].filter(function(o){ return o.he !== secret.he; })).slice(0,3);
+  return shuffle([secret].concat(others));
+}
+
+/* ---------- state ---------- */
+var STORE = 'impostor.v1';
+var CLEAN = {show:7000, hide:5000, tapHide:3000};
+var ROUND_SEC = 180;
+var G = {
+  lang:'he', mute:false, n:4, diff:'easy', clean:false, twoImp:false,
+  cats:CATS.map(function(c){ return c.id; }), names:[], used:[], scores:[], round:0,
+  // per round
+  roles:[], secret:null, hint:null, startAt:0, order:[], revealIdx:0, voted:-1, caught:null, guessRight:false, deltas:[],
+  screen:'s-setup', timer:{left:ROUND_SEC, running:false, id:0}
+};
+function load(){
+  try {
+    var s = JSON.parse(localStorage.getItem(STORE) || 'null');
+    if (s && typeof s === 'object') ['lang','mute','n','diff','clean','twoImp','cats','names','used','scores','round'].forEach(function(k){ if (s[k] !== undefined) G[k] = s[k]; });
+  } catch(e){}
+  G.n = Math.min(12, Math.max(3, +G.n || 4));
+  if (!Array.isArray(G.cats) || !G.cats.length) G.cats = CATS.map(function(c){ return c.id; });
+  if (!Array.isArray(G.names)) G.names = [];
+  if (!Array.isArray(G.used)) G.used = [];
+  if (!Array.isArray(G.scores)) G.scores = [];
+}
+function save(){
+  try {
+    localStorage.setItem(STORE, JSON.stringify({lang:G.lang,mute:G.mute,n:G.n,diff:G.diff,clean:G.clean,twoImp:G.twoImp,cats:G.cats,names:G.names,used:G.used,scores:G.scores,round:G.round}));
+  } catch(e){}
+}
+
+/* ---------- i18n ---------- */
+function t(key, vars){
+  var s = (T[G.lang] && T[G.lang][key]) || T.he[key] || key;
+  if (vars) Object.keys(vars).forEach(function(k){ s = s.split('{'+k+'}').join(vars[k]); });
+  return s;
+}
+function wordText(w){ return G.lang === 'en' ? w.en : w.he; }
+function catName(id){ var c = CATS.filter(function(x){ return x.id === id; })[0]; return c ? (G.lang === 'en' ? c.en : c.he) : id; }
+function pname(i){ return (G.names[i] && G.names[i].trim()) || t('player', {n:i+1}); }
+function setLang(l){
+  G.lang = l === 'en' ? 'en' : 'he';
+  document.documentElement.lang = G.lang;
+  document.documentElement.dir = G.lang === 'en' ? 'ltr' : 'rtl';
+  $('b-lang').textContent = G.lang === 'en' ? 'עב' : 'EN';
+  var els = document.querySelectorAll('[data-t]');
+  for (var i=0;i<els.length;i++) els[i].textContent = t(els[i].getAttribute('data-t'));
+  renderSetup(); save();
+  rerender();
+}
+/* re-draw the dynamic text of the screen that is open (language switch mid-game) */
+function rerender(){
+  if (!G.secret) return;
+  var i = G.revealIdx, k;
+  switch (G.screen){
+    case 's-pass':
+      $('pass-title').textContent = G.names[i] && G.names[i].trim() ? t('passNamed', {name:pname(i)}) : t('passTitle', {n:i+1});
+      $('pass-prog').textContent = t('passProg', {i:i+1, n:G.n});
+      if ($('pass-clean').textContent) $('pass-clean').textContent = t('passClean', {s:Math.round(CLEAN.show/1000)});
+      break;
+    case 's-role': $('role-title').textContent = pname(i); fillFace(); break;
+    case 's-play':
+      var rows = $('order').children;
+      for (k=0;k<rows.length;k++){ rows[k].children[1].textContent = pname(G.order[k]); if (k === 0) rows[k].children[2].textContent = '🎤 ' + t('starts'); }
+      drawTimer(); break;
+    case 's-vote':
+      var vr = $('vote-list').children;
+      for (k=0;k<vr.length;k++) vr[k].children[1].textContent = pname(k);
+      break;
+    case 's-result':
+      var imps = []; G.roles.forEach(function(x, j){ if (x) imps.push(pname(j)); });
+      $('res-banner').textContent = G.caught ? t('caught') : t('escaped');
+      $('res-word').textContent = wordText(G.secret);
+      $('res-cat').textContent = t('catLbl', {c:catName(G.secret.cat)});
+      $('res-imp-lbl').textContent = imps.length > 1 ? t('impsWere') : t('impWas');
+      $('res-imp').textContent = imps.join(' · ');
+      $('res-voted').textContent = t('votedFor', {name:pname(G.voted)}) + ' · ' + (G.caught ? t('crewPts') : t('impPts'));
+      $('b-res-next').textContent = G.caught ? t('toScore') : t('toGuess');
+      break;
+    case 's-guess':
+      var gi = []; G.roles.forEach(function(x, j){ if (x) gi.push(pname(j)); });
+      $('guess-text').textContent = t('guessText', {name:gi.join(' · ')});
+      var gb = $('guess-opts').children;
+      for (k=0;k<gb.length;k++) if (guessOpts[k]) gb[k].textContent = wordText(guessOpts[k]);
+      if (!$('guess-res').classList.contains('hidden')) $('guess-res').textContent = G.guessRight ? t('guessRight') : t('guessWrong', {w:wordText(G.secret)});
+      break;
+    case 's-score': showScore(); break;
+  }
+}
+
+/* ---------- dom ---------- */
+function $(id){ return document.getElementById(id); }
+function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
+function show(id){
+  var s = document.querySelectorAll('.screen');
+  for (var i=0;i<s.length;i++) s[i].classList.toggle('on', s[i].id === id);
+  G.screen = id;
+  try { window.scrollTo(0,0); } catch(e){}
+}
+var toastId = 0;
+function toast(msg){ var e = $('toast'); e.textContent = msg; e.classList.add('on'); clearTimeout(toastId); toastId = setTimeout(function(){ e.classList.remove('on'); }, 2200); }
+
+/* ---------- sound ---------- */
+var AC = null;
+function beep(freq, dur, type, vol){
+  if (G.mute) return;
+  try {
+    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    var o = AC.createOscillator(), g = AC.createGain();
+    o.type = type || 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol || 0.15, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + dur);
+    o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + dur);
+  } catch(e){}
+}
+var SFX = {
+  tap:function(){ beep(600, .08, 'square', .08); },
+  flip:function(){ beep(880, .12, 'triangle'); setTimeout(function(){ beep(1320, .15, 'triangle'); }, 90); },
+  imp:function(){ beep(220, .3, 'sawtooth', .12); setTimeout(function(){ beep(180, .35, 'sawtooth', .12); }, 200); },
+  tick:function(){ beep(1000, .05, 'square', .05); },
+  win:function(){ [523,659,784,1047].forEach(function(f,i){ setTimeout(function(){ beep(f, .25, 'triangle', .18); }, i*120); }); },
+  lose:function(){ [400,330,262].forEach(function(f,i){ setTimeout(function(){ beep(f, .3, 'sawtooth', .12); }, i*180); }); },
+  go:function(){ beep(660, .1, 'square', .1); setTimeout(function(){ beep(990, .2, 'square', .1); }, 110); }
+};
+
+/* ---------- confetti ---------- */
+function confetti(colors){
+  var box = $('confetti'); box.innerHTML = '';
+  for (var i=0;i<70;i++){
+    var p = el('i'); p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[i % colors.length];
+    p.style.animationDuration = (2 + Math.random()*2) + 's';
+    p.style.animationDelay = (Math.random()*.8) + 's';
+    p.style.transform = 'rotate(' + rnd(360) + 'deg)';
+    box.appendChild(p);
+  }
+  setTimeout(function(){ box.innerHTML = ''; }, 5000);
+}
+
+/* ---------- setup screen ---------- */
+function renderSetup(){
+  $('p-num').textContent = G.n;
+  var db = $('diff').querySelectorAll('button');
+  for (var i=0;i<db.length;i++) db[i].classList.toggle('on', db[i].getAttribute('data-d') === G.diff);
+  var cb = $('cats'); cb.innerHTML = '';
+  CATS.forEach(function(c){
+    var ch = el('button', 'chip' + (G.cats.indexOf(c.id) >= 0 ? ' on' : ''));
+    ch.appendChild(el('span', 'ck', G.cats.indexOf(c.id) >= 0 ? '✅' : '⬜'));
+    ch.appendChild(el('span', '', G.lang === 'en' ? c.en : c.he));
+    ch.onclick = function(){ toggleCat(c.id); };
+    cb.appendChild(ch);
+  });
+  $('sw-clean').classList.toggle('on', G.clean);
+  $('sw-two').classList.toggle('on', G.twoImp && G.n >= 6);
+  $('sw-two').classList.toggle('dis', G.n < 6);
+  var nb = $('names'); nb.innerHTML = '';
+  for (var j=0;j<G.n;j++){
+    (function(j){
+      var row = el('div', 'nm');
+      row.appendChild(el('div', 'av', ['🦊','🐸','🐼','🦁','🐵','🐨','🐯','🐷','🐮','🐙','🦄','🐧'][j]));
+      var inp = el('input'); inp.type = 'text'; inp.maxLength = 14; inp.placeholder = t('player', {n:j+1}); inp.value = G.names[j] || '';
+      inp.oninput = function(){ G.names[j] = inp.value; save(); };
+      row.appendChild(inp); nb.appendChild(row);
+    })(j);
+  }
+  $('used-count').textContent = G.used.length ? t('usedCount', {n:G.used.length}) : '';
+  $('score-hint').textContent = G.round ? t('scoreHint', {n:G.round}) : '';
+  $('b-mute').textContent = G.mute ? '🔇' : '🔊';
+}
+function setPlayers(n){ G.n = Math.min(12, Math.max(3, n)); if (G.n < 6) G.twoImp = false; save(); renderSetup(); }
+function setDiff(d){ G.diff = d; save(); renderSetup(); }
+function toggleCat(id){
+  var i = G.cats.indexOf(id);
+  if (i >= 0) G.cats.splice(i, 1); else G.cats.push(id);
+  save(); renderSetup();
+}
+function impostorCount(){ return (G.twoImp && G.n >= 6) ? 2 : 1; }
+
+/* ---------- game flow ---------- */
+var cleanT1 = 0, cleanT2 = 0, tapT = 0;
+function clearRoleTimers(){ clearTimeout(cleanT1); clearTimeout(cleanT2); clearTimeout(tapT); }
+
+function startGame(){
+  if (!G.cats.length){ toast(t('noCats')); return false; }
+  var w = pickWord(G.cats, G.diff, G.used);
+  if (!w){ // all words of these categories used: forget them and start over
+    G.used = G.used.filter(function(k){ return G.cats.indexOf(k.split(':')[0]) < 0; });
+    w = pickWord(G.cats, G.diff, G.used);
+  }
+  G.secret = w; G.hint = hintFor(w);
+  G.used.push(w.cat + ':' + w.he);
+  G.roles = assignRoles(G.n, impostorCount());
+  while (G.scores.length < G.n) G.scores.push(0);
+  G.scores.length = G.n;
+  G.startAt = rnd(G.n);
+  G.order = []; for (var i=0;i<G.n;i++) G.order.push((G.startAt + i) % G.n);
+  G.revealIdx = 0; G.voted = -1; G.caught = null; G.guessRight = false; G.deltas = [];
+  G.names.length = Math.max(G.names.length, 0);
+  save();
+  SFX.go();
+  showPass();
+  return true;
+}
+function showPass(){
+  clearRoleTimers();
+  var i = G.revealIdx;
+  $('pass-title').textContent = G.names[i] && G.names[i].trim() ? t('passNamed', {name:pname(i)}) : t('passTitle', {n:i+1});
+  $('pass-prog').textContent = t('passProg', {i:i+1, n:G.n});
+  var isLastClean = G.clean && i === G.n - 1;
+  $('pass-clean').textContent = isLastClean ? t('passClean', {s:Math.round(CLEAN.show/1000)}) : '';
+  show('s-pass');
+  if (isLastClean){
+    // the previous player can put the phone down: the card opens by itself
+    cleanT1 = setTimeout(function(){ revealRole(true); }, CLEAN.show);
+  }
+}
+function fillFace(){
+  var f = $('face-back'); f.innerHTML = '';
+  var isImp = G.roles[G.revealIdx];
+  f.classList.toggle('imp', isImp);
+  if (isImp){
+    f.appendChild(el('div', 'eye', '🕵'));
+    f.appendChild(el('div', 'word', t('impostor')));
+    f.appendChild(el('div', 'cat', t('impostorText')));
+    if (G.diff === 'hard' && G.hint) f.appendChild(el('div', 'hint', t('impHint', {h:wordText(G.hint)})));
+  } else {
+    f.appendChild(el('div', 'cat', t('secretLbl')));
+    f.appendChild(el('div', 'word', wordText(G.secret)));
+    f.appendChild(el('div', 'cat', t('catLbl', {c:catName(G.secret.cat)})));
+  }
+}
+var seen = false;
+function revealRole(auto){
+  clearRoleTimers();
+  seen = false;
+  $('role-title').textContent = pname(G.revealIdx);
+  $('role-hint').textContent = auto ? t('autoHint') : t('holdHint');
+  fillFace();
+  $('flip').classList.remove('open');
+  $('b-gotit').disabled = true;
+  show('s-role');
+  if (auto){
+    openCard();
+    cleanT2 = setTimeout(function(){ closeCard(); }, CLEAN.hide);
+  }
+}
+function openCard(){
+  if ($('flip').classList.contains('open')) return;
+  $('flip').classList.add('open');
+  if (G.roles[G.revealIdx]) SFX.imp(); else SFX.flip();
+  seen = true; $('b-gotit').disabled = false;
+}
+function closeCard(){ $('flip').classList.remove('open'); if (seen) $('b-gotit').disabled = false; }
+function nextPlayer(){
+  clearRoleTimers();
+  SFX.tap();
+  G.revealIdx++;
+  if (G.revealIdx >= G.n){ startPlaying(); } else { showPass(); }
+}
+
+/* ---------- playing + timer ---------- */
+var CIRC = 2 * Math.PI * 65;
+function fmt(s){ s = Math.max(0, Math.round(s)); return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+function drawTimer(){
+  var tm = G.timer;
+  $('time').textContent = fmt(tm.left);
+  $('prog').style.strokeDashoffset = CIRC * (1 - Math.max(0, Math.min(1, tm.left / tm.total)));
+  $('ring').classList.toggle('low', tm.left <= 15);
+  $('b-pause').textContent = tm.running ? t('pause') : t('resume');
+}
+function tick(){
+  var tm = G.timer; if (!tm.running) return;
+  var now = Date.now(); tm.left -= (now - tm.last) / 1000; tm.last = now;
+  if (tm.left <= 10 && Math.floor(tm.left) !== tm.lastBeep){ tm.lastBeep = Math.floor(tm.left); SFX.tick(); }
+  if (tm.left <= 0){ tm.left = 0; stopTimer(); drawTimer(); toast(t('timeUp')); SFX.lose(); return; }
+  drawTimer();
+}
+function startTimer(sec){
+  stopTimer();
+  G.timer = {left:sec, total:sec, running:true, last:Date.now(), id:setInterval(tick, 250), lastBeep:-1};
+  drawTimer();
+}
+function stopTimer(){ if (G.timer.id) clearInterval(G.timer.id); G.timer.id = 0; G.timer.running = false; }
+function togglePause(){
+  var tm = G.timer;
+  if (tm.running){ stopTimer(); }
+  else if (tm.left > 0){ tm.running = true; tm.last = Date.now(); tm.id = setInterval(tick, 250); }
+  SFX.tap(); drawTimer();
+}
+function addTime(){ G.timer.left += 60; G.timer.total = Math.max(G.timer.total, G.timer.left); SFX.tap(); drawTimer(); }
+function startPlaying(){
+  var list = $('order'); list.innerHTML = '';
+  G.order.forEach(function(p, k){
+    var row = el('div', 'pl' + (k === 0 ? ' first' : ''));
+    row.appendChild(el('div', 'n', String(k+1)));
+    row.appendChild(el('div', 'nm', pname(p)));
+    if (k === 0) row.appendChild(el('span', 'tag', '🎤 ' + t('starts')));
+    list.appendChild(row);
+  });
+  show('s-play');
+  startTimer(ROUND_SEC);
+  SFX.go();
+}
+
+/* ---------- vote ---------- */
+function toVote(){
+  stopTimer();
+  G.voted = -1;
+  var list = $('vote-list'); list.innerHTML = '';
+  for (var i=0;i<G.n;i++){
+    (function(i){
+      var row = el('div', 'pl votable');
+      row.appendChild(el('div', 'n', String(i+1)));
+      row.appendChild(el('div', 'nm', pname(i)));
+      row.appendChild(el('span', 'tag', '👆'));
+      row.onclick = function(){ castVote(i); };
+      row.setAttribute('data-i', i);
+      list.appendChild(row);
+    })(i);
+  }
+  $('b-vote').disabled = true;
+  show('s-vote');
+}
+function castVote(i){
+  G.voted = i; SFX.tap();
+  var rows = $('vote-list').children;
+  for (var k=0;k<rows.length;k++) rows[k].classList.toggle('sel', k === i);
+  $('b-vote').disabled = false;
+}
+function confirmVote(){
+  if (G.voted < 0) return false;
+  var r = scoreRound(G.roles, G.voted, false);
+  G.caught = r.caught;
+  G.deltas = r.deltas;
+  G.guessRight = false;
+  var imps = []; G.roles.forEach(function(x, i){ if (x) imps.push(pname(i)); });
+  $('res-emoji').textContent = r.caught ? '🎉' : '😈';
+  var b = $('res-banner'); b.textContent = r.caught ? t('caught') : t('escaped');
+  b.className = 'banner ' + (r.caught ? 'win' : 'lose');
+  $('res-word').textContent = wordText(G.secret);
+  $('res-cat').textContent = t('catLbl', {c:catName(G.secret.cat)});
+  $('res-imp-lbl').textContent = imps.length > 1 ? t('impsWere') : t('impWas');
+  $('res-imp').textContent = imps.join(' · ');
+  $('res-voted').textContent = t('votedFor', {name:pname(G.voted)}) + ' · ' + (r.caught ? t('crewPts') : t('impPts'));
+  $('b-res-next').textContent = r.caught ? t('toScore') : t('toGuess');
+  show('s-result');
+  if (r.caught){ SFX.win(); confetti(['#2EE6C5','#4ADE80','#FFD166','#fff']); }
+  else { SFX.lose(); confetti(['#FF6B9D','#9B6DFF','#FF5C5C','#fff']); }
+  return r;
+}
+function afterResult(){ SFX.tap(); if (G.caught) finishRound(); else toGuess(); }
+
+/* ---------- impostor guess ---------- */
+var guessOpts = [];
+function toGuess(){
+  var imps = []; G.roles.forEach(function(x, i){ if (x) imps.push(pname(i)); });
+  $('guess-text').textContent = t('guessText', {name:imps.join(' · ')});
+  guessOpts = guessOptions(G.secret);
+  var box = $('guess-opts'); box.innerHTML = '';
+  guessOpts.forEach(function(w, i){
+    var b = el('button', 'btn alt', wordText(w));
+    b.onclick = function(){ guess(i); };
+    box.appendChild(b);
+  });
+  $('guess-res').classList.add('hidden');
+  $('b-guess-next').classList.add('hidden');
+  show('s-guess');
+}
+function guess(i){
+  var w = guessOpts[i]; if (!w) return false;
+  var right = w.he === G.secret.he;
+  G.guessRight = right;
+  var r = scoreRound(G.roles, G.voted, right); G.deltas = r.deltas;
+  var bs = $('guess-opts').children;
+  for (var k=0;k<bs.length;k++){ bs[k].disabled = true; if (guessOpts[k].he === G.secret.he) bs[k].classList.add('warn'); }
+  var res = $('guess-res'); res.classList.remove('hidden');
+  res.textContent = right ? t('guessRight') : t('guessWrong', {w:wordText(G.secret)});
+  $('b-guess-next').classList.remove('hidden');
+  if (right){ SFX.win(); confetti(['#FF6B9D','#FFD166','#fff']); } else SFX.lose();
+  return right;
+}
+
+/* ---------- score ---------- */
+function finishRound(){
+  if (G.deltas.length){
+    G.deltas.forEach(function(d, i){ G.scores[i] = (G.scores[i] || 0) + d; });
+    G.round++;
+    G.deltas = [];
+  }
+  save();
+  showScore();
+}
+function showScore(){
+  $('score-round').textContent = t('scoreRound', {n:G.round});
+  var list = $('score-list'); list.innerHTML = '';
+  var best = Math.max.apply(null, G.scores.concat([0]));
+  var idx = []; for (var i=0;i<G.n;i++) idx.push(i);
+  idx.sort(function(a,b){ return (G.scores[b]||0) - (G.scores[a]||0); });
+  var lastDeltas = G.lastDeltas || [];
+  idx.forEach(function(i){
+    var row = el('div', 'pl' + (G.roles[i] ? ' imp' : ''));
+    row.appendChild(el('div', 'n', String(i+1)));
+    var nm = el('div', 'nm', pname(i) + (best > 0 && G.scores[i] === best ? ' ' + t('leader') : ''));
+    row.appendChild(nm);
+    row.appendChild(el('span', 'tag', G.roles[i] ? t('impTag') : t('crewTag')));
+    var d = lastDeltas[i] || 0;
+    row.appendChild(el('span', 'delta' + (d ? '' : ' neg'), d ? '+' + d : '·'));
+    row.appendChild(el('span', 'sc', String(G.scores[i] || 0)));
+    list.appendChild(row);
+  });
+  show('s-score');
+}
+function nextRound(){ SFX.tap(); startGame(); }
+function toMenu(){ stopTimer(); clearRoleTimers(); SFX.tap(); renderSetup(); show('s-setup'); }
+function resetScores(){ G.scores = []; G.round = 0; save(); toast(t('scoreReset')); showScore(); }
+function resetWords(){ G.used = []; save(); toast(t('wordsReset')); renderSetup(); }
+
+/* keep the per-round deltas for the scoreboard */
+var _finish = finishRound;
+finishRound = function(){ G.lastDeltas = G.deltas.slice(); _finish(); };
+
+/* ---------- wiring ---------- */
+function wire(){
+  $('p-minus').onclick = function(){ SFX.tap(); setPlayers(G.n - 1); };
+  $('p-plus').onclick = function(){ SFX.tap(); setPlayers(G.n + 1); };
+  var db = $('diff').querySelectorAll('button');
+  for (var i=0;i<db.length;i++) (function(b){ b.onclick = function(){ SFX.tap(); setDiff(b.getAttribute('data-d')); }; })(db[i]);
+  $('cats-all').onclick = function(){ SFX.tap(); G.cats = G.cats.length === CATS.length ? [] : CATS.map(function(c){ return c.id; }); save(); renderSetup(); };
+  $('sw-clean').onclick = function(){ SFX.tap(); G.clean = !G.clean; save(); renderSetup(); };
+  $('sw-two').onclick = function(){ if (G.n < 6) return; SFX.tap(); G.twoImp = !G.twoImp; save(); renderSetup(); };
+  $('names-tog').onclick = function(){ var h = $('names').classList.toggle('hidden'); $('names-tog').textContent = h ? '▾' : '▴'; };
+  $('b-start').onclick = function(){ startGame(); };
+  $('b-reset-words').onclick = resetWords;
+  $('b-lang').onclick = function(){ SFX.tap(); setLang(G.lang === 'he' ? 'en' : 'he'); };
+  $('b-mute').onclick = function(){ G.mute = !G.mute; save(); renderSetup(); SFX.tap(); };
+  $('b-reveal').onclick = function(){ clearRoleTimers(); SFX.tap(); revealRole(false); };
+  var flip = $('flip');
+  var down = function(e){ if (e.cancelable && e.type !== 'pointerdown') e.preventDefault(); clearTimeout(tapT); clearTimeout(cleanT2); openCard(); };
+  var up = function(){ clearTimeout(tapT); tapT = setTimeout(closeCard, CLEAN.tapHide); };
+  if (window.PointerEvent){ flip.addEventListener('pointerdown', down); flip.addEventListener('pointerup', up); flip.addEventListener('pointercancel', up); flip.addEventListener('pointerleave', up); }
+  else { flip.addEventListener('touchstart', down, {passive:false}); flip.addEventListener('touchend', up); flip.addEventListener('mousedown', down); flip.addEventListener('mouseup', up); }
+  flip.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  $('b-gotit').onclick = nextPlayer;
+  $('b-pause').onclick = togglePause;
+  $('b-addtime').onclick = addTime;
+  $('b-tovote').onclick = function(){ SFX.tap(); toVote(); };
+  $('b-vote').onclick = function(){ confirmVote(); };
+  $('b-res-next').onclick = afterResult;
+  $('b-guess-next').onclick = function(){ SFX.tap(); finishRound(); };
+  $('b-next-round').onclick = nextRound;
+  $('b-menu').onclick = toMenu;
+  $('b-reset-score').onclick = resetScores;
+  document.addEventListener('visibilitychange', function(){ if (document.hidden && G.timer.running && G.screen === 's-play'){ togglePause(); } });
+}
+
+/* ---------- boot ---------- */
+load();
+wire();
+setLang(G.lang);
+show('s-setup');
+
+window.IMP = {
+  G:G, T:T, CATS:CATS, WORDS:WORDS, TIERS:TIERS, CLEAN:CLEAN,
+  pickWord:pickWord, hintFor:hintFor, assignRoles:assignRoles, scoreRound:scoreRound, guessOptions:guessOptions,
+  show:show, setLang:setLang, t:t, setPlayers:setPlayers, setDiff:setDiff, toggleCat:toggleCat,
+  startGame:startGame, revealRole:revealRole, openCard:openCard, closeCard:closeCard, nextPlayer:nextPlayer,
+  startPlaying:startPlaying, toVote:toVote, castVote:castVote, confirmVote:confirmVote, afterResult:afterResult,
+  toGuess:toGuess, guess:guess, finishRound:function(){ finishRound(); }, showScore:showScore, nextRound:nextRound, toMenu:toMenu,
+  togglePause:togglePause, stopTimer:stopTimer, save:save, load:load
+};
+
+/* ---------- tests (#test) ---------- */
+if (location.hash === '#test'){
+  (function(){
+    var log = [], errs = [];
+    function ok(name, cond, info){ log.push([name, cond ? 'PASS' : 'FAIL']); if (!cond) errs.push(name + (info !== undefined ? ': ' + info : '')); }
+    function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+    function done(){
+      var pre = $('test-log'); pre.removeAttribute('class');
+      pre.textContent = JSON.stringify({errs:errs, log:log});
+    }
+    (async function(){
+      try {
+        var I = window.IMP;
+        I.G.mute = true;
+        // --- word pools
+        var allOk = true, uniqOk = true, hintOk = true, pairOk = true, total = 0;
+        I.CATS.forEach(function(c){
+          I.TIERS.forEach(function(tier){
+            var ws = I.WORDS[c.id][tier]; total += ws.length;
+            if (ws.length < 25){ allOk = false; errs.push('pool ' + c.id + '/' + tier + ' has ' + ws.length); }
+            var he = {}, en = {};
+            ws.forEach(function(w){
+              if (!w.he || !w.en) pairOk = false;
+              if (he[w.he]){ uniqOk = false; errs.push('dup he ' + c.id + '/' + tier + ' ' + w.he); } he[w.he] = 1;
+              if (en[w.en]){ uniqOk = false; errs.push('dup en ' + c.id + '/' + tier + ' ' + w.en); } en[w.en] = 1;
+              if (tier === 'hard' && (!w.hintHe || !w.hintEn || w.hintHe === w.he)){ hintOk = false; errs.push('bad hint ' + c.id + ' ' + w.he); }
+            });
+          });
+        });
+        ok('10 categories', I.CATS.length === 10, I.CATS.length);
+        ok('every pool has at least 25 words', allOk);
+        ok('words unique within pool (he+en)', uniqOk);
+        ok('every word has he+en', pairOk);
+        ok('hard words carry a different hint', hintOk);
+        ok('total words at least 750', total >= 750, total);
+        // --- pickWord
+        var w = I.pickWord(['animals'], 'easy', []);
+        ok('pickWord returns a word of the category/tier', w && w.cat === 'animals' && w.tier === 'easy');
+        var used = [], seenW = {}, rep = false, cnt = I.WORDS.animals.easy.length;
+        for (var i=0;i<cnt;i++){ var x = I.pickWord(['animals'], 'easy', used); if (!x || seenW[x.he]) rep = true; seenW[x.he] = 1; used.push(x.cat + ':' + x.he); }
+        ok('pickWord never repeats a used word', !rep && Object.keys(seenW).length === cnt);
+        ok('pickWord returns null when pool exhausted', I.pickWord(['animals'], 'easy', used) === null);
+        var multi = I.pickWord(['food','sports'], 'medium', []);
+        ok('pickWord across several categories', multi && (multi.cat === 'food' || multi.cat === 'sports') && multi.tier === 'medium');
+        ok('pickWord with no categories gives null', I.pickWord([], 'easy', []) === null);
+        // --- hint
+        var hw = I.pickWord(['nature'], 'hard', []), h = I.hintFor(hw);
+        ok('hard hint differs from secret', h.he !== hw.he && h.he === hw.hintHe);
+        var ew = I.pickWord(['nature'], 'easy', []), eh = I.hintFor(ew);
+        ok('fallback hint (non-hard) differs from secret', eh.he && eh.he !== ew.he);
+        // --- roles
+        var rolesOk = true;
+        for (var n=3;n<=12;n++){ var r1 = I.assignRoles(n, 1); if (r1.length !== n || r1.filter(Boolean).length !== 1) rolesOk = false; }
+        ok('assignRoles: n players, exactly 1 impostor (3..12)', rolesOk);
+        var r2 = I.assignRoles(8, 2);
+        ok('assignRoles: 2 impostors', r2.length === 8 && r2.filter(Boolean).length === 2);
+        ok('assignRoles clamps k below n', I.assignRoles(3, 5).filter(Boolean).length === 2);
+        var pos = {}; for (var k=0;k<60;k++) pos[I.assignRoles(5, 1).indexOf(true)] = 1;
+        ok('assignRoles is random (several positions seen)', Object.keys(pos).length >= 3);
+        // --- scoring
+        var roles = [false, true, false, false];
+        var s1 = I.scoreRound(roles, 1, false);
+        ok('caught: crew +1 each, impostor 0', s1.caught && s1.deltas.join() === '1,0,1,1');
+        var s2 = I.scoreRound(roles, 0, false);
+        ok('escaped: impostor +2, crew 0', !s2.caught && s2.deltas.join() === '0,2,0,0');
+        var s3 = I.scoreRound(roles, 2, true);
+        ok('escaped + guessed: impostor +3', s3.deltas.join() === '0,3,0,0');
+        var s4 = I.scoreRound([true, false, true, false, false, false], 5, true);
+        ok('two impostors escaped: both +3', s4.deltas.join() === '3,0,3,0,0,0');
+        var go = I.guessOptions(hw);
+        ok('guessOptions: 4 unique options incl. secret', go.length === 4 && go.filter(function(o){ return o.he === hw.he; }).length === 1 && new Set(go.map(function(o){ return o.he; })).size === 4);
+        // --- language
+        I.setLang('en');
+        ok('setLang(en) sets dir ltr', document.documentElement.dir === 'ltr' && document.documentElement.lang === 'en');
+        ok('english strings applied', $('b-start').textContent === I.T.en.start);
+        I.setLang('he');
+        ok('setLang(he) sets dir rtl', document.documentElement.dir === 'rtl' && $('b-start').textContent === I.T.he.start);
+        var keysHe = Object.keys(I.T.he), keysEn = Object.keys(I.T.en);
+        ok('same string keys in he and en', keysHe.length === keysEn.length && keysHe.every(function(k){ return typeof I.T.en[k] === 'string' && I.T.en[k].length; }));
+        ok('t() substitutes vars', I.t('player', {n:7}) === 'שחקן 7');
+        // --- setup controls
+        I.setPlayers(2); ok('players clamp min 3', I.G.n === 3);
+        I.setPlayers(20); ok('players clamp max 12', I.G.n === 12);
+        I.setPlayers(4); I.setDiff('hard'); ok('setDiff', I.G.diff === 'hard' && $('diff').querySelector('.on').getAttribute('data-d') === 'hard');
+        var before = I.G.cats.length; I.toggleCat('food'); var after = I.G.cats.length; I.toggleCat('food');
+        ok('toggleCat flips membership', Math.abs(before - after) === 1 && I.G.cats.length === before);
+        // --- flow: setup -> pass/role xN -> play -> vote -> result -> guess -> score
+        I.G.cats = ['animals']; I.G.clean = false; I.G.used = []; I.G.scores = []; I.G.round = 0;
+        var usedBefore = I.G.used.length;
+        ok('startGame goes to s-pass', I.startGame() === true && I.G.screen === 's-pass');
+        ok('startGame marks the word as used', I.G.used.length === usedBefore + 1);
+        ok('roles assigned for 4 players', I.G.roles.length === 4 && I.G.roles.filter(Boolean).length === 1);
+        ok('secret from chosen category/tier', I.G.secret.cat === 'animals' && I.G.secret.tier === 'hard');
+        ok('order is a permutation starting at startAt', I.G.order.length === 4 && I.G.order[0] === I.G.startAt && new Set(I.G.order).size === 4);
+        var flowOk = true;
+        for (var p=0;p<4;p++){
+          I.revealRole(false);
+          if (I.G.screen !== 's-role' || !$('b-gotit').disabled) flowOk = false;
+          I.openCard();
+          var isImp = I.G.roles[p], txt = $('face-back').textContent;
+          if (!$('flip').classList.contains('open') || $('b-gotit').disabled) flowOk = false;
+          if (isImp && (txt.indexOf(I.T.he.impostor) < 0 || txt.indexOf(I.G.hint.he) < 0)) flowOk = false;
+          if (!isImp && txt.indexOf(I.G.secret.he) < 0) flowOk = false;
+          I.nextPlayer();
+          if (p < 3 && I.G.screen !== 's-pass') flowOk = false;
+        }
+        ok('reveal x4: card shows word / impostor+hint, gotIt enabled after open', flowOk);
+        ok('after last player: s-play with running timer', I.G.screen === 's-play' && I.G.timer.running && $('order').children.length === 4);
+        I.togglePause(); ok('pause stops timer', !I.G.timer.running); I.togglePause(); ok('resume restarts timer', I.G.timer.running);
+        I.toVote();
+        ok('toVote: s-vote, timer stopped, vote disabled', I.G.screen === 's-vote' && !I.G.timer.running && $('b-vote').disabled && $('vote-list').children.length === 4);
+        var impIdx = I.G.roles.indexOf(true), crewIdx = I.G.roles.indexOf(false);
+        I.castVote(impIdx);
+        ok('castVote selects + enables confirm', I.G.voted === impIdx && !$('b-vote').disabled && $('vote-list').children[impIdx].classList.contains('sel'));
+        var res = I.confirmVote();
+        ok('confirmVote (impostor): caught, s-result', res.caught && I.G.screen === 's-result' && $('res-word').textContent === I.G.secret.he);
+        I.afterResult();
+        ok('caught: straight to scoreboard, crew +1, round 1', I.G.screen === 's-score' && I.G.round === 1 && I.G.scores[crewIdx] === 1 && I.G.scores[impIdx] === 0);
+        // round 2: impostor escapes and guesses
+        var used2 = I.G.used.slice();
+        I.nextRound();
+        ok('nextRound: new word (not repeated), s-pass', I.G.screen === 's-pass' && used2.indexOf(I.G.used[I.G.used.length-1]) < 0);
+        for (var q=0;q<4;q++){ I.revealRole(false); I.openCard(); I.nextPlayer(); }
+        I.toVote();
+        var imp2 = I.G.roles.indexOf(true), crew2 = I.G.roles.indexOf(false);
+        I.castVote(crew2); var res2 = I.confirmVote();
+        ok('vote crew: escaped', !res2.caught && $('b-res-next').textContent === I.T.he.toGuess);
+        I.afterResult();
+        ok('escaped: s-guess with 4 options', I.G.screen === 's-guess' && $('guess-opts').children.length === 4);
+        var rightIdx = -1; for (var g=0;g<4;g++) if ($('guess-opts').children[g].textContent === I.G.secret.he) rightIdx = g;
+        var scoreBefore = I.G.scores[imp2];
+        ok('guess(correct) returns true', I.guess(rightIdx) === true && I.G.guessRight);
+        I.finishRound();
+        ok('impostor gets +3 after escape+guess, round 2', I.G.screen === 's-score' && I.G.round === 2 && I.G.scores[imp2] === scoreBefore + 3);
+        I.toMenu(); ok('toMenu goes to s-setup', I.G.screen === 's-setup');
+        // --- 2 impostors
+        I.setPlayers(6); I.G.twoImp = true; I.startGame();
+        ok('two impostors with 6 players', I.G.roles.filter(Boolean).length === 2);
+        I.toMenu(); I.G.twoImp = false; I.setPlayers(4);
+        // --- clean hands (short timers)
+        I.CLEAN.show = 60; I.CLEAN.hide = 100;
+        I.G.clean = true; I.startGame();
+        for (var c=0;c<3;c++){ I.revealRole(false); I.openCard(); I.nextPlayer(); }
+        ok('clean hands: last player waits on s-pass with notice', I.G.screen === 's-pass' && $('pass-clean').textContent.length > 0);
+        await sleep(100);
+        ok('clean hands: card opened automatically', I.G.screen === 's-role' && $('flip').classList.contains('open'));
+        await sleep(100);
+        ok('clean hands: card closed automatically, gotIt enabled', !$('flip').classList.contains('open') && !$('b-gotit').disabled);
+        I.nextPlayer(); ok('clean hands flow reaches s-play', I.G.screen === 's-play');
+        I.stopTimer(); I.toMenu();
+        // --- persistence
+        I.save();
+        var stored = null; try { stored = JSON.parse(localStorage.getItem('impostor.v1')); } catch(e){}
+        ok('settings persisted under impostor.v1 (or storage unavailable)', stored === null || (stored.n === 4 && Array.isArray(stored.used)));
+        // --- layout sanity
+        ok('no horizontal overflow', document.documentElement.scrollWidth <= window.innerWidth + 1, document.documentElement.scrollWidth + '>' + window.innerWidth);
+        ok('screens exist', document.querySelectorAll('.screen').length === 8);
+      } catch(e){ errs.push('exception: ' + (e && e.stack || e)); }
+      done();
+    })();
+  })();
+}
+})();
+</script>
+</body>
+</html>
