@@ -3,7 +3,7 @@
   "short_name": "כוכב הכדורגל",
   "description": "משחק כדורגל חינם לילדים: 96 כוכבים, אונליין עם חברים, פנדלים, מועדונים ותיבות.",
   "start_url": "./game1.html?src=pwa",
-  "id": "./game1.html",
+  "id": "/game-lab/game1.html",
   "scope": "./game1.html",
   "display": "standalone",
   "orientation": "landscape",

@@ -3,7 +3,7 @@
   "short_name": "אימפוסטר",
   "description": "משחק חברה לטלפון אחד: כולם מקבלים מילה סודית חוץ מהאימפוסטר. 3–12 שחקנים.",
   "start_url": "./impostor.html?src=pwa",
-  "id": "./impostor.html",
+  "id": "/game-lab/impostor.html",
   "scope": "./impostor.html",
   "display": "standalone",
   "orientation": "portrait",
