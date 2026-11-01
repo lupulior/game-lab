@@ -42,8 +42,22 @@
   body{display:flex;flex-direction:column;align-items:center;padding:28px 16px 40px}
   h1{font-size:40px;margin:10px 0 2px;color:#fff;text-shadow:0 4px 0 rgba(27,42,78,.35)}
   .sub{color:#fff;opacity:.95;font-size:18px;margin:0 0 26px;font-weight:700}
-  .grid{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;width:100%;max-width:1000px}
-  .card{background:#fff;border-radius:26px;box-shadow:0 10px 0 rgba(27,42,78,.25),0 14px 30px rgba(0,0,0,.18);width:min(100%,460px);overflow:hidden;text-decoration:none;color:inherit;transition:transform .15s}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;max-width:960px}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  .search{width:100%;max-width:960px;margin:0 0 16px;position:relative}
+  .search input{width:100%;box-sizing:border-box;font:inherit;font-size:19px;font-weight:700;padding:13px 50px 13px 18px;border:0;border-radius:18px;background:#fff;color:#1B2A4E;box-shadow:0 6px 0 rgba(27,42,78,.2),0 8px 18px rgba(0,0,0,.12);outline:none}
+  .search input:focus{box-shadow:0 0 0 4px #FFD447,0 6px 0 rgba(27,42,78,.2)}
+  .search .ic{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:22px;pointer-events:none}
+  .nores{display:none;color:#fff;font-size:20px;font-weight:900;margin-top:10px}
+  .card.hide{display:none}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  .search{width:100%;max-width:960px;margin:0 0 16px;position:relative}
+  .search input{width:100%;box-sizing:border-box;font:inherit;font-size:19px;font-weight:700;padding:13px 50px 13px 18px;border:0;border-radius:18px;background:#fff;color:#1B2A4E;box-shadow:0 6px 0 rgba(27,42,78,.2),0 8px 18px rgba(0,0,0,.12);outline:none}
+  .search input:focus{box-shadow:0 0 0 4px #FFD447,0 6px 0 rgba(27,42,78,.2)}
+  .search .ic{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:22px;pointer-events:none}
+  .nores{display:none;color:#fff;font-size:20px;font-weight:900;margin-top:10px}
+  .card.hide{display:none}
+  .card{background:#fff;border-radius:26px;box-shadow:0 10px 0 rgba(27,42,78,.25),0 14px 30px rgba(0,0,0,.18);width:100%;overflow:hidden;text-decoration:none;color:inherit;transition:transform .15s}
   .card:hover{transform:translateY(-4px)}
   .card img{display:block;width:100%;aspect-ratio:1200/630;object-fit:cover;background:#3FB35B}
   .card .body{padding:16px 18px 20px}
@@ -52,7 +66,7 @@
   .tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:14px}
   .tag{background:#EAF6FF;color:#1B2A4E;border-radius:12px;padding:4px 10px;font-size:13px;font-weight:700}
   .play{display:inline-block;background:#3FC35F;color:#fff;font-size:24px;font-weight:900;padding:12px 44px;border-radius:20px;box-shadow:0 7px 0 #22883C}
-  .soon{width:min(100%,460px);border:3px dashed rgba(255,255,255,.75);border-radius:26px;color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;min-height:180px;opacity:.9}
+  .soon{width:100%;border:3px dashed rgba(255,255,255,.75);border-radius:26px;color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;min-height:180px;opacity:.9}
   .about{max-width:760px;margin-top:34px;background:rgba(255,255,255,.55);border-radius:20px;padding:14px 18px;font-size:14px;line-height:1.6;color:#1B2A4E}
   .about h2{font-size:17px;margin:0 0 6px}
   .about p{margin:0}
@@ -64,8 +78,9 @@
 <body>
   <h1>🎮 Game Lab</h1>
   <p class="sub">מעבדת המשחקים של לופו · בחינם, בדפדפן, בלי התקנה</p>
-  <div class="grid">
-    <a class="card" href="game1.html">
+  <div class="search"><input id="q" type="search" placeholder="חיפוש משחק… (כדורגל, אימפוסטר, כדורסל)" autocomplete="off"><span class="ic">🔎</span></div>
+  <div class="grid" id="grid">
+    <a class="card" href="game1.html" data-tags="football soccer כדורגל כוכב הכדורגל לופו fifa">
       <img src="art/og.png" alt="כוכב הכדורגל">
       <div class="body">
         <h2>⚽ כוכב הכדורגל</h2>
@@ -74,7 +89,7 @@
         <span class="play">שחק ▶</span>
       </div>
     </a>
-    <a class="card" href="impostor.html">
+    <a class="card" href="impostor.html" data-tags="impostor אימפוסטר מילים משחק חברה among us אמונג אס">
       <img src="art/impostor-og.png" alt="אימפוסטר – מי מסתתר בינינו?">
       <div class="body">
         <h2>🕵 אימפוסטר</h2>
@@ -83,7 +98,7 @@
         <span class="play">שחק ▶</span>
       </div>
     </a>
-    <a class="card" href="basketball.html">
+    <a class="card" href="basketball.html" data-tags="basketball nba כדורסל לברון גורדן basketball stars">
       <img src="art/basketball-og.png" alt="כדורסל 1 על 1">
       <div class="body">
         <h2>🏀 כדורסל 1 על 1</h2>
@@ -99,6 +114,8 @@
     <p>מעבדת משחקים (Game Lab) היא האתר של לופו, ילד שבונה משחקים. יש כאן שלושה משחקים: <strong>כדורסל 1 על 1</strong> – משחק כדורסל ארקייד במגרש מלא עם 20 קבוצות NBA ו-300 שחקנים אמיתיים (נגד המחשב, שני שחקנים, טורניר) – <strong>אימפוסטר</strong> – משחק חברה לטלפון אחד שעובר מיד ליד (3–12 שחקנים, מילה סודית, מי מסתתר בינינו?) – ו<strong>כוכב הכדורגל</strong>, המשחק הראשון: <strong>כוכב הכדורגל</strong> – משחק כדורגל לילדים שמשחקים בדפדפן, בחינם ובלי התקנה: כדורגל 1 על 1 מול המחשב, כדורגל אונליין עם חברים, משחק פנדלים, 96 כוכבי כדורגל, ארנות, מועדונים, תיבות ואוסף מראה. מחפשים "לופו כדורגל", "המשחק של לופו" או "משחק כדורגל חינם"? זה כאן. עובד גם בטלפון, בעברית, אנגלית, ערבית ורוסית.</p>
     <p class="credits">🙏 קרדיטים: אלון מידברג ויהונתן סבג.</p>
   </section>
+  <p class="nores" id="nores">😕 לא נמצא משחק כזה… אולי בקרוב!</p>
+  <script>(function(){ var q=document.getElementById("q"), cards=[].slice.call(document.querySelectorAll("#grid .card")), soon=document.querySelector("#grid .soon"), nr=document.getElementById("nores"); function norm(s){ return (s||"").toLowerCase().replace(/[֑-ׇ]/g,""); } function run(){ var v=norm(q.value).trim(), n=0; cards.forEach(function(c){ var hit=!v || norm(c.textContent+" "+(c.getAttribute("data-tags")||"")).indexOf(v)>=0; c.classList.toggle("hide", !hit); if(hit) n++; }); if(soon) soon.style.display = v ? "none" : ""; nr.style.display = (v && !n) ? "block" : "none"; } q.addEventListener("input", run); })();</script>
   <p class="foot">Football Star · <a href="https://whatsapp.com/channel/0029Vb8YFue4SpkQTJY86O3C">ערוץ העדכונים בוואטסאפ 📣</a></p>
 </body>
 </html>

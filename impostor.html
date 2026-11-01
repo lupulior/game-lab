@@ -143,16 +143,16 @@ footer a{color:var(--teal);text-decoration:none;font-weight:700}
 .pl .delta.neg{color:var(--muted)}
 .pl .tag{font-size:13px;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:999px}
 
-/* ring timer */
-.ring{position:relative;width:150px;height:150px;margin:0 auto}
-.ring svg{transform:rotate(-90deg);width:150px;height:150px}
-.ring circle{fill:none;stroke-width:12;stroke-linecap:round}
-.ring .track{stroke:rgba(255,255,255,.12)}
-.ring .prog{stroke:var(--teal);stroke-dasharray:408.4;stroke-dashoffset:0;transition:stroke-dashoffset .25s linear,stroke .3s}
-.ring.low .prog{stroke:var(--red)}
-.ring .time{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;font-variant-numeric:tabular-nums}
-.ring.low .time{color:var(--red);animation:blink 1s steps(2) infinite}
-@keyframes blink{50%{opacity:.5}}
+/* speaker */
+.speaker{text-align:center;border:2px solid var(--yellow);background:linear-gradient(160deg,#4A3380,#3A2766)}
+.speaker .who{font-size:36px;font-weight:800;color:var(--yellow);line-height:1.2;margin:6px 0;overflow-wrap:anywhere;animation:pop .3s ease}
+.pl.now{border-color:var(--yellow);background:#4A3380}
+.pl.now .n{background:var(--yellow);color:var(--ink)}
+.plain{border:2px solid var(--teal);background:linear-gradient(160deg,#1F4D5A,#3A2766)}
+.plain .plain-t{font-size:20px;font-weight:800}
+.note{display:flex;align-items:center;gap:10px;background:var(--yellow);color:var(--ink);border-radius:16px;padding:10px 12px;font-size:16px;font-weight:700}
+.note .ib{background:rgba(0,0,0,.1);border-color:transparent;color:var(--ink);min-width:40px;min-height:40px;flex:none}
+.note span{flex:1}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .opts .btn{min-height:70px;font-size:20px;padding:10px}
 @media (max-width:380px){.opts{grid-template-columns:1fr}}
@@ -181,6 +181,7 @@ footer a{color:var(--teal);text-decoration:none;font-weight:700}
 
   <!-- SETUP -->
   <section class="screen" id="s-setup">
+    <div class="note hidden" id="desk-note"><span data-t="deskNote">💻 המשחק מתוכנן לטלפון שעובר מיד ליד — אפשר לשחק גם כאן, אבל בטלפון זה הכי כיף</span><button class="ib" id="b-desk-close" aria-label="close">✖</button></div>
     <div class="mascot">🕵</div>
     <h1 data-t="title">מי מסתתר בינינו?</h1>
     <p class="sub" data-t="tagline">משחק חברה לטלפון אחד שעובר מיד ליד</p>
@@ -204,16 +205,22 @@ footer a{color:var(--teal);text-decoration:none;font-weight:700}
       <p class="sub" style="margin-top:8px;font-size:15px" data-t="hardNote">💀 בקשה האימפוסטר מקבל מילת רמז דומה – קשה יותר לתפוס אותו!</p>
     </div>
 
-    <div class="card">
-      <div class="lbl"><span data-t="cats">🗂 קטגוריות</span><button class="chip" id="cats-all" style="min-height:36px;padding:4px 10px" data-t="allCats">הכול</button></div>
-      <div class="chips" id="cats"></div>
+    <div class="card plain" id="plain-card">
+      <div class="switch" id="sw-plain">
+        <div class="txt"><span class="plain-t" data-t="plain">🎲 רגיל — מילה פשוטה אקראית</span><small data-t="plainHint">מילים מהיום-יום שכל ילד מכיר (כיסא, דלת, כוס…)</small></div>
+        <div class="tog"></div>
+      </div>
+    </div>
+
+    <div class="card" id="cats-card">
+      <div class="lbl"><button class="chip" id="cats-tog" style="min-height:40px;flex:1;justify-content:space-between"><span data-t="cats">📚 לפי קטגוריה</span><span id="cats-arrow">▾</span></button></div>
+      <div class="hidden" id="cats-body">
+        <div class="lbl" style="margin-top:8px"><span id="cats-count"></span><button class="chip" id="cats-all" style="min-height:36px;padding:4px 10px" data-t="allCats">הכול</button></div>
+        <div class="chips" id="cats"></div>
+      </div>
     </div>
 
     <div class="card" style="display:flex;flex-direction:column;gap:10px">
-      <div class="switch" id="sw-clean">
-        <div class="txt"><span data-t="clean">🧼 מצב ידיים נקיות</span><small data-t="cleanHint">לשחקן האחרון המילה מופיעה לבד אחרי 7 שניות ונעלמת אחרי 5</small></div>
-        <div class="tog"></div>
-      </div>
       <div class="switch" id="sw-two">
         <div class="txt"><span data-t="twoImp">🕵🕵 שני אימפוסטרים</span><small data-t="twoImpHint">אפשרי מ-6 שחקנים</small></div>
         <div class="tog"></div>
@@ -237,7 +244,6 @@ footer a{color:var(--teal);text-decoration:none;font-weight:700}
     <div class="big">📱</div>
     <h1 id="pass-title">שחקן 1 📱</h1>
     <p class="sub" data-t="passText">הגישו את הטלפון לשחקן הזה בלבד. שאר השחקנים – אל תציצו!</p>
-    <p class="sub" id="pass-clean"></p>
     <div class="spacer"></div>
     <button class="btn alt" id="b-reveal" data-t="revealBtn">👁 ראה את תפקידך</button>
     <p class="sub" id="pass-prog"></p>
@@ -261,14 +267,12 @@ footer a{color:var(--teal);text-decoration:none;font-weight:700}
   <section class="screen" id="s-play">
     <h2 data-t="playTitle">🎮 כולם יודעים את תפקידם!</h2>
     <p class="sub" data-t="playText">כל שחקן בתורו אומר מילה אחת שמתארת את המילה הסודית. האימפוסטר צריך להסתתר – בהצלחה!</p>
-    <div class="ring" id="ring">
-      <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="65"/><circle class="prog" id="prog" cx="75" cy="75" r="65"/></svg>
-      <div class="time" id="time">3:00</div>
+    <div class="card speaker">
+      <p class="sub" data-t="nowSpeaking">🎤 עכשיו מדבר:</p>
+      <div class="who" id="speaker"></div>
+      <p class="sub" id="lap"></p>
     </div>
-    <div class="row">
-      <button class="btn ghost" id="b-pause" data-t="pause">⏸ השהה</button>
-      <button class="btn ghost" id="b-addtime">+1 ⏱</button>
-    </div>
+    <button class="btn" id="b-spoke" data-t="spoke">✅ דיברתי — הבא בתור</button>
     <div class="card">
       <div class="lbl"><span data-t="order">🔁 סדר התורות</span></div>
       <div class="plist" id="order"></div>
@@ -339,22 +343,22 @@ he:{
   brand:'אימפוסטר', title:'מי מסתתר בינינו?', tagline:'משחק חברה לטלפון אחד שעובר מיד ליד',
   players:'👥 מספר שחקנים', difficulty:'🎚 רמת קושי', easy:'😊 קל', medium:'😤 בינוני', hard:'💀 קשה',
   hardNote:'💀 בקשה האימפוסטר מקבל מילת רמז דומה – קשה יותר לתפוס אותו!',
-  cats:'🗂 קטגוריות', allCats:'הכול', clean:'🧼 מצב ידיים נקיות',
-  cleanHint:'לשחקן האחרון המילה מופיעה לבד אחרי 7 שניות ונעלמת אחרי 5',
+  cats:'📚 לפי קטגוריה', allCats:'הכול', catsCount:'{n} קטגוריות נבחרו',
+  plain:'🎲 רגיל — מילה פשוטה אקראית', plainHint:'מילים מהיום-יום שכל ילד מכיר (כיסא, דלת, כוס…)', plainCat:'🎲 רגיל',
+  deskNote:'💻 המשחק מתוכנן לטלפון שעובר מיד ליד — אפשר לשחק גם כאן, אבל בטלפון זה הכי כיף',
   twoImp:'🕵🕵 שני אימפוסטרים', twoImpHint:'אפשרי מ-6 שחקנים', names:'✏️ שמות השחקנים (לא חובה)',
   start:'🚀 התחל משחק', resetWords:'🧹 אפס את "המילים שכבר יצאו"', more:'🎮 עוד משחקים',
   usedCount:'יצאו כבר {n} מילים בסשן הזה', scoreHint:'סיבוב {n}',
   passTitle:'שחקן {n} 📱', passNamed:'{name} 📱',
   passText:'הגישו את הטלפון לשחקן הזה בלבד. שאר השחקנים – אל תציצו!',
-  passClean:'🧼 ידיים נקיות: הכרטיס ייפתח לבד בעוד {s} שניות',
   passProg:'{i} מתוך {n}', revealBtn:'👁 ראה את תפקידך', holdHint:'לחצו והחזיקו את הכרטיס כדי לראות 👇',
-  autoHint:'🧼 הכרטיס ייפתח לבד… אל תיגעו', tapToSee:'לחצו כדי לראות',
+  tapToSee:'לחצו כדי לראות',
   secretLbl:'המילה הסודית שלך:', catLbl:'קטגוריה: {c}',
   impostor:'🕵 אתה האימפוסטר!', impostorText:'אין לך את המילה – תנסה להסתתר',
   impHint:'🤫 רמז: המילה דומה ל־"{h}"', gotIt:'✅ הבנתי – העבר הלאה',
   playTitle:'🎮 כולם יודעים את תפקידם!',
   playText:'כל שחקן בתורו אומר מילה אחת שמתארת את המילה הסודית. האימפוסטר צריך להסתתר – בהצלחה!',
-  pause:'⏸ השהה', resume:'▶ המשך', order:'🔁 סדר התורות', starts:'מתחיל', toVote:'🗳 להצבעה!', timeUp:'⏰ הזמן נגמר! להצבעה',
+  nowSpeaking:'🎤 עכשיו מדבר:', spoke:'✅ דיברתי — הבא בתור', lap:'סיבוב דיבור {n}', order:'🔁 סדר התורות', starts:'מתחיל', toVote:'🗳 להצבעה!',
   voteTitle:'🗳 הצבעה', voteText:'דברו, תחשדו, ואז לחצו על השחקן שכולם חושבים שהוא האימפוסטר', voteConfirm:'✅ אשר הצבעה',
   caught:'🎉 תפסתם את האימפוסטר!', escaped:'😈 האימפוסטר ברח!', wordWasLbl:'המילה הסודית הייתה:',
   impWas:'האימפוסטר היה:', impsWere:'האימפוסטרים היו:', votedFor:'הצבעתם נגד {name}', crewPts:'הצוות מקבל +1 לכל אחד',
@@ -369,22 +373,22 @@ en:{
   brand:'Impostor', title:'Who is hiding among us?', tagline:'A party game on one phone, passed around',
   players:'👥 Players', difficulty:'🎚 Difficulty', easy:'😊 Easy', medium:'😤 Medium', hard:'💀 Hard',
   hardNote:'💀 On Hard the impostor gets a similar hint word – harder to catch!',
-  cats:'🗂 Categories', allCats:'All', clean:'🧼 Clean-hands mode',
-  cleanHint:'For the last player the card opens by itself after 7 s and closes after 5',
+  cats:'📚 By category', allCats:'All', catsCount:'{n} categories selected',
+  plain:'🎲 Regular — a simple random word', plainHint:'Everyday words every kid knows (chair, door, cup…)', plainCat:'🎲 Regular',
+  deskNote:'💻 This game is made for one phone passed around — you can play here too, but a phone is the most fun',
   twoImp:'🕵🕵 Two impostors', twoImpHint:'Available from 6 players', names:'✏️ Player names (optional)',
   start:'🚀 Start game', resetWords:'🧹 Reset "words already used"', more:'🎮 More games',
   usedCount:'{n} words used this session', scoreHint:'Round {n}',
   passTitle:'Player {n} 📱', passNamed:'{name} 📱',
   passText:'Hand the phone to this player only. Everyone else – no peeking!',
-  passClean:'🧼 Clean hands: the card opens by itself in {s} seconds',
   passProg:'{i} of {n}', revealBtn:'👁 See your role', holdHint:'Press and hold the card to see 👇',
-  autoHint:'🧼 The card opens by itself… hands off', tapToSee:'Tap to see',
+  tapToSee:'Tap to see',
   secretLbl:'Your secret word:', catLbl:'Category: {c}',
   impostor:'🕵 You are the impostor!', impostorText:"You don't have the word – try to blend in",
   impHint:'🤫 Hint: the word is similar to "{h}"', gotIt:'✅ Got it – pass it on',
   playTitle:'🎮 Everyone knows their role!',
   playText:'Each player in turn says one word that describes the secret word. The impostor must blend in – good luck!',
-  pause:'⏸ Pause', resume:'▶ Resume', order:'🔁 Turn order', starts:'starts', toVote:'🗳 Vote!', timeUp:"⏰ Time's up! Vote now",
+  nowSpeaking:'🎤 Now speaking:', spoke:'✅ I spoke — next player', lap:'Speaking round {n}', order:'🔁 Turn order', starts:'starts', toVote:'🗳 Vote!',
   voteTitle:'🗳 Vote', voteText:'Discuss, suspect, then tap the player everyone thinks is the impostor', voteConfirm:'✅ Confirm vote',
   caught:'🎉 You caught the impostor!', escaped:'😈 The impostor escaped!', wordWasLbl:'The secret word was:',
   impWas:'The impostor was:', impsWere:'The impostors were:', votedFor:'You voted against {name}', crewPts:'The crew gets +1 each',
@@ -439,9 +443,14 @@ var CATS = [
   medium:"נחל|Stream,עמק|Valley,גבעה|Hill,צוק|Cliff,חוף|Beach,מפרץ|Bay,קרחון|Glacier,ג'ונגל|Jungle,סוואנה|Savanna,ביצה|Swamp,מעיין|Spring,נווה מדבר|Oasis,דיונה|Dune,שונית|Coral reef,גל|Wave,גאות|Tide,ערפל|Fog,קרה|Frost,ברד|Hail,רעם|Thunder,זריחה|Sunrise,שקיעה|Sunset,שמיים|Sky,אופק|Horizon,סלע|Rock,אדמה|Soil,שורש|Root,גזע|Trunk",
   hard:"מכתש|Crater|קניון|Canyon,פיורד|Fjord|לגונה|Lagoon,טונדרה|Tundra|טייגה|Taiga,ערבה|Steppe|פרריה|Prairie,דלתא|Delta|שפך|Estuary,גייזר|Geyser|מעיין חם|Hot spring,סטלקטיט|Stalactite|סטלגמיט|Stalagmite,רעידת אדמה|Earthquake|צונאמי|Tsunami,טורנדו|Tornado|הוריקן|Hurricane,מפולת שלגים|Avalanche|מפולת סלעים|Rockslide,ליקוי חמה|Solar eclipse|ליקוי ירח|Lunar eclipse,זוהר הצפון|Northern lights|שביל החלב|Milky Way,כוכב שביט|Comet|מטאור|Meteor,קרחון צף|Iceberg|קרחון|Glacier,מנגרוב|Mangrove|ביצה|Swamp,חורש|Woodland|יער גשם|Rainforest,אזוב|Moss|חזזית|Lichen,שרך|Fern|שיח|Bush,פטרייה|Mushroom|כמהין|Truffle,סחף|Erosion|הצטברות|Sedimentation,לבה|Lava|מגמה|Magma,אבן חול|Sandstone|גרניט|Granite,גיר|Limestone|בזלת|Basalt,נציב מלח|Salt pillar|מלחה|Salt flat,בולען|Sinkhole|מערה|Cave,חצי אי|Peninsula|רצועת חוף|Coastline,קו המשווה|Equator|הקוטב|The Pole"}
 ];
+/* "plain everyday words" pool: the default word source (not a category chip) */
+var PLAIN = {id:'plain',
+  easy:"כיסא|Chair,שולחן|Table,מיטה|Bed,דלת|Door,חלון|Window,קיר|Wall,כוס|Cup,צלחת|Plate,כף|Spoon,מזלג|Fork,סכין|Knife,נעל|Shoe,גרב|Sock,חולצה|Shirt,מכנסיים|Pants,כובע|Hat,מעיל|Coat,מפתח|Key,עיפרון|Pencil,עט|Pen,ספר|Book,מחברת|Notebook,תיק|Bag,כרית|Pillow,שמיכה|Blanket,שעון|Clock,מראה|Mirror,מדרגות|Stairs,טלפון|Phone,טלוויזיה|TV,מחשב|Computer,מנורה|Lamp,ארון|Closet,שטיח|Rug,כדור|Ball,בובה|Doll,אופניים|Bicycle,מכונית|Car,אוטובוס|Bus,בית|House,גינה|Garden,עץ|Tree,פרח|Flower,שמש|Sun,ירח|Moon,מים|Water,לחם|Bread,תפוח|Apple,בננה|Banana,חלב|Milk,ביצה|Egg,עוגה|Cake,גלידה|Ice cream,כלב|Dog,חתול|Cat,ציפור|Bird,דג|Fish,יד|Hand,רגל|Foot,עין|Eye,אף|Nose,פה|Mouth,שיער|Hair,סבון|Soap,מגבת|Towel,מברשת שיניים|Toothbrush,אמבטיה|Bathtub,מקרר|Fridge,סיר|Pot,בקבוק|Bottle,קופסה|Box,משקפיים|Glasses,מטרייה|Umbrella,גשם|Rain",
+  medium:"מגירה|Drawer,מדף|Shelf,וילון|Curtain,תריס|Shutter,ידית|Handle,מנעול|Lock,שקע|Socket,מתג|Light switch,נורה|Light bulb,כבל|Cable,מטען|Charger,שלט|Remote control,אוזניות|Headphones,מצלמה|Camera,ארנק|Wallet,מטבע|Coin,שטר|Banknote,כרטיס|Card,מעטפה|Envelope,בול|Stamp,מדבקה|Sticker,סרט דביק|Tape,מספריים|Scissors,מהדק|Stapler,סרגל|Ruler,מחק|Eraser,מחדד|Sharpener,קלמר|Pencil case,ילקוט|Backpack,קומקום|Kettle,מחבת|Frying pan,מסננת|Strainer,קרש חיתוך|Cutting board,פותחן|Can opener,מפית|Napkin,מגש|Tray,קנקן|Jug,צנצנת|Jar,פקק|Cork,קשית|Straw,שקית|Plastic bag,פח|Trash can,מטאטא|Broom,דלי|Bucket,ספוג|Sponge,מגב|Squeegee,סמרטוט|Rag,מסרק|Comb,מברשת|Brush,שמפו|Shampoo,משחת שיניים|Toothpaste,נייר טואלט|Toilet paper,מייבש שיער|Hair dryer,כפכפים|Flip-flops,מגפיים|Boots,שרוך|Shoelace,חגורה|Belt,כפפות|Gloves,צעיף|Scarf,רוכסן|Zipper,כפתור|Button,כיס|Pocket,פיג'מה|Pajamas,גרביון|Tights,מזרן|Mattress,סדין|Sheet,קולב|Hanger,מאוורר|Fan,מזגן|Air conditioner,תנור|Oven,מיקרוגל|Microwave,כיור|Sink,ברז|Faucet,אסלה|Toilet,מרפסת|Balcony,גדר|Fence,שער|Gate,תיבת דואר|Mailbox,פעמון|Doorbell,מדרכה|Sidewalk,רמזור|Traffic light,ספסל|Bench,נדנדה|Swing,מגלשה|Slide",
+  hard:"ציר|Hinge|ידית|Handle,משקוף|Door frame|מפתן|Threshold,אדן החלון|Windowsill|מדף|Shelf,מעקה|Railing|גדר|Fence,מרזב|Gutter|צינור|Pipe,ארובה|Chimney|גג|Roof,מרתף|Basement|עליית גג|Attic,פרוזדור|Hallway|כניסה|Entrance,פנל|Baseboard|רצפה|Floor,אריח|Tile|קיר|Wall,טיח|Plaster|צבע|Paint,תקרה|Ceiling|גג|Roof,בריח|Bolt|מנעול|Lock,צוהר|Porthole|חלון|Window,מפסק|Circuit breaker|שקע|Socket,מאריך|Extension cord|כבל|Cable,סוללה|Battery|מטען|Charger,נתב|Router|מודם|Modem,מקלדת|Keyboard|עכבר|Mouse,מסך|Screen|מקרן|Projector,מדפסת|Printer|סורק|Scanner,אנטנה|Antenna|צלחת לוויין|Satellite dish,מתלה מגבות|Towel rack|קולב|Hanger,פקק אמבטיה|Bath plug|ברז|Faucet,מקלחון|Shower stall|אמבטיה|Bathtub,מתקן סבון|Soap dispenser|סבון|Soap,אבן ספוג|Pumice stone|ספוג|Sponge,פינצטה|Tweezers|מספריים|Scissors,קוצץ ציפורניים|Nail clipper|פצירה|Nail file,מקלון אוזניים|Cotton swab|צמר גפן|Cotton ball,פלסטר|Band-aid|תחבושת|Bandage,מדחום|Thermometer|משאף|Inhaler,מסננת תה|Tea strainer|מסננת|Strainer,כף עץ|Wooden spoon|מצקת|Ladle,מטרפה|Whisk|מערוך|Rolling pin,פומפייה|Grater|קולפן|Peeler,מחבת ווק|Wok|מחבת|Frying pan,תבנית|Baking tray|מגש|Tray,נייר אפייה|Baking paper|נייר כסף|Aluminium foil,ניילון נצמד|Cling film|שקית|Bag,מקפיא|Freezer|מקרר|Fridge,תבנית קרח|Ice tray|קוביית קרח|Ice cube,תרמוס|Thermos|בקבוק|Bottle,מימייה|Canteen|תרמוס|Thermos,צידנית|Cooler|סל|Basket,שעון חול|Hourglass|שעון מעורר|Alarm clock,לוח שנה|Calendar|יומן|Diary,מגנט|Magnet|מדבקה|Sticker,נר|Candle|גפרור|Match,מצית|Lighter|נר|Candle,פנס|Flashlight|נורה|Light bulb,כפתור שרוול|Cufflink|כפתור|Button,סיכת ביטחון|Safety pin|מהדק|Paper clip,חוט ומחט|Needle and thread|סיכה|Pin,אצבעון|Thimble|מחט|Needle,סוליה|Sole|עקב|Heel,כף נעליים|Shoehorn|שרוך|Shoelace,משחת נעליים|Shoe polish|מברשת|Brush,כיסוי מיטה|Bedspread|שמיכה|Blanket,ציפית|Pillowcase|סדין|Sheet,ראש מיטה|Headboard|מזרן|Mattress,שידת לילה|Nightstand|מגירה|Drawer,הדום|Footstool|כיסא|Chair,שרפרף|Stool|ספסל|Bench,כורסה|Armchair|ספה|Sofa,מחיצה|Partition|וילון|Curtain"};
 var TIERS = ['easy','medium','hard'];
-var WORDS = {}; // WORDS[catId][tier] = [{he,en,hintHe,hintEn,cat}]
-CATS.forEach(function(c){
+var WORDS = {}; // WORDS[catId][tier] = [{he,en,hintHe,hintEn,cat}]  (plus WORDS.plain)
+CATS.concat([PLAIN]).forEach(function(c){
   WORDS[c.id] = {};
   TIERS.forEach(function(t){
     WORDS[c.id][t] = c[t].split(',').map(function(s){
@@ -498,19 +507,19 @@ function guessOptions(secret){
 
 /* ---------- state ---------- */
 var STORE = 'impostor.v1';
-var CLEAN = {show:7000, hide:5000, tapHide:3000};
-var ROUND_SEC = 180;
+var CLEAN = {tapHide:3000};
 var G = {
-  lang:'he', mute:false, n:4, diff:'easy', clean:false, twoImp:false,
+  lang:'he', mute:false, n:4, diff:'easy', plain:true, twoImp:false, deskDismissed:false,
   cats:CATS.map(function(c){ return c.id; }), names:[], used:[], scores:[], round:0,
   // per round
-  roles:[], secret:null, hint:null, startAt:0, order:[], revealIdx:0, voted:-1, caught:null, guessRight:false, deltas:[],
-  screen:'s-setup', timer:{left:ROUND_SEC, running:false, id:0}
+  roles:[], secret:null, hint:null, startAt:0, order:[], revealIdx:0, turn:0, lap:1, voted:-1, caught:null, guessRight:false, deltas:[],
+  screen:'s-setup'
 };
+var SAVE_KEYS = ['lang','mute','n','diff','plain','twoImp','deskDismissed','cats','names','used','scores','round'];
 function load(){
   try {
     var s = JSON.parse(localStorage.getItem(STORE) || 'null');
-    if (s && typeof s === 'object') ['lang','mute','n','diff','clean','twoImp','cats','names','used','scores','round'].forEach(function(k){ if (s[k] !== undefined) G[k] = s[k]; });
+    if (s && typeof s === 'object') SAVE_KEYS.forEach(function(k){ if (s[k] !== undefined) G[k] = s[k]; });
   } catch(e){}
   G.n = Math.min(12, Math.max(3, +G.n || 4));
   if (!Array.isArray(G.cats) || !G.cats.length) G.cats = CATS.map(function(c){ return c.id; });
@@ -520,7 +529,8 @@ function load(){
 }
 function save(){
   try {
-    localStorage.setItem(STORE, JSON.stringify({lang:G.lang,mute:G.mute,n:G.n,diff:G.diff,clean:G.clean,twoImp:G.twoImp,cats:G.cats,names:G.names,used:G.used,scores:G.scores,round:G.round}));
+    var o = {}; SAVE_KEYS.forEach(function(k){ o[k] = G[k]; });
+    localStorage.setItem(STORE, JSON.stringify(o));
   } catch(e){}
 }
 
@@ -531,7 +541,7 @@ function t(key, vars){
   return s;
 }
 function wordText(w){ return G.lang === 'en' ? w.en : w.he; }
-function catName(id){ var c = CATS.filter(function(x){ return x.id === id; })[0]; return c ? (G.lang === 'en' ? c.en : c.he) : id; }
+function catName(id){ if (id === 'plain') return t('plainCat'); var c = CATS.filter(function(x){ return x.id === id; })[0]; return c ? (G.lang === 'en' ? c.en : c.he) : id; }
 function pname(i){ return (G.names[i] && G.names[i].trim()) || t('player', {n:i+1}); }
 function setLang(l){
   G.lang = l === 'en' ? 'en' : 'he';
@@ -551,13 +561,9 @@ function rerender(){
     case 's-pass':
       $('pass-title').textContent = G.names[i] && G.names[i].trim() ? t('passNamed', {name:pname(i)}) : t('passTitle', {n:i+1});
       $('pass-prog').textContent = t('passProg', {i:i+1, n:G.n});
-      if ($('pass-clean').textContent) $('pass-clean').textContent = t('passClean', {s:Math.round(CLEAN.show/1000)});
       break;
     case 's-role': $('role-title').textContent = pname(i); fillFace(); break;
-    case 's-play':
-      var rows = $('order').children;
-      for (k=0;k<rows.length;k++){ rows[k].children[1].textContent = pname(G.order[k]); if (k === 0) rows[k].children[2].textContent = '🎤 ' + t('starts'); }
-      drawTimer(); break;
+    case 's-play': drawTurn(); break;
     case 's-vote':
       var vr = $('vote-list').children;
       for (k=0;k<vr.length;k++) vr[k].children[1].textContent = pname(k);
@@ -640,13 +646,19 @@ function renderSetup(){
   for (var i=0;i<db.length;i++) db[i].classList.toggle('on', db[i].getAttribute('data-d') === G.diff);
   var cb = $('cats'); cb.innerHTML = '';
   CATS.forEach(function(c){
-    var ch = el('button', 'chip' + (G.cats.indexOf(c.id) >= 0 ? ' on' : ''));
-    ch.appendChild(el('span', 'ck', G.cats.indexOf(c.id) >= 0 ? '✅' : '⬜'));
+    var on = !G.plain && G.cats.indexOf(c.id) >= 0;
+    var ch = el('button', 'chip' + (on ? ' on' : ''));
+    ch.appendChild(el('span', 'ck', on ? '✅' : '⬜'));
     ch.appendChild(el('span', '', G.lang === 'en' ? c.en : c.he));
     ch.onclick = function(){ toggleCat(c.id); };
     cb.appendChild(ch);
   });
-  $('sw-clean').classList.toggle('on', G.clean);
+  $('sw-plain').classList.toggle('on', G.plain);
+  $('cats-card').style.opacity = G.plain ? '.75' : '1';
+  $('cats-count').textContent = G.plain ? t('plainCat') : t('catsCount', {n:G.cats.length});
+  $('cats-body').classList.toggle('hidden', G.plain && !catsOpen);
+  $('cats-arrow').textContent = $('cats-body').classList.contains('hidden') ? '▾' : '▴';
+  checkDesk();
   $('sw-two').classList.toggle('on', G.twoImp && G.n >= 6);
   $('sw-two').classList.toggle('dis', G.n < 6);
   var nb = $('names'); nb.innerHTML = '';
@@ -663,25 +675,42 @@ function renderSetup(){
   $('score-hint').textContent = G.round ? t('scoreHint', {n:G.round}) : '';
   $('b-mute').textContent = G.mute ? '🔇' : '🔊';
 }
+var catsOpen = false;
 function setPlayers(n){ G.n = Math.min(12, Math.max(3, n)); if (G.n < 6) G.twoImp = false; save(); renderSetup(); }
 function setDiff(d){ G.diff = d; save(); renderSetup(); }
+function setPlain(on){ G.plain = !!on; if (!G.plain) catsOpen = true; save(); renderSetup(); }
 function toggleCat(id){
+  if (G.plain){ G.plain = false; catsOpen = true; } // picking a category switches to the category pool
   var i = G.cats.indexOf(id);
   if (i >= 0) G.cats.splice(i, 1); else G.cats.push(id);
   save(); renderSetup();
 }
 function impostorCount(){ return (G.twoImp && G.n >= 6) ? 2 : 1; }
+/** The categories the next word is drawn from: the plain pool, or the chosen chips. */
+function sourceCats(){ return G.plain ? ['plain'] : G.cats.slice(); }
+/* desktop notice: not a touch phone (fine pointer) or a wide screen */
+function isDesktop(){
+  try { var mq = window.matchMedia('(pointer: coarse)'); if (!mq.matches) return true; } catch(e){}
+  return window.innerWidth >= 900;
+}
+function checkDesk(force){
+  var showIt = (force === true) || (force !== false && !G.deskDismissed && isDesktop());
+  $('desk-note').classList.toggle('hidden', !showIt);
+  return showIt;
+}
+function dismissDesk(){ G.deskDismissed = true; save(); $('desk-note').classList.add('hidden'); }
 
 /* ---------- game flow ---------- */
-var cleanT1 = 0, cleanT2 = 0, tapT = 0;
-function clearRoleTimers(){ clearTimeout(cleanT1); clearTimeout(cleanT2); clearTimeout(tapT); }
+var tapT = 0;
+function clearRoleTimers(){ clearTimeout(tapT); }
 
 function startGame(){
-  if (!G.cats.length){ toast(t('noCats')); return false; }
-  var w = pickWord(G.cats, G.diff, G.used);
-  if (!w){ // all words of these categories used: forget them and start over
-    G.used = G.used.filter(function(k){ return G.cats.indexOf(k.split(':')[0]) < 0; });
-    w = pickWord(G.cats, G.diff, G.used);
+  var cats = sourceCats();
+  if (!cats.length){ toast(t('noCats')); return false; }
+  var w = pickWord(cats, G.diff, G.used);
+  if (!w){ // all words of this source used: forget them and start over
+    G.used = G.used.filter(function(k){ return cats.indexOf(k.split(':')[0]) < 0; });
+    w = pickWord(cats, G.diff, G.used);
   }
   G.secret = w; G.hint = hintFor(w);
   G.used.push(w.cat + ':' + w.he);
@@ -690,8 +719,7 @@ function startGame(){
   G.scores.length = G.n;
   G.startAt = rnd(G.n);
   G.order = []; for (var i=0;i<G.n;i++) G.order.push((G.startAt + i) % G.n);
-  G.revealIdx = 0; G.voted = -1; G.caught = null; G.guessRight = false; G.deltas = [];
-  G.names.length = Math.max(G.names.length, 0);
+  G.revealIdx = 0; G.turn = 0; G.lap = 1; G.voted = -1; G.caught = null; G.guessRight = false; G.deltas = [];
   save();
   SFX.go();
   showPass();
@@ -702,13 +730,7 @@ function showPass(){
   var i = G.revealIdx;
   $('pass-title').textContent = G.names[i] && G.names[i].trim() ? t('passNamed', {name:pname(i)}) : t('passTitle', {n:i+1});
   $('pass-prog').textContent = t('passProg', {i:i+1, n:G.n});
-  var isLastClean = G.clean && i === G.n - 1;
-  $('pass-clean').textContent = isLastClean ? t('passClean', {s:Math.round(CLEAN.show/1000)}) : '';
   show('s-pass');
-  if (isLastClean){
-    // the previous player can put the phone down: the card opens by itself
-    cleanT1 = setTimeout(function(){ revealRole(true); }, CLEAN.show);
-  }
 }
 function fillFace(){
   var f = $('face-back'); f.innerHTML = '';
@@ -726,19 +748,15 @@ function fillFace(){
   }
 }
 var seen = false;
-function revealRole(auto){
+function revealRole(){
   clearRoleTimers();
   seen = false;
   $('role-title').textContent = pname(G.revealIdx);
-  $('role-hint').textContent = auto ? t('autoHint') : t('holdHint');
+  $('role-hint').textContent = t('holdHint');
   fillFace();
   $('flip').classList.remove('open');
   $('b-gotit').disabled = true;
   show('s-role');
-  if (auto){
-    openCard();
-    cleanT2 = setTimeout(function(){ closeCard(); }, CLEAN.hide);
-  }
 }
 function openCard(){
   if ($('flip').classList.contains('open')) return;
@@ -754,53 +772,38 @@ function nextPlayer(){
   if (G.revealIdx >= G.n){ startPlaying(); } else { showPass(); }
 }
 
-/* ---------- playing + timer ---------- */
-var CIRC = 2 * Math.PI * 65;
-function fmt(s){ s = Math.max(0, Math.round(s)); return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
-function drawTimer(){
-  var tm = G.timer;
-  $('time').textContent = fmt(tm.left);
-  $('prog').style.strokeDashoffset = CIRC * (1 - Math.max(0, Math.min(1, tm.left / tm.total)));
-  $('ring').classList.toggle('low', tm.left <= 15);
-  $('b-pause').textContent = tm.running ? t('pause') : t('resume');
-}
-function tick(){
-  var tm = G.timer; if (!tm.running) return;
-  var now = Date.now(); tm.left -= (now - tm.last) / 1000; tm.last = now;
-  if (tm.left <= 10 && Math.floor(tm.left) !== tm.lastBeep){ tm.lastBeep = Math.floor(tm.left); SFX.tick(); }
-  if (tm.left <= 0){ tm.left = 0; stopTimer(); drawTimer(); toast(t('timeUp')); SFX.lose(); return; }
-  drawTimer();
-}
-function startTimer(sec){
-  stopTimer();
-  G.timer = {left:sec, total:sec, running:true, last:Date.now(), id:setInterval(tick, 250), lastBeep:-1};
-  drawTimer();
-}
-function stopTimer(){ if (G.timer.id) clearInterval(G.timer.id); G.timer.id = 0; G.timer.running = false; }
-function togglePause(){
-  var tm = G.timer;
-  if (tm.running){ stopTimer(); }
-  else if (tm.left > 0){ tm.running = true; tm.last = Date.now(); tm.id = setInterval(tick, 250); }
-  SFX.tap(); drawTimer();
-}
-function addTime(){ G.timer.left += 60; G.timer.total = Math.max(G.timer.total, G.timer.left); SFX.tap(); drawTimer(); }
-function startPlaying(){
+/* ---------- playing: speakers take turns, wrapping lap after lap until someone calls the vote ---------- */
+function currentSpeaker(){ return G.order[G.turn] ; }
+function drawTurn(){
+  $('speaker').textContent = pname(currentSpeaker());
+  $('lap').textContent = t('lap', {n:G.lap});
   var list = $('order'); list.innerHTML = '';
   G.order.forEach(function(p, k){
-    var row = el('div', 'pl' + (k === 0 ? ' first' : ''));
+    var row = el('div', 'pl' + (k === G.turn ? ' now' : ''));
     row.appendChild(el('div', 'n', String(k+1)));
     row.appendChild(el('div', 'nm', pname(p)));
-    if (k === 0) row.appendChild(el('span', 'tag', '🎤 ' + t('starts')));
+    if (k === G.turn) row.appendChild(el('span', 'tag', '🎤'));
+    else if (k === 0) row.appendChild(el('span', 'tag', t('starts')));
     list.appendChild(row);
   });
+}
+/** Advance to the next speaker; after the last one wrap to the first and count a new lap. */
+function nextTurn(){
+  G.turn++;
+  if (G.turn >= G.order.length){ G.turn = 0; G.lap++; }
+  SFX.tap();
+  if (G.screen === 's-play') drawTurn();
+  return G.turn;
+}
+function startPlaying(){
+  G.turn = 0; G.lap = 1;
+  drawTurn();
   show('s-play');
-  startTimer(ROUND_SEC);
   SFX.go();
 }
 
 /* ---------- vote ---------- */
 function toVote(){
-  stopTimer();
   G.voted = -1;
   var list = $('vote-list'); list.innerHTML = '';
   for (var i=0;i<G.n;i++){
@@ -907,7 +910,7 @@ function showScore(){
   show('s-score');
 }
 function nextRound(){ SFX.tap(); startGame(); }
-function toMenu(){ stopTimer(); clearRoleTimers(); SFX.tap(); renderSetup(); show('s-setup'); }
+function toMenu(){ clearRoleTimers(); SFX.tap(); renderSetup(); show('s-setup'); }
 function resetScores(){ G.scores = []; G.round = 0; save(); toast(t('scoreReset')); showScore(); }
 function resetWords(){ G.used = []; save(); toast(t('wordsReset')); renderSetup(); }
 
@@ -921,24 +924,25 @@ function wire(){
   $('p-plus').onclick = function(){ SFX.tap(); setPlayers(G.n + 1); };
   var db = $('diff').querySelectorAll('button');
   for (var i=0;i<db.length;i++) (function(b){ b.onclick = function(){ SFX.tap(); setDiff(b.getAttribute('data-d')); }; })(db[i]);
-  $('cats-all').onclick = function(){ SFX.tap(); G.cats = G.cats.length === CATS.length ? [] : CATS.map(function(c){ return c.id; }); save(); renderSetup(); };
-  $('sw-clean').onclick = function(){ SFX.tap(); G.clean = !G.clean; save(); renderSetup(); };
+  $('cats-all').onclick = function(){ SFX.tap(); G.plain = false; catsOpen = true; G.cats = G.cats.length === CATS.length ? [] : CATS.map(function(c){ return c.id; }); save(); renderSetup(); };
+  $('sw-plain').onclick = function(){ SFX.tap(); setPlain(!G.plain); };
+  $('cats-tog').onclick = function(){ SFX.tap(); catsOpen = $('cats-body').classList.contains('hidden'); if (G.plain){ $('cats-body').classList.toggle('hidden', !catsOpen); $('cats-arrow').textContent = catsOpen ? '▴' : '▾'; } else renderSetup(); };
+  $('b-desk-close').onclick = function(){ SFX.tap(); dismissDesk(); };
   $('sw-two').onclick = function(){ if (G.n < 6) return; SFX.tap(); G.twoImp = !G.twoImp; save(); renderSetup(); };
   $('names-tog').onclick = function(){ var h = $('names').classList.toggle('hidden'); $('names-tog').textContent = h ? '▾' : '▴'; };
   $('b-start').onclick = function(){ startGame(); };
   $('b-reset-words').onclick = resetWords;
   $('b-lang').onclick = function(){ SFX.tap(); setLang(G.lang === 'he' ? 'en' : 'he'); };
   $('b-mute').onclick = function(){ G.mute = !G.mute; save(); renderSetup(); SFX.tap(); };
-  $('b-reveal').onclick = function(){ clearRoleTimers(); SFX.tap(); revealRole(false); };
+  $('b-reveal').onclick = function(){ clearRoleTimers(); SFX.tap(); revealRole(); };
   var flip = $('flip');
-  var down = function(e){ if (e.cancelable && e.type !== 'pointerdown') e.preventDefault(); clearTimeout(tapT); clearTimeout(cleanT2); openCard(); };
+  var down = function(e){ if (e.cancelable && e.type !== 'pointerdown') e.preventDefault(); clearTimeout(tapT); openCard(); };
   var up = function(){ clearTimeout(tapT); tapT = setTimeout(closeCard, CLEAN.tapHide); };
   if (window.PointerEvent){ flip.addEventListener('pointerdown', down); flip.addEventListener('pointerup', up); flip.addEventListener('pointercancel', up); flip.addEventListener('pointerleave', up); }
   else { flip.addEventListener('touchstart', down, {passive:false}); flip.addEventListener('touchend', up); flip.addEventListener('mousedown', down); flip.addEventListener('mouseup', up); }
   flip.addEventListener('contextmenu', function(e){ e.preventDefault(); });
   $('b-gotit').onclick = nextPlayer;
-  $('b-pause').onclick = togglePause;
-  $('b-addtime').onclick = addTime;
+  $('b-spoke').onclick = nextTurn;
   $('b-tovote').onclick = function(){ SFX.tap(); toVote(); };
   $('b-vote').onclick = function(){ confirmVote(); };
   $('b-res-next').onclick = afterResult;
@@ -946,7 +950,7 @@ function wire(){
   $('b-next-round').onclick = nextRound;
   $('b-menu').onclick = toMenu;
   $('b-reset-score').onclick = resetScores;
-  document.addEventListener('visibilitychange', function(){ if (document.hidden && G.timer.running && G.screen === 's-play'){ togglePause(); } });
+  window.addEventListener('resize', function(){ if (G.screen === 's-setup') checkDesk(); });
 }
 
 /* ---------- boot ---------- */
@@ -956,13 +960,14 @@ setLang(G.lang);
 show('s-setup');
 
 window.IMP = {
-  G:G, T:T, CATS:CATS, WORDS:WORDS, TIERS:TIERS, CLEAN:CLEAN,
-  pickWord:pickWord, hintFor:hintFor, assignRoles:assignRoles, scoreRound:scoreRound, guessOptions:guessOptions,
-  show:show, setLang:setLang, t:t, setPlayers:setPlayers, setDiff:setDiff, toggleCat:toggleCat,
+  G:G, T:T, CATS:CATS, PLAIN:PLAIN, WORDS:WORDS, TIERS:TIERS, CLEAN:CLEAN,
+  pickWord:pickWord, hintFor:hintFor, assignRoles:assignRoles, scoreRound:scoreRound, guessOptions:guessOptions, sourceCats:sourceCats,
+  show:show, setLang:setLang, t:t, setPlayers:setPlayers, setDiff:setDiff, setPlain:setPlain, toggleCat:toggleCat,
+  isDesktop:isDesktop, checkDesk:checkDesk, dismissDesk:dismissDesk,
   startGame:startGame, revealRole:revealRole, openCard:openCard, closeCard:closeCard, nextPlayer:nextPlayer,
-  startPlaying:startPlaying, toVote:toVote, castVote:castVote, confirmVote:confirmVote, afterResult:afterResult,
+  startPlaying:startPlaying, nextTurn:nextTurn, currentSpeaker:currentSpeaker, toVote:toVote, castVote:castVote, confirmVote:confirmVote, afterResult:afterResult,
   toGuess:toGuess, guess:guess, finishRound:function(){ finishRound(); }, showScore:showScore, nextRound:nextRound, toMenu:toMenu,
-  togglePause:togglePause, stopTimer:stopTimer, save:save, load:load
+  save:save, load:load
 };
 
 /* ---------- tests (#test) ---------- */
@@ -1000,6 +1005,24 @@ if (location.hash === '#test'){
         ok('every word has he+en', pairOk);
         ok('hard words carry a different hint', hintOk);
         ok('total words at least 750', total >= 750, total);
+        // --- plain pool
+        var plainOk = true, plainUniq = true, plainHint = true, plainTiers = I.TIERS.every(function(tr){ return Array.isArray(I.WORDS.plain[tr]); });
+        I.TIERS.forEach(function(tr){
+          var ws = I.WORDS.plain[tr] || [], he = {}, en = {};
+          if (ws.length < 60){ plainOk = false; errs.push('plain/' + tr + ' has ' + ws.length); }
+          ws.forEach(function(w){
+            if (!w.he || !w.en || w.cat !== 'plain' || w.tier !== tr) plainOk = false;
+            if (he[w.he]){ plainUniq = false; errs.push('dup plain he ' + tr + ' ' + w.he); } he[w.he] = 1;
+            if (en[w.en]){ plainUniq = false; errs.push('dup plain en ' + tr + ' ' + w.en); } en[w.en] = 1;
+            if (tr === 'hard' && (!w.hintHe || !w.hintEn || w.hintHe === w.he)) plainHint = false;
+          });
+        });
+        ok('plain pool has all 3 tiers', plainTiers);
+        ok('plain pool at least 60 words per tier, tagged plain', plainOk);
+        ok('plain words unique within tier (he+en)', plainUniq);
+        ok('plain hard words carry a different hint', plainHint);
+        ok('plain is not a category chip', I.CATS.every(function(c){ return c.id !== 'plain'; }) && I.PLAIN.id === 'plain');
+        ok('pickWord from plain pool respects tier', (function(){ var p = I.pickWord(['plain'], 'medium', []); return p && p.cat === 'plain' && p.tier === 'medium'; })());
         // --- pickWord
         var w = I.pickWord(['animals'], 'easy', []);
         ok('pickWord returns a word of the category/tier', w && w.cat === 'animals' && w.tier === 'easy');
@@ -1049,10 +1072,22 @@ if (location.hash === '#test'){
         I.setPlayers(2); ok('players clamp min 3', I.G.n === 3);
         I.setPlayers(20); ok('players clamp max 12', I.G.n === 12);
         I.setPlayers(4); I.setDiff('hard'); ok('setDiff', I.G.diff === 'hard' && $('diff').querySelector('.on').getAttribute('data-d') === 'hard');
-        var before = I.G.cats.length; I.toggleCat('food'); var after = I.G.cats.length; I.toggleCat('food');
-        ok('toggleCat flips membership', Math.abs(before - after) === 1 && I.G.cats.length === before);
+        I.setPlain(true);
+        var before = I.G.cats.length; I.toggleCat('food'); var after = I.G.cats.length;
+        ok('toggleCat flips membership and switches plain off', Math.abs(before - after) === 1 && I.G.plain === false && $('sw-plain').classList.contains('on') === false);
+        I.toggleCat('food'); ok('toggleCat back restores the set', I.G.cats.length === before);
+        // --- plain mode
+        I.setPlain(true); I.G.used = [];
+        ok('plain mode: sourceCats is [plain] and chips are ignored', I.sourceCats().join() === 'plain' && $('sw-plain').classList.contains('on') && !$('cats').querySelector('.chip.on'));
+        I.G.diff = 'medium';
+        ok('plain mode: startGame picks from the plain pool at the chosen tier', I.startGame() === true && I.G.secret.cat === 'plain' && I.G.secret.tier === 'medium' && I.G.used[0] === 'plain:' + I.G.secret.he);
+        I.G.revealIdx = I.G.roles.indexOf(false); I.revealRole(); I.openCard();
+        ok('plain word card shows the plain label as category', $('face-back').textContent.indexOf(I.t('catLbl', {c:I.t('plainCat')})) >= 0 && $('face-back').textContent.indexOf(I.G.secret.he) >= 0);
+        I.toMenu();
+        I.setPlain(false);
+        ok('plain off: sourceCats are the chosen chips', I.sourceCats().join() === I.G.cats.join() && I.G.cats.length > 0);
         // --- flow: setup -> pass/role xN -> play -> vote -> result -> guess -> score
-        I.G.cats = ['animals']; I.G.clean = false; I.G.used = []; I.G.scores = []; I.G.round = 0;
+        I.setPlain(false); I.setDiff('hard'); I.G.cats = ['animals']; I.G.used = []; I.G.scores = []; I.G.round = 0;
         var usedBefore = I.G.used.length;
         ok('startGame goes to s-pass', I.startGame() === true && I.G.screen === 's-pass');
         ok('startGame marks the word as used', I.G.used.length === usedBefore + 1);
@@ -1072,10 +1107,19 @@ if (location.hash === '#test'){
           if (p < 3 && I.G.screen !== 's-pass') flowOk = false;
         }
         ok('reveal x4: card shows word / impostor+hint, gotIt enabled after open', flowOk);
-        ok('after last player: s-play with running timer', I.G.screen === 's-play' && I.G.timer.running && $('order').children.length === 4);
-        I.togglePause(); ok('pause stops timer', !I.G.timer.running); I.togglePause(); ok('resume restarts timer', I.G.timer.running);
+        ok('after last player: s-play, first speaker = start player, lap 1', I.G.screen === 's-play' && I.G.turn === 0 && I.G.lap === 1 && I.currentSpeaker() === I.G.startAt && $('order').children.length === 4 && $('speaker').textContent === I.t('player', {n:I.G.startAt+1}));
+        ok('current speaker highlighted in the order list', $('order').children[0].classList.contains('now') && $('lap').textContent === I.t('lap', {n:1}));
+        I.nextTurn();
+        ok('nextTurn moves to the 2nd speaker', I.G.turn === 1 && I.currentSpeaker() === I.G.order[1] && $('order').children[1].classList.contains('now') && !$('order').children[0].classList.contains('now'));
+        I.nextTurn(); I.nextTurn();
+        ok('nextTurn reaches the last speaker', I.G.turn === 3 && I.G.lap === 1);
+        I.nextTurn();
+        ok('after the last speaker it wraps to the first and counts lap 2', I.G.turn === 0 && I.G.lap === 2 && $('lap').textContent === I.t('lap', {n:2}) && $('speaker').textContent === I.t('player', {n:I.G.startAt+1}));
+        for (var z=0; z<9; z++) I.nextTurn();
+        ok('keeps cycling: 13 presses => turn 1, lap 4', I.G.turn === 1 && I.G.lap === 4);
+        ok('vote button always visible on s-play', !$('b-tovote').classList.contains('hidden') && !$('b-tovote').disabled);
         I.toVote();
-        ok('toVote: s-vote, timer stopped, vote disabled', I.G.screen === 's-vote' && !I.G.timer.running && $('b-vote').disabled && $('vote-list').children.length === 4);
+        ok('toVote reachable mid-cycle: s-vote, vote disabled', I.G.screen === 's-vote' && $('b-vote').disabled && $('vote-list').children.length === 4);
         var impIdx = I.G.roles.indexOf(true), crewIdx = I.G.roles.indexOf(false);
         I.castVote(impIdx);
         ok('castVote selects + enables confirm', I.G.voted === impIdx && !$('b-vote').disabled && $('vote-list').children[impIdx].classList.contains('sel'));
@@ -1088,7 +1132,9 @@ if (location.hash === '#test'){
         I.nextRound();
         ok('nextRound: new word (not repeated), s-pass', I.G.screen === 's-pass' && used2.indexOf(I.G.used[I.G.used.length-1]) < 0);
         for (var q=0;q<4;q++){ I.revealRole(false); I.openCard(); I.nextPlayer(); }
+        ok('round 2 starts at turn 0 lap 1', I.G.turn === 0 && I.G.lap === 1);
         I.toVote();
+        ok('vote reachable without any turn press', I.G.screen === 's-vote');
         var imp2 = I.G.roles.indexOf(true), crew2 = I.G.roles.indexOf(false);
         I.castVote(crew2); var res2 = I.confirmVote();
         ok('vote crew: escaped', !res2.caught && $('b-res-next').textContent === I.T.he.toGuess);
@@ -1104,21 +1150,21 @@ if (location.hash === '#test'){
         I.setPlayers(6); I.G.twoImp = true; I.startGame();
         ok('two impostors with 6 players', I.G.roles.filter(Boolean).length === 2);
         I.toMenu(); I.G.twoImp = false; I.setPlayers(4);
-        // --- clean hands (short timers)
-        I.CLEAN.show = 60; I.CLEAN.hide = 100;
-        I.G.clean = true; I.startGame();
-        for (var c=0;c<3;c++){ I.revealRole(false); I.openCard(); I.nextPlayer(); }
-        ok('clean hands: last player waits on s-pass with notice', I.G.screen === 's-pass' && $('pass-clean').textContent.length > 0);
-        await sleep(100);
-        ok('clean hands: card opened automatically', I.G.screen === 's-role' && $('flip').classList.contains('open'));
-        await sleep(100);
-        ok('clean hands: card closed automatically, gotIt enabled', !$('flip').classList.contains('open') && !$('b-gotit').disabled);
-        I.nextPlayer(); ok('clean hands flow reaches s-play', I.G.screen === 's-play');
-        I.stopTimer(); I.toMenu();
+        // --- desktop notice
+        var coarse = false; try { coarse = window.matchMedia('(pointer: coarse)').matches; } catch(e){}
+        I.G.deskDismissed = false;
+        ok('isDesktop true when pointer is not coarse', coarse ? true : I.isDesktop() === true);
+        ok('banner shown on desktop when not dismissed', coarse ? true : (I.checkDesk() === true && !$('desk-note').classList.contains('hidden')));
+        ok('banner can be forced for a phone', I.checkDesk(true) === true && !$('desk-note').classList.contains('hidden'));
+        I.dismissDesk();
+        ok('dismiss hides the banner and remembers it', $('desk-note').classList.contains('hidden') && I.G.deskDismissed === true && I.checkDesk() === false);
+        ok('banner text exists in both languages', I.T.he.deskNote.indexOf('💻') === 0 && I.T.en.deskNote.indexOf('💻') === 0);
         // --- persistence
         I.save();
         var stored = null; try { stored = JSON.parse(localStorage.getItem('impostor.v1')); } catch(e){}
-        ok('settings persisted under impostor.v1 (or storage unavailable)', stored === null || (stored.n === 4 && Array.isArray(stored.used)));
+        ok('settings persisted under impostor.v1 (or storage unavailable)', stored === null || (stored.n === 4 && Array.isArray(stored.used) && stored.deskDismissed === true && typeof stored.plain === 'boolean'));
+        ok('no clean-hands leftovers', !('clean' in I.G) && !I.T.he.clean && !$('sw-clean') && !$('pass-clean'));
+        ok('no timer leftovers', !$('ring') && !$('b-pause') && !I.T.he.pause && !('timer' in I.G));
         // --- layout sanity
         ok('no horizontal overflow', document.documentElement.scrollWidth <= window.innerWidth + 1, document.documentElement.scrollWidth + '>' + window.innerWidth);
         ok('screens exist', document.querySelectorAll('.screen').length === 8);
