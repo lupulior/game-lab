@@ -43,14 +43,23 @@
   h1{font-size:40px;margin:10px 0 2px;color:#fff;text-shadow:0 4px 0 rgba(27,42,78,.35)}
   .sub{color:#fff;opacity:.95;font-size:18px;margin:0 0 26px;font-weight:700}
   .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;max-width:960px}
-  @media (max-width:640px){.grid{gap:10px} .card{border-radius:18px} .card .body{padding:10px 10px 14px} .card h2{font-size:18px} .card p{font-size:13px;line-height:1.35;margin-bottom:8px} .tags{gap:4px;margin-bottom:8px} .tag{font-size:11px;padding:3px 7px} .play{font-size:18px;padding:9px 22px;box-shadow:0 5px 0 #22883C} .soon{font-size:16px;min-height:120px}}
+  .card .ico{display:none}
+  @media (max-width:640px){
+    .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .card{border-radius:20px;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px}
+    .card img:not(.ico){display:none}
+    .card .ico{display:block;width:58%;max-width:96px;aspect-ratio:1/1;border-radius:22%;box-shadow:0 4px 0 rgba(27,42,78,.18)}
+    .card .body{padding:0}
+    .card h2{font-size:14px;margin:0;line-height:1.2}
+    .card p,.card .tags,.card .play{display:none}
+    .soon{aspect-ratio:1/1;min-height:0;font-size:13px;border-radius:20px;padding:6px;text-align:center}
+  }
   .search{width:100%;max-width:960px;margin:0 0 16px;position:relative}
   .search input{width:100%;box-sizing:border-box;font:inherit;font-size:19px;font-weight:700;padding:13px 50px 13px 18px;border:0;border-radius:18px;background:#fff;color:#1B2A4E;box-shadow:0 6px 0 rgba(27,42,78,.2),0 8px 18px rgba(0,0,0,.12);outline:none}
   .search input:focus{box-shadow:0 0 0 4px #FFD447,0 6px 0 rgba(27,42,78,.2)}
   .search .ic{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:22px;pointer-events:none}
   .nores{display:none;color:#fff;font-size:20px;font-weight:900;margin-top:10px}
   .card.hide{display:none}
-  @media (max-width:640px){.grid{gap:10px} .card{border-radius:18px} .card .body{padding:10px 10px 14px} .card h2{font-size:18px} .card p{font-size:13px;line-height:1.35;margin-bottom:8px} .tags{gap:4px;margin-bottom:8px} .tag{font-size:11px;padding:3px 7px} .play{font-size:18px;padding:9px 22px;box-shadow:0 5px 0 #22883C} .soon{font-size:16px;min-height:120px}}
   .search{width:100%;max-width:960px;margin:0 0 16px;position:relative}
   .search input{width:100%;box-sizing:border-box;font:inherit;font-size:19px;font-weight:700;padding:13px 50px 13px 18px;border:0;border-radius:18px;background:#fff;color:#1B2A4E;box-shadow:0 6px 0 rgba(27,42,78,.2),0 8px 18px rgba(0,0,0,.12);outline:none}
   .search input:focus{box-shadow:0 0 0 4px #FFD447,0 6px 0 rgba(27,42,78,.2)}
@@ -81,7 +90,7 @@
   <div class="search"><input id="q" type="search" placeholder="חיפוש משחק… (כדורגל, אימפוסטר, כדורסל)" autocomplete="off"><span class="ic">🔎</span></div>
   <div class="grid" id="grid">
     <a class="card" href="game1.html" data-tags="football soccer כדורגל כוכב הכדורגל לופו fifa">
-      <img src="art/og.png" alt="כוכב הכדורגל">
+      <img src="art/og.png" alt="כוכב הכדורגל"><img class="ico" src="art/icon-192.png" alt="">
       <div class="body">
         <h2>⚽ כוכב הכדורגל</h2>
         <p>משחק כדורגל 1 על 1: 96 כוכבים, אונליין עם חברים, פנדלים, ארנות, מועדונים ותיבות.</p>
@@ -90,7 +99,7 @@
       </div>
     </a>
     <a class="card" href="impostor.html" data-tags="impostor אימפוסטר מילים משחק חברה among us אמונג אס">
-      <img src="art/impostor-og.png" alt="אימפוסטר – מי מסתתר בינינו?">
+      <img src="art/impostor-og.png" alt="אימפוסטר – מי מסתתר בינינו?"><img class="ico" src="art/impostor-192.png" alt="">
       <div class="body">
         <h2>🕵 אימפוסטר</h2>
         <p>משחק חברה לטלפון אחד שעובר מיד ליד: כולם מקבלים מילה סודית חוץ מהאימפוסטר. 3–12 שחקנים, 10 קטגוריות, הצבעה וניקוד.</p>
@@ -99,7 +108,7 @@
       </div>
     </a>
     <a class="card" href="basketball.html" data-tags="basketball nba כדורסל לברון גורדן basketball stars">
-      <img src="art/basketball-og.png" alt="כדורסל 1 על 1">
+      <img src="art/basketball-og.png" alt="כדורסל 1 על 1"><img class="ico" src="art/basketball-192.png" alt="">
       <div class="body">
         <h2>🏀 כדורסל 1 על 1</h2>
         <p>כדורסל ארקייד 1 על 1 במגרש מלא עם שני סלים: 20 קבוצות NBA ו-300 שחקנים אמיתיים (לברון, ג׳ורדן, קרי…), פאולים וזריקות עונשין, דאנקים, שלשות, טורניר, נגד המחשב או שני שחקנים.</p>
@@ -108,7 +117,7 @@
       </div>
     </a>
     <a class="card" href="xo.html" data-tags="xo tic tac toe איקס עיגול איקס איקס עיגול 4 בשורה 3x3 5x5 7x7 יויו">
-      <img src="art/xo-og.png" alt="איקס עיגול">
+      <img src="art/xo-og.png" alt="איקס עיגול"><img class="ico" src="art/xo-192.png" alt="">
       <div class="body">
         <h2>❌⭕ איקס עיגול</h2>
         <p>איקס עיגול קלאסי 3×3, או 5×5 ו-7×7 עם 4 ברצף. נגד המחשב (גם ברמה בלתי מנוצחת) או שני שחקנים על אותו מסך.</p>
