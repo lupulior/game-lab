@@ -1,0 +1,19 @@
+{
+  "name": "איש שורד 🏃",
+  "short_name": "איש שורד",
+  "description": "משחק פלטפורמה עם 40 שלבים מפתיעים: הרצפה נעלמת, הדלת בורחת, הקוצים קופצים. כמה פעמים תמות?",
+  "start_url": "./survivor.html?src=pwa",
+  "id": "/game-lab/survivor.html",
+  "scope": "./survivor.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#1B1033",
+  "theme_color": "#1B1033",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/survivor-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/survivor-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/survivor-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
