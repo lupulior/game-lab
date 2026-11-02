@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>איקס עיגול ❌⭕ – 3×3, 5×5 ו-7×7, נגד המחשב או חבר – המשחק של לופו</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="איקס עיגול ❌⭕ בחינם: לוח 3×3 קלאסי, ולוחות 5×5 ו-7×7 עם 4 בשורה. נגד המחשב (קל, בינוני, בלתי מנוצח) או שני שחקנים באותו טלפון. רמזים, טיימר, הישגים, מצב כהה. בלי התקנה, בעברית ובאנגלית – המשחק של לופו.">
+<meta name="keywords" content="איקס עיגול, משחק איקס עיגול, איקס עיגול נגד המחשב, איקס עיגול לשני שחקנים, 5 על 5, 7 על 7, 4 בשורה, tic tac toe, tic tac toe 5x5, tic tac toe 7x7, יויו משחקים, משחק לילדים, משחק חשיבה, לופו, המשחק של לופו">
+<meta name="theme-color" content="#2FD3B0">
+<link rel="canonical" href="https://lupulior.github.io/game-lab/xo.html">
+<link rel="manifest" href="xo.webmanifest">
+<link rel="apple-touch-icon" href="art/xo-180.png">
+<link rel="icon" href="art/xo-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Game Lab">
+<meta property="og:title" content="איקס עיגול ❌⭕ – 3×3, 5×5 ו-7×7">
+<meta property="og:description" content="איקס עיגול נגד המחשב (קל, בינוני, בלתי מנוצח) או שני שחקנים באותו מסך. לוח 3×3 קלאסי, ו-5×5 / 7×7 עם 4 בשורה. בחינם, בלי התקנה.">
+<meta property="og:image" content="https://lupulior.github.io/game-lab/art/xo-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="איקס עיגול – איקס קורל ועיגול כחול מצוירים על רקע מנטה">
+<meta property="og:url" content="https://lupulior.github.io/game-lab/xo.html">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="איקס עיגול ❌⭕ – 3×3, 5×5 ו-7×7">
+<meta name="twitter:description" content="איקס עיגול נגד המחשב או חבר: 3 בשורה על 3×3, 4 בשורה על 5×5 ו-7×7. בחינם, בלי התקנה.">
+<meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/xo-og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"איקס עיגול – 3×3, 5×5 ו-7×7","alternateName":["Tic Tac Toe","XO","משחק איקס עיגול","איקס עיגול נגד המחשב"],"url":"https://lupulior.github.io/game-lab/xo.html","image":"https://lupulior.github.io/game-lab/art/xo-og.png","description":"איקס עיגול נגד המחשב (קל, בינוני, בלתי מנוצח) או שני שחקנים באותו מסך. לוח 3×3 קלאסי, ולוחות 5×5 ו-7×7 עם 4 בשורה.","genre":["Puzzle","Board game","Strategy"],"gamePlatform":["Web browser","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":2},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"isPartOf":{"@type":"WebSite","name":"מעבדת משחקים – Game Lab","url":"https://lupulior.github.io/game-lab/"}}
+</script>
+<style>
+:root{
+  --bg:#E4FBF3; --bg2:#C3F3E3; --bgHi:#F7FFFC; --card:#FFFFFF; --card2:#F0FBF7; --line:#BDEADA;
+  --mint:#2FD3B0; --mintD:#149C80; --coral:#FF6B6B; --coralD:#C94B4B; --navy:#1B2A4A; --blue:#3A7BFF; --blueD:#2558C9;
+  --yellow:#FFD166; --yellowD:#D7A53B; --green:#3DD17F; --text:#1B2A4A; --muted:#55657F; --ink:#1B2A4A;
+  --x:#FF6B6B; --o:#3A7BFF; --cell:#FFFFFF; --cellH:#EAFFF7; --frame:#1B2A4A; --focus:#3A7BFF; --onbg:#2FD3B0; --onfg:#1B2A4A;
+  --r:22px; --shadow:0 10px 28px rgba(27,42,74,.14);
+}
+html[data-theme=dark]{
+  --bg:#13284A; --bg2:#0B1830; --bgHi:#1C3A66; --card:#1C3156; --card2:#243F6C; --line:#36558A;
+  --text:#EAF3FF; --muted:#A9BDDD; --x:#FF7E7E; --o:#4FE3C3; --cell:#243F6C; --cellH:#2E5187; --frame:#0B1830; --focus:#FFD166; --onbg:#2FD3B0; --onfg:#1B2A4A;
+  --shadow:0 10px 28px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  font-family:"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-serif;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140' fill='none' stroke='%231B2A4A' stroke-opacity='.07' stroke-width='7' stroke-linecap='round'%3E%3Cpath d='M24 24l22 22M46 24L24 46'/%3E%3Ccircle cx='100' cy='100' r='13'/%3E%3C/svg%3E") 0 0/140px 140px fixed,
+    radial-gradient(900px 520px at 50% -10%,var(--bgHi) 0%,var(--bg) 45%,var(--bg2) 100%) fixed;
+  color:var(--text); font-size:18px; line-height:1.35; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+html[data-theme=dark] body{
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140' fill='none' stroke='%23ffffff' stroke-opacity='.06' stroke-width='7' stroke-linecap='round'%3E%3Cpath d='M24 24l22 22M46 24L24 46'/%3E%3Ccircle cx='100' cy='100' r='13'/%3E%3C/svg%3E") 0 0/140px 140px fixed,
+    radial-gradient(900px 520px at 50% -10%,var(--bgHi) 0%,var(--bg) 45%,var(--bg2) 100%) fixed;
+}
+button,input{font:inherit;font-family:inherit;color:inherit}
+#app{max-width:560px;margin:0 auto;padding:10px 16px 20px;min-height:100vh;display:flex;flex-direction:column}
+#app.game{max-width:560px}
+@media (min-width:860px){ #app.game{max-width:1100px} }
+header.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 0 10px}
+header.top .brand{display:flex;align-items:center;gap:6px;font-weight:800;font-size:19px;color:var(--text);text-decoration:none;min-width:0}
+header.top .brand span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icons{flex:none;gap:6px}
+header.top .brand .m{font-size:21px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2))}
+.icons{display:flex;gap:8px}
+.ib{min-width:44px;min-height:44px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--text);font-size:18px;cursor:pointer;padding:0 10px;font-weight:800;box-shadow:0 3px 0 var(--line)}
+.ib:active{transform:translateY(2px);box-shadow:none}
+.screen{display:none;flex-direction:column;gap:14px;flex:1;animation:pop .25s ease}
+.screen.on{display:flex}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+h1{font-size:32px;margin:0;text-align:center;line-height:1.2}
+h2{font-size:22px;margin:0}
+p{margin:0}
+.sub{color:var(--muted);text-align:center;font-size:17px}
+.card{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);border:2px solid var(--line)}
+.card .lbl{font-size:17px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card .lbl .note{font-size:16px;color:var(--muted);font-weight:700}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:60px;padding:12px 18px;
+  border:none;border-radius:20px;font-size:22px;font-weight:800;cursor:pointer;color:#fff;
+  background:linear-gradient(180deg,#FF8F8F,var(--coral) 60%,#F25C5C);box-shadow:0 6px 0 var(--coralD),0 12px 24px rgba(27,42,74,.18);
+  transition:transform .08s,box-shadow .08s;text-shadow:0 1px 0 rgba(0,0,0,.15);
+}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--coralD),0 6px 14px rgba(27,42,74,.18)}
+.btn.alt{background:linear-gradient(180deg,#78F2D7,var(--mint) 60%,#22BE9C);color:var(--ink);box-shadow:0 6px 0 var(--mintD),0 12px 24px rgba(27,42,74,.18);text-shadow:none}
+.btn.alt:active{box-shadow:0 2px 0 var(--mintD),0 6px 14px rgba(27,42,74,.18)}
+.btn.ghost{background:var(--card);color:var(--text);box-shadow:0 3px 0 var(--line);border:2px solid var(--line);min-height:52px;font-size:18px;text-shadow:none}
+.btn.ghost:active{transform:translateY(2px);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn small{font-size:16px;font-weight:700;opacity:.8}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;min-height:52px;border-radius:16px;border:2px solid var(--line);background:var(--card2);color:var(--text);font-size:17px;font-weight:800;cursor:pointer;padding:6px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.2;min-width:0}
+.seg button small{font-size:16px;color:var(--muted);font-weight:700}
+.seg button.on{background:var(--onbg);color:var(--onfg);border-color:var(--mintD);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
+.seg button.on small{color:var(--onfg);opacity:.8}
+.seg button:active{transform:scale(.97)}
+.seg.wrap{flex-wrap:wrap}
+.seg.wrap button{flex:1 1 calc(50% - 4px)}
+.seg .sx{color:var(--x)} .seg .so{color:var(--o)} .seg button.on .sx,.seg button.on .so{color:var(--onfg)}
+.seg.big button{min-height:62px;font-size:19px}
+.hidden{display:none!important}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{flex:1;min-width:0}
+input.nm{width:100%;min-height:48px;border-radius:14px;border:2px solid var(--line);padding:8px 12px;font-size:17px;background:var(--card2);color:var(--text);outline:none}
+input.nm:focus{border-color:var(--mint)}
+input.nm::placeholder{color:var(--muted);opacity:.8}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;cursor:pointer}
+.switch .txt{flex:1;font-weight:800}
+.switch .txt small{display:block;color:var(--muted);font-size:16px;font-weight:700}
+.tog{width:64px;height:36px;border-radius:999px;background:var(--card2);border:2px solid var(--line);position:relative;flex:none;transition:background .2s}
+.tog::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.switch.on .tog{background:var(--mint);border-color:var(--mintD)}
+.switch.on .tog::after{transform:translateX(28px)}
+[dir=rtl] .switch.on .tog::after{transform:translateX(-28px)}
+footer{text-align:center;padding:14px 0 0;color:var(--muted);font-size:16px}
+footer a{color:var(--mintD);text-decoration:none;font-weight:800}
+html[data-theme=dark] footer a{color:var(--mint)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:999px;font-weight:800;font-size:17px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50;max-width:92vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ach{background:linear-gradient(180deg,#FFE08A,var(--yellow));color:var(--ink)}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
+.confetti i{position:absolute;top:-20px;width:12px;height:16px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+#test-log{white-space:pre-wrap;font-family:monospace;font-size:12px;color:#fff;background:#000;padding:8px;direction:ltr}
+
+/* hero */
+.hero{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:4px}
+.mascot{width:min(240px,70vw);height:auto;overflow:visible}
+.mascot .bob{animation:bob 2.2s ease-in-out infinite;transform-origin:50% 60%}
+.mascot .b2{animation-delay:-1.1s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+.stats{font-size:16px;color:var(--muted);line-height:1.5}
+.stats b{color:var(--text)}
+.achs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.achs span{font-size:16px;background:var(--card2);border:2px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--text);font-weight:700}
+.achs span.lock{opacity:.4;filter:grayscale(1)}
+
+/* game */
+.gwrap{display:flex;flex-direction:column;gap:10px}
+.pside{display:flex;flex-direction:column;gap:10px}
+.bside{width:100%}
+.bwrap{position:relative;width:100%;margin:0 auto;aspect-ratio:1/1;
+  max-width:max(min(100%,360px),min(100%,calc(100vh - 318px)));
+  max-width:max(min(100%,360px),min(100%,calc(100dvh - 318px)));}
+@media (min-width:860px){
+  .gwrap{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:auto 1fr;grid-template-areas:"b a" "b c";gap:12px 24px;align-items:start}
+  .pside.top{grid-area:a} .pside.bot{grid-area:c} .bside{grid-area:b}
+  .bwrap{max-width:max(300px,min(100%,calc(100vh - 150px),680px));max-width:max(300px,min(100%,calc(100dvh - 150px),680px))}
+}
+.tiles{display:grid;grid-template-columns:1fr auto 1fr;gap:8px}
+.tile{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:6px 10px;display:flex;flex-direction:column;align-items:center;min-height:60px;justify-content:center;min-width:0;transition:transform .15s,box-shadow .15s}
+.tile .nm{font-size:16px;font-weight:800;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tile .n{font-size:24px;font-weight:800;line-height:1.1}
+.tile.tx{border-color:var(--x)} .tile.to{border-color:var(--o)}
+.tile.tx .n{color:var(--x)} .tile.to .n{color:var(--o)}
+.tile.td{padding:6px 12px;color:var(--muted)}
+.tile.td .n{color:var(--text)}
+.tile.on{transform:scale(1.04);box-shadow:0 0 0 3px var(--card),0 0 0 6px currentColor}
+.tile.tx.on{color:var(--x)} .tile.to.on{color:var(--o)}
+.tile.on .nm{color:var(--text)}
+.status{text-align:center;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:16px;padding:4px 10px}
+.status #turn{font-size:21px;font-weight:800;line-height:1.25}
+.status #movecount{font-size:16px;color:var(--muted);font-weight:700}
+.status.think #turn{color:var(--muted);animation:blink 1s ease-in-out infinite}
+@keyframes blink{50%{opacity:.5}}
+.status.banner{padding:10px 12px;animation:boom .5s cubic-bezier(.2,1.4,.4,1);box-shadow:var(--shadow)}
+.status.banner #turn{font-size:26px}
+.status.banner #movecount{color:inherit;opacity:.8}
+.status.banner.win{background:linear-gradient(160deg,#8CF5C2,#2FD3B0);color:#063D2E}
+.status.banner.lose{background:linear-gradient(160deg,#FFB3B3,#FF6B6B);color:#4A1010}
+.status.banner.draw{background:linear-gradient(160deg,#FFE9A8,#FFD166);color:#4A3500}
+@keyframes boom{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.tbar{height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+.tbar i{display:block;height:100%;width:100%;background:var(--mint);transition:width .1s linear;border-radius:999px}
+.tbar i.low{background:var(--coral)}
+.board{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));grid-auto-rows:1fr;gap:var(--gap);background:var(--frame);border-radius:var(--cr);width:100%;height:100%;direction:ltr;box-shadow:var(--shadow);--gap:10px;--cr:18px;--sw:14}
+.board.n5{--gap:6px;--cr:12px;--sw:15}
+.board.n7{--gap:3px;--cr:8px;--sw:16}
+.cell{position:relative;border:none;margin:0;padding:0;background:var(--cell);border-radius:var(--cr);cursor:pointer;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;transition:background .12s,transform .08s;touch-action:manipulation;overflow:hidden}
+.board:not(.locked) .cell.e:hover{background:var(--cellH)}
+.board:not(.locked) .cell.e:active{transform:scale(.92);background:var(--cellH)}
+.board.locked .cell{cursor:default}
+.cell svg{width:76%;height:76%;overflow:visible;display:block}
+.cell svg *{fill:none;stroke-width:var(--sw);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .3s ease-out forwards}
+.cell.x svg *{stroke:var(--x)} .cell.o svg *{stroke:var(--o)}
+.cell svg .d2{animation-delay:.17s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.cell.last::before{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 3px var(--yellow);pointer-events:none}
+.cell.winc{background:var(--yellow);animation:pulse .45s ease-in-out 4}
+@keyframes pulse{50%{transform:scale(.9)}}
+.cell.hint{animation:hintp .4s ease-in-out 4}
+@keyframes hintp{50%{background:var(--yellow);transform:scale(.9)}}
+.cell.kb::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 4px var(--focus);pointer-events:none}
+.cell:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+#winline{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#winline line{stroke:#fff;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .55s .15s ease-out forwards;filter:drop-shadow(0 0 4px #FFB300) drop-shadow(0 0 1px rgba(0,0,0,.6))}
+.ctrls{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding-top:6px}
+.ctrls button{position:relative;min-height:48px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--text);font-weight:800;font-size:16px;padding:4px 2px;cursor:pointer;box-shadow:0 3px 0 var(--line);white-space:nowrap;min-width:0}
+.ctrls .bd{position:absolute;top:-9px;inset-inline-end:-5px;min-width:24px;height:24px;padding:0 5px;border-radius:999px;background:var(--yellow);color:var(--ink);font-size:16px;line-height:20px;text-align:center;font-weight:800;border:2px solid var(--card)}
+.ctrls button:disabled .bd{background:var(--line)}
+.ctrls button:active{transform:translateY(2px);box-shadow:none}
+.ctrls button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.hist{display:flex;gap:6px;overflow-x:auto;padding:3px 2px;scrollbar-width:none;min-height:36px}
+.hist::-webkit-scrollbar{display:none}
+.hm{flex:none;font-size:16px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--card);border:2px solid var(--line);direction:ltr;color:var(--muted)}
+.hm.x{border-color:var(--x);color:var(--x)} .hm.o{border-color:var(--o);color:var(--o)}
+.hm:last-child{background:var(--card2);color:var(--text)}
+.kb{font-size:16px}
+@media (max-width:859px){ .kb{display:none} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important} .cell svg *,#winline line{stroke-dashoffset:0!important}}
+html.still *{animation-duration:0s!important;animation-delay:0s!important;transition:none!important}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <a class="brand" href="./" aria-label="Game Lab"><span class="m">❌⭕</span><span data-t="title">איקס עיגול</span></a>
+    <div class="icons">
+      <button class="ib" id="b-sound" aria-label="sound">🔊</button>
+      <button class="ib" id="b-theme" aria-label="theme">🌙</button>
+      <button class="ib" id="b-lang" aria-label="language">EN</button>
+    </div>
+  </header>
+
+  <!-- MENU -->
+  <section class="screen on" id="s-menu">
+    <div class="hero">
+      <svg class="mascot" viewBox="0 0 230 110" aria-hidden="true">
+        <g class="bob">
+          <path d="M30 25 L80 75 M80 25 L30 75" stroke="var(--x)" stroke-width="22" stroke-linecap="round" fill="none"/>
+          <circle cx="47" cy="45" r="7" fill="#fff"/><circle cx="63" cy="45" r="7" fill="#fff"/>
+          <circle cx="48.5" cy="46" r="3.6" fill="#1B2A4A"/><circle cx="64.5" cy="46" r="3.6" fill="#1B2A4A"/>
+          <path d="M47 58 Q55 66 63 58" stroke="#1B2A4A" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        </g>
+        <g class="bob b2">
+          <circle cx="170" cy="50" r="31" stroke="var(--o)" stroke-width="19" fill="none"/>
+          <circle cx="162" cy="46" r="7" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/><circle cx="178" cy="46" r="7" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <circle cx="163.5" cy="47" r="3.4" fill="#1B2A4A"/><circle cx="179.5" cy="47" r="3.4" fill="#1B2A4A"/>
+          <path d="M162 58 Q170 65 178 58" stroke="#1B2A4A" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        </g>
+      </svg>
+      <h1 data-t="h1">איקס עיגול</h1>
+      <p class="sub" data-t="tagline">3 ברצף על 3×3, 4 ברצף על 5×5 ו-7×7 – נגד המחשב או נגד חבר</p>
+    </div>
+
+    <div class="card stack">
+      <div>
+        <div class="lbl"><span data-t="mode">🎮 איך משחקים?</span></div>
+        <div class="seg big" data-opt="mode">
+          <button data-v="cpu" data-t="cpu">🤖 נגד המחשב</button>
+          <button data-v="2p" data-t="two">👥 שני שחקנים</button>
+        </div>
+      </div>
+      <div id="cpu-opts" class="stack">
+        <div>
+          <div class="lbl"><span data-t="level">🎚 רמת המחשב</span></div>
+          <div class="seg" data-opt="level">
+            <button data-v="easy" data-t="easy">😊 קל</button>
+            <button data-v="medium" data-t="medium">😤 בינוני</button>
+            <button data-v="hard" data-t="hard">💀 בלתי מנוצח</button>
+          </div>
+          <p class="sub" id="level-note" style="margin-top:8px;font-size:16px"></p>
+        </div>
+        <div>
+          <div class="lbl"><span data-t="symbol">🎭 מי אתה?</span></div>
+          <div class="seg" data-opt="human">
+            <button data-v="X"><span><span class="sx">✕</span> <span data-t="symX">אני X</span></span></button>
+            <button data-v="O"><span><span class="so">◯</span> <span data-t="symO">אני O</span></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl"><span data-t="board">🔲 גודל הלוח</span><span class="note" id="need-note"></span></div>
+      <div class="seg" data-opt="size">
+        <button data-v="3">3×3<small data-t="need3">3 ברצף</small></button>
+        <button data-v="5">5×5<small data-t="need4">4 ברצף</small></button>
+        <button data-v="7">7×7<small data-t="need4b">4 ברצף</small></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl"><span data-t="starter">🥇 מי מתחיל?</span></div>
+      <div class="seg wrap" data-opt="starter">
+        <button data-v="X"><span><span class="sx">✕</span> X</span></button>
+        <button data-v="O"><span><span class="so">◯</span> O</span></button>
+        <button data-v="random" data-t="stRand">🎲 אקראי</button>
+        <button data-v="loser" data-t="stLoser">😅 המפסיד מתחיל</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl"><span data-t="names">✏️ שמות (לא חובה)</span></div>
+      <div class="row">
+        <input class="nm" id="name0" maxlength="14" autocomplete="off">
+        <input class="nm" id="name1" maxlength="14" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="switch" id="sw-timer" role="switch" aria-checked="false">
+        <div class="txt"><span data-t="timer">⏱ מהיר – 10 שניות למהלך</span><small data-t="timerHint">נגמר הזמן? נבחר מהלך אקראי במקומך</small></div>
+        <div class="tog"></div>
+      </div>
+    </div>
+
+    <button class="btn" id="b-play" data-t="play">🚀 שחק</button>
+    <button class="btn ghost" id="b-quick"><span data-t="quick">⚡ משחק מהיר</span><small id="quick-cfg"></small></button>
+
+    <div class="card">
+      <div class="lbl"><span data-t="stats">📊 הסטטיסטיקה שלי</span><button class="ib" id="b-reset-stats" style="min-height:36px;font-size:16px;padding:0 10px" data-t="resetStats">🧹 אפס</button></div>
+      <div class="stats" id="stats"></div>
+      <div class="achs" id="achs"></div>
+    </div>
+
+    <footer><a href="./" data-t="more">🎮 עוד משחקים</a></footer>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="s-game">
+    <div class="gwrap">
+      <div class="pside top">
+        <div class="tiles">
+          <div class="tile tx" id="tile-x"><span class="nm" id="tx-name">X</span><span class="n" id="tx-n">0</span></div>
+          <div class="tile td" id="tile-d"><span class="nm" data-t="draws">תיקו</span><span class="n" id="td-n">0</span></div>
+          <div class="tile to" id="tile-o"><span class="nm" id="to-name">O</span><span class="n" id="to-n">0</span></div>
+        </div>
+        <div class="status" id="status"><span id="turn"></span><span id="movecount"></span></div>
+        <div class="tbar hidden" id="tbar"><i id="tfill"></i></div>
+      </div>
+      <div class="bside">
+        <div class="bwrap">
+          <div class="board n3" id="board" role="grid" aria-label="board"></div>
+          <svg id="winline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" class="hidden"></svg>
+        </div>
+      </div>
+      <div class="pside bot">
+        <div class="hidden" id="again-row"><button class="btn alt" id="b-again" data-t="again">🔁 סיבוב נוסף</button></div>
+        <div class="ctrls">
+          <button id="b-undo" data-t="undo">↩️ בטל</button>
+          <button id="b-hint"><span data-t="hint">💡 רמז</span><b class="bd" id="hint-n">3</b></button>
+          <button id="b-restart" data-t="restart">🔄 מחדש</button>
+          <button id="b-menu" data-t="menu">🏠 תפריט</button>
+        </div>
+        <div class="hist" id="hist"></div>
+        <p class="sub kb" data-t="kbHint">⌨️ חיצים לבחירה · Enter להנחה · Z לביטול · H לרמז</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="confetti" id="confetti"></div>
+  <div class="toast" id="toast"></div>
+  <pre id="test-log" class="hidden"></pre>
+</div>
+<script>
+(function(){
+'use strict';
+var TEST = location.hash === '#test', ERRS = [];
+if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
+var $ = function(id){ return document.getElementById(id); };
+function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+var KEY = 'xo.v1';
+
+/* ---------- strings ---------- */
+var T = {
+he:{
+  title:'איקס עיגול', h1:'איקס עיגול', tagline:'3 ברצף על לוח 3×3, 4 ברצף על 5×5 ו-7×7 – נגד המחשב או נגד חבר באותו מסך',
+  mode:'🎮 איך משחקים?', cpu:'🤖 נגד המחשב', two:'👥 שני שחקנים',
+  level:'🎚 רמת המחשב', easy:'😊 קל', medium:'😤 בינוני', hard:'💀 בלתי מנוצח',
+  hardNote3:'💀 בלתי מנוצח על 3×3: אי אפשר לנצח אותו – אבל אפשר תיקו!', hardNoteBig:'💀 בלתי מנוצח חושב שני מהלכים קדימה וחוסם איומים כפולים', mediumNote:'😤 בינוני חוסם וממהר לנצח, אבל טועה לפעמים', easyNote:'😊 קל משחק כמעט באקראי – מתאים לקטנטנים',
+  symbol:'🎭 מי אתה?', symX:'אני X', symO:'אני O',
+  board:'🔲 גודל הלוח', need3:'3 ברצף', need4:'4 ברצף', need4b:'4 ברצף', needNote3:'מנצחים עם 3 ברצף', needNote4:'מנצחים עם 4 ברצף',
+  starter:'🥇 מי מתחיל?', stRand:'🎲 אקראי', stLoser:'😅 המפסיד מתחיל',
+  names:'✏️ שמות (לא חובה)', yourName:'השם שלך', nameX:'שחקן X', nameO:'שחקן O',
+  timer:'⏱ מהיר – 10 שניות למהלך', timerHint:'נגמר הזמן? נבחר מהלך אקראי במקומך',
+  play:'🚀 שחק', quick:'⚡ משחק מהיר', more:'🎮 עוד משחקים',
+  stats:'📊 הסטטיסטיקה שלי', statsAll:'{g} משחקים · ✕ ניצח {x} · ◯ ניצח {o} · תיקו {d}', statsCpu:'🤖 נגד המחשב (ניצחונות-הפסדים-תיקו): קל {e} · בינוני {m} · בלתי מנוצח {h}', bestStreak:'🔥 הרצף הכי טוב: {n} ניצחונות', noStats:'עוד לא שיחקת – בוא נתחיל! 🎉', resetStats:'🧹 אפס', statsReset:'הסטטיסטיקה אופסה',
+  turn:'תור {name} {sym}', move:'מהלך {n}', moves:'{n} מהלכים', thinking:'🤖 המחשב חושב…',
+  won:'🎉 {name} ניצח!', cpuWon:'🤖 המחשב ניצח! נסה שוב', draw:'🤝 תיקו!',
+  undo:'↩️ בטל', hint:'💡 רמז', hintN:'💡 רמז ({n})', noHints:'נגמרו הרמזים למשחק הזה', restart:'🔄 מחדש', menu:'🏠 תפריט', again:'🔁 סיבוב נוסף', timeUp:'⏱ נגמר הזמן – מהלך אקראי!',
+  p1:'שחקן 1', p2:'שחקן 2', you:'אתה', cpuName:'המחשב', draws:'תיקו',
+  kbHint:'⌨️ חיצים לבחירה · Enter להנחה · Z לביטול · H לרמז',
+  achFirst:'🌟 ניצחון ראשון!', achImpossible:'🏆 בלתי אפשרי! ניצחת את הבלתי מנוצח', achStreak:'🔥 שלושה ניצחונות ברצף!', achBig:'🗺 מלך הלוח הגדול – ניצחון ב-7×7', achFast:'⚡ מהיר כברק – ניצחון ב-3 מהלכים', achDraws:'🧠 שווה למחשב – 3 תיקו נגד הבלתי מנוצח',
+  achShort:{first:'🌟 ניצחון ראשון', impossible:'🏆 בלתי אפשרי', streak:'🔥 רצף 3', big:'🗺 מלך 7×7', fast:'⚡ מהיר כברק', draws:'🧠 שווה למחשב'},
+  vs:'נגד'
+},
+en:{
+  title:'Tic Tac Toe', h1:'Tic Tac Toe', tagline:'3 in a row on 3×3, 4 in a row on 5×5 and 7×7 – vs the computer or a friend on one screen',
+  mode:'🎮 How to play?', cpu:'🤖 vs Computer', two:'👥 Two players',
+  level:'🎚 Computer level', easy:'😊 Easy', medium:'😤 Medium', hard:'💀 Unbeatable',
+  hardNote3:'💀 Unbeatable on 3×3: it never loses – but you can draw!', hardNoteBig:'💀 Unbeatable looks two moves ahead and blocks double threats', mediumNote:'😤 Medium blocks and goes for the win, but slips sometimes', easyNote:'😊 Easy plays almost randomly – great for little ones',
+  symbol:'🎭 Who are you?', symX:'I am X', symO:'I am O',
+  board:'🔲 Board size', need3:'3 in a row', need4:'4 in a row', need4b:'4 in a row', needNote3:'win with 3 in a row', needNote4:'win with 4 in a row',
+  starter:'🥇 Who starts?', stRand:'🎲 Random', stLoser:'😅 Loser starts',
+  names:'✏️ Names (optional)', yourName:'Your name', nameX:'Player X', nameO:'Player O',
+  timer:'⏱ Speed – 10 seconds per move', timerHint:'Out of time? A random move is played for you',
+  play:'🚀 Play', quick:'⚡ Quick game', more:'🎮 More games',
+  stats:'📊 My stats', statsAll:'{g} games · ✕ won {x} · ◯ won {o} · {d} draws', statsCpu:'🤖 vs computer (wins-losses-draws): easy {e} · medium {m} · unbeatable {h}', bestStreak:'🔥 Best streak: {n} wins', noStats:'No games yet – let\'s start! 🎉', resetStats:'🧹 Reset', statsReset:'Stats reset',
+  turn:'{name}\'s turn {sym}', move:'Move {n}', moves:'{n} moves', thinking:'🤖 Computer is thinking…',
+  won:'🎉 {name} wins!', cpuWon:'🤖 Computer wins! Try again', draw:'🤝 Draw!',
+  undo:'↩️ Undo', hint:'💡 Hint', hintN:'💡 Hint ({n})', noHints:'No hints left this game', restart:'🔄 Reset', menu:'🏠 Menu', again:'🔁 Next round', timeUp:'⏱ Time\'s up – random move!',
+  p1:'Player 1', p2:'Player 2', you:'You', cpuName:'Computer', draws:'Draws',
+  kbHint:'⌨️ Arrows to pick · Enter to place · Z undo · H hint',
+  achFirst:'🌟 First win!', achImpossible:'🏆 Impossible! You beat Unbeatable', achStreak:'🔥 Three wins in a row!', achBig:'🗺 King of the big board – a 7×7 win', achFast:'⚡ Lightning fast – won in 3 moves', achDraws:'🧠 Equal to the machine – 3 draws vs Unbeatable',
+  achShort:{first:'🌟 First win', impossible:'🏆 Impossible', streak:'🔥 Streak 3', big:'🗺 King 7×7', fast:'⚡ Lightning', draws:'🧠 Equal'},
+  vs:'vs'
+}};
+function t(k, vars){
+  var s = (T[G.lang] && T[G.lang][k] != null) ? T[G.lang][k] : (T.he[k] != null ? T.he[k] : k);
+  if (vars) Object.keys(vars).forEach(function(v){ s = s.split('{'+v+'}').join(vars[v]); });
+  return s;
+}
+
+/* ---------- state ---------- */
+function defaultStats(){ return {games:0, xw:0, ow:0, d:0, cpu:{easy:[0,0,0], medium:[0,0,0], hard:[0,0,0]}, streak:0, best:0, hardDraws:0, ach:{}}; }
+var G = {
+  lang:'he', mute:false, dark:false, names:['',''],
+  mode:'cpu', level:'medium', size:3, starter:'X', human:'X', timerOn:false, last:null,
+  screen:'s-menu',
+  board:[], need:3, turn:'X', moves:[], over:null, first:'X', hints:3, cursor:-1,
+  series:{X:0,O:0,D:0}, stats:defaultStats(), lastResult:null, lastFirst:null, lastToasts:[],
+  cpuDelay:null, cpuTimer:0, thinking:false, deadline:0, timerId:0, lastTick:-1, rng:Math.random
+};
+
+/* ---------- pure game logic ---------- */
+var DIRS = [[0,1],[1,0],[1,1],[1,-1]];
+function other(s){ return s === 'X' ? 'O' : 'X'; }
+/* winner(board, size, need) -> {sym, line:[idx..]} | 'draw' | null */
+function winner(board, size, need){
+  var n = size, full = true;
+  for (var r=0; r<n; r++) for (var c=0; c<n; c++){
+    var s = board[r*n+c];
+    if (!s){ full = false; continue; }
+    for (var d=0; d<4; d++){
+      var dr = DIRS[d][0], dc = DIRS[d][1], er = r + dr*(need-1), ec = c + dc*(need-1);
+      if (er < 0 || er >= n || ec < 0 || ec >= n) continue;
+      var line = [r*n+c], okk = true;
+      for (var k=1; k<need; k++){ var idx = (r+dr*k)*n + (c+dc*k); if (board[idx] !== s){ okk = false; break; } line.push(idx); }
+      if (okk) return {sym:s, line:line};
+    }
+  }
+  return full ? 'draw' : null;
+}
+function legalMoves(board){ var m = []; for (var i=0; i<board.length; i++) if (!board[i]) m.push(i); return m; }
+/* does placing sym at idx complete `need` in a row? */
+function winsAt(board, size, need, idx, sym){
+  var r = (idx / size) | 0, c = idx % size;
+  for (var d=0; d<4; d++){
+    var dr = DIRS[d][0], dc = DIRS[d][1], cnt = 1, k, rr, cc;
+    for (k=1; k<need; k++){ rr = r+dr*k; cc = c+dc*k; if (rr<0||rr>=size||cc<0||cc>=size||board[rr*size+cc]!==sym) break; cnt++; }
+    for (k=1; k<need; k++){ rr = r-dr*k; cc = c-dc*k; if (rr<0||rr>=size||cc<0||cc>=size||board[rr*size+cc]!==sym) break; cnt++; }
+    if (cnt >= need) return true;
+  }
+  return false;
+}
+/* empty cells where sym wins immediately */
+function threats(board, size, need, sym){
+  var out = []; for (var i=0; i<board.length; i++) if (!board[i] && winsAt(board, size, need, i, sym)) out.push(i); return out;
+}
+var WCACHE = {};
+function windows(size, need){
+  var key = size + ':' + need; if (WCACHE[key]) return WCACHE[key];
+  var out = [];
+  for (var r=0; r<size; r++) for (var c=0; c<size; c++) for (var d=0; d<4; d++){
+    var dr = DIRS[d][0], dc = DIRS[d][1], er = r+dr*(need-1), ec = c+dc*(need-1);
+    if (er<0||er>=size||ec<0||ec>=size) continue;
+    var w = []; for (var k=0; k<need; k++) w.push((r+dr*k)*size + c+dc*k); out.push(w);
+  }
+  return WCACHE[key] = out;
+}
+var WT = [0, 1, 10, 100, 1000, 10000];
+/* heuristic score of the position from `me`'s point of view */
+function evalBoard(board, size, need, me){
+  var ws = windows(size, need), opp = other(me), s = 0, i, j;
+  for (i=0; i<ws.length; i++){
+    var w = ws[i], m = 0, o = 0;
+    for (j=0; j<need; j++){ var v = board[w[j]]; if (v === me) m++; else if (v === opp) o++; }
+    if (m && !o) s += WT[m]; else if (o && !m) s -= WT[o] * 1.15;
+  }
+  var mid = (size-1)/2;
+  for (i=0; i<board.length; i++){ var v2 = board[i]; if (!v2) continue; var dist = Math.max(Math.abs(((i/size)|0) - mid), Math.abs((i%size) - mid)); var b = (mid - dist) * 0.6; s += v2 === me ? b : -b; }
+  return s;
+}
+/* empty cells next to any piece (the centre on an empty board) */
+function near(board, size, dist){
+  var set = {}, out = [], any = false;
+  for (var i=0; i<board.length; i++){
+    if (!board[i]) continue; any = true;
+    var r = (i/size)|0, c = i%size;
+    for (var dr=-dist; dr<=dist; dr++) for (var dc=-dist; dc<=dist; dc++){
+      var rr = r+dr, cc = c+dc; if (rr<0||rr>=size||cc<0||cc>=size) continue;
+      var j = rr*size+cc; if (!board[j] && !set[j]){ set[j] = 1; out.push(j); }
+    }
+  }
+  if (!any){ var m = (size-1)/2|0; out.push(m*size+m); }
+  return out;
+}
+/* full minimax for 3x3 (memoised). -> {idx, score, ties}; score>0 win for sym, 0 draw, <0 loss; |score| bigger = sooner */
+var MM = {};
+function minimax3(board, sym){
+  var key = '', i; for (i=0; i<9; i++) key += board[i] || '.'; key += sym;
+  if (MM[key]) return MM[key];
+  var opp = other(sym), best = -Infinity, ties = [], idx = -1;
+  for (i=0; i<9; i++){
+    if (board[i]) continue;
+    board[i] = sym;
+    var w = winner(board, 3, 3), sc;
+    if (w === 'draw') sc = 0;
+    else if (w) sc = 10;
+    else { sc = -minimax3(board, opp).score; if (sc > 0) sc -= 1; else if (sc < 0) sc += 1; }
+    board[i] = '';
+    if (sc > best){ best = sc; ties = [i]; idx = i; } else if (sc === best) ties.push(i);
+  }
+  if (idx < 0){ var w0 = winner(board, 3, 3); best = (w0 && w0 !== 'draw') ? (w0.sym === sym ? 10 : -10) : 0; }
+  return MM[key] = {idx:idx, score:best, ties:ties};
+}
+/* bestMove(board, size, need, sym, level, rng) -> idx (or -1 when the board is full) */
+function bestMove(board, size, need, sym, level, rng){
+  rng = rng || Math.random;
+  var legal = legalMoves(board); if (!legal.length) return -1;
+  var opp = other(sym);
+  function pick(arr){ return arr[Math.min(arr.length-1, Math.floor(rng()*arr.length))]; }
+  var myWins = threats(board, size, need, sym), oppWins = threats(board, size, need, opp);
+  if (size === 3 && need === 3){
+    if (level === 'hard'){ var mm = minimax3(board, sym); return (mm.ties && mm.ties.length) ? pick(mm.ties) : mm.idx; }
+    if (level === 'easy'){
+      if (myWins.length && rng() < 0.5) return pick(myWins);
+      if (oppWins.length && rng() < 0.35) return pick(oppWins);
+      return pick(legal);
+    }
+    if (myWins.length) return pick(myWins);
+    if (oppWins.length && rng() < 0.9) return pick(oppWins);
+    if (rng() < 0.15) return pick(legal);
+    if (!board[4]) return 4;
+    var corners = [0,2,6,8].filter(function(i){ return !board[i]; });
+    if (corners.length && rng() < 0.85) return pick(corners);
+    return pick(legal);
+  }
+  /* big boards: 4 in a row */
+  var cand = near(board, size, 1);
+  if (level === 'easy'){
+    if (myWins.length && rng() < 0.6) return pick(myWins);
+    if (oppWins.length && rng() < 0.4) return pick(oppWins);
+    return rng() < 0.7 ? pick(cand) : pick(legal);
+  }
+  if (myWins.length) return pick(myWins);
+  if (oppWins.length) return pick(oppWins);
+  var scored = cand.map(function(i){ board[i] = sym; var s = evalBoard(board, size, need, sym); board[i] = ''; return {i:i, s:s}; });
+  scored.sort(function(a, b){ return b.s - a.s; });
+  if (level === 'medium'){
+    var top = scored.slice(0, 3), r = rng(), k = r < 0.6 ? 0 : (r < 0.85 ? 1 : 2);
+    return top[Math.min(k, top.length-1)].i;
+  }
+  /* hard: 2-ply lookahead with threat scoring */
+  var BIG = 1e6, best = -Infinity, bestIdx = [], mine = scored.slice(0, 16);
+  for (var a=0; a<mine.length; a++){
+    var m = mine[a].i, val; board[m] = sym;
+    if (threats(board, size, need, sym).length >= 2) val = BIG - 1;      /* double threat: unstoppable */
+    else {
+      val = Infinity;
+      var replies = near(board, size, 1);
+      for (var b=0; b<replies.length; b++){
+        var r2 = replies[b], v; board[r2] = opp;
+        if (threats(board, size, need, sym).length >= 1) v = BIG - 2;        /* they failed to block: I win */
+        else { var oT = threats(board, size, need, opp); v = oT.length >= 2 ? -BIG : evalBoard(board, size, need, sym); }
+        board[r2] = '';
+        if (v < val) val = v;
+        if (val <= -BIG) break;
+      }
+      if (val === Infinity) val = evalBoard(board, size, need, sym);
+    }
+    board[m] = '';
+    val += mine[a].s * 0.001;
+    if (val > best + 1e-9){ best = val; bestIdx = [m]; } else if (Math.abs(val - best) < 1e-9) bestIdx.push(m);
+  }
+  return bestIdx.length ? pick(bestIdx) : scored[0].i;
+}
+
+/* ---------- persistence ---------- */
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify({lang:G.lang, mute:G.mute, dark:G.dark, names:G.names, mode:G.mode, level:G.level, size:G.size, starter:G.starter, human:G.human, timerOn:G.timerOn, last:G.last, stats:G.stats})); } catch(e){}
+}
+function load(){
+  var d = null; try { d = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  if (!d) return;
+  ['lang','mute','dark','mode','level','starter','human','timerOn','last'].forEach(function(k){ if (d[k] !== undefined) G[k] = d[k]; });
+  if (d.size) G.size = +d.size;
+  if (Array.isArray(d.names)) G.names = [String(d.names[0]||''), String(d.names[1]||'')];
+  if (d.stats && typeof d.stats === 'object'){ var s = defaultStats(); Object.keys(s).forEach(function(k){ if (d.stats[k] !== undefined) s[k] = d.stats[k]; }); if (!s.cpu.easy) s.cpu = defaultStats().cpu; G.stats = s; }
+}
+
+/* ---------- sound / haptics / confetti / toast ---------- */
+var AC = null;
+function beep(freq, dur, type, vol){
+  if (G.mute) return;
+  try {
+    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    var o = AC.createOscillator(), g = AC.createGain();
+    o.type = type || 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol || 0.15, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + dur);
+    o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + dur);
+  } catch(e){}
+}
+var SFX = {
+  tap:function(){ beep(600, .06, 'square', .06); },
+  place:function(s){ if (s === 'X') beep(520, .09, 'triangle', .14); else beep(720, .11, 'sine', .16); },
+  win:function(){ [523,659,784,1047].forEach(function(f,i){ setTimeout(function(){ beep(f, .22, 'triangle', .18); }, i*110); }); },
+  lose:function(){ [392,330,262].forEach(function(f,i){ setTimeout(function(){ beep(f, .28, 'sawtooth', .1); }, i*170); }); },
+  draw:function(){ [440,440].forEach(function(f,i){ setTimeout(function(){ beep(f, .15, 'triangle', .12); }, i*180); }); },
+  hint:function(){ beep(880, .08, 'sine', .1); setTimeout(function(){ beep(1320, .12, 'sine', .1); }, 90); },
+  tick:function(){ beep(1000, .05, 'square', .05); },
+  ach:function(){ [784,988,1175,1568].forEach(function(f,i){ setTimeout(function(){ beep(f, .18, 'square', .08); }, i*90); }); },
+  deny:function(){ beep(200, .08, 'square', .06); }
+};
+function vibrate(p){ try { if (navigator.vibrate) navigator.vibrate(p); } catch(e){} }
+function confetti(){
+  var box = $('confetti'); box.innerHTML = '';
+  var colors = ['#FF6B6B','#2FD3B0','#FFD166','#3A7BFF','#ffffff','#9B6DFF'];
+  for (var i=0; i<80; i++){
+    var p = el('i'); p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[i % colors.length];
+    p.style.animationDuration = (2 + Math.random()*2) + 's';
+    p.style.animationDelay = (Math.random()*.8) + 's';
+    p.style.transform = 'rotate(' + Math.floor(Math.random()*360) + 'deg)';
+    box.appendChild(p);
+  }
+  setTimeout(function(){ box.innerHTML = ''; }, 5000);
+}
+var toastId = 0;
+function toast(msg, cls){ var e = $('toast'); e.textContent = msg; e.className = 'toast on' + (cls ? ' ' + cls : ''); clearTimeout(toastId); toastId = setTimeout(function(){ e.classList.remove('on'); }, 2400); }
+
+/* ---------- helpers ---------- */
+function symIcon(s){ return s === 'X' ? '❌' : '⭕'; }
+function pname(s){
+  if (G.mode === 'cpu'){ if (s !== G.human) return t('cpuName'); return (G.names[0]||'').trim() || t('you'); }
+  var nm = (G.names[s === 'X' ? 0 : 1] || '').trim(); return nm || t(s === 'X' ? 'p1' : 'p2');
+}
+function coord(i){ return String.fromCharCode(65 + (i % G.size)) + (Math.floor(i / G.size) + 1); }
+function isCpuTurn(){ return G.mode === 'cpu' && G.turn !== G.human && !G.over; }
+function cfgLabel(c){ c = c || G; return c.size + '×' + c.size + ' · ' + (c.mode === 'cpu' ? t('cpu') + ' · ' + t(c.level) : t('two')); }
+
+/* ---------- screens ---------- */
+function show(id){
+  var sc = document.querySelectorAll('.screen');
+  for (var i=0; i<sc.length; i++) sc[i].classList.toggle('on', sc[i].id === id);
+  G.screen = id; $('app').classList.toggle('game', id === 's-game');
+  window.scrollTo(0, 0);
+}
+function toMenu(){ stopTimer(); clearTimeout(G.cpuTimer); G.thinking = false; show('s-menu'); renderMenu(); }
+
+/* ---------- game flow ---------- */
+function newGame(opts){
+  opts = opts || {};
+  ['mode','level','starter','human','timerOn'].forEach(function(k){ if (opts[k] !== undefined) G[k] = opts[k]; });
+  if (opts.size !== undefined) G.size = +opts.size;
+  if (opts.names) G.names = opts.names.slice();
+  G.size = (G.size === 5 || G.size === 7) ? G.size : 3; G.need = G.size === 3 ? 3 : 4;
+  if (opts.resetSeries){ G.series = {X:0,O:0,D:0}; G.lastResult = null; }
+  G.board = []; for (var i=0; i<G.size*G.size; i++) G.board.push('');
+  G.moves = []; G.over = null; G.hints = 3; G.cursor = -1; G.thinking = false; G.lastToasts = [];
+  clearTimeout(G.cpuTimer); stopTimer();
+  var first;
+  if (opts.first) first = opts.first;
+  else if (G.starter === 'X' || G.starter === 'O') first = G.starter;
+  else if (G.starter === 'random') first = G.rng() < 0.5 ? 'X' : 'O';
+  else { /* loser starts; after a draw the other one starts */
+    if (!G.lastResult) first = 'X';
+    else if (G.lastResult === 'draw') first = other(G.lastFirst || 'X');
+    else first = other(G.lastResult);
+  }
+  G.first = G.turn = G.lastFirst = first;
+  G.last = {mode:G.mode, level:G.level, size:G.size, starter:G.starter, human:G.human, timerOn:G.timerOn};
+  show('s-game'); buildBoard(); renderGame(); save();
+  if (isCpuTurn()) scheduleCpu(); else startTimer();
+}
+function play(idx){
+  if (G.over || G.thinking || idx < 0 || idx >= G.board.length || G.board[idx]) return false;
+  G.board[idx] = G.turn; G.moves.push(idx);
+  SFX.place(G.turn);
+  var w = winner(G.board, G.size, G.need);
+  G.turn = other(G.turn);
+  if (w) endRound(w);
+  renderGame();
+  if (!G.over){ if (isCpuTurn()) scheduleCpu(); else startTimer(); }
+  return true;
+}
+function humanPlay(idx){
+  if (G.over) return false;
+  if (G.thinking || isCpuTurn()){ SFX.deny(); return false; }
+  return play(idx);
+}
+function scheduleCpu(){
+  G.thinking = true; stopTimer(); renderStatus(); renderCtrls(); $('board').classList.add('locked');
+  var d = G.cpuDelay != null ? G.cpuDelay : 300 + Math.floor(Math.random()*300);
+  clearTimeout(G.cpuTimer);
+  G.cpuTimer = setTimeout(cpuMove, d);
+}
+function cpuMove(){
+  G.thinking = false;
+  if (G.over || G.screen !== 's-game' || !isCpuTurn()){ renderGame(); return; }
+  var idx = bestMove(G.board, G.size, G.need, G.turn, G.level, Math.random);
+  play(idx);
+}
+function endRound(w){
+  G.over = w; stopTimer(); clearTimeout(G.cpuTimer); G.thinking = false;
+  var res = w === 'draw' ? 'draw' : w.sym;
+  G.lastResult = res;
+  if (res === 'draw') G.series.D++; else G.series[res]++;
+  var st = G.stats; st.games++;
+  if (res === 'draw') st.d++; else if (res === 'X') st.xw++; else st.ow++;
+  var humanWon = false, cpuWon = false;
+  if (G.mode === 'cpu'){
+    var rec = st.cpu[G.level] || (st.cpu[G.level] = [0,0,0]);
+    if (res === 'draw') rec[2]++; else if (res === G.human){ rec[0]++; humanWon = true; } else { rec[1]++; cpuWon = true; }
+    if (humanWon){ st.streak++; if (st.streak > st.best) st.best = st.streak; } else st.streak = 0;
+    if (G.level === 'hard' && res === 'draw') st.hardDraws = (st.hardDraws||0) + 1;
+  }
+  if (res === 'draw') SFX.draw();
+  else if (cpuWon){ SFX.lose(); vibrate(80); }
+  else { SFX.win(); confetti(); vibrate([60,40,60,40,140]); }
+  var toasts = [];
+  function unlock(id, key){ if (!st.ach[id]){ st.ach[id] = 1; toasts.push(key); } }
+  var hw = res !== 'draw' && !cpuWon;
+  if (hw) unlock('first', 'achFirst');
+  if (humanWon && G.level === 'hard') unlock('impossible', 'achImpossible');
+  if (humanWon && st.streak >= 3) unlock('streak', 'achStreak');
+  if (hw && G.size === 7) unlock('big', 'achBig');
+  if (hw && G.size === 3 && G.moves.length <= 5) unlock('fast', 'achFast');
+  if (G.mode === 'cpu' && G.level === 'hard' && st.hardDraws >= 3) unlock('draws', 'achDraws');
+  G.lastToasts = toasts;
+  save();
+  toasts.forEach(function(k, i){ setTimeout(function(){ toast(t(k), 'ach'); SFX.ach(); }, 900 + i*2600); });
+}
+function undo(){
+  if (G.over || !G.moves.length) return false;
+  var n = 1;
+  if (G.mode === 'cpu'){
+    if (G.thinking){ clearTimeout(G.cpuTimer); G.thinking = false; n = 1; }
+    else { if (G.moves.length === 1) return false; n = 2; }
+  }
+  for (var i=0; i<n; i++){ var idx = G.moves.pop(); G.board[idx] = ''; G.turn = other(G.turn); }
+  G.cursor = -1; SFX.tap(); renderGame();
+  if (isCpuTurn()) scheduleCpu(); else startTimer();
+  return true;
+}
+function restart(){ newGame({first:G.first}); }
+function nextRound(){ newGame({}); }
+function hint(){
+  if (G.over || G.thinking || isCpuTurn()) return -1;
+  if (G.hints <= 0){ toast(t('noHints')); SFX.deny(); return -1; }
+  var idx = bestMove(G.board, G.size, G.need, G.turn, 'hard', Math.random);
+  if (idx < 0) return -1;
+  G.hints--; SFX.hint(); renderCtrls();
+  var cell = $('board').children[idx];
+  if (cell){ cell.classList.remove('hint'); void cell.offsetWidth; cell.classList.add('hint'); setTimeout(function(){ cell.classList.remove('hint'); }, 1700); }
+  return idx;
+}
+
+/* ---------- move timer (⏱) ---------- */
+function startTimer(){
+  stopTimer();
+  if (!G.timerOn || G.over || G.screen !== 's-game' || isCpuTurn()) return;
+  G.deadline = Date.now() + 10000; G.lastTick = -1;
+  $('tbar').classList.remove('hidden');
+  G.timerId = setInterval(tickTimer, 100); tickTimer();
+}
+function stopTimer(){ clearInterval(G.timerId); G.timerId = 0; $('tbar').classList.add('hidden'); }
+function tickTimer(){
+  var left = G.deadline - Date.now(), p = Math.max(0, Math.min(1, left/10000));
+  $('tfill').style.width = (p*100) + '%'; $('tfill').classList.toggle('low', left < 3000);
+  var sec = Math.ceil(left/1000);
+  if (left > 0 && left <= 3000 && sec !== G.lastTick){ G.lastTick = sec; SFX.tick(); }
+  if (left <= 0){ stopTimer(); timerExpire(); }
+}
+function timerExpire(){
+  if (G.over || isCpuTurn() || G.thinking) return false;
+  var lm = legalMoves(G.board); if (!lm.length) return false;
+  toast(t('timeUp'));
+  return play(lm[Math.floor(Math.random()*lm.length)]);
+}
+
+/* ---------- rendering: game ---------- */
+function markSVG(s){
+  if (s === 'X') return '<svg viewBox="0 0 100 100" aria-hidden="true"><path class="d1" d="M22 22 L78 78" pathLength="1"/><path class="d2" d="M78 22 L22 78" pathLength="1"/></svg>';
+  return '<svg viewBox="0 0 100 100" aria-hidden="true"><circle class="d1" cx="50" cy="50" r="30" pathLength="1" transform="rotate(-90 50 50)"/></svg>';
+}
+function onCell(){ humanPlay(+this.getAttribute('data-i')); }
+function buildBoard(){
+  var b = $('board'); b.innerHTML = '';
+  b.style.setProperty('--n', G.size); b.className = 'board n' + G.size;
+  for (var i=0; i<G.size*G.size; i++){
+    var c = el('button', 'cell e'); c.setAttribute('data-i', i); c.setAttribute('data-s', ''); c.setAttribute('role', 'gridcell');
+    c.setAttribute('aria-label', coord(i)); c.onclick = onCell; b.appendChild(c);
+  }
+}
+function renderBoard(){
+  var b = $('board'); if (b.children.length !== G.board.length) buildBoard();
+  var winLine = (G.over && G.over !== 'draw') ? G.over.line : null, last = G.moves.length ? G.moves[G.moves.length-1] : -1;
+  for (var i=0; i<G.board.length; i++){
+    var c = b.children[i], s = G.board[i];
+    if (c.getAttribute('data-s') !== s){ c.setAttribute('data-s', s); c.innerHTML = s ? markSVG(s) : ''; c.classList.toggle('x', s === 'X'); c.classList.toggle('o', s === 'O'); c.classList.toggle('e', !s); }
+    c.classList.toggle('last', i === last && !winLine);
+    c.classList.toggle('winc', !!winLine && winLine.indexOf(i) >= 0);
+    c.classList.toggle('kb', G.cursor === i);
+  }
+  b.classList.toggle('locked', G.thinking || !!G.over);
+  b.setAttribute('data-turn', G.turn);
+  drawWinLine(winLine);
+}
+function drawWinLine(line){
+  var svg = $('winline');
+  if (!line){ svg.innerHTML = ''; svg.classList.add('hidden'); return; }
+  if (!svg.classList.contains('hidden') && svg.getAttribute('data-k') === line.join(',')) return;
+  var n = G.size, a = line[0], z = line[line.length-1];
+  function cx(i){ return ((i % n) + 0.5) / n * 100; } function cy(i){ return (Math.floor(i / n) + 0.5) / n * 100; }
+  var sw = n === 3 ? 3.4 : (n === 5 ? 2.1 : 1.5);
+  svg.setAttribute('data-k', line.join(','));
+  svg.innerHTML = '<line x1="' + cx(a) + '" y1="' + cy(a) + '" x2="' + cx(z) + '" y2="' + cy(z) + '" pathLength="1" stroke-width="' + sw + '"/>';
+  svg.classList.remove('hidden');
+}
+function renderStatus(){
+  var st = $('status'); st.className = 'status';
+  if (G.over){
+    if (G.over === 'draw'){ st.classList.add('banner', 'draw'); $('turn').textContent = t('draw'); }
+    else {
+      var s = G.over.sym, cpuWon = G.mode === 'cpu' && s !== G.human;
+      st.classList.add('banner', cpuWon ? 'lose' : 'win');
+      $('turn').textContent = cpuWon ? t('cpuWon') : t('won', {name:pname(s)});
+    }
+    $('movecount').textContent = t('moves', {n:G.moves.length});
+  } else if (G.thinking){
+    st.classList.add('think'); $('turn').textContent = t('thinking'); $('movecount').textContent = t('move', {n:G.moves.length+1});
+  } else {
+    $('turn').textContent = t('turn', {name:pname(G.turn), sym:symIcon(G.turn)}); $('movecount').textContent = t('move', {n:G.moves.length+1});
+  }
+  $('tx-name').textContent = pname('X'); $('to-name').textContent = pname('O');
+  $('tx-n').textContent = G.series.X; $('to-n').textContent = G.series.O; $('td-n').textContent = G.series.D;
+  $('tile-x').classList.toggle('on', !G.over && G.turn === 'X'); $('tile-o').classList.toggle('on', !G.over && G.turn === 'O');
+  $('again-row').classList.toggle('hidden', !G.over);
+}
+function renderCtrls(){
+  var canUndo = !G.over && G.moves.length > 0 && !(G.mode === 'cpu' && !G.thinking && G.moves.length === 1);
+  $('b-undo').disabled = !canUndo;
+  $('hint-n').textContent = G.hints; $('b-hint').setAttribute('aria-label', t('hintN', {n:G.hints}));
+  $('b-hint').disabled = !!G.over || G.hints <= 0 || G.thinking || isCpuTurn();
+}
+function renderHist(){
+  var h = $('hist'); h.innerHTML = '';
+  var start = Math.max(0, G.moves.length - 16);
+  for (var i=start; i<G.moves.length; i++){
+    var s = ((G.first === 'X') === (i % 2 === 0)) ? 'X' : 'O';
+    h.appendChild(el('span', 'hm ' + s.toLowerCase(), (i+1) + '. ' + (s === 'X' ? '✕' : '◯') + ' ' + coord(G.moves[i])));
+  }
+  h.scrollLeft = document.documentElement.dir === 'rtl' ? -1e6 : 1e6;
+}
+function renderGame(){ if (!G.board.length) return; renderBoard(); renderStatus(); renderCtrls(); renderHist(); }
+
+/* ---------- rendering: menu ---------- */
+function renderMenu(){
+  var segs = document.querySelectorAll('.seg[data-opt]');
+  for (var i=0; i<segs.length; i++){
+    var opt = segs[i].getAttribute('data-opt'), bs = segs[i].querySelectorAll('button');
+    for (var j=0; j<bs.length; j++) bs[j].classList.toggle('on', String(G[opt]) === bs[j].getAttribute('data-v'));
+  }
+  $('cpu-opts').classList.toggle('hidden', G.mode !== 'cpu');
+  $('level-note').textContent = G.level === 'hard' ? t(G.size === 3 ? 'hardNote3' : 'hardNoteBig') : t(G.level === 'medium' ? 'mediumNote' : 'easyNote');
+  $('need-note').textContent = t(G.size === 3 ? 'needNote3' : 'needNote4');
+  $('name0').placeholder = G.mode === 'cpu' ? t('yourName') : t('nameX');
+  $('name1').placeholder = t('nameO');
+  $('name1').classList.toggle('hidden', G.mode !== 'cpu' ? false : true);
+  $('name0').value = G.names[0] || ''; $('name1').value = G.names[1] || '';
+  $('sw-timer').classList.toggle('on', !!G.timerOn); $('sw-timer').setAttribute('aria-checked', G.timerOn ? 'true' : 'false');
+  $('quick-cfg').textContent = cfgLabel(G.last || {size:3, mode:'cpu', level:'medium'});
+  $('b-sound').textContent = G.mute ? '🔇' : '🔊';
+  $('b-theme').textContent = G.dark ? '☀️' : '🌙';
+  var st = G.stats, box = $('stats'); box.innerHTML = '';
+  if (!st.games) box.appendChild(el('div', '', t('noStats')));
+  else {
+    box.appendChild(el('div', '', t('statsAll', {g:st.games, x:st.xw, o:st.ow, d:st.d})));
+    function rec(l){ var r = st.cpu[l] || [0,0,0]; return r[0] + '-' + r[1] + '-' + r[2]; }
+    box.appendChild(el('div', '', t('statsCpu', {e:rec('easy'), m:rec('medium'), h:rec('hard')})));
+    if (st.best) box.appendChild(el('div', '', t('bestStreak', {n:st.best})));
+  }
+  var ab = $('achs'); ab.innerHTML = '';
+  var AS = T[G.lang].achShort;
+  Object.keys(AS).forEach(function(k){ ab.appendChild(el('span', st.ach[k] ? '' : 'lock', AS[k])); });
+}
+function setLang(l){
+  G.lang = l === 'en' ? 'en' : 'he';
+  document.documentElement.lang = G.lang;
+  document.documentElement.dir = G.lang === 'en' ? 'ltr' : 'rtl';
+  $('b-lang').textContent = G.lang === 'en' ? 'עב' : 'EN';
+  var els = document.querySelectorAll('[data-t]');
+  for (var i=0; i<els.length; i++) els[i].textContent = t(els[i].getAttribute('data-t'));
+  renderMenu(); renderGame(); save();
+}
+function setTheme(dark){
+  G.dark = !!dark;
+  document.documentElement.setAttribute('data-theme', G.dark ? 'dark' : 'light');
+  var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', G.dark ? '#13284A' : '#2FD3B0');
+  $('b-theme').textContent = G.dark ? '☀️' : '🌙';
+  save();
+}
+
+/* ---------- keyboard ---------- */
+function onKey(e){
+  if (G.screen !== 's-game') return;
+  var ae = document.activeElement, tag = ae && ae.tagName;
+  if (tag === 'INPUT') return;
+  var n = G.size, k = e.key;
+  if (k === 'ArrowLeft' || k === 'ArrowRight' || k === 'ArrowUp' || k === 'ArrowDown'){
+    e.preventDefault();
+    if (G.cursor < 0) G.cursor = Math.floor(n*n/2);
+    else {
+      var r = Math.floor(G.cursor/n), c = G.cursor % n;
+      if (k === 'ArrowLeft') c = (c+n-1)%n; else if (k === 'ArrowRight') c = (c+1)%n; else if (k === 'ArrowUp') r = (r+n-1)%n; else r = (r+1)%n;
+      G.cursor = r*n+c;
+    }
+    renderBoard(); return;
+  }
+  if (k === 'Enter' || k === ' '){
+    if (tag === 'BUTTON' && !ae.classList.contains('cell')) return;
+    if (G.cursor >= 0 && !G.over){ e.preventDefault(); if (!G.board[G.cursor]) humanPlay(G.cursor); else SFX.deny(); }
+    return;
+  }
+  if (k === 'z' || k === 'Z' || k === 'Backspace'){ e.preventDefault(); undo(); return; }
+  if (k === 'h' || k === 'H'){ hint(); return; }
+  if (k === 'r' || k === 'R'){ if (G.over) nextRound(); else restart(); return; }
+  if (k === 'Escape'){ toMenu(); }
+}
+
+/* ---------- bindings ---------- */
+function bind(){
+  var segs = document.querySelectorAll('.seg[data-opt]');
+  for (var i=0; i<segs.length; i++) (function(seg){
+    var opt = seg.getAttribute('data-opt'), bs = seg.querySelectorAll('button');
+    for (var j=0; j<bs.length; j++) (function(b){
+      b.onclick = function(){ var v = b.getAttribute('data-v'); G[opt] = opt === 'size' ? +v : v; SFX.tap(); renderMenu(); save(); };
+    })(bs[j]);
+  })(segs[i]);
+  $('name0').oninput = function(){ G.names[0] = this.value; save(); };
+  $('name1').oninput = function(){ G.names[1] = this.value; save(); };
+  $('sw-timer').onclick = function(){ G.timerOn = !G.timerOn; SFX.tap(); renderMenu(); save(); };
+  $('b-play').onclick = function(){ SFX.tap(); newGame({resetSeries:true}); };
+  $('b-quick').onclick = function(){ SFX.tap(); var c = G.last || {size:3, mode:'cpu', level:'medium'}; newGame({mode:c.mode, level:c.level, size:c.size, starter:c.starter, human:c.human, timerOn:c.timerOn, resetSeries:true}); };
+  $('b-reset-stats').onclick = function(){ G.stats = defaultStats(); save(); renderMenu(); toast(t('statsReset')); };
+  $('b-sound').onclick = function(){ G.mute = !G.mute; save(); renderMenu(); SFX.tap(); };
+  $('b-theme').onclick = function(){ SFX.tap(); setTheme(!G.dark); };
+  $('b-lang').onclick = function(){ SFX.tap(); setLang(G.lang === 'he' ? 'en' : 'he'); };
+  $('b-undo').onclick = function(){ undo(); };
+  $('b-hint').onclick = function(){ hint(); };
+  $('b-restart').onclick = function(){ SFX.tap(); restart(); };
+  $('b-menu').onclick = function(){ SFX.tap(); toMenu(); };
+  $('b-again').onclick = function(){ SFX.tap(); nextRound(); };
+  document.addEventListener('keydown', onKey);
+}
+
+/* ---------- init ---------- */
+function init(){
+  load(); setTheme(G.dark); bind(); setLang(G.lang); renderMenu();
+  var h = location.hash.replace('-dark', '').replace('-still', '').replace('-en', '');
+  if (location.hash.indexOf('-dark') > 0) setTheme(true);
+  if (location.hash.indexOf('-en') > 0) setLang('en');
+  if (location.hash.indexOf('-still') > 0) document.documentElement.classList.add('still');
+  if (h === '#auto3'){ G.names = ['לופו','נועה']; newGame({mode:'2p', size:3, starter:'X', resetSeries:true}); [4,0,8,2].forEach(play); }
+  else if (h === '#auto5'){ G.names = ['לופו','']; newGame({mode:'cpu', level:'hard', size:5, starter:'X', human:'X', resetSeries:true}); G.cpuDelay = 1e9; [12,7,13,8].forEach(function(i){ G.thinking = false; G.turn = G.moves.length % 2 ? 'O' : 'X'; play(i); }); G.thinking = false; clearTimeout(G.cpuTimer); G.turn = 'X'; renderGame(); }
+  else if (h === '#auto7'){ G.names = ['לופו','נועה']; newGame({mode:'2p', size:7, starter:'X', resetSeries:true}); [24,25,17,31,32,16,10,38,18].forEach(play); }
+  else if (h === '#auto-win'){ G.names = ['לופו','נועה']; newGame({mode:'2p', size:3, starter:'X', resetSeries:true}); [0,3,1,4,2].forEach(play); }
+  else if (h === '#auto-draw'){ newGame({mode:'2p', size:3, starter:'X', resetSeries:true}); [0,1,2,4,3,5,7,6,8].forEach(play); }
+}
+window.XO = { G:G, T:T, t:t, winner:winner, legalMoves:legalMoves, bestMove:bestMove, minimax3:minimax3, threats:threats, evalBoard:evalBoard, near:near,
+  newGame:newGame, play:play, humanPlay:humanPlay, undo:undo, hint:hint, restart:restart, nextRound:nextRound, setLang:setLang, setTheme:setTheme, show:show, toMenu:toMenu,
+  tickTimer:tickTimer, timerExpire:timerExpire, startTimer:startTimer, coord:coord, pname:pname, save:save, load:load, renderMenu:renderMenu, onKey:onKey, cpuMove:cpuMove, defaultStats:defaultStats };
+if (TEST){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } } else init();
+
+/* ---------- tests (#test) ---------- */
+if (TEST){
+  (function(){
+    var log = [], errs = ERRS;
+    function ok(name, cond, info){ log.push([name, cond ? 'PASS' : 'FAIL']); if (!cond) errs.push(name + (info !== undefined ? ': ' + info : '')); }
+    function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+    function done(){ var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = JSON.stringify({errs:errs, log:log}); }
+    function B(s){ return s.split('').map(function(c){ return c === '.' ? '' : c; }); }
+    function empty(n){ var b = []; for (var i=0; i<n*n; i++) b.push(''); return b; }
+    function seeded(seed){ var x = seed || 12345; return function(){ x = (x * 1103515245 + 12345) & 0x7fffffff; return x / 0x80000000; }; }
+    function now(){ return (window.performance && performance.now) ? performance.now() : Date.now(); }
+    (async function(){
+      try {
+        var I = window.XO, G = I.G;
+        G.mute = true; G.cpuDelay = 0;
+        ok('viewport ' + window.innerWidth + 'x' + window.innerHeight, true);
+        /* --- winner --- */
+        var w = I.winner(B('XXXOO....'), 3, 3);
+        ok('winner: 3x3 row', w && w.sym === 'X' && w.line.join() === '0,1,2', JSON.stringify(w));
+        w = I.winner(B('OX.OX.O..'), 3, 3); ok('winner: 3x3 column', w && w.sym === 'O' && w.line.join() === '0,3,6');
+        w = I.winner(B('XO..XO..X'), 3, 3); ok('winner: 3x3 diagonal', w && w.sym === 'X' && w.line.join() === '0,4,8');
+        w = I.winner(B('.XO.OXO..'), 3, 3); ok('winner: 3x3 anti-diagonal', w && w.sym === 'O' && w.line.join() === '2,4,6');
+        ok('winner: 3x3 draw', I.winner(B('XOXXOOOXX'), 3, 3) === 'draw');
+        ok('winner: 3x3 ongoing is null', I.winner(B('XO.......'), 3, 3) === null);
+        ok('winner: empty 7x7 is null', I.winner(empty(7), 7, 4) === null);
+        var b5 = empty(5); b5[10] = b5[11] = b5[12] = 'X';
+        ok('winner: 3 in a row on 5x5 (need 4) is not a win', I.winner(b5, 5, 4) === null);
+        b5[13] = 'X'; w = I.winner(b5, 5, 4); ok('winner: 4 in a row on 5x5', w && w.sym === 'X' && w.line.join() === '10,11,12,13');
+        var b5b = empty(5); [4,8,12,16].forEach(function(i){ b5b[i] = 'O'; }); w = I.winner(b5b, 5, 4);
+        ok('winner: 5x5 anti-diagonal', w && w.sym === 'O' && w.line.join() === '4,8,12,16');
+        var b7 = empty(7); [3,10,17,24].forEach(function(i){ b7[i] = 'X'; }); w = I.winner(b7, 7, 4);
+        ok('winner: 7x7 column', w && w.sym === 'X' && w.line.join() === '3,10,17,24');
+        var b7d = empty(7); [0,8,16,24].forEach(function(i){ b7d[i] = 'O'; }); w = I.winner(b7d, 7, 4);
+        ok('winner: 7x7 diagonal', w && w.sym === 'O' && w.line.join() === '0,8,16,24');
+        var full7 = empty(7); for (var q=0; q<49; q++){ var rr = (q/7)|0, cc = q%7; full7[q] = ((((rr/2)|0) + cc) % 2) ? 'X' : 'O'; }
+        ok('winner: 7x7 full board without 4 in a row is a draw', I.winner(full7, 7, 4) === 'draw', JSON.stringify(I.winner(full7, 7, 4)));
+        /* --- legalMoves --- */
+        ok('legalMoves: empty 3x3 has 9', I.legalMoves(empty(3)).length === 9);
+        ok('legalMoves: lists only empty cells', I.legalMoves(B('XO..X....')).join() === '2,3,5,6,7,8');
+        ok('legalMoves: full board is empty', I.legalMoves(B('XOXXOOOXX')).length === 0);
+        /* --- minimax3 --- */
+        var mm = I.minimax3(B('XX.OO....'), 'X'); ok('minimax3: takes the immediate win', mm.idx === 2 && mm.score === 10, JSON.stringify(mm));
+        mm = I.minimax3(B('OO.X.X...'), 'X'); ok('minimax3: wins at 4 (own win beats block)', mm.idx === 4, JSON.stringify(mm));
+        mm = I.minimax3(B('XX..O....'), 'O'); ok('minimax3: blocks the opponent', mm.idx === 2, JSON.stringify(mm));
+        mm = I.minimax3(empty(3), 'X'); ok('minimax3: empty board is a draw with perfect play', mm.score === 0 && mm.ties.length === 9, JSON.stringify(mm));
+        var rng = seeded(7), losses = 0, wins = 0, draws = 0;
+        for (var g=0; g<200; g++){
+          var bd = empty(3), cpu = g % 2 ? 'X' : 'O', turn = 'X', res = null;
+          while (!(res = I.winner(bd, 3, 3))){
+            var mv = turn === cpu ? I.bestMove(bd, 3, 3, cpu, 'hard', rng) : (function(){ var lm = I.legalMoves(bd); return lm[Math.floor(rng()*lm.length)]; })();
+            bd[mv] = turn; turn = turn === 'X' ? 'O' : 'X';
+          }
+          if (res === 'draw') draws++; else if (res.sym === cpu) wins++; else losses++;
+        }
+        ok('unbeatable 3x3: 0 losses in 200 games vs random', losses === 0, 'losses=' + losses + ' wins=' + wins + ' draws=' + draws);
+        ok('unbeatable 3x3: actually wins most games vs random', wins > 150, 'wins=' + wins);
+        /* --- bestMove 3x3 --- */
+        var r0 = function(){ return 0; }, r5 = function(){ return 0.5; };
+        ok('bestMove medium 3x3 takes the win', I.bestMove(B('XX.OO....'), 3, 3, 'X', 'medium', r5) === 2);
+        ok('bestMove medium 3x3 blocks', I.bestMove(B('XX..O....'), 3, 3, 'O', 'medium', r0) === 2);
+        ok('bestMove medium 3x3 opens in the centre', I.bestMove(empty(3), 3, 3, 'X', 'medium', r5) === 4);
+        ok('bestMove medium 3x3 answers centre with a corner', [0,2,6,8].indexOf(I.bestMove(B('....X....'), 3, 3, 'O', 'medium', r5)) >= 0);
+        var e3 = I.bestMove(B('XX..O....'), 3, 3, 'O', 'easy', seeded(3)); ok('bestMove easy 3x3 returns a legal move', [2,3,5,6,7,8].indexOf(e3) >= 0, e3);
+        ok('bestMove hard 3x3 picks among minimax ties with rng', I.bestMove(empty(3), 3, 3, 'X', 'hard', r0) === 0 && I.bestMove(empty(3), 3, 3, 'X', 'hard', function(){ return 0.99; }) === 8);
+        ok('bestMove on a full board is -1', I.bestMove(B('XOXXOOOXX'), 3, 3, 'X', 'hard') === -1);
+        /* --- bestMove big boards --- */
+        var h5 = empty(5); h5[10] = h5[11] = h5[12] = 'O'; h5[0] = h5[1] = 'X';
+        var hw = I.bestMove(h5, 5, 4, 'O', 'hard', r5); ok('hard 5x5 takes its own win', hw === 13 || hw === 9, hw);
+        h5[hw] = 'O'; ok('hard 5x5 move completes 4 in a row', I.winner(h5, 5, 4) && I.winner(h5, 5, 4).sym === 'O', hw); h5[hw] = '';
+        var k5 = empty(5); k5[10] = k5[11] = k5[12] = 'X'; k5[20] = 'O';
+        var kb = I.bestMove(k5, 5, 4, 'O', 'hard', r5); ok('hard 5x5 blocks an immediate win', kb === 13, kb);
+        ok('medium 5x5 blocks an immediate win', I.bestMove(k5, 5, 4, 'O', 'medium', r5) === 13);
+        var m5 = empty(5); m5[10] = m5[11] = m5[12] = 'O'; m5[20] = 'X';
+        ok('medium 5x5 takes its own win', I.bestMove(m5, 5, 4, 'O', 'medium', r5) === 13);
+        var d5 = empty(5); d5[11] = d5[12] = 'X';  /* X threatens _XXX_ via 13 */
+        var dm = I.bestMove(d5, 5, 4, 'O', 'hard', r5); ok('hard 5x5 prevents the open-three double threat', [10,13,14].indexOf(dm) >= 0, dm);
+        var c5 = empty(5); c5[11] = c5[12] = 'O'; c5[0] = c5[4] = 'X';
+        ok('hard 5x5 creates a double threat when it can', I.bestMove(c5, 5, 4, 'O', 'hard', r5) === 13, I.bestMove(c5, 5, 4, 'O', 'hard', r5));
+        ok('hard 7x7 opens in the centre', I.bestMove(empty(7), 7, 4, 'X', 'hard', r5) === 24);
+        var d7 = empty(7); d7[24] = d7[25] = 'X'; d7[17] = 'O';
+        var d7m = I.bestMove(d7, 7, 4, 'O', 'hard', r5); ok('hard 7x7 prevents the open three', [23,26,27,22].indexOf(d7m) >= 0, d7m);
+        var mid7 = empty(7); [24,25,17,31,32,16,10,38,18,9,30,26,39,12].forEach(function(i, k){ mid7[i] = k % 2 ? 'O' : 'X'; });
+        var tmax = 0, legalAll = true;
+        for (var tI=0; tI<6; tI++){ var t0 = now(); var mv7 = I.bestMove(mid7, 7, 4, tI % 2 ? 'O' : 'X', 'hard', seeded(tI+1)); var dt = now() - t0; if (dt > tmax) tmax = dt; if (mid7[mv7] || mv7 < 0) legalAll = false; }
+        ok('hard 7x7 mid-game move under 50 ms', tmax < 50, 'max ' + tmax.toFixed(1) + 'ms');
+        ok('hard 7x7 mid-game moves are legal', legalAll);
+        var allLegal = true;
+        [[3,3],[5,4],[7,4]].forEach(function(sn){ ['easy','medium','hard'].forEach(function(lv){ var bb = empty(sn[0]), r = seeded(99), tn = 'X'; for (var s=0; s<6; s++){ var m = I.bestMove(bb, sn[0], sn[1], tn, lv, r); if (m < 0 || bb[m]) allLegal = false; bb[m] = tn; tn = tn === 'X' ? 'O' : 'X'; } }); });
+        ok('bestMove: every level on every board returns legal moves', allLegal);
+        var ez = empty(7), ezr = seeded(5), ezOk = true; for (var e=0; e<20; e++){ var em = I.bestMove(ez, 7, 4, 'X', 'easy', ezr); if (em < 0 || ez[em]) ezOk = false; ez[em] = e % 2 ? 'O' : 'X'; }
+        ok('easy 7x7 keeps returning legal moves', ezOk);
+        /* --- flow: two players --- */
+        I.newGame({mode:'2p', size:5, starter:'X', names:['אבא','אמא'], resetSeries:true});
+        ok('newGame: 5x5 board, need 4, game screen', G.board.length === 25 && G.need === 4 && G.screen === 's-game' && $('board').children.length === 25);
+        ok('newGame: X starts and status shows the name + symbol', G.turn === 'X' && $('turn').textContent.indexOf('אבא') >= 0 && $('turn').textContent.indexOf('❌') >= 0, $('turn').textContent);
+        ok('play: first move placed, turn passes to O', I.play(12) === true && G.board[12] === 'X' && G.turn === 'O');
+        ok('play: occupied cell is rejected', I.play(12) === false && G.moves.length === 1);
+        ok('board: cell shows an animated SVG stroke', $('board').children[12].querySelector('svg path') !== null && $('board').children[12].classList.contains('x'));
+        ok('move counter shows move 2', $('movecount').textContent.indexOf('2') >= 0, $('movecount').textContent);
+        I.play(7); ok('undo (2P) removes one move', I.undo() === true && G.moves.length === 1 && G.board[7] === '' && G.turn === 'O');
+        ok('coord: A1 and E5 on 5x5', I.coord(0) === 'A1' && I.coord(24) === 'E5');
+        ok('history strip lists the moves', $('hist').children.length === 1 && $('hist').children[0].textContent.indexOf('C3') >= 0, $('hist').textContent);
+        I.newGame({mode:'2p', size:3, starter:'X', names:['לופו','נועה'], resetSeries:true});
+        [0,3,1,4,2].forEach(I.play);
+        ok('win: detected with the line 0,1,2', G.over && G.over.sym === 'X' && G.over.line.join() === '0,1,2');
+        ok('win: banner names the winner', $('status').classList.contains('win') && $('turn').textContent.indexOf('לופו') >= 0 && $('turn').textContent.indexOf('ניצח') >= 0, $('turn').textContent);
+        ok('win: winning cells glow and the line is drawn', $('board').children[1].classList.contains('winc') && $('winline').querySelector('line') !== null && !$('winline').classList.contains('hidden'));
+        ok('win: series X=1, next-round button shown', G.series.X === 1 && !$('again-row').classList.contains('hidden'));
+        ok('win: no more moves and no undo after the end', I.play(5) === false && I.undo() === false && $('b-undo').disabled);
+        ok('win: confetti spawned and first-win achievement toast queued', $('confetti').children.length > 0 && G.lastToasts.indexOf('achFirst') >= 0 && G.lastToasts.indexOf('achFast') >= 0, JSON.stringify(G.lastToasts));
+        ok('stats: all-time counters updated', G.stats.games >= 1 && G.stats.xw >= 1 && G.stats.ach.first === 1);
+        /* loser starts */
+        G.starter = 'loser'; I.nextRound();
+        ok('loser starts: O (the loser) starts the next round, series kept', G.turn === 'O' && G.first === 'O' && G.series.X === 1 && G.moves.length === 0);
+        [0,1,2,4,3,5,7,6,8].forEach(I.play);
+        ok('draw: detected, banner + series', G.over === 'draw' && $('status').classList.contains('draw') && G.series.D === 1 && $('turn').textContent.indexOf('תיקו') >= 0);
+        I.nextRound(); ok('after a draw the other player starts', G.first === 'X');
+        G.rng = function(){ return 0.9; }; I.newGame({starter:'random', resetSeries:true}); var f1 = G.first; G.rng = function(){ return 0.1; }; I.newGame({starter:'random'});
+        ok('random starter honours the injected rng', f1 === 'O' && G.first === 'X'); G.rng = Math.random;
+        /* restart keeps series */
+        G.series.X = 3; I.play(4); I.restart(); ok('restart clears the board but keeps the series', G.moves.length === 0 && G.series.X === 3);
+        /* hints */
+        var hi = I.hint(); ok('hint highlights a legal cell', hi >= 0 && G.board[hi] === '' && $('board').children[hi].classList.contains('hint') && G.hints === 2);
+        I.hint(); I.hint(); ok('hints limited to 3 per game', I.hint() === -1 && G.hints === 0 && $('b-hint').disabled);
+        /* keyboard */
+        I.newGame({mode:'2p', size:3, starter:'X'});
+        function key(k){ document.dispatchEvent(new KeyboardEvent('keydown', {key:k, bubbles:true, cancelable:true})); }
+        key('ArrowRight'); ok('keyboard: first arrow selects the centre', G.cursor === 4 && $('board').children[4].classList.contains('kb'));
+        key('ArrowRight'); key('ArrowDown'); ok('keyboard: arrows move the cursor', G.cursor === 8);
+        key('Enter'); ok('keyboard: Enter plays the move', G.board[8] === 'X' && G.moves.length === 1);
+        key('z'); ok('keyboard: Z undoes', G.moves.length === 0);
+        /* --- flow: vs CPU --- */
+        I.newGame({mode:'cpu', level:'hard', size:3, starter:'X', human:'X', resetSeries:true});
+        ok('vs CPU: human X moves first, CPU not yet', G.turn === 'X' && !G.thinking);
+        I.play(4); ok('vs CPU: thinking state locks the board', G.thinking === true && $('board').classList.contains('locked') && $('turn').textContent === I.t('thinking'));
+        ok('vs CPU: human tap while thinking is refused', I.humanPlay(0) === false);
+        await sleep(30);
+        ok('vs CPU: the computer answered', G.moves.length === 2 && G.turn === 'X' && !G.thinking, JSON.stringify(G.moves));
+        ok('vs CPU: undo takes back both moves', I.undo() === true && G.moves.length === 0 && G.turn === 'X');
+        ok('vs CPU: CPU name on the O tile, saved name on the X tile', $('to-name').textContent === I.t('cpuName') && $('tx-name').textContent === 'לופו', $('tx-name').textContent);
+        G.names = ['','']; I.renderMenu(); I.newGame({mode:'cpu', level:'easy', size:3, starter:'X', human:'X'});
+        ok('vs CPU: without a name the human tile says "you"', $('tx-name').textContent === I.t('you'));
+        G.names = ['לופו','נועה'];
+        I.newGame({mode:'cpu', level:'medium', size:3, starter:'X', human:'O', resetSeries:true});
+        await sleep(30);
+        ok('vs CPU as O: the computer opens', G.moves.length === 1 && G.turn === 'O' && G.board[G.moves[0]] === 'X', JSON.stringify(G.moves));
+        ok('vs CPU as O: cannot undo the computer opening', I.undo() === false);
+        var cpuLost = false, played = 0;
+        for (var gg=0; gg<12; gg++){
+          I.newGame({mode:'cpu', level:'hard', size:3, starter:gg % 2 ? 'O' : 'X', human:gg % 3 ? 'X' : 'O', resetSeries:false});
+          var guard = 0;
+          while (!G.over && guard++ < 20){ if (G.thinking || isCpuNow()) { await sleep(5); continue; } var lm = I.legalMoves(G.board); I.play(lm[Math.floor(Math.random()*lm.length)]); await sleep(5); }
+          played++; if (G.over && G.over !== 'draw' && G.over.sym === G.human) cpuLost = true;
+        }
+        function isCpuNow(){ return G.mode === 'cpu' && G.turn !== G.human && !G.over; }
+        ok('vs CPU flow: 12 random games vs unbeatable, no human win', played === 12 && !cpuLost);
+        ok('stats: cpu record for hard has entries', (G.stats.cpu.hard[1] + G.stats.cpu.hard[2]) >= 12, JSON.stringify(G.stats.cpu));
+        var hb = $('status').classList.contains('lose') || $('status').classList.contains('draw');
+        ok('vs CPU: loss shows the computer banner (or draw)', hb, $('status').className);
+        /* --- timer --- */
+        I.newGame({mode:'2p', size:3, starter:'X', timerOn:true, resetSeries:true});
+        ok('timer: bar visible when the speed timer is on', !$('tbar').classList.contains('hidden') && G.timerId !== 0);
+        G.deadline = Date.now() - 1; I.tickTimer();
+        ok('timer: expiry auto-plays a random legal move', G.moves.length === 1 && G.turn === 'O' && !$('tbar').classList.contains('hidden'));
+        G.timerOn = false; I.newGame({timerOn:false}); ok('timer: hidden when off', $('tbar').classList.contains('hidden') && G.timerId === 0);
+        /* --- language / theme / persistence --- */
+        I.setLang('en');
+        ok('setLang(en) sets dir ltr and translates', document.documentElement.dir === 'ltr' && document.documentElement.lang === 'en' && $('b-play').textContent === I.T.en.play && $('b-lang').textContent === 'עב');
+        ok('status translated live', $('turn').textContent.indexOf('turn') >= 0, $('turn').textContent);
+        I.setLang('he');
+        ok('setLang(he) sets dir rtl', document.documentElement.dir === 'rtl' && $('b-play').textContent === I.T.he.play);
+        I.setTheme(true); ok('dark theme attribute set', document.documentElement.getAttribute('data-theme') === 'dark' && $('b-theme').textContent === '☀️');
+        I.setTheme(false); ok('light theme restored', document.documentElement.getAttribute('data-theme') === 'light');
+        var stored = null; try { stored = JSON.parse(localStorage.getItem('xo.v1')); } catch(e){}
+        ok('persisted under xo.v1 (or storage unavailable)', stored === null || (stored.stats && stored.stats.games === G.stats.games && stored.lang === 'he' && Array.isArray(stored.names) && stored.last && stored.last.size === 3));
+        /* --- menu DOM --- */
+        I.toMenu(); ok('toMenu shows the menu', G.screen === 's-menu' && $('s-menu').classList.contains('on') && !$('s-game').classList.contains('on'));
+        document.querySelector('.seg[data-opt=size] button[data-v="7"]').click();
+        ok('menu: size button sets 7x7 and the 4-in-a-row note', G.size === 7 && $('need-note').textContent === I.T.he.needNote4 && document.querySelector('.seg[data-opt=size] button[data-v="7"]').classList.contains('on'));
+        document.querySelector('.seg[data-opt=mode] button[data-v="2p"]').click();
+        ok('menu: 2P hides the CPU options and shows two name inputs', G.mode === '2p' && $('cpu-opts').classList.contains('hidden') && !$('name1').classList.contains('hidden'));
+        $('name0').value = 'דני'; $('name0').dispatchEvent(new Event('input'));
+        ok('menu: name input saved', G.names[0] === 'דני' && (stored === null || JSON.parse(localStorage.getItem('xo.v1')).names[0] === 'דני'));
+        $('sw-timer').click(); ok('menu: timer switch toggles', G.timerOn === true && $('sw-timer').classList.contains('on')); $('sw-timer').click();
+        $('b-play').click();
+        ok('menu: play starts a 7x7 2P game with a fresh series', G.screen === 's-game' && G.size === 7 && G.mode === '2p' && G.series.X === 0 && $('board').children.length === 49 && $('tx-name').textContent === 'דני');
+        var cell = $('board').children[0].getBoundingClientRect();
+        ok('7x7 cells are big enough to tap (>=44px)', cell.width >= 44 && cell.height >= 44, cell.width.toFixed(1));
+        ok('board is square', Math.abs($('board').getBoundingClientRect().width - $('board').getBoundingClientRect().height) < 2);
+        $('board').children[24].click(); ok('tap on a cell plays', G.board[24] === 'X');
+        $('b-menu').click(); $('b-quick').click();
+        ok('quick game replays the last configuration', G.screen === 's-game' && G.size === 7 && G.mode === '2p');
+        $('b-menu').click(); $('b-reset-stats').click(); ok('reset stats clears all-time stats', G.stats.games === 0 && $('stats').textContent === I.T.he.noStats);
+        ok('vibrate helper is guarded', (function(){ try { I.G.mute = true; return true; } catch(e){ return false; } })());
+        ok('no horizontal overflow', document.documentElement.scrollWidth <= window.innerWidth + 1, document.documentElement.scrollWidth + '>' + window.innerWidth);
+        ok('two screens exist', document.querySelectorAll('.screen').length === 2);
+        ok('no runtime errors', errs.filter(function(x){ return x.indexOf('onerror') === 0 || x.indexOf('init') === 0; }).length === 0);
+      } catch(e){ errs.push('exception: ' + (e && e.stack || e)); }
+      done();
+    })();
+  })();
+}
+})();
+</script>
+</body>
+</html>

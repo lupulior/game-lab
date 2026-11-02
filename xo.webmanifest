@@ -1,0 +1,19 @@
+{
+  "name": "איקס עיגול ❌⭕",
+  "short_name": "איקס עיגול",
+  "description": "איקס עיגול 3×3, 5×5 ו-7×7: נגד המחשב או שני שחקנים, גם בטלפון.",
+  "start_url": "./xo.html?src=pwa",
+  "id": "/game-lab/xo.html",
+  "scope": "./xo.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2BC3A7",
+  "theme_color": "#2BC3A7",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/xo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/xo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/xo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
