@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>נחש נגד תולעים 🐍 – משחק נחשים io עם 3 מצבים (כמו Snake vs Worms) – המשחק של לופו</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="נחש נגד תולעים 🐍 בחינם: משחק נחשים בסגנון slither.io נגד תולעים חכמות – אכלו פיצות, דונאטס ופירות, גדלו, חסמו את הקטנים והתחמקו מהגדולים. 3 מצבים: אינסוף, בטל רויאל של 100 נחשים וזירה. נחשים ורקעים לקנייה במטבעות, מתנה יומית וגלגל מזל. בלי התקנה, בעברית ובאנגלית – המשחק של לופו.">
+<meta name="keywords" content="נחש נגד תולעים, משחק נחש, משחק סלית'ר, slither, snake io, בטל רויאל, משחק נחשים לילדים, Snake vs Worms, משחק נחשים, snake game, worms, משחק לילדים, לופו, המשחק של לופו">
+<meta name="theme-color" content="#2C7BE5">
+<link rel="canonical" href="https://lupulior.github.io/game-lab/snake.html">
+<link rel="manifest" href="snake.webmanifest">
+<link rel="apple-touch-icon" href="art/snake-180.png">
+<link rel="icon" href="art/snake-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Game Lab">
+<meta property="og:title" content="נחש נגד תולעים 🐍 – משחק נחשים io עם 3 מצבים">
+<meta property="og:description" content="אכלו פיצות ודונאטס, גדלו, חסמו את הקטנים והתחמקו מהגדולים. אינסוף, בטל רויאל של 100 נחשים וזירה. בחינם, בלי התקנה.">
+<meta property="og:image" content="https://lupulior.github.io/game-lab/art/snake-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="נחש נגד תולעים – נחש אדום מצויר בין פיצות ודונאטס על רקע סגול">
+<meta property="og:url" content="https://lupulior.github.io/game-lab/snake.html">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="נחש נגד תולעים 🐍 – משחק נחשים io עם 3 מצבים">
+<meta name="twitter:description" content="משחק נחשים בסגנון slither: אכלו, גדלו, חסמו נחשים קטנים והתחמקו מהגדולים. אינסוף, בטל רויאל וזירה.">
+<meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/snake-og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"נחש נגד תולעים – משחק נחשים io","alternateName":["Snake vs Worms","משחק נחש","משחק סלית'ר","snake io","slither"],"url":"https://lupulior.github.io/game-lab/snake.html","image":"https://lupulior.github.io/game-lab/art/snake-og.png","description":"משחק נחשים בסגנון slither.io נגד תולעים: אכלו פיצות ודונאטס, גדלו, חסמו את הקטנים והתחמקו מהגדולים. 3 מצבים: אינסוף, בטל רויאל של 100 נחשים וזירה.","genre":["Arcade","Action","Casual"],"gamePlatform":["Web browser","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":1},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"isPartOf":{"@type":"WebSite","name":"מעבדת משחקים – Game Lab","url":"https://lupulior.github.io/game-lab/"}}
+</script>
+<style>
+:root{--blue:#2C7BE5;--blue2:#5BB2FF;--blueD:#1B4FA3;--gold:#FFC93C;--gold2:#FFB300;--goldD:#C2820A;--text:#fff;--dark:#1E2338;--panel:#273052;--line:rgba(255,255,255,.18);--green:#3DBB2B;--greenD:#237A16;--red:#E8433F}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;background:var(--blue);overflow:hidden}
+body{font-family:"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-serif;color:var(--text);font-size:18px;line-height:1.3;-webkit-font-smoothing:antialiased;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;font-size:inherit;line-height:1.2}
+button:active{filter:brightness(.95)}
+.hidden{display:none!important}
+.scr{position:fixed;inset:0;display:none}.scr.on{display:block}
+/* ---- menu ---- */
+#s-menu{background:radial-gradient(120vmax 80vmax at 50% -10%,#6BC0FF,var(--blue) 55%,#1F63C8);overflow:auto}
+#s-menu:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.055) 0 16px,transparent 16px 32px);pointer-events:none}
+.topbar{position:absolute;top:8px;left:8px;right:8px;display:flex;align-items:center;gap:8px;z-index:3;direction:ltr}
+.tpill{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.3);border-radius:999px;padding:4px;min-height:48px;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
+.badge{width:40px;height:40px;border-radius:50%;background:linear-gradient(#FFE27A,var(--gold2));color:#5a3a00;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 var(--goldD);font-size:18px;flex:none}
+.xpwrap{display:flex;flex-direction:column;gap:3px;min-width:84px;padding:0 8px 0 2px}
+.xpbar{height:10px;border-radius:5px;background:rgba(0,0,0,.4);overflow:hidden}.xpbar i{display:block;height:100%;background:linear-gradient(#9CFF6A,var(--green));width:0;border-radius:5px;transition:width .4s}
+.xpwrap span{font-size:16px;font-weight:800;line-height:1;white-space:nowrap}
+.coins{padding-left:10px;font-weight:900;font-size:18px}
+.coins b{min-width:36px;text-align:center}
+.plus{width:40px;height:40px;border-radius:50%;background:linear-gradient(#6BE259,var(--green));color:#fff;font-weight:900;font-size:24px;box-shadow:0 3px 0 var(--greenD);flex:none}
+.gear{margin-left:auto;width:48px;height:48px;border-radius:14px;background:rgba(0,0,0,.3);font-size:24px}
+.bgpick{position:absolute;right:8px;top:66px;z-index:3;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border-radius:999px;padding:4px 12px 4px 4px;min-height:44px;font-weight:800;font-size:16px}
+.bgpick i{width:34px;height:34px;border-radius:50%;background:#4A4E6E;border:2px solid #fff;flex:none}
+.side{position:absolute;left:8px;top:66px;display:flex;flex-direction:column;gap:8px;z-index:3;direction:ltr}
+.sq{display:flex;align-items:center;gap:10px;min-width:168px;height:54px;padding:0 14px;border-radius:16px;background:linear-gradient(#FFE27A,var(--gold2));box-shadow:0 4px 0 var(--goldD),0 6px 12px rgba(0,0,0,.2);color:#5a3a00;font-weight:900;font-size:16px;position:relative;text-align:left}
+.sq .ic{font-size:26px;width:32px;text-align:center;flex:none}
+.sq:active{transform:translateY(3px);box-shadow:0 1px 0 var(--goldD)}
+.sq em{position:absolute;right:-6px;top:-10px;background:var(--red);color:#fff;font-style:normal;font-size:16px;border-radius:999px;padding:2px 9px;box-shadow:0 2px 0 #9a1f1c}
+.sq em.off{display:none}
+.centre{position:absolute;left:0;right:0;top:66px;bottom:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:2;pointer-events:none;padding:0 190px}
+.centre>*{pointer-events:auto}
+.logo{margin:0;text-align:center;font-size:34px;line-height:1;text-shadow:0 4px 0 rgba(0,0,0,.25);letter-spacing:.5px;color:#FFF7CC}
+.logo small{display:block;font-size:20px;color:#fff;margin-top:6px;letter-spacing:0}
+.card{display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.35);border-radius:22px;padding:8px 10px 6px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.card canvas{width:240px;height:120px;border-radius:14px;background:rgba(0,0,0,.18)}
+.card span{font-weight:900;font-size:16px;letter-spacing:.5px}
+.playrow{display:flex;align-items:center;gap:12px}
+.play{min-width:220px;height:66px;border-radius:999px;background:linear-gradient(#FFE27A,var(--gold2));color:#5a3a00;font-weight:900;font-size:28px;box-shadow:0 6px 0 var(--goldD),0 10px 18px rgba(0,0,0,.25);padding:0 24px}
+.play:active{transform:translateY(4px);box-shadow:0 2px 0 var(--goldD)}
+.chest{width:66px;height:66px;border-radius:18px;background:linear-gradient(#FFE27A,var(--gold2));box-shadow:0 5px 0 var(--goldD);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#5a3a00;font-size:28px;line-height:1;position:relative}
+.chest small{font-size:16px;font-weight:900;line-height:1;margin-top:2px}
+.chest.wait{filter:grayscale(.6) brightness(.85)}
+#name{width:220px;height:44px;border-radius:12px;border:2px solid rgba(255,255,255,.4);background:rgba(0,0,0,.25);color:#fff;font:800 16px/1 "Varela Round","Arial Rounded MT Bold",Arial,sans-serif;text-align:center;outline:none}
+#name::placeholder{color:rgba(255,255,255,.6)}
+.foot{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:16px;z-index:3}
+.foot a,.foot .lnk{color:#FFF7CC;text-decoration:none;font-weight:800;padding:8px 10px;display:inline-block}
+@media (min-width:1400px){
+  .card canvas{width:320px;height:160px}
+  .play{min-width:280px;height:76px;font-size:32px}.chest{width:76px;height:76px;font-size:32px}
+  .logo{font-size:44px}.logo small{font-size:24px}
+}
+/* phone portrait: everything stacks under the top bar */
+@media (max-width:720px) and (min-height:461px){
+  .bgpick{position:static;margin:66px auto 0;width:max-content}
+  .side{position:static;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:8px;padding:0 8px;margin-top:8px}
+  .sq{min-width:150px;height:48px;font-size:16px}
+  .centre{position:static;padding:12px 8px 8px;justify-content:flex-start;gap:10px}
+  .logo{font-size:28px}
+  .card canvas{width:200px;height:100px}
+  .play{min-width:190px;height:60px;font-size:24px}
+  .foot{position:static;padding:8px 0 10px}
+}
+/* phone landscape: keep the side columns, shrink the middle */
+@media (max-height:460px){
+  .centre{top:56px;bottom:26px;padding:0 180px;gap:6px}
+  .logo{display:none}
+  .card canvas{width:180px;height:78px}
+  .play{height:50px;font-size:22px;min-width:160px}.chest{width:50px;height:50px;font-size:20px}
+  #name{height:40px}
+  .sq{height:44px;min-width:150px}.side,.bgpick{top:62px}
+  .foot{bottom:0}.foot a,.foot .lnk{padding:4px 10px}
+}
+/* ---- overlays ---- */
+.ov{position:fixed;inset:0;background:rgba(10,14,30,.86);display:none;align-items:center;justify-content:center;z-index:20;overflow:auto;padding:12px}
+.ov.on{display:flex}
+.panel{background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:16px;max-width:560px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.5);text-align:center;max-height:calc(100% - 8px);overflow:auto}
+.panel h2{margin:0 0 10px;font-size:26px}
+.panel p{margin:6px 0;font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;min-width:140px;border-radius:999px;background:linear-gradient(#FFE27A,var(--gold2));color:#5a3a00;font-weight:900;font-size:20px;box-shadow:0 5px 0 var(--goldD);padding:0 22px;margin:6px 4px}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--goldD)}
+.btn2{display:inline-flex;align-items:center;justify-content:center;min-height:48px;min-width:140px;border-radius:999px;background:rgba(255,255,255,.14);border:2px solid var(--line);color:#fff;font-weight:900;font-size:18px;padding:0 20px;margin:6px 4px}
+.btn.sm{min-width:0;min-height:44px;font-size:16px;padding:0 14px}
+.xbtn{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);font-size:20px;font-weight:900}
+.modes{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:50px}
+.mode{width:220px;background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.mode .ic{font-size:54px;line-height:1}
+.mode h3{margin:0;font-size:24px}
+.mode p{margin:0;font-size:16px;color:#C8D0F0;min-height:62px}
+.mode .btn{width:100%;margin-top:4px}
+#s-modes h2{position:absolute;top:14px;left:0;right:0;text-align:center;margin:0;font-size:26px}
+.back{position:absolute;top:10px;left:10px;width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.15);font-size:22px;z-index:2}
+.stats3{display:flex;justify-content:center;gap:10px;margin:10px 0}
+.stats3 div{flex:1;background:rgba(0,0,0,.25);border-radius:14px;padding:8px 4px}
+.stats3 b{display:block;font-size:26px}
+.stats3 span{font-size:16px;color:#C8D0F0}
+.earn{display:flex;justify-content:center;gap:16px;font-size:20px;font-weight:900;margin:6px 0 10px;flex-wrap:wrap}
+.earn span{background:rgba(255,201,60,.18);border-radius:999px;padding:6px 14px}
+#dead-place{font-size:20px;font-weight:900;color:var(--gold);margin:0 0 6px}
+#dead-title.win{color:var(--gold)}
+.tabs{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
+.tab{min-height:44px;padding:0 18px;border-radius:999px;background:rgba(255,255,255,.12);font-weight:900;font-size:16px}
+.tab.on{background:var(--gold);color:#5a3a00}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+.item{background:rgba(0,0,0,.25);border:2px solid transparent;border-radius:16px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:44px}
+.item.own{border-color:rgba(255,255,255,.3)}
+.item.eq{border-color:var(--gold);background:rgba(255,201,60,.15)}
+.item canvas{width:104px;height:54px;border-radius:10px;background:rgba(0,0,0,.2)}
+.item .sw{width:104px;height:54px;border-radius:10px}
+.item span{font-size:16px;font-weight:800}
+.item small{font-size:16px;color:var(--gold);font-weight:900}
+.shopcoins{font-weight:900;font-size:20px;margin-bottom:6px}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.2);border-radius:14px;padding:6px 6px 6px 14px;margin:6px 0;font-weight:800;font-size:16px}
+.setrow .btn2{margin:0;min-width:130px;min-height:44px;font-size:16px}
+.setrow .btn2.on{background:var(--green);border-color:transparent}
+#wheel{width:260px;height:260px;max-width:80vw;max-height:80vw;display:block;margin:0 auto}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%) translateY(-90px);background:#fff;color:#1E2338;padding:10px 18px;border-radius:14px;font-weight:900;z-index:60;transition:transform .3s;max-width:90vw;text-align:center;font-size:16px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.toast.on{transform:translateX(-50%) translateY(0)}
+/* ---- game ---- */
+#s-game{background:#2f3350}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#hud{position:absolute;inset:0;pointer-events:none;direction:ltr}
+#hud button{pointer-events:auto}
+#hud-tl{position:absolute;left:8px;top:8px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+#mm{width:90px;height:90px;border-radius:12px;background:rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.3);display:block}
+.hpill{background:rgba(0,0,0,.5);border-radius:999px;padding:4px 10px;font-size:16px;font-weight:900;display:flex;align-items:center;gap:6px;min-height:34px;white-space:nowrap}
+.hpill .plus{width:30px;height:30px;font-size:20px;pointer-events:auto;box-shadow:0 2px 0 var(--greenD)}
+.hb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.55);font-size:22px;font-weight:900;color:#fff;border:2px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center}
+.hb.off{opacity:.55}
+#hud-tc{position:absolute;left:50%;top:8px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;max-width:min(64vw,380px)}
+#mission{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.55);border-radius:999px;padding:5px 12px 5px 6px;font-size:16px;font-weight:900;white-space:nowrap;direction:rtl;border:2px solid rgba(255,255,255,.2);max-width:100%;overflow:hidden}
+#mission.done{background:rgba(61,187,43,.75)}
+#mring{width:30px;height:30px;border-radius:50%;background:conic-gradient(var(--gold) var(--p,100%),rgba(255,255,255,.2) 0);position:relative;flex:none}
+#mring:after{content:"";position:absolute;inset:5px;border-radius:50%;background:#1E2338}
+#mission-timer{font-variant-numeric:tabular-nums;direction:ltr;color:var(--gold)}
+#mission-txt{overflow:hidden;text-overflow:ellipsis}
+#score{font-size:36px;font-weight:900;text-shadow:0 3px 0 rgba(0,0,0,.45);line-height:1.1}
+#lb{position:absolute;right:8px;top:8px;width:176px;background:rgba(0,0,0,.5);border-radius:14px;padding:6px 8px;font-size:16px;direction:ltr;border:2px solid rgba(255,255,255,.2)}
+.lbt{font-weight:900;color:var(--gold);text-align:center;margin-bottom:2px}
+#lb .row{display:flex;gap:4px;white-space:nowrap;line-height:1.35;font-weight:700}
+#lb .row .n{flex:1;overflow:hidden;text-overflow:ellipsis;min-width:0}
+#lb .row.me{color:var(--gold)}
+#lb-me{border-top:1px solid rgba(255,255,255,.25);margin-top:4px;padding-top:3px;color:var(--gold);font-weight:900;display:flex;gap:4px;white-space:nowrap}
+#lb-me .n{flex:1;overflow:hidden;text-overflow:ellipsis;min-width:0}
+#b-emoji{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:22px;background:rgba(255,201,60,.9);color:#5a3a00;border-color:#fff}
+#emoji-row{position:absolute;right:64px;top:50%;transform:translateY(-50%);display:flex;gap:4px;background:rgba(0,0,0,.6);border-radius:999px;padding:4px;pointer-events:auto}
+#emoji-row button{width:46px;height:46px;font-size:26px;border-radius:50%;background:rgba(255,255,255,.1)}
+#b-pause{position:absolute;left:10px;bottom:10px}
+#b-boost{position:absolute;right:16px;bottom:16px;width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#FFE27A,#FF9A00);box-shadow:0 6px 0 #b56a00;font-size:34px;display:none;border:3px solid rgba(255,255,255,.5)}
+#b-boost.on{display:block}
+#b-boost:active{transform:translateY(4px);box-shadow:0 2px 0 #b56a00}
+#joy{position:absolute;width:120px;height:120px;border-radius:50%;border:3px solid rgba(255,255,255,.45);background:rgba(255,255,255,.08);transform:translate(-50%,-50%);pointer-events:none}
+#joy i{position:absolute;left:50%;top:50%;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.6);transform:translate(-50%,-50%)}
+#hint{position:absolute;left:50%;bottom:110px;transform:translateX(-50%);background:rgba(0,0,0,.5);border-radius:999px;padding:8px 16px;font-size:16px;font-weight:800;white-space:nowrap;max-width:94vw;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:600px){
+  #lb{width:132px;padding:4px 6px}#lb .row:nth-child(n+4){display:none}
+  #hud-tc{top:170px;max-width:78vw}
+  #mm{width:76px;height:76px}
+  #score{font-size:30px}
+  #hint{bottom:120px}
+}
+@media (max-height:460px){
+  #lb .row:nth-child(n+6){display:none}
+  #hud-tl{gap:4px}
+}
+#test-log{position:fixed;left:0;top:0;z-index:999;white-space:pre-wrap;font-family:monospace;font-size:12px;color:#fff;background:#000;padding:8px;direction:ltr;max-height:100%;overflow:auto;margin:0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<!-- MAIN MENU -->
+<div id="s-menu" class="scr on">
+  <div class="topbar">
+    <div class="tpill"><div class="badge" id="m-level">1</div><div class="xpwrap"><div class="xpbar"><i id="m-xpfill"></i></div><span id="m-xp">0/170</span></div></div>
+    <div class="tpill coins"><span>🪙</span><b id="m-coins">0</b><button class="plus" id="b-plus" aria-label="more coins">+</button></div>
+    <button class="gear" id="b-settings" aria-label="settings">⚙️</button>
+  </div>
+  <button class="bgpick" id="b-bg"><i id="bg-swatch"></i><span data-t="background">רקע</span></button>
+  <div class="side">
+    <button class="sq" id="b-gift"><span class="ic">🎁</span><span data-t="gift">מתנה יומית</span><em id="gift-tag" data-t="claim">קחו!</em></button>
+    <button class="sq" id="b-free"><span class="ic">🪙</span><span data-t="free">מטבעות חינם</span><em id="free-tag" data-t="claim">קחו!</em></button>
+    <button class="sq" id="b-wheel"><span class="ic">🎡</span><span data-t="wheel">גלגל המזל</span><em id="wheel-tag" data-t="spinTag">סובבו!</em></button>
+    <button class="sq" id="b-shop"><span class="ic">🛒</span><span data-t="shop">חנות</span></button>
+  </div>
+  <div class="centre">
+    <h1 class="logo">Snake vs Worms<small data-t="title">נחש נגד תולעים</small></h1>
+    <button class="card" id="b-edit" aria-label="edit snake"><canvas id="pv" width="480" height="240"></canvas><span data-t="edit">ערוך נחש</span></button>
+    <input id="name" maxlength="14" placeholder="השם שלכם" autocomplete="off" spellcheck="false">
+    <div class="playrow"><button class="play" id="b-play" data-t="play">שחק</button><button class="chest" id="b-chest"><span>🧰</span><small id="chest-tag" data-t="ready">מוכן</small></button></div>
+  </div>
+  <div class="foot"><a href="./" data-t="more">🎮 עוד משחקים</a> · <button class="lnk" id="b-lang">English</button></div>
+</div>
+
+<!-- GAME MODES -->
+<div id="s-modes" class="ov">
+  <button class="back" id="b-modes-back" aria-label="back">↩</button>
+  <h2 data-t="modes">בחרו מצב משחק</h2>
+  <div class="modes">
+    <div class="mode"><div class="ic">♾️</div><h3 data-t="mInf">אינסוף</h3><p data-t="mInfD">אינסוף: הגיעו למשקל הנחש המקסימלי</p><button class="btn" data-mode="infinity" data-t="play">שחק</button></div>
+    <div class="mode"><div class="ic">👑</div><h3 data-t="mBr">בטל רויאל</h3><p data-t="mBrD">קרב בין 100 נחשים – רק אחד ישרוד</p><button class="btn" data-mode="br" data-t="play">שחק</button></div>
+    <div class="mode"><div class="ic">⚔️</div><h3 data-t="mAr">זירה</h3><p data-t="mArD">זירה: הילחמו ב־5 נחשים אחרים בזירה</p><button class="btn" data-mode="arena" data-t="play">שחק</button></div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="s-game" class="scr">
+  <canvas id="cv"></canvas>
+  <div id="hud">
+    <div id="hud-tl">
+      <canvas id="mm" width="180" height="180"></canvas>
+      <div class="hpill" id="online">👥 <b id="online-n">0</b></div>
+      <div class="hpill" id="g-coins">🪙 <b id="g-coins-n">0</b><button class="plus" id="b-gplus" aria-label="coins">+</button></div>
+      <button class="hb" id="b-music" aria-label="music">🎵</button>
+    </div>
+    <div id="hud-tc">
+      <div id="mission"><span id="mring"></span><span id="mission-timer">05:00</span><span id="mission-txt"></span></div>
+      <div id="score">10</div>
+    </div>
+    <div id="lb"><div class="lbt" data-t="leaders">מובילים</div><div id="lb-rows"></div><div id="lb-me"></div></div>
+    <div id="emoji-row" class="hidden"><button>😂</button><button>😡</button><button>😎</button><button>👍</button><button>💀</button></div>
+    <button class="hb" id="b-emoji" aria-label="emoji">E</button>
+    <button class="hb" id="b-pause" aria-label="pause">⏸</button>
+    <div id="hint" class="hidden"></div>
+    <div id="joy" class="hidden"><i></i></div>
+    <button id="b-boost" aria-label="boost">🚀</button>
+  </div>
+</div>
+
+<!-- PAUSE -->
+<div id="s-pause" class="ov"><div class="panel"><h2 data-t="paused">הפסקה</h2><button class="btn" id="b-resume" data-t="resume">המשך</button><br><button class="btn2" id="b-quit" data-t="quit">יציאה לתפריט</button></div></div>
+
+<!-- DEATH -->
+<div id="s-dead" class="ov"><div class="panel">
+  <h2 id="dead-title">נפסלת!</h2>
+  <p id="dead-place"></p>
+  <div class="stats3"><div><b id="d-weight">0</b><span data-t="weight">משקל</span></div><div><b id="d-kills">0</b><span data-t="kills">הריגות</span></div><div><b id="d-time">0:00</b><span data-t="time">זמן</span></div></div>
+  <div class="earn"><span>🪙 +<b id="d-coins">0</b></span><span>⭐ +<b id="d-xp">0</b> XP</span></div>
+  <p id="dead-tip" data-t="tip">הראש שלכם נגע בגוף של נחש אחר. תנו לאחרים להתנגש בכם!</p>
+  <button class="btn" id="b-again" data-t="again">שחק שוב</button><button class="btn2" id="b-menu" data-t="menu">תפריט</button>
+</div></div>
+
+<!-- SHOP -->
+<div id="s-shop" class="ov"><div class="panel" style="position:relative;max-width:640px">
+  <button class="xbtn" id="b-shop-x" aria-label="close">✕</button>
+  <h2 data-t="shop">חנות</h2>
+  <div class="shopcoins">🪙 <b id="s-coins">0</b></div>
+  <div class="tabs"><button class="tab on" id="tab-skins" data-t="skins">נחשים</button><button class="tab" id="tab-bgs" data-t="bgs">רקעים</button></div>
+  <div class="grid" id="shop-grid"></div>
+</div></div>
+
+<!-- SETTINGS -->
+<div id="s-settings" class="ov"><div class="panel" style="position:relative;max-width:420px">
+  <button class="xbtn" id="b-set-x" aria-label="close">✕</button>
+  <h2 data-t="settings">הגדרות</h2>
+  <div class="setrow"><span data-t="sound">צלילים</span><button class="btn2" id="set-sound">פועל</button></div>
+  <div class="setrow"><span data-t="music">מוזיקה</span><button class="btn2" id="set-music">כבוי</button></div>
+  <div class="setrow"><span data-t="lang">שפה</span><button class="btn2" id="set-lang">English</button></div>
+  <div class="setrow"><span data-t="controls">שליטה</span><button class="btn2" id="set-ctrl">עכבר + מקלדת</button></div>
+  <div class="setrow"><span data-t="reset">איפוס התקדמות</span><button class="btn2" id="set-reset">🗑️</button></div>
+</div></div>
+
+<!-- WHEEL -->
+<div id="s-wheel" class="ov"><div class="panel" style="position:relative;max-width:360px">
+  <button class="xbtn" id="b-wheel-x" aria-label="close">✕</button>
+  <h2 data-t="wheel">גלגל המזל</h2>
+  <canvas id="wheel" width="520" height="520"></canvas>
+  <p id="wheel-msg"></p>
+  <button class="btn" id="b-spin" data-t="spin">סובב!</button>
+</div></div>
+
+<!-- GENERIC MODAL -->
+<div id="s-modal" class="ov"><div class="panel" style="max-width:380px"><h2 id="modal-title"></h2><p id="modal-body" style="font-size:18px"></p><button class="btn" id="b-modal-ok" data-t="ok">אישור</button></div></div>
+
+<div class="toast" id="toast"></div>
+<pre id="test-log" class="hidden"></pre>
+<script>
+(function(){
+'use strict';
+var TEST = location.hash === '#test', ERRS = [];
+if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
+var KEY = 'snake.v1', HZ = 60, DT = 1 / HZ, TAU = Math.PI * 2;
+function $(id){ return document.getElementById(id); }
+function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+function lerp(a, b, t){ return a + (b - a) * t; }
+function mkRng(seed){ var a = (seed >>> 0) || 1; return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function angDiff(a, b){ var d = (a - b) % TAU; if (d > Math.PI) d -= TAU; else if (d < -Math.PI) d += TAU; return d; }
+function hyp(x, y){ return Math.sqrt(x * x + y * y); }
+
+/* ---------- data ---------- */
+var SPEED = 165, BOOST_MUL = 2, BOOST_BURN = 3, BOOST_MIN = 12, TURN0 = 5.2, MAX_SEGS = 260, START_W = 10;
+var MODES = {
+  infinity:{ id:'infinity', R:3000, bots:30, food:1500, shape:'circle', respawn:true, zone:false, time:0, icon:'♾️' },
+  br:{ id:'br', R:2500, bots:99, food:2000, shape:'circle', respawn:false, zone:true, time:0, icon:'👑' },
+  arena:{ id:'arena', R:900, bots:5, food:300, shape:'square', respawn:false, zone:false, time:180, icon:'⚔️' }
+};
+var NAMES = ['Randle Danfield','Antani','Inger Guanio','daka','team?','Osvaldo','Lupita','Kenji','Bartek','xX_Noodle_Xx','Mia','Gustavo','Priya','Wormzilla','Zed','Olga','Tomer','Noa','Yuki','Pablo','Sneaky','Big Boss','Lil Worm','Hannah','Marco','Dana','Igor','Chen','Amir','Sofia','Leo','Pizza Lover','Donut King','Tiny','Rex','Nadia','Fiona','Bob','Alexey','Mila','Omar','Elif','Sam','Zoe','Max','Ivy','Kai','Lola','Nico','Ruby','Theo','Juno','Gal','Yoav','Shira','Lior','Ben','Eden','Roni','Tal','Mr. Slither','Spaghetti','Noodles','WormHole','Slinky','Jelly','Mango','Cobra','Viper','Python','Anaconda','Boa','Fluffy','Snek','Hiss','Zig','Zag','Coil','Wiggles','Mamba','Kaa','Nagini','Sir Hiss','Jake','Finn','Luna','Aria','Milo','Oscar','Pepper','Pickle','Tofu','Momo','Kiki','Bibi','Toto','Lulu','Nala','Simba'];
+var FOOD_KINDS = [
+  { id:'cherry', w:1 }, { id:'strawberry', w:1 }, { id:'kiwi', w:2 }, { id:'apple', w:2 }, { id:'cookie', w:2 },
+  { id:'donut', w:3 }, { id:'pizza', w:3 }, { id:'icecream', w:3 }, { id:'burger', w:4 }, { id:'cake', w:4 }, { id:'watermelon', w:5 }
+];
+var SKINS = [
+  { id:'red', he:'אדום', en:'Red', price:0, pat:'solid', c:['#E8433F','#B8201D'] },
+  { id:'green', he:'ירוק', en:'Green', price:0, pat:'solid', c:['#4CC24A','#2E8B2C'] },
+  { id:'blue', he:'כחול', en:'Blue', price:0, pat:'solid', c:['#3F8CF2','#1F5FB8'] },
+  { id:'orange', he:'כתום', en:'Orange', price:100, pat:'solid', c:['#FF8A2B','#C25A0A'] },
+  { id:'purple', he:'סגול', en:'Purple', price:100, pat:'solid', c:['#9B5CF6','#6A33C2'] },
+  { id:'bee', he:'דבורה', en:'Bee', price:200, pat:'stripes', c:['#FFD23F','#2B2B2B'] },
+  { id:'candycane', he:'סוכרייה', en:'Candy cane', price:200, pat:'stripes', c:['#F03E3E','#FFFFFF'] },
+  { id:'dots', he:'נקודות', en:'Dots', price:250, pat:'dots', c:['#20B6A6','#FFE45C'] },
+  { id:'sunset', he:'שקיעה', en:'Sunset', price:300, pat:'gradient', c:['#3F8CF2','#FF5CA8'] },
+  { id:'rainbow', he:'קשת', en:'Rainbow', price:400, pat:'rainbow', c:['#FF4444','#44FF44'] },
+  { id:'galaxy', he:'גלקסיה', en:'Galaxy', price:500, pat:'galaxy', c:['#2E1A5E','#FFFFFF'] },
+  { id:'candy', he:'ממתק', en:'Candy', price:350, pat:'candy', c:['#FF7BC4','#FFFFFF','#7BE0C8'] },
+  { id:'israel', he:'כחול-לבן', en:'Blue & white', price:300, pat:'stripes', c:['#FFFFFF','#2B6CD8'] },
+  { id:'brazil', he:'ירוק-צהוב', en:'Green & yellow', price:300, pat:'stripes', c:['#2EAD4B','#FFD700'] },
+  { id:'zebra', he:'זברה', en:'Zebra', price:250, pat:'stripes', c:['#F2F2F2','#222222'] },
+  { id:'lava', he:'לבה', en:'Lava', price:400, pat:'gradient', c:['#FF3D00','#FFD600'] },
+  { id:'ice', he:'קרח', en:'Ice', price:400, pat:'gradient', c:['#E8FBFF','#4FC3F7'] },
+  { id:'gold', he:'זהב', en:'Gold', price:800, pat:'solid', c:['#FFC93C','#B8860B'] },
+  { id:'neon', he:'ניאון', en:'Neon', price:450, pat:'dots', c:['#39FF14','#0B3D0B'] },
+  { id:'watermelon', he:'אבטיח', en:'Watermelon', price:350, pat:'stripes', c:['#3FB84A','#1E6B25'] }
+];
+var BACKGROUNDS = [
+  { id:'purple', he:'סגול', en:'Purple', price:0, c:['#4A4E6E','#555A7E'], out:'#2B2E45' },
+  { id:'grass', he:'דשא', en:'Grass', price:150, c:['#3E7A3A','#4A8C44'], out:'#24481F' },
+  { id:'ocean', he:'אוקיינוס', en:'Ocean', price:150, c:['#1F5F8B','#2A6FA0'], out:'#12364F' },
+  { id:'sand', he:'חול', en:'Sand', price:150, c:['#C9A95F','#D6B86E'], out:'#8A7038' },
+  { id:'night', he:'לילה', en:'Night', price:200, c:['#1A1D33','#23274A'], out:'#0C0E1C' },
+  { id:'pink', he:'ורוד', en:'Pink', price:200, c:['#B05C8C','#C06A9C'], out:'#6E3556' }
+];
+var MISSIONS = [
+  { id:'kill1', type:'kill', n:1, coins:20 }, { id:'kill3', type:'kill', n:3, coins:40 }, { id:'kill5', type:'kill', n:5, coins:70 },
+  { id:'eat30', type:'eat', n:30, coins:20 }, { id:'eat50', type:'eat', n:50, coins:30 }, { id:'eat100', type:'eat', n:100, coins:50 },
+  { id:'w200', type:'weight', n:200, coins:30 }, { id:'w500', type:'weight', n:500, coins:60 }, { id:'w1000', type:'weight', n:1000, coins:100 },
+  { id:'boost15', type:'boost', n:15, coins:25 }
+];
+var MISSION_TIME = 300, EMOJIS = ['😂','😡','😎','👍','💀'];
+function radiusFor(w){ return clamp(9 + Math.pow(Math.max(0, w), 0.45) * 1.6, 9, 60); }
+function lenFor(w){ return clamp(Math.floor(8 + 2.2 * Math.sqrt(Math.max(0, w))), 8, MAX_SEGS); }
+function turnFor(s){ return TURN0 / (1 + s.r / 22); }
+function foodR(w){ return 7 + Math.sqrt(Math.max(0.2, w)) * 3.2; }
+
+/* ---------- spatial grid ---------- */
+function mkGrid(R, cs){ var n = Math.ceil(2 * R / cs) + 4, cells = new Array(n * n); for (var i = 0; i < cells.length; i++) cells[i] = []; return { cs:cs, n:n, R:R, cells:cells, used:[] }; }
+function gidx(g, x, y){ var cx = clamp(((x + g.R) / g.cs + 2) | 0, 0, g.n - 1), cy = clamp(((y + g.R) / g.cs + 2) | 0, 0, g.n - 1); return cx * g.n + cy; }
+function gput(g, x, y, item){ var i = gidx(g, x, y), c = g.cells[i]; if (!c.length) g.used.push(i); c.push(item); return i; }
+function gclear(g){ for (var k = 0; k < g.used.length; k++) g.cells[g.used[k]].length = 0; g.used.length = 0; }
+function gnear(g, x, y, rad, fn){
+  var c0 = clamp(((x - rad + g.R) / g.cs + 2) | 0, 0, g.n - 1), c1 = clamp(((x + rad + g.R) / g.cs + 2) | 0, 0, g.n - 1);
+  var r0 = clamp(((y - rad + g.R) / g.cs + 2) | 0, 0, g.n - 1), r1 = clamp(((y + rad + g.R) / g.cs + 2) | 0, 0, g.n - 1);
+  for (var cx = c0; cx <= c1; cx++) for (var cy = r0; cy <= r1; cy++){ var cell = g.cells[cx * g.n + cy]; for (var k = 0; k < cell.length; k++) if (fn(cell[k]) === true) return true; }
+  return false;
+}
+
+/* ---------- world ---------- */
+function newWorld(mode, seed){
+  var M = MODES[mode] || MODES.infinity;
+  var W = { mode:M.id, M:M, seed:seed == null ? (Date.now() & 0x7fffffff) : seed, t:0, tick:0, snakes:[], food:[], nextId:1, events:[], alive:0, player:null, result:null, placement:0, endT:0,
+    stats:{ botEats:0, boostDrops:0, deaths:0 }, names:null, zone:null, timeLeft:M.time };
+  W.rng = mkRng(W.seed);
+  W.R = M.R;
+  W.fg = mkGrid(M.R + 200, 100); W.sg = mkGrid(M.R + 200, 120);
+  if (M.zone) W.zone = { r:M.R, min:260, t0:20, t1:220 };
+  W.names = NAMES.slice(); for (var i = W.names.length - 1; i > 0; i--){ var j = (W.rng() * (i + 1)) | 0; var tmp = W.names[i]; W.names[i] = W.names[j]; W.names[j] = tmp; }
+  for (var f = 0; f < M.food; f++){ var p = randomPos(W, 40); var k = randomFoodKind(W); spawnFood(W, p.x, p.y, k, FOOD_KINDS[k].w); }
+  for (var b = 0; b < M.bots; b++) spawnBot(W);
+  W.alive = countAlive(W);
+  return W;
+}
+function countAlive(W){ var n = 0; for (var i = 0; i < W.snakes.length; i++) if (W.snakes[i].alive) n++; return n; }
+function randomFoodKind(W){ var r = W.rng(); return r < 0.5 ? (W.rng() * 5) | 0 : r < 0.85 ? 5 + ((W.rng() * 3) | 0) : 8 + ((W.rng() * 3) | 0); }
+function randomPos(W, margin){
+  if (W.M.shape === 'square'){ var L = W.R - margin; return { x:(W.rng() * 2 - 1) * L, y:(W.rng() * 2 - 1) * L }; }
+  var rr = Math.max(50, (W.zone ? Math.min(W.zone.r, W.R) : W.R) - margin), a = W.rng() * TAU, d = Math.sqrt(W.rng()) * rr;
+  return { x:Math.cos(a) * d, y:Math.sin(a) * d };
+}
+function spawnFood(W, x, y, k, w){ var f = { id:W.nextId++, x:x, y:y, k:k | 0, w:w, r:foodR(w), ph:W.rng() * TAU, cell:-1, dead:false }; f.cell = gput(W.fg, x, y, f); W.food.push(f); return f; }
+function removeFood(W, f){ if (f.dead) return; f.dead = true; var c = W.fg.cells[f.cell], i = c.indexOf(f); if (i >= 0) c.splice(i, 1); var j = W.food.indexOf(f); if (j >= 0){ W.food[j] = W.food[W.food.length - 1]; W.food.pop(); } }
+function rehashFood(W, f){ var ci = gidx(W.fg, f.x, f.y); if (ci !== f.cell){ var c = W.fg.cells[f.cell], k = c.indexOf(f); if (k >= 0) c.splice(k, 1); f.cell = gput(W.fg, f.x, f.y, f); } }
+/* a spawn point whose whole (straight-ish) body line is inside the world and away from every head and body */
+function freeSpot(W, len, ang){
+  len = len || 0; ang = ang || 0; var ca = Math.cos(ang), sa = Math.sin(ang), best = null, bestC = -1e9;
+  for (var k = 0; k < 80; k++){
+    var p = randomPos(W, 320), clr = 1e9;
+    for (var i = 0; i < W.snakes.length; i++){ var o = W.snakes[i]; if (o.alive){ var dh = hyp(o.x - p.x, o.y - p.y) - 150; if (dh < clr) clr = dh; } }
+    for (var d = 0; d <= len && clr >= 0; d += 80){
+      var qx = p.x - ca * d, qy = p.y - sa * d; if (outside(W, qx, qy, 100)){ clr = -1; break; }
+      gnear(W.sg, qx, qy, 300, function(q){ if (!q.s.alive) return; var dd = hyp(q.x - qx, q.y - qy); if (dd < clr) clr = dd; });
+    }
+    if (clr >= 160) return p;
+    if (clr > bestC){ bestC = clr; best = p; }
+  }
+  return best || randomPos(W, 320);
+}
+function spawnSnake(W, o){
+  o = o || {};
+  var w = o.weight != null ? o.weight : START_W, n = lenFor(w), r = radiusFor(w), ang = o.ang != null ? o.ang : W.rng() * TAU;
+  var pos = o.x != null ? { x:o.x, y:o.y } : freeSpot(W, n * r * 0.45, ang);
+  var s = { id:W.nextId++, name:o.name || 'Player', bot:!!o.bot, skin:(o.skin | 0) % SKINS.length, weight:w, x:pos.x, y:pos.y, ang:ang, targetAng:ang, lookA:ang, boost:false, boostAcc:0, boostT:0, alive:true, kills:0, eaten:0, segs:[], r:r, think:5 + ((W.rng() * 4) | 0), think0:0, far:false,
+    ai:{ mode:'wander', wanderA:ang, aggr:W.rng(), side:1, t:0 }, emoji:'', emojiT:0, bornT:W.t, deathT:0, outZone:false, killer:null, why:'' };
+  s.think0 = s.think;
+  var side = o.x != null ? 0 : (W.rng() < 0.5 ? -1 : 1), a = ang, px = pos.x, py = pos.y, sp = r * 0.45;
+  for (var i = 0; i < n; i++){ s.segs.push({ x:px, y:py, s:s, i:i }); px -= Math.cos(a) * sp; py -= Math.sin(a) * sp; a += 0.012 * side; }
+  for (i = 0; i < n; i += 2) gput(W.sg, s.segs[i].x, s.segs[i].y, s.segs[i]);
+  W.snakes.push(s); W.alive = countAlive(W); return s;
+}
+function spawnBot(W){
+  var name = W.names.length ? W.names.pop() : 'Worm' + ((W.rng() * 900 + 100) | 0), r = W.rng(), cap = W.mode === 'arena' ? 0.3 : W.mode === 'br' ? 0.3 : 1;
+  return spawnSnake(W, { bot:true, name:name, skin:(W.rng() * SKINS.length) | 0, weight:10 + (r < 0.5 ? W.rng() * 30 : r < 0.85 ? 30 + W.rng() * 120 : 150 + W.rng() * 400) * cap });
+}
+
+function moveSnake(W, s, dt){
+  s.r = radiusFor(s.weight); var sp = s.r * 0.45;
+  var maxT = turnFor(s) * dt, d = angDiff(s.targetAng, s.ang); s.ang += clamp(d, -maxT, maxT); if (s.ang > Math.PI) s.ang -= TAU; else if (s.ang < -Math.PI) s.ang += TAU;
+  var v = SPEED;
+  if (s.boost){
+    if (s.weight > BOOST_MIN){ v *= BOOST_MUL; s.weight -= BOOST_BURN * dt; s.boostT += dt; s.boostAcc += dt;
+      if (s.boostAcc >= 0.12){ s.boostAcc = 0; var t = s.segs[s.segs.length - 1]; spawnFood(W, t.x + (W.rng() - .5) * 10, t.y + (W.rng() - .5) * 10, 0, 0.35); W.stats.boostDrops++; } }
+    else s.boost = false;
+  }
+  s.x += Math.cos(s.ang) * v * dt; s.y += Math.sin(s.ang) * v * dt;
+  var segs = s.segs; segs[0].x = s.x; segs[0].y = s.y;
+  for (var i = 1; i < segs.length; i++){ var p = segs[i - 1], q = segs[i], dx = p.x - q.x, dy = p.y - q.y, dd = Math.sqrt(dx * dx + dy * dy); if (dd > sp){ var k = (dd - sp) / dd; q.x += dx * k; q.y += dy * k; } }
+  var n = lenFor(s.weight);
+  while (segs.length < n){ var tl = segs[segs.length - 1]; segs.push({ x:tl.x, y:tl.y, s:s, i:segs.length }); }
+  if (segs.length > n) segs.length = n;
+  if (s.emojiT > 0){ s.emojiT -= dt; if (s.emojiT <= 0) s.emoji = ''; }
+}
+function rebuildSegs(W){
+  gclear(W.sg);
+  for (var i = 0; i < W.snakes.length; i++){ var s = W.snakes[i]; if (!s.alive) continue; var segs = s.segs; for (var k = 0; k < segs.length; k += 2) gput(W.sg, segs[k].x, segs[k].y, segs[k]); }
+}
+function eat(W, s, f){ if (f.dead) return false; removeFood(W, f); s.weight += f.w; s.eaten++; if (s.bot) W.stats.botEats++; W.events.push({ type:'eat', s:s, w:f.w, x:f.x, y:f.y, k:f.k }); return true; }
+function eatNear(W, s, dt){
+  var rad = s.r * 2.4 + 24, pull = 420 * dt;
+  gnear(W.fg, s.x, s.y, rad, function(f){
+    if (f.dead) return;
+    var dx = f.x - s.x, dy = f.y - s.y, d2 = dx * dx + dy * dy, er = s.r + f.r * 0.8;
+    if (d2 < er * er) eat(W, s, f);
+    else if (d2 < rad * rad){ var d = Math.sqrt(d2), mv = Math.min(d, pull); f.x -= dx / d * mv; f.y -= dy / d * mv; rehashFood(W, f); }
+  });
+}
+function outside(W, x, y, r){ if (W.M.shape === 'square') return Math.abs(x) > W.R - r || Math.abs(y) > W.R - r; return x * x + y * y > (W.R - r) * (W.R - r); }
+function collide(W){
+  var dead = [];
+  for (var i = 0; i < W.snakes.length; i++){
+    var s = W.snakes[i]; if (!s.alive) continue;
+    if (outside(W, s.x, s.y, s.r)){ dead.push([s, null, 'wall']); continue; }
+    var hit = null, sx = s.x, sy = s.y, sr = s.r;
+    gnear(W.sg, sx, sy, sr + 60, function(p){ var o = p.s; if (o === s || !o.alive) return; var dx = p.x - sx, dy = p.y - sy, rr = sr + o.r * 0.9; if (dx * dx + dy * dy < rr * rr){ hit = o; return true; } });
+    if (hit) dead.push([s, hit, 'body']);
+  }
+  for (var k = 0; k < dead.length; k++) kill(W, dead[k][0], dead[k][1], dead[k][2]);
+  return dead.length;
+}
+function kill(W, s, killer, why){
+  if (!s.alive) return;
+  s.alive = false; s.deathT = W.t; s.boost = false; s.killer = killer || null; s.why = why || 'body';
+  if (killer && killer !== s && killer.alive){ killer.kills++; if (killer.bot && W.rng() < 0.5){ killer.emoji = EMOJIS[(W.rng() * EMOJIS.length) | 0]; killer.emojiT = 2.5; } }
+  var w = Math.max(0, s.weight), n = clamp(Math.ceil(w / 4), 3, 80), each = w / n, segs = s.segs;
+  for (var i = 0; i < n; i++){
+    var p = segs[Math.floor(i * segs.length / n) % segs.length];
+    var k = each >= 4 ? 8 + ((W.rng() * 3) | 0) : each >= 2.5 ? 5 + ((W.rng() * 3) | 0) : (W.rng() * 5) | 0;
+    spawnFood(W, p.x + (W.rng() - .5) * s.r, p.y + (W.rng() - .5) * s.r, k, each);
+  }
+  W.stats.deaths++;
+  W.alive = countAlive(W);
+  if (s === W.player){ W.placement = W.alive + 1; }
+  W.events.push({ type:'kill', s:s, killer:killer || null, why:s.why });
+}
+function updateZone(W, dt){
+  var z = W.zone; z.r = W.t < z.t0 ? W.R : Math.max(z.min, W.R - (W.t - z.t0) / (z.t1 - z.t0) * (W.R - z.min));
+  for (var i = 0; i < W.snakes.length; i++){ var s = W.snakes[i]; if (!s.alive) continue; var d = hyp(s.x, s.y); if (d > z.r){ s.outZone = true; s.weight -= 25 * dt; if (s.weight < 5) kill(W, s, null, 'zone'); } else s.outZone = false; }
+}
+/* bots: avoid bodies and walls, flee bigger snakes, cut in front of smaller ones, otherwise go for food */
+/* 0 = clear, 1 = something far along the ray, 2 = wall/zone edge or something close; checks bodies plus where nearby heads will be */
+function danger(W, s, a, look, probe, near){
+  var hit = 0; probe = probe || s.r * 1.6 + 26;
+  for (var m = 1; m <= 3; m++){
+    var L = look * m / 3, px = s.x + Math.cos(a) * L, py = s.y + Math.sin(a) * L;
+    if (outside(W, px, py, s.r + 20)) return 2;
+    if (W.zone && hyp(px, py) > W.zone.r - 10 && hyp(s.x, s.y) < W.zone.r) return 2;
+    gnear(W.sg, px, py, probe + 60, function(p){ var o = p.s; if (o === s || !o.alive) return; var dx = p.x - px, dy = p.y - py, rr = probe + o.r; if (dx * dx + dy * dy < rr * rr){ hit = 1; return true; } });
+    if (!hit && near){ for (var k = 0; k < near.length && !hit; k++){ var o = near[k], v = SPEED * (o.boost ? BOOST_MUL : 1), ca = Math.cos(o.ang) * v, sa = Math.sin(o.ang) * v; for (var tau = 0.15; tau <= 0.45; tau += 0.15){ var ox = o.x + ca * tau - px, oy = o.y + sa * tau - py, rr2 = probe + o.r + 24; if (ox * ox + oy * oy < rr2 * rr2){ hit = 1; break; } } } }
+    if (hit) return m === 1 ? 2 : 1;
+  }
+  return 0;
+}
+/* pick a clear heading near 'want': prefer the side chosen last time (no flip-flopping), default to the right so head-on pairs part */
+var OFFS = [0.55, 1.1, 1.7, 2.3], OFFS_NEAR = [1.2, 1.8, 2.4];
+function pickDir(W, s, want, look, probe, near, nearHit){
+  var side = s.ai.side || 1, mags = nearHit ? OFFS_NEAR : OFFS;
+  if (!nearHit && !danger(W, s, want, look, probe, near)) return want;
+  for (var k = 0; k < mags.length; k++){
+    if (!danger(W, s, want + mags[k] * side, look, probe, near)) return want + mags[k] * side;
+    if (!danger(W, s, want - mags[k] * side, look, probe, near)){ s.ai.side = -side; return want - mags[k] * side; }
+  }
+  return s.ang + Math.PI;
+}
+function botThink(W, s){
+  var ai = s.ai, rng = W.rng, R = W.R, zr = W.zone ? W.zone.r : R;
+  var tx, ty, boost = false, mode = 'wander', threat = null, prey = null, tD = 1e9, pD = 1e9, near = [];
+  for (var i = 0; i < W.snakes.length; i++){
+    var o = W.snakes[i]; if (o === s || !o.alive) continue; var dx = o.x - s.x, dy = o.y - s.y; if (Math.abs(dx) > 520 || Math.abs(dy) > 520) continue; var d = Math.sqrt(dx * dx + dy * dy); if (d > 520) continue;
+    near.push(o);
+    if (o.weight > s.weight * 1.25){ if (d < tD){ threat = o; tD = d; } }
+    else if (s.weight > o.weight * 1.3 && s.weight > 25 && (s.x - o.x) * Math.cos(o.ang) + (s.y - o.y) * Math.sin(o.ang) > 0){ if (d < pD){ prey = o; pD = d; } }
+  }
+  if (threat && tD < 260){ mode = 'flee'; var fa = Math.atan2(s.y - threat.y, s.x - threat.x); tx = s.x + Math.cos(fa) * 300; ty = s.y + Math.sin(fa) * 300; boost = s.weight > 30 && tD < 170; }
+  else if (prey && pD < 440 && ai.aggr > 0.25){ mode = 'hunt'; var lead = clamp(pD / SPEED * 0.6, 0.2, 1.4) + 0.8; tx = prey.x + Math.cos(prey.ang) * SPEED * lead; ty = prey.y + Math.sin(prey.ang) * SPEED * lead; boost = s.weight > 40 && pD < 260 && ai.aggr > 0.5; }
+  else {
+    var best = null, bd = 1e18, sx = s.x, sy = s.y;
+    gnear(W.fg, sx, sy, 330, function(f){ if (f.dead) return; var dx = f.x - sx, dy = f.y - sy, d = dx * dx + dy * dy - f.w * 2500; if (d < bd){ bd = d; best = f; } });
+    if (best){ mode = 'food'; tx = best.x; ty = best.y; }
+    else { mode = 'wander'; if (rng() < 0.2) ai.wanderA += (rng() - .5) * 1.8; tx = s.x + Math.cos(ai.wanderA) * 220; ty = s.y + Math.sin(ai.wanderA) * 220; }
+  }
+  if (W.M.shape === 'square'){ if (Math.max(Math.abs(s.x), Math.abs(s.y)) > R - 240){ tx = 0; ty = 0; mode = 'center'; } }
+  else { var dc = hyp(s.x, s.y); if (dc > Math.min(zr, R) - 260 - s.r){ tx = 0; ty = 0; mode = 'center'; boost = !!W.zone && dc > zr - 60 && s.weight > 20; } }
+  var want = Math.atan2(ty - s.y, tx - s.x);
+  var look = clamp(s.r * 6 + 120, 150, 340) + (s.boost ? 160 : 0), probe = s.r * 1.6 + 26;
+  var d0 = danger(W, s, s.ang, look, probe, near), d1 = danger(W, s, want, look, probe, near);
+  if (d0 || d1){ want = pickDir(W, s, want, look, probe, near, d0 === 2 || d1 === 2); boost = false; mode = 'avoid'; }
+  else ai.side = 1;
+  s.think = mode === 'avoid' ? 2 : s.think0;
+  s.targetAng = want; s.lookA = want; s.boost = boost; ai.mode = mode;
+  return mode;
+}
+function step(W, dt){
+  dt = dt == null ? DT : dt;
+  W.t += dt; W.tick++;
+  if (W.zone) updateZone(W, dt);
+  for (var i = 0; i < W.snakes.length; i++){ var s = W.snakes[i]; if (!s.alive || !s.bot) continue; var every = s.far && s.ai.mode !== 'avoid' ? s.think * 2 : s.think; if ((W.tick + s.id) % every === 0) botThink(W, s); }
+  for (i = 0; i < W.snakes.length; i++){ s = W.snakes[i]; if (s.alive) moveSnake(W, s, dt); }
+  rebuildSegs(W);
+  for (i = 0; i < W.snakes.length; i++){ s = W.snakes[i]; if (s.alive) eatNear(W, s, dt); }
+  collide(W);
+  /* respawn / cleanup */
+  for (i = W.snakes.length - 1; i >= 0; i--){ s = W.snakes[i]; if (!s.alive && s !== W.player && W.M.respawn && W.t - s.deathT > 3){ W.snakes.splice(i, 1); spawnBot(W); } }
+  /* food refill */
+  if (W.food.length < W.M.food){ var n = Math.min(3, W.M.food - W.food.length); for (var f = 0; f < n; f++){ var p = randomPos(W, 40), k = randomFoodKind(W); spawnFood(W, p.x, p.y, k, FOOD_KINDS[k].w); } }
+  if (W.M.time){ W.timeLeft = Math.max(0, W.M.time - W.t); }
+  if (W.events.length > 400) W.events.splice(0, W.events.length - 400);
+  checkEnd(W);
+  return W;
+}
+function checkEnd(W){
+  if (W.result || !W.player) return;
+  var p = W.player;
+  if (W.mode === 'br'){ if (!p.alive){ W.result = 'dead'; } else if (W.alive === 1){ W.result = 'win'; W.placement = 1; } }
+  else if (W.mode === 'arena'){
+    if (!p.alive) W.result = 'dead';
+    else if (W.alive === 1) W.result = 'win';
+    else if (W.timeLeft <= 0){ var top = 0; for (var i = 0; i < W.snakes.length; i++){ var o = W.snakes[i]; if (o !== p && o.kills > top) top = o.kills; } W.result = p.kills >= top ? 'win' : 'lose'; }
+  }
+  else if (!p.alive) W.result = 'dead';
+  if (W.result) W.endT = W.t;
+}
+function leaderboard(W){ var a = []; for (var i = 0; i < W.snakes.length; i++) if (W.snakes[i].alive) a.push(W.snakes[i]); a.sort(function(x, y){ return y.weight - x.weight; }); return a; }
+
+/* ---------- texts ---------- */
+var T = {
+  he:{ title:'נחש נגד תולעים', play:'שחק', edit:'ערוך נחש', gift:'מתנה יומית', free:'מטבעות חינם', wheel:'גלגל המזל', shop:'חנות', settings:'הגדרות', background:'רקע', claim:'קחו!', spinTag:'סובבו!', ready:'מוכן', wait:'המתינו', more:'🎮 עוד משחקים', modes:'בחרו מצב משחק',
+    mInf:'אינסוף', mInfD:'אינסוף: הגיעו למשקל הנחש המקסימלי', mBr:'בטל רויאל', mBrD:'קרב בין 100 נחשים – רק אחד ישרוד', mAr:'זירה', mArD:'זירה: הילחמו ב־5 נחשים אחרים בזירה',
+    leaders:'מובילים', weight:'משקל', kills:'הריגות', time:'זמן', died:'נפסלת!', won:'🏆 ניצחת!', lost:'הזמן נגמר', place:'מקום #{n} מתוך {m}', again:'שחק שוב', menu:'תפריט', resume:'המשך', quit:'יציאה לתפריט', paused:'הפסקה',
+    skins:'נחשים', bgs:'רקעים', owned:'בבעלותכם', equipped:'נבחר', noCoins:'אין מספיק מטבעות', bought:'נקנה!', sound:'צלילים', music:'מוזיקה', lang:'שפה', controls:'שליטה', ctrlMouse:'עכבר + מקלדת', ctrlKeys:'מקלדת בלבד', reset:'איפוס התקדמות', resetQ:'למחוק את כל ההתקדמות?', on:'פועל', off:'כבוי', langName:'English',
+    giftT:'מתנה יומית', giftGot:'קיבלתם {n} מטבעות! חזרו מחר למתנה נוספת.', giftWait:'כבר לקחתם את המתנה היום – חזרו מחר.', freeT:'מטבעות חינם', freeGot:'קיבלתם {n} מטבעות חינם!', freeWait:'מטבעות חינם נוספים בעוד {n} דקות.', spin:'סובב!', wheelWait:'סובבו שוב מחר', wheelCoins:'זכיתם ב־{n} מטבעות!', wheelSkin:'זכיתם בנחש חדש: {n}!', chestT:'תיבת אוצר', chestGot:'התיבה נתנה {n} מטבעות!', chestWait:'התיבה תיפתח בעוד {n} דקות.', levelUp:'עלית לרמה {n}!', missionDone:'משימה הושלמה! +{n} 🪙',
+    mKill:'הרגו {n} נחשים', mEat:'אכלו {n} מאכלים', mWeight:'הגיעו למשקל {n}', mBoost:'האיצו {n} שניות', name:'השם שלכם', ok:'אישור', hintTouch:'גררו כדי לנווט · 🚀 להאצה', hintMouse:'העכבר מנווט · לחיצה / רווח להאצה',
+    tip:'הראש שלכם נגע בגוף של נחש אחר. תנו לאחרים להתנגש בכם!', tipZone:'נשארתם מחוץ לאזור הבטוח!', tipWall:'נגעתם בקצה העולם!', tipWin:'כל הכבוד – אתם הנחש האחרון!', tipArenaWin:'הכי הרבה הריגות בזירה!', tipArenaLose:'לנחש אחר היו יותר הריגות.', you:'אתם', alive:'חיים' },
+  en:{ title:'io snake game · 3 modes', play:'PLAY', edit:'EDIT SNAKE', gift:'Daily gift', free:'Free coins', wheel:'Lucky wheel', shop:'Shop', settings:'Settings', background:'Background', claim:'Claim', spinTag:'Spin!', ready:'Ready', wait:'Wait', more:'🎮 More games', modes:'Choose a game mode',
+    mInf:'Infinity', mInfD:'Infinity: get the maximum weight of the snake', mBr:'Battle Royale', mBrD:'Battle between 100 snakes but only 1 will survive', mAr:'Arena', mArD:'Arena: fight against 5 other snakes on the arena',
+    leaders:'Leaders', weight:'Weight', kills:'Kills', time:'Time', died:'You died', won:'🏆 You win!', lost:'Time is up', place:'Place #{n} of {m}', again:'Play again', menu:'Menu', resume:'Resume', quit:'Quit to menu', paused:'Paused',
+    skins:'Snakes', bgs:'Backgrounds', owned:'Owned', equipped:'Equipped', noCoins:'Not enough coins', bought:'Bought!', sound:'Sound', music:'Music', lang:'Language', controls:'Controls', ctrlMouse:'Mouse + keys', ctrlKeys:'Keys only', reset:'Reset progress', resetQ:'Delete all progress?', on:'On', off:'Off', langName:'עברית',
+    giftT:'Daily gift', giftGot:'You got {n} coins! Come back tomorrow for more.', giftWait:'Already claimed today – come back tomorrow.', freeT:'Free coins', freeGot:'You got {n} free coins!', freeWait:'More free coins in {n} minutes.', spin:'Spin!', wheelWait:'Spin again tomorrow', wheelCoins:'You won {n} coins!', wheelSkin:'You won a new snake: {n}!', chestT:'Treasure chest', chestGot:'The chest gave you {n} coins!', chestWait:'The chest opens in {n} minutes.', levelUp:'Level {n}!', missionDone:'Mission complete! +{n} 🪙',
+    mKill:'Kill {n} snakes', mEat:'Eat {n} food', mWeight:'Reach {n} weight', mBoost:'Boost for {n} seconds', name:'Your name', ok:'OK', hintTouch:'Drag to steer · 🚀 to boost', hintMouse:'Mouse steers · click / Space to boost',
+    tip:'Your head touched another snake\'s body. Make others crash into you!', tipZone:'You stayed outside the safe zone!', tipWall:'You hit the edge of the world!', tipWin:'Well done – you are the last snake!', tipArenaWin:'Most kills in the arena!', tipArenaLose:'Another snake had more kills.', you:'You', alive:'alive' }
+};
+function t(k){ var L = T[P.set.lang] || T.he; return L[k] != null ? L[k] : (T.he[k] != null ? T.he[k] : k); }
+function fmt(k, n, m){ return t(k).replace('{n}', n).replace('{m}', m); }
+
+/* ---------- profile ---------- */
+function DEF(){ return { v:1, coins:0, xp:0, level:1, skins:[0, 1, 2], bgs:[0], skin:0, bg:0, name:'', best:{ infinity:0, br:0, arena:0 }, stats:{ games:0, kills:0, food:0, time:0, wins:0 }, gift:'', wheel:'', freeAt:0, chestAt:0, set:{ sound:true, music:false, lang:'he', mouse:true } }; }
+var P = DEF();
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(P)); } catch(e){} }
+function load(){
+  var d = null; try { d = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  P = DEF(); if (!d || typeof d !== 'object') return;
+  ['coins', 'xp', 'level', 'skin', 'bg', 'name', 'gift', 'wheel', 'freeAt', 'chestAt'].forEach(function(k){ if (d[k] != null) P[k] = d[k]; });
+  if (Array.isArray(d.skins) && d.skins.length) P.skins = d.skins.map(Number).filter(function(i){ return i >= 0 && i < SKINS.length; });
+  if (Array.isArray(d.bgs) && d.bgs.length) P.bgs = d.bgs.map(Number).filter(function(i){ return i >= 0 && i < BACKGROUNDS.length; });
+  if (P.skins.indexOf(0) < 0) P.skins.unshift(0); if (P.bgs.indexOf(0) < 0) P.bgs.unshift(0);
+  if (d.best) for (var k in P.best) if (d.best[k] != null) P.best[k] = +d.best[k] || 0;
+  if (d.stats) for (k in P.stats) if (d.stats[k] != null) P.stats[k] = +d.stats[k] || 0;
+  if (d.set){ P.set.sound = d.set.sound !== false; P.set.music = !!d.set.music; P.set.lang = d.set.lang === 'en' ? 'en' : 'he'; P.set.mouse = d.set.mouse !== false; }
+  P.level = Math.max(1, P.level | 0); P.coins = Math.max(0, P.coins | 0); P.xp = Math.max(0, P.xp | 0);
+  if (P.skins.indexOf(P.skin) < 0) P.skin = 0; if (P.bgs.indexOf(P.bg) < 0) P.bg = 0; P.name = String(P.name || '').slice(0, 14);
+}
+function xpNeed(l){ return 170 + (l - 1) * 80; }
+function addXP(n){ P.xp += Math.max(0, n | 0); var ups = 0; while (P.xp >= xpNeed(P.level)){ P.xp -= xpNeed(P.level); P.level++; ups++; } if (ups) toast(fmt('levelUp', P.level)); return ups; }
+function addCoins(n){ P.coins = Math.max(0, Math.round(P.coins + n)); refreshCoins(); return P.coins; }
+function dayKey(d){ d = d == null ? new Date() : new Date(d); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function claimGift(now){ var k = dayKey(now); if (P.gift === k) return 0; P.gift = k; addCoins(100); save(); return 100; }
+function claimFree(now){ now = now == null ? Date.now() : now; if (now - P.freeAt < 3600e3) return 0; P.freeAt = now; addCoins(50); save(); return 50; }
+function claimChest(now){ now = now == null ? Date.now() : now; if (now < P.chestAt) return 0; P.chestAt = now + 15 * 60e3; addCoins(40); save(); return 40; }
+var WHEEL = [{ coins:20 }, { coins:50 }, { coins:100 }, { coins:200 }, { coins:500 }, { skin:true }, { coins:30 }, { coins:75 }];
+function spinWheel(now, r){
+  var k = dayKey(now); if (P.wheel === k) return null; P.wheel = k;
+  var i = Math.floor((r == null ? Math.random() : r) * WHEEL.length) % WHEEL.length, w = WHEEL[i], res = { i:i };
+  if (w.skin){ var cand = []; for (var j = 0; j < SKINS.length; j++) if (P.skins.indexOf(j) < 0) cand.push(j);
+    if (cand.length){ var sk = cand[Math.floor(Math.random() * cand.length)]; P.skins.push(sk); P.skin = sk; res.skin = sk; } else { addCoins(300); res.coins = 300; } }
+  else { addCoins(w.coins); res.coins = w.coins; }
+  save(); return res;
+}
+function buySkin(i){ i |= 0; if (!SKINS[i]) return 'none'; if (P.skins.indexOf(i) >= 0){ P.skin = i; save(); return 'equipped'; } if (P.coins < SKINS[i].price) return 'poor'; P.coins -= SKINS[i].price; P.skins.push(i); P.skin = i; save(); refreshCoins(); return 'bought'; }
+function buyBg(i){ i |= 0; if (!BACKGROUNDS[i]) return 'none'; if (P.bgs.indexOf(i) >= 0){ P.bg = i; save(); return 'equipped'; } if (P.coins < BACKGROUNDS[i].price) return 'poor'; P.coins -= BACKGROUNDS[i].price; P.bgs.push(i); P.bg = i; save(); refreshCoins(); return 'bought'; }
+
+/* ---------- audio ---------- */
+var AC = null, master = null, hiss = null, SFX = {};
+function ac(){ if (AC) return AC; try { AC = new (window.AudioContext || window.webkitAudioContext)(); master = AC.createGain(); master.gain.value = 0.5; master.connect(AC.destination); } catch(e){ AC = null; } return AC; }
+function snd(fn){ if (!P.set.sound) return; var c = ac(); if (!c) return; if (c.state === 'suspended'){ try { c.resume(); } catch(e){} } try { fn(c); } catch(e){} }
+function tone(c, f0, f1, dur, type, vol, t0){ var o = c.createOscillator(), g = c.createGain(), tt = t0 || c.currentTime; o.type = type || 'sine'; o.frequency.setValueAtTime(f0, tt); if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, tt + dur); g.gain.setValueAtTime(vol || 0.2, tt); g.gain.exponentialRampToValueAtTime(0.001, tt + dur); o.connect(g); g.connect(master); o.start(tt); o.stop(tt + dur + 0.02); }
+function noiseBuf(c, sec){ var b = c.createBuffer(1, Math.floor(c.sampleRate * sec), c.sampleRate), d = b.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; return b; }
+SFX.eat = function(w){ snd(function(c){ tone(c, 520 + Math.min(500, w * 70), 980 + Math.min(600, w * 60), 0.09, 'sine', 0.14); }); };
+SFX.tap = function(){ snd(function(c){ tone(c, 640, 320, 0.07, 'square', 0.06); }); };
+SFX.coin = function(){ snd(function(c){ tone(c, 1200, 1800, 0.12, 'sine', 0.15); tone(c, 1800, 2400, 0.16, 'sine', 0.1, c.currentTime + 0.08); }); };
+SFX.ding = function(){ snd(function(c){ tone(c, 880, 880, 0.14, 'sine', 0.2); tone(c, 1320, 1320, 0.3, 'sine', 0.2, c.currentTime + 0.13); tone(c, 1760, 1760, 0.4, 'sine', 0.15, c.currentTime + 0.26); }); };
+SFX.kill = function(){ snd(function(c){ tone(c, 300, 900, 0.18, 'triangle', 0.2); tone(c, 900, 1500, 0.2, 'sine', 0.12, c.currentTime + 0.1); }); };
+SFX.die = function(){ snd(function(c){ var s = c.createBufferSource(); s.buffer = noiseBuf(c, 0.4); var f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 900; var g = c.createGain(); g.gain.setValueAtTime(0.35, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.4); s.connect(f); f.connect(g); g.connect(master); s.start(); tone(c, 220, 50, 0.45, 'sawtooth', 0.2); }); };
+SFX.boost = function(on){ if (!P.set.sound || !ac()){ on = false; } if (on && !hiss){ try { var c = AC, s = c.createBufferSource(); s.buffer = noiseBuf(c, 1); s.loop = true; var f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1800; f.Q.value = 0.7; var g = c.createGain(); g.gain.value = 0.0001; g.gain.exponentialRampToValueAtTime(0.07, c.currentTime + 0.1); s.connect(f); f.connect(g); g.connect(master); s.start(); hiss = { s:s, g:g }; } catch(e){ hiss = null; } } else if (!on && hiss){ try { var h = hiss; h.g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + 0.15); h.s.stop(AC.currentTime + 0.2); } catch(e){} hiss = null; } };
+var MUS = { on:false, timer:0, next:0, i:0, mel:[0, 4, 7, 12, 7, 4, 0, 4, 2, 5, 9, 14, 9, 5, 2, 5, -3, 0, 4, 9, 4, 0, -3, 0, -1, 2, 7, 11, 7, 2, -1, 2] };
+function musTick(){ var c = AC; if (!c || !MUS.on) return; while (MUS.next < c.currentTime + 0.35){ var n = MUS.mel[MUS.i % MUS.mel.length], f = 262 * Math.pow(2, n / 12); tone(c, f, f, 0.16, 'triangle', 0.06, MUS.next); if (MUS.i % 4 === 0) tone(c, f / 4, f / 4, 0.32, 'sine', 0.09, MUS.next); if (MUS.i % 2 === 1) tone(c, 3000, 3000, 0.03, 'square', 0.01, MUS.next); MUS.i++; MUS.next += 0.21; } }
+function music(on){ MUS.on = !!on && P.set.music; if (MUS.on){ var c = ac(); if (!c){ MUS.on = false; return; } if (c.state === 'suspended'){ try { c.resume(); } catch(e){} } if (!MUS.timer){ MUS.next = c.currentTime + 0.05; MUS.timer = setInterval(musTick, 120); } } else if (MUS.timer){ clearInterval(MUS.timer); MUS.timer = 0; } }
+
+/* ---------- sprites ---------- */
+function shade(hex, k){ var n = parseInt(hex.slice(1), 16), r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255; function f(v){ return clamp(Math.round(k < 0 ? v * (1 + k) : v + (255 - v) * k), 0, 255); } return 'rgb(' + f(r) + ',' + f(g) + ',' + f(b) + ')'; }
+function circ(c, x, y, r, fill, stroke, lw){ c.beginPath(); c.arc(x, y, r, 0, TAU); if (fill){ c.fillStyle = fill; c.fill(); } if (stroke){ c.strokeStyle = stroke; c.lineWidth = lw || 2; c.stroke(); } }
+function drawFoodIcon(c, k, R){
+  var id = FOOD_KINDS[k].id; c.lineJoin = 'round'; c.lineCap = 'round'; var lw = Math.max(1.5, R * 0.09);
+  if (id === 'cherry'){ c.strokeStyle = '#3B7D2A'; c.lineWidth = lw * 1.3; c.beginPath(); c.moveTo(-R * .32, R * .3); c.quadraticCurveTo(-R * .1, -R * .5, R * .05, -R * .85); c.moveTo(R * .36, R * .36); c.quadraticCurveTo(R * .3, -R * .4, R * .05, -R * .85); c.stroke();
+    c.fillStyle = '#4CAF3F'; c.beginPath(); c.ellipse(R * .22, -R * .72, R * .3, R * .14, -0.5, 0, TAU); c.fill();
+    circ(c, -R * .34, R * .4, R * .42, '#E0262A', '#8E1016', lw); circ(c, R * .36, R * .46, R * .42, '#F0343A', '#8E1016', lw); circ(c, -R * .46, R * .26, R * .12, 'rgba(255,255,255,.75)'); circ(c, R * .24, R * .32, R * .12, 'rgba(255,255,255,.75)'); }
+  else if (id === 'strawberry'){ c.fillStyle = '#E8343A'; c.strokeStyle = '#9C1C22'; c.lineWidth = lw; c.beginPath(); c.moveTo(0, R * .9); c.bezierCurveTo(-R * 1.1, R * .2, -R * .8, -R * .55, 0, -R * .5); c.bezierCurveTo(R * .8, -R * .55, R * 1.1, R * .2, 0, R * .9); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#FFE57A'; for (var i = 0; i < 7; i++){ var a = i * 1.3, rr = R * (.2 + (i % 3) * .17); circ(c, Math.cos(a) * rr * .8, Math.sin(a) * rr + R * .1, R * .06, '#FFE57A'); }
+    c.fillStyle = '#3FA33A'; c.beginPath(); c.moveTo(0, -R * .45); c.lineTo(-R * .5, -R * .8); c.lineTo(-R * .15, -R * .6); c.lineTo(0, -R * 1); c.lineTo(R * .15, -R * .6); c.lineTo(R * .5, -R * .8); c.closePath(); c.fill(); }
+  else if (id === 'kiwi'){ circ(c, 0, 0, R * .9, '#8B5A2B'); circ(c, 0, 0, R * .78, '#7FC241'); circ(c, 0, 0, R * .3, '#EAF5C8'); for (var j = 0; j < 10; j++){ var aa = j / 10 * TAU; c.save(); c.translate(Math.cos(aa) * R * .5, Math.sin(aa) * R * .5); c.rotate(aa); c.fillStyle = '#222'; c.beginPath(); c.ellipse(0, 0, R * .09, R * .05, 0, 0, TAU); c.fill(); c.restore(); } }
+  else if (id === 'apple'){ circ(c, 0, R * .08, R * .82, '#E8343A', '#9C1C22', lw); c.fillStyle = '#E8343A'; circ(c, -R * .35, -R * .1, R * .5, '#E8343A'); circ(c, R * .35, -R * .1, R * .5, '#E8343A'); c.strokeStyle = '#6B3A12'; c.lineWidth = lw * 1.5; c.beginPath(); c.moveTo(0, -R * .5); c.lineTo(R * .08, -R * .95); c.stroke(); c.fillStyle = '#4CAF3F'; c.beginPath(); c.ellipse(R * .3, -R * .72, R * .3, R * .13, -0.4, 0, TAU); c.fill(); circ(c, -R * .3, -R * .2, R * .14, 'rgba(255,255,255,.7)'); }
+  else if (id === 'cookie'){ circ(c, 0, 0, R * .88, '#D9A05B', '#9A6A2F', lw); [[-.35, -.3], [.3, -.4], [.45, .2], [-.1, .45], [-.5, .25], [.05, -.05]].forEach(function(p){ circ(c, p[0] * R, p[1] * R, R * .13, '#5A3215'); }); }
+  else if (id === 'donut'){ circ(c, 0, 0, R * .92, '#E0A860'); circ(c, 0, -R * .04, R * .86, '#FF7BC4'); c.strokeStyle = '#E0A860'; c.lineWidth = lw; var cols = ['#fff', '#FFE45C', '#7BE0C8', '#3F8CF2']; for (var s2 = 0; s2 < 10; s2++){ var a2 = s2 / 10 * TAU + .3, rr2 = R * .6; c.save(); c.translate(Math.cos(a2) * rr2, Math.sin(a2) * rr2 - R * .04); c.rotate(a2 + s2); c.strokeStyle = cols[s2 % 4]; c.lineWidth = lw * 1.2; c.beginPath(); c.moveTo(-R * .1, 0); c.lineTo(R * .1, 0); c.stroke(); c.restore(); }
+    c.save(); c.globalCompositeOperation = 'destination-out'; circ(c, 0, 0, R * .3, '#000'); c.restore(); }
+  else if (id === 'pizza'){ c.fillStyle = '#FFD24A'; c.strokeStyle = '#C97A2A'; c.lineWidth = lw; c.beginPath(); c.moveTo(0, R * .95); c.lineTo(-R * .78, -R * .55); c.arc(0, -R * .2, R * .86, Math.PI * 1.17, Math.PI * 1.83); c.closePath(); c.fill(); c.stroke();
+    c.strokeStyle = '#D98A3A'; c.lineWidth = R * .2; c.beginPath(); c.arc(0, -R * .2, R * .86, Math.PI * 1.19, Math.PI * 1.81); c.stroke();
+    circ(c, -R * .25, -R * .3, R * .17, '#D32F2F'); circ(c, R * .22, -R * .25, R * .17, '#D32F2F'); circ(c, 0, R * .2, R * .15, '#D32F2F'); c.fillStyle = '#4CAF3F'; c.beginPath(); c.ellipse(R * .12, -R * .6, R * .12, R * .06, .6, 0, TAU); c.fill(); }
+  else if (id === 'icecream'){ c.fillStyle = '#D9A05B'; c.strokeStyle = '#9A6A2F'; c.lineWidth = lw; c.beginPath(); c.moveTo(-R * .5, -R * .1); c.lineTo(0, R * .98); c.lineTo(R * .5, -R * .1); c.closePath(); c.fill(); c.stroke();
+    c.strokeStyle = '#B5803C'; c.lineWidth = lw * .7; c.beginPath(); c.moveTo(-R * .35, R * .2); c.lineTo(R * .15, R * .55); c.moveTo(-R * .15, R * .55); c.lineTo(R * .35, R * .2); c.moveTo(-R * .45, 0); c.lineTo(R * .3, R * .4); c.stroke();
+    circ(c, 0, -R * .4, R * .52, '#FF8FB1', '#C2516F', lw); circ(c, -R * .18, -R * .55, R * .12, 'rgba(255,255,255,.7)'); circ(c, R * .2, -R * .9, R * .13, '#E0262A'); }
+  else if (id === 'burger'){ c.fillStyle = '#D9A05B'; c.strokeStyle = '#9A6A2F'; c.lineWidth = lw; c.beginPath(); c.arc(0, -R * .2, R * .85, Math.PI, 0); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#4CAF3F'; c.beginPath(); for (var g = -1; g <= 1; g += .2) c.lineTo(g * R * .9, -R * .15 + (Math.round(g * 5) % 2 ? R * .12 : 0)); c.lineTo(R * .9, R * .05); c.lineTo(-R * .9, R * .05); c.closePath(); c.fill();
+    c.fillStyle = '#FFD24A'; c.fillRect(-R * .85, -R * .02, R * 1.7, R * .22); c.fillStyle = '#6B3A12'; c.fillRect(-R * .85, R * .18, R * 1.7, R * .3); c.fillStyle = '#D9A05B'; c.beginPath(); c.moveTo(-R * .85, R * .46); c.lineTo(R * .85, R * .46); c.quadraticCurveTo(R * .85, R * .95, R * .4, R * .95); c.lineTo(-R * .4, R * .95); c.quadraticCurveTo(-R * .85, R * .95, -R * .85, R * .46); c.fill(); c.stroke();
+    [[-.45, -.6], [-.1, -.8], [.3, -.65], [.55, -.4]].forEach(function(p){ c.fillStyle = '#FFF3D0'; c.beginPath(); c.ellipse(p[0] * R, p[1] * R, R * .08, R * .05, -.3, 0, TAU); c.fill(); }); }
+  else if (id === 'cake'){ c.fillStyle = '#FFB3C7'; c.strokeStyle = '#C2516F'; c.lineWidth = lw; c.beginPath(); c.moveTo(-R * .75, R * .2); c.lineTo(R * .1, -R * .35); c.lineTo(R * .8, R * .05); c.lineTo(R * .8, R * .6); c.lineTo(-R * .75, R * .85); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#FFF3F7'; c.beginPath(); c.moveTo(-R * .75, R * .2); c.lineTo(R * .1, -R * .35); c.lineTo(R * .8, R * .05); c.lineTo(-R * .05, R * .45); c.closePath(); c.fill(); c.stroke();
+    c.strokeStyle = '#E8343A'; c.lineWidth = lw * 1.2; c.beginPath(); c.moveTo(-R * .75, R * .5); c.lineTo(R * .8, R * .33); c.stroke();
+    circ(c, R * .05, -R * .55, R * .18, '#E0262A', '#8E1016', lw * .8); circ(c, R * .05, -R * .38, R * .2, '#FFF3F7'); }
+  else if (id === 'watermelon'){ c.fillStyle = '#2E8B3A'; c.strokeStyle = '#1C5A24'; c.lineWidth = lw; c.beginPath(); c.arc(0, -R * .2, R * .95, 0, Math.PI); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#F3F7D8'; c.beginPath(); c.arc(0, -R * .2, R * .8, 0, Math.PI); c.closePath(); c.fill(); c.fillStyle = '#FF4D5A'; c.beginPath(); c.arc(0, -R * .2, R * .7, 0, Math.PI); c.closePath(); c.fill();
+    [[-.4, .1], [0, .3], [.4, .1], [-.2, -.05], [.2, -.05]].forEach(function(p){ c.fillStyle = '#222'; c.beginPath(); c.ellipse(p[0] * R, p[1] * R, R * .06, R * .1, 0, 0, TAU); c.fill(); }); }
+}
+var SPR = [];
+function mkSprites(){ SPR = FOOD_KINDS.map(function(k, i){ var cv = document.createElement('canvas'); cv.width = cv.height = 72; var c = cv.getContext('2d'); c.translate(36, 36); drawFoodIcon(c, i, 30); return cv; }); }
+function hexPath(c, x, y, r){ c.beginPath(); for (var i = 0; i < 6; i++){ var a = Math.PI / 6 + i * Math.PI / 3, px = x + Math.cos(a) * r, py = y + Math.sin(a) * r; if (i) c.lineTo(px, py); else c.moveTo(px, py); } c.closePath(); }
+function mkTile(bg){ var cv = document.createElement('canvas'); cv.width = 64; cv.height = 110; var c = cv.getContext('2d'); c.fillStyle = bg.c[0]; c.fillRect(0, 0, 64, 110); c.fillStyle = bg.c[1]; c.strokeStyle = bg.c[1]; c.lineJoin = 'round'; c.lineWidth = 7; [[32, 0], [32, 110], [0, 55], [64, 55]].forEach(function(p){ hexPath(c, p[0], p[1], 31); c.fill(); c.stroke(); }); return cv; }
+var TILES = {};
+function tile(i){ if (!TILES[i]) TILES[i] = mkTile(BACKGROUNDS[i] || BACKGROUNDS[0]); return TILES[i]; }
+
+/* ---------- snake drawing ---------- */
+var HUES = []; for (var hh = 0; hh < 36; hh++) HUES.push('hsl(' + (hh * 10) + ',95%,55%)');
+var GRADS = {};
+function gradCols(sk){ if (GRADS[sk.id]) return GRADS[sk.id]; var a = parseInt(sk.c[0].slice(1), 16), b = parseInt(sk.c[1].slice(1), 16), out = []; for (var i = 0; i < 16; i++){ var k = i / 15; out.push('rgb(' + Math.round(lerp(a >> 16 & 255, b >> 16 & 255, k)) + ',' + Math.round(lerp(a >> 8 & 255, b >> 8 & 255, k)) + ',' + Math.round(lerp(a & 255, b & 255, k)) + ')'); } GRADS[sk.id] = out; return out; }
+var DARK = {};
+function darkOf(sk){ if (!DARK[sk.id]) DARK[sk.id] = shade(sk.pat === 'gradient' ? sk.c[1] : sk.c[0], -0.42); return DARK[sk.id]; }
+function pathSegs(c, segs, from, to, ox, oy){ ox = ox || 0; oy = oy || 0; c.beginPath(); c.moveTo(segs[to].x + ox, segs[to].y + oy); for (var i = to - 1; i >= from; i--) c.lineTo(segs[i].x + ox, segs[i].y + oy); }
+function drawSnake(c, s, zoom, now, alpha, detail){
+  var sk = SKINS[s.skin] || SKINS[0], segs = s.segs, r = s.r, n = segs.length, i;
+  if (alpha < 1) c.globalAlpha = alpha;
+  c.lineCap = 'round'; c.lineJoin = 'round';
+  if (s.boost && s.alive){ pathSegs(c, segs, 0, n - 1); c.strokeStyle = 'rgba(255,255,255,.28)'; c.lineWidth = r * 2 + 14; c.stroke(); }
+  pathSegs(c, segs, 0, n - 1); c.strokeStyle = darkOf(sk); c.lineWidth = r * 2 + 3.5; c.stroke();
+  var base = sk.pat === 'gradient' ? gradCols(sk)[0] : sk.c[0];
+  if (sk.pat === 'gradient' || sk.pat === 'rainbow'){
+    var cols = sk.pat === 'gradient' ? gradCols(sk) : HUES, L = cols.length;
+    for (i = n - 1; i >= 0; i--){ var ci = sk.pat === 'gradient' ? Math.floor(i / Math.max(1, n - 1) * (L - 1)) : ((i * 2 + ((now * 20) | 0)) % L + L) % L; c.fillStyle = cols[ci]; c.beginPath(); c.arc(segs[i].x, segs[i].y, r, 0, TAU); c.fill(); }
+  } else { pathSegs(c, segs, 0, n - 1); c.strokeStyle = base; c.lineWidth = r * 2; c.stroke(); }
+  if (detail){
+    if (sk.pat === 'stripes'){ c.strokeStyle = sk.c[1]; c.lineWidth = r * 2; for (i = 3; i + 2 < n; i += 6){ pathSegs(c, segs, i, i + 2); c.stroke(); } }
+    else if (sk.pat === 'candy'){ c.lineWidth = r * 2; for (i = 3; i + 1 < n; i += 4){ c.strokeStyle = sk.c[1 + ((i >> 2) & 1)]; pathSegs(c, segs, i, i + 1); c.stroke(); } }
+    else if (sk.pat === 'dots'){ c.fillStyle = sk.c[1]; for (i = 2; i < n; i += 3){ c.beginPath(); c.arc(segs[i].x, segs[i].y, r * .36, 0, TAU); c.fill(); } }
+    else if (sk.pat === 'galaxy'){ c.fillStyle = sk.c[1]; for (i = 1; i < n; i += 2){ var h1 = Math.sin(i * 12.9898) * 43758.5453, f1 = h1 - Math.floor(h1), h2 = Math.sin(i * 78.233) * 43758.5453, f2 = h2 - Math.floor(h2); c.beginPath(); c.arc(segs[i].x + (f1 - .5) * r * 1.2, segs[i].y + (f2 - .5) * r * 1.2, r * (.08 + f1 * .1), 0, TAU); c.fill(); } c.fillStyle = 'rgba(160,80,255,.35)'; for (i = 4; i < n; i += 9){ c.beginPath(); c.arc(segs[i].x, segs[i].y, r * .5, 0, TAU); c.fill(); } }
+    pathSegs(c, segs, 0, n - 1, 0, -r * .35); c.strokeStyle = 'rgba(255,255,255,.22)'; c.lineWidth = r * .5; c.stroke();
+  }
+  /* head */
+  var hx = s.x, hy = s.y, a = s.ang, look = s.alive ? s.lookA : a, hr = r * 1.08;
+  c.fillStyle = base; c.strokeStyle = darkOf(sk); c.lineWidth = 3; c.beginPath(); c.arc(hx, hy, hr, 0, TAU); c.fill(); c.stroke();
+  var px = -Math.sin(a), py = Math.cos(a), er = r * .42, ex = Math.cos(a) * r * .3, ey = Math.sin(a) * r * .3;
+  var ld = angDiff(look, a), lx = Math.cos(a + ld * .6) * r * .17, ly = Math.sin(a + ld * .6) * r * .17;
+  for (i = -1; i <= 1; i += 2){ var cx0 = hx + ex + px * r * .48 * i, cy0 = hy + ey + py * r * .48 * i; circ(c, cx0, cy0, er, '#fff', '#222', Math.max(1, r * .08)); if (s.alive) circ(c, cx0 + lx, cy0 + ly, er * .5, '#111'); else { c.strokeStyle = '#111'; c.lineWidth = Math.max(1.5, r * .1); c.beginPath(); c.moveTo(cx0 - er * .4, cy0 - er * .4); c.lineTo(cx0 + er * .4, cy0 + er * .4); c.moveTo(cx0 + er * .4, cy0 - er * .4); c.lineTo(cx0 - er * .4, cy0 + er * .4); c.stroke(); } }
+  c.strokeStyle = '#3a0d0d'; c.lineWidth = Math.max(1.5, r * .12); c.beginPath(); var mx = hx + Math.cos(a) * r * .72, my = hy + Math.sin(a) * r * .72; c.arc(mx, my, r * .3, a - 1.1, a + 1.1); c.stroke();
+  if (detail){
+    var fs = 15 / zoom; c.font = '900 ' + fs + 'px "Varela Round","Arial Rounded MT Bold",Arial,sans-serif'; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.lineWidth = 4 / zoom; c.strokeStyle = 'rgba(0,0,0,.65)'; c.fillStyle = s.bot ? '#fff' : '#FFE27A'; c.strokeText(s.name, hx, hy - hr - 8 / zoom); c.fillText(s.name, hx, hy - hr - 8 / zoom);
+    if (s.emoji){ c.font = (32 / zoom) + 'px sans-serif'; c.fillText(s.emoji, hx, hy - hr - 30 / zoom); }
+  }
+  if (alpha < 1) c.globalAlpha = 1;
+}
+function drawPreview(cv, skinIdx, bgIdx){
+  var c = cv.getContext('2d'), w = cv.width, h = cv.height; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, w, h);
+  if (bgIdx != null){ c.fillStyle = c.createPattern(tile(bgIdx), 'repeat'); c.fillRect(0, 0, w, h); }
+  var segs = [], n = 26, r = Math.min(h * .19, w * .07); for (var i = 0; i < n; i++){ var k = i / (n - 1); segs.push({ x:w * .82 - k * w * .66, y:h * .5 + Math.sin(k * Math.PI * 1.6 + .4) * h * .2 }); }
+  var s = { skin:skinIdx, segs:segs, r:r, x:segs[0].x, y:segs[0].y, ang:Math.atan2(segs[0].y - segs[1].y, segs[0].x - segs[1].x) - .2, lookA:-.5, alive:true, bot:true, name:'', boost:false, emoji:'' };
+  drawSnake(c, s, 1, 0, 1, true);
+}
+
+/* ---------- game state ---------- */
+var G = { screen:'s-menu', W:null, player:null, mode:'infinity', acc:0, lastT:0, zoom:1, cam:{ x:0, y:0 }, mission:null, missionT:0, m0:null, missionCool:0, missionsDone:0, coinsEarned:0, xpEarned:0, playT:0, ended:false, overT:-1, paused:false, lb:[], auto:false, hudT:0, lbT:0, mmT:0, lbHtml:'', farT:0, result:'', lastW:0, dpr:1, hintT:0, coinT:0 };
+var inp = { mx:0, my:0, mouse:false, keys:{}, joy:{ on:false, ox:0, oy:0, x:0, y:0, id:null }, boostBtn:false, mdown:false, touched:false };
+var cv, ctx, mmc, mmx, PATS = {};
+function pat(i){ if (!PATS[i]) PATS[i] = ctx.createPattern(tile(i), 'repeat'); return PATS[i]; }
+
+function show(id){
+  var scr = id === 's-menu' || id === 's-game';
+  if (scr){ ['s-menu', 's-game'].forEach(function(k){ $(k).classList.toggle('on', k === id); }); }
+  [].slice.call(document.querySelectorAll('.ov')).forEach(function(e){ e.classList.toggle('on', e.id === id); });
+  G.screen = id;
+  if (id === 's-menu'){ music(false); SFX.boost(false); renderMenu(); }
+}
+function closeOv(){ [].slice.call(document.querySelectorAll('.ov')).forEach(function(e){ e.classList.remove('on'); }); G.screen = $('s-game').classList.contains('on') ? 's-game' : 's-menu'; }
+function toast(msg, ms){ var e = $('toast'); e.textContent = msg; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function(){ e.classList.remove('on'); }, ms || 2200); }
+function modal(title, body){ $('modal-title').textContent = title; $('modal-body').textContent = body; $('s-modal').classList.add('on'); }
+function refreshCoins(){ var v = String(P.coins); ['m-coins', 'g-coins-n', 's-coins'].forEach(function(id){ var e = $(id); if (e && e.textContent !== v) e.textContent = v; }); }
+
+function newMission(exclude){
+  var pool = MISSIONS.filter(function(m){ return m !== exclude; }), m = pool[Math.floor(Math.random() * pool.length)], p = G.player;
+  G.mission = m; G.missionT = MISSION_TIME; G.m0 = { kills:p ? p.kills : 0, eaten:p ? p.eaten : 0, boost:p ? p.boostT : 0 }; $('mission').classList.remove('done'); return m;
+}
+function missionProgress(){ var m = G.mission, p = G.player; if (!m || !p || !G.m0) return 0; if (m.type === 'kill') return p.kills - G.m0.kills; if (m.type === 'eat') return p.eaten - G.m0.eaten; if (m.type === 'weight') return Math.floor(p.weight); if (m.type === 'boost') return Math.floor(p.boostT - G.m0.boost); return 0; }
+function missionText(m, prog){ return fmt(m.type === 'kill' ? 'mKill' : m.type === 'eat' ? 'mEat' : m.type === 'weight' ? 'mWeight' : 'mBoost', (prog != null ? Math.min(m.n, prog) + '/' : '') + m.n); }
+function updateMission(dt){
+  var p = G.player; if (!p || !p.alive) return;
+  if (!G.mission){ G.missionCool -= dt; if (G.missionCool <= 0) newMission(G.lastMission); return; }
+  G.missionT -= dt;
+  if (missionProgress() >= G.mission.n){ addCoins(G.mission.coins); G.coinsEarned += G.mission.coins; G.missionsDone++; SFX.ding(); toast(fmt('missionDone', G.mission.coins)); $('mission').classList.add('done'); G.lastMission = G.mission; G.mission = null; G.missionCool = 3; save(); }
+  else if (G.missionT <= 0) newMission(G.mission);
+}
+function start(mode){
+  mode = MODES[mode] ? mode : 'infinity';
+  var W = newWorld(mode, (Date.now() ^ (Math.random() * 1e9)) & 0x7fffffff);
+  var nm = (P.name || '').trim() || (P.set.lang === 'en' ? 'Player' : 'שחקן');
+  var p = spawnSnake(W, { bot:false, name:nm, skin:P.skin, weight:G.auto ? 60 : START_W });
+  W.player = p; G.W = W; G.player = p; G.mode = mode; G.acc = 0; G.zoom = 1; G.cam.x = p.x; G.cam.y = p.y; G.mission = null; G.missionCool = 0; G.lastMission = null; G.missionsDone = 0; G.coinsEarned = 0; G.xpEarned = 0; G.playT = 0; G.ended = false; G.overT = -1; G.paused = false; G.result = ''; G.lastW = p.weight; G.lbHtml = ''; G.coinT = 0; G.hintT = 6;
+  inp.keys = {}; inp.mdown = false; inp.boostBtn = false; inp.joy.on = false; $('joy').classList.add('hidden'); $('emoji-row').classList.add('hidden');
+  P.stats.games++; save();
+  show('s-game'); fit(); newMission(null); hudRefresh(true); music(true);
+  $('b-boost').classList.toggle('on', inp.touched || (window.matchMedia && matchMedia('(pointer:coarse)').matches));
+  $('hint').textContent = t($('b-boost').classList.contains('on') ? 'hintTouch' : 'hintMouse'); $('hint').classList.remove('hidden');
+  return W;
+}
+function playerTarget(){
+  var kx = 0, ky = 0, k = inp.keys; if (k.left) kx -= 1; if (k.right) kx += 1; if (k.up) ky -= 1; if (k.down) ky += 1;
+  if (inp.joy.on){ var dx = inp.joy.x - inp.joy.ox, dy = inp.joy.y - inp.joy.oy; return dx * dx + dy * dy > 100 ? Math.atan2(dy, dx) : null; }
+  if (kx || ky) return Math.atan2(ky, kx);
+  if (inp.mouse && P.set.mouse){ var mx = inp.mx - window.innerWidth / 2, my = inp.my - window.innerHeight / 2; if (mx * mx + my * my > 100) return Math.atan2(my, mx); }
+  return null;
+}
+function applyInput(){
+  var p = G.player; if (!p || !p.alive) return;
+  if (G.auto){ if (G.W.tick % 6 === 0) botThink(G.W, p); return; }
+  var a = playerTarget(); if (a !== null){ p.targetAng = a; p.lookA = a; }
+  var b = !!(inp.mdown || inp.keys.boost || inp.boostBtn); if (b !== p.boost){ p.boost = b; }
+}
+function simTick(){
+  var W = G.W; applyInput(); step(W, DT);
+  var p = G.player; if (p.alive) G.playT += DT;
+  var ev = W.events; for (var i = 0; i < ev.length; i++){ var e = ev[i];
+    if (e.type === 'eat'){ if (e.s === p) SFX.eat(e.w); }
+    else if (e.type === 'kill'){ if (e.s === p){ SFX.die(); SFX.boost(false); } else if (e.killer === p){ SFX.kill(); addCoins(5); G.coinsEarned += 5; } }
+  }
+  ev.length = 0;
+  updateMission(DT);
+  if (p.alive){ G.coinT += DT; if (G.coinT >= 10){ G.coinT -= 10; addCoins(1); G.coinsEarned += 1; } }
+  if (W.result && !G.ended) endGame();
+  if (W.tick % 30 === 0){ for (i = 0; i < W.snakes.length; i++){ var s = W.snakes[i]; s.far = Math.abs(s.x - G.cam.x) > 1700 || Math.abs(s.y - G.cam.y) > 1700; } }
+}
+function endGame(){
+  var W = G.W, p = G.player; G.ended = true; G.result = W.result; G.overT = 1.4; SFX.boost(false);
+  var tm = G.playT, coins = 0, xp = Math.floor(p.weight / 5) + p.kills * 20 + Math.floor(tm / 5), bonus = 0;
+  if (W.mode === 'br'){ if (W.result === 'win') bonus = 300; else if (W.placement <= 10) bonus = 100; else if (W.placement <= 50) bonus = 20; }
+  if (W.mode === 'arena' && W.result === 'win') bonus = 150;
+  if (W.result === 'win') xp += 200;
+  coins += bonus; if (coins) addCoins(coins); G.coinsEarned += coins; G.xpEarned = xp; addXP(xp);
+  P.stats.kills += p.kills; P.stats.food += p.eaten; P.stats.time += Math.round(tm); if (W.result === 'win') P.stats.wins++;
+  if (Math.floor(p.weight) > (P.best[W.mode] || 0)) P.best[W.mode] = Math.floor(p.weight);
+  G.lastW = Math.floor(p.weight); save();
+}
+function showDead(){
+  var W = G.W, p = G.player, win = W.result === 'win';
+  $('dead-title').textContent = win ? t('won') : W.result === 'lose' ? t('lost') : t('died'); $('dead-title').classList.toggle('win', win);
+  $('dead-place').textContent = W.mode === 'br' ? fmt('place', win ? 1 : W.placement, W.M.bots + 1) : W.mode === 'arena' ? (t('kills') + ': ' + p.kills) : '';
+  $('d-weight').textContent = G.lastW; $('d-kills').textContent = p.kills; $('d-time').textContent = mmss(G.playT); $('d-coins').textContent = G.coinsEarned; $('d-xp').textContent = G.xpEarned;
+  $('dead-tip').textContent = t(win ? (W.mode === 'arena' ? 'tipArenaWin' : 'tipWin') : W.result === 'lose' ? 'tipArenaLose' : p.why === 'zone' ? 'tipZone' : p.why === 'wall' ? 'tipWall' : 'tip');
+  show('s-dead'); renderMenu();
+}
+function mmss(s, pad){ s = Math.max(0, Math.floor(s)); var m = Math.floor(s / 60), r = s % 60; return (pad && m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r; }
+function updateCamera(dt){
+  var p = G.player, W = G.W; if (!p) return;
+  var tz = clamp(1.05 - Math.sqrt(Math.max(0, p.weight)) / 95, 0.42, 1.05) * clamp(Math.min(window.innerWidth, window.innerHeight) / 650, 0.8, 1);
+  G.zoom = lerp(G.zoom, tz, Math.min(1, dt * 2));
+  var k = Math.min(1, dt * 8); G.cam.x = lerp(G.cam.x, p.x, k); G.cam.y = lerp(G.cam.y, p.y, k);
+}
+function render(){
+  var W = G.W; if (!W || !ctx) return;
+  var w = cv.width, h = cv.height, dpr = G.dpr, z = G.zoom * dpr, now = W.t;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  var bg = BACKGROUNDS[P.bg] || BACKGROUNDS[0]; ctx.fillStyle = bg.out; ctx.fillRect(0, 0, w, h);
+  ctx.setTransform(z, 0, 0, z, w / 2 - G.cam.x * z, h / 2 - G.cam.y * z);
+  var vx0 = G.cam.x - w / 2 / z, vx1 = G.cam.x + w / 2 / z, vy0 = G.cam.y - h / 2 / z, vy1 = G.cam.y + h / 2 / z;
+  ctx.save(); ctx.beginPath(); if (W.M.shape === 'square') ctx.rect(-W.R, -W.R, 2 * W.R, 2 * W.R); else ctx.arc(0, 0, W.R, 0, TAU); ctx.clip();
+  ctx.fillStyle = pat(P.bg); ctx.fillRect(vx0, vy0, vx1 - vx0, vy1 - vy0); ctx.restore();
+  /* border */
+  ctx.lineWidth = 10 / G.zoom; ctx.strokeStyle = '#FF3B5C'; ctx.beginPath(); if (W.M.shape === 'square') ctx.rect(-W.R, -W.R, 2 * W.R, 2 * W.R); else ctx.arc(0, 0, W.R, 0, TAU); ctx.stroke();
+  ctx.lineWidth = 3 / G.zoom; ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.stroke();
+  /* zone */
+  if (W.zone && W.zone.r < W.R - 1){ ctx.save(); ctx.beginPath(); ctx.rect(vx0, vy0, vx1 - vx0, vy1 - vy0); ctx.arc(0, 0, W.zone.r, 0, TAU, true); ctx.fillStyle = 'rgba(200,30,60,.28)'; ctx.fill(); ctx.restore(); ctx.beginPath(); ctx.arc(0, 0, W.zone.r, 0, TAU); ctx.lineWidth = 6 / G.zoom; ctx.strokeStyle = '#FF5577'; ctx.stroke(); }
+  /* food */
+  var food = W.food, m = 40;
+  for (var i = 0; i < food.length; i++){ var f = food[i]; if (f.x < vx0 - m || f.x > vx1 + m || f.y < vy0 - m || f.y > vy1 + m) continue; var fr = f.r * 1.15 * (1 + Math.sin(now * 3 + f.ph) * .06), fy = f.y + Math.sin(now * 2.2 + f.ph) * 2; ctx.drawImage(SPR[f.k], f.x - fr, fy - fr, fr * 2, fr * 2); }
+  /* snakes */
+  var detail = G.zoom > 0.3, mg = 400;
+  for (i = 0; i < W.snakes.length; i++){ var s = W.snakes[i]; var alpha = s.alive ? 1 : Math.max(0, 1 - (now - s.deathT) / 0.6); if (alpha <= 0) continue;
+    var vis = false, segs = s.segs; for (var k = 0; k < segs.length; k += 8){ var q = segs[k]; if (q.x > vx0 - mg && q.x < vx1 + mg && q.y > vy0 - mg && q.y < vy1 + mg){ vis = true; break; } }
+    if (!vis){ var tl = segs[segs.length - 1]; vis = tl.x > vx0 - mg && tl.x < vx1 + mg && tl.y > vy0 - mg && tl.y < vy1 + mg; }
+    if (vis && s !== G.player) drawSnake(ctx, s, G.zoom, now, alpha, detail); }
+  if (G.player) drawSnake(ctx, G.player, G.zoom, now, G.player.alive ? 1 : Math.max(0, 1 - (now - G.player.deathT) / 0.6), true);
+  /* screen-space: crown pointer */
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var top = G.lb[0], p = G.player;
+  if (top && p && top !== p && p.alive){ var ang = Math.atan2(top.y - p.y, top.x - p.x), sw = w / dpr, sh = h / dpr, px = sw / 2, py = sh - 64; ctx.save(); ctx.translate(px, py); ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.beginPath(); ctx.arc(0, 0, 26, 0, TAU); ctx.fill(); ctx.rotate(ang); ctx.fillStyle = '#FFC93C'; ctx.beginPath(); ctx.moveTo(30, 0); ctx.lineTo(16, -9); ctx.lineTo(16, 9); ctx.closePath(); ctx.fill(); ctx.restore(); ctx.font = '22px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('👑', px, py + 1); }
+}
+function drawMinimap(){
+  var W = G.W; if (!W || !mmx) return; var c = mmx, S = 180, half = 80; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, S, S); c.translate(S / 2, S / 2); var k = half / W.R;
+  c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 2; c.beginPath(); if (W.M.shape === 'square') c.rect(-half, -half, 2 * half, 2 * half); else c.arc(0, 0, half, 0, TAU); c.stroke();
+  if (W.zone){ c.beginPath(); c.arc(0, 0, W.zone.r * k, 0, TAU); c.strokeStyle = '#FF5577'; c.lineWidth = 2; c.stroke(); }
+  var top = G.lb[0];
+  for (var i = 0; i < W.snakes.length; i++){ var s = W.snakes[i]; if (!s.alive || s === G.player) continue; c.fillStyle = s === top ? '#FFC93C' : 'rgba(255,255,255,.75)'; c.beginPath(); c.arc(s.x * k, s.y * k, s === top ? 4 : 2.5, 0, TAU); c.fill(); }
+  var p = G.player; if (p){ c.fillStyle = '#FFE27A'; c.strokeStyle = '#000'; c.lineWidth = 2; c.beginPath(); c.arc(p.x * k, p.y * k, 5, 0, TAU); c.fill(); c.stroke(); }
+}
+function hudRefresh(force){
+  var W = G.W, p = G.player; if (!W || !p) return;
+  var sc = String(Math.floor(p.alive ? p.weight : G.lastW)); if ($('score').textContent !== sc) $('score').textContent = sc;
+  var m = G.mission, mt = m ? missionText(m, missionProgress()) : '✓';
+  if ($('mission-txt').textContent !== mt) $('mission-txt').textContent = mt;
+  var tt = m ? mmss(G.missionT, true) : '--:--'; if ($('mission-timer').textContent !== tt) $('mission-timer').textContent = tt;
+  $('mring').style.setProperty('--p', (m ? Math.round(G.missionT / MISSION_TIME * 100) : 100) + '%');
+  var bots = 0; for (var i = 0; i < W.snakes.length; i++) if (W.snakes[i].alive && W.snakes[i].bot) bots++;
+  var on = String(bots) + (W.M.time ? ' · ⏱ ' + mmss(W.timeLeft) : W.zone ? ' ' + t('alive') : ''); if ($('online-n').textContent !== on) $('online-n').textContent = on;
+  refreshCoins();
+  G.lb = leaderboard(W);
+  if (force || G.lbT <= 0){ G.lbT = 0.25; var rows = '', lb = G.lb, me = -1; for (i = 0; i < lb.length && i < 10; i++){ var s = lb[i]; rows += '<div class="row' + (s === p ? ' me' : '') + '"><span>' + (i === 0 ? '👑' : (i + 1) + '.') + '</span><span class="n">' + esc(s.name) + '</span><span>' + Math.floor(s.weight) + '</span></div>'; }
+    for (i = 0; i < lb.length; i++) if (lb[i] === p){ me = i; break; }
+    var meH = '<span>' + (me >= 0 ? me + 1 : '-') + '.</span><span class="n">' + esc(p.name) + '</span><span>' + Math.floor(p.alive ? p.weight : G.lastW) + '</span>';
+    var html = rows + '|' + meH; if (html !== G.lbHtml){ G.lbHtml = html; $('lb-rows').innerHTML = rows; $('lb-me').innerHTML = meH; } }
+  if (force || G.mmT <= 0){ G.mmT = 0.15; drawMinimap(); }
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, function(ch){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[ch]; }); }
+function hudTick(dt){
+  G.hudT -= dt; G.lbT -= dt; G.mmT -= dt; if (G.hudT <= 0){ G.hudT = 0.1; hudRefresh(false); }
+  if (G.hintT > 0){ G.hintT -= dt; if (G.hintT <= 0) $('hint').classList.add('hidden'); }
+  if (G.overT >= 0){ G.overT -= dt; if (G.overT < 0){ G.overT = -1; showDead(); } }
+  var p = G.player; if (p && p.alive) SFX.boost(p.boost && p.weight > BOOST_MIN);
+}
+function frame(now){
+  var dt = Math.min(0.1, (now - G.lastT) / 1000); G.lastT = now;
+  if (G.screen === 's-game' && !G.paused && G.W){ G.acc += dt; var n = 0; while (G.acc >= DT && n < 4){ simTick(); G.acc -= DT; n++; } if (n === 4) G.acc = 0; updateCamera(dt); render(); hudTick(dt); }
+  requestAnimationFrame(frame);
+}
+function fit(){
+  if (!cv) return; var dpr = Math.min(window.devicePixelRatio || 1, Math.min(window.innerWidth, window.innerHeight) < 500 ? 1.5 : 2); G.dpr = dpr;
+  var w = Math.max(1, Math.round(window.innerWidth * dpr)), h = Math.max(1, Math.round(window.innerHeight * dpr)); if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; }
+}
+function pause(on){ if (!G.W || G.ended) return; G.paused = !!on; if (on){ show('s-pause'); SFX.boost(false); music(false); } else { closeOv(); G.lastT = performance.now(); music(true); } }
+function react(em){ var p = G.player; if (!p) return; p.emoji = em; p.emojiT = 3; $('emoji-row').classList.add('hidden'); }
+/* ---------- input ---------- */
+function onPointerDown(e){
+  if (G.screen !== 's-game') return; e.preventDefault();
+  if (e.pointerType === 'mouse'){ inp.mdown = true; inp.mx = e.clientX; inp.my = e.clientY; inp.mouse = true; return; }
+  inp.touched = true; $('b-boost').classList.add('on');
+  if (!inp.joy.on){ inp.joy.on = true; inp.joy.id = e.pointerId; inp.joy.ox = inp.joy.x = e.clientX; inp.joy.oy = inp.joy.y = e.clientY; var j = $('joy'); j.style.left = e.clientX + 'px'; j.style.top = e.clientY + 'px'; j.firstElementChild.style.transform = 'translate(-50%,-50%)'; j.classList.remove('hidden'); }
+}
+function onPointerMove(e){
+  if (e.pointerType === 'mouse'){ inp.mx = e.clientX; inp.my = e.clientY; inp.mouse = true; return; }
+  if (inp.joy.on && e.pointerId === inp.joy.id){ var dx = e.clientX - inp.joy.ox, dy = e.clientY - inp.joy.oy, d = hyp(dx, dy), mx = 44; if (d > mx){ dx = dx / d * mx; dy = dy / d * mx; } inp.joy.x = inp.joy.ox + dx; inp.joy.y = inp.joy.oy + dy; $('joy').firstElementChild.style.transform = 'translate(calc(-50% + ' + dx + 'px),calc(-50% + ' + dy + 'px))'; }
+}
+function onPointerUp(e){
+  if (e.pointerType === 'mouse'){ inp.mdown = false; return; }
+  if (inp.joy.on && e.pointerId === inp.joy.id){ inp.joy.on = false; inp.joy.id = null; $('joy').classList.add('hidden'); }
+}
+var KEYMAP = { ArrowLeft:'left', KeyA:'left', ArrowRight:'right', KeyD:'right', ArrowUp:'up', KeyW:'up', ArrowDown:'down', KeyS:'down', Space:'boost', ShiftLeft:'boost', ShiftRight:'boost' };
+function onKey(e, down){
+  var c = e.code, k = KEYMAP[c];
+  if (G.screen === 's-game' || G.screen === 's-pause'){
+    if (k){ inp.keys[k] = down; e.preventDefault(); return; }
+    if (!down) return;
+    if (c === 'Escape' || c === 'KeyP'){ pause(!G.paused); return; }
+    if (c === 'KeyE'){ $('emoji-row').classList.toggle('hidden'); return; }
+    if (/^Digit[1-5]$/.test(c)){ react(EMOJIS[+c.slice(5) - 1]); return; }
+  } else if (down && G.screen === 's-menu' && (c === 'Enter') && document.activeElement !== $('name')){ $('b-play').click(); }
+  else if (down && c === 'Escape' && G.screen !== 's-menu' && G.screen !== 's-game'){ if (G.screen === 's-dead') return; closeOv(); if (G.paused) pause(false); }
+}
+/* ---------- menus ---------- */
+function renderMenu(){
+  $('m-level').textContent = P.level; $('m-xp').textContent = P.xp + '/' + xpNeed(P.level); $('m-xpfill').style.width = Math.round(P.xp / xpNeed(P.level) * 100) + '%';
+  refreshCoins(); var now = Date.now(), dk = dayKey(now);
+  $('gift-tag').classList.toggle('off', P.gift === dk); $('wheel-tag').classList.toggle('off', P.wheel === dk); $('free-tag').classList.toggle('off', now - P.freeAt < 3600e3);
+  var chestOk = now >= P.chestAt; $('b-chest').classList.toggle('wait', !chestOk); $('chest-tag').textContent = chestOk ? t('ready') : mmss((P.chestAt - now) / 1000);
+  $('bg-swatch').style.background = (BACKGROUNDS[P.bg] || BACKGROUNDS[0]).c[1];
+  if ($('name').value !== P.name) $('name').value = P.name; $('name').placeholder = t('name');
+  var pv = $('pv'); if (pv) drawPreview(pv, P.skin, P.bg);
+}
+function openShop(tab){
+  G.shopTab = tab || G.shopTab || 'skins'; $('tab-skins').classList.toggle('on', G.shopTab === 'skins'); $('tab-bgs').classList.toggle('on', G.shopTab !== 'skins'); refreshCoins();
+  var grid = $('shop-grid'); grid.innerHTML = ''; var list = G.shopTab === 'skins' ? SKINS : BACKGROUNDS, ownedL = G.shopTab === 'skins' ? P.skins : P.bgs, eq = G.shopTab === 'skins' ? P.skin : P.bg;
+  list.forEach(function(it, i){
+    var own = ownedL.indexOf(i) >= 0, b = document.createElement('button'); b.className = 'item' + (own ? ' own' : '') + (eq === i ? ' eq' : ''); b.setAttribute('data-i', i);
+    var c = document.createElement('canvas'); c.width = 208; c.height = 108; b.appendChild(c);
+    if (G.shopTab === 'skins') drawPreview(c, i, null); else { var x = c.getContext('2d'); x.fillStyle = x.createPattern(tile(i), 'repeat'); x.fillRect(0, 0, 208, 108); }
+    var nm = document.createElement('span'); nm.textContent = it[P.set.lang] || it.he; b.appendChild(nm);
+    var pr = document.createElement('small'); pr.textContent = eq === i ? '✓ ' + t('equipped') : own ? t('owned') : '🪙 ' + it.price; b.appendChild(pr);
+    b.onclick = function(){ SFX.tap(); var res = G.shopTab === 'skins' ? buySkin(i) : buyBg(i); if (res === 'poor') toast(t('noCoins')); else if (res === 'bought'){ SFX.coin(); toast(t('bought')); } openShop(G.shopTab); renderMenu(); };
+    grid.appendChild(b);
+  });
+  show('s-shop');
+}
+function renderSettings(){ $('set-sound').textContent = t(P.set.sound ? 'on' : 'off'); $('set-sound').classList.toggle('on', P.set.sound); $('set-music').textContent = t(P.set.music ? 'on' : 'off'); $('set-music').classList.toggle('on', P.set.music); $('set-lang').textContent = t('langName'); $('set-ctrl').textContent = t(P.set.mouse ? 'ctrlMouse' : 'ctrlKeys'); $('b-music').classList.toggle('off', !P.set.music); }
+var WHEEL_COLS = ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#FF8FB1', '#C77DFF', '#FFB347', '#5EEAD4'];
+function drawWheel(rot){
+  var c = $('wheel').getContext('2d'), S = 520, R = 240, n = WHEEL.length, sa = TAU / n; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, S, S); c.translate(S / 2, S / 2);
+  c.save(); c.rotate(rot);
+  for (var i = 0; i < n; i++){ c.beginPath(); c.moveTo(0, 0); c.arc(0, 0, R, i * sa, (i + 1) * sa); c.closePath(); c.fillStyle = WHEEL_COLS[i]; c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 4; c.stroke();
+    c.save(); c.rotate((i + .5) * sa); c.fillStyle = '#1E2338'; c.font = '900 30px "Varela Round",Arial,sans-serif'; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(WHEEL[i].skin ? '🐍' : WHEEL[i].coins + ' 🪙', R - 18, 0); c.restore(); }
+  c.restore(); circ(c, 0, 0, 34, '#fff', '#1E2338', 6); c.fillStyle = '#1E2338'; c.beginPath(); c.moveTo(-22, -R - 6); c.lineTo(22, -R - 6); c.lineTo(0, -R + 36); c.closePath(); c.fill(); c.fillStyle = '#FFC93C'; c.beginPath(); c.moveTo(-16, -R - 2); c.lineTo(16, -R - 2); c.lineTo(0, -R + 28); c.closePath(); c.fill();
+}
+function openWheel(){ G.wheelRot = G.wheelRot || 0; drawWheel(G.wheelRot); var ok = P.wheel !== dayKey(); $('wheel-msg').textContent = ok ? '' : t('wheelWait'); $('b-spin').disabled = !ok; $('b-spin').style.opacity = ok ? 1 : .5; show('s-wheel'); }
+function doSpin(){
+  var res = spinWheel(Date.now()); if (!res){ $('wheel-msg').textContent = t('wheelWait'); return; }
+  renderMenu(); var sa = TAU / WHEEL.length, target = -Math.PI / 2 - (res.i + .5) * sa, start = G.wheelRot || 0, cur = ((start % TAU) + TAU) % TAU, end = start + TAU * 5 + (((target - cur) % TAU) + TAU) % TAU, t0 = performance.now(), dur = 3200;
+  $('b-spin').disabled = true; $('b-spin').style.opacity = .5;
+  (function anim(now){ var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); G.wheelRot = start + (end - start) * e; drawWheel(G.wheelRot); if (k < 1) requestAnimationFrame(anim); else { SFX.coin(); $('wheel-msg').textContent = res.skin != null ? fmt('wheelSkin', SKINS[res.skin][P.set.lang] || SKINS[res.skin].he) : fmt('wheelCoins', res.coins); renderMenu(); } })(t0);
+}
+function setLang(l){
+  P.set.lang = l === 'en' ? 'en' : 'he'; document.documentElement.lang = P.set.lang; document.documentElement.dir = P.set.lang === 'en' ? 'ltr' : 'rtl';
+  [].slice.call(document.querySelectorAll('[data-t]')).forEach(function(e){ e.textContent = t(e.getAttribute('data-t')); });
+  $('b-lang').textContent = t('langName'); $('name').placeholder = t('name');
+  document.title = P.set.lang === 'en' ? 'Snake vs Worms 🐍 – io snake game with 3 modes – Lupu\'s game' : 'נחש נגד תולעים 🐍 – משחק נחשים io עם 3 מצבים (כמו Snake vs Worms) – המשחק של לופו';
+  renderSettings(); if (G.screen === 's-menu') renderMenu(); if (G.screen === 's-shop') openShop(G.shopTab); if (G.W) hudRefresh(true); save();
+}
+function bind(){
+  cv = $('cv'); ctx = cv.getContext('2d'); mmc = $('mm'); mmx = mmc.getContext('2d');
+  cv.addEventListener('pointerdown', onPointerDown); window.addEventListener('pointermove', onPointerMove); window.addEventListener('pointerup', onPointerUp); window.addEventListener('pointercancel', onPointerUp);
+  cv.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  document.addEventListener('keydown', function(e){ if (!e.repeat) onKey(e, true); else if (KEYMAP[e.code]) e.preventDefault(); });
+  document.addEventListener('keyup', function(e){ onKey(e, false); });
+  window.addEventListener('resize', fit); window.addEventListener('orientationchange', function(){ setTimeout(fit, 150); });
+  document.addEventListener('visibilitychange', function(){ if (document.hidden && G.screen === 's-game' && !G.ended) pause(true); });
+  document.addEventListener('pointerdown', function(){ ac(); }, { once:true });
+  var bb = $('b-boost'); bb.addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); inp.boostBtn = true; }); ['pointerup', 'pointercancel', 'pointerleave'].forEach(function(ev){ bb.addEventListener(ev, function(){ inp.boostBtn = false; }); });
+  $('b-play').onclick = function(){ SFX.tap(); P.name = $('name').value.trim().slice(0, 14); save(); show('s-modes'); };
+  $('b-modes-back').onclick = function(){ SFX.tap(); closeOv(); };
+  [].slice.call(document.querySelectorAll('[data-mode]')).forEach(function(b){ b.onclick = function(){ SFX.tap(); ac(); start(b.getAttribute('data-mode')); }; });
+  $('b-again').onclick = function(){ SFX.tap(); start(G.mode); };
+  $('b-menu').onclick = function(){ SFX.tap(); G.W = null; show('s-menu'); };
+  $('b-pause').onclick = function(){ SFX.tap(); pause(true); };
+  $('b-resume').onclick = function(){ SFX.tap(); pause(false); };
+  $('b-quit').onclick = function(){ SFX.tap(); if (G.W && !G.ended){ G.W.result = 'quit'; endGame(); } G.paused = false; G.W = null; show('s-menu'); };
+  $('b-emoji').onclick = function(){ SFX.tap(); $('emoji-row').classList.toggle('hidden'); };
+  [].slice.call($('emoji-row').querySelectorAll('button')).forEach(function(b){ b.onclick = function(){ SFX.tap(); react(b.textContent); }; });
+  $('b-music').onclick = function(){ P.set.music = !P.set.music; save(); renderSettings(); music(G.screen === 's-game'); SFX.tap(); };
+  $('b-settings').onclick = function(){ SFX.tap(); renderSettings(); show('s-settings'); };
+  $('b-set-x').onclick = function(){ SFX.tap(); closeOv(); };
+  $('set-sound').onclick = function(){ P.set.sound = !P.set.sound; save(); renderSettings(); SFX.tap(); };
+  $('set-music').onclick = function(){ P.set.music = !P.set.music; save(); renderSettings(); SFX.tap(); };
+  $('set-lang').onclick = $('b-lang').onclick = function(){ SFX.tap(); setLang(P.set.lang === 'he' ? 'en' : 'he'); };
+  $('set-ctrl').onclick = function(){ P.set.mouse = !P.set.mouse; save(); renderSettings(); SFX.tap(); };
+  $('set-reset').onclick = function(){ if (confirm(t('resetQ'))){ P = DEF(); save(); setLang(P.set.lang); renderMenu(); renderSettings(); toast('✓'); } };
+  $('b-shop').onclick = $('b-edit').onclick = function(){ SFX.tap(); openShop('skins'); };
+  $('b-bg').onclick = function(){ SFX.tap(); openShop('bgs'); };
+  $('b-shop-x').onclick = function(){ SFX.tap(); closeOv(); renderMenu(); };
+  $('tab-skins').onclick = function(){ SFX.tap(); openShop('skins'); }; $('tab-bgs').onclick = function(){ SFX.tap(); openShop('bgs'); };
+  $('b-plus').onclick = $('b-gplus').onclick = function(){ SFX.tap(); if (G.screen === 's-game'){ pause(true); } var n = claimFree(); if (n){ SFX.coin(); modal(t('freeT'), fmt('freeGot', n)); } else modal(t('freeT'), fmt('freeWait', Math.ceil((3600e3 - (Date.now() - P.freeAt)) / 60e3))); renderMenu(); };
+  $('b-free').onclick = function(){ SFX.tap(); var n = claimFree(); if (n){ SFX.coin(); modal(t('freeT'), fmt('freeGot', n)); } else modal(t('freeT'), fmt('freeWait', Math.ceil((3600e3 - (Date.now() - P.freeAt)) / 60e3))); renderMenu(); };
+  $('b-gift').onclick = function(){ SFX.tap(); var n = claimGift(Date.now()); if (n){ SFX.coin(); modal(t('giftT'), fmt('giftGot', n)); } else modal(t('giftT'), t('giftWait')); renderMenu(); };
+  $('b-chest').onclick = function(){ SFX.tap(); var n = claimChest(); if (n){ SFX.coin(); modal(t('chestT'), fmt('chestGot', n)); } else modal(t('chestT'), fmt('chestWait', Math.ceil((P.chestAt - Date.now()) / 60e3))); renderMenu(); };
+  $('b-wheel').onclick = function(){ SFX.tap(); openWheel(); }; $('b-wheel-x').onclick = function(){ SFX.tap(); closeOv(); renderMenu(); }; $('b-spin').onclick = function(){ SFX.tap(); doSpin(); };
+  $('b-modal-ok').onclick = function(){ SFX.tap(); $('s-modal').classList.remove('on'); if (G.screen === 's-modal') G.screen = $('s-game').classList.contains('on') ? 's-game' : 's-menu'; };
+  $('name').addEventListener('change', function(){ P.name = $('name').value.trim().slice(0, 14); save(); });
+  setInterval(function(){ if (G.screen === 's-menu') renderMenu(); }, 30000);
+}
+function runAuto(mode, secs, thenDead){
+  G.auto = true; var W, tries = 0;
+  do { start(mode); W = G.W; for (var i = 0; i < secs * HZ && G.player.alive; i++) simTick(); } while (!G.player.alive && ++tries < 8);
+  if (thenDead){ var k = null; for (var j = 0; j < W.snakes.length; j++) if (W.snakes[j].bot && W.snakes[j].alive){ k = W.snakes[j]; break; } kill(W, G.player, k, 'body'); W.events.length = 0; checkEnd(W); endGame(); G.overT = -1; G.cam.x = G.player.x; G.cam.y = G.player.y; G.zoom = 0.9; render(); hudRefresh(true); showDead(); }
+  else { G.cam.x = G.player.x; G.cam.y = G.player.y; hudRefresh(true); }
+}
+function init(){
+  load(); mkSprites(); bind(); setLang(P.set.lang); renderSettings(); renderMenu();
+  var h = location.hash.replace('-en', '').replace('-touch', ''); if (location.hash.indexOf('-en') > 0) setLang('en'); if (location.hash.indexOf('-touch') > 0) inp.touched = true;
+  if (h === '#auto') runAuto('infinity', 3); else if (h === '#auto-br') runAuto('br', 3); else if (h === '#auto-arena') runAuto('arena', 3);
+  else if (h === '#auto-dead') runAuto('infinity', 2, true); else if (h === '#auto-modes') show('s-modes'); else if (h === '#auto-shop') openShop('skins');
+  else if (h === '#auto-wheel') openWheel(); else if (h === '#auto-settings'){ renderSettings(); show('s-settings'); }
+  else if (h === '#auto-pause'){ runAuto('infinity', 2); pause(true); }
+  else if (h === '#auto-win'){ runAuto('br', 2); var Wn = G.W; Wn.snakes.forEach(function(s){ if (s !== G.player) kill(Wn, s, null, 'zone'); }); Wn.events.length = 0; checkEnd(Wn); endGame(); G.overT = -1; render(); hudRefresh(true); showDead(); }
+  requestAnimationFrame(function(now){ G.lastT = now; requestAnimationFrame(frame); });
+}
+window.SN = { MODES:MODES, SKINS:SKINS, BACKGROUNDS:BACKGROUNDS, MISSIONS:MISSIONS, FOOD_KINDS:FOOD_KINDS, NAMES:NAMES, WHEEL:WHEEL, G:G, T:T, t:t, inp:inp, mkRng:mkRng,
+  /* each engine call takes (world, ...) or, for the running game, just (...) */
+  newWorld:newWorld, step:function(a, b){ if (a && typeof a === 'object') return step(a, b); return G.W ? step(G.W, a) : null; },
+  spawnSnake:function(a, b){ if (a && a.snakes) return spawnSnake(a, b); return G.W ? spawnSnake(G.W, a) : null; }, spawnBot:spawnBot,
+  botThink:function(a, b){ if (a && a.snakes) return botThink(a, b); return G.W && a ? botThink(G.W, a) : null; },
+  collide:collide, eat:function(a, b, c){ if (a && a.snakes) return eat(a, b, c); return G.W ? eat(G.W, a, b) : false; }, kill:function(a, b, c, d){ if (a && a.snakes) return kill(a, b, c, d); if (G.W && a) kill(G.W, a, b, c); },
+  moveSnake:moveSnake, radiusFor:radiusFor, lenFor:lenFor, turnFor:turnFor, leaderboard:leaderboard, checkEnd:checkEnd, freeSpot:freeSpot, spawnFood:spawnFood,
+  show:show, start:start, setLang:setLang, P:function(){ return P; }, save:save, load:load, xpNeed:xpNeed, addXP:addXP, addCoins:addCoins, claimGift:claimGift, claimFree:claimFree, claimChest:claimChest, spinWheel:spinWheel, buySkin:buySkin, buyBg:buyBg, dayKey:dayKey,
+  newMission:newMission, missionProgress:missionProgress, updateMission:updateMission, simTick:simTick, endGame:endGame, showDead:showDead, render:render, hudRefresh:hudRefresh, drawMinimap:drawMinimap, react:react, pause:pause, fit:fit, applyInput:applyInput, onPointerDown:onPointerDown, onPointerMove:onPointerMove, onPointerUp:onPointerUp, onKey:onKey, openShop:openShop, openWheel:openWheel, renderMenu:renderMenu, closeOv:closeOv, drawPreview:drawPreview, music:music, SFX:SFX,
+  DT:DT, HZ:HZ, SPEED:SPEED, BOOST_MIN:BOOST_MIN, MISSION_TIME:MISSION_TIME, EMOJIS:EMOJIS, KEY:KEY };
+if (TEST){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } } else init();
+
+/* ---------- tests (#test) ---------- */
+if (TEST){
+  (function(){
+    var log = [], errs = ERRS;
+    function ok(name, cond, info){ log.push([name, cond ? 'PASS' : 'FAIL']); if (!cond) errs.push(name + (info !== undefined ? ': ' + info : '')); }
+    function done(){ var pre = $('test-log'); pre.classList.remove('hidden'); pre.textContent = JSON.stringify({ errs:errs, log:log }); }
+    function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+    function steps(W, n){ for (var i = 0; i < n; i++) step(W, DT); }
+    function bgPix(px){ var bg = BACKGROUNDS[P.bg] || BACKGROUNDS[0]; return [bg.c[0], bg.c[1], bg.out].some(function(h){ var n = parseInt(h.slice(1), 16); return Math.abs((n >> 16 & 255) - px[0]) < 6 && Math.abs((n >> 8 & 255) - px[1]) < 6 && Math.abs((n & 255) - px[2]) < 6; }); }
+    (async function(){
+      try {
+        try { localStorage.removeItem(KEY); } catch(e){}
+        P = DEF(); renderMenu(); var i;
+        ok('MODES: infinity 6000x6000 circle, BR 5000 shrinking, arena 1800x1800 square', MODES.infinity.R === 3000 && MODES.br.R === 2500 && MODES.br.zone === true && MODES.arena.R === 900 && MODES.arena.shape === 'square');
+        var Wi = newWorld('infinity', 7);
+        ok('newWorld(infinity): 30 bots, 1500 food, everything inside the world', Wi.snakes.length === 30 && Wi.food.length === 1500 && Wi.food.every(function(f){ return hyp(f.x, f.y) <= Wi.R; }) && Wi.snakes.every(function(s){ return hyp(s.x, s.y) < Wi.R; }));
+        var Wb = newWorld('br', 7);
+        ok('newWorld(br): 99 bots (+player = 100), 2000 food, zone starts at the full radius', Wb.snakes.length === 99 && Wb.food.length === 2000 && !!Wb.zone && Wb.zone.r === Wb.R);
+        var Wa = newWorld('arena', 7);
+        ok('newWorld(arena): 5 bots, 300 food, 180 s timer', Wa.snakes.length === 5 && Wa.food.length === 300 && Wa.timeLeft === 180);
+        var W1 = newWorld('infinity', 42), W2 = newWorld('infinity', 42);
+        ok('seeded rng: the same seed gives the same world', W1.snakes[0].x === W2.snakes[0].x && W1.snakes[0].name === W2.snakes[0].name && W1.food[5].x === W2.food[5].x);
+        ok('bots have distinct human-like names and varied skins and sizes', (function(){ var names = {}, skins = {}, minW = 1e9, maxW = 0; Wi.snakes.forEach(function(s){ names[s.name] = 1; skins[s.skin] = 1; minW = Math.min(minW, s.weight); maxW = Math.max(maxW, s.weight); }); return Object.keys(names).length === 30 && Object.keys(skins).length >= 5 && maxW > minW * 3 && NAMES.indexOf('Randle Danfield') >= 0; })());
+        ok('food kinds: 11 cartoon foods worth 1-5 each, bigger items worth more', FOOD_KINDS.length === 11 && FOOD_KINDS.every(function(k){ return k.w >= 1 && k.w <= 5; }) && foodR(5) > foodR(1) && SPR.length === 11);
+        var W = newWorld('infinity', 3), p = spawnSnake(W, { name:'Tester', weight:START_W, x:0, y:0, ang:0 }); W.player = p;
+        ok('spawnSnake: weight 10, radius and segment count derived from the weight', p.weight === 10 && p.r === radiusFor(10) && p.segs.length === lenFor(10) && p.r > 9 && p.alive && W.snakes.length === 31);
+        var a0 = p.ang; p.targetAng = 2; step(W, DT);
+        ok('turn rate is limited: one tick turns at most turnFor*dt toward the target', Math.abs(p.ang - a0) <= turnFor(p) * DT + 1e-9 && p.ang > a0);
+        for (i = 0; i < HZ * 2; i++){ p.targetAng = 2; step(W, DT); }
+        ok('after 2 s the heading matches the target angle', Math.abs(angDiff(p.ang, 2)) < 0.01, p.ang);
+        var x0 = p.x, y0 = p.y; p.boost = false; step(W, DT);
+        ok('speed: the head moves SPEED*dt per tick', Math.abs(hyp(p.x - x0, p.y - y0) - SPEED * DT) < 0.01);
+        p.weight = 40; x0 = p.x; y0 = p.y; p.boost = true; step(W, DT);
+        ok('boost doubles the speed', Math.abs(hyp(p.x - x0, p.y - y0) - SPEED * BOOST_MUL * DT) < 0.01);
+        var w0 = p.weight, drops0 = W.stats.boostDrops, ev0 = W.events.length, bt0 = p.boostT; for (i = 0; i < HZ; i++){ p.boost = true; step(W, DT); }
+        var ateW = 0; for (i = ev0; i < W.events.length; i++) if (W.events[i].type === 'eat' && W.events[i].s === p) ateW += W.events[i].w;
+        ok('boost burns 3 weight per second and drops small food behind (1 s)', Math.abs(p.weight - (w0 - BOOST_BURN + ateW)) < 0.01 && W.stats.boostDrops >= drops0 + 7 && Math.abs(p.boostT - bt0 - 1) < 0.01, (w0 - p.weight) + ' ate ' + ateW + ' drops ' + (W.stats.boostDrops - drops0));
+        p.weight = 11; p.boost = true; x0 = p.x; y0 = p.y; step(W, DT);
+        ok('boost is impossible under the minimum weight', p.boost === false && Math.abs(hyp(p.x - x0, p.y - y0) - SPEED * DT) < 0.01);
+        p.weight = 10; var f = spawnFood(W, p.x + 5, p.y, 6, 3), n0 = W.food.length, e0 = p.eaten; w0 = p.weight; eat(W, p, f);
+        ok('eat(): weight grows by the food value and the food disappears', p.weight === w0 + 3 && W.food.length === n0 - 1 && f.dead && p.eaten === e0 + 1);
+        var l0 = p.segs.length; p.weight = 100; for (i = 0; i < 10; i++) step(W, DT);
+        ok('bigger snake: more segments, wider body, slower turning', p.segs.length === lenFor(p.weight) && p.segs.length > l0 && radiusFor(100) > radiusFor(10) && turnFor({ r:radiusFor(100) }) < turnFor({ r:radiusFor(10) }));
+        var fx = spawnFood(W, p.x + Math.cos(p.ang) * 30, p.y + Math.sin(p.ang) * 30, 0, 1); for (i = 0; i < 20 && !fx.dead; i++){ p.targetAng = p.ang; step(W, DT); }
+        ok('moving over food eats it (suction + contact)', fx.dead === true);
+        var A = spawnSnake(W, { name:'A', weight:20, x:600, y:600, ang:0 }), B = spawnSnake(W, { name:'B', weight:50, x:650, y:560, ang:Math.PI / 2 });
+        var seg = B.segs[5]; A.x = seg.x; A.y = seg.y; A.segs[0].x = seg.x; A.segs[0].y = seg.y; rebuildSegs(W); var wA = A.weight, kB = B.kills, nF = W.food.length, deaths = collide(W);
+        ok('a head touching another snake\'s body dies and credits the killer', !A.alive && B.alive && B.kills === kB + 1 && deaths >= 1 && A.killer === B);
+        var sum = 0; for (i = nF; i < W.food.length; i++) sum += W.food[i].w;
+        ok('the dead snake bursts into food worth exactly its weight', Math.abs(sum - wA) < 0.01 && W.food.length - nF >= 3, sum + ' vs ' + wA);
+        var C = spawnSnake(W, { name:'C', weight:20, x:-900, y:0, ang:0 }), D = spawnSnake(W, { name:'D', weight:20, x:-890, y:0, ang:Math.PI }); rebuildSegs(W); collide(W);
+        ok('head-on collision kills both snakes', !C.alive && !D.alive);
+        var E = spawnSnake(W, { name:'E', weight:10, x:W.R - 5, y:0, ang:0 }); rebuildSegs(W); collide(W);
+        ok('touching the world border kills', !E.alive && E.why === 'wall');
+        var Ws = newWorld('infinity', 99); steps(Ws, HZ * 20);
+        var aliveBots = Ws.snakes.filter(function(s){ return s.alive; }).length, grew = Ws.snakes.filter(function(s){ return s.alive && s.eaten > 0; }).length;
+        ok('20 s of simulation: bots stay alive (respawn), eat food and grow', aliveBots >= 25 && Ws.stats.botEats > 50 && grew > 10 && Ws.snakes.length === 30, aliveBots + ' ' + Ws.stats.botEats + ' ' + grew);
+        ok('food count is refilled toward the cap', Ws.food.length >= Ws.M.food * 0.9, Ws.food.length);
+        ok('all living snakes are inside the world after 20 s', Ws.snakes.every(function(s){ return !s.alive || hyp(s.x, s.y) <= Ws.R; }));
+        var Wv = newWorld('arena', 5); Wv.snakes.forEach(function(s){ s.alive = false; });
+        var bot = spawnSnake(Wv, { bot:true, name:'bot', weight:30, x:0, y:0, ang:0 }), wall = spawnSnake(Wv, { bot:true, name:'wall', weight:200, x:120, y:-300, ang:Math.PI / 2 });
+        for (i = 0; i < wall.segs.length; i++){ wall.segs[i].x = 120; wall.segs[i].y = -300 + i * 12; } wall.x = 120; wall.y = -300; rebuildSegs(Wv); var mode = botThink(Wv, bot);
+        ok('bot avoids a body wall ahead (steers away)', mode === 'avoid' && Math.abs(angDiff(bot.targetAng, 0)) > 0.5, mode + ' ' + bot.targetAng.toFixed(2));
+        var Wf = newWorld('arena', 6); Wf.snakes.forEach(function(s){ s.alive = false; }); var small = spawnSnake(Wf, { bot:true, name:'s', weight:15, x:0, y:0, ang:0 }), big = spawnSnake(Wf, { bot:true, name:'b', weight:300, x:150, y:0, ang:Math.PI }); rebuildSegs(Wf); var m2 = botThink(Wf, small);
+        ok('a small bot flees from a bigger snake nearby', (m2 === 'flee' || m2 === 'avoid') && Math.cos(small.targetAng) < 0.2, m2 + ' ' + small.targetAng.toFixed(2));
+        var Wh = newWorld('arena', 8); Wh.snakes.forEach(function(s){ s.alive = false; }); var hunter = spawnSnake(Wh, { bot:true, name:'h', weight:300, x:0, y:0, ang:0 }), prey = spawnSnake(Wh, { bot:true, name:'p', weight:15, x:250, y:120, ang:Math.PI }); hunter.ai.aggr = 0.9; rebuildSegs(Wh); var m3 = botThink(Wh, hunter);
+        var leadT = clamp(hyp(250, 120) / SPEED * 0.6, 0.2, 1.4) + 0.8, cutX = 250 - SPEED * leadT;
+        ok('a big bot hunts: it aims at a point well in front of a smaller snake coming its way (cuts it off)', m3 === 'hunt' && Math.abs(angDiff(hunter.targetAng, Math.atan2(120, cutX))) < 0.05 && cutX < 250, m3 + ' ' + hunter.targetAng.toFixed(2));
+        prey.ang = 0; var m4 = botThink(Wh, hunter);
+        ok('a bot does not chase prey from behind (no hunt when behind the prey)', m4 !== 'hunt', m4);
+        var Wz = newWorld('br', 11); steps(Wz, HZ * 60);
+        ok('BR zone shrinks over time', Wz.zone.r < Wz.R - 100 && Wz.zone.r >= Wz.zone.min, Wz.zone.r);
+        Wz.t = 400; Wz.snakes.forEach(function(s){ kill(Wz, s, null, 'zone'); }); step(Wz, DT); var out = spawnSnake(Wz, { name:'out', weight:20, x:1500, y:0, ang:Math.PI / 2 }), ticks = 0; while (out.alive && ticks < HZ * 5){ out.targetAng = out.ang; step(Wz, DT); ticks++; }
+        ok('a snake outside the zone loses weight and dies', Wz.zone.r === Wz.zone.min && !out.alive && out.why === 'zone' && ticks < HZ * 5, ticks + ' ' + Wz.zone.r);
+        var Wp = newWorld('br', 12), pp = spawnSnake(Wp, { name:'me', weight:10, x:0, y:0 }); Wp.player = pp; var aliveNow = Wp.alive; kill(Wp, pp, Wp.snakes[0], 'body'); checkEnd(Wp);
+        ok('BR death gives the placement (#alive+1 of 100)', Wp.result === 'dead' && Wp.placement === aliveNow && Wp.placement === 100, Wp.placement);
+        var Ww = newWorld('br', 13), pw = spawnSnake(Ww, { name:'me', weight:10, x:0, y:0 }); Ww.player = pw; Ww.snakes.forEach(function(s){ if (s !== pw) kill(Ww, s, null, 'zone'); }); checkEnd(Ww);
+        ok('BR: the last snake alive wins (place #1)', Ww.result === 'win' && Ww.placement === 1);
+        var Wr = newWorld('arena', 14), pr = spawnSnake(Wr, { name:'me', weight:10, x:0, y:0 }); Wr.player = pr; Wr.snakes.forEach(function(s){ if (s !== pr) kill(Wr, s, pr, 'body'); }); checkEnd(Wr);
+        ok('arena: killing all 5 bots wins with 5 kills', Wr.result === 'win' && pr.kills === 5);
+        var Wt = newWorld('arena', 15), pt = spawnSnake(Wt, { name:'me', weight:10, x:0, y:0 }); Wt.player = pt; pt.kills = 2; Wt.snakes[0].kills = 1; Wt.timeLeft = 0; checkEnd(Wt);
+        ok('arena: when time is up the top killer wins', Wt.result === 'win');
+        var Wl = newWorld('arena', 16), pl = spawnSnake(Wl, { name:'me', weight:10, x:0, y:0 }); Wl.player = pl; Wl.snakes[0].kills = 3; Wl.timeLeft = 0; checkEnd(Wl);
+        ok('arena: when time is up with fewer kills you lose', Wl.result === 'lose');
+        G.auto = false; start('infinity'); await sleep(20);
+        ok('start(infinity): game screen on, 30 bots + player, canvas sized to the viewport', G.screen === 's-game' && !!G.W && G.W.snakes.length === 31 && G.player.alive && cv.width === Math.round(window.innerWidth * G.dpr) && $('s-game').classList.contains('on'));
+        ok('a mission is active with a 05:00 timer', !!G.mission && G.missionT <= MISSION_TIME && G.missionT > MISSION_TIME - 1 && $('mission-txt').textContent.length > 3 && /^0[45]:/.test($('mission-timer').textContent));
+        G.mission = MISSIONS[0]; G.m0 = { kills:G.player.kills, eaten:G.player.eaten, boost:0 }; G.missionT = 100; var c0 = P.coins, victim = G.W.snakes.filter(function(s){ return s.bot && s.alive; })[0]; kill(G.W, victim, G.player, 'body'); simTick();
+        ok('mission "kill 1 snake" completes and pays coins (+5 per kill)', P.coins === c0 + MISSIONS[0].coins + 5 && G.mission === null && G.missionsDone === 1, P.coins - c0);
+        G.missionCool = 0; updateMission(DT);
+        ok('a new mission starts after the cooldown', !!G.mission && G.mission !== MISSIONS[0]);
+        G.mission = MISSIONS[3]; G.m0 = { kills:G.player.kills, eaten:G.player.eaten, boost:0 }; G.missionT = 100; for (i = 0; i < 30; i++){ var ff = spawnFood(G.W, G.player.x, G.player.y, 0, 1); eat(G.W, G.player, ff); }
+        ok('mission "eat 30 food" counts eaten food', missionProgress() >= 30);
+        G.mission = MISSIONS[8]; G.missionT = 0.001; updateMission(DT);
+        ok('an expired mission is replaced by a new one', !!G.mission && G.mission !== MISSIONS[8] && G.missionT === MISSION_TIME);
+        onKey({ code:'ArrowLeft', preventDefault:function(){} }, true); applyInput(); var tl = G.player.targetAng; onKey({ code:'ArrowLeft', preventDefault:function(){} }, false);
+        ok('arrow keys steer: left arrow sets the target angle to pi', Math.abs(Math.abs(tl) - Math.PI) < 1e-9);
+        onKey({ code:'Space', preventDefault:function(){} }, true); G.player.weight = 50; applyInput(); var bo = G.player.boost; onKey({ code:'Space', preventDefault:function(){} }, false); applyInput();
+        ok('Space boosts while held', bo === true && G.player.boost === false);
+        onPointerDown({ pointerType:'touch', pointerId:7, clientX:100, clientY:300, preventDefault:function(){} }); onPointerMove({ pointerType:'touch', pointerId:7, clientX:100, clientY:260 }); applyInput(); var ja = G.player.targetAng, joyShown = !$('joy').classList.contains('hidden'); onPointerUp({ pointerType:'touch', pointerId:7 });
+        ok('touch drag shows a joystick and steers (up = -pi/2); the boost button appears', joyShown && Math.abs(ja + Math.PI / 2) < 1e-6 && $('joy').classList.contains('hidden') && $('b-boost').classList.contains('on'));
+        inp.mouse = true; inp.mx = window.innerWidth / 2 + 100; inp.my = window.innerHeight / 2; applyInput();
+        ok('the snake follows the mouse direction', Math.abs(G.player.targetAng) < 1e-6);
+        react('😂'); G.cam.x = G.player.x; G.cam.y = G.player.y; render();
+        ok('emoji reaction shows above the head for 3 s', G.player.emoji === '😂' && G.player.emojiT === 3);
+        for (i = 0; i < HZ * 3.2; i++){ G.player.targetAng = G.player.ang; moveSnake(G.W, G.player, DT); }
+        ok('the emoji disappears after 3 s', G.player.emoji === '');
+        hudRefresh(true); var lbW = G.lb.map(function(s){ return s.weight; }), sorted = lbW.every(function(v, j){ return j === 0 || lbW[j - 1] >= v; });
+        ok('leaderboard is sorted by weight, shows the top 10 with a crown and your own rank line', sorted && $('lb-rows').children.length === 10 && $('lb-rows').firstChild.textContent.indexOf('👑') === 0 && $('lb-me').textContent.indexOf(G.player.name) >= 0);
+        var mmd = mmx.getImageData(0, 0, 180, 180).data, painted = 0; for (i = 3; i < mmd.length; i += 4) if (mmd[i] > 0) painted++;
+        ok('minimap renders dots and the world outline', painted > 200, painted);
+        G.cam.x = G.player.x; G.cam.y = G.player.y; G.zoom = 1; render(); var px = ctx.getImageData(Math.floor(cv.width / 2), Math.floor(cv.height / 2), 1, 1).data;
+        ok('the world renders: the player head is drawn at the screen centre', px[3] === 255 && !bgPix(px), Array.prototype.slice.call(px).join(','));
+        ok('HUD buttons are >= 44px and inside the viewport', ['b-emoji', 'b-pause', 'b-music'].every(function(id){ var rc = $(id).getBoundingClientRect(); return rc.width >= 44 && rc.height >= 44 && rc.right <= window.innerWidth + 1 && rc.bottom <= window.innerHeight + 1; }));
+        G.player.weight = 77; var k2 = G.W.snakes.filter(function(s){ return s.bot && s.alive; })[0]; kill(G.W, G.player, k2, 'body'); simTick(); G.overT = 0; hudTick(0.1); await sleep(10);
+        ok('death: panel with weight, kills, time, coins and XP; best weight saved', G.screen === 's-dead' && $('s-dead').classList.contains('on') && $('d-weight').textContent === '77' && $('d-kills').textContent === '1' && G.xpEarned > 0 && P.best.infinity === 77 && $('dead-title').textContent === t('died'), $('d-weight').textContent + ' ' + $('d-kills').textContent);
+        P.coins = 0; P.xp = 0; P.level = 1; addCoins(120); addXP(xpNeed(1) + 5); save(); var lvl = P.level; P = DEF(); load();
+        ok('coins/xp/level persist in localStorage snake.v1', P.coins === 120 && P.level === 2 && lvl === 2 && P.xp === 5 && xpNeed(2) > xpNeed(1), JSON.stringify([P.coins, P.level, P.xp]));
+        P.coins = 150; var r1 = buySkin(3), r2 = buySkin(9);
+        ok('shop: buying a skin costs coins and equips it; too expensive is refused', r1 === 'bought' && P.skin === 3 && P.coins === 50 && r2 === 'poor' && P.skins.indexOf(9) < 0);
+        ok('shop: re-selecting an owned skin just equips it', buySkin(1) === 'equipped' && P.skin === 1);
+        P.coins = 200; var r3 = buyBg(1);
+        ok('shop: backgrounds are bought and equipped too', r3 === 'bought' && P.bg === 1 && P.coins === 50 && P.bgs.indexOf(1) >= 0);
+        openShop('skins');
+        ok('shop screen lists 20 skins with previews and prices, 6 backgrounds', $('shop-grid').children.length === SKINS.length && SKINS.length >= 16 && BACKGROUNDS.length === 6 && !!$('shop-grid').querySelector('.item.eq'));
+        closeOv();
+        var nowT = Date.parse('2026-11-03T10:00:00'); P.coins = 0; var g1 = claimGift(nowT), g2 = claimGift(nowT + 3600e3), g3 = claimGift(nowT + 86400e3);
+        ok('daily gift: once per day', g1 === 100 && g2 === 0 && g3 === 100 && P.coins === 200);
+        P.freeAt = 0; var f1 = claimFree(nowT), f2 = claimFree(nowT + 600e3), f3 = claimFree(nowT + 3600e3);
+        ok('free coins: once an hour', f1 === 50 && f2 === 0 && f3 === 50);
+        P.wheel = ''; P.coins = 0; var s1 = spinWheel(nowT, 0.3), s2 = spinWheel(nowT, 0.3);
+        ok('lucky wheel: spins once a day and pays the sector', !!s1 && s1.i === 2 && s1.coins === 100 && P.coins === 100 && s2 === null);
+        P.wheel = ''; P.skins = [0, 1, 2]; var s3 = spinWheel(nowT + 86400e3, 5.5 / 8);
+        ok('lucky wheel: the snake sector gives a new skin', !!s3 && s3.skin != null && P.skins.indexOf(s3.skin) >= 0 && P.skin === s3.skin);
+        P.chestAt = 0; var ch1 = claimChest(nowT), ch2 = claimChest(nowT + 60e3);
+        ok('chest: ready, then waits 15 minutes', ch1 === 40 && ch2 === 0 && P.chestAt === nowT + 15 * 60e3);
+        setLang('en'); ok('setLang(en): ltr, PLAY, English title', document.documentElement.dir === 'ltr' && $('b-play').textContent === 'PLAY' && document.title.indexOf('Snake vs Worms') === 0 && $('b-lang').textContent === 'עברית');
+        setLang('he'); ok('setLang(he): rtl + Hebrew', document.documentElement.dir === 'rtl' && $('b-play').textContent === 'שחק' && document.title.indexOf('נחש נגד תולעים') === 0);
+        G.W = null; show('s-menu'); await sleep(10);
+        ok('menu shows the level badge, XP bar, coins, gift/wheel/shop buttons and the snake preview', G.screen === 's-menu' && $('m-level').textContent === String(P.level) && /\/\d+/.test($('m-xp').textContent) && $('m-coins').textContent === String(P.coins) && $('pv').width === 480);
+        ok('no horizontal overflow', document.documentElement.scrollWidth <= window.innerWidth + 1, document.documentElement.scrollWidth + '>' + window.innerWidth);
+        var wide = []; [].slice.call(document.querySelectorAll('#s-menu *')).forEach(function(e){ var rc = e.getBoundingClientRect(); if (rc.width > 0 && (rc.right > window.innerWidth + 1 || rc.left < -1)) wide.push((e.id || e.className || e.tagName) + ':' + Math.round(rc.left) + '-' + Math.round(rc.right)); });
+        ok('no menu element sticks out of the viewport (' + window.innerWidth + 'px)', wide.length === 0, wide.slice(0, 8).join(' | '));
+        ok('menu tap targets are >= 44px', ['b-play', 'b-gift', 'b-free', 'b-wheel', 'b-shop', 'b-settings', 'b-plus', 'b-chest', 'b-bg'].every(function(id){ var rc = $(id).getBoundingClientRect(); return rc.width >= 40 && rc.height >= 40; }));
+        show('s-modes'); ok('modes screen shows 3 cards with PLAY buttons', $('s-modes').classList.contains('on') && document.querySelectorAll('[data-mode]').length === 3); closeOv();
+        var oset = Storage.prototype.setItem, threw = false; Storage.prototype.setItem = function(){ throw new Error('quota'); }; try { save(); addCoins(1); } catch(e){ threw = true; } Storage.prototype.setItem = oset;
+        ok('saving never throws when storage is unavailable', !threw);
+        var Wperf = newWorld('br', 2026), pp2 = spawnSnake(Wperf, { name:'me', weight:10 }); Wperf.player = pp2; var t0 = performance.now(); steps(Wperf, 1000); var el = performance.now() - t0;
+        ok('performance: 1000 steps of a BR world (100 snakes, 2000 food) under 2 s', el < 2000, Math.round(el) + ' ms');
+        ok('pwa install snippet present and hidden', !!$('pwa-install') && getComputedStyle($('pwa-install')).display === 'none');
+        ok('footer links to the games menu', !!document.querySelector('.foot a[href="./"]'));
+        ok('JSON-LD VideoGame present', (function(){ try { return JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@type'] === 'VideoGame'; } catch(e){ return false; } })());
+        ok('public API exposed on window.SN', ['newWorld', 'step', 'spawnSnake', 'botThink', 'collide', 'eat', 'kill', 'G', 'show', 'start', 'setLang', 'MODES', 'SKINS', 'BACKGROUNDS', 'MISSIONS'].every(function(k){ return window.SN[k] !== undefined; }));
+        try { localStorage.removeItem(KEY); } catch(e){}
+        ok('no runtime errors', errs.filter(function(x){ return x.indexOf('onerror') === 0 || x.indexOf('init') === 0; }).length === 0);
+      } catch(e){ errs.push('exception: ' + (e && e.stack || e)); }
+      done();
+    })();
+  })();
+}
+})();
+</script>
+<!-- install button: shows only when the browser offers to install THIS game as an app -->
+<style>#pwa-install{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9999;display:none;font-family:"Varela Round","Arial Rounded MT Bold",Arial,sans-serif;font-weight:900;font-size:16px;color:#fff;background:#1B2A4E;border:0;border-radius:999px;padding:10px 18px;box-shadow:0 6px 0 rgba(0,0,0,.25),0 8px 18px rgba(0,0,0,.25);cursor:pointer}#pwa-install.on{display:block}</style>
+<button id="pwa-install" type="button">📲 התקן את המשחק בטלפון</button>
+<script>(function(){ var d=null, b=document.getElementById('pwa-install'); if(!b) return; try{ if(localStorage.getItem('pwa.hide')==='1') return; }catch(e){} window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); d=e; b.classList.add('on'); }); window.addEventListener('appinstalled', function(){ b.classList.remove('on'); try{ localStorage.setItem('pwa.hide','1'); }catch(e){} }); b.addEventListener('click', function(){ if(!d) return; var p=d; d=null; b.classList.remove('on'); p.prompt(); }); })();</script>
+</body>
+</html>
