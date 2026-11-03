@@ -1,14 +1,14 @@
 {
   "name": "מעגל המכוניות 🚗",
   "short_name": "מעגל המכוניות",
-  "description": "הכניסו מכוניות לכיכר בלי תאונות, נגד השעון. 60 שלבים ומצב אינסוף.",
+  "description": "לחצו בזמן הנכון כדי להכניס כל מכונית ללולאה בלי תאונה. 60 שלבים, כמו Car Circle.",
   "start_url": "./carcircle.html?src=pwa",
   "id": "/game-lab/carcircle.html",
   "scope": "./carcircle.html",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#3BA7F0",
-  "theme_color": "#3BA7F0",
+  "background_color": "#121A2A",
+  "theme_color": "#121A2A",
   "lang": "he",
   "dir": "rtl",
   "icons": [
