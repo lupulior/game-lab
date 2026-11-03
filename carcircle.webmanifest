@@ -1,7 +1,7 @@
 {
   "name": "מעגל המכוניות 🚗",
   "short_name": "מעגל המכוניות",
-  "description": "לחצו בזמן הנכון כדי להכניס כל מכונית ללולאה בלי תאונה. 60 שלבים, כמו Car Circle.",
+  "description": "לחצו בזמן הנכון כדי להכניס כל מכונית ללולאה בלי תאונה. 500 שלבים, כמו Car Circle.",
   "start_url": "./carcircle.html?src=pwa",
   "id": "/game-lab/carcircle.html",
   "scope": "./carcircle.html",

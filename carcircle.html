@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>מעגל המכוניות 🚗 – הכניסו מכוניות לכיכר בלי תאונות (כמו Car Circle) – המשחק של לופו</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="מעגל המכוניות 🚗 בחינם: לחצו כדי לשלוח כל מכונית למסלול ברגע הנכון – בלי להתנגש במכוניות שכבר מסתובבות. מסלול אחד, תור של מכוניות צהובות, ותזמון מדויק. 60+ שלבים עם מסלולים שונים, משאיות ומכוניות מהירות. בלי התקנה, בעברית ובאנגלית – המשחק של לופו.">
+<meta name="description" content="מעגל המכוניות 🚗 בחינם: לחצו כדי לשלוח כל מכונית למסלול ברגע הנכון – בלי להתנגש במכוניות שכבר מסתובבות. מסלול אחד, תור של מכוניות צהובות, ותזמון מדויק. 500 שלבים עם מסלולים שונים, משאיות ומכוניות מהירות. בלי התקנה, בעברית ובאנגלית – המשחק של לופו.">
 <meta name="keywords" content="מעגל המכוניות, משחק מכוניות, משחק כיכר, משחק תנועה, Car Circle, traffic puzzle, משחק מכוניות לילדים, משחק תזמון, משחק לילדים, לופו, המשחק של לופו">
 <meta name="theme-color" content="#3BA7F0">
 <link rel="canonical" href="https://lupulior.github.io/game-lab/carcircle.html">
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Game Lab">
 <meta property="og:title" content="מעגל המכוניות 🚗 – הכניסו מכוניות למסלול בלי תאונות">
-<meta property="og:description" content="לחצו כדי לשלוח כל מכונית למסלול ברגע הנכון, בלי להתנגש במכוניות שכבר מסתובבות. 60+ שלבים. בחינם, בלי התקנה.">
+<meta property="og:description" content="לחצו כדי לשלוח כל מכונית למסלול ברגע הנכון, בלי להתנגש במכוניות שכבר מסתובבות. 500 שלבים. בחינם, בלי התקנה.">
 <meta property="og:image" content="https://lupulior.github.io/game-lab/art/carcircle-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -25,10 +25,10 @@
 <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="מעגל המכוניות 🚗 – הכניסו מכוניות למסלול בלי תאונות">
-<meta name="twitter:description" content="משחק תזמון: שלחו כל מכונית למסלול כשהצומת פנוי. מכונית אחת שגויה – והכול נגמר. 60+ שלבים.">
+<meta name="twitter:description" content="משחק תזמון: שלחו כל מכונית למסלול כשהצומת פנוי. מכונית אחת שגויה – והכול נגמר. 500 שלבים.">
 <meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/carcircle-og.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"VideoGame","name":"מעגל המכוניות – משחק תנועה ותזמון","alternateName":["Car Circle","משחק מכוניות","משחק כיכר","Traffic puzzle"],"url":"https://lupulior.github.io/game-lab/carcircle.html","image":"https://lupulior.github.io/game-lab/art/carcircle-og.png","description":"לחצו כדי לשלוח כל מכונית למסלול ברגע הנכון, בלי להתנגש במכוניות שכבר מסתובבות. 60+ שלבים עם מסלולים שונים.","genre":["Puzzle","Arcade","Casual"],"gamePlatform":["Web browser","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":1},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"isPartOf":{"@type":"WebSite","name":"מעבדת משחקים – Game Lab","url":"https://lupulior.github.io/game-lab/"}}
+{"@context":"https://schema.org","@type":"VideoGame","name":"מעגל המכוניות – משחק תנועה ותזמון","alternateName":["Car Circle","משחק מכוניות","משחק כיכר","Traffic puzzle"],"url":"https://lupulior.github.io/game-lab/carcircle.html","image":"https://lupulior.github.io/game-lab/art/carcircle-og.png","description":"לחצו כדי לשלוח כל מכונית למסלול ברגע הנכון, בלי להתנגש במכוניות שכבר מסתובבות. 500 שלבים עם מסלולים שונים.","genre":["Puzzle","Arcade","Casual"],"gamePlatform":["Web browser","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":1},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"isPartOf":{"@type":"WebSite","name":"מעבדת משחקים – Game Lab","url":"https://lupulior.github.io/game-lab/"}}
 </script>
 <style>
 :root{ --bg:#121A2A; --bg2:#0C1220; --road:#3A4150; --text:#EAF0FF; --muted:#8C9BB8; --yellow:#F5C400; --yellowD:#B88F00; --green:#36D399; --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.12) }
@@ -54,6 +54,9 @@ body{font-family:"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-ser
 .sel .ib{font-size:22px;min-width:52px;min-height:52px}
 .sel .lvname{min-width:150px;text-align:center;font-weight:900;font-size:22px}
 .sel .lvname small{display:block;font-size:14px;color:var(--muted);font-weight:700}
+.sel.jump{gap:8px;font-size:16px;color:var(--muted)}
+.sel.jump input{width:86px;min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);font:900 18px "Varela Round","Arial Rounded MT Bold",Arial,sans-serif;text-align:center;padding:0 6px}
+.sel.jump .ib{font-size:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin:14px auto;max-width:420px}
 .stats{display:flex;justify-content:space-around;gap:6px;text-align:center}
 .stats b{display:block;font-size:26px}.stats span{font-size:14px;color:var(--muted)}
@@ -108,9 +111,14 @@ html.still *{animation-duration:0s!important;animation-delay:0s!important;transi
       <div class="lvname"><span id="sel-name">שלב 1</span><small id="sel-sub"></small></div>
       <button class="ib" id="b-next-lv" aria-label="next">▶</button>
     </div>
+    <div class="sel jump">
+      <label for="jump" data-t="jump">קפוץ לשלב</label>
+      <input id="jump" type="number" min="1" max="1" value="1" inputmode="numeric" aria-label="level number">
+      <button class="ib" id="b-go" data-t="go">קפוץ</button>
+    </div>
     <div class="card"><div class="stats">
       <div><b id="st-best">1</b><span data-t="stBest">השלב הכי רחוק</span></div>
-      <div><b id="st-levels">60</b><span data-t="stLevels">שלבים</span></div>
+      <div><b id="st-levels">500</b><span data-t="stLevels">שלבים</span></div>
     </div></div>
     <div class="card"><p class="how" data-t="how">כל לחיצה שולחת את המכונית הצהובה הראשונה למסלול. אם היא נוגעת במכונית אחרת – תאונה. הכניסו את כל המכוניות ועברו שלב.</p></div>
     <p class="kbd"><b>↑</b> / <b>רווח</b> <span data-t="kSend">שליחה</span> · <b>R</b> <span data-t="kRestart">מחדש</span> · <b>Esc</b> <span data-t="kMenu">תפריט</span></p>
@@ -135,16 +143,16 @@ html.still *{animation-duration:0s!important;animation-delay:0s!important;transi
 var TEST = location.hash === '#test', QUICK = location.search.indexOf('quick') >= 0, ERRS = [];
 if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
 var $ = function(id){ return document.getElementById(id); };
-var KEY = 'carcircle.v1', NLV = 60, HZ = 120, DT = 1 / HZ, W = 540, H = 960, CX = 270, CY = 380, FILLET = 42, ROADW = 50, MARGIN = 6;
+var KEY = 'carcircle.v1', NLV = 500, HZ = 120, DT = 1 / HZ, W = 540, H = 960, CX = 270, CY = 380, FILLET = 42, ROADW = 50, MARGIN = 6;
 
 /* ---------- strings ---------- */
 var T = {
 he:{ title:'מעגל המכוניות', tagline:'לחצו כדי לשלוח מכונית למסלול – רק כשהצומת פנוי!', play:'▶ שחק', cont:'המשך משלב {n}', level:'שלב {n}', best:'הגעת עד שלב {n}', stBest:'השלב הכי רחוק', stLevels:'שלבים',
   how:'כל לחיצה שולחת את המכונית הצהובה הראשונה למסלול. אם היא נוגעת במכונית אחרת – תאונה. הכניסו את כל המכוניות ועברו שלב.', kSend:'שליחה', kRestart:'מחדש', kMenu:'תפריט', more:'🎮 עוד משחקים',
-  tap:'לחצו!', crash:'תאונה!', done:'כל הכבוד!', allDone:'סיימת את כל השלבים! 🏆', left:'נשארו {n}', locked:'נעול' },
+  tap:'לחצו!', crash:'תאונה!', done:'כל הכבוד!', allDone:'סיימת את כל 500 השלבים! 🏆', left:'נשארו {n}', locked:'נעול', jump:'קפוץ לשלב', go:'קפוץ' },
 en:{ title:'Car Circle', tagline:'Tap to send a car into the loop – only when the junction is clear!', play:'▶ Play', cont:'continue from level {n}', level:'Level {n}', best:'reached level {n}', stBest:'furthest level', stLevels:'levels',
   how:'Every tap sends the first yellow car into the loop. If it touches another car – crash. Get all the cars in to pass the level.', kSend:'send', kRestart:'restart', kMenu:'menu', more:'🎮 More games',
-  tap:'TAP!', crash:'Crash!', done:'Well done!', allDone:'You finished every level! 🏆', left:'{n} left', locked:'locked' } };
+  tap:'TAP!', crash:'Crash!', done:'Well done!', allDone:'You finished all 500 levels! 🏆', left:'{n} left', locked:'locked', jump:'Jump to level', go:'Go' } };
 function t(k, o){ var s = T[G.lang][k]; if (s == null) s = T.he[k]; if (s == null) return k; if (o) for (var p in o) s = s.split('{' + p + '}').join(o[p]); return s; }
 
 /* ---------- global state + storage ---------- */
@@ -183,24 +191,27 @@ function roundedPoly(verts, r){
   return out;
 }
 function regular(n, R, startAng){ var v = []; for (var i = 0; i < n; i++){ var a = startAng + i * 2 * Math.PI / n; v.push({ x:CX + R * Math.cos(a), y:CY + R * Math.sin(a) }); } return v; }
-function resample(pts, step){ /* dense, even samples along a closed polyline */
-  var p = mkPath(pts, true), out = [], n = Math.max(60, Math.round(p.len / step)); for (var i = 0; i < n; i++){ var q = pathAt(p, p.len * i / n); out.push({ x:q.x, y:q.y }); } return out;
-}
+function param(n, fn){ var out = []; for (var i = 0; i < n; i++) out.push(fn(i * 2 * Math.PI / n)); return out; }
+function resample(pts, step){ var p = mkPath(pts, true), out = [], n = Math.max(60, Math.round(p.len / step)); for (var i = 0; i < n; i++){ var q = pathAt(p, p.len * i / n); out.push({ x:q.x, y:q.y }); } return out; }
 var SHAPES = {
   circle:function(k){ return arcPts(CX, CY, 160 * k, 0, 2 * Math.PI, 240).slice(0, 240); },
   rsquare:function(k){ var h = 150 * k; return roundedPoly([{ x:CX - h, y:CY - h }, { x:CX + h, y:CY - h }, { x:CX + h, y:CY + h }, { x:CX - h, y:CY + h }], 58 * k); },
   rtri:function(k){ var R = 202 * k; return roundedPoly([{ x:CX, y:CY - R }, { x:CX + R * 0.95, y:CY + R * 0.62 }, { x:CX - R * 0.95, y:CY + R * 0.62 }], 55 * k); },
-  oval:function(k){ var out = []; for (var i = 0; i < 240; i++){ var a = i * 2 * Math.PI / 240; out.push({ x:CX + 195 * k * Math.cos(a), y:CY + 135 * k * Math.sin(a) }); } return out; },
+  oval:function(k){ return param(240, function(a){ return { x:CX + 195 * k * Math.cos(a), y:CY + 135 * k * Math.sin(a) }; }); },
   hex:function(k){ return roundedPoly(regular(6, 170 * k, 0), 48 * k); },
-  peanut:function(k){ var out = []; for (var i = 0; i < 300; i++){ var a = i * 2 * Math.PI / 300, r = 138 * k * (1 - 0.28 * Math.cos(2 * a)); out.push({ x:CX + r * 1.35 * Math.cos(a), y:CY + r * Math.sin(a) }); } return out; },
+  peanut:function(k){ return param(300, function(a){ var r = 138 * k * (1 - 0.28 * Math.cos(2 * a)); return { x:CX + r * 1.35 * Math.cos(a), y:CY + r * Math.sin(a) }; }); },
   dshape:function(k){ var h = 150 * k, w = 150 * k, c = 56 * k, out = []; arcPts(CX, CY, h, -Math.PI / 2, Math.PI / 2, 80, out); arcPts(CX - w + c, CY + h - c, c, Math.PI / 2, Math.PI, 14, out); arcPts(CX - w + c, CY - h + c, c, Math.PI, 1.5 * Math.PI, 14, out); return out; },
   diamond:function(k){ return roundedPoly(regular(4, 185 * k, -Math.PI / 2), 62 * k); },
   pent:function(k){ return roundedPoly(regular(5, 175 * k, -Math.PI / 2), 52 * k); },
   stadium:function(k){ var w = 200 * k, h = 110 * k; return roundedPoly([{ x:CX - w, y:CY - h }, { x:CX + w, y:CY - h }, { x:CX + w, y:CY + h }, { x:CX - w, y:CY + h }], h); },
   rrect:function(k){ var w = 125 * k, h = 172 * k; return roundedPoly([{ x:CX - w, y:CY - h }, { x:CX + w, y:CY - h }, { x:CX + w, y:CY + h }, { x:CX - w, y:CY + h }], 55 * k); },
-  oct:function(k){ return roundedPoly(regular(8, 172 * k, Math.PI / 8), 40 * k); }
+  oct:function(k){ return roundedPoly(regular(8, 172 * k, Math.PI / 8), 40 * k); },
+  star:function(k){ var v = []; for (var i = 0; i < 10; i++){ var a = Math.PI / 2 + i * Math.PI / 5, R = (i % 2 ? 150 : 192) * k; v.push({ x:CX + R * Math.cos(a), y:CY + R * Math.sin(a) }); } return roundedPoly(v, 42 * k); },
+  pill:function(k){ var w = 112 * k, h = 185 * k; return roundedPoly([{ x:CX - w, y:CY - h }, { x:CX + w, y:CY - h }, { x:CX + w, y:CY + h }, { x:CX - w, y:CY + h }], w); },
+  egg:function(k){ return param(240, function(a){ return { x:CX + 160 * k * Math.cos(a) * (1 + 0.2 * Math.sin(a)), y:CY + 175 * k * Math.sin(a) }; }); },
+  squircle:function(k){ return param(240, function(a){ var c = Math.cos(a), s = Math.sin(a); return { x:CX + 162 * k * Math.sign(c) * Math.sqrt(Math.abs(c)), y:CY + 162 * k * Math.sign(s) * Math.sqrt(Math.abs(s)) }; }); }
 };
-var SHAPE_ORDER = ['circle', 'rsquare', 'rtri', 'oval', 'hex', 'peanut', 'dshape', 'diamond', 'pent', 'stadium', 'rrect', 'oct'];
+var SHAPE_ORDER = ['circle', 'rsquare', 'rtri', 'oval', 'hex', 'peanut', 'dshape', 'diamond', 'pent', 'stadium', 'rrect', 'oct', 'star', 'pill', 'egg', 'squircle'];
 function buildLoop(shape, k){
   var pts = resample(SHAPES[shape](k || 1), 3);
   /* root the loop at its bottom point (max y, nearest to CX) and make it run clockwise on screen: bottom -> left -> top -> right */
@@ -210,6 +221,8 @@ function buildLoop(shape, k){
   pts[0] = { x:CX, y:pts[0].y };
   return mkPath(pts, true);
 }
+var LOOPS = {};
+function getLoop(shape, k){ var key = shape + '@' + k; return LOOPS[key] || (LOOPS[key] = buildLoop(shape, k)); }
 function buildEntry(loop){
   var jb = loop.pts[0], pts = [{ x:CX + FILLET, y:H + 120 }, { x:CX + FILLET, y:jb.y + FILLET }];
   arcPts(CX, jb.y + FILLET, FILLET, 0, -Math.PI / 2, 16, pts); pts[pts.length - 1] = { x:jb.x, y:jb.y };
@@ -218,57 +231,91 @@ function buildEntry(loop){
 
 /* ---------- car types ---------- */
 var TYPES = {
-  car:   { len:36, w:20, col:'#F5C400', spd:1,    player:true },
-  taxi:  { len:48, w:20, col:'#F5C400', spd:1,    player:true, sign:true },
-  mini:  { len:28, w:18, col:'#F5C400', spd:1,    player:true },
+  car:   { len:34, w:20, col:'#F5C400', spd:1,    player:true },
+  taxi:  { len:44, w:20, col:'#F5C400', spd:1,    player:true, sign:true },
+  mini:  { len:26, w:18, col:'#F5C400', spd:1,    player:true },
   blue:  { len:36, w:20, col:'#4F8DFF', spd:1 },
   lblue: { len:32, w:19, col:'#9ED0FF', spd:1.1 },
   dblue: { len:42, w:21, col:'#2D4FB8', spd:0.9 },
   white: { len:36, w:20, col:'#E8ECF4', spd:1 },
   red:   { len:32, w:19, col:'#FF5A5A', spd:1.3 },
   truck: { len:64, w:22, col:'#C9D1E0', spd:0.78, truck:true },
-  bus:   { len:72, w:23, col:'#9B6BFF', spd:0.72, truck:true }
+  bus:   { len:72, w:23, col:'#9B6BFF', spd:0.72, truck:true },
+  sport: { len:30, w:18, col:'#FF8A3D', spd:1.45 },
+  lorry: { len:84, w:23, col:'#8FA3B8', spd:0.66, truck:true }
 };
-function trafficMix(n){ var m = { blue:3, lblue:2, dblue:2 }; if (n >= 10) m.white = 2; if (n >= 15) m.red = 1.5; if (n >= 20) m.truck = 1.2; if (n >= 30) m.bus = 1; return m; }
-function queueMix(n){ var m = { car:5 }; if (n >= 6) m.mini = 2; if (n >= 20) m.taxi = 2; return m; }
+function trafficMix(n){
+  var m = { blue:3, lblue:2, dblue:2 };
+  if (n >= 10) m.white = 2; if (n >= 15) m.red = 1.5; if (n >= 20) m.truck = 1.2; if (n >= 30) m.bus = 1;
+  if (n >= 150) m.sport = 1 + Math.min(2, (n - 150) / 150); if (n >= 250) m.lorry = 0.8 + Math.min(1.2, (n - 250) / 200);
+  if (n >= 300){ m.red += 1; m.truck += 0.6; }
+  return m;
+}
+function queueMix(n){ var m = { car:5 }; if (n >= 6) m.mini = 2; if (n >= 20) m.taxi = 2; if (n >= 300) m.taxi = 3; return m; }
+function avgLen(mix){ var tot = 0, sum = 0, k; for (k in mix){ tot += mix[k]; sum += mix[k] * TYPES[k].len; } return sum / tot; }
 var LEVELS = (function(){
-  var L = [];
+  var L = [], prevT = 0;
   for (var i = 0; i < NLV; i++){
-    var n = i + 1;
-    L.push({ n:n, shape:n === 1 ? 'circle' : SHAPE_ORDER[(n - 1) % SHAPE_ORDER.length], scale:+(1 + 0.2 * Math.min(1, (n - 1) / 30)).toFixed(3),
-      speed:110 + 2 * (n - 1), traffic:n === 1 ? 0 : (n === 2 ? 3 : Math.min(7, 2 + Math.floor((n - 2) / 4))), queue:n <= 3 ? 5 : Math.min(12, 5 + Math.floor((n - 3) / 5)),
-      tmix:trafficMix(n), qmix:queueMix(n), seed:n * 9973 + 7 });
+    var n = i + 1, p = i / (NLV - 1);
+    var shape = n === 1 ? 'circle' : SHAPE_ORDER[(n - 1) % SHAPE_ORDER.length], scale = +(1 + 0.2 * Math.min(1, (n - 1) / 60)).toFixed(3);
+    var tmix = trafficMix(n), qmix = queueMix(n), loopLen = getLoop(shape, scale).len;
+    /* targets rise with the level; when they exceed the loop's safe budget (≤ 62% of its length) both shrink proportionally */
+    var qT = n <= 3 ? 5 : Math.min(20, 5 + Math.floor((n - 1) / 13)), tT = n === 1 ? 0 : (n === 2 ? 3 : (n === 3 ? 2 : Math.min(10, 2 + Math.floor((n - 2) / 4))));
+    var pattern = n >= 100 && n % 7 === 3 ? 'platoon' : (n >= 100 && n % 7 === 5 ? 'uneven' : (n >= 401 && n % 5 === 0 ? 'pulse' : ''));
+    var budget = loopLen * (0.52 + 0.11 * Math.min(1, (n - 1) / 400)) * (pattern === 'pulse' ? 0.85 : 1), aT = avgLen(tmix), aQ = avgLen(qmix);
+    var f = Math.min(1, budget / (tT * aT + qT * aQ)), traffic = Math.floor(tT * f), queue = Math.max(5, Math.floor(qT * f));
+    if (n > 3) traffic = Math.max(2, traffic);
+    L.push({ n:n, shape:shape, scale:scale, speed:Math.round(110 + 150 * p), traffic:traffic, queue:queue, tmix:tmix, qmix:qmix, pattern:pattern, loopLen:Math.round(loopLen), seed:n * 9973 + 7 });
+    prevT = traffic;
   }
   return L;
 })();
 
 /* ---------- simulation (pure functions over a state object S) ---------- */
-var ACC = 480, FRESH = 1.0, FOLLOW = 16, QGAP = 10;
+/* Rules: a tap launches the first queued car instantly at (almost) loop speed. Player-sent cars never brake or follow:
+   any contact between a player car and any other car, at any time, is a crash. Pre-placed traffic all shares the loop
+   speed (types differ in length/look), so a level can never fail by itself; traffic may car-follow traffic (pulse levels). */
+var EASE = 10, QGAP = 10, FOLLOW = 16;
 function pick(rng, mix){ var tot = 0, k; for (k in mix) tot += mix[k]; var r = rng() * tot; for (k in mix){ r -= mix[k]; if (r <= 0) return k; } return 'car'; }
-function mkCar(S, type, base){ var ty = TYPES[type]; return { id:S.nextId++, type:type, len:ty.len, w:ty.w, col:ty.col, spd:base * ty.spd, v:0, s:0, e:0, eT:0, fresh:0, player:!!ty.player, gold:false }; }
-function copyCar(c){ return { id:c.id, type:c.type, len:c.len, w:c.w, col:c.col, spd:c.spd, v:c.v, s:c.s, e:c.e, eT:c.eT, fresh:c.fresh, player:c.player, gold:false }; }
+function mkCar(S, type, base){ var ty = TYPES[type]; return { id:S.nextId++, type:type, len:ty.len, w:ty.w, col:ty.col, spd:base, v:0, s:0, e:0, eT:0, player:!!ty.player, gold:false, pulse:0, pw:0, ph:0 }; }
+function copyCar(c){ return { id:c.id, type:c.type, len:c.len, w:c.w, col:c.col, spd:c.spd, v:c.v, s:c.s, e:c.e, eT:c.eT, player:c.player, gold:false, pulse:c.pulse, pw:c.pw, ph:c.ph }; }
+function ownSpd(S, c){ return c.pulse ? c.spd * (1 + c.pulse * Math.sin(S.t * c.pw + c.ph)) : c.spd; }
 function headPos(S){ return S.E - FILLET * Math.PI / 2 - 2; }
-function layoutQueue(S){ var e = headPos(S); for (var i = 0; i < S.queue.length; i++){ var c = S.queue[i]; c.eT = e; if (c.e === 0) c.e = e; e -= c.len + QGAP; } }
+function layoutQueue(S){ var e = headPos(S); for (var i = 0; i < S.queue.length; i++){ var c = S.queue[i]; c.eT = e; c.e = e; e -= c.len + QGAP; } }
+function arrivalTime(S){ return (S.E - headPos(S)) / S.lv.speed + 0.05; }
 function makeState(li, seed){
   var lv = LEVELS[Math.max(0, Math.min(NLV - 1, li))], rng = mkRng((seed == null ? 1 : seed) * 2654435761 + lv.seed);
-  var loop = buildLoop(lv.shape, lv.scale), entry = buildEntry(loop);
+  var loop = getLoop(lv.shape, lv.scale), entry = buildEntry(loop);
   var S = { lv:lv, li:li, rng:rng, loop:loop, entry:entry, L:loop.len, E:entry.len, cars:[], entering:[], queue:[], t:0, over:false, won:false, reason:'', nextId:1, sent:0, total:lv.queue, ev:[], sim:false, crashPair:null };
+  S.tA = arrivalTime(S);
   for (var i = 0; i < lv.queue; i++) S.queue.push(mkCar(S, pick(rng, lv.qmix), lv.speed));
   layoutQueue(S);
-  var n = lv.traffic, sp = S.L / Math.max(1, n);
-  for (var j = 0; j < n; j++){ var c = mkCar(S, pick(rng, lv.tmix), lv.speed); c.s = mod(sp * (j + 0.5) + (rng() - 0.5) * sp * 0.24, S.L); c.v = c.spd; S.cars.push(c); }
+  var n = lv.traffic, j, c, s;
+  if (lv.pattern === 'platoon' && n >= 2){
+    /* one or two tight platoons (10 px gaps) at the loop speed: the hard gaps are inside, the room is between them */
+    var groups = n >= 5 ? 2 : 1, per = Math.ceil(n / groups); s = S.L * 0.18;
+    for (j = 0; j < n; j++){ c = mkCar(S, pick(rng, lv.tmix), lv.speed); if (j % per === 0 && j) s = S.L * 0.18 + S.L * 0.5 * Math.floor(j / per); c.s = mod(s + c.len, S.L); s += c.len + 10; c.v = c.spd; S.cars.push(c); }
+  } else if (lv.pattern === 'uneven' && n >= 3){
+    /* clumps of 2–3 cars with 14 px gaps, clumps spread evenly: few usable gaps */
+    var clumps = Math.max(2, Math.ceil(n / 3)), cs = S.L / clumps, k2 = 0; s = cs * 0.3;
+    for (j = 0; j < n; j++){ c = mkCar(S, pick(rng, lv.tmix), lv.speed); if (j && j % 3 === 0){ k2++; s = cs * (k2 + 0.3); } c.s = mod(s + c.len, S.L); s += c.len + 14; c.v = c.spd; S.cars.push(c); }
+  } else {
+    var sp = S.L / Math.max(1, n);
+    for (j = 0; j < n; j++){
+      c = mkCar(S, pick(rng, lv.tmix), lv.speed); c.s = mod(sp * (j + 0.5) + (rng() - 0.5) * sp * 0.24, S.L);
+      if (lv.pattern === 'pulse'){ c.pulse = 0.12; c.pw = 2 * Math.PI / 3.5; c.ph = 0; } /* all traffic pulses in lockstep: zero mean drift, exactly periodic */
+      c.v = c.spd; S.cars.push(c);
+    }
+  }
   S.cars.sort(function(a, b){ return a.s - b.s; });
   return S;
 }
-function canSend(S){
-  if (S.over) return 'over'; if (!S.queue.length) return 'empty';
-  var last = S.entering.length ? S.entering[S.entering.length - 1] : null;
-  if (last && last.e - last.len < headPos(S) + 6) return 'busy';
-  return '';
-}
+function canSend(S){ if (S.over) return 'over'; if (!S.queue.length) return 'empty'; return ''; }
 function sendState(S){
   var why = canSend(S); if (why) return { ok:false, reason:why };
-  var c = S.queue.shift(); c.v = 0; S.entering.push(c); S.sent++; layoutQueue(S); S.ev.push('send');
+  var c = S.queue.shift(), last = S.entering.length ? S.entering[S.entering.length - 1] : null;
+  c.v = c.spd * 0.45; S.entering.push(c); S.sent++; layoutQueue(S); S.ev.push('send');
+  if (last && last.e - last.len < c.e + 0.5){ crash(S, c, last); } /* tapped again before the previous car cleared: chain crash on the ramp */
   return { ok:true, car:c };
 }
 function gapTo(S, a, b){ /* free arc-length from a's front to b's rear (b ahead of a) */ return mod(b.s - b.len - a.s, S.L); }
@@ -277,50 +324,61 @@ function crash(S, a, b){ if (S.over) return; S.over = true; S.won = false; S.rea
 function physStep(S, dt){
   if (S.over) return;
   S.t += dt; var i, c, n;
-  for (i = 0; i < S.queue.length; i++){ c = S.queue[i]; if (c.e < c.eT) c.e = Math.min(c.eT, c.e + 320 * dt); else if (c.e > c.eT) c.e = c.eT; }
-  /* cars on the entry road */
+  /* cars on the entry road: instant launch with a tiny ease, never brake */
   for (i = 0; i < S.entering.length; i++){
-    c = S.entering[i]; c.v = Math.min(c.spd, c.v + ACC * dt); c.e += c.v * dt;
+    c = S.entering[i]; c.v = Math.min(c.spd, c.v + c.spd * EASE * dt); c.e += c.v * dt;
+    if (i > 0){ var fr = S.entering[i - 1]; if (c.e > fr.e - fr.len){ crash(S, c, fr); return; } }
     if (c.e >= S.E){
-      S.entering.splice(i, 1); i--; c.s = mod(c.e - S.E, S.L); c.e = 0; c.fresh = FRESH; c.v = c.spd;
+      S.entering.splice(i, 1); i--; c.s = mod(c.e - S.E, S.L); c.e = 0; c.v = c.spd;
       for (var j = 0; j < S.cars.length; j++) if (overlap(S, c, S.cars[j])){ S.cars.push(c); crash(S, c, S.cars[j]); return; }
       S.cars.push(c); S.ev.push('enter');
     }
   }
-  /* cars on the loop: own speed, car-following behind non-fresh cars, crashes with fresh cars */
+  /* cars on the loop */
   n = S.cars.length;
   if (n){
     S.cars.sort(function(a, b){ return a.s - b.s; });
     for (i = 0; i < n; i++){
-      c = S.cars[i]; var ahead = S.cars[(i + 1) % n];
-      if (n === 1 || c.fresh > 0 || ahead.fresh > 0) c.v = c.spd;
-      else { var g = gapTo(S, c, ahead); c.v = g < FOLLOW ? Math.min(c.spd, ahead.v) : c.spd; }
+      c = S.cars[i]; var ahead = S.cars[(i + 1) % n], own = ownSpd(S, c);
+      if (n === 1 || c.player || ahead.player) c.v = own;
+      else { var g = gapTo(S, c, ahead); c.v = g < FOLLOW ? Math.min(own, ahead.v) : own; }
     }
-    for (i = 0; i < n; i++){ c = S.cars[i]; c.s = mod(c.s + c.v * dt, S.L); if (c.fresh > 0) c.fresh -= dt; }
+    for (i = 0; i < n; i++){ c = S.cars[i]; c.s = mod(c.s + c.v * dt, S.L); }
     if (n > 1){
       S.cars.sort(function(a, b){ return a.s - b.s; });
       for (i = 0; i < n; i++){
         c = S.cars[i]; var a2 = S.cars[(i + 1) % n], gg = mod(a2.s - c.s, S.L) - a2.len;
-        if (gg < 0){ if (c.fresh > 0 || a2.fresh > 0 || gg < -c.len){ crash(S, c, a2); return; } c.s = mod(a2.s - a2.len, S.L); }
+        if (gg < 0){ if (c.player || a2.player || gg < -c.len){ crash(S, c, a2); return; } c.s = mod(a2.s - a2.len, S.L); }
       }
     }
   }
-  if (!S.queue.length && !S.entering.length && !S.cars.some(function(x){ return x.fresh > 0; })){ S.over = true; S.won = true; S.reason = 'win'; S.ev.push('win'); }
+  if (!S.sim && !S.queue.length && !S.entering.length){ S.over = true; S.won = true; S.reason = 'win'; S.ev.push('win'); }
+}
+function junctionBusy(S){ /* cheap pre-check: would any loop car (at its current speed) cover the junction when the head car arrives? */
+  var head = S.queue[0], tA = S.tA, win = head.len + MARGIN;
+  for (var i = 0; i < S.cars.length; i++){ var c = S.cars[i], f = mod(c.s + c.v * tA, S.L); if (f < c.len + MARGIN || S.L - f < win) return true; }
+  return false;
 }
 function predictCrash(S){
-  var cl = { lv:S.lv, L:S.L, E:S.E, loop:S.loop, entry:S.entry, cars:S.cars.map(copyCar), entering:S.entering.map(copyCar), queue:S.queue.slice(1).map(copyCar), t:S.t, over:false, won:false, reason:'', nextId:S.nextId, sent:S.sent, total:S.total, ev:[], sim:true };
-  var head = copyCar(S.queue[0]); head.v = 0; head.e = head.eT; cl.entering.push(head);
+  var cl = { lv:S.lv, L:S.L, E:S.E, loop:S.loop, entry:S.entry, cars:S.cars.map(copyCar), entering:S.entering.map(copyCar), queue:[], t:S.t, over:false, won:false, reason:'', nextId:S.nextId, sent:S.sent, total:S.total, ev:[], sim:true };
+  var head = copyCar(S.queue[0]); head.v = head.spd * 0.45; head.e = head.eT; cl.entering.push(head);
   cl.cars.forEach(function(c){ c.len += MARGIN; }); cl.entering.forEach(function(c){ c.len += MARGIN; });
-  var tt = 0;
-  while (tt < 4 && !cl.over){ physStep(cl, DT); tt += DT; var h = null; for (var i = 0; i < cl.cars.length; i++) if (cl.cars[i].id === head.id) h = cl.cars[i]; if (h && h.fresh <= 0) break; }
+  /* horizon: until the car is in, plus a full pulse period on pulsing levels (relative motion is periodic), else a short settle */
+  var tt = 0, step = 1 / 60, settle = S.lv.pattern === 'pulse' ? 3.6 : 0.6, inAt = -1;
+  while (tt < 6 && !cl.over){
+    physStep(cl, step); tt += step;
+    if (inAt < 0){ var on = false; for (var i = 0; i < cl.cars.length; i++) if (cl.cars[i].id === head.id) on = true; if (on) inAt = tt; }
+    else if (tt - inAt >= settle) break;
+  }
   return cl.over && cl.reason === 'crash';
 }
-function wouldCrashState(S){ if (canSend(S)) return false; return predictCrash(S); }
+function wouldCrashState(S){ if (canSend(S)) return false; if (junctionBusy(S)) return true; return predictCrash(S); }
 function autoStep(S){ if (!canSend(S) && !wouldCrashState(S)){ return sendState(S).ok; } return false; }
 function simulateAuto(li, seed, maxT){
   var S = makeState(li, seed), limit = maxT || 120, n = 0;
-  while (!S.over && S.t < limit){ physStep(S, DT); n++; if (n % 12 === 0) autoStep(S); S.ev.length = 0; }
-  return { won:S.won, reason:S.reason, time:+S.t.toFixed(2), sent:S.sent, total:S.total };
+  while (!S.over && S.t < limit){ physStep(S, DT); n++; if (n % 4 === 0 && autoStep(S)) S.lastSend = S.t; S.ev.length = 0; }
+  var info = null; if (S.crashPair){ info = S.crashPair.map(function(c){ return c.type + (c.player ? '(p)' : '') + (S.entering.indexOf(c) >= 0 ? ' ramp e=' + c.e.toFixed(0) : ' s=' + c.s.toFixed(0)); }).join(' x ') + ' dt=' + (S.t - (S.lastSend || 0)).toFixed(2); }
+  return { won:S.won, reason:S.reason, time:+S.t.toFixed(2), sent:S.sent, total:S.total, crash:info };
 }
 
 /* ---------- audio ---------- */
@@ -427,8 +485,10 @@ function renderTitle(){
   $('play-sub').textContent = G.unlocked > 1 ? t('cont', { n:G.sel + 1 }) : '';
   $('sel-name').textContent = t('level', { n:G.sel + 1 }); var lv = LEVELS[G.sel]; $('sel-sub').textContent = lv.traffic + ' 🚙 · ' + lv.queue + ' 🚗';
   $('b-prev').disabled = G.sel === 0; $('b-next-lv').disabled = G.sel >= G.unlocked - 1;
+  $('jump').max = G.unlocked; $('jump').value = G.sel + 1;
   $('st-best').textContent = Math.min(G.best, NLV); $('st-levels').textContent = NLV;
 }
+function jumpTo(){ var v = parseInt($('jump').value, 10); if (!isFinite(v)) v = G.sel + 1; G.sel = Math.max(0, Math.min(G.unlocked - 1, v - 1)); renderTitle(); }
 function start(i){
   G.level = Math.max(0, Math.min(NLV - 1, i)); G.S = makeState(G.level, Date.now() % 1000003); G.overT = -1; FX.parts.length = 0; FX.flash = 0; FX.shake = 0; FX.hint = true;
   show('s-game'); engine(true); render();
@@ -457,7 +517,7 @@ function frame(now){
   if (G.screen !== 's-game' || !G.S) return;
   var dt = Math.min(0.1, (now - lastT) / 1000 || 0); lastT = now; if (G.paused) dt = 0;
   acc += dt; var n = 0;
-  while (acc >= DT && n < 12){ physStep(G.S, DT); acc -= DT; n++; if (G.auto && !G.S.over){ autoT += DT; if (autoT >= 0.1){ autoT = 0; if (autoStep(G.S)) FX.hint = false; } } }
+  while (acc >= DT && n < 12){ physStep(G.S, DT); acc -= DT; n++; if (G.auto && !G.S.over){ autoT += DT; if (autoT >= 0.05){ autoT = 0; if (autoStep(G.S)) FX.hint = false; } } }
   handleEvents(); updFX(dt);
   if (G.overT >= 0){ G.overT -= dt; if (G.overT < 0){ G.overT = -1; afterOver(); } }
   if (ENG && ENG.g){ try { ENG.g.gain.value = 0.015 + 0.012 * Math.min(1, (G.S.cars.length + G.S.entering.length * 3) / 10); } catch(e){} }
@@ -471,6 +531,7 @@ function onTap(){
 }
 function onKey(e){
   var c = e.code;
+  if (e.target && e.target.tagName === 'INPUT'){ if (c === 'Enter'){ e.preventDefault(); jumpTo(); } return; }
   if (G.screen === 's-game' && G.S){
     if (c === 'ArrowUp' || c === 'Space' || c === 'Enter'){ e.preventDefault(); onTap(); }
     else if (c === 'KeyR'){ e.preventDefault(); start(G.level); }
@@ -508,6 +569,7 @@ function bind(){
   $('b-play').onclick = function(){ SFX.tap(); start(G.sel); };
   $('b-prev').onclick = function(){ SFX.tap(); G.sel = Math.max(0, G.sel - 1); renderTitle(); };
   $('b-next-lv').onclick = function(){ SFX.tap(); G.sel = Math.min(G.unlocked - 1, G.sel + 1); renderTitle(); };
+  $('b-go').onclick = function(){ SFX.tap(); jumpTo(); }; $('jump').addEventListener('change', jumpTo);
   $('b-home').onclick = function(e){ e.stopPropagation(); SFX.tap(); show('s-title'); };
   ['b-home', 'b-lang2', 'b-mute2'].forEach(function(id){ $(id).addEventListener('pointerdown', function(e){ e.stopPropagation(); }); });
   $('b-lang').onclick = $('b-lang2').onclick = function(){ SFX.tap(); setLang(G.lang === 'he' ? 'en' : 'he'); };
@@ -520,7 +582,7 @@ function init(){
   if (location.hash.indexOf('-still') > 0) document.documentElement.classList.add('still');
   if (h === '#auto'){ G.auto = true; start(0); }
   else if ((mm = /^#auto(\d+)$/.exec(h))){ G.unlocked = Math.max(G.unlocked, Math.min(NLV, +mm[1])); G.auto = true; start(Math.min(NLV, +mm[1]) - 1); }
-  else if (h === '#auto-crash'){ start(1); var S = G.S; S.cars[0].s = mod(12 - S.cars[0].spd * 0.72, S.L); send(); var n = 0; while (!S.over && n < HZ * 3){ physStep(S, DT); n++; } handleEvents(); for (var j = 0; j < 12; j++) updFX(1 / 60); FX.shake = 0; G.overT = -1; render(); }
+  else if (h === '#auto-crash'){ start(1); var S = G.S; S.cars[0].s = mod(12 - S.cars[0].spd * S.tA, S.L); send(); var n = 0; while (!S.over && n < HZ * 3){ physStep(S, DT); n++; } handleEvents(); for (var j = 0; j < 12; j++) updFX(1 / 60); FX.shake = 0; G.overT = -1; render(); }
   else if (h === '#auto-win'){ start(2); var S2 = G.S; var k = 0; while (!S2.over && k < HZ * 60){ physStep(S2, DT); k++; if (k % 12 === 0) autoStep(S2); S2.ev.length = S2.won ? S2.ev.length : 0; } handleEvents(); for (var q = 0; q < 20; q++) updFX(1 / 60); G.overT = -1; render(); }
   requestAnimationFrame(function(now){ lastT = now; requestAnimationFrame(frame); });
 }
@@ -528,7 +590,7 @@ window.CC = { LEVELS:LEVELS, TYPES:TYPES, SHAPES:SHAPES, SHAPE_ORDER:SHAPE_ORDER
   buildLoop:buildLoop, buildEntry:buildEntry, mkPath:mkPath, pathAt:pathAt, mkRng:mkRng, mod:mod, overlap:function(a, b){ return overlap(G.S, a, b); }, gapTo:function(a, b){ return gapTo(G.S, a, b); },
   newLevel:function(i, seed){ G.level = i; G.S = makeState(i, seed); return G.S; }, step:function(dt){ if (G.S) physStep(G.S, dt == null ? DT : dt); return G.S; }, send:send, canSend:function(){ return canSend(G.S); }, wouldCrash:function(){ return wouldCrashState(G.S); },
   makeState:makeState, physStep:physStep, sendState:sendState, autoStep:autoStep, simulateAuto:simulateAuto,
-  show:show, start:start, setLang:setLang, setMute:setMute, save:save, load:load, render:render, onKey:onKey, onTap:onTap, handleEvents:handleEvents, afterOver:afterOver, renderTitle:renderTitle, fit:fit, FX:FX };
+  show:show, start:start, setLang:setLang, setMute:setMute, save:save, load:load, render:render, onKey:onKey, onTap:onTap, handleEvents:handleEvents, afterOver:afterOver, renderTitle:renderTitle, jumpTo:jumpTo, fit:fit, FX:FX, getLoop:getLoop, avgLen:avgLen, NLV:NLV };
 if (TEST){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } } else init();
 
 /* ---------- tests (#test) ---------- */
@@ -542,11 +604,17 @@ if (TEST){
       try {
         var I = window.CC; G.mute = true;
         ok('viewport ' + window.innerWidth + 'x' + window.innerHeight, true);
-        ok('60 levels in the table', I.LEVELS.length === 60);
+        ok('500 levels in the table', I.LEVELS.length === 500 && I.NLV === 500);
         ok('level 1: circle, no traffic, 5 cars; level 2: rounded square, 3 traffic, 5 cars', I.LEVELS[0].shape === 'circle' && I.LEVELS[0].traffic === 0 && I.LEVELS[0].queue === 5 && I.LEVELS[1].shape === 'rsquare' && I.LEVELS[1].traffic === 3 && I.LEVELS[1].queue === 5);
-        ok('level 20: 6+ traffic of mixed speeds, 8+ queued, trucks; level 40: 10+ queued', I.LEVELS[19].traffic >= 6 && I.LEVELS[19].queue >= 8 && I.LEVELS[19].tmix.truck > 0 && I.LEVELS[19].tmix.red > 0 && I.LEVELS[39].queue >= 10 && I.LEVELS[39].traffic >= 7);
-        ok('difficulty ramps (speed, traffic, queue never decrease)', I.LEVELS.every(function(l, i){ return i === 0 || (l.speed >= I.LEVELS[i - 1].speed && l.traffic >= I.LEVELS[i - 1].traffic - (i === 2 ? 1 : 0) && l.queue >= I.LEVELS[i - 1].queue); }));
-        ok('all 12 shapes are used across the levels', I.SHAPE_ORDER.every(function(s){ return I.LEVELS.some(function(l){ return l.shape === s; }); }));
+        ok('level 20: 6+ traffic with trucks and fast cars; level 40: 7+ traffic, 6+ queued; queue grows to 15–20 later and traffic to 8+', I.LEVELS[19].traffic >= 6 && I.LEVELS[19].tmix.truck > 0 && I.LEVELS[19].tmix.red > 0 && I.LEVELS[39].traffic >= 7 && I.LEVELS[39].queue >= 6 && I.LEVELS.slice(199).some(function(l){ return l.queue >= 15; }) && I.LEVELS.slice(199).some(function(l){ return l.traffic >= 7; }) && I.LEVELS.every(function(l){ return l.queue <= 20 && l.traffic <= 10; }), JSON.stringify([I.LEVELS[19].traffic, I.LEVELS[19].queue, I.LEVELS[39].traffic, I.LEVELS[39].queue, Math.max.apply(null, I.LEVELS.map(function(l){ return l.queue; })), Math.max.apply(null, I.LEVELS.slice(199).map(function(l){ return l.traffic; }))]));
+        ok('speed rises slowly 110 → 260 and never decreases', I.LEVELS[0].speed === 110 && I.LEVELS[499].speed === 260 && I.LEVELS.every(function(l, i){ return i === 0 || l.speed >= I.LEVELS[i - 1].speed; }));
+        ok('difficulty rises by hundreds (avg traffic, queue and speed)', (function(){ function avg(a, b, f){ var s = 0; for (var i = a; i < b; i++) s += f(I.LEVELS[i]); return s / (b - a); } var ok1 = true; for (var h = 1; h < 5; h++){ if (!(avg(h * 100, h * 100 + 100, function(l){ return l.speed; }) > avg(h * 100 - 100, h * 100, function(l){ return l.speed; }))) ok1 = false; if (!(avg(h * 100, h * 100 + 100, function(l){ return l.traffic * I.avgLen(l.tmix) + l.queue * I.avgLen(l.qmix); }) >= avg(h * 100 - 100, h * 100, function(l){ return l.traffic * I.avgLen(l.tmix) + l.queue * I.avgLen(l.qmix); }) - 1)) ok1 = false; } return ok1; })());
+        ok('every level keeps total car length ≤ 70% of its loop (no deadlock capacity)', I.LEVELS.every(function(l){ return l.traffic * I.avgLen(l.tmix) + l.queue * I.avgLen(l.qmix) <= 0.7 * l.loopLen; }));
+        ok('loops grow with the level up to the canvas limit', I.LEVELS[0].scale === 1 && I.LEVELS[60].scale === 1.2 && I.LEVELS[499].scale === 1.2 && I.LEVELS.every(function(l, i){ return i === 0 || l.scale >= I.LEVELS[i - 1].scale; }));
+        ok('traffic types widen: sport cars from 150, lorries from 250; platoon/dual patterns from 100, pulsing speed in the last 100', !I.LEVELS[148].tmix.sport && I.LEVELS[150].tmix.sport > 0 && !I.LEVELS[248].tmix.lorry && I.LEVELS[250].tmix.lorry > 0 && I.LEVELS.slice(0, 99).every(function(l){ return !l.pattern; }) && I.LEVELS.slice(99).some(function(l){ return l.pattern === 'platoon'; }) && I.LEVELS.slice(99).some(function(l){ return l.pattern === 'uneven'; }) && I.LEVELS.slice(0, 400).every(function(l){ return l.pattern !== 'pulse'; }) && I.LEVELS.slice(400).some(function(l){ return l.pattern === 'pulse'; }));
+        ok('all 16 shapes are used across the levels', I.SHAPE_ORDER.length === 16 && I.SHAPE_ORDER.every(function(s){ return I.LEVELS.some(function(l){ return l.shape === s; }); }));
+        var Sp = I.makeState(100, 1), Sd = I.makeState(102, 1), Su = I.makeState(404, 1);
+        ok('platoon levels start with tight 10 px gaps; uneven levels have 14 px clumps; pulse levels oscillate speed around the loop speed', I.LEVELS[100].pattern === 'platoon' && Sp.cars.some(function(c, i){ var nx = Sp.cars[(i + 1) % Sp.cars.length]; return Math.abs(mod(nx.s - nx.len - c.s, Sp.L) - 10) < 0.5; }) && I.LEVELS[102].pattern === 'uneven' && Sd.cars.some(function(c, i){ var nx = Sd.cars[(i + 1) % Sd.cars.length]; return Math.abs(mod(nx.s - nx.len - c.s, Sd.L) - 14) < 0.5; }) && I.LEVELS[404].pattern === 'pulse' && Su.cars.some(function(c){ return c.pulse > 0 && c.spd === Su.lv.speed; }));
         /* --- paths --- */
         I.SHAPE_ORDER.forEach(function(sh){
           var p = I.buildLoop(sh, 1.1), f = p.pts[0], l = p.pts[p.pts.length - 1], good = true, info = [];
@@ -567,7 +635,7 @@ if (TEST){
         /* --- state, spacing and collisions --- */
         var S = I.newLevel(1, 3);
         ok('newLevel: queue of 5 yellow cars, 3 traffic cars on the loop, none overlapping', S.queue.length === 5 && S.queue.every(function(c){ return c.player; }) && S.cars.length === 3 && S.cars.every(function(a){ return S.cars.every(function(b){ return a === b || !I.overlap(a, b); }); }));
-        ok('traffic cars have per-type speeds', S.cars.every(function(c){ return Math.abs(c.spd - S.lv.speed * I.TYPES[c.type].spd) < 1e-9; }));
+        ok('all traffic of a level shares the loop speed (types differ in length), so a level never fails by itself', S.cars.every(function(c){ return c.spd === S.lv.speed; }) && (function(){ var Z = I.makeState(39, 1); for (var i = 0; i < HZ * 40; i++) physStep(Z, DT); return !Z.over; })());
         ok('queue cars sit nose to tail on the entry road, first at the junction', S.queue[0].eT < S.E && S.queue[0].eT > S.E - 80 && S.queue.every(function(c, i){ return i === 0 || Math.abs((S.queue[i - 1].eT - S.queue[i - 1].len - c.eT) - 10) < 1e-6; }));
         var a = { s:100, len:36 }, b = { s:140, len:36 }, c3 = { s:130, len:36 };
         ok('overlap(): separated cars false, touching bodies true, wrap-around true', !I.overlap(a, b) && I.overlap(a, c3) && I.overlap({ s:5, len:36 }, { s:S.L - 10, len:36 }));
@@ -575,13 +643,19 @@ if (TEST){
         ok('newLevel deterministic per seed', JSON.stringify(I.makeState(7, 5).cars.map(function(c){ return [c.type, +c.s.toFixed(3)]; })) === JSON.stringify(I.makeState(7, 5).cars.map(function(c){ return [c.type, +c.s.toFixed(3)]; })));
         /* send */
         S = I.newLevel(0, 1); var q0 = S.queue[0], e1 = S.queue[1].e, r = I.send();
-        ok('send() moves the first car onto the entry road and shifts the queue', r.ok && r.car === q0 && S.entering[0] === q0 && S.queue.length === 4 && S.queue[0].eT > e1 && S.sent === 1);
-        ok('second send is refused while the first car is still leaving', I.send().reason === 'busy');
-        for (var i = 0; i < HZ * 2 && S.cars.length === 0; i++) I.step();
-        ok('the car accelerates, enters the loop at the junction and is marked fresh', S.cars.length === 1 && S.entering.length === 0 && S.cars[0] === q0 && q0.fresh > 0 && q0.v === q0.spd && S.t < 1);
+        ok('send() moves the first car onto the entry road and shifts the queue up instantly', r.ok && r.car === q0 && S.entering[0] === q0 && S.queue.length === 4 && S.queue[0].eT > e1 && S.queue[0].e === S.queue[0].eT && S.sent === 1);
+        ok('instant launch: the car already moves at ≥45% of loop speed when sent', q0.v >= 0.45 * q0.spd);
+        var r2 = I.send(); ok('tapping again before the first car has cleared is a chain crash on the ramp', r2.ok && S.over && S.reason === 'crash' && S.crashPair.indexOf(q0) >= 0 && S.crashPair.indexOf(r2.car) >= 0);
+        S = I.newLevel(0, 1); q0 = S.queue[0]; I.send(); for (var i = 0; i < HZ * 0.1; i++) I.step();
+        ok('the car reaches full loop speed within 0.1 s (no slow ramp-up)', q0.v === q0.spd);
+        for (i = 0; i < HZ * 2 && S.cars.length === 0; i++) I.step();
+        ok('the car enters the loop at the junction within D/v + 0.1 s and keeps loop speed', S.cars.length === 1 && S.entering.length === 0 && S.cars[0] === q0 && q0.v === q0.spd && S.t <= S.tA + 0.1, S.t + ' vs ' + S.tA);
         var s0 = S.cars[0].s; I.step(); ok('cars circulate clockwise at constant speed', Math.abs(mod(S.cars[0].s - s0, S.L) - S.lv.speed * DT) < 1e-6);
         for (i = 0; i < HZ * 30 && S.cars[0].s > 10; i++) I.step();
         ok('cars never exit: a full lap brings the car back to the junction', S.cars.length === 1 && !S.over);
+        S = I.newLevel(0, 1); I.send(); for (i = 0; i < HZ * 0.5; i++) I.step(); I.send(); for (i = 0; i < HZ * 15 && !S.over; i++) I.step();
+        var g2 = I.gapTo(S.cars[0], S.cars[1]); for (i = 0; i < HZ * 5; i++) I.step();
+        ok('two cars sent 0.5 s apart share the loop speed and keep their gap forever (no crash)', !S.over && S.cars.length === 2 && Math.abs(I.gapTo(S.cars[0], S.cars[1]) - g2) < 0.01);
         /* crash */
         S = I.newLevel(1, 2); S.cars[0].s = mod(30, S.L); S.cars[0].spd = S.cars[0].v = 0.0001;
         ok('wouldCrash() predicts a car parked over the junction', I.wouldCrash() === true);
@@ -591,11 +665,15 @@ if (TEST){
         /* catching up */
         S = I.newLevel(1, 2); S.cars.forEach(function(c){ c.s = mod(c.s + 300, S.L); }); var slow = S.cars[0]; slow.s = 60; slow.spd = slow.v = 20;
         I.send(); for (i = 0; i < HZ * 3 && !S.over; i++) I.step();
-        ok('a just-sent car catching up with a slow car ahead crashes', S.over && S.reason === 'crash' && S.crashPair.indexOf(slow) >= 0);
+        ok('a player car catching up with a slower car ahead crashes (player cars never brake)', S.over && S.reason === 'crash' && S.crashPair.indexOf(slow) >= 0);
         /* following */
         S = I.newLevel(1, 2); var fast = S.cars[0]; fast.spd = S.lv.speed * 2; var ah = S.cars[1];
         for (i = 0; i < HZ * 8; i++) I.step();
-        ok('settled traffic follows the car ahead instead of crashing', !S.over && I.gapTo(fast, ah) >= -0.01 && fast.v <= ah.v + 1e-6);
+        ok('traffic follows traffic instead of crashing', !S.over && I.gapTo(fast, ah) >= -0.01 && fast.v <= ah.v + 1e-6);
+        S = I.newLevel(1, 2); S.cars.forEach(function(c){ c.s = mod(c.s + 250, S.L); }); I.send(); for (i = 0; i < HZ * 1.5; i++) I.step(); var pc = S.cars.filter(function(c){ return c.player; })[0];
+        var beh = null, bd = Infinity; S.cars.forEach(function(c){ if (!c.player){ var d = mod(pc.s - c.s, S.L); if (d < bd){ bd = d; beh = c; } } }); beh.spd = S.lv.speed * 2.5;
+        for (i = 0; i < HZ * 10 && !S.over; i++) I.step();
+        ok('traffic never follows a player car: contact from behind is a crash too', S.over && S.reason === 'crash' && S.crashPair.indexOf(pc) >= 0 && S.crashPair.indexOf(beh) >= 0);
         /* win */
         S = I.newLevel(0, 4); for (i = 0; i < HZ * 20 && !S.over; i++){ I.step(); if (i % 12 === 0) I.autoStep(S); }
         ok('all queued cars in with no crash → win state', S.over && S.won && S.reason === 'win' && S.queue.length === 0 && S.cars.length === 5);
@@ -603,10 +681,10 @@ if (TEST){
         var t0 = performance.now();
         for (var li = 0; li < (QUICK ? 0 : NLV); li++){
           var won = false, tries = [];
-          for (var sd = 1; sd <= 3 && !won; sd++){ var res = I.simulateAuto(li, sd); tries.push(res.reason + '@' + res.time + ' ' + res.sent + '/' + res.total); if (res.won) won = true; }
+          for (var sd = 1; sd <= 3 && !won; sd++){ var res = I.simulateAuto(li, sd); tries.push(res.reason + '@' + res.time + ' ' + res.sent + '/' + res.total + (res.crash ? ' [' + res.crash + ']' : '')); if (res.won) won = true; }
           ok('level ' + (li + 1) + ' (' + I.LEVELS[li].shape + ') winnable by auto-player', won, tries.join(' | '));
         }
-        ok('winnability sweep finished (' + Math.round(performance.now() - t0) + 'ms)', true);
+        ok('winnability sweep of ' + NLV + ' levels finished (' + Math.round(performance.now() - t0) + 'ms)', true);
         /* --- storage / i18n / DOM --- */
         try { localStorage.removeItem(KEY); } catch(e){}
         G.unlocked = 9; G.best = 9; I.save(); var stored = null; try { stored = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
@@ -617,13 +695,16 @@ if (TEST){
         I.show('s-title'); G.sel = 8; I.renderTitle();
         ok('title: level selector shows the chosen level and best level', $('sel-name').textContent === T.he.level.replace('{n}', '9') && $('st-best').textContent === '9' && $('b-next-lv').disabled === true);
         $('b-prev').click(); ok('◀ selects the previous level', G.sel === 7 && $('sel-name').textContent.indexOf('8') > 0);
+        $('jump').value = '5'; $('b-go').click(); var j1 = G.sel; $('jump').value = '999'; I.jumpTo(); var j2 = G.sel; $('jump').value = '-3'; I.jumpTo();
+        ok('"קפוץ לשלב" input jumps to a level and clamps to the unlocked range', j1 === 4 && j2 === 8 && G.sel === 0 && $('jump').max === '9');
         I.start(0); await sleep(30);
         ok('start(0) shows the full-screen stage with a 540x960 canvas scaled to fit', G.screen === 's-game' && cv.width === 540 && cv.height === 960 && (function(){ var rc = $('stage').getBoundingClientRect(); return rc.width <= window.innerWidth + 1 && rc.height <= window.innerHeight + 1 && rc.width > 100; })());
         ok('overlay buttons are >= 44px and inside the viewport', ['b-home', 'b-lang2', 'b-mute2'].every(function(id){ var rc = $(id).getBoundingClientRect(); return rc.width >= 44 && rc.height >= 44 && rc.right <= window.innerWidth + 1 && rc.bottom <= window.innerHeight + 1; }));
         I.onKey({ code:'ArrowUp', preventDefault:function(){} }); ok('↑ sends a car and hides the TAP hint', G.S.entering.length === 1 && I.FX.hint === false);
-        I.onTap(); ok('a second tap right away is ignored (car still leaving)', G.S.entering.length === 1);
+        I.onTap(); I.handleEvents(); ok('a second tap right away is a chain crash (fail)', G.S.over && G.S.reason === 'crash' && G.overT > 0);
+        I.afterOver(); ok('the crashed level restarts fresh', G.level === 0 && G.S && !G.S.over && G.S.queue.length === 5);
         for (i = 0; i < HZ * 20 && !G.S.over; i++){ I.step(); if (i % 12 === 0) I.autoStep(G.S); } I.handleEvents();
-        ok('level 1 completes: cars turn gold and progress unlocks level 2', G.S.won && G.S.cars.every(function(c){ return c.gold; }) && G.unlocked >= 2 && G.best >= 2 && G.overT > 0);
+        ok('level 1 completes: cars turn gold and progress unlocks level 2', G.S.won && G.S.cars.every(function(c){ return c.gold; }) && G.unlocked >= 2 && G.best >= 2 && G.overT > 0, JSON.stringify({ won:G.S.won, r:G.S.reason, u:G.unlocked }));
         I.afterOver(); ok('after the win the next level loads automatically', G.level === 1 && G.S && G.S.lv.n === 2 && !G.S.over);
         G.S.cars[0].s = 20; G.S.cars[0].spd = G.S.cars[0].v = 0.0001; I.send(); for (i = 0; i < HZ * 3 && !G.S.over; i++) I.step(); I.handleEvents();
         ok('crash: red flash + shake + 0.9 s restart timer', G.S.over && I.FX.flash > 0 && I.FX.shake > 0 && G.overT > 0 && G.overT <= 0.9);
