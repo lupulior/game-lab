@@ -1,0 +1,19 @@
+{
+  "name": "נהיגה משוגעת 🚗",
+  "short_name": "נהיגה משוגעת",
+  "description": "משחק מכוניות פיזיקלי: שיווי משקל חשוב ממהירות. 500 שלבים של קפיצות, מגנטים וחוסר כבידה.",
+  "start_url": "./drivemad.html?src=pwa",
+  "id": "/game-lab/drivemad.html",
+  "scope": "./drivemad.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#3FB2F5",
+  "theme_color": "#3FB2F5",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/drivemad-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/drivemad-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/drivemad-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
