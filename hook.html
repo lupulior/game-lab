@@ -297,13 +297,15 @@ function build(n, tr){
   return { n:n, seed:tr, hue:HUES[(n - 1) % HUES.length], hooks:hooks, blocks:blocks, spikes:spikes, pads:pads, finish:{ x:fx, y:ftop - 180, h:180 }, startX:0, startY:-PR, deathY:DEATHY, len:fx, kinds:kinds, tries:tr + 1 };
 }
 function genLevel(n){ n = clamp(n | 0 || 1, 1, NLV); if (LCACHE[n]) return LCACHE[n]; var L = null;
-  for (var tr = 0; tr < 60; tr++){ L = build(n, tr); var a = simulate(L, 'classic'); if (!a.won || a.time > 16) continue; var b = simulate(L, 'grapple'); if (!b.won || b.time > 16) continue; L.simT = a.time; L.simTG = b.time; LCACHE[n] = L; return L; }
+  var maxT = n <= 30 ? 10 : 16; /* early levels must also play quickly */
+  for (var tr = 0; tr < 60; tr++){ L = build(n, tr); var a = simulate(L, 'classic'); if (!a.won || a.time > maxT) continue; var b = simulate(L, 'grapple'); if (!b.won || b.time > maxT) continue; L.simT = a.time; L.simTG = b.time; LCACHE[n] = L; return L; }
   L.unsolved = true; LCACHE[n] = L; return L; }
 
 /* ---------- physics engine (pure, deterministic) ---------- */
 function newRun(L, mode){ return { L:L, mode:mode === 'grapple' ? 'grapple' : 'classic', x:L.startX, y:L.startY, vx:0, vy:0, hook:-1, rope:0, rope0:0, attachT:0, lastHook:-1, cool:0, t:0, dead:false, won:false, over:false, standing:true, wasSt:true, stillT:0, padCool:0, squash:0, winT:0, ev:[] }; }
-function findHook(S){ var L = S.L, hs = L.hooks, best = -1, bs = -1e9, i;
-  for (i = 0; i < hs.length; i++){ var h = hs[i]; if (i === S.lastHook && S.cool > 0) continue; var dx = h.x - S.x; if (dx > 260 || dx < -260) continue; var dy = h.y - S.y, d = Math.sqrt(dx * dx + dy * dy); if (d > h.r) continue; var sc = (h.x >= S.x - 30 ? 1000 : 0) - d; if (sc > bs){ bs = sc; best = i; } }
+/* the rope always goes to the NEAREST hook in range (pure distance from the head, no direction bias); the hook just released is skipped during its 0.3 s cooldown */
+function findHook(S){ var L = S.L, hs = L.hooks, best = -1, bd = 1e9, i;
+  for (i = 0; i < hs.length; i++){ var h = hs[i]; if (i === S.lastHook && S.cool > 0) continue; var dx = h.x - S.x; if (dx > 260 || dx < -260) continue; var dy = h.y - S.y, d = Math.sqrt(dx * dx + dy * dy); if (d > h.r) continue; if (d < bd){ bd = d; best = i; } }
   return best; }
 function hitBlock(S, b){ var cx = clamp(S.x, b.x, b.x + b.w), cy = clamp(S.y, b.y, b.y + b.h), dx = S.x - cx, dy = S.y - cy, d2 = dx * dx + dy * dy, nx, ny, pen;
   if (d2 >= PR * PR) return false;
@@ -617,6 +619,11 @@ if (TEST){
         ok('pendulum constraint: distance never exceeds the rope, the rope shortens while swinging (momentum) but never below 45% of its length', okRope && S.rope < S.rope0 && S.rope >= S.rope0 * .45 - 1e-9, S.rope + '/' + S.rope0);
         var vx0 = S.vx, vy0 = S.vy; I.step(S, false, I.DT); ok('release keeps the velocity (launch) and fires a release event', S.hook === -1 && Math.abs(S.vx - vx0) < 1e-6 && Math.abs(S.vy - (vy0 + I.GRAV * I.DT)) < 1e-6 && S.ev.indexOf('release') >= 0);
         var reat = false; for (i = 0; i < 6; i++){ I.step(S, true, I.DT); if (S.hook >= 0) reat = true; } ok('no instant re-attach to the hook just released (cooldown)', !reat && S.cool > 0);
+        var L2 = { n:0, hue:0, hooks:[{ x:200, y:-200, r:190 }, { x:420, y:-200, r:190 }], blocks:[], spikes:[], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        S = I.newRun(L2, 'classic'); S.x = 300; S.y = -100; S.vx = 600; S.standing = false; var nearBehind = I.findHook(S); I.step(S, true, I.DT);
+        ok('two hooks in range: the NEARER one is attached even though it is behind the player (no direction bias)', nearBehind === 0 && S.hook === 0 && (S.x = 330, S.hook = -1, S.lastHook = -1, I.findHook(S) === 1), nearBehind + '/' + S.hook);
+        S = I.newRun(L2, 'classic'); S.x = 300; S.y = -100; S.hook = 0; S.standing = false; I.step(S, false, I.DT); var afterRel = I.findHook(S);
+        ok('during the cooldown of the just-released nearer hook the other hook in range is chosen; after it the nearest wins again', afterRel === 1 && (S.cool = 0, I.findHook(S) === 0));
         S = I.newRun(LF, 'grapple'); S.x = 200; S.y = -100; S.standing = false; I.step(S, true, I.DT); var d0 = Math.hypot(S.x - 300, S.y + 200); for (i = 0; i < 12; i++) I.step(S, true, I.DT); var d1 = Math.hypot(S.x - 300, S.y + 200);
         ok('grapple mode: attaching pulls the stickman toward the hook fast (distance shrinks, speed > 600 within 0.2 s)', S.mode === 'grapple' && d1 < d0 - 40 && Math.hypot(S.vx, S.vy) > 600, d0 + '→' + d1);
         var LB = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }, { x:400, y:-200, w:60, h:400 }], spikes:[], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
