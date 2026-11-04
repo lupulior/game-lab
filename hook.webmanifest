@@ -1,0 +1,19 @@
+{
+  "name": "סטיקמן הוק 🪝",
+  "short_name": "סטיקמן הוק",
+  "description": "איש מקל על חבל: תפוס וו, שחרר, ובנה תנופה עד קו הסיום. 500 שלבים.",
+  "start_url": "./hook.html?src=pwa",
+  "id": "/game-lab/hook.html",
+  "scope": "./hook.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#6B3FA0",
+  "theme_color": "#6B3FA0",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/hook-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/hook-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/hook-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

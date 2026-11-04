@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>סטיקמן הוק 🪝 – איש מקל על חבל, 500 שלבים (כמו Stickman Hook) – המשחק של לופו</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="סטיקמן הוק 🪝 בחינם: איש מקל על חבל – לחצו כדי לתפוס וו, שחררו כדי לעוף! צברו תנופה בכל נדנדה, קפצו על קפיצים ועברו 500 שלבים של מיומנות. מצב קלאסי ומצב גראפל, 23 סקינים ומטבעות. בלי התקנה, בעברית ובאנגלית – המשחק של לופו.">
+<meta name="keywords" content="סטיקמן הוק, Stickman Hook, איש מקל, משחק חבל, משחק נדנדה, משחק מיומנות, 500 שלבים, סטיקמן, משחק לילדים, לופו, המשחק של לופו">
+<meta name="theme-color" content="#6B3FA0">
+<link rel="canonical" href="https://lupulior.github.io/game-lab/hook.html">
+<link rel="manifest" href="hook.webmanifest">
+<link rel="apple-touch-icon" href="art/hook-180.png">
+<link rel="icon" href="art/hook-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Game Lab">
+<meta property="og:title" content="סטיקמן הוק 🪝 – איש מקל על חבל, 500 שלבים">
+<meta property="og:description" content="לחצו כדי לתפוס וו, שחררו כדי לעוף! צברו תנופה בכל נדנדה ועברו 500 שלבים. 23 סקינים, מצב גראפל. בחינם, בלי התקנה.">
+<meta property="og:image" content="https://lupulior.github.io/game-lab/art/hook-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="סטיקמן הוק – איש מקל עם ראש אדום מתנדנד על חבל מעל רקע סגול">
+<meta property="og:url" content="https://lupulior.github.io/game-lab/hook.html">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="סטיקמן הוק 🪝 – איש מקל על חבל, 500 שלבים">
+<meta name="twitter:description" content="משחק מיומנות: תפסו ווים, התנדנדו, שחררו בזמן הנכון ותעופו עד הדגל. 500 שלבים, 23 סקינים.">
+<meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/hook-og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"סטיקמן הוק – איש מקל על חבל","alternateName":["Stickman Hook","סטיקמן הוק","משחק חבל","משחק נדנדה"],"url":"https://lupulior.github.io/game-lab/hook.html","image":"https://lupulior.github.io/game-lab/art/hook-og.png","description":"לחצו כדי לתפוס וו, שחררו כדי לעוף! צברו תנופה בכל נדנדה, קפצו על קפיצים ועברו 500 שלבים של מיומנות. מצב קלאסי ומצב גראפל, 23 סקינים.","genre":["Arcade","Skill","Casual"],"gamePlatform":["Web browser","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":1},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"isPartOf":{"@type":"WebSite","name":"מעבדת משחקים – Game Lab","url":"https://lupulior.github.io/game-lab/"}}
+</script>
+<style>
+:root{ --bg:#2A1458; --bg2:#3B1E72; --text:#FFFFFF; --muted:#D9CCF5; --red:#FF4B4B; --cyan:#7EE8FF; --gold:#FFD23F; --card:rgba(255,255,255,.08); --line:rgba(255,255,255,.18); --font:"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-serif }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100%;background:var(--bg)}
+body{font-family:var(--font);color:var(--text);font-size:18px;line-height:1.35;overflow-x:hidden;-webkit-font-smoothing:antialiased;touch-action:manipulation;background:linear-gradient(180deg,#7A3FB8 0%,#4A2A9A 45%,#2A1458 100%);background-attachment:fixed}
+body.ingame{overflow:hidden}
+#app{position:relative;max-width:640px;margin:0 auto;padding:10px 12px 20px}
+body.ingame #app{display:none}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 0 8px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:900;font-size:19px}
+.icons{display:flex;gap:8px}
+.ib{min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--text);font:900 17px/1 var(--font);cursor:pointer;padding:0 10px}
+.ib:active{transform:translateY(1px);opacity:.8}
+.screen{display:none}.screen.on{display:block}
+.hero{text-align:center;padding:4px 0 2px}
+.hero h1{margin:0;font-size:38px;letter-spacing:1px;text-shadow:0 3px 0 rgba(0,0,0,.35)}
+.hero h1 small{display:block;font-size:18px;color:var(--gold);font-weight:700;margin-top:2px;letter-spacing:2px}
+.hero .tag{margin:8px 0 10px;color:var(--muted);font-size:17px}
+.stats{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;font-size:18px;font-weight:900;margin:0 0 6px}
+.stats span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;min-height:44px;display:inline-flex;align-items:center}
+.btn{display:block;width:100%;max-width:360px;margin:12px auto;min-height:58px;border:0;border-radius:999px;background:var(--red);color:#fff;font:900 24px/1 var(--font);cursor:pointer;box-shadow:0 6px 0 #B92B2B,0 10px 22px rgba(0,0,0,.3);padding:0 20px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #B92B2B}
+.btn.ghost{background:var(--card);color:var(--text);box-shadow:none;border:1px solid var(--line);min-height:48px;font-size:18px}
+.btn small{display:block;font-size:15px;font-weight:700;opacity:.85;margin-top:3px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{position:relative;border-radius:18px;background:var(--card);border:2px solid var(--line);padding:12px 8px 10px;text-align:center;cursor:pointer;color:var(--text);font:400 18px var(--font);min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.card:active{transform:translateY(2px)}
+.card .ic{font-size:40px;line-height:1}
+.card b{font-size:21px;letter-spacing:1px}
+.card small{display:block;font-size:16px;color:var(--muted);line-height:1.25}
+.card .lock{font-size:16px;color:var(--gold);line-height:1.25;font-weight:800}
+.card.classic{border-color:var(--red);box-shadow:0 0 18px rgba(255,75,75,.3)}
+.card.grapple{border-color:var(--cyan)}.card.grapple.open{box-shadow:0 0 18px rgba(126,232,255,.35)}
+.card.locked{opacity:.7;filter:saturate(.6)}
+.weekly{margin-top:10px;background:linear-gradient(135deg,rgba(255,210,63,.18),rgba(255,255,255,.06));border:2px solid var(--gold);border-radius:18px;padding:8px 12px;display:flex;align-items:center;gap:12px}
+.weekly canvas{width:64px;height:64px;flex:none}
+.weekly .wt{flex:1;min-width:0}
+.weekly .wt b{display:block;font-size:17px;color:var(--gold)}
+.weekly .wt span{display:block;font-size:16px;color:var(--muted)}
+.weekly button{min-height:44px;border:0;border-radius:12px;background:var(--gold);color:#2A1458;font:900 16px var(--font);cursor:pointer;padding:0 14px;flex:none}
+.weekly button.own{background:var(--card);color:var(--text);border:1px solid var(--line)}
+.skinsbar{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px 10px 6px}
+.skinsbar .hd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.skinsbar .hd b{font-size:19px;letter-spacing:1px}
+.skinsbar .hd button{min-height:44px}
+.skinsbar .row{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 6px;scrollbar-width:none;direction:ltr}
+.skinsbar .row::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;width:78px;height:96px;border-radius:14px;border:2px solid var(--line);background:rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--text);font:700 16px var(--font);padding:0}
+.chip canvas{width:48px;height:48px;display:block}
+.chip.eq{border-color:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.chip .pr{color:var(--gold);font-size:16px}
+.chip .pr.own{color:var(--cyan)}
+.how{color:var(--muted);font-size:16px;text-align:center;margin:12px 0 0}
+.kbd{text-align:center;color:var(--muted);font-size:16px;margin:8px 0}
+.kbd b{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:2px 9px;color:var(--text);font-size:16px}
+footer{text-align:center;padding:14px 0 0;color:var(--muted);font-size:16px}
+footer a{color:var(--gold);text-decoration:none;font-weight:800}
+.sel{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px auto 4px}
+.sel .name{min-width:170px;text-align:center;font-weight:900;font-size:22px}
+.sel .name small{display:block;font-size:16px;color:var(--muted);font-weight:700}
+.sub{text-align:center;color:var(--muted);font-size:16px;margin:4px 0}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0}
+@media (max-width:380px){.sgrid{grid-template-columns:repeat(2,1fr)}}
+.sk{border-radius:16px;border:2px solid var(--line);background:var(--card);padding:8px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.sk canvas{width:72px;height:72px;display:block}
+.sk b{font-size:17px}
+.sk .pr{color:var(--gold);font-size:16px;font-weight:700;min-height:22px}
+.sk .pr s{opacity:.6;margin-inline-end:4px}
+.sk button{min-height:44px;width:100%;border:0;border-radius:12px;background:var(--gold);color:#2A1458;font:900 16px var(--font);cursor:pointer}
+.sk button.own{background:var(--card);color:var(--text);border:1px solid var(--line)}
+.sk button.eq{background:var(--red);color:#fff}
+.sk button:disabled{opacity:.45;cursor:default}
+.sk.eq{border-color:var(--cyan);box-shadow:0 0 12px rgba(126,232,255,.5)}
+.sk.wk{border-color:var(--gold)}
+.hidden{display:none!important}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%) translateY(-80px);background:#fff;color:#2A1458;padding:10px 16px;border-radius:14px;font-weight:800;z-index:60;transition:transform .3s;max-width:90vw;text-align:center;font-size:16px}
+.toast.on{transform:translateX(-50%) translateY(0)}
+/* ---- game ---- */
+#s-game{position:fixed;inset:0;background:#1A0D3A;display:none;align-items:center;justify-content:center}
+#s-game.on{display:flex}
+#stage{position:relative;flex:none;width:960px;height:540px;touch-action:none;user-select:none;-webkit-user-select:none}
+#cv{display:block;width:100%;height:100%}
+#hud{position:fixed;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;padding:calc(6px + env(safe-area-inset-top)) 8px 0;pointer-events:none;z-index:5;font-weight:900;font-size:18px;text-shadow:0 1px 2px rgba(0,0,0,.6);direction:ltr}
+#hud .g{display:flex;align-items:center;gap:6px;pointer-events:auto}
+#hud .ib{background:rgba(20,10,45,.55);font-size:18px;border-color:rgba(255,255,255,.3)}
+#hud .tx{padding:0 6px;white-space:nowrap;line-height:1}
+#rotate{position:fixed;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom));text-align:center;color:var(--muted);font-size:16px;display:none;pointer-events:none;padding:0 12px}
+body.portrait #rotate{display:block}
+#ov{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:8;pointer-events:none;padding:8px}
+#ov.on{display:flex}
+.panel{pointer-events:auto;background:rgba(32,16,70,.94);border:2px solid rgba(255,255,255,.25);border-radius:22px;padding:14px 18px;text-align:center;max-width:min(94vw,420px);width:100%;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.panel h3{font-size:30px;margin:0 0 4px;letter-spacing:1px}
+.panel p{margin:4px 0 8px;font-size:18px}
+.panel .bar{height:14px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden;margin:4px 0 2px}
+.panel .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#FF9A3C);border-radius:999px;transition:width .6s}
+.panel .skp{display:flex;align-items:center;gap:10px;justify-content:center;margin:6px 0}
+.panel .skp canvas{width:44px;height:44px}
+.panel .skp .pt{flex:1;max-width:240px;text-align:start;font-size:16px;color:var(--muted)}
+.panel .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.panel .btns button{min-height:48px;min-width:110px;border:0;border-radius:999px;font:900 18px var(--font);cursor:pointer;padding:0 16px;color:#fff;background:var(--red);box-shadow:0 4px 0 #B92B2B}
+.panel .btns button.alt{background:var(--card);color:var(--text);border:1px solid var(--line);box-shadow:none}
+#test-log{white-space:pre-wrap;font-family:monospace;font-size:12px;color:#fff;background:#000;padding:8px;direction:ltr}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top" id="top">
+    <a class="brand" href="./" aria-label="Game Lab"><span>🪝</span><span data-t="title">סטיקמן הוק</span></a>
+    <div class="icons">
+      <button class="ib" id="b-sound" aria-label="sound">🔊</button>
+      <button class="ib" id="b-lang" aria-label="language">EN</button>
+    </div>
+  </header>
+
+  <!-- MENU -->
+  <section class="screen on" id="s-menu">
+    <div class="hero">
+      <h1><span data-t="title">סטיקמן הוק</span><small data-t="sub">איש מקל על חבל</small></h1>
+      <p class="tag" data-t="tagline">לחצו כדי לתפוס וו, שחררו כדי לעוף – וצברו תנופה בכל נדנדה!</p>
+    </div>
+    <div class="stats"><span id="st-done">✔ 0</span><span id="st-streak">🔥 0</span><span id="st-coins">🪙 0</span></div>
+    <button class="btn" id="b-play"></button>
+    <div class="cards">
+      <button class="card classic" id="c-classic"><span class="ic">🪝</span><span><b data-t="classic">קלאסי</b><small id="c-classic-sub"></small></span></button>
+      <button class="card grapple" id="c-grapple"><span class="ic">⚡</span><span><b data-t="grapple">גראפל</b><small id="c-grapple-sub"></small></span></button>
+    </div>
+    <div class="weekly" id="weekly"><canvas id="wk-cv" width="128" height="128"></canvas><div class="wt"><b id="wk-title"></b><span id="wk-name"></span><span id="wk-price"></span></div><button id="wk-btn"></button></div>
+    <div class="skinsbar">
+      <div class="hd"><b data-t="skins">סקינים</b><button class="ib" id="b-skins" data-t="allSkins">כל הסקינים ▶</button></div>
+      <div class="row" id="skin-row"></div>
+    </div>
+    <p class="how" data-t="how"></p>
+    <p class="kbd"><b data-t="kSpace">רווח</b> / <span data-t="kMouse">עכבר</span> <span data-t="kHold">החזקה = תפיסה</span> · <b>R</b> <span data-t="kRestart">מחדש</span> · <b>Esc</b> <span data-t="kMenu">תפריט</span></p>
+    <footer><a href="./" data-t="more">🎮 עוד משחקים</a></footer>
+  </section>
+
+  <!-- SKINS -->
+  <section class="screen" id="s-skins">
+    <div class="sel"><div class="name"><span data-t="skins">סקינים</span><small id="sk-coins"></small></div></div>
+    <p class="sub" data-t="skinsHow"></p>
+    <div class="sgrid" id="sk-grid"></div>
+    <button class="btn ghost" id="b-sk-back" data-t="back">◀ חזרה</button>
+  </section>
+
+  <div class="toast" id="toast"></div>
+  <pre id="test-log" class="hidden"></pre>
+</div>
+
+<!-- GAME (full-screen letterboxed 16:9 stage) -->
+<section class="screen" id="s-game">
+  <div id="stage"><canvas id="cv" width="960" height="540"></canvas></div>
+  <div id="hud">
+    <div class="g"><button class="ib" id="b-home2" aria-label="menu">🏠</button><button class="ib" id="b-restart" aria-label="restart">↻</button><span class="tx" id="hud-l"></span></div>
+    <div class="g"><span class="tx" id="hud-r"></span><button class="ib" id="b-mute2" aria-label="sound">🔊</button><button class="ib" id="b-pause" aria-label="pause">⏸</button></div>
+  </div>
+  <div id="rotate" data-t="rotate">🔄 סובבו את המכשיר למסך גדול יותר</div>
+  <div id="ov"><div class="panel" id="panel"></div></div>
+</section>
+
+<script>
+(function(){
+'use strict';
+var TEST = location.hash === '#test', ERRS = [];
+if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
+var $ = function(id){ return document.getElementById(id); };
+var KEY = 'hook.v1', W = 960, H = 540, HZ = 60, DT = 1 / HZ, NLV = 500, GRAV = 1600, PR = 12, VMAX = 1700, SHRINK = 90, MINF = .6, BOOST = 900, PULL = 3800, GSHRINK = 600, GMIN = 90, PADV = 980, REST = .28, GRAPPLE_AT = 30, SIMMAX = 20, DEATHY = 430, STUCK = 1.2;
+function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+function lerp(a, b, t){ return a + (b - a) * t; }
+
+/* ---------- strings ---------- */
+var T = {
+he:{ title:'סטיקמן הוק', sub:'איש מקל על חבל', tagline:'לחצו כדי לתפוס וו, שחררו כדי לעוף – וצברו תנופה בכל נדנדה!', play:'▶ שחק', cont:'▶ שלב {n}', classic:'קלאסי', grapple:'גראפל', classicSub:'שלב {n} / 500 · נדנדה קלאסית', grappleSub:'שלב {n} / 500 · הוו מושך אתכם',
+  lockGrapple:'סיימו 30 שלבים קלאסיים', done:'{n} שלבים', streak:'רצף {n}', skins:'סקינים', allSkins:'כל הסקינים ▶', weekly:'⭐ סקין השבוע', half:'50% הנחה!', buy:'קנה', equip:'בחר', equipped:'✓ נבחר', locked:'נעול', lockLvl:'נפתח אחרי {n} שלבים', free:'חינם',
+  skinsHow:'סקינים קלאסיים נפתחים לפי התקדמות · סקינים מיוחדים נקנים במטבעות',
+  how:'החזיקו את האצבע על המסך (או רווח / עכבר) כדי להיתפס לוו הקרוב, ושחררו כדי לעוף קדימה. שחררו לפני שיא הנדנדה כדי לעוף רחוק, דלגו על ווים כשיש לכם תנופה, קפצו על הקפיצים – והגיעו לקו הסיום המשובץ! נפילה או קוצים = התחלה מחדש מיידית.',
+  kSpace:'רווח', kMouse:'עכבר', kHold:'החזקה = תפיסה', kRestart:'מחדש', kMenu:'תפריט', more:'🎮 עוד משחקים', rotate:'🔄 סובבו את המכשיר למסך גדול יותר', back:'◀ חזרה', level:'שלב {n}', done1:'שלב {n} ✔', next:'הבא ▶', again:'שוב ↻', menu:'🏠 תפריט', resume:'▶ המשך', paused:'הפסקה',
+  coinsEarned:'+{n} 🪙', flawless:'בלי נפילות! 🌟', nextSkin:'הסקין הבא: {n}', skinUnlocked:'נפתח סקין חדש: {n}! 🎉', allDone:'סיימתם את כל 500 השלבים! 🏆', noCoins:'אין מספיק מטבעות', bought:'קניתם את {n}!', allSkinsOwn:'כל הסקינים פתוחים! 🏆', tapToStart:'לחצו כדי לתפוס' },
+en:{ title:'Stickman Hook', sub:'Stickman on a rope', tagline:'Press to grab a hook, release to fly – build momentum with every swing!', play:'▶ PLAY', cont:'▶ Level {n}', classic:'CLASSIC', grapple:'GRAPPLE', classicSub:'Level {n} / 500 · classic swing', grappleSub:'Level {n} / 500 · the hook pulls you',
+  lockGrapple:'Finish 30 classic levels', done:'{n} levels', streak:'streak {n}', skins:'SKINS', allSkins:'All skins ▶', weekly:'⭐ Skin of the week', half:'50% off!', buy:'Buy', equip:'Equip', equipped:'✓ Equipped', locked:'Locked', lockLvl:'Unlocks after {n} levels', free:'Free',
+  skinsHow:'Classic skins unlock with progress · special skins cost coins',
+  how:'Hold your finger on the screen (or Space / mouse) to grab the nearest hook, release to launch forward. Release before the top of the swing to fly far, skip hooks when you already have momentum, bounce on the jump pads – and reach the checkered finish line! Falling or spikes = instant restart.',
+  kSpace:'Space', kMouse:'mouse', kHold:'hold = grab', kRestart:'restart', kMenu:'menu', more:'🎮 More games', rotate:'🔄 Rotate your device for a bigger screen', back:'◀ Back', level:'Level {n}', done1:'Level {n} ✔', next:'Next ▶', again:'Again ↻', menu:'🏠 Menu', resume:'▶ Resume', paused:'PAUSED',
+  coinsEarned:'+{n} 🪙', flawless:'Flawless! 🌟', nextSkin:'Next skin: {n}', skinUnlocked:'New skin unlocked: {n}! 🎉', allDone:'You finished all 500 levels! 🏆', noCoins:'Not enough coins', bought:'You bought {n}!', allSkinsOwn:'All skins unlocked! 🏆', tapToStart:'Press to grab' } };
+function t(k, o){ var s = T[G.lang][k]; if (s == null) s = T.he[k]; if (s == null) return k; if (o) for (var p in o) s = s.split('{' + p + '}').join(o[p]); return s; }
+
+/* ---------- skins: 9 classic (unlocked by progress) + 14 fun (coins) ---------- */
+var SKINS = [
+  { id:'red', he:'אדום', en:'Red', price:0, lvl:0, kind:'ball', c1:'#E8352B', c2:'#FF8A80', limb:'#1E1B2E' },
+  { id:'blue', he:'כחול', en:'Blue', price:0, lvl:3, kind:'ball', c1:'#2F7BFF', c2:'#8CC4FF', limb:'#1E1B2E' },
+  { id:'green', he:'ירוק', en:'Green', price:0, lvl:8, kind:'ball', c1:'#2ECC71', c2:'#A8F0C2', limb:'#1E1B2E' },
+  { id:'yellow', he:'צהוב', en:'Yellow', price:0, lvl:15, kind:'ball', c1:'#FFD23F', c2:'#FFF0A8', limb:'#1E1B2E' },
+  { id:'orange', he:'כתום', en:'Orange', price:0, lvl:25, kind:'ball', c1:'#FF8A1F', c2:'#FFC88A', limb:'#1E1B2E' },
+  { id:'pink', he:'ורוד', en:'Pink', price:0, lvl:40, kind:'ball', c1:'#FF5CB8', c2:'#FFB3E0', limb:'#1E1B2E' },
+  { id:'purple', he:'סגול', en:'Purple', price:0, lvl:60, kind:'ball', c1:'#8E44FF', c2:'#CDB0FF', limb:'#1E1B2E' },
+  { id:'white', he:'לבן', en:'White', price:0, lvl:90, kind:'ball', c1:'#F7F7FF', c2:'#FFFFFF', limb:'#1E1B2E' },
+  { id:'black', he:'שחור', en:'Black', price:0, lvl:130, kind:'ball', c1:'#23202E', c2:'#5A5570', limb:'#23202E' },
+  { id:'hamburger', he:'המבורגר', en:'Hamburger', price:100, kind:'hamburger', c1:'#F4A950', c2:'#7A3E12', limb:'#3A2412' },
+  { id:'cactus', he:'קקטוס', en:'Cactus', price:120, kind:'cactus', c1:'#3CB043', c2:'#1E7A2A', limb:'#1E5C22' },
+  { id:'dragon', he:'דרקון', en:'Dragon', price:140, kind:'dragon', c1:'#3FBF5A', c2:'#F4D35E', limb:'#1E1B2E' },
+  { id:'lemon', he:'לימון', en:'Lemon', price:160, kind:'lemon', c1:'#F9E04B', c2:'#3CB043', limb:'#1E1B2E' },
+  { id:'robot', he:'רובוט', en:'Robot', price:180, kind:'robot', c1:'#B9C2D0', c2:'#5BE1FF', limb:'#4A5568' },
+  { id:'ghost', he:'רוח', en:'Ghost', price:200, kind:'ghost', c1:'#F2F4FF', c2:'#1E1B2E', limb:'#C7CBE8' },
+  { id:'ninja', he:'נינג\'ה', en:'Ninja', price:220, kind:'ninja', c1:'#23202E', c2:'#E8352B', limb:'#23202E' },
+  { id:'pirate', he:'פיראט', en:'Pirate', price:240, kind:'pirate', c1:'#F3C9A0', c2:'#D7262E', limb:'#1E1B2E' },
+  { id:'alien', he:'חייזר', en:'Alien', price:260, kind:'alien', c1:'#8CE24A', c2:'#0F0F1A', limb:'#2E7A1E' },
+  { id:'cat', he:'חתול', en:'Cat', price:280, kind:'cat', c1:'#F5A742', c2:'#FFE0B0', limb:'#1E1B2E' },
+  { id:'panda', he:'פנדה', en:'Panda', price:300, kind:'panda', c1:'#FFFFFF', c2:'#1E1B2E', limb:'#1E1B2E' },
+  { id:'pumpkin', he:'דלעת', en:'Pumpkin', price:320, kind:'pumpkin', c1:'#FF8A1F', c2:'#3CB043', limb:'#1E1B2E' },
+  { id:'astronaut', he:'אסטרונאוט', en:'Astronaut', price:360, kind:'astronaut', c1:'#F2F4FF', c2:'#2F7BFF', limb:'#D9DDF0' },
+  { id:'unicorn', he:'חד-קרן', en:'Unicorn', price:400, kind:'unicorn', c1:'#FFFFFF', c2:'#FFD23F', limb:'#1E1B2E' } ];
+var FUN = SKINS.filter(function(s){ return s.price > 0; }), CLASSIC = SKINS.filter(function(s){ return s.price === 0; });
+function skinById(id){ for (var i = 0; i < SKINS.length; i++) if (SKINS[i].id === id) return SKINS[i]; return SKINS[0]; }
+function weekNo(now){ return Math.floor(((now == null ? Date.now() : now) + 3 * 86400000) / (7 * 86400000)); }
+function weeklySkin(now){ return FUN[weekNo(now) % FUN.length]; }
+function skinPrice(sk, now){ return sk.price > 0 && weeklySkin(now).id === sk.id ? Math.round(sk.price / 2) : sk.price; }
+
+/* ---------- global state + storage ---------- */
+var G = { lang:'he', mute:false, classicLevel:1, grappleLevel:1, coins:0, owned:[], skin:'red', streak:0, bestStreak:0, screen:'s-menu', S:null, mode:'classic', level:1, hold:false, auto:false, overT:-1, frozen:false, paused:false, deaths:0, k:1, cam:{ x:0, y:0 } };
+function levelsDone(){ return (G.classicLevel - 1) + (G.grappleLevel - 1); }
+function skinUnlocked(sk){ return sk.price === 0 ? levelsDone() >= sk.lvl : G.owned.indexOf(sk.id) >= 0; }
+function ownedSkins(){ return SKINS.filter(skinUnlocked); }
+function nextClassicSkin(){ for (var i = 0; i < CLASSIC.length; i++) if (!skinUnlocked(CLASSIC[i])) return CLASSIC[i]; return null; }
+function skinProgress(){ var nx = nextClassicSkin(); if (!nx) return null; var prev = 0; for (var i = 0; i < CLASSIC.length; i++) if (CLASSIC[i].lvl < nx.lvl) prev = Math.max(prev, CLASSIC[i].lvl); var d = levelsDone(); return { skin:nx, have:d - prev, need:nx.lvl - prev, frac:clamp((d - prev) / (nx.lvl - prev), 0, 1) }; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify({ classicLevel:G.classicLevel, grappleLevel:G.grappleLevel, coins:G.coins, owned:G.owned, skin:G.skin, streak:G.streak, bestStreak:G.bestStreak, lang:G.lang, mute:G.mute })); } catch(e){} }
+function load(){ var d = null; try { d = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  if (d && typeof d === 'object'){ G.classicLevel = clamp(d.classicLevel | 0 || 1, 1, NLV); G.grappleLevel = clamp(d.grappleLevel | 0 || 1, 1, NLV); G.coins = Math.max(0, d.coins | 0); G.owned = Array.isArray(d.owned) ? d.owned.filter(function(id){ return FUN.some(function(s){ return s.id === id; }); }) : []; G.streak = Math.max(0, d.streak | 0); G.bestStreak = Math.max(0, d.bestStreak | 0); G.lang = d.lang === 'en' ? 'en' : 'he'; G.mute = !!d.mute; G.skin = skinUnlocked(skinById(d.skin)) ? skinById(d.skin).id : 'red'; } }
+function canGrapple(){ return G.classicLevel > GRAPPLE_AT; }
+function buySkin(id, now){ var s = skinById(id); if (skinUnlocked(s)) return true; var pr = skinPrice(s, now); if (G.coins < pr) return false; G.coins -= pr; G.owned.push(s.id); save(); return true; }
+function equipSkin(id){ var s = skinById(id); if (!skinUnlocked(s)) return false; G.skin = s.id; save(); return true; }
+
+/* ---------- rng ---------- */
+function mkRng(seed){ var a = seed >>> 0; return function(){ a = (a + 0x6D2B79F5) | 0; var t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function pick(rng, w){ var tot = 0, k; for (k in w) tot += w[k]; var r = rng() * tot; for (k in w){ r -= w[k]; if (r < 0) return k; } return 'chain'; }
+
+/* ---------- level generator ---------- */
+var HUES = [268, 222, 190, 24, 335, 300, 205, 160, 42, 350, 250, 12];
+var YMIN = -470, YMAX = -70, LCACHE = {};
+function build(n, tr){
+  var rng = mkRng((n * 7919 + tr * 104729 + 13) >>> 0), d = (n - 1) / (NLV - 1), rx = Math.min(1, tr / 8);
+  var hooks = [], blocks = [], spikes = [], pads = [], i;
+  var gap = 250 + 120 * d * (1 - .5 * rx), hv = 50 + 80 * d * (1 - .4 * rx), R = 190 - 40 * d * (1 - .5 * rx);
+  blocks.push({ x:-230, y:0, w:290, h:90 });
+  var cx = 125 + rng() * 25, cy = -(105 + rng() * 25);
+  hooks.push({ x:cx, y:cy, r:R + 12 });
+  var nseg = 4 + Math.round(d * 3) + Math.floor(rng() * 2);
+  var hz = tr >= 30 ? 0 : 1 - .7 * rx, gw = tr >= 30 ? .2 : 1;
+  var wts = { chain:3, gap:(n >= 4 ? (.6 + 2 * d) * gw : 0), plat:Math.max(.2, 1.6 - d), spike:(n >= 8 ? 2.2 * d * hz : 0), pad:(n >= 6 ? (.6 + d) * gw : 0), wall:(n >= 12 ? 2 * d * hz : 0), ceil:(n >= 20 ? 1.6 * d * hz : 0), corr:(n >= 60 ? 1.6 * d * hz : 0) };
+  function nextY(bias){ var y = cy + (rng() * 2 - 1) * hv + (bias || 0); y += (-270 - y) * .15; return clamp(y, YMIN, YMAX); }
+  function hook(x, y, rr){ hooks.push({ x:x, y:y, r:rr || R }); cx = x; cy = y; }
+  var kinds = [];
+  for (i = 0; i < nseg; i++){
+    var k = i === 0 ? 'chain' : pick(rng, wts), g = gap * (.85 + .3 * rng()); kinds.push(k);
+    if (k === 'chain'){ var m = 2 + Math.floor(rng() * 2); for (var j = 0; j < m; j++){ if (i === 0 && j === 0) hook(cx + 245 + rng() * 25, clamp(cy - 10 - rng() * 40, YMIN, YMAX), R + 8); else hook(cx + gap * (.85 + .3 * rng()), nextY()); } }
+    else if (k === 'gap'){ hook(cx + gap * (1.25 + .15 * d), nextY(-20), R + 15); }
+    else if (k === 'plat'){ var pg = Math.max(g, 260); hook(cx + pg, nextY(40), R + 8); var pr = R + 8, pdy = 112, pa = Math.min(pg - 130, Math.sqrt(Math.max(0, (pr * .93) * (pr * .93) - (pdy - PR) * (pdy - PR)))), pw = Math.max(70, pa - 70); blocks.push({ x:cx - 70 - pw, y:cy + pdy, w:pw, h:56 }); }
+    else if (k === 'pad'){ var up = rng() < .5, bx0 = cx + 150, btop = cy + 130; blocks.push({ x:bx0, y:btop, w:170, h:56 }); pads.push({ x:bx0 + 20, y:btop - 14, w:130, h:14, dir:up ? 'up' : 'fwd' }); hook(cx + (up ? 470 : 560), clamp(cy - (up ? 170 : 90) - 40 * rng(), YMIN, YMAX), R + 10); }
+    else if (k === 'spike'){ hook(cx + g, nextY(), R); var sfy = cy + R + 64, sx0 = cx - 40 - rng() * 40, sw = 220 + rng() * 80; blocks.push({ x:sx0, y:sfy, w:sw, h:56 }); spikes.push({ x:sx0 + 8, y:sfy - 18, w:sw - 16, h:18 }); }
+    else if (k === 'wall'){ var wx = cx + g * .55, wtop = cy + 150 - 110 * d * (1 - .5 * rx); blocks.push({ x:wx, y:wtop, w:50 + 30 * rng(), h:900 }); hook(cx + g * 1.15, nextY(-30)); }
+    else if (k === 'ceil'){ var c0 = cx + 40; hook(cx + g, nextY(30)); blocks.push({ x:c0, y:cy - 470, w:cx - c0 + 100, h:410 - 30 * d }); }
+    else if (k === 'corr'){ var s0 = cx + 60; hook(cx + g * .9, nextY()); hook(cx + g * .9, clamp(cy + (rng() * 2 - 1) * 30, YMIN, YMAX)); var fl = cy + R * .9; blocks.push({ x:s0, y:cy - 450, w:cx - s0 + 120, h:400 }); blocks.push({ x:s0, y:fl, w:cx - s0 + 120, h:50 }); if (d > .5 && rng() < .5) spikes.push({ x:s0 + 40, y:fl - 18, w:80, h:18 }); }
+  }
+  var fx = cx + 270 + rng() * 60, ftop = cy + 170; blocks.push({ x:fx - 120, y:ftop, w:380, h:90 });
+  for (i = 1; i < hooks.length; i++) if (hooks[i].x <= hooks[i - 1].x) hooks[i].x = hooks[i - 1].x + 40;
+  return { n:n, seed:tr, hue:HUES[(n - 1) % HUES.length], hooks:hooks, blocks:blocks, spikes:spikes, pads:pads, finish:{ x:fx, y:ftop - 180, h:180 }, startX:0, startY:-PR, deathY:DEATHY, len:fx, kinds:kinds, tries:tr + 1 };
+}
+function genLevel(n){ n = clamp(n | 0 || 1, 1, NLV); if (LCACHE[n]) return LCACHE[n]; var L = null;
+  for (var tr = 0; tr < 60; tr++){ L = build(n, tr); var a = simulate(L, 'classic'); if (!a.won || a.time > 16) continue; var b = simulate(L, 'grapple'); if (!b.won || b.time > 16) continue; L.simT = a.time; L.simTG = b.time; LCACHE[n] = L; return L; }
+  L.unsolved = true; LCACHE[n] = L; return L; }
+
+/* ---------- physics engine (pure, deterministic) ---------- */
+function newRun(L, mode){ return { L:L, mode:mode === 'grapple' ? 'grapple' : 'classic', x:L.startX, y:L.startY, vx:0, vy:0, hook:-1, rope:0, rope0:0, attachT:0, lastHook:-1, cool:0, t:0, dead:false, won:false, over:false, standing:true, wasSt:true, stillT:0, padCool:0, squash:0, winT:0, ev:[] }; }
+function findHook(S){ var L = S.L, hs = L.hooks, best = -1, bs = -1e9, i;
+  for (i = 0; i < hs.length; i++){ var h = hs[i]; if (i === S.lastHook && S.cool > 0) continue; var dx = h.x - S.x; if (dx > 260 || dx < -260) continue; var dy = h.y - S.y, d = Math.sqrt(dx * dx + dy * dy); if (d > h.r) continue; var sc = (h.x >= S.x - 30 ? 1000 : 0) - d; if (sc > bs){ bs = sc; best = i; } }
+  return best; }
+function hitBlock(S, b){ var cx = clamp(S.x, b.x, b.x + b.w), cy = clamp(S.y, b.y, b.y + b.h), dx = S.x - cx, dy = S.y - cy, d2 = dx * dx + dy * dy, nx, ny, pen;
+  if (d2 >= PR * PR) return false;
+  if (S.y < b.y + PR * 1.6 && S.y > b.y - PR && S.vy > -200 && ((S.x < b.x && S.vx > 0) || (S.x > b.x + b.w && S.vx < 0))){ S.y = b.y - PR; if (S.vy > 0) S.vy = 0; S.standing = true; if (!S.wasSt){ S.ev.push('land'); S.squash = Math.max(S.squash, .5); } return true; }
+  if (d2 > 1e-6){ var d = Math.sqrt(d2); nx = dx / d; ny = dy / d; pen = PR - d; }
+  else { var l = S.x - b.x, r = b.x + b.w - S.x, tp = S.y - b.y, bt = b.y + b.h - S.y, m = Math.min(l, r, tp, bt); if (m === tp){ nx = 0; ny = -1; } else if (m === bt){ nx = 0; ny = 1; } else if (m === l){ nx = -1; ny = 0; } else { nx = 1; ny = 0; } pen = m + PR; }
+  S.x += nx * pen; S.y += ny * pen;
+  var vn = S.vx * nx + S.vy * ny;
+  if (vn < 0){ var sp = -vn; if (ny < -.7 && sp < 140){ S.vx -= vn * nx; S.vy = 0; S.standing = true; if (sp > 40 && !S.wasSt){ S.ev.push('land'); S.squash = Math.max(S.squash, .6); } }
+    else { S.vx -= (1 + REST) * vn * nx; S.vy -= (1 + REST) * vn * ny; if (!S.wasSt || sp > 140) S.ev.push(sp > 400 ? 'thud' : 'land'); S.squash = Math.max(S.squash, Math.min(1, sp / 700)); if (ny < -.7) S.standing = true; }
+    if (ny < -.7) S.vx *= (S.hook >= 0 ? .995 : .82); else S.vy *= .9; }
+  else if (ny < -.7 && S.vy >= 0 && S.vy < 40){ S.vy = 0; S.standing = true; }
+  return true; }
+function overlap(S, b, sh){ sh = sh || 0; var cx = clamp(S.x, b.x + sh, b.x + b.w - sh), cy = clamp(S.y, b.y + sh, b.y + b.h - sh), dx = S.x - cx, dy = S.y - cy; return dx * dx + dy * dy < PR * PR; }
+function step(S, hold, dt){ if (S.dead || (S.won && S.winT > 1.2)) return; var L = S.L, i, b;
+  S.t += dt; S.cool -= dt; S.padCool -= dt; if (S.squash > 0) S.squash = Math.max(0, S.squash - 4 * dt);
+  if (S.won){ S.winT += dt; hold = false; }
+  if (S.hook >= 0 && !hold){ S.lastHook = S.hook; S.hook = -1; S.cool = .3; S.ev.push('release'); }
+  if (hold && S.hook < 0 && !S.won){ var hi = findHook(S); if (hi >= 0){ var hk0 = L.hooks[hi]; S.hook = hi; S.rope0 = S.rope = Math.max(30, Math.sqrt((S.x - hk0.x) * (S.x - hk0.x) + (S.y - hk0.y) * (S.y - hk0.y))); S.attachT = S.t; S.standing = false; S.ev.push('attach');
+      if (S.mode === 'grapple'){ var gdx = hk0.x - S.x, gdy = hk0.y - S.y, gd = Math.sqrt(gdx * gdx + gdy * gdy) || 1, gsp = Math.max(Math.sqrt(S.vx * S.vx + S.vy * S.vy) * .8, 650); S.vx = gdx / gd * gsp; S.vy = gdy / gd * gsp; }
+      else if (hk0.x > S.x && S.vx * S.vx + S.vy * S.vy < 200 * 200) S.vx = Math.max(S.vx, 260); } }
+  S.vy += GRAV * dt;
+  if (S.hook >= 0){ var hk = L.hooks[S.hook], rx = S.x - hk.x, ry = S.y - hk.y, rd = Math.sqrt(rx * rx + ry * ry) || 1;
+    S.rope = Math.max(Math.min(S.rope, Math.max(50, S.rope0 * .45)), Math.min(S.rope, rd));
+    if (S.mode === 'grapple'){ if (rd > GMIN + 10){ S.vx -= rx / rd * PULL * dt; S.vy -= ry / rd * PULL * dt; } S.rope = Math.max(Math.min(GMIN, S.rope), S.rope - GSHRINK * dt); }
+    else { if (!S.standing) S.rope = Math.max(Math.min(S.rope0 * MINF, S.rope), S.rope - SHRINK * dt); var tx = -ry / rd, ty = rx / rd; if (tx < 0){ tx = -tx; ty = -ty; } var vt = S.vx * tx + S.vy * ty; if (ry > 0 && vt > -30 && vt < 1000){ S.vx += tx * BOOST * dt; S.vy += ty * BOOST * dt; } }
+    /* rope tension impulse (does no work): remove the outward radial velocity while the rope is taut */
+    var nx0 = rx / rd, ny0 = ry / rd, vr0 = S.vx * nx0 + S.vy * ny0; if (rd >= S.rope - .5 && vr0 > 0){ S.vx -= vr0 * nx0; S.vy -= vr0 * ny0; } }
+  var sp2 = S.vx * S.vx + S.vy * S.vy; if (sp2 > VMAX * VMAX){ var sc = VMAX / Math.sqrt(sp2); S.vx *= sc; S.vy *= sc; }
+  S.x += S.vx * dt; S.y += S.vy * dt;
+  if (S.hook >= 0){ var h2 = L.hooks[S.hook], dx2 = S.x - h2.x, dy2 = S.y - h2.y, d2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+    /* pendulum constraint: back onto the circle, velocity rotated onto the tangent with its speed preserved (no numerical energy loss) */
+    if (d2 > S.rope && d2 > 0){ var nx2 = dx2 / d2, ny2 = dy2 / d2; S.x = h2.x + nx2 * S.rope; S.y = h2.y + ny2 * S.rope; var sp3 = Math.sqrt(S.vx * S.vx + S.vy * S.vy), tx2 = -ny2, ty2 = nx2, vt2 = S.vx * tx2 + S.vy * ty2, sg2 = vt2 > 1 ? 1 : vt2 < -1 ? -1 : (tx2 >= 0 ? 1 : -1); S.vx = tx2 * sg2 * sp3; S.vy = ty2 * sg2 * sp3; } }
+  S.wasSt = S.standing; S.standing = false;
+  for (i = 0; i < L.blocks.length; i++){ b = L.blocks[i]; if (b.x > S.x + PR + 2 || b.x + b.w < S.x - PR - 2) continue; hitBlock(S, b); }
+  if (S.standing && S.hook < 0 && Math.abs(S.vx) > 0){ S.vx *= Math.max(0, 1 - 6 * dt); if (Math.abs(S.vx) < 4) S.vx = 0; }
+  if (S.won) return;
+  for (i = 0; i < L.pads.length; i++){ b = L.pads[i]; if (S.padCool <= 0 && overlap(S, b, -2)){ S.padCool = .35; S.standing = false; S.y = Math.min(S.y, b.y - PR + 2); if (S.hook >= 0){ S.lastHook = S.hook; S.hook = -1; S.cool = .4; } if (b.dir === 'fwd'){ S.vx = Math.max(S.vx, 620); S.vy = Math.min(S.vy, -700); } else { S.vy = -PADV; S.vx = Math.max(S.vx, 160); } S.squash = 1; S.ev.push('pad'); } }
+  for (i = 0; i < L.spikes.length; i++){ b = L.spikes[i]; if (overlap(S, b, 3)){ S.dead = true; S.over = true; S.hook = -1; S.ev.push('die'); return; } }
+  if (S.y > L.deathY){ S.dead = true; S.over = true; S.hook = -1; S.ev.push('die'); return; }
+  if (S.standing && Math.abs(S.vx) < 5 && S.hook < 0){ S.stillT += dt; if (S.stillT > STUCK && findHook(S) < 0 && !(hold && S.t < .5)){ S.dead = true; S.over = true; S.ev.push('die'); S.ev.push('stuck'); return; } } else S.stillT = 0;
+  if (S.x >= L.finish.x){ S.won = true; S.over = true; if (S.hook >= 0){ S.hook = -1; } S.ev.push('win'); } }
+
+/* ---------- auto-player ---------- */
+function autoInput(S){ var L = S.L, hk;
+  if (S.won) return false;
+  if (S.hook >= 0){ hk = L.hooks[S.hook]; var vx = S.vx, vy = S.vy, ang = Math.atan2(-vy, vx), at = S.t - S.attachT;
+    if (S.mode === 'grapple'){ var gsp2 = Math.sqrt(vx * vx + vy * vy); if (at > .1 && vx > 300 && gsp2 > 550 && ang > .25 && ang < .7) return false; if (at > .7 && vx > 0 && vy < 0 && ang < .9) return false; if (at > 1.3) return false; return true; }
+    var csp = Math.sqrt(vx * vx + vy * vy), nxt = L.hooks[S.hook + 1], far = nxt && (nxt.x - hk.x) > 1.25 * nxt.r, amin = (csp > 650 && !far) ? .42 : .62;
+    if (S.y < hk.y){ if (vx > 250 && ang > .35 && ang < .85) return false; } /* whipping over the hook: wait for a flatter launch */
+    else if (vx > 200 && ang > amin && ang < 1.05) return false;
+    if (at > 2.2 && vx > 100 && vy < 0) return false;
+    return true; }
+  var i = findHook(S); if (i < 0) return false; hk = L.hooks[i];
+  if (S.mode === 'grapple'){ var gx = hk.x - S.x, gy = S.y - hk.y; return gx > 20 && gx > .45 * gy && (gy > -120 || S.standing); }
+  if (S.standing) return true;
+  if (hk.x > S.x + 20 && hk.y < S.y + 30){ if (S.vy < -380 && S.vx > 520) return false; return true; }
+  if (S.vy > 150 && hk.y < S.y) return true;
+  return false; }
+function simulate(L, mode){ var S = newRun(L, mode), n = 0, maxN = Math.round(SIMMAX * HZ), hold = false, held = 0;
+  while (!S.over && n < maxN){ hold = autoInput(S); step(S, hold, DT); if (hold) held++; S.ev.length = 0; n++; }
+  return { won:S.won, time:S.t, dead:S.dead, x:S.x }; }
+
+/* ---------- audio ---------- */
+var AC = null, NOISE = null;
+function ac(){ if (AC) return AC; try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} return AC; }
+function tone(f, dur, type, vol, slide, delay){ if (G.mute || !ac()) return; try { var o = AC.createOscillator(), g = AC.createGain(), n = AC.currentTime + (delay || 0); o.type = type || 'sine'; o.frequency.setValueAtTime(f, n); if (slide) o.frequency.exponentialRampToValueAtTime(slide, n + dur); g.gain.setValueAtTime(vol || .15, n); g.gain.exponentialRampToValueAtTime(.001, n + dur); o.connect(g); g.connect(AC.destination); o.start(n); o.stop(n + dur + .02); } catch(e){} }
+function noise(dur, vol, f0, f1){ if (G.mute || !ac()) return; try { if (!NOISE){ var len = AC.sampleRate * .5, b = AC.createBuffer(1, len, AC.sampleRate), d = b.getChannelData(0); for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; NOISE = b; } var s = AC.createBufferSource(), g = AC.createGain(), fl = AC.createBiquadFilter(), n = AC.currentTime; s.buffer = NOISE; fl.type = 'bandpass'; fl.frequency.setValueAtTime(f0 || 800, n); if (f1) fl.frequency.exponentialRampToValueAtTime(f1, n + dur); fl.Q.value = .8; g.gain.setValueAtTime(vol, n); g.gain.exponentialRampToValueAtTime(.001, n + dur); s.connect(fl); fl.connect(g); g.connect(AC.destination); s.start(n); s.stop(n + dur + .02); } catch(e){} }
+var SFX = {
+  tap:function(){ tone(620, .06, 'square', .04); },
+  tick:function(){ tone(1400, .04, 'square', .08, 900); tone(2200, .03, 'sine', .05); },
+  whoosh:function(){ noise(.28, .22, 600, 2400); },
+  boing:function(){ tone(160, .3, 'sine', .2, 720); tone(320, .2, 'triangle', .08, 1200, .03); },
+  thud:function(){ tone(95, .14, 'sine', .22, 45); noise(.08, .1, 300, 120); },
+  pop:function(){ noise(.3, .28, 1200, 200); tone(300, .35, 'sawtooth', .16, 50); },
+  win:function(){ var ns = [523, 659, 784, 1047]; for (var i = 0; i < ns.length; i++) tone(ns[i], i === 3 ? .5 : .16, 'triangle', .14, 0, i * .12); },
+  coin:function(){ tone(1100, .09, 'sine', .1, 1500); tone(1650, .12, 'sine', .08, 1700, .06); } };
+function vibrate(ms){ try { if (navigator.vibrate) navigator.vibrate(ms); } catch(e){} }
+
+/* ---------- rendering ---------- */
+var cv, ctx, BGS = {}, lastT = 0, acc = 0, NOW = 0;
+var FX = { shake:0, flash:0, parts:[], trail:[] };
+function mkCanvas(w, h){ var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function bgCanvas(hue){ if (BGS[hue]) return BGS[hue]; var c = mkCanvas(W, H), x = c.getContext('2d'), g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'hsl(' + hue + ',62%,52%)'); g.addColorStop(.5, 'hsl(' + ((hue + 350) % 360) + ',60%,44%)'); g.addColorStop(1, 'hsl(' + ((hue + 335) % 360) + ',64%,34%)'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.globalAlpha = .035; x.fillStyle = '#fff'; for (var i = 0; i < 9; i++){ var r = 50 + (i * 37) % 90; x.beginPath(); x.arc((i * 211 + 60) % W, (i * 137 + 40) % H, r, 0, 6.2832); x.fill(); } x.globalAlpha = 1; BGS[hue] = c; return c; }
+function rrect(c, x, y, w, h, r){ r = Math.min(r, w / 2, h / 2); c.beginPath(); c.moveTo(x + r, y); c.lineTo(x + w - r, y); c.quadraticCurveTo(x + w, y, x + w, y + r); c.lineTo(x + w, y + h - r); c.quadraticCurveTo(x + w, y + h, x + w - r, y + h); c.lineTo(x + r, y + h); c.quadraticCurveTo(x, y + h, x, y + h - r); c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y); c.closePath(); }
+function burst(x, y, col, n, sp){ for (var i = 0; i < n; i++){ var a = Math.random() * 6.2832, s = sp * (.3 + Math.random() * .7); FX.parts.push({ x:x, y:y, vx:Math.cos(a) * s, vy:Math.sin(a) * s - 100, r:2 + Math.random() * 4, col:col, life:.5 + Math.random() * .5, t:0 }); } }
+function updFX(dt){ var i; for (i = FX.parts.length - 1; i >= 0; i--){ var p = FX.parts[i]; p.t += dt; if (p.t > p.life){ FX.parts.splice(i, 1); continue; } p.vy += 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; } if (FX.shake > 0) FX.shake = Math.max(0, FX.shake - 3 * dt); if (FX.flash > 0) FX.flash = Math.max(0, FX.flash - 2.5 * dt); }
+/* head of each skin, drawn at radius r (facing +x) */
+function drawHead(c, x, y, r, sk, sq){ sq = sq || 0; c.save(); c.translate(x, y); c.scale(1 + .35 * sq, 1 - .3 * sq); var k = sk.kind, i;
+  function circ(cx, cy, rr, col){ c.fillStyle = col; c.beginPath(); c.arc(cx, cy, rr, 0, 6.2832); c.fill(); }
+  function eyes(dx, dy, rr, col){ circ(-r * .32 + (dx || 0), (dy || 0), rr || r * .13, col || '#1E1B2E'); circ(r * .32 + (dx || 0), (dy || 0), rr || r * .13, col || '#1E1B2E'); }
+  if (k === 'ball'){ circ(0, 0, r, sk.c1); c.globalAlpha = .55; circ(-r * .3, -r * .32, r * .28, sk.c2); c.globalAlpha = 1; }
+  else if (k === 'hamburger'){ c.fillStyle = '#F4A950'; c.beginPath(); c.arc(0, -r * .15, r, Math.PI, 0); c.closePath(); c.fill(); c.fillStyle = '#3CB043'; rrect(c, -r * 1.05, -r * .2, r * 2.1, r * .3, 4); c.fill(); c.fillStyle = '#7A3E12'; rrect(c, -r * .95, r * .05, r * 1.9, r * .38, 3); c.fill(); c.fillStyle = '#F9D14B'; rrect(c, -r * .9, r * .18, r * 1.8, r * .14, 2); c.fill(); c.fillStyle = '#E8953A'; rrect(c, -r, r * .4, r * 2, r * .5, 6); c.fill(); c.fillStyle = '#FFF1C0'; for (i = -2; i <= 2; i++) circ(i * r * .32, -r * .55 + (i % 2) * r * .15, r * .07, '#FFF1C0'); eyes(0, -r * .25, r * .11); }
+  else if (k === 'cactus'){ c.fillStyle = sk.c1; rrect(c, -r * .75, -r, r * 1.5, r * 2, r * .7); c.fill(); c.fillStyle = sk.c2; rrect(c, -r * .2, -r * .9, r * .18, r * 1.8, 3); c.fill(); rrect(c, -r * .6, -r * .5, r * .16, r * 1.1, 3); c.fill(); rrect(c, r * .35, -r * .6, r * .16, r * 1.2, 3); c.fill(); circ(r * .45, -r * .85, r * .22, '#FF5CB8'); circ(r * .45, -r * .85, r * .09, '#FFD23F'); eyes(0, -r * .1, r * .12); }
+  else if (k === 'dragon'){ c.fillStyle = sk.c1; c.beginPath(); c.moveTo(-r * .5, -r); c.lineTo(-r * .2, -r * .55); c.lineTo(-r * .75, -r * .6); c.closePath(); c.fill(); c.beginPath(); c.moveTo(r * .5, -r); c.lineTo(r * .2, -r * .55); c.lineTo(r * .75, -r * .6); c.closePath(); c.fill(); circ(0, 0, r, sk.c1); c.fillStyle = sk.c1; rrect(c, r * .3, -r * .1, r * .95, r * .7, r * .3); c.fill(); c.fillStyle = sk.c2; rrect(c, -r * .4, r * .25, r * .8, r * .55, r * .3); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.moveTo(r * .6, r * .5); c.lineTo(r * .7, r * .72); c.lineTo(r * .8, r * .5); c.closePath(); c.fill(); eyes(0, -r * .25, r * .14, '#FFD23F'); eyes(0, -r * .25, r * .07); circ(r * 1.05, r * .1, r * .07, '#1E1B2E'); }
+  else if (k === 'lemon'){ c.save(); c.scale(1.15, .9); circ(0, 0, r, sk.c1); c.restore(); c.globalAlpha = .5; circ(-r * .3, -r * .3, r * .3, '#FFF7B0'); c.globalAlpha = 1; c.fillStyle = sk.c2; c.beginPath(); c.ellipse(r * .55, -r * .95, r * .4, r * .18, -.6, 0, 6.2832); c.fill(); eyes(0, 0, r * .12); c.strokeStyle = '#1E1B2E'; c.lineWidth = 1.5; c.beginPath(); c.arc(0, r * .25, r * .3, .3, 2.84); c.stroke(); }
+  else if (k === 'robot'){ c.fillStyle = sk.c1; rrect(c, -r * .9, -r * .85, r * 1.8, r * 1.75, r * .25); c.fill(); c.fillStyle = '#7A8597'; rrect(c, -r * .8, -r * .75, r * 1.6, r * .25, 3); c.fill(); c.fillStyle = '#1E1B2E'; rrect(c, -r * .7, -r * .4, r * 1.4, r * .55, 4); c.fill(); eyes(0, -r * .12, r * .14, sk.c2); c.strokeStyle = sk.c1; c.lineWidth = 2; c.beginPath(); c.moveTo(0, -r * .85); c.lineTo(0, -r * 1.25); c.stroke(); circ(0, -r * 1.3, r * .14, '#FF4B4B'); c.fillStyle = '#5A6478'; for (i = -2; i <= 2; i++){ rrect(c, i * r * .3 - r * .08, r * .4, r * .16, r * .3, 1); c.fill(); } }
+  else if (k === 'ghost'){ c.fillStyle = sk.c1; c.beginPath(); c.arc(0, -r * .1, r, Math.PI, 0); c.lineTo(r, r * .8); for (i = 3; i >= -3; i--) c.lineTo(i * r / 3, r * .8 + ((i + 3) % 2 ? r * .2 : 0)); c.closePath(); c.fill(); eyes(0, -r * .1, r * .18, '#1E1B2E'); eyes(r * .05, -r * .15, r * .07, '#fff'); c.fillStyle = '#1E1B2E'; c.beginPath(); c.ellipse(0, r * .35, r * .14, r * .2, 0, 0, 6.2832); c.fill(); }
+  else if (k === 'ninja'){ circ(0, 0, r, sk.c1); c.fillStyle = '#F3C9A0'; rrect(c, -r * .85, -r * .35, r * 1.7, r * .5, r * .2); c.fill(); eyes(0, -r * .1, r * .11); c.strokeStyle = sk.c2; c.lineWidth = r * .18; c.beginPath(); c.moveTo(-r, -r * .5); c.lineTo(r * .9, -r * .55); c.stroke(); c.beginPath(); c.moveTo(-r * .9, -r * .5); c.lineTo(-r * 1.45, -r * .2); c.stroke(); }
+  else if (k === 'pirate'){ circ(0, 0, r, sk.c1); c.fillStyle = sk.c2; c.beginPath(); c.arc(0, 0, r, Math.PI, 0); c.closePath(); c.fill(); c.fillStyle = '#fff'; for (i = -1; i <= 1; i++) circ(i * r * .4, -r * .55, r * .08, '#fff'); c.fillStyle = sk.c2; c.beginPath(); c.moveTo(-r * .9, -r * .3); c.lineTo(-r * 1.5, r * .2); c.lineTo(-r * .8, 0); c.closePath(); c.fill(); c.strokeStyle = '#1E1B2E'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(-r, -r * .25); c.lineTo(r, 0); c.stroke(); circ(r * .35, -r * .05, r * .26, '#1E1B2E'); circ(-r * .32, 0, r * .12, '#1E1B2E'); c.strokeStyle = '#1E1B2E'; c.beginPath(); c.arc(0, r * .3, r * .3, .4, 2.7); c.stroke(); }
+  else if (k === 'alien'){ c.save(); c.scale(1, 1.1); circ(0, 0, r, sk.c1); c.restore(); c.fillStyle = sk.c2; c.beginPath(); c.ellipse(-r * .35, -r * .05, r * .22, r * .36, .3, 0, 6.2832); c.fill(); c.beginPath(); c.ellipse(r * .35, -r * .05, r * .22, r * .36, -.3, 0, 6.2832); c.fill(); c.strokeStyle = sk.c1; c.lineWidth = 2; c.beginPath(); c.moveTo(0, -r * 1.05); c.lineTo(0, -r * 1.4); c.stroke(); circ(0, -r * 1.45, r * .13, sk.c1); c.strokeStyle = '#1E1B2E'; c.lineWidth = 1.5; c.beginPath(); c.arc(0, r * .45, r * .2, .2, 2.9); c.stroke(); }
+  else if (k === 'cat'){ c.fillStyle = sk.c1; c.beginPath(); c.moveTo(-r * .9, -r * .4); c.lineTo(-r * .75, -r * 1.25); c.lineTo(-r * .2, -r * .85); c.closePath(); c.fill(); c.beginPath(); c.moveTo(r * .9, -r * .4); c.lineTo(r * .75, -r * 1.25); c.lineTo(r * .2, -r * .85); c.closePath(); c.fill(); circ(0, 0, r, sk.c1); c.fillStyle = sk.c2; c.beginPath(); c.ellipse(0, r * .35, r * .5, r * .4, 0, 0, 6.2832); c.fill(); eyes(0, -r * .15, r * .12); circ(0, r * .18, r * .1, '#FF8AA8'); c.strokeStyle = '#1E1B2E'; c.lineWidth = 1; for (i = -1; i <= 1; i += 2){ c.beginPath(); c.moveTo(i * r * .4, r * .3); c.lineTo(i * r * 1.1, r * .2); c.moveTo(i * r * .4, r * .42); c.lineTo(i * r * 1.1, r * .5); c.stroke(); } }
+  else if (k === 'panda'){ circ(-r * .7, -r * .7, r * .35, sk.c2); circ(r * .7, -r * .7, r * .35, sk.c2); circ(0, 0, r, sk.c1); c.beginPath(); c.ellipse(-r * .35, -r * .1, r * .28, r * .34, .4, 0, 6.2832); c.fillStyle = sk.c2; c.fill(); c.beginPath(); c.ellipse(r * .35, -r * .1, r * .28, r * .34, -.4, 0, 6.2832); c.fill(); eyes(0, -r * .12, r * .09, '#fff'); circ(0, r * .35, r * .14, sk.c2); }
+  else if (k === 'pumpkin'){ c.fillStyle = sk.c2; rrect(c, -r * .12, -r * 1.3, r * .24, r * .5, 3); c.fill(); c.save(); c.scale(1.1, .95); circ(0, 0, r, sk.c1); c.restore(); c.strokeStyle = 'rgba(0,0,0,.18)'; c.lineWidth = 2; for (i = -1; i <= 1; i++){ c.beginPath(); c.ellipse(0, 0, r * (.35 + Math.abs(i) * .35), r * .93, 0, 0, 6.2832); c.stroke(); } c.fillStyle = '#1E1B2E'; c.beginPath(); c.moveTo(-r * .5, -r * .1); c.lineTo(-r * .2, -r * .1); c.lineTo(-r * .35, -r * .4); c.closePath(); c.fill(); c.beginPath(); c.moveTo(r * .5, -r * .1); c.lineTo(r * .2, -r * .1); c.lineTo(r * .35, -r * .4); c.closePath(); c.fill(); c.beginPath(); c.moveTo(-r * .55, r * .25); c.lineTo(r * .55, r * .25); c.lineTo(r * .35, r * .55); c.lineTo(r * .15, r * .38); c.lineTo(-r * .15, r * .55); c.lineTo(-r * .35, r * .38); c.closePath(); c.fill(); }
+  else if (k === 'astronaut'){ circ(0, 0, r, sk.c1); c.fillStyle = sk.c2; rrect(c, -r * .7, -r * .55, r * 1.4, r * .95, r * .4); c.fill(); c.globalAlpha = .5; c.fillStyle = '#fff'; rrect(c, -r * .55, -r * .45, r * .5, r * .25, 4); c.fill(); c.globalAlpha = 1; c.strokeStyle = '#C7CBE8'; c.lineWidth = 2; c.beginPath(); c.arc(0, 0, r * .92, 0, 6.2832); c.stroke(); }
+  else if (k === 'unicorn'){ c.fillStyle = sk.c2; c.beginPath(); c.moveTo(-r * .2, -r * .75); c.lineTo(r * .15, -r * 1.75); c.lineTo(r * .35, -r * .7); c.closePath(); c.fill(); var mc = ['#FF5CB8', '#FFD23F', '#7EE8FF', '#8E44FF']; for (i = 0; i < 4; i++) circ(-r * (.55 + i * .2), -r * (.75 - i * .3), r * .28, mc[i]); circ(0, 0, r, sk.c1); c.fillStyle = '#FFC2EC'; c.beginPath(); c.ellipse(r * .55, r * .3, r * .45, r * .35, 0, 0, 6.2832); c.fill(); eyes(0, -r * .15, r * .12); circ(r * .1 - r * .32, -r * .2, r * .04, '#fff'); circ(r * .75, r * .25, r * .06, '#1E1B2E'); }
+  else { circ(0, 0, r, sk.c1); }
+  c.restore(); }
+/* ragdoll stickman following the velocity; returns the hand point of the rope arm */
+function drawStick(c, sx, sy, S, sk, now, hookPt){ var sp = Math.sqrt(S.vx * S.vx + S.vy * S.vy), bdx, bdy, k, m;
+  if (S.standing && sp < 60){ bdx = 0; bdy = 1; }
+  else { k = Math.min(1, sp / 700); var ux = -S.vx / (sp || 1), uy = -S.vy / (sp || 1); bdx = ux * k; bdy = uy * k + (1 - k); m = Math.sqrt(bdx * bdx + bdy * bdy) || 1; bdx /= m; bdy /= m; }
+  if (hookPt){ var rx = sx - hookPt.x, ry = sy - hookPt.y, rl = Math.sqrt(rx * rx + ry * ry) || 1; bdx = bdx * .35 + (rx / rl) * .65; bdy = bdy * .35 + (ry / rl) * .65; m = Math.sqrt(bdx * bdx + bdy * bdy) || 1; bdx /= m; bdy /= m; }
+  var BL = 30, base = Math.atan2(bdy, bdx), fl = Math.sin(now * 13) * .5 * Math.min(1, sp / 350), fl2 = Math.sin(now * 11 + 1.7) * .45 * Math.min(1, sp / 350);
+  var shx = sx + bdx * 9, shy = sy + bdy * 9, hx = sx + bdx * BL, hy = sy + bdy * BL, hand = null;
+  c.strokeStyle = sk.limb; c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = 4.2;
+  c.beginPath(); c.moveTo(shx, shy); c.lineTo(hx, hy); c.stroke();
+  function limb(x, y, a1, l1, a2, l2){ var ex = x + Math.cos(a1) * l1, ey = y + Math.sin(a1) * l1, fx = ex + Math.cos(a2) * l2, fy = ey + Math.sin(a2) * l2; c.beginPath(); c.moveTo(x, y); c.lineTo(ex, ey); c.lineTo(fx, fy); c.stroke(); return { x:fx, y:fy }; }
+  if (S.standing && sp < 60){ limb(hx, hy, Math.PI / 2 + .25, 14, Math.PI / 2 + .1, 13); limb(hx, hy, Math.PI / 2 - .25, 14, Math.PI / 2 - .1, 13); limb(shx, shy, Math.PI / 2 + .55, 12, Math.PI / 2 + .3, 11); limb(shx, shy, Math.PI / 2 - .55, 12, Math.PI / 2 - .3, 11); }
+  else { limb(hx, hy, base + .45 + fl, 14, base + .2 + fl * 1.5, 13); limb(hx, hy, base - .45 + fl2, 14, base - .2 + fl2 * 1.5, 13);
+    if (hookPt){ var ha = Math.atan2(hookPt.y - shy, hookPt.x - shx); hand = limb(shx, shy, ha, 12, ha, 11); limb(shx, shy, base + .9 - fl2, 12, base + .6 - fl2, 11); }
+    else { limb(shx, shy, base + .95 + fl2, 12, base + .7 + fl2 * 1.4, 11); limb(shx, shy, base - .95 + fl, 12, base - .7 + fl * 1.4, 11); } }
+  drawHead(c, sx, sy, 15, sk, S.squash);
+  return hand; }
+function render(){ var S = G.S; if (!S || !ctx) return; var L = S.L, c = ctx, i, sk = skinById(G.skin), camx = G.cam.x, camy = G.cam.y;
+  if (FX.shake > 0){ camx += (Math.random() - .5) * 14 * FX.shake; camy += (Math.random() - .5) * 14 * FX.shake; }
+  c.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+  c.drawImage(bgCanvas(L.hue), 0, 0);
+  var dz = L.deathY - camy; if (dz < H){ var g = c.createLinearGradient(0, dz - 60, 0, dz + 160); g.addColorStop(0, 'rgba(10,5,25,0)'); g.addColorStop(1, 'rgba(10,5,25,.75)'); c.fillStyle = g; c.fillRect(0, Math.max(0, dz - 60), W, H); }
+  c.save(); c.translate(-camx, -camy);
+  /* blocks */
+  for (i = 0; i < L.blocks.length; i++){ var b = L.blocks[i]; if (b.x + b.w < camx - 20 || b.x > camx + W + 20 || b.y > camy + H + 20 || b.y + b.h < camy - 20) continue; c.fillStyle = '#17151F'; rrect(c, b.x, b.y, b.w, Math.min(b.h, camy + H + 60 - b.y), 10); c.fill(); c.strokeStyle = 'rgba(255,255,255,.14)'; c.lineWidth = 2; c.beginPath(); c.moveTo(b.x + 10, b.y + 1.5); c.lineTo(b.x + b.w - 10, b.y + 1.5); c.stroke(); }
+  /* spikes */
+  c.fillStyle = '#F4F1FF'; for (i = 0; i < L.spikes.length; i++){ var s = L.spikes[i]; if (s.x + s.w < camx || s.x > camx + W) continue; var n = Math.max(1, Math.round(s.w / 14)), sw = s.w / n; c.beginPath(); for (var j = 0; j < n; j++){ c.moveTo(s.x + j * sw, s.y + s.h); c.lineTo(s.x + j * sw + sw / 2, s.y); c.lineTo(s.x + (j + 1) * sw, s.y + s.h); } c.closePath(); c.fill(); }
+  /* pads */
+  for (i = 0; i < L.pads.length; i++){ var p = L.pads[i]; if (p.x + p.w < camx || p.x > camx + W) continue; c.fillStyle = '#2B2838'; rrect(c, p.x - 4, p.y + 4, p.w + 8, p.h + 4, 4); c.fill(); c.fillStyle = p.dir === 'fwd' ? '#7EE8FF' : '#FFD23F'; rrect(c, p.x, p.y, p.w, 9, 4); c.fill(); c.strokeStyle = '#17151F'; c.lineWidth = 2; c.beginPath(); if (p.dir === 'fwd'){ c.moveTo(p.x + p.w * .35, p.y + 2); c.lineTo(p.x + p.w * .5, p.y + 4.5); c.lineTo(p.x + p.w * .35, p.y + 7); c.moveTo(p.x + p.w * .55, p.y + 2); c.lineTo(p.x + p.w * .7, p.y + 4.5); c.lineTo(p.x + p.w * .55, p.y + 7); } else { c.moveTo(p.x + p.w * .4, p.y + 7); c.lineTo(p.x + p.w * .5, p.y + 2); c.lineTo(p.x + p.w * .6, p.y + 7); } c.stroke(); }
+  /* finish line: black & white checkers */
+  var f = L.finish; if (f.x + 30 > camx && f.x - 30 < camx + W){ var sq = 12, cols = 2, rows = Math.round(f.h / sq); for (i = 0; i < rows; i++) for (var q = 0; q < cols; q++){ c.fillStyle = (i + q) % 2 ? '#F7F7FF' : '#17151F'; c.fillRect(f.x - sq + q * sq, f.y + i * sq, sq, sq); } c.fillStyle = '#17151F'; c.fillRect(f.x - 3, f.y - 16, 6, 16); c.fillStyle = '#FF4B4B'; c.beginPath(); c.moveTo(f.x + 3, f.y - 16); c.lineTo(f.x + 28, f.y - 9); c.lineTo(f.x + 3, f.y - 2); c.closePath(); c.fill(); }
+  /* hooks: node + dashed grab radius */
+  for (i = 0; i < L.hooks.length; i++){ var h = L.hooks[i]; if (h.x + h.r < camx || h.x - h.r > camx + W) continue; var on = S.hook === i; c.setLineDash([7, 7]); c.lineWidth = on ? 2 : 1.5; c.strokeStyle = on ? 'rgba(255,255,255,.75)' : 'rgba(255,255,255,.32)'; c.beginPath(); c.arc(h.x, h.y, h.r, 0, 6.2832); c.stroke(); c.setLineDash([]); c.fillStyle = '#C9CBD6'; c.beginPath(); c.arc(h.x, h.y, 9, 0, 6.2832); c.fill(); c.fillStyle = '#6B6E80'; c.beginPath(); c.arc(h.x, h.y, 4, 0, 6.2832); c.fill(); }
+  /* speed trail */
+  var tr = FX.trail; if (tr.length > 2){ c.lineCap = 'round'; c.lineJoin = 'round'; for (i = 1; i < tr.length; i++){ var a = i / tr.length; c.strokeStyle = 'rgba(150,230,255,' + (a * .55).toFixed(2) + ')'; c.lineWidth = 2 + a * 9; c.beginPath(); c.moveTo(tr[i - 1].x, tr[i - 1].y); c.lineTo(tr[i].x, tr[i].y); c.stroke(); } }
+  /* rope + stickman */
+  var hp = S.hook >= 0 ? L.hooks[S.hook] : null;
+  if (!S.dead){ var hand = drawStick(c, S.x, S.y, S, sk, NOW, hp); if (hp && hand){ c.strokeStyle = 'rgba(255,255,255,.92)'; c.lineWidth = 2; c.beginPath(); c.moveTo(hand.x, hand.y); c.lineTo(hp.x, hp.y); c.stroke(); } }
+  /* particles */
+  for (i = 0; i < FX.parts.length; i++){ var pt = FX.parts[i]; c.globalAlpha = 1 - pt.t / pt.life; c.fillStyle = pt.col; c.beginPath(); c.arc(pt.x, pt.y, pt.r, 0, 6.2832); c.fill(); } c.globalAlpha = 1;
+  c.restore();
+  /* progress bar: level ——●—— next */
+  var x0 = W * .33, x1 = W * .67, y0 = 30, fr = clamp((S.x - L.startX) / (L.finish.x - L.startX), 0, 1);
+  c.strokeStyle = 'rgba(255,255,255,.35)'; c.lineWidth = 5; c.lineCap = 'round'; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y0); c.stroke(); c.strokeStyle = 'rgba(255,255,255,.95)'; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0 + (x1 - x0) * fr, y0); c.stroke();
+  c.fillStyle = '#fff'; c.font = '900 22px ' + '"Varela Round",Arial,sans-serif'; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(String(G.level), x0 - 14, y0 + 1); c.textAlign = 'left'; c.fillText(String(Math.min(NLV, G.level + 1)), x1 + 14, y0 + 1);
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(x0 + (x1 - x0) * fr, y0, 11, 0, 6.2832); c.fill(); drawHead(c, x0 + (x1 - x0) * fr, y0, 8, sk, 0);
+  if (S.t < 2 && S.standing && !G.auto && S.hook < 0){ c.fillStyle = 'rgba(255,255,255,' + (.6 + .4 * Math.sin(NOW * 5)).toFixed(2) + ')'; c.font = '900 24px "Varela Round",Arial,sans-serif'; c.textAlign = 'center'; c.fillText(t('tapToStart'), W / 2, H * .72); }
+  if (FX.flash > 0){ c.fillStyle = 'rgba(255,255,255,' + (FX.flash * .5).toFixed(2) + ')'; c.fillRect(0, 0, W, H); }
+  if (G.mode === 'grapple'){ c.fillStyle = 'rgba(255,255,255,.8)'; c.font = '900 16px "Varela Round",Arial,sans-serif'; c.textAlign = 'center'; c.fillText('⚡ ' + t('grapple'), W / 2, 58); } }
+
+/* ---------- game flow ---------- */
+function fit(){ if (!cv) return; var vw = window.innerWidth, vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight, k = Math.min(vw / W, vh / H), dpr = Math.min(2, window.devicePixelRatio || 1), st = $('stage');
+  G.k = k; st.style.width = Math.round(W * k) + 'px'; st.style.height = Math.round(H * k) + 'px'; var bw = Math.round(W * k * dpr), bh = Math.round(H * k * dpr); if (cv.width !== bw || cv.height !== bh){ cv.width = bw; cv.height = bh; }
+  document.body.classList.toggle('portrait', vh > vw * 1.15); if (G.S && G.screen === 's-game') render(); }
+function show(id){ document.querySelectorAll('.screen').forEach(function(e){ e.classList.toggle('on', e.id === id); }); G.screen = id; document.body.classList.toggle('ingame', id === 's-game');
+  if (id === 's-game') fit(); else { G.hold = false; G.paused = false; $('ov').classList.remove('on'); }
+  if (id === 's-menu') renderMenu(); else if (id === 's-skins') renderSkins(); window.scrollTo(0, 0); }
+function camReset(S){ G.cam.x = S.x - W * .4; G.cam.y = S.y - H * .56; }
+function start(mode, n){ G.mode = mode === 'grapple' ? 'grapple' : 'classic'; n = clamp(n | 0 || 1, 1, NLV); G.level = n; var L = genLevel(n);
+  G.S = newRun(L, G.mode); G.deaths = 0; G.overT = -1; G.frozen = false; G.paused = false; FX.parts.length = 0; FX.trail.length = 0; FX.shake = 0; FX.flash = 0; camReset(G.S); $('ov').classList.remove('on'); show('s-game'); hud(); render(); }
+function restart(){ if (!G.S) return; G.S = newRun(G.S.L, G.mode); G.overT = -1; G.frozen = false; G.paused = false; FX.trail.length = 0; FX.shake = 0; FX.flash = 0; camReset(G.S); $('ov').classList.remove('on'); hud(); }
+function camUpdate(S, dt){ var tx = S.x + clamp(S.vx * .28, -100, 280) - W * .4, ty = S.y + clamp(S.vy * .12, -70, 120) - H * .56; ty = Math.min(ty, S.L.deathY - H + 70); var k = 1 - Math.exp(-5 * dt); G.cam.x += (tx - G.cam.x) * k; G.cam.y += (ty - G.cam.y) * k; }
+function tick(dt){ var S = G.S; if (!S || G.paused) return;
+  if (G.overT >= 0){ G.overT -= dt; if (G.overT < 0){ G.overT = -1; afterOver(); } return; }
+  if (S.over && !S.won) return;
+  var hold = G.auto ? autoInput(S) : G.hold; step(S, hold, dt); camUpdate(S, dt);
+  var sp = Math.sqrt(S.vx * S.vx + S.vy * S.vy); if (sp > 220 && !S.dead){ FX.trail.push({ x:S.x, y:S.y }); } else if (FX.trail.length) FX.trail.shift(); if (FX.trail.length > 14) FX.trail.shift();
+  handleEvents(); }
+function handleEvents(){ var S = G.S; if (!S) return; var ev = S.ev, i, sk = skinById(G.skin); S.ev = [];
+  for (i = 0; i < ev.length; i++){ var e = ev[i];
+    if (e === 'attach') SFX.tick();
+    else if (e === 'release') SFX.whoosh();
+    else if (e === 'pad'){ SFX.boing(); burst(S.x, S.y + PR, '#FFD23F', 8, 180); }
+    else if (e === 'thud'){ SFX.thud(); FX.shake = Math.max(FX.shake, .35); burst(S.x, S.y, '#fff', 5, 140); }
+    else if (e === 'land'){ SFX.thud(); }
+    else if (e === 'die'){ SFX.pop(); vibrate(50); burst(S.x, Math.min(S.y, S.L.deathY + 10), sk.c1, 18, 360); burst(S.x, Math.min(S.y, S.L.deathY + 10), '#fff', 8, 240); FX.shake = .8; FX.flash = .7; G.deaths++; G.streak = 0; save(); G.overT = .45; }
+    else if (e === 'win') finishLevel(); }
+  hud(); }
+function afterOver(){ var S = G.S; if (!S) return; if (S.dead){ G.S = newRun(S.L, G.mode); FX.flash = 0; FX.trail.length = 0; camReset(G.S); hud(); } }
+function finishLevel(){ var S = G.S, n = G.level, flawless = G.deaths === 0, before = nextClassicSkin(); SFX.win(); burst(S.x, S.y, '#fff', 24, 320); burst(S.x, S.y, '#FFD23F', 18, 260);
+  var earned = flawless ? 10 : 5; G.coins += earned; G.streak++; G.bestStreak = Math.max(G.bestStreak, G.streak);
+  if (G.mode === 'classic'){ if (n === G.classicLevel) G.classicLevel = Math.min(NLV, n + 1); } else if (n === G.grappleLevel) G.grappleLevel = Math.min(NLV, n + 1);
+  var after = nextClassicSkin(), unlocked = before && (!after || after.id !== before.id) ? before : null; save();
+  showPanel('done', { earned:earned, flawless:flawless, unlocked:unlocked }); }
+function skinCanvas(sk, px){ var c = mkCanvas(px * 2, px * 2), x = c.getContext('2d'); x.scale(2, 2); drawHead(x, px * .5, px * .5 + 2, px * .3, sk, 0); return c; }
+function showPanel(kind, d){ var p = $('panel'), h = ''; d = d || {};
+  if (kind === 'done'){ var pr = skinProgress(); h = '<h3>' + t('done1', { n:G.level }) + '</h3><p>' + t('coinsEarned', { n:d.earned }) + (d.flawless ? ' · ' + t('flawless') : '') + (G.level === NLV ? '<br>' + t('allDone') : '') + '</p>';
+    if (d.unlocked) h += '<p style="color:var(--gold)">' + t('skinUnlocked', { n:d.unlocked[G.lang] }) + '</p>';
+    if (pr) h += '<div class="skp"><canvas id="skp-cv" width="88" height="88"></canvas><div class="pt"><div>' + t('nextSkin', { n:pr.skin[G.lang] }) + ' · ' + pr.have + '/' + pr.need + '</div><div class="bar"><i id="skp-bar" style="width:' + Math.round(pr.frac * 100) + '%"></i></div></div></div>';
+    h += '<div class="btns">' + (G.level < NLV ? '<button id="p-next">' + t('next') + '</button>' : '') + '<button id="p-again" class="alt">' + t('again') + '</button><button id="p-menu" class="alt">' + t('menu') + '</button></div>'; }
+  else if (kind === 'pause'){ h = '<h3>' + t('paused') + '</h3><p>' + t('level', { n:G.level }) + (G.mode === 'grapple' ? ' · ⚡ ' + t('grapple') : '') + '</p><div class="btns"><button id="p-resume">' + t('resume') + '</button><button id="p-again" class="alt">' + t('again') + '</button><button id="p-menu" class="alt">' + t('menu') + '</button></div>'; }
+  p.innerHTML = h; $('ov').classList.add('on'); p.setAttribute('dir', G.lang === 'en' ? 'ltr' : 'rtl');
+  var b, sc = $('skp-cv'); if (sc && kind === 'done'){ var pr2 = skinProgress(); if (pr2) sc.getContext('2d').drawImage(skinCanvas(pr2.skin, 44), 0, 0); }
+  if ((b = $('p-next'))) b.onclick = function(){ SFX.tap(); start(G.mode, G.level + 1); }; if ((b = $('p-again'))) b.onclick = function(){ SFX.tap(); restart(); }; if ((b = $('p-menu'))) b.onclick = function(){ SFX.tap(); show('s-menu'); }; if ((b = $('p-resume'))) b.onclick = function(){ SFX.tap(); togglePause(false); }; }
+function togglePause(on){ if (!G.S || G.S.over) return; on = on == null ? !G.paused : !!on; G.paused = on; G.hold = false; if (on) showPanel('pause'); else $('ov').classList.remove('on'); }
+var hudCache = '';
+function hud(){ var S = G.S; if (!S) return; var l = t('level', { n:G.level }), r = '🪙 ' + G.coins; var key = l + '|' + r; if (key !== hudCache){ hudCache = key; $('hud-l').textContent = l; $('hud-r').textContent = r; } }
+function frame(now){ var dt = Math.min(.1, (now - lastT) / 1000); lastT = now; NOW = now / 1000;
+  if (G.screen === 's-game' && G.S && !G.frozen && !document.hidden){ acc += dt; var n = 0; while (acc >= DT && n < 4){ tick(DT); acc -= DT; n++; } if (n === 4) acc = 0; updFX(dt); render(); }
+  requestAnimationFrame(frame); }
+
+/* ---------- menus ---------- */
+function renderMenu(){ $('st-done').textContent = '✔ ' + t('done', { n:levelsDone() }); $('st-streak').textContent = '🔥 ' + t('streak', { n:G.bestStreak }); $('st-coins').textContent = '🪙 ' + G.coins;
+  $('b-play').textContent = t('cont', { n:G.classicLevel });
+  var cg = $('c-grapple'); cg.classList.toggle('locked', !canGrapple()); cg.classList.toggle('open', canGrapple());
+  $('c-classic-sub').textContent = t('classicSub', { n:G.classicLevel });
+  $('c-grapple-sub').innerHTML = canGrapple() ? t('grappleSub', { n:G.grappleLevel }) : '<span class="lock">🔒 ' + t('lockGrapple') + '</span>';
+  var wk = weeklySkin(), own = skinUnlocked(wk), wc = $('wk-cv'); wc.getContext('2d').clearRect(0, 0, 128, 128); wc.getContext('2d').drawImage(skinCanvas(wk, 64), 0, 0);
+  $('wk-title').textContent = t('weekly'); $('wk-name').textContent = wk[G.lang]; $('wk-price').innerHTML = own ? (G.skin === wk.id ? t('equipped') : '✓') : '<s>🪙' + wk.price + '</s> 🪙' + skinPrice(wk) + ' · ' + t('half');
+  var wb = $('wk-btn'); wb.textContent = own ? (G.skin === wk.id ? t('equipped') : t('equip')) : t('buy'); wb.className = own ? 'own' : ''; wb.disabled = own && G.skin === wk.id;
+  wb.onclick = function(){ SFX.tap(); if (own){ equipSkin(wk.id); } else if (buySkin(wk.id)){ equipSkin(wk.id); toast(t('bought', { n:wk[G.lang] })); SFX.coin(); } else toast(t('noCoins')); renderMenu(); };
+  var row = $('skin-row'); row.innerHTML = ''; SKINS.forEach(function(sk){ var b = document.createElement('button'); b.className = 'chip' + (sk.id === G.skin ? ' eq' : ''); b.appendChild(skinCanvas(sk, 48)); var pr = document.createElement('span'); var o = skinUnlocked(sk); pr.className = 'pr' + (o ? ' own' : ''); pr.textContent = o ? (sk.id === G.skin ? '✓' : sk[G.lang]) : (sk.price ? '🪙' + skinPrice(sk) : '🔒' + sk.lvl); b.appendChild(pr); b.title = sk[G.lang]; b.onclick = function(){ SFX.tap(); if (o){ equipSkin(sk.id); renderMenu(); } else show('s-skins'); }; row.appendChild(b); }); }
+function renderSkins(){ var grid = $('sk-grid'); grid.innerHTML = ''; $('sk-coins').textContent = '🪙 ' + G.coins; var wk = weeklySkin();
+  SKINS.forEach(function(sk){ var d = document.createElement('div'), own = skinUnlocked(sk), eq = sk.id === G.skin, isWk = sk.id === wk.id; d.className = 'sk' + (eq ? ' eq' : '') + (isWk && !own ? ' wk' : ''); d.appendChild(skinCanvas(sk, 72)); var nm = document.createElement('b'); nm.textContent = sk[G.lang]; d.appendChild(nm); var pr = document.createElement('span'); pr.className = 'pr';
+    if (own) pr.textContent = eq ? t('equipped') : (sk.price ? '✓' : t('free')); else if (sk.price) pr.innerHTML = isWk ? '<s>🪙' + sk.price + '</s>🪙' + skinPrice(sk) : '🪙 ' + sk.price; else pr.textContent = '🔒 ' + t('lockLvl', { n:sk.lvl }); d.appendChild(pr);
+    var b = document.createElement('button'); b.textContent = own ? (eq ? t('equipped') : t('equip')) : (sk.price ? t('buy') : t('locked')); b.className = eq ? 'eq' : own ? 'own' : ''; b.disabled = eq || (!own && (!sk.price || G.coins < skinPrice(sk)));
+    b.onclick = function(){ SFX.tap(); if (own){ equipSkin(sk.id); } else if (sk.price && buySkin(sk.id)){ equipSkin(sk.id); toast(t('bought', { n:sk[G.lang] })); SFX.coin(); } else toast(t('noCoins')); renderSkins(); }; d.appendChild(b); grid.appendChild(d); }); }
+var toastT = null; function toast(msg){ var e = $('toast'); e.textContent = msg; e.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function(){ e.classList.remove('on'); }, 1600); }
+function setLang(l){ G.lang = l === 'en' ? 'en' : 'he'; document.documentElement.lang = G.lang; document.documentElement.dir = G.lang === 'en' ? 'ltr' : 'rtl';
+  $('b-lang').textContent = G.lang === 'en' ? 'עב' : 'EN';
+  document.querySelectorAll('[data-t]').forEach(function(e){ e.textContent = t(e.getAttribute('data-t')); });
+  document.title = G.lang === 'en' ? 'Stickman Hook 🪝 – stickman on a rope, 500 levels (like Stickman Hook) – Lupu\'s game' : 'סטיקמן הוק 🪝 – איש מקל על חבל, 500 שלבים (כמו Stickman Hook) – המשחק של לופו';
+  hudCache = ''; if (G.screen === 's-game'){ hud(); if (G.S) render(); } else show(G.screen); save(); }
+function setMute(m){ G.mute = !!m; ['b-sound', 'b-mute2'].forEach(function(id){ $(id).textContent = G.mute ? '🔇' : '🔊'; }); save(); }
+function onKey(e){ var c = e.code; if (G.screen === 's-game'){
+    if (c === 'Space' || c === 'ArrowUp' || c === 'KeyW'){ e.preventDefault(); if (!e.repeat){ if ($('ov').classList.contains('on') && $('p-next')){ $('p-next').click(); return; } if (G.paused) return; G.hold = true; ac(); } }
+    else if (c === 'Enter'){ if ($('p-next')){ e.preventDefault(); $('p-next').click(); } else if (G.paused) togglePause(false); }
+    else if (c === 'KeyR'){ e.preventDefault(); if (!e.repeat){ SFX.tap(); restart(); } }
+    else if (c === 'KeyP'){ e.preventDefault(); if (!e.repeat) togglePause(); }
+    else if (c === 'Escape'){ e.preventDefault(); if (G.S && G.S.won) show('s-menu'); else togglePause(); } }
+  else if (G.screen === 's-menu' && (c === 'Enter' || c === 'Space')){ e.preventDefault(); $('b-play').click(); }
+  else if (G.screen === 's-skins' && c === 'Escape'){ show('s-menu'); } }
+function onKeyUp(e){ var c = e.code; if (c === 'Space' || c === 'ArrowUp' || c === 'KeyW') G.hold = false; }
+function bind(){ cv = $('cv'); ctx = cv.getContext('2d');
+  var sg = $('s-game'); sg.addEventListener('pointerdown', function(e){ if (e.target.closest('button') || e.target.closest('.panel')) return; e.preventDefault(); ac(); if (!G.paused) G.hold = true; });
+  document.addEventListener('pointerup', function(){ G.hold = false; }); document.addEventListener('pointercancel', function(){ G.hold = false; }); window.addEventListener('blur', function(){ G.hold = false; });
+  sg.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  document.addEventListener('keydown', function(e){ onKey(e); }); document.addEventListener('keyup', onKeyUp);
+  window.addEventListener('resize', fit); window.addEventListener('orientationchange', function(){ setTimeout(fit, 150); }); if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+  document.addEventListener('pointerdown', function(){ ac(); }, { once:true });
+  document.addEventListener('visibilitychange', function(){ if (document.hidden && G.screen === 's-game' && G.S && !G.S.over && !G.auto) togglePause(true); });
+  $('b-play').onclick = function(){ SFX.tap(); start('classic', G.classicLevel); };
+  $('c-classic').onclick = function(){ SFX.tap(); start('classic', G.classicLevel); };
+  $('c-grapple').onclick = function(){ SFX.tap(); if (canGrapple()) start('grapple', G.grappleLevel); else toast('🔒 ' + t('lockGrapple')); };
+  $('b-skins').onclick = function(){ SFX.tap(); show('s-skins'); }; $('b-sk-back').onclick = function(){ SFX.tap(); show('s-menu'); };
+  $('b-home2').onclick = function(){ SFX.tap(); show('s-menu'); }; $('b-restart').onclick = function(){ SFX.tap(); restart(); }; $('b-pause').onclick = function(){ SFX.tap(); togglePause(); };
+  $('b-lang').onclick = function(){ SFX.tap(); setLang(G.lang === 'he' ? 'en' : 'he'); };
+  $('b-sound').onclick = $('b-mute2').onclick = function(){ setMute(!G.mute); SFX.tap(); }; }
+function runAuto(mode, n, secs, untilSwing){ G.auto = true; start(mode, n); var S = G.S, k = 0, max = Math.round(secs * HZ); while (k++ < max){ tick(DT); S = G.S; if (untilSwing && S.hook >= 1 && S.t - S.attachT > .2 && S.vx > 250 && S.vy < -60 && S.x > S.L.hooks[S.hook].x - 30) break; } for (var q = 0; q < 8; q++) updFX(1 / 60); G.frozen = true; render(); }
+function init(){ load(); bind(); setMute(G.mute); setLang(G.lang);
+  var h = location.hash.replace(/-en$/, ''), mm; if (/-en$/.test(location.hash)) setLang('en');
+  if (h === '#auto') runAuto('classic', 1, 6, true);
+  else if ((mm = /^#auto(\d+)(?:x(\d+))?$/.exec(h))){ var n = clamp(+mm[1], 1, NLV); G.classicLevel = Math.max(G.classicLevel, n); if (mm[2]) runAuto('classic', n, +mm[2], false); else runAuto('classic', n, 2.6, true); }
+  else if (h === '#auto-grapple'){ G.classicLevel = Math.max(G.classicLevel, GRAPPLE_AT + 1); runAuto('grapple', 1, 6, true); }
+  else if (h === '#auto-win'){ G.auto = true; start('classic', 1); var k = 0; while (!G.S.won && k++ < HZ * 40){ tick(DT); if (G.overT >= 0){ G.overT = -1; afterOver(); } } for (var j = 0; j < 20; j++){ tick(DT); updFX(1 / 60); } G.frozen = true; render(); }
+  else if (h === '#auto-skins'){ G.coins = Math.max(G.coins, 350); G.classicLevel = Math.max(G.classicLevel, 10); if (G.owned.indexOf('dragon') < 0) G.owned.push('dragon'); show('s-skins'); }
+  else if ((mm = /^#sim(\d+)(g?)(?:s(\d+))?$/.exec(h))){ var SL = build(+mm[1], mm[3] ? +mm[3] : 0), SS = newRun(SL, mm[2] ? 'grapple' : 'classic'), rows = [], si = 0; while (!SS.over && si < 900){ var hh = autoInput(SS); step(SS, hh, DT); if (si % 5 === 0 || SS.ev.length) rows.push(si + ':' + (hh ? 'H' : '-') + ' x' + SS.x.toFixed(0) + ' y' + SS.y.toFixed(0) + ' v' + SS.vx.toFixed(0) + ',' + SS.vy.toFixed(0) + ' hk' + SS.hook + (SS.standing ? ' st' : '') + ' r' + SS.rope.toFixed(0) + (SS.ev.length ? ' [' + SS.ev.join(',') + ']' : '')); SS.ev.length = 0; si++; } var pre2 = $('test-log'); pre2.removeAttribute('class'); pre2.textContent = 'hooks=' + JSON.stringify(SL.hooks.map(function(q){ return [Math.round(q.x), Math.round(q.y), Math.round(q.r)]; })) + ' blocks=' + JSON.stringify(SL.blocks) + ' finish=' + Math.round(SL.finish.x) + '\n' + rows.join('\n'); }
+  else if ((mm = /^#bench(\d+)-(\d+)$/.exec(h))){ var a0 = +mm[1], b0 = +mm[2], out = [], tb = performance.now(), bad = [], hist = [0, 0, 0, 0, 0], mxT = 0, mxTG = 0, sumTr = 0; for (var bi = a0; bi <= b0; bi++){ var BL = genLevel(bi); sumTr += BL.tries; if (BL.unsolved) bad.push(bi); hist[BL.tries <= 1 ? 0 : BL.tries <= 3 ? 1 : BL.tries <= 10 ? 2 : BL.tries <= 30 ? 3 : 4]++; mxT = Math.max(mxT, BL.simT || 0); mxTG = Math.max(mxTG, BL.simTG || 0); out.push(bi + ':' + BL.tries + (BL.unsolved ? 'X' : '') + ':' + (BL.simT ? BL.simT.toFixed(1) : '-') + '/' + (BL.simTG ? BL.simTG.toFixed(1) : '-') + ':' + BL.kinds.join('')); } var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = 'ms=' + Math.round(performance.now() - tb) + ' unsolved=' + bad.join(',') + ' tries[1,2-3,4-10,11-30,31+]=' + hist.join('/') + ' avgTries=' + (sumTr / (b0 - a0 + 1)).toFixed(1) + ' maxT=' + mxT.toFixed(1) + ' maxTG=' + mxTG.toFixed(1) + (b0 - a0 < 60 ? ' ' + out.join(' ') : ''); }
+  else if (h === '#auto-menu'){ G.classicLevel = Math.max(G.classicLevel, 37); G.coins = Math.max(G.coins, 120); G.bestStreak = Math.max(G.bestStreak, 5); show('s-menu'); }
+  requestAnimationFrame(function(now){ lastT = now; requestAnimationFrame(frame); }); }
+window.HK = { genLevel:genLevel, build:build, newRun:newRun, step:step, findHook:findHook, autoInput:autoInput, simulate:simulate, show:show, start:start, restart:restart, setLang:setLang, setMute:setMute, save:save, load:load, buySkin:buySkin, equipSkin:equipSkin, skinUnlocked:skinUnlocked, ownedSkins:ownedSkins, skinProgress:skinProgress, weeklySkin:weeklySkin, skinPrice:skinPrice, canGrapple:canGrapple, levelsDone:levelsDone,
+  onKey:onKey, onKeyUp:onKeyUp, tick:tick, handleEvents:handleEvents, afterOver:afterOver, finishLevel:finishLevel, togglePause:togglePause, render:render, fit:fit, renderMenu:renderMenu, renderSkins:renderSkins, drawHead:drawHead,
+  SKINS:SKINS, FUN:FUN, CLASSIC:CLASSIC, G:G, T:T, t:t, FX:FX, NLV:NLV, GRAV:GRAV, PR:PR, DT:DT, HZ:HZ, PADV:PADV, DEATHY:DEATHY, GRAPPLE_AT:GRAPPLE_AT, mkRng:mkRng, LCACHE:LCACHE };
+if (TEST){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } } else init();
+
+/* ---------- tests (#test) ---------- */
+if (TEST){
+  (function(){
+    var log = [], errs = ERRS;
+    function ok(name, cond, info){ log.push([name, cond ? 'PASS' : 'FAIL']); if (!cond) errs.push(name + (info !== undefined ? ': ' + info : '')); }
+    function done(){ var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = JSON.stringify({ errs:errs, log:log }); }
+    function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+    (async function(){
+      try {
+        var I = window.HK, i, n, S, L, L1; G.mute = true;
+        try { localStorage.removeItem(KEY); } catch(e){}
+        ok('viewport ' + window.innerWidth + 'x' + window.innerHeight, true);
+        /* --- generator --- */
+        L1 = I.genLevel(1); var L1b = I.build(1, L1.seed);
+        ok('genLevel(1) is deterministic (same seed → identical geometry) and cached', JSON.stringify(L1.hooks) === JSON.stringify(L1b.hooks) && JSON.stringify(L1.blocks) === JSON.stringify(L1b.blocks) && I.genLevel(1) === L1);
+        ok('different levels have different geometry and hues', JSON.stringify(I.genLevel(7).hooks) !== JSON.stringify(I.genLevel(8).hooks) && I.genLevel(1).hue !== I.genLevel(2).hue);
+        ok('level 1: start block under the player, ≥ 5 hooks sorted by x inside the band, finish after the last hook', L1.blocks[0].x < 0 && L1.blocks[0].y === 0 && L1.hooks.length >= 5 && L1.hooks.every(function(h, j){ return (j === 0 || h.x > L1.hooks[j - 1].x) && h.y >= YMIN && h.y <= YMAX && h.r > 100; }) && L1.finish.x > L1.hooks[L1.hooks.length - 1].x, L1.hooks.length);
+        ok('level 1: first hook is within grab range from the start, no hazards (spikes/walls/ceilings) in levels 1–3', (function(){ var h = L1.hooks[0]; return Math.hypot(h.x - L1.startX, h.y - L1.startY) <= h.r; })() && [1, 2, 3].every(function(k){ var l = I.genLevel(k); return l.spikes.length === 0 && !l.kinds.some(function(q){ return q === 'wall' || q === 'ceil' || q === 'corr' || q === 'spike'; }); }));
+        var L500 = I.genLevel(500), L250 = I.genLevel(250);
+        ok('difficulty ramps: level 500 is longer with more hooks and a smaller grab radius than level 1', L500.len > L1.len && L500.hooks.length > L1.hooks.length && L500.hooks[2].r < L1.hooks[2].r && L250.len > L1.len, [L1.len, L250.len, L500.len].join(','));
+        ok('hazards appear with level: spikes, walls, ceilings, corridors and pads all occur in levels 100–200', (function(){ var has = {}; for (var k = 100; k <= 200; k++) I.genLevel(k).kinds.forEach(function(q){ has[q] = 1; }); return has.spike && has.wall && has.ceil && has.corr && has.pad && has.gap; })());
+        /* --- the big sweep: every level completable in both modes --- */
+        var t0 = performance.now(), fails = [], failsG = [], tBad = [], tries = 0, maxT = 0, sumT = 0;
+        for (n = 1; n <= NLV; n++){ L = I.genLevel(n); if (L.unsolved) fails.push(n); var rc = I.simulate(L, 'classic'), rg = I.simulate(L, 'grapple'); if (!rc.won) fails.push(n); if (!rg.won) failsG.push(n); if (rc.time < 2.5 || rc.time > 18) tBad.push(n + ':' + rc.time.toFixed(1)); tries += L.tries; maxT = Math.max(maxT, rc.time); sumT += rc.time; }
+        var sweepMs = performance.now() - t0;
+        ok('ALL 500 levels are completable by the auto-player in CLASSIC mode (deterministic sim)', fails.length === 0, 'fails: ' + fails.slice(0, 20).join(','));
+        ok('ALL 500 levels are completable by the auto-player in GRAPPLE mode', failsG.length === 0, 'fails: ' + failsG.slice(0, 20).join(','));
+        ok('sweep of 500 levels × 2 modes (generate + verify + re-verify) took ≤ 6000 ms: ' + Math.round(sweepMs) + ' ms, avg tries ' + (tries / NLV).toFixed(2), sweepMs <= 6000);
+        ok('every level takes 2.5–18 s of play for the auto-player (avg ' + (sumT / NLV).toFixed(1) + ' s, max ' + maxT.toFixed(1) + ' s)', tBad.length === 0, tBad.slice(0, 10).join(','));
+        ok('≥ 40% of the levels pass within their first 3 generated layouts; average rerolls ≤ 10', (function(){ var c = 0; for (var k = 1; k <= NLV; k++) if (I.genLevel(k).tries <= 3) c++; return c >= 200 && tries / NLV <= 10; })(), tries / NLV);
+        /* --- physics --- */
+        S = I.newRun(L1, 'classic'); ok('newRun: starts standing at the start, no hook, alive, classic mode', S.x === 0 && S.y === -I.PR && S.hook === -1 && !S.over && S.standing && S.mode === 'classic');
+        var LF = { n:0, hue:0, hooks:[{ x:300, y:-200, r:180 }], blocks:[], spikes:[], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        S = I.newRun(LF, 'classic'); S.standing = false; I.step(S, false, I.DT); I.step(S, false, I.DT); ok('gravity: free fall accelerates downward (vy grows, y grows)', S.vy > 0 && S.y > -12 && Math.abs(S.vy - 2 * I.GRAV * I.DT) < 1e-6, S.vy);
+        S = I.newRun(LF, 'classic'); S.x = 200; S.y = -100; S.standing = false; var hi0 = I.findHook(S); I.step(S, true, I.DT);
+        ok('hold with a hook in range → attaches (hook index, rope = distance, attach event)', hi0 === 0 && S.hook === 0 && Math.abs(S.rope0 - Math.hypot(200 - 300, -100 + 200)) < 1e-6 && S.ev.indexOf('attach') >= 0);
+        var okRope = true, minD = 1e9; for (i = 0; i < 90; i++){ I.step(S, true, I.DT); var dd = Math.hypot(S.x - 300, S.y + 200); if (dd > S.rope + .01) okRope = false; minD = Math.min(minD, dd); }
+        ok('pendulum constraint: distance never exceeds the rope, the rope shortens while swinging (momentum) but never below 45% of its length', okRope && S.rope < S.rope0 && S.rope >= S.rope0 * .45 - 1e-9, S.rope + '/' + S.rope0);
+        var vx0 = S.vx, vy0 = S.vy; I.step(S, false, I.DT); ok('release keeps the velocity (launch) and fires a release event', S.hook === -1 && Math.abs(S.vx - vx0) < 1e-6 && Math.abs(S.vy - (vy0 + I.GRAV * I.DT)) < 1e-6 && S.ev.indexOf('release') >= 0);
+        var reat = false; for (i = 0; i < 6; i++){ I.step(S, true, I.DT); if (S.hook >= 0) reat = true; } ok('no instant re-attach to the hook just released (cooldown)', !reat && S.cool > 0);
+        S = I.newRun(LF, 'grapple'); S.x = 200; S.y = -100; S.standing = false; I.step(S, true, I.DT); var d0 = Math.hypot(S.x - 300, S.y + 200); for (i = 0; i < 12; i++) I.step(S, true, I.DT); var d1 = Math.hypot(S.x - 300, S.y + 200);
+        ok('grapple mode: attaching pulls the stickman toward the hook fast (distance shrinks, speed > 600 within 0.2 s)', S.mode === 'grapple' && d1 < d0 - 40 && Math.hypot(S.vx, S.vy) > 600, d0 + '→' + d1);
+        var LB = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }, { x:400, y:-200, w:60, h:400 }], spikes:[], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        S = I.newRun(LB, 'classic'); S.x = 100; S.y = 0; S.vy = 500; S.standing = false; for (i = 0; i < 30; i++) I.step(S, false, I.DT);
+        ok('landing on a block: stands on top (y = top − R), vy = 0, land/thud event, squash', S.standing && Math.abs(S.y - (100 - I.PR)) < .5 && S.vy === 0 && S.ev.indexOf('land') + S.ev.indexOf('thud') > -2 && S.squash >= 0);
+        S = I.newRun(LB, 'classic'); S.x = 370; S.y = 0; S.vx = 600; S.standing = false; I.step(S, false, I.DT); I.step(S, false, I.DT);
+        ok('hitting a wall from the side: pushed out and bounced back (vx < 0), not dead', S.x <= 400 - I.PR + .01 && S.vx < 0 && !S.dead && S.ev.indexOf('thud') >= 0, S.x + ',' + S.vx);
+        var LP = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }], spikes:[], pads:[{ x:100, y:86, w:70, h:14, dir:'up' }, { x:200, y:86, w:70, h:14, dir:'fwd' }], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        S = I.newRun(LP, 'classic'); S.x = 135; S.y = 70; S.vy = 300; S.standing = false; for (i = 0; i < 4; i++) I.step(S, false, I.DT);
+        ok('jump pad (up) launches the stickman up (vy = −PADV) with a pad event', S.vy < -I.PADV + 200 && S.ev.indexOf('pad') >= 0, S.vy);
+        S = I.newRun(LP, 'classic'); S.x = 235; S.y = 70; S.vy = 300; S.standing = false; for (i = 0; i < 4; i++) I.step(S, false, I.DT);
+        ok('forward pad adds forward speed (vx ≥ 600) and some lift', S.vx >= 600 && S.vy < -400, S.vx + ',' + S.vy);
+        var LS = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }], spikes:[{ x:100, y:82, w:80, h:18 }], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        S = I.newRun(LS, 'classic'); S.x = 140; S.y = 60; S.vy = 300; S.standing = false; for (i = 0; i < 10 && !S.over; i++) I.step(S, false, I.DT);
+        ok('spikes = death (dead, over, die event)', S.dead && S.over && !S.won && S.ev.indexOf('die') >= 0);
+        S = I.newRun(LF, 'classic'); S.y = 420; S.vy = 400; S.standing = false; for (i = 0; i < 10 && !S.over; i++) I.step(S, false, I.DT); ok('falling below the level = death', S.dead && S.over && S.ev.indexOf('die') >= 0);
+        S = I.newRun(LF, 'classic'); S.x = 4995; S.y = -300; S.vx = 400; S.standing = false; for (i = 0; i < 5 && !S.over; i++) I.step(S, false, I.DT); ok('crossing the finish line wins (won, over, win event)', S.won && S.over && !S.dead && S.ev.indexOf('win') >= 0);
+        S = I.newRun(LB, 'classic'); S.x = 150; S.y = 100 - I.PR; S.vx = 0; S.vy = 0; for (i = 0; i < HZ * 2 && !S.over; i++) I.step(S, false, I.DT); ok('standing still with no hook in range for > 1.2 s = stuck → instant restart (dead)', S.dead && S.ev.indexOf('stuck') >= 0 && S.t < 1.6, S.t);
+        S = I.newRun(L1, 'classic'); ok('autoInput: holds when standing with the first hook in range', I.autoInput(S) === true);
+        S = I.newRun(LF, 'classic'); S.x = 340; S.y = -60; S.vx = 500; S.vy = -420; S.hook = 0; S.rope = S.rope0 = 150; S.attachT = 0; S.t = .5; S.standing = false; ok('autoInput: releases when swinging up-forward at a good angle (~40°), keeps holding when moving backward or too flat', I.autoInput(S) === false && (S.vx = -300, I.autoInput(S) === true) && (S.vx = 500, S.vy = -60, I.autoInput(S) === true));
+        var sim1 = I.simulate(L1, 'classic'), simG = I.simulate(L1, 'grapple'); ok('simulate(level 1): won in 2.5–15 s in both modes', sim1.won && simG.won && sim1.time >= 2.5 && sim1.time <= 15 && simG.time <= 15, JSON.stringify([sim1, simG]));
+        /* --- skins --- */
+        ok('23 skins: 9 classic (free, unlocked by level, red default first) + 14 fun skins with rising coin prices, unique ids', I.SKINS.length === 23 && I.CLASSIC.length === 9 && I.FUN.length === 14 && I.SKINS[0].id === 'red' && I.SKINS[0].lvl === 0 && I.CLASSIC.every(function(s, j){ return j === 0 || s.lvl > I.CLASSIC[j - 1].lvl; }) && I.FUN.every(function(s, j){ return j === 0 || s.price > I.FUN[j - 1].price; }) && new Set(I.SKINS.map(function(s){ return s.id; })).size === 23 && ['hamburger', 'cactus', 'dragon', 'lemon', 'robot', 'ghost', 'ninja', 'pirate', 'alien', 'cat', 'panda', 'pumpkin', 'astronaut', 'unicorn'].every(function(id){ return I.FUN.some(function(s){ return s.id === id; }); }));
+        var wk0 = I.weeklySkin(0), wk1 = I.weeklySkin(7 * 86400000 * 3); ok('weekly skin: a fun skin, rotates by week, half price', wk0.price > 0 && wk1.price > 0 && wk0.id !== wk1.id && I.skinPrice(wk0, 0) === Math.round(wk0.price / 2) && I.skinPrice(wk1, 0) === wk1.price);
+        G.classicLevel = 1; G.grappleLevel = 1; G.owned = []; ok('skin unlock by progress: only red at the start, blue after 3 levels, progress bar data', I.ownedSkins().length === 1 && I.skinProgress().skin.id === 'blue' && I.skinProgress().need === 3 && (G.classicLevel = 4, I.skinUnlocked(I.SKINS[1]) && I.skinProgress().skin.id === 'green' && I.skinProgress().have === 0));
+        G.coins = 150; ok('buySkin: refuses without coins, deducts and owns with coins (weekly = half); equip only unlocked', !I.buySkin('unicorn', 0) && G.coins === 150 && I.buySkin('hamburger', 0) && G.coins === 150 - I.skinPrice(I.SKINS[9], 0) && G.owned.indexOf('hamburger') >= 0 && !I.equipSkin('unicorn') && I.equipSkin('hamburger') && G.skin === 'hamburger');
+        /* --- storage --- */
+        G.classicLevel = 35; G.grappleLevel = 4; G.coins = 321; G.owned = ['hamburger', 'cat']; G.skin = 'cat'; G.streak = 3; G.bestStreak = 9; I.save();
+        var stored = null; try { stored = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+        ok('save() writes hook.v1 with classicLevel, grappleLevel, coins, owned, skin, streak, bestStreak, lang, mute', !!stored && stored.classicLevel === 35 && stored.grappleLevel === 4 && stored.coins === 321 && stored.skin === 'cat' && stored.owned.length === 2 && stored.streak === 3 && stored.bestStreak === 9 && 'lang' in stored && 'mute' in stored);
+        G.classicLevel = 1; G.grappleLevel = 1; G.coins = 0; G.owned = []; G.skin = 'red'; G.streak = 0; G.bestStreak = 0; I.load();
+        ok('load() restores everything; grapple unlocked after 30 classic levels', G.classicLevel === 35 && G.grappleLevel === 4 && G.coins === 321 && G.skin === 'cat' && G.owned.indexOf('cat') >= 0 && G.bestStreak === 9 && I.canGrapple() && I.levelsDone() === 37 && (G.classicLevel = 30, !I.canGrapple()));
+        G.classicLevel = 35;
+        /* --- UI --- */
+        I.setLang('en'); ok('setLang(en): ltr, translated, English title', document.documentElement.dir === 'ltr' && $('b-lang').textContent === 'עב' && $('c-classic').querySelector('b').textContent === 'CLASSIC' && document.title.indexOf('Stickman Hook') === 0);
+        I.setLang('he'); ok('setLang(he): rtl + Hebrew title "סטיקמן הוק"', document.documentElement.dir === 'rtl' && $('c-classic').querySelector('b').textContent === 'קלאסי' && document.title.indexOf('סטיקמן הוק') === 0 && $('s-menu').querySelector('h1 small').textContent === 'איש מקל על חבל');
+        I.show('s-menu'); ok('menu: play continues at the furthest level (35), 2 mode cards, stats, weekly skin card, 23 skin chips, equipped chip highlighted', $('b-play').textContent.indexOf('35') > 0 && document.querySelectorAll('.card').length === 2 && $('st-coins').textContent.indexOf('321') > 0 && $('st-streak').textContent.indexOf('9') > 0 && $('wk-name').textContent.length > 0 && $('wk-price').textContent.indexOf('🪙') >= 0 && document.querySelectorAll('#skin-row .chip').length === 23 && document.querySelector('#skin-row .chip.eq') !== null);
+        ok('menu: grapple card open at 35 levels, locked text below 30', !$('c-grapple').classList.contains('locked') && (G.classicLevel = 20, I.renderMenu(), $('c-grapple').classList.contains('locked') && $('c-grapple').textContent.indexOf('30') > 0)); G.classicLevel = 35; I.renderMenu();
+        I.show('s-skins'); ok('skins screen: 23 cards with buy/equip/locked buttons, locked classic skins show their level', document.querySelectorAll('#sk-grid .sk').length === 23 && document.querySelectorAll('#sk-grid .sk button').length === 23 && document.querySelector('#sk-grid .sk.eq') !== null && $('sk-grid').textContent.indexOf('130') > 0);
+        I.start('classic', 1); await sleep(30);
+        ok('start(classic,1): full-screen 16:9 stage that fits the viewport, HUD shows level 1, camera near the start', G.screen === 's-game' && G.S && G.S.L.n === 1 && G.mode === 'classic' && (function(){ var rc = $('stage').getBoundingClientRect(); return rc.width <= window.innerWidth + 1 && rc.height <= window.innerHeight + 1 && Math.abs(rc.width / rc.height - 16 / 9) < .02; })() && $('hud-l').textContent.indexOf('1') > 0 && Math.abs(G.cam.x - (0 - W * .4)) < 1);
+        ok('in-game buttons (home, restart, mute, pause) ≥ 44 px and inside the viewport', ['b-home2', 'b-restart', 'b-mute2', 'b-pause'].every(function(id){ var rc = $(id).getBoundingClientRect(); return rc.width >= 44 && rc.height >= 44 && rc.right <= window.innerWidth + 1 && rc.bottom <= window.innerHeight + 1; }));
+        I.onKey({ code:'Space', preventDefault:function(){} }); var h1 = G.hold; I.onKeyUp({ code:'Space' }); ok('Space holds (grab) and releases', h1 === true && G.hold === false);
+        G.hold = true; for (i = 0; i < 20; i++) I.tick(I.DT); ok('holding in game attaches the rope to hook 1 and the camera follows', G.S.hook === 0 && G.cam.x > 0 - W * .4); G.hold = false;
+        var S0 = G.S; I.onKey({ code:'KeyR', preventDefault:function(){} }); ok('R restarts the level with a fresh run', G.S !== S0 && G.S.x === 0 && G.S.L === S0.L);
+        I.onKey({ code:'Escape', preventDefault:function(){} }); ok('Esc opens the pause panel (resume / again / menu) and freezes the sim', G.paused && $('ov').classList.contains('on') && !!$('p-resume') && (function(){ var x = G.S.x; G.hold = true; I.tick(I.DT); G.hold = false; return G.S.x === x && G.S.hook < 0; })());
+        $('p-resume').click(); ok('resume closes the panel', !G.paused && !$('ov').classList.contains('on'));
+        G.S.y = 425; G.S.vy = 500; G.S.standing = false; var d0c = G.deaths; for (i = 0; i < 30 && !G.S.over; i++) I.tick(I.DT);
+        ok('death: particles + shake + flash, deaths counted, streak reset, short restart timer (no screen)', G.S.dead && I.FX.parts.length > 10 && I.FX.shake > 0 && G.deaths === d0c + 1 && G.streak === 0 && G.overT > 0 && G.overT <= .45 && !$('ov').classList.contains('on'), G.overT);
+        I.afterOver(); G.overT = -1; ok('after the death the same level restarts instantly', G.S && !G.S.over && G.S.x === 0 && G.S.L.n === 1 && G.cam.x < 0);
+        G.classicLevel = 1; G.grappleLevel = 1; G.coins = 100; G.streak = 0; G.auto = true; for (i = 0; i < HZ * 40 && !G.S.over; i++) I.tick(I.DT); G.auto = false;
+        ok('finishing level 1 (auto-player): "שלב 1 ✔" panel, +5 coins (a death happened → not flawless), level 2 unlocked, skin progress bar shown', G.S.won && $('ov').classList.contains('on') && $('panel').textContent.indexOf('שלב 1 ✔') >= 0 && G.coins === 105 && G.classicLevel === 2 && !!$('p-next') && !!$('skp-bar') && $('panel').textContent.indexOf('1/3') > 0, G.coins);
+        ok('level-complete buttons ≥ 44 px, inside the viewport', [].slice.call(document.querySelectorAll('#panel button')).every(function(b){ var rc = b.getBoundingClientRect(); return rc.height >= 44 && rc.width >= 44 && rc.right <= window.innerWidth + 1 && rc.bottom <= window.innerHeight + 1; }));
+        $('p-next').click(); ok('"next" starts level 2 (fresh run, panel closed)', G.level === 2 && G.S.L.n === 2 && !$('ov').classList.contains('on') && G.S.x === 0);
+        G.auto = true; for (i = 0; i < HZ * 40 && !G.S.over; i++) I.tick(I.DT); G.auto = false;
+        ok('flawless level 2 (first try, no deaths): +10 coins, streak 2, classicLevel 3', G.S.won && G.coins === 115 && G.streak === 2 && G.classicLevel === 3, G.coins + '/' + G.streak);
+        G.classicLevel = 31; I.start('grapple', 1); ok('grapple mode: separate progress, run in grapple mode, HUD label', G.mode === 'grapple' && G.S.mode === 'grapple' && G.grappleLevel === 1);
+        G.auto = true; for (i = 0; i < HZ * 40 && !G.S.over; i++) I.tick(I.DT); G.auto = false; ok('grapple level 1 finished by the auto-player → grappleLevel 2, classicLevel untouched', G.S.won && G.grappleLevel === 2 && G.classicLevel === 31);
+        /* --- layout --- */
+        I.show('s-menu');
+        ok('no horizontal overflow', document.documentElement.scrollWidth <= window.innerWidth + 1, document.documentElement.scrollWidth + '>' + window.innerWidth);
+        var wide = []; [].slice.call(document.querySelectorAll('#app *')).forEach(function(e){ if (e.closest('#skin-row')) return; var rc = e.getBoundingClientRect(); if (rc.width > 0 && (rc.right > window.innerWidth + 1 || rc.left < -1)) wide.push((e.id || e.className || e.tagName) + ':' + Math.round(rc.left) + '-' + Math.round(rc.right)); });
+        ok('no element sticks out of the viewport (' + window.innerWidth + 'px)', wide.length === 0, wide.slice(0, 8).join(' | '));
+        var small = []; [].slice.call(document.querySelectorAll('#app button, #app p, #app small, #app b, #app span, #app a, #hud .tx, #hud .ib')).forEach(function(e){ if (!e.offsetParent && e.id !== 'hud-l') return; var fs = parseFloat(getComputedStyle(e).fontSize); if (fs < 16 && e.textContent.trim()) small.push((e.id || e.className || e.tagName) + ':' + fs); });
+        ok('all visible text ≥ 16 px', small.length === 0, small.slice(0, 8).join(' | '));
+        ok('menu buttons ≥ 44 px tall', [].slice.call(document.querySelectorAll('#s-menu button')).every(function(b){ return b.getBoundingClientRect().height >= 44; }));
+        ok('pwa install snippet present and hidden', !!$('pwa-install') && getComputedStyle($('pwa-install')).display === 'none');
+        ok('footer links to the games menu', !!document.querySelector('footer a[href="./"]'));
+        ok('JSON-LD VideoGame present; manifest + apple-touch-icon + canonical linked', (function(){ try { return JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@type'] === 'VideoGame'; } catch(e){ return false; } })() && !!document.querySelector('link[rel="manifest"][href="hook.webmanifest"]') && !!document.querySelector('link[rel="apple-touch-icon"][href="art/hook-180.png"]') && !!document.querySelector('link[rel="canonical"][href="https://lupulior.github.io/game-lab/hook.html"]'));
+        ok('public API on window.HK', ['genLevel', 'newRun', 'step', 'autoInput', 'simulate', 'SKINS', 'show', 'start', 'setLang'].every(function(k){ return k in I; }));
+        try { localStorage.removeItem(KEY); } catch(e){}
+        ok('no runtime errors', errs.filter(function(x){ return x.indexOf('onerror') === 0 || x.indexOf('init') === 0; }).length === 0);
+      } catch(e){ errs.push('exception: ' + (e && e.stack || e)); }
+      done();
+    })();
+  })();
+}
+})();
+</script>
+<!-- install button: shows only when the browser offers to install THIS game as an app -->
+<style>#pwa-install{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9999;display:none;font-family:"Varela Round","Arial Rounded MT Bold",Arial,sans-serif;font-weight:900;font-size:16px;color:#fff;background:#1B2A4E;border:0;border-radius:999px;padding:10px 18px;box-shadow:0 6px 0 rgba(0,0,0,.25),0 8px 18px rgba(0,0,0,.25);cursor:pointer}#pwa-install.on{display:block}</style>
+<button id="pwa-install" type="button">📲 התקן את המשחק בטלפון</button>
+<script>(function(){ var d=null, b=document.getElementById('pwa-install'); if(!b) return; try{ if(localStorage.getItem('pwa.hide')==='1') return; }catch(e){} window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); d=e; b.classList.add('on'); }); window.addEventListener('appinstalled', function(){ b.classList.remove('on'); try{ localStorage.setItem('pwa.hide','1'); }catch(e){} }); b.addEventListener('click', function(){ if(!d) return; var p=d; d=null; b.classList.remove('on'); p.prompt(); }); })();</script>
+</body>
+</html>
