@@ -77,6 +77,16 @@ body{font-family:var(--font);font-size:18px;color:var(--ink);height:100dvh;touch
 .btn.w{background:#fff;box-shadow:0 4px 0 #D9C9A0;border:2px solid #E6D6AE}
 .btn:disabled{opacity:.5;box-shadow:none;transform:none;cursor:default}
 .badge{position:absolute;top:-10px;inset-inline-end:-10px;width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font:900 18px/24px var(--font);border:2px solid #fff;text-align:center}
+.ad{text-align:center}
+.ad .adtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;font-weight:900;font-size:17px;color:var(--ink)}
+.ad .adcnt{min-width:46px;height:46px;border-radius:50%;background:#333;color:#fff;font:900 20px/46px var(--font);text-align:center;border:3px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.ad img{display:block;width:100%;aspect-ratio:1200/630;object-fit:cover;border-radius:16px;border:3px solid var(--brown);background:#fff;box-shadow:0 6px 0 rgba(0,0,0,.15)}
+.ad .adnm{font-size:24px;font-weight:900;margin:12px 0 2px;color:var(--ink)}
+.ad .addesc{font-size:16px;font-weight:700;color:#6B4E3D;margin:0 0 10px}
+.ad .bar{height:12px;background:#fff;border:2px solid var(--brown);border-radius:8px;overflow:hidden;margin:0 0 12px}
+.ad .bar i{display:block;height:100%;width:0;background:#5ED36B}
+.ad .adbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ad .adbtns .btn{min-width:150px}
 .task{background:var(--cream);border:3px solid #F0D9A0;border-radius:16px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
 .task .tx{flex:1;min-width:0}
 .task .tx b{display:block;font-size:17px;margin-bottom:4px}
@@ -114,6 +124,21 @@ footer a{color:#2C6FB0;text-decoration:none;font-weight:900}
 var TEST = location.hash === '#test', ERRS = [];
 if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
 var $ = function(id){ return document.getElementById(id); };
+var AD_T = 30, AD_SKIP = 10;
+/* in-game "ads": a 30 s promo for another Game Lab game (skippable after 10 s) in place of a real rewarded ad */
+var ADS = [
+  { id:'game1', url:'game1.html', img:'art/og.png', he:'כוכב הכדורגל', en:'Football Star', he2:'כדורגל 1 על 1, אונליין עם חברים ופנדלים', en2:'1v1 football, online with friends and penalties' },
+  { id:'impostor', url:'impostor.html', img:'art/impostor-og.png', he:'אימפוסטר', en:'Impostor', he2:'משחק חברה לטלפון אחד: מי מסתתר בינינו?', en2:'A party game for one phone: who is hiding among us?' },
+  { id:'basketball', url:'basketball.html', img:'art/basketball-og.png', he:'כדורסל 1 על 1', en:'Basketball 1v1', he2:'מגרש מלא, 20 קבוצות, 300 שחקנים', en2:'Full court, 20 teams, 300 players' },
+  { id:'xo', url:'xo.html', img:'art/xo-og.png', he:'איקס עיגול', en:'Tic-Tac-Toe', he2:'3×3, 5×5 ו-7×7 נגד המחשב או חבר', en2:'3×3, 5×5 and 7×7 vs the computer or a friend' },
+  { id:'survivor', url:'survivor.html', img:'art/survivor-og.png', he:'איש שורד', en:'Survivor', he2:'500 שלבים מפתיעים עם מלכודות', en2:'500 surprising trap levels' },
+  { id:'carcircle', url:'carcircle.html', img:'art/carcircle-og.png', he:'מעגל המכוניות', en:'Car Circle', he2:'הכניסו מכוניות ללולאה בלי תאונות', en2:'Send cars into the loop without crashing' },
+  { id:'snake', url:'snake.html', img:'art/snake-og.png', he:'נחש נגד תולעים', en:'Snake vs Worms', he2:'משחק נחשים io עם בטל רויאל', en2:'An io snake game with battle royale' },
+  { id:'neon', url:'neon.html', img:'art/neon-og.png', he:'אתגר הניאון', en:'Neon Challenge', he2:'מסלולי ניאון בלחיצה אחת, 500 שלבים', en2:'One-button neon courses, 500 levels' },
+  { id:'drivemad', url:'drivemad.html', img:'art/drivemad-og.png', he:'נהיגה משוגעת', en:'Drive Mad', he2:'מכונית פיזיקלית, 500 שלבים', en2:'A physics car, 500 levels' },
+  { id:'hook', url:'hook.html', img:'art/hook-og.png', he:'סטיקמן הוק', en:'Stickman Hook', he2:'מתנדנדים מוו לוו עד הסיום, 500 שלבים', en2:'Swing hook to hook to the finish, 500 levels' },
+  { id:'wreck', url:'wreck.html', img:'art/wreck-og.png', he:'שוד הבלוקים', en:'Voxel Wreck', he2:'פורצים לבניינים מקוביות ב-3D, 500 שלבים', en2:'Break into voxel buildings in 3D, 500 levels' }
+];
 var KEY = 'mart.v1', HZ = 60, DT = 1 / HZ, TICK = .1, TPS = 6, FONT = '"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-serif';
 var PSPEED = 260, CSPEED = 150, WSPEED = 200, SHELF_CAP = 12, IN_CAP = 8, OUT_CAP = 8, MAX_CUST = 12, PATIENCE = 12, SERVE_T = 1, TAKE_T = .3, ACT_T = .25, SLEEP_T = 20, BOOT_T = 120, BOOT_EVERY = 180, OFFLINE_CAP = 7200, OFFLINE_RATE = .2, MAX_PILES = 30, PILE_UNIT = 10;
 function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
@@ -128,11 +153,11 @@ function fmt(n){ n = Math.floor(n); if (n >= 1e6) return (n / 1e6).toFixed(n >= 
 
 /* ---------- i18n ---------- */
 var T = {
-  he:{ title:'מונקי מארט', shop:'חנות', upgrades:'שדרוגים', hats:'אביזרים', settings:'הגדרות', tasks:'משימות יומיות', daily:'מבצע יומי', reset:'מתאפס בעוד', free:'חינם', selected:'נבחר', claimed:'נאסף', buy:'קנייה', max:'מקס', lv:'רמה', sound:'צלילים', lang:'שפה', resetAll:'איפוס ההתקדמות', resetQ:'למחוק את כל ההתקדמות?', resetQ2:'בטוח? זה לא ניתן לביטול!', yes:'כן', no:'לא', install:'📲 התקן את המשחק בטלפון', more:'🎮 עוד משחקים', welcome:'ברוכים השבים!', offline:'הקופאים שלכם עבדו בזמן שלא הייתם:', ok:'אישור', cash:'מזומן', dia:'יהלומים', player:'השחקן', speed:'מהירות', stack:'ערימה', stamina:'כוח', cashier:'קופאי', assistant:'עוזר', farmer:'חקלאי', chef:'שף', notEnough:'אין מספיק יהלומים', notCash:'אין מספיק מזומן', newMart:'מארט חדש נפתח!', travel:'נסעו עם המשאית', martDone:'כל הכבוד!', bonus:'בונוס על כל המשימות', tTasks:'המשימות של היום', taskDone:'משימה הושלמה', mins:'דק׳',
+  he:{ title:'מונקי מארט', shop:'חנות', upgrades:'שדרוגים', hats:'אביזרים', settings:'הגדרות', tasks:'משימות יומיות', daily:'מבצע יומי', reset:'מתאפס בעוד', free:'חינם', selected:'נבחר', claimed:'נאסף', buy:'קנייה', max:'מקס', lv:'רמה', sound:'צלילים', lang:'שפה', resetAll:'איפוס ההתקדמות', resetQ:'למחוק את כל ההתקדמות?', resetQ2:'בטוח? זה לא ניתן לביטול!', yes:'כן', no:'לא', install:'📲 התקן את המשחק בטלפון', more:'🎮 עוד משחקים', welcome:'ברוכים השבים!', offline:'הקופאים שלכם עבדו בזמן שלא הייתם:', ok:'אישור', cash:'מזומן', dia:'יהלומים', player:'השחקן', speed:'מהירות', stack:'ערימה', stamina:'כוח', cashier:'קופאי', assistant:'עוזר', farmer:'חקלאי', chef:'שף', notEnough:'אין מספיק יהלומים', notCash:'אין מספיק מזומן', newMart:'מארט חדש נפתח!', travel:'נסעו עם המשאית', martDone:'כל הכבוד!', bonus:'בונוס על כל המשימות', tTasks:'המשימות של היום', taskDone:'משימה הושלמה', mins:'דק׳', ad:'פרסומת', adSkip:'דלג ▶', adSkipIn:'דלג בעוד {n}', adPlay:'שחקו עכשיו ▶', adOf:'עוד משחק של לופו', adHint:'הפרס מחכה בסוף הפרסומת',
     tutMove:'השתמשו בחצים כדי לזוז', tutTap:'לחצו בכל מקום על המסך', tutCash:'לכו לקופה', tutStand:'בנו את דוכן הבננות', tutHarvest:'קטפו בננות', tutStock:'מלאו את המדף', tutServe:'שרתו את הלקוח', tutCollect:'אספו את הכסף', tutHire:'שכרו קופאי', tutStack:'שדרגו את הערימה', tutHat:'קנו כובע חדש!', tutBuild:'בנו את המארט',
     tk_harvest:'קטפו {n} פריטים', tk_sell:'מכרו {n} מוצרים', tk_serve:'שרתו {n} לקוחות', tk_earn:'הרוויחו {n} מזומן', tk_hire:'שכרו או שדרגו {n} פעם', wake:'תיקתוק! העובד התעורר',
     pk1:'חבילת מזומן', pk2:'קופת חזיר', pk3:'מזוודת מזומן', truckHint:'המארט הבא מחכה!', mart:'מארט' },
-  en:{ title:'Monkey Mart', shop:'SHOP', upgrades:'UPGRADES', hats:'ACCESSORIES', settings:'SETTINGS', tasks:'DAILY TASKS', daily:'Daily Offer', reset:'Reset in', free:'FREE', selected:'SELECTED', claimed:'CLAIMED', buy:'BUY', max:'MAX', lv:'Lv', sound:'Sound', lang:'Language', resetAll:'Reset progress', resetQ:'Delete all progress?', resetQ2:'Really? This cannot be undone!', yes:'Yes', no:'No', install:'📲 Install the game', more:'🎮 More games', welcome:'Welcome back!', offline:'Your cashiers worked while you were away:', ok:'OK', cash:'Cash', dia:'Diamonds', player:'Player', speed:'Speed', stack:'Stack', stamina:'Stamina', cashier:'Cashier', assistant:'Assistant', farmer:'Farmer', chef:'Chef', notEnough:'Not enough diamonds', notCash:'Not enough cash', newMart:'NEW MART UNLOCKED', travel:'Take the truck', martDone:'Well done!', bonus:'All tasks bonus', tTasks:"Today's tasks", taskDone:'Task complete', mins:'mins',
+  en:{ title:'Monkey Mart', shop:'SHOP', upgrades:'UPGRADES', hats:'ACCESSORIES', settings:'SETTINGS', tasks:'DAILY TASKS', daily:'Daily Offer', reset:'Reset in', free:'FREE', selected:'SELECTED', claimed:'CLAIMED', buy:'BUY', max:'MAX', lv:'Lv', sound:'Sound', lang:'Language', resetAll:'Reset progress', resetQ:'Delete all progress?', resetQ2:'Really? This cannot be undone!', yes:'Yes', no:'No', install:'📲 Install the game', more:'🎮 More games', welcome:'Welcome back!', offline:'Your cashiers worked while you were away:', ok:'OK', cash:'Cash', dia:'Diamonds', player:'Player', speed:'Speed', stack:'Stack', stamina:'Stamina', cashier:'Cashier', assistant:'Assistant', farmer:'Farmer', chef:'Chef', notEnough:'Not enough diamonds', notCash:'Not enough cash', newMart:'NEW MART UNLOCKED', travel:'Take the truck', martDone:'Well done!', bonus:'All tasks bonus', tTasks:"Today's tasks", taskDone:'Task complete', mins:'mins', ad:'AD', adSkip:'Skip ▶', adSkipIn:'Skip in {n}', adPlay:'PLAY NOW ▶', adOf:'Another game by Lupu', adHint:'Your reward comes after the ad',
     tutMove:'USE ARROWS TO MOVE', tutTap:'TAP ANYWHERE ON THE SCREEN', tutCash:'GO TO THE CASH MACHINE', tutStand:'BUILD THE BANANA STAND', tutHarvest:'HARVEST BANANAS', tutStock:'STOCK THE SHELF', tutServe:'SERVE THE CUSTOMER', tutCollect:'COLLECT THE CASH', tutHire:'HIRE A CASHIER', tutStack:'UPGRADE YOUR STACK', tutHat:'BUY A NEW HAT!', tutBuild:'BUILD THE MART',
     tk_harvest:'Harvest {n} items', tk_sell:'Sell {n} products', tk_serve:'Serve {n} customers', tk_earn:'Earn {n} cash', tk_hire:'Hire or upgrade {n} time', wake:'Tap! The worker woke up',
     pk1:'Cash pack', pk2:'Piggy bank', pk3:'Cash case', truckHint:'The next mart awaits!', mart:'Mart' }
@@ -323,7 +348,7 @@ function newGame(){
   G = { cash:350, dia:0, lang:lang, sound:sound, hat:'none', hats:['none'], up:{ speed:1, stack:1, stamina:1 }, wup:{}, mart:0, unlocked:1, marts:[],
     player:{ x:START.x, y:START.y, tx:0, ty:0, dir:1, stack:[], stam:100, tired:false, moving:false, phase:0, goal:null, actT:0, moved:0, serving:false },
     boots:{ until:0, spawnT:BOOT_EVERY, x:0, y:0, on:false, here:false }, daily:null, stats:{ harvest:0, sold:0, served:0, earned:0, hires:0 }, tut:{ moved:false, hat:false, stack:false },
-    t:0, n:0, input:{ x:0, y:0 }, passAcc:0, fakeNow:null, headless:false, truckT:0, msg:null, msgT:0, dayT:0, saveT:0, savedAt:0, cid:0, bot:{ job:null }, offlineAmt:0, offlineSecs:0, lastBuilt:-1 };
+    t:0, n:0, input:{ x:0, y:0 }, passAcc:0, fakeNow:null, ad:null, adLast:-1, headless:false, truckT:0, msg:null, msgT:0, dayT:0, saveT:0, savedAt:0, cid:0, bot:{ job:null }, offlineAmt:0, offlineSecs:0, lastBuilt:-1 };
   for (var w = 0; w < WTYPES.length; w++) G.wup[WTYPES[w]] = { speed:1, stack:1, stamina:1 };
   for (var i = 0; i < MARTS.length; i++) G.marts.push(newMart(i));
   checkDaily(); return G;
@@ -370,7 +395,7 @@ function playerAct(M, D, T){
   var acted = best >= 0 && actOn(M, D, best, P, T); if (!acted) P.actT = 0;
   P.serving = !!cd && M.spots[D.cidx].built && dist(P.x, P.y, cd.px, cd.py) < 60;
   if (cd && M.spots[D.cidx].built && M.pile > 0 && dist(P.x, P.y, cd.lx, cd.ly) < 80) collectPile(M);
-  var B = G.boots; if (B.here && dist(P.x, P.y, B.x, B.y) < 55){ B.here = false; B.on = true; B.until = G.t + BOOT_T; B.spawnT = BOOT_EVERY; fx('boots', P); sfx('boots'); }
+  var B = G.boots; if (B.here && dist(P.x, P.y, B.x, B.y) < 55){ B.here = false; B.spawnT = BOOT_EVERY; showAd(function(){ B.on = true; B.until = G.t + BOOT_T; fx('boots', G.player); sfx('boots'); }); }
   for (var w = 0; w < M.workers.length; w++){ var wk = M.workers[w]; if (wk.asleep && dist(P.x, P.y, wk.x, wk.y) < 50) wakeWorker(wk, M); }
 }
 function actOn(M, D, j, P, T){
@@ -522,7 +547,7 @@ function tick(T){
   tutorialTick();
   if (!G.headless){ G.saveT += T; if (G.saveT >= 2){ G.saveT = 0; save(); } }
 }
-function step(dt){
+function step(dt){ if (G.ad){ adTick(dt); return; } /* the ad pauses the mart */
   G.t += dt; G.n++; movePlayer(dt);
   var M = G.marts[G.mart];
   for (var c = 0; c < M.customers.length; c++) moveEnt(M.customers[c], CSPEED, dt);
@@ -1000,6 +1025,7 @@ function panelHTML(kind){
     h += '<div class="srow"><span>🗑️ ' + esc(t('resetAll')) + '</span><button class="btn r" data-act="reset1">' + esc(t('resetAll')) + '</button></div>';
     h += '<div id="reset-box"></div><footer><a href="./">' + esc(t('more')) + '</a></footer></div>'; }
   else if (kind === 'travel'){ h += head(t('travel'), 'truck') + '<div class="body"><div class="grid2">'; for (i = 0; i < G.unlocked; i++) h += '<button class="btn ' + (i === G.mart ? 'g' : 'w') + '" data-act="go" data-i="' + i + '" style="min-height:64px;width:100%">' + (i + 1) + '. ' + esc(MARTS[i][G.lang]) + (G.marts[i].done ? ' ✓' : '') + '</button>'; h += '</div></div>'; }
+  else if (kind === 'ad'){ var ad = ADS[G.ad.i]; h += '<div class="ttl"><span>📺 ' + esc(t('ad')) + '</span></div><div class="body ad"><div class="adtop"><span class="adcnt" id="ad-cnt">' + AD_T + '</span><span>' + esc(t('adOf')) + '</span></div><img src="' + ad.img + '" alt=""><div class="adnm">' + esc(ad[G.lang]) + '</div><div class="addesc">' + esc(ad[G.lang + '2']) + '</div><div class="bar"><i id="ad-bar"></i></div><div class="adbtns"><button class="btn g" data-act="adplay">' + esc(t('adPlay')) + '</button><button class="btn w" id="ad-skip" data-act="adskip" disabled>' + esc(t('adSkipIn').replace('{n}', String(AD_SKIP))) + '</button></div><p class="addesc" style="margin:10px 0 0">' + esc(t('adHint')) + '</p></div>'; }
   else if (kind === 'welcome'){ var mn = Math.round(G.offlineSecs / 60); h += head(t('welcome'), 'bills') + '<div class="body" style="text-align:center"><p style="font-weight:800;margin:6px 0">' + esc(t('offline')) + '</p><p style="font-size:34px;font-weight:900;color:#2F8F2F;margin:6px 0">+' + fmt(G.offlineAmt) + '</p><p style="margin:0 0 10px">' + mn + ' ' + esc(t('mins')) + '</p><button class="btn g" data-act="close">' + esc(t('ok')) + '</button></div>'; }
   return h;
 }
@@ -1014,12 +1040,19 @@ function drawIcon(c, id){ var cx = c.getContext('2d'), w = c.width, h = c.height
 function drawHatIcon(c, id){ var cx = c.getContext('2d'), w = c.width, h = c.height; cx.clearRect(0, 0, w, h); var saved = ctx; ctx = cx; if (id === 'none'){ ctx.save(); ctx.translate(w / 2, h / 2); ctx.beginPath(); ctx.arc(0, 0, w * .3, 0, 6.2832); ctx.strokeStyle = '#E8394A'; ctx.lineWidth = 8; ctx.stroke(); ctx.beginPath(); ctx.moveTo(-w * .2, -w * .2); ctx.lineTo(w * .2, w * .2); ctx.stroke(); ctx.restore(); } else drawHat(id, w / 2, h / 2 + 8, w / 60); ctx = saved; }
 function paintIcons(root){ var cs = root.querySelectorAll('canvas[data-icon]'), i; for (i = 0; i < cs.length; i++) drawIcon(cs[i], cs[i].getAttribute('data-icon')); cs = root.querySelectorAll('canvas[data-hat]'); for (i = 0; i < cs.length; i++) drawHatIcon(cs[i], cs[i].getAttribute('data-hat')); }
 function openPanel(kind){ var p = $('panel'); p.innerHTML = panelHTML(kind); p.setAttribute('dir', G.lang === 'en' ? 'ltr' : 'rtl'); paintIcons(p); $('ov').classList.add('on'); G.panel = kind; INP.joy.on = false; setInput(0, 0); if (kind === 'hats') G.tut.hat = true; if (kind === 'upg') G.tut.stack = true; p.onclick = panelClick; return kind; }
-function closePanel(){ $('ov').classList.remove('on'); G.panel = null; }
+function closePanel(){ if (G.ad) return; $('ov').classList.remove('on'); G.panel = null; }
+function showAd(cb){ if (G.ad) return false; var i = Math.floor(rnd() * ADS.length); if (ADS.length > 1 && i === G.adLast) i = (i + 1) % ADS.length; G.adLast = i; G.ad = { i:i, t:0, cb:cb }; openPanel('ad'); return true; }
+function adTick(dt){ var A = G.ad; if (!A) return; A.t += dt; var left = String(Math.max(0, Math.ceil(AD_T - A.t))), c = $('ad-cnt'), b = $('ad-bar'), s = $('ad-skip'); if (c && c.textContent !== left) c.textContent = left; if (b) b.style.width = Math.min(100, A.t / AD_T * 100).toFixed(1) + '%';
+  if (s){ if (A.t >= AD_SKIP){ if (s.disabled){ s.disabled = false; s.textContent = t('adSkip'); } } else { var want = t('adSkipIn').replace('{n}', String(Math.ceil(AD_SKIP - A.t))); if (s.textContent !== want) s.textContent = want; } }
+  if (A.t >= AD_T) finishAd(); }
+function finishAd(){ var A = G.ad; if (!A) return; G.ad = null; closePanel(); sfx('gem'); if (A.cb) A.cb(); save(); }
 function refreshPanel(){ if (G.panel) openPanel(G.panel); }
 function panelClick(e){ var el = e.target.closest('[data-act]'); if (!el) return; var act = el.getAttribute('data-act');
   if (act === 'close') closePanel();
   else if (act === 'pack'){ if (buyPack(+el.getAttribute('data-i'))) refreshPanel(); else toast(t('notEnough')); }
-  else if (act === 'offer'){ if (claimOffer()) refreshPanel(); }
+  else if (act === 'offer'){ if (nextOffer() >= 0) showAd(function(){ claimOffer(); openPanel('shop'); }); }
+  else if (act === 'adplay'){ if (G.ad){ var adg = ADS[G.ad.i]; if (!TEST){ try { window.open(adg.url, '_blank'); } catch(err){} } finishAd(); } }
+  else if (act === 'adskip'){ if (G.ad && G.ad.t >= AD_SKIP) finishAd(); }
   else if (act === 'hat'){ var id = el.getAttribute('data-id'); if (buyHat(id)) refreshPanel(); else toast(t('notEnough')); }
   else if (act === 'up'){ if (buyUpgrade(el.getAttribute('data-who'), el.getAttribute('data-k'), el.getAttribute('data-type') || null)) refreshPanel(); else toast(t('notCash')); }
   else if (act === 'sound'){ G.sound = !G.sound; save(); refreshPanel(); }
@@ -1035,7 +1068,8 @@ function setLang(l){ G.lang = l === 'en' ? 'en' : 'he'; document.documentElement
 /* ---------- main loop / init / routes ---------- */
 var lastT = 0, acc = 0, lastDust = 0;
 function frame(now){ var dt = Math.min(.1, (now - lastT) / 1000) || 0; lastT = now; REALT += dt;
-  if (!G.frozen){ if (!INP.joy.on && !G.panel){ var x = 0, y = 0; if (KEYS.ArrowLeft || KEYS.KeyA) x -= 1; if (KEYS.ArrowRight || KEYS.KeyD) x += 1; if (KEYS.ArrowUp || KEYS.KeyW) y -= 1; if (KEYS.ArrowDown || KEYS.KeyS) y += 1; if (x || y || G.keyWas){ setInput(x, y); G.keyWas = !!(x || y); } }
+  if (G.ad) adTick(dt);
+  if (!G.frozen && !G.ad){ if (!INP.joy.on && !G.panel){ var x = 0, y = 0; if (KEYS.ArrowLeft || KEYS.KeyA) x -= 1; if (KEYS.ArrowRight || KEYS.KeyD) x += 1; if (KEYS.ArrowUp || KEYS.KeyW) y -= 1; if (KEYS.ArrowDown || KEYS.KeyS) y += 1; if (x || y || G.keyWas){ setInput(x, y); G.keyWas = !!(x || y); } }
     acc += dt; var n = 0; while (acc >= DT && n < 6){ if (G.autoplay && G.n % TPS === 0) botThink(); step(DT); acc -= DT; n++; } if (n === 6) acc = 0;
     if (G.player.moving && REALT - lastDust > .12){ lastDust = REALT; fx('dust', G.player, G.player.dir); } }
   updFX(dt); updCam(dt); render(); requestAnimationFrame(frame); }
@@ -1054,14 +1088,15 @@ function init(){ fit(); bind(); if (!load()) newGame(); setLang(G.lang);
   if (h === '#demo1' || h === '#demo-shop' || h === '#demo-hats' || h === '#demo-upgrades' || h === '#demo-tasks' || h === '#demo-settings'){ prepDemo(1); if (h === '#demo-shop') openPanel('shop'); else if (h === '#demo-hats'){ G.hats = ['none', 'straw']; G.hat = 'straw'; openPanel('hats'); } else if (h === '#demo-upgrades'){ G.unlocked = 2; openPanel('upg'); } else if (h === '#demo-tasks'){ G.stats.harvest += 23; G.stats.sold += 30; openPanel('tasks'); } else if (h === '#demo-settings') openPanel('settings'); }
   else if (h === '#demo2') prepDemo(2);
   else if (h === '#demo-travel'){ prepDemo(2); openPanel('travel'); }
+  else if (h === '#demo-ad'){ prepDemo(1); showAd(function(){}); adTick(4); }
   else if (h === '#auto'){ G.autoplay = true; }
   else if ((mm = /^#bench(\d*)$/.exec(h))){ var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = bench(mm[1] ? +mm[1] : 3); }
   else if ((mm = /^#trace(\d+)(?:x(\d+))?$/.exec(h))){ NOSAVE = true; newGame(); var rows = [], every = mm[2] ? +mm[2] : 20, lim = +mm[1]; while (G.t < lim){ auto(every); var Mq = G.marts[G.mart], Dq = MARTS[G.mart], Pq = G.player, nx = Mq.next; rows.push(Math.round(G.t) + 's mart' + G.mart + ' cash=' + Math.floor(G.cash) + ' next=' + nx + (nx >= 0 ? '(' + Dq.spots[nx].k + ' ' + Mq.spots[nx].paid + '/' + Dq.spots[nx].price + ')' : '') + ' P=' + Math.round(Pq.x) + ',' + Math.round(Pq.y) + ' st=' + Pq.stack.join(',') + ' goal=' + (Pq.goal ? Math.round(Pq.goal.x) + ',' + Math.round(Pq.goal.y) : '-') + ' job=' + (G.bot.job ? G.bot.job.src + '>' + G.bot.job.dst + 'x' + G.bot.job.n : '-') + ' cust=' + Mq.customers.length + ' q=' + Mq.queue.length + ' pile=' + Mq.pile + ' w=' + Mq.workers.map(function(w){ return w.t[0] + (w.asleep ? 'z' : w.st[0]); }).join('') + ' shelves=' + Dq.spots.map(function(d, j){ return d.k === 'shelf' && Mq.spots[j].built ? Mq.spots[j].stock : (d.k === 'src' && Mq.spots[j].built ? 's' + Mq.spots[j].stock : (d.k === 'mach' || d.k === 'animal') && Mq.spots[j].built ? 'm' + Mq.spots[j].ins.join('+') + '>' + Mq.spots[j].outN : null); }).filter(function(v){ return v !== null; }).join('/') + ' tired=' + Pq.tired + ' stam=' + Math.round(Pq.stam)); } var pre3 = $('test-log'); pre3.removeAttribute('class'); pre3.textContent = rows.join('\n'); }
   else if (h === '#welcome'){ NOSAVE = true; G.offlineAmt = 1234; G.offlineSecs = 3600; openPanel('welcome'); }
   else if (G.offlineAmt > 0 && !TEST) openPanel('welcome');
   tutorialTick(); CAM.snap = true; requestAnimationFrame(function(now){ lastT = now; requestAnimationFrame(frame); }); }
-window.MM = { newGame:newGame, load:load, save:save, step:step, get state(){ return G; }, DATA:{ MARTS:MARTS, ITEMS:ITEMS, HATS:HATS, UPG:UPG, TASKS:TASKS, PACKS:PACKS, OFFERS:OFFERS, SZ:SZ, FLOOR:FLOOR, GATE:GATE }, setInput:setInput, walkTo:walkTo, auto:auto, goMart:goMart, render:render, serialize:serialize, restore:restore, offline:offline, t:t, bench:bench, TUT:TUT,
-  ui:{ open:openPanel, close:closePanel, setLang:setLang, buyHat:buyHat, buyPack:buyPack, claimOffer:claimOffer, buyUpgrade:buyUpgrade, wake:wakeWorker, hudLayout:hudLayout, tap:tap, fit:fit, hudHit:hudHit, toast:toast },
+window.MM = { newGame:newGame, load:load, save:save, step:step, get state(){ return G; }, DATA:{ MARTS:MARTS, ITEMS:ITEMS, HATS:HATS, UPG:UPG, TASKS:TASKS, PACKS:PACKS, OFFERS:OFFERS, SZ:SZ, FLOOR:FLOOR, GATE:GATE, ADS:ADS }, setInput:setInput, walkTo:walkTo, auto:auto, goMart:goMart, render:render, serialize:serialize, restore:restore, offline:offline, t:t, bench:bench, TUT:TUT,
+  ui:{ open:openPanel, close:closePanel, setLang:setLang, buyHat:buyHat, buyPack:buyPack, claimOffer:claimOffer, buyUpgrade:buyUpgrade, wake:wakeWorker, hudLayout:hudLayout, tap:tap, fit:fit, hudHit:hudHit, toast:toast, showAd:showAd, finishAd:finishAd, adTick:adTick },
   fn:{ findJob:findJob, findDst:findDst, findSrc:findSrc, build:build, payChunk:payChunk, tick:tick, checkTasks:checkTasks, checkDaily:checkDaily, passiveRate:passiveRate, spawnWorker:spawnWorker, taskProg:taskProg, taskGoal:taskGoal, nextOffer:nextOffer, botThink:botThink, packCash:packCash, upPrice:upPrice, stackCap:stackCap, nowMs:nowMs, cashierAt:cashierAt, collectPile:collectPile, sleepWorker:sleepWorker, resetTime:resetTime, nextSpot:nextSpot, prepDemo:prepDemo, dayKey:dayKey } };
 if (TEST){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } } else init();
 
@@ -1164,7 +1199,9 @@ if (TEST){
         ok('Stamina Lv 4: never tires', G.up.stamina === 4 && !tired4 && P.stam === 100);
         /* --- speed boots --- */
         G.boots.on = false; put(1000, 700); G.boots.here = true; G.boots.x = 1000; G.boots.y = 700; run(.2);
-        ok('walking into the speed boots: 2-minute boost, pickup gone, next spawn in 180 s', G.boots.on && !G.boots.here && Math.abs(G.boots.until - G.t - BOOT_T) < .2 && G.boots.spawnT > BOOT_EVERY - 1, G.boots.on + ' ' + G.boots.here + ' ' + G.boots.spawnT);
+        ok('walking into the speed boots opens a 30 s ad first (pickup gone, boost not yet on)', G.ad && G.panel === 'ad' && !G.boots.here && !G.boots.on);
+        I.ui.adTick(AD_T);
+        ok('after the ad: 2-minute boost, next spawn in 180 s', G.boots.on && !G.boots.here && Math.abs(G.boots.until - G.t - BOOT_T) < .2 && G.boots.spawnT > BOOT_EVERY - 1, G.boots.on + ' ' + G.boots.here + ' ' + G.boots.spawnT);
         put(400, 1000); I.setInput(1, 0); run(1); var vb = P.x - 400; I.setInput(0, 0); run(118); var onAt118 = G.boots.on; run(2.5);
         ok('boost = ×1.5 speed (' + Math.round(vb) + ' wu/s), lasts 120 s then ends', vb > 260 * 1.6 * 1.5 * .95 && onAt118 && !G.boots.on);
         run(181); ok('new boots spawn on the floor every ~3 minutes', G.boots.here && G.boots.x > FLOOR.x && G.boots.x < FLOOR.x + FLOOR.w);
@@ -1221,6 +1258,20 @@ if (TEST){
         /* --- language / UI --- */
         I.ui.setLang('en'); ok('setLang(en): ltr, English texts, English title', document.documentElement.dir === 'ltr' && I.t('shop') === 'SHOP' && I.t('tutCash') === 'GO TO THE CASH MACHINE' && document.title.indexOf('Monkey Mart') === 0);
         I.ui.setLang('he'); ok('setLang(he): rtl, Hebrew texts and title "מונקי מארט"', document.documentElement.dir === 'rtl' && I.t('shop') === 'חנות' && document.title.indexOf('מונקי מארט') === 0 && I.t('tutCash') === 'לכו לקופה');
+        /* --- ads (a 30 s promo for another Game Lab game, skippable after 10 s) --- */
+        ok('ADS: 11 other Game Lab games with Hebrew + English names, OG images and page urls (never this game)', I.DATA.ADS.length === 11 && I.DATA.ADS.every(function(a){ return a.he && a.en && a.he2 && a.en2 && /^art\/[\w-]+\.png$/.test(a.img) && /^[a-z0-9]+\.html$/.test(a.url) && a.url !== 'mart.html'; }));
+        G.daily.offers = [0, 0, 0, 0]; var d0 = G.dia; I.ui.close(); I.ui.open('shop'); $('panel').querySelector('[data-act="offer"]').click();
+        ok('FREE daily offer opens the ad instead of paying at once: countdown 30, skip locked, promo image of another game, no X button', G.ad && G.panel === 'ad' && G.dia === d0 && $('ad-cnt').textContent === '30' && $('ad-skip').disabled && $('panel').querySelector('.ad img').getAttribute('src') === I.DATA.ADS[G.ad.i].img && !$('panel').querySelector('.x'));
+        $('ov').click(); window.dispatchEvent(new KeyboardEvent('keydown', { code:'Escape' })); I.ui.close();
+        ok('the ad cannot be closed by clicking outside, Escape or close()', G.ad && G.panel === 'ad' && $('ov').classList.contains('on'));
+        I.ui.adTick(5); ok('after 5 s: countdown 25, progress 16.7 %, skip still locked and says "skip in 5"', $('ad-cnt').textContent === '25' && $('ad-bar').style.width === '16.7%' && $('ad-skip').disabled && $('ad-skip').textContent === I.t('adSkipIn').replace('{n}', '5'));
+        I.ui.adTick(5); ok('after 10 s the skip button unlocks', !$('ad-skip').disabled && $('ad-skip').textContent === I.t('adSkip'));
+        $('ad-skip').click(); ok('skipping grants the reward (+3 diamonds) and returns to the shop', !G.ad && G.panel === 'shop' && G.dia === d0 + 3 && G.daily.offers.join() === '1,0,0,0');
+        $('panel').querySelector('[data-act="offer"]').click(); var adi = G.ad.i; I.ui.adTick(10); $('ov').click(); I.ui.adTick(20);
+        ok('watching the full 30 s ends the ad by itself and pays the next offer (+5)', !G.ad && G.panel === 'shop' && G.dia === d0 + 8 && G.daily.offers.join() === '1,1,0,0');
+        $('panel').querySelector('[data-act="offer"]').click(); var adj = G.ad.i; $('panel').querySelector('[data-act="adplay"]').click();
+        ok('"PLAY NOW" (opens the promoted game in a new tab) also ends the ad with the reward (+7); consecutive ads promote different games', !G.ad && G.dia === d0 + 15 && adi !== adj && G.daily.offers.join() === '1,1,1,0');
+        I.ui.setLang('en'); I.ui.showAd(function(){}); ok('English ad: AD title, English name/description, "Skip in 10"', $('panel').textContent.indexOf('AD') >= 0 && $('panel').querySelector('.adnm').textContent === I.DATA.ADS[G.ad.i].en && $('ad-skip').textContent === 'Skip in 10'); I.ui.adTick(AD_T); I.ui.setLang('he');
         I.ui.open('shop'); ok('SHOP modal: title, 3 cash packs with diamond prices, Daily Offer ribbon, reset timer, 4 rewards, FREE button, close X', $('ov').classList.contains('on') && $('panel').querySelectorAll('.card').length === 3 && $('panel').querySelector('.ribbon') !== null && /\d+h \d+m/.test($('panel').querySelector('.box .hd').textContent) && $('panel').querySelectorAll('.gem').length === 4 && $('panel').querySelector('[data-act="offer"]') !== null && $('panel').querySelector('.x') !== null);
         I.ui.open('hats'); ok('ACCESSORIES modal: 22 hat cards in a 3-column grid, SELECTED label on the worn hat, FREE on the straw hat, diamond prices', $('panel').querySelectorAll('.grid3 .card').length === 22 && $('panel').querySelector('.pill.sel') !== null && $('panel').textContent.indexOf(I.t('free')) >= 0 && $('panel').querySelectorAll('canvas[data-hat]').length === 22 && getComputedStyle($('panel').querySelector('.grid3')).gridTemplateColumns.split(' ').length === 3);
         I.ui.open('upg'); ok('UPGRADES modal: player + worker cards with Lv x/4 and prices', $('panel').querySelectorAll('.card').length >= 15 && $('panel').textContent.indexOf('/4') > 0 && $('panel').querySelectorAll('[data-act="up"]').length >= 15);
