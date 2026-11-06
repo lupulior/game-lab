@@ -1,0 +1,19 @@
+{
+  "name": "מונקי מארט 🍌",
+  "short_name": "מונקי מארט",
+  "description": "נהלו סופרמרקט של קופים: קטפו בננות, מלאו מדפים, שרתו לקוחות ובנו 6 חנויות.",
+  "start_url": "./mart.html?src=pwa",
+  "id": "/game-lab/mart.html",
+  "scope": "./mart.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#4CC24A",
+  "theme_color": "#4CC24A",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/mart-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/mart-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/mart-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -9,6 +9,9 @@ for a in "$@"; do args="$args $a"; done
 if [ -n "${SHOT:-}" ]; then
   powershell -NoProfile -Command "& 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' $args --hide-scrollbars --screenshot='$SHOT' '$url' 2>\$null | Out-Null"
 else
-  powershell -NoProfile -Command "[Console]::OutputEncoding=[Text.Encoding]::UTF8; & 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' $args --dump-dom '$url' 2>\$null"
+  # msedge.exe is a GUI-subsystem exe: PowerShell only waits for it when it has to consume its stdout, so the
+  # dump is piped through Out-String (without it PowerShell returns after ~0.2 s with an empty dump whenever
+  # this script's stdout is a file rather than a pipe, and the profile dir is left behind).
+  powershell -NoProfile -Command "[Console]::OutputEncoding=[Text.Encoding]::UTF8; & 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' $args --dump-dom '$url' 2>\$null | Out-String -Stream"
 fi
 rm -rf "$profile" 2>/dev/null || true

@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>מונקי מארט 🍌 – נהלו סופרמרקט של קופים (כמו Monkey Mart) – המשחק של לופו</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="מונקי מארט 🍌 בחינם: קטפו בננות, מלאו מדפים, שרתו לקוחות בקופה ובנו סופרמרקט של קופים! מכונות יוגורט ופופקורן, פרות ותרנגולות, שוקולד ומאפינס, 6 חנויות, עובדים, שדרוגים ו-22 כובעים. בלי התקנה, בעברית ובאנגלית – המשחק של לופו.">
+<meta name="keywords" content="מונקי מארט, Monkey Mart, משחק סופרמרקט, משחק קופים, משחק ניהול, משחק חנות, בננות, משחק לילדים, לופו, המשחק של לופו">
+<meta name="theme-color" content="#4CC24A">
+<link rel="canonical" href="https://lupulior.github.io/game-lab/mart.html">
+<link rel="manifest" href="mart.webmanifest">
+<link rel="apple-touch-icon" href="art/mart-180.png">
+<link rel="icon" href="art/mart-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Game Lab">
+<meta property="og:title" content="מונקי מארט 🍌 – נהלו סופרמרקט של קופים">
+<meta property="og:description" content="קטפו בננות, מלאו מדפים, שרתו לקוחות ובנו 6 חנויות עם מכונות, חיות ועובדים. 22 כובעים. בחינם, בלי התקנה.">
+<meta property="og:image" content="https://lupulior.github.io/game-lab/art/mart-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="מונקי מארט – קוף חום עם ערימת בננות על הראש בסופרמרקט צהוב">
+<meta property="og:url" content="https://lupulior.github.io/game-lab/mart.html">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="מונקי מארט 🍌 – נהלו סופרמרקט של קופים">
+<meta name="twitter:description" content="משחק ניהול: קטפו, מלאו מדפים, שרתו לקוחות, שכרו עובדים ובנו 6 חנויות. 22 כובעים.">
+<meta name="twitter:image" content="https://lupulior.github.io/game-lab/art/mart-og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"מונקי מארט – סופרמרקט של קופים","alternateName":["Monkey Mart","מונקי מארט","משחק סופרמרקט","משחק קופים"],"url":"https://lupulior.github.io/game-lab/mart.html","image":"https://lupulior.github.io/game-lab/art/mart-og.png","description":"קטפו בננות, מלאו מדפים, שרתו לקוחות בקופה ובנו סופרמרקט של קופים: מכונות, חיות, עובדים, שדרוגים, 6 חנויות ו-22 כובעים.","genre":["Simulation","Management","Casual"],"gamePlatform":["Web browser","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["he","en"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":1},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS"},"isPartOf":{"@type":"WebSite","name":"מעבדת משחקים – Game Lab","url":"https://lupulior.github.io/game-lab/"}}
+</script>
+<style>
+:root{ --font:"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-serif; --cream:#FFF6D8; --brown:#6E4A2E; --ink:#4A3728; --green:#3ED26B; --red:#F0506E; --yellow:#FFE27A }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;background:#49C64A;overflow:hidden}
+body{font-family:var(--font);font-size:18px;color:var(--ink);height:100dvh;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+#cv{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:pointer}
+#ov{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(50,30,15,.5);z-index:20;padding:30px 10px 12px}
+#ov.on{display:flex}
+.panel{position:relative;width:min(96vw,560px);max-height:min(100%,660px);background:#FFF1C9;background-image:radial-gradient(circle at 20% 30%,rgba(255,215,80,.18) 0 9px,transparent 10px),radial-gradient(circle at 70% 70%,rgba(255,215,80,.16) 0 7px,transparent 8px);background-size:120px 120px;border:4px solid var(--brown);border-radius:28px;box-shadow:0 12px 34px rgba(0,0,0,.4);padding:30px 14px 14px;display:flex;flex-direction:column}
+.panel .ttl{position:absolute;top:-26px;left:50%;transform:translateX(-50%);background:var(--cream);border:3px solid var(--brown);border-radius:999px;padding:7px 28px;font-weight:900;font-size:22px;letter-spacing:1px;white-space:nowrap;display:flex;align-items:center;gap:10px;color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.panel .ttl canvas{width:36px;height:36px}
+.panel .x{position:absolute;top:-24px;inset-inline-end:-12px;width:50px;height:50px;border-radius:50%;background:var(--red);border:3px solid #fff;color:#fff;font:900 26px/1 var(--font);cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.25);padding:0;z-index:2}
+.panel .body{overflow:auto;flex:1;padding:6px 4px 4px;scrollbar-width:thin}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:420px){.grid3{gap:8px}.card{padding:6px 5px 8px}.pill{padding:4px 6px;font-size:16px;gap:4px}.card .big{font-size:20px}}
+.card{background:var(--cream);border:3px solid #F0D9A0;border-radius:18px;padding:8px 8px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;position:relative;color:var(--ink)}
+.card:active{transform:translateY(2px)}
+.card .ic{width:100%;aspect-ratio:1;border-radius:12px;background-color:#CFEBFF;background-image:linear-gradient(45deg,rgba(255,255,255,.35) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.35) 75%),linear-gradient(45deg,rgba(255,255,255,.35) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.35) 75%);background-size:22px 22px;background-position:0 0,11px 11px;display:flex;align-items:center;justify-content:center;border:2px solid #A9D9F7}
+.card .ic.pack{aspect-ratio:1/1.05}
+.card .ic canvas{width:74%;height:74%}
+.card .nm{font-size:16px;font-weight:800;line-height:1.1;min-height:18px}
+.card .big{position:absolute;top:6px;left:0;right:0;text-align:center;font-size:24px;font-weight:900;color:#fff;text-shadow:0 2px 0 #3B82C4,0 0 6px rgba(0,0,0,.3)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:4px 14px;border-radius:999px;background:var(--yellow);font-weight:900;font-size:17px;color:#5A3B2E;border:2px solid #E8C45A;direction:ltr;width:100%;min-width:0;max-width:100%;white-space:nowrap}
+.pill canvas{width:24px;height:24px;flex:none}
+.pill.sel{background:#7BE07B;border-color:#4BBF4B;color:#1E5A1E}
+.pill.own{background:#E6F4E6;border-color:#B9DDB9}
+.pill.max{background:#E9D9B0;border-color:#D4C08E}
+.tick{position:absolute;top:-10px;inset-inline-end:-8px;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;font:900 20px/1 var(--font);display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.lv{font-size:16px;font-weight:800;color:#7A5A3A}
+.ribbon{margin:14px auto 8px;background:#5ED36B;color:#fff;font-weight:900;font-size:20px;text-align:center;padding:8px 40px;border-radius:6px;position:relative;width:max-content;max-width:100%;box-shadow:0 3px 0 #3DA64A;letter-spacing:.5px}
+.ribbon:before,.ribbon:after{content:"";position:absolute;top:6px;width:22px;height:100%;background:#3DA64A;z-index:-1;border-radius:4px}
+.ribbon:before{left:-12px}.ribbon:after{right:-12px}
+.box{background:#BFF0C3;border:3px solid #7BD58A;border-radius:18px;padding:30px 10px 12px;position:relative;margin-top:22px;text-align:center}
+.box .hd{position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:var(--cream);border:3px solid #7BD58A;border-radius:999px;padding:4px 18px;font-weight:900;font-size:17px;white-space:nowrap;color:var(--ink)}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 10px}
+.gem{background:#CFEBFF;border:3px solid #fff;border-radius:14px;padding:6px 4px;text-align:center;font-weight:900;font-size:18px;color:#2C6FB0;position:relative}
+.gem canvas{width:100%;height:46px;display:block}
+.gem.done{opacity:.55}
+.gem .ok{position:absolute;top:-8px;inset-inline-end:-6px;width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:14px;line-height:22px;border:2px solid #fff}
+.btn{min-height:46px;border:0;border-radius:16px;background:var(--yellow);font:900 18px var(--font);padding:0 22px;cursor:pointer;box-shadow:0 4px 0 #D9B24A;color:#5A3B2E;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #D9B24A}
+.btn.g{background:#7BE07B;box-shadow:0 4px 0 #4BBF4B;color:#1E5A1E}
+.btn.r{background:var(--red);color:#fff;box-shadow:0 4px 0 #B9385A}
+.btn.w{background:#fff;box-shadow:0 4px 0 #D9C9A0;border:2px solid #E6D6AE}
+.btn:disabled{opacity:.5;box-shadow:none;transform:none;cursor:default}
+.badge{position:absolute;top:-10px;inset-inline-end:-10px;width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font:900 18px/24px var(--font);border:2px solid #fff;text-align:center}
+.task{background:var(--cream);border:3px solid #F0D9A0;border-radius:16px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.task .tx{flex:1;min-width:0}
+.task .tx b{display:block;font-size:17px;margin-bottom:4px}
+.bar{height:16px;border-radius:999px;background:#E9D9B0;overflow:hidden;border:2px solid #D9C48E}
+.bar i{display:block;height:100%;background:linear-gradient(180deg,#7BE07B,#3ED26B);border-radius:999px;transition:width .4s}
+.task .rw{font-weight:900;font-size:17px;white-space:nowrap;color:#2C6FB0;display:flex;align-items:center;gap:4px}
+.task .rw canvas{width:22px;height:22px}
+.task.done{border-color:#7BD58A;background:#E6F8E6}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--cream);border:3px solid #F0D9A0;border-radius:16px;padding:10px 14px;margin-bottom:10px;font-weight:800;font-size:17px}
+.srow .btn{min-height:44px;font-size:16px;padding:0 16px}
+.sw{width:78px;height:44px;border-radius:999px;background:#C9B99A;position:relative;cursor:pointer;border:0;padding:0;flex:none}
+.sw i{position:absolute;top:4px;left:4px;width:36px;height:36px;border-radius:50%;background:#fff;transition:left .2s}
+.sw.on{background:var(--green)}.sw.on i{left:38px}
+footer{text-align:center;padding:8px 0 0;font-size:16px}
+footer a{color:#2C6FB0;text-decoration:none;font-weight:900}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%) translateY(-90px);background:var(--cream);color:var(--ink);padding:10px 18px;border-radius:16px;font-weight:900;z-index:60;transition:transform .3s;max-width:92vw;text-align:center;font-size:17px;border:3px solid var(--brown);pointer-events:none;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.toast.on{transform:translateX(-50%) translateY(0)}
+#banner{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(0);background:var(--cream);border:4px solid var(--green);border-radius:24px;padding:14px 30px;font-weight:900;font-size:28px;color:#1E8F45;text-align:center;z-index:30;transition:transform .35s cubic-bezier(.3,1.5,.6,1);pointer-events:none;letter-spacing:1px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+#banner.on{transform:translate(-50%,-50%) scale(1)}
+#banner small{display:block;font-size:17px;color:var(--ink);margin-top:4px}
+.hidden{display:none!important}
+#test-log{position:fixed;left:0;top:0;white-space:pre-wrap;font-family:monospace;font-size:12px;color:#fff;background:#000;padding:8px;direction:ltr;z-index:99;max-height:100%;overflow:auto}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="ov"><div class="panel" id="panel"></div></div>
+<div id="banner"></div>
+<div class="toast" id="toast"></div>
+<pre id="test-log" class="hidden"></pre>
+<script>
+(function(){
+'use strict';
+var TEST = location.hash === '#test', ERRS = [];
+if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
+var $ = function(id){ return document.getElementById(id); };
+var KEY = 'mart.v1', HZ = 60, DT = 1 / HZ, TICK = .1, TPS = 6, FONT = '"Varela Round","Arial Rounded MT Bold",Arial,Helvetica,sans-serif';
+var PSPEED = 260, CSPEED = 150, WSPEED = 200, SHELF_CAP = 12, IN_CAP = 8, OUT_CAP = 8, MAX_CUST = 12, PATIENCE = 12, SERVE_T = 1, TAKE_T = .3, ACT_T = .25, SLEEP_T = 20, BOOT_T = 120, BOOT_EVERY = 180, OFFLINE_CAP = 7200, OFFLINE_RATE = .2, MAX_PILES = 30, PILE_UNIT = 10;
+function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+function lerp(a, b, t){ return a + (b - a) * t; }
+function dist(ax, ay, bx, by){ return Math.sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by)); }
+var RNG = { s:12345 };
+function rnd(){ RNG.s = (RNG.s * 1664525 + 1013904223) >>> 0; return RNG.s / 4294967296; }
+function pick(a){ return a[Math.floor(rnd() * a.length)]; }
+function nowMs(){ return G && G.fakeNow != null ? G.fakeNow : Date.now(); }
+function dayKey(ms){ var d = new Date(ms); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function fmt(n){ n = Math.floor(n); if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M'; if (n >= 1e4) return (n / 1e3).toFixed(n >= 1e5 ? 0 : 1) + 'K'; return String(n); }
+
+/* ---------- i18n ---------- */
+var T = {
+  he:{ title:'מונקי מארט', shop:'חנות', upgrades:'שדרוגים', hats:'אביזרים', settings:'הגדרות', tasks:'משימות יומיות', daily:'מבצע יומי', reset:'מתאפס בעוד', free:'חינם', selected:'נבחר', claimed:'נאסף', buy:'קנייה', max:'מקס', lv:'רמה', sound:'צלילים', lang:'שפה', resetAll:'איפוס ההתקדמות', resetQ:'למחוק את כל ההתקדמות?', resetQ2:'בטוח? זה לא ניתן לביטול!', yes:'כן', no:'לא', install:'📲 התקן את המשחק בטלפון', more:'🎮 עוד משחקים', welcome:'ברוכים השבים!', offline:'הקופאים שלכם עבדו בזמן שלא הייתם:', ok:'אישור', cash:'מזומן', dia:'יהלומים', player:'השחקן', speed:'מהירות', stack:'ערימה', stamina:'כוח', cashier:'קופאי', assistant:'עוזר', farmer:'חקלאי', chef:'שף', notEnough:'אין מספיק יהלומים', notCash:'אין מספיק מזומן', newMart:'מארט חדש נפתח!', travel:'נסעו עם המשאית', martDone:'כל הכבוד!', bonus:'בונוס על כל המשימות', tTasks:'המשימות של היום', taskDone:'משימה הושלמה', mins:'דק׳',
+    tutMove:'השתמשו בחצים כדי לזוז', tutTap:'לחצו בכל מקום על המסך', tutCash:'לכו לקופה', tutStand:'בנו את דוכן הבננות', tutHarvest:'קטפו בננות', tutStock:'מלאו את המדף', tutServe:'שרתו את הלקוח', tutCollect:'אספו את הכסף', tutHire:'שכרו קופאי', tutStack:'שדרגו את הערימה', tutHat:'קנו כובע חדש!', tutBuild:'בנו את המארט',
+    tk_harvest:'קטפו {n} פריטים', tk_sell:'מכרו {n} מוצרים', tk_serve:'שרתו {n} לקוחות', tk_earn:'הרוויחו {n} מזומן', tk_hire:'שכרו או שדרגו {n} פעם', wake:'תיקתוק! העובד התעורר',
+    pk1:'חבילת מזומן', pk2:'קופת חזיר', pk3:'מזוודת מזומן', truckHint:'המארט הבא מחכה!', mart:'מארט' },
+  en:{ title:'Monkey Mart', shop:'SHOP', upgrades:'UPGRADES', hats:'ACCESSORIES', settings:'SETTINGS', tasks:'DAILY TASKS', daily:'Daily Offer', reset:'Reset in', free:'FREE', selected:'SELECTED', claimed:'CLAIMED', buy:'BUY', max:'MAX', lv:'Lv', sound:'Sound', lang:'Language', resetAll:'Reset progress', resetQ:'Delete all progress?', resetQ2:'Really? This cannot be undone!', yes:'Yes', no:'No', install:'📲 Install the game', more:'🎮 More games', welcome:'Welcome back!', offline:'Your cashiers worked while you were away:', ok:'OK', cash:'Cash', dia:'Diamonds', player:'Player', speed:'Speed', stack:'Stack', stamina:'Stamina', cashier:'Cashier', assistant:'Assistant', farmer:'Farmer', chef:'Chef', notEnough:'Not enough diamonds', notCash:'Not enough cash', newMart:'NEW MART UNLOCKED', travel:'Take the truck', martDone:'Well done!', bonus:'All tasks bonus', tTasks:"Today's tasks", taskDone:'Task complete', mins:'mins',
+    tutMove:'USE ARROWS TO MOVE', tutTap:'TAP ANYWHERE ON THE SCREEN', tutCash:'GO TO THE CASH MACHINE', tutStand:'BUILD THE BANANA STAND', tutHarvest:'HARVEST BANANAS', tutStock:'STOCK THE SHELF', tutServe:'SERVE THE CUSTOMER', tutCollect:'COLLECT THE CASH', tutHire:'HIRE A CASHIER', tutStack:'UPGRADE YOUR STACK', tutHat:'BUY A NEW HAT!', tutBuild:'BUILD THE MART',
+    tk_harvest:'Harvest {n} items', tk_sell:'Sell {n} products', tk_serve:'Serve {n} customers', tk_earn:'Earn {n} cash', tk_hire:'Hire or upgrade {n} time', wake:'Tap! The worker woke up',
+    pk1:'Cash pack', pk2:'Piggy bank', pk3:'Cash case', truckHint:'The next mart awaits!', mart:'Mart' }
+};
+function t(k){ var v = T[G.lang][k]; return v === undefined ? (T.en[k] || k) : v; }
+
+/* ---------- DATA: items ---------- */
+var ITEMS = {
+  banana:{ he:'בננה', en:'Banana', p:10, c:'#FFD93D' }, yogurt:{ he:'יוגורט', en:'Yogurt', p:35, c:'#F7F3E8' },
+  corn:{ he:'תירס', en:'Corn', p:12, c:'#FFD23F' }, popcorn:{ he:'פופקורן', en:'Popcorn', p:40, c:'#FFF5D6' }, feed:{ he:'מזון', en:'Feed', p:15, c:'#C9A46B' },
+  milk:{ he:'חלב', en:'Milk', p:45, c:'#FFFFFF' }, egg:{ he:'ביצה', en:'Egg', p:40, c:'#FFF7E6' }, cocoa:{ he:'קקאו', en:'Cocoa', p:15, c:'#9C5A2E' }, chocolate:{ he:'שוקולד', en:'Chocolate', p:60, c:'#5B3222' },
+  wheat:{ he:'חיטה', en:'Wheat', p:14, c:'#E9C46A' }, flour:{ he:'קמח', en:'Flour', p:45, c:'#F4ECDC' }, muffin:{ he:'מאפין שוקולד', en:'Choc muffin', p:95, c:'#7A4B2A' },
+  coffeebean:{ he:'פולי קפה', en:'Coffee beans', p:16, c:'#5A3A22' }, coffee:{ he:'קפה', en:'Coffee', p:70, c:'#B07A4A' },
+  fish:{ he:'דג', en:'Fish', p:20, c:'#6EC1F0' }, icecream:{ he:'גלידה', en:'Ice cream', p:85, c:'#FFC0CB' },
+  apple:{ he:'תפוח', en:'Apple', p:18, c:'#E53935' }, juice:{ he:'מיץ תפוחים', en:'Apple juice', p:70, c:'#F5B041' },
+  peanut:{ he:'בוטן', en:'Peanut', p:16, c:'#D8A05A' }, pbutter:{ he:'חמאת בוטנים', en:'Peanut butter', p:75, c:'#C47A2C' },
+  coconut:{ he:'קוקוס', en:'Coconut', p:20, c:'#7B5230' }, cocodrink:{ he:'משקה קוקוס', en:'Coconut drink', p:90, c:'#E8F6F0' }
+};
+/* footprint sizes [w, d, h] per kind */
+var SZ = { counter:[300, 90, 60], shelf:[200, 70, 110], mach:[170, 96, 80], animal:[220, 160, 50], tree:[44, 30, 0], palm:[44, 30, 0], bush:[70, 40, 0], bed:[220, 90, 24], tank:[170, 90, 70], hire:[110, 90, 0], spot:[120, 90, 0] };
+/* the sand floor; grass (MARGIN wide) all around it; the gate is the gap in the top trellis; START = where the monkey stands when a mart opens */
+var FLOOR = { x:0, y:0, w:1800, h:1100 }, GATE = { x:900, y:0 }, START = { x:900, y:230 }, MARGIN = 420;
+function mk(k, x, y, price, extra){ var o = { k:k, x:x, y:y, price:price }; if (extra) for (var q in extra) o[q] = extra[q]; return o; }
+function tree(x, y, price, item, kind, pre){ return mk('src', x, y, price, { item:item, kind:kind || 'tree', cap:3, regrow:2.5, pre:pre || 0 }); }
+function bed(x, y, price, item, pre){ return mk('src', x, y, price, { item:item, kind:'bed', cap:3, regrow:2.2, pre:pre || 0 }); }
+function tank(x, y, price, pre){ return mk('src', x, y, price, { item:'fish', kind:'tank', cap:4, regrow:2, pre:pre || 0 }); }
+function shelf(x, y, price, item, pre){ return mk('shelf', x, y, price, { item:item, pre:pre || 0 }); }
+function mach(x, y, price, name, inp, need, out, tm){ return mk('mach', x, y, price, { name:name, inp:inp, need:need, out:out, t:tm }); }
+function animal(x, y, price, name, out, tm){ return mk('animal', x, y, price, { name:name, inp:['feed'], need:[1], out:out, t:tm }); }
+function hire(x, y, price, w){ return mk('hire', x, y, price, { wt:w }); }
+/* ---------- DATA: marts (spots appear one at a time, in array order; pre = built at start) ----------
+   shared floor plan: counter top-left by the gate, shelves in two rows (y 330 / 580) right of it, sources (trees, beds, tanks)
+   bottom-left, hire spots in a column at the left wall, machines in a row at the bottom (y 780), animals at the right wall */
+var MARTS = [
+  { id:'banana', he:'מארט הבננות', en:'Banana Mart', ci:[6, 3], spots:[
+    tree(470, 430, 0, 'banana', 'tree', 1),
+    shelf(680, 330, 0, 'banana', 1),
+    mk('counter', 380, 120, 100),
+    tree(560, 500, 150, 'banana'),
+    hire(160, 300, 300, 'cashier'),
+    mach(700, 780, 600, 'yogurt', ['banana'], [2], 'yogurt', 4),
+    shelf(940, 330, 400, 'yogurt'),
+    hire(160, 440, 500, 'assistant'),
+    tree(330, 640, 350, 'banana') ] },
+  { id:'choc', he:'מארט השוקולד', en:'Chocolate Bar Mart', ci:[5, 2.5], spots:[
+    bed(420, 420, 0, 'corn', 1),
+    mk('counter', 380, 120, 220),
+    shelf(680, 330, 300, 'corn'),
+    bed(420, 560, 260, 'corn'),
+    hire(160, 300, 430, 'cashier'),
+    mach(700, 780, 780, 'popcorn', ['corn'], [2], 'popcorn', 5),
+    shelf(940, 330, 520, 'popcorn'),
+    hire(160, 440, 700, 'assistant'),
+    mach(960, 780, 1050, 'feed', ['corn'], [2], 'feed', 4),
+    animal(1500, 300, 1550, 'cow', 'milk', 6),
+    shelf(1200, 330, 700, 'milk'),
+    hire(160, 580, 1100, 'farmer'),
+    animal(1500, 600, 1700, 'chicken', 'egg', 5),
+    shelf(680, 580, 850, 'egg'),
+    tree(560, 720, 1050, 'cocoa', 'tree'),
+    mach(1220, 780, 2200, 'chocolate', ['cocoa'], [2], 'chocolate', 6),
+    shelf(940, 580, 1300, 'chocolate'),
+    hire(160, 720, 1550, 'chef') ] },
+  { id:'muffin', he:'מארט המאפינס', en:'Chocolate Muffin Mart', ci:[4.5, 2.2], spots:[
+    bed(420, 420, 0, 'wheat', 1),
+    mk('counter', 380, 120, 650),
+    shelf(680, 330, 900, 'wheat'),
+    bed(420, 560, 800, 'wheat'),
+    hire(160, 300, 1300, 'cashier'),
+    mach(700, 780, 2600, 'mill', ['wheat'], [2], 'flour', 5),
+    shelf(940, 330, 1550, 'flour'),
+    hire(160, 440, 1950, 'assistant'),
+    tree(560, 720, 1800, 'cocoa', 'tree'),
+    mach(960, 780, 3600, 'chocolate', ['cocoa'], [2], 'chocolate', 6),
+    shelf(1200, 330, 2200, 'chocolate'),
+    hire(160, 720, 3250, 'chef'),
+    mach(1220, 780, 5200, 'oven', ['flour', 'chocolate'], [1, 1], 'muffin', 7),
+    shelf(1460, 330, 3000, 'muffin'),
+    tree(1500, 560, 2350, 'coffeebean', 'bush'),
+    mach(1480, 780, 4700, 'brewer', ['coffeebean'], [2], 'coffee', 6),
+    shelf(680, 580, 2850, 'coffee'),
+    hire(160, 580, 3400, 'farmer') ] },
+  { id:'fish', he:'מארט הדגים', en:'Fish Mart', ci:[4, 2], spots:[
+    tank(420, 420, 0, 1),
+    mk('counter', 380, 120, 1600),
+    shelf(680, 330, 2400, 'fish'),
+    tank(420, 560, 2550),
+    hire(160, 300, 3200, 'cashier'),
+    tank(620, 560, 3200),
+    hire(160, 440, 4150, 'assistant'),
+    bed(420, 700, 2900, 'corn'),
+    mach(700, 780, 4500, 'feed', ['corn'], [2], 'feed', 4),
+    animal(1500, 300, 7200, 'cow', 'milk', 6),
+    shelf(940, 330, 4000, 'milk'),
+    hire(160, 580, 5300, 'farmer'),
+    mach(960, 780, 10400, 'icecream', ['milk'], [2], 'icecream', 7),
+    shelf(1200, 330, 5900, 'icecream'),
+    hire(160, 720, 6700, 'chef'),
+    animal(1500, 600, 8000, 'chicken', 'egg', 5),
+    shelf(940, 580, 4800, 'egg') ] },
+  { id:'apple', he:'מארט התפוחים', en:'Apple Mart', ci:[3.5, 1.8], spots:[
+    tree(470, 430, 0, 'apple', 'tree', 1),
+    mk('counter', 380, 120, 3200),
+    shelf(680, 330, 4800, 'apple'),
+    tree(560, 500, 4000, 'apple', 'tree'),
+    hire(160, 300, 6100, 'cashier'),
+    mach(700, 780, 12000, 'juice', ['apple'], [2], 'juice', 6),
+    shelf(940, 330, 8000, 'juice'),
+    hire(160, 440, 8000, 'assistant'),
+    tree(330, 640, 6100, 'apple', 'tree'),
+    bed(420, 740, 6700, 'peanut'),
+    shelf(1200, 330, 5600, 'peanut'),
+    hire(160, 580, 9600, 'farmer'),
+    mach(960, 780, 16000, 'pbutter', ['peanut'], [2], 'pbutter', 7),
+    shelf(1460, 330, 9600, 'pbutter'),
+    hire(160, 720, 11200, 'chef') ] },
+  { id:'coconut', he:'מארט הקוקוס', en:'Coconut Drink Mart', ci:[3, 1.6], spots:[
+    tree(470, 430, 0, 'coconut', 'palm', 1),
+    mk('counter', 380, 120, 4800),
+    shelf(680, 330, 7200, 'coconut'),
+    tree(560, 500, 6000, 'coconut', 'palm'),
+    hire(160, 300, 9000, 'cashier'),
+    mach(700, 780, 18000, 'cocodrink', ['coconut'], [2], 'cocodrink', 6),
+    shelf(940, 330, 12000, 'cocodrink'),
+    hire(160, 440, 12000, 'assistant'),
+    tree(330, 640, 9000, 'coconut', 'palm'),
+    hire(160, 720, 14400, 'chef'),
+    tree(1500, 520, 9600, 'apple', 'tree'),
+    shelf(1200, 330, 8400, 'apple'),
+    mach(960, 780, 16800, 'juice', ['apple'], [2], 'juice', 6),
+    shelf(1460, 330, 12000, 'juice'),
+    hire(160, 580, 15600, 'farmer') ] }
+];
+/* fixed scenery (not for sale): wooden crate top-left, potted plant and blue trash can flanking the gate, green barrels top-right,
+   a low wooden fence piece out on the grass at the left (like the original) */
+var SCENERY = [
+  { k:'crate', x:90, y:80 }, { k:'plant', x:GATE.x - 215, y:48 }, { k:'trash', x:GATE.x + 215, y:48 },
+  { k:'barrels', x:FLOOR.x + FLOOR.w - 90, y:90 }, { k:'wfence', x:FLOOR.x - 330, y:470, w:190 }
+];
+var PACK_MULT = [1, 3, 8, 15, 25, 40], PACKS = [{ cash:250, dia:10 }, { cash:1200, dia:40 }, { cash:5000, dia:100 }], OFFERS = [3, 5, 7, 10];
+/* ---------- DATA: hats ---------- */
+var HATS = [
+  { id:'none', he:'בלי כובע', en:'None', price:0 }, { id:'straw', he:'כובע קש', en:'Straw hat', price:0 }, { id:'bucket', he:'כובע טמבל', en:'Green bucket hat', price:30 },
+  { id:'redhat', he:'כובע אדום', en:'Red hat', price:30 }, { id:'bow', he:'פפיון אדום', en:'Red bow', price:50 }, { id:'strawsun', he:'קש + משקפיים', en:'Straw hat + shades', price:60 },
+  { id:'fedora', he:'פדורה לבנה', en:'White fedora', price:100 }, { id:'cap', he:'כובע מצחייה', en:'Blue cap', price:100 }, { id:'helmet', he:'קסדה ירוקה', en:'Green dotted helmet', price:100 },
+  { id:'pirate', he:'כובע פיראטים', en:'Pirate hat', price:120 }, { id:'crown', he:'כתר', en:'Crown', price:150 }, { id:'chef', he:'כובע שף', en:'Chef hat', price:150 },
+  { id:'party', he:'כובע מסיבה', en:'Party cone', price:80 }, { id:'viking', he:'קסדת ויקינג', en:'Viking helmet', price:200 }, { id:'cowboy', he:'כובע בוקרים', en:'Cowboy hat', price:120 },
+  { id:'beanie', he:'כובע צמר', en:'Beanie', price:60 }, { id:'headphones', he:'אוזניות', en:'Headphones', price:90 }, { id:'flower', he:'זר פרחים', en:'Flower crown', price:70 },
+  { id:'wizard', he:'כובע קוסם', en:'Wizard hat', price:200 }, { id:'halo', he:'הילה', en:'Halo', price:250 }, { id:'catears', he:'אוזני חתול', en:'Cat ears', price:90 }, { id:'tophat', he:'צילינדר', en:'Top hat', price:180 }
+];
+/* ---------- DATA: upgrades (levels 1..4) ---------- */
+var UPG = {
+  player:{ speed:{ v:[1, 1.2, 1.4, 1.6], price:[200, 800, 3000] }, stack:{ v:[4, 6, 8, 12], price:[150, 600, 2500] }, stamina:{ v:[5, 3, 1.5, 0], price:[100, 500, 2000] } },
+  worker:{ speed:{ v:[1, 1.25, 1.5, 1.8], price:[300, 900, 2500] }, stack:{ v:[3, 5, 8, 12], price:[250, 800, 2200] }, stamina:{ v:[1, .7, .45, .25], price:[200, 700, 2000] } }
+};
+var WTYPES = ['cashier', 'assistant', 'farmer', 'chef'], WCOL = { cashier:'#3B3B4A', assistant:'#5D4037', farmer:'#6D4C2A', chef:'#4A4A58' }, WHAT = { cashier:'cap', assistant:'bucket', farmer:'straw', chef:'chef' };
+var TASKS = [{ id:'harvest', goal:50 }, { id:'sell', goal:30 }, { id:'serve', goal:20 }, { id:'earn', goal:1000 }, { id:'hire', goal:1 }];
+var CUSTCOL = ['#F08AC6', '#5CB2F0', '#A4A8B5', '#F7D23F', '#F08AC6', '#5CB2F0'];
+var G = null;
+/* ---------- geometry prep ---------- */
+function sz(d){ return SZ[d.k === 'src' ? d.kind : d.k] || SZ.spot; }
+/* bx/by/bw/bd = the dashed build brackets (never smaller than a 120×90 patch so a tree spot is easy to stand on);
+   counter: px/py = where the cashier stands (behind the register at the right end), qx/qy = head of the queue in front of the
+   register (the queue runs left along the counter front), lx/ly = where you stand to collect the cash pile (left end) */
+(function prep(){ for (var i = 0; i < MARTS.length; i++){ var D = MARTS[i]; D.cidx = -1; for (var j = 0; j < D.spots.length; j++){ var d = D.spots[j], z = sz(d); d.j = j; d.w = z[0]; d.d = z[1]; d.h = z[2]; d.cx = d.x + d.w / 2; d.cy = d.y + d.d / 2; d.fx = d.cx; d.fy = d.y + d.d + 34; d.r = d.k === 'src' ? 80 : d.k === 'mach' || d.k === 'animal' ? 90 : 72;
+  d.bw = Math.max(d.w, 120); d.bd = Math.max(d.d, 90); d.bx = d.cx - d.bw / 2; d.by = d.cy - d.bd / 2;
+  if (d.k === 'counter'){ D.cidx = j; d.px = d.x + d.w - 60; d.py = d.y - 34; d.qx = d.x + d.w - 56; d.qy = d.y + d.d + 44; d.lx = d.x - 44; d.ly = d.y + d.d - 4; } } } })();
+function hatById(id){ for (var i = 0; i < HATS.length; i++) if (HATS[i].id === id) return HATS[i]; return null; }
+function stackCap(){ return UPG.player.stack.v[G.up.stack - 1]; }
+function wdrain(t){ return UPG.worker.stamina.v[G.wup[t].stamina - 1]; }
+function wcap(t){ return UPG.worker.stack.v[G.wup[t].stack - 1]; }
+function wspeed(t){ return WSPEED * UPG.worker.speed.v[G.wup[t].speed - 1]; }
+function upPrice(who, k, type){ var lv = who === 'player' ? G.up[k] : G.wup[type][k]; return lv >= 4 ? 0 : UPG[who][k].price[lv - 1]; }
+
+/* ---------- state ---------- */
+function newMart(i){
+  var D = MARTS[i], M = { i:i, spots:[], workers:[], customers:[], queue:[], pile:0, spawnT:2.5, next:-1, done:false };
+  for (var j = 0; j < D.spots.length; j++){ var d = D.spots[j], s = { paid:0, built:!!d.pre, stock:0, timer:0, inc:0, incs:null, ins:null, outN:0, prog:0, pop:0 };
+    if (d.k === 'mach' || d.k === 'animal'){ s.ins = d.inp.map(function(){ return 0; }); s.incs = d.inp.map(function(){ return 0; }); }
+    if (d.k === 'src' && s.built) s.stock = d.cap;
+    M.spots.push(s); }
+  M.next = nextSpot(M); return M;
+}
+function nextSpot(M){ for (var j = 0; j < M.spots.length; j++) if (!M.spots[j].built) return j; return -1; }
+function newGame(){
+  RNG.s = 12345;
+  var lang = G ? G.lang : 'he', sound = G ? G.sound : true;
+  G = { cash:350, dia:0, lang:lang, sound:sound, hat:'none', hats:['none'], up:{ speed:1, stack:1, stamina:1 }, wup:{}, mart:0, unlocked:1, marts:[],
+    player:{ x:START.x, y:START.y, tx:0, ty:0, dir:1, stack:[], stam:100, tired:false, moving:false, phase:0, goal:null, actT:0, moved:0, serving:false },
+    boots:{ until:0, spawnT:BOOT_EVERY, x:0, y:0, on:false, here:false }, daily:null, stats:{ harvest:0, sold:0, served:0, earned:0, hires:0 }, tut:{ moved:false, hat:false, stack:false },
+    t:0, n:0, input:{ x:0, y:0 }, passAcc:0, fakeNow:null, headless:false, truckT:0, msg:null, msgT:0, dayT:0, saveT:0, savedAt:0, cid:0, bot:{ job:null }, offlineAmt:0, offlineSecs:0, lastBuilt:-1 };
+  for (var w = 0; w < WTYPES.length; w++) G.wup[WTYPES[w]] = { speed:1, stack:1, stamina:1 };
+  for (var i = 0; i < MARTS.length; i++) G.marts.push(newMart(i));
+  checkDaily(); return G;
+}
+function curM(){ return G.marts[G.mart]; }
+function curD(){ return MARTS[G.mart]; }
+function hasWorker(M, t){ for (var w = 0; w < M.workers.length; w++) if (M.workers[w].t === t) return true; return false; }
+function builtFrac(M){ var n = 0; for (var j = 0; j < M.spots.length; j++) if (M.spots[j].built) n++; return n / M.spots.length; }
+function hasInputs(s, d){ for (var q = 0; q < d.inp.length; q++) if (s.ins[q] < d.need[q]) return false; return true; }
+function inRect(e, d, pad){ return e.x > d.x - pad && e.x < d.x + d.w + pad && e.y > d.y - pad && e.y < d.y + d.d + pad; }
+function inBrackets(e, d, pad){ return e.x > d.bx - pad && e.x < d.bx + d.bw + pad && e.y > d.by - pad && e.y < d.by + d.bd + pad; }
+function setTarget(e, x, y){ e.tx = x; e.ty = y; }
+function arrived(e){ return Math.abs(e.tx - e.x) < 7 && Math.abs(e.ty - e.y) < 7; }
+function moveEnt(e, sp, dt){ var dx = e.tx - e.x, dy = e.ty - e.y, dd = Math.sqrt(dx * dx + dy * dy); if (dd < 3){ e.moving = false; return; } var m = Math.min(dd, sp * dt); e.x += dx / dd * m; e.y += dy / dd * m; e.moving = true; e.phase += dt * 11; if (Math.abs(dx) > 2) e.dir = dx > 0 ? 1 : -1; }
+function collide(e, M, D, slide){
+  var r = 16;
+  for (var j = 0; j < D.spots.length; j++){ var s = M.spots[j]; if (!s.built) continue; var d = D.spots[j]; if (d.k === 'hire') continue;
+    var x0 = d.x - r, x1 = d.x + d.w + r, y0 = d.y - r, y1 = d.y + d.d + r;
+    if (e.x > x0 && e.x < x1 && e.y > y0 && e.y < y1){ var pl = e.x - x0, pr = x1 - e.x, pt = e.y - y0, pb = y1 - e.y, m = Math.min(pl, pr, pt, pb);
+      if (m === pl) e.x = x0; else if (m === pr) e.x = x1; else if (m === pt) e.y = y0; else e.y = y1;
+      if (slide && (m === pt || m === pb) && ((m === pt && e.ty > y1) || (m === pb && e.ty < y0))) e.x += (e.tx < d.cx ? -slide : slide);
+      else if (slide && (m === pl || m === pr) && ((m === pl && e.tx > x1) || (m === pr && e.tx < x0))) e.y += (e.ty < d.cy ? -slide : slide); } }
+}
+
+/* ---------- player ---------- */
+function movePlayer(dt){
+  var P = G.player, ix = G.input.x, iy = G.input.y;
+  if (P.goal){ var gx = P.goal.x - P.x, gy = P.goal.y - P.y, gd = Math.sqrt(gx * gx + gy * gy); if (gd < 6){ P.goal = null; ix = iy = 0; } else { ix = gx / gd; iy = gy / gd; } }
+  var l = Math.sqrt(ix * ix + iy * iy); if (l > 1){ ix /= l; iy /= l; }
+  P.moving = l > .05;
+  if (P.moving){ var sp = PSPEED * UPG.player.speed.v[G.up.speed - 1] * (G.boots.on ? 1.5 : 1) * (P.tired ? .6 : 1); P.x += ix * sp * dt; P.y += iy * sp * dt; P.moved += sp * dt; P.phase += dt * 11; if (Math.abs(ix) > .1) P.dir = ix > 0 ? 1 : -1;
+    P.stam -= UPG.player.stamina.v[G.up.stamina - 1] * dt; if (P.stam <= 0){ P.stam = 0; P.tired = true; } }
+  else P.stam = Math.min(100, P.stam + 14 * dt);
+  if (P.tired){ P.stam = Math.min(100, P.stam + 10 * dt); if (P.stam >= 40) P.tired = false; }
+  if (P.moving){ if (P.goal){ P.tx = P.goal.x; P.ty = P.goal.y; } collide(P, G.marts[G.mart], MARTS[G.mart], P.goal ? 6 : 0); P.x = clamp(P.x, FLOOR.x - MARGIN + 60, FLOOR.x + FLOOR.w + MARGIN - 60); P.y = clamp(P.y, FLOOR.y - 40, FLOOR.y + FLOOR.h + MARGIN - 60); }
+}
+function setInput(x, y){ G.input.x = x; G.input.y = y; if (x || y) G.player.goal = null; }
+function walkTo(x, y){ G.player.goal = { x:x, y:y }; }
+function playerAct(M, D, T){
+  var P = G.player, best = -1, bd = 1e9, j, cd = D.cidx >= 0 ? D.spots[D.cidx] : null;
+  j = M.next; if (j >= 0 && inBrackets(P, D.spots[j], 14)) payChunk(M, D, j);
+  for (j = 0; j < D.spots.length; j++){ var s = M.spots[j]; if (!s.built) continue; var d = D.spots[j]; if (d.k === 'hire' || d.k === 'counter') continue;
+    var dd = dist(P.x, P.y, d.fx, d.fy); if (dd < d.r && dd < bd){ bd = dd; best = j; } }
+  var acted = best >= 0 && actOn(M, D, best, P, T); if (!acted) P.actT = 0;
+  P.serving = !!cd && M.spots[D.cidx].built && dist(P.x, P.y, cd.px, cd.py) < 60;
+  if (cd && M.spots[D.cidx].built && M.pile > 0 && dist(P.x, P.y, cd.lx, cd.ly) < 80) collectPile(M);
+  var B = G.boots; if (B.here && dist(P.x, P.y, B.x, B.y) < 55){ B.here = false; B.on = true; B.until = G.t + BOOT_T; B.spawnT = BOOT_EVERY; fx('boots', P); sfx('boots'); }
+  for (var w = 0; w < M.workers.length; w++){ var wk = M.workers[w]; if (wk.asleep && dist(P.x, P.y, wk.x, wk.y) < 50) wakeWorker(wk, M); }
+}
+function actOn(M, D, j, P, T){
+  var d = D.spots[j], s = M.spots[j], cap = stackCap(), st = P.stack, top = st.length ? st[st.length - 1] : null;
+  if (d.k === 'src'){ if (s.stock > 0 && st.length < cap && (!top || top === d.item)){ P.actT += T; if (P.actT >= ACT_T - 1e-9){ P.actT -= ACT_T; s.stock--; st.push(d.item); G.stats.harvest++; fx('pick', d, P); sfx('pick'); } return true; } return false; }
+  if (d.k === 'shelf'){ if (top === d.item && s.stock < SHELF_CAP){ P.actT += T; if (P.actT >= ACT_T - 1e-9){ P.actT -= ACT_T; st.pop(); s.stock++; fx('put', P, d); sfx('put'); } return true; } return false; }
+  if (d.k === 'mach' || d.k === 'animal'){ var q = top ? d.inp.indexOf(top) : -1;
+    if (q >= 0 && s.ins[q] < IN_CAP){ P.actT += T; if (P.actT >= ACT_T - 1e-9){ P.actT -= ACT_T; st.pop(); s.ins[q]++; fx('put', P, d); sfx('put'); } return true; }
+    if (s.outN > 0 && st.length < cap && (!top || top === d.out)){ P.actT += T; if (P.actT >= ACT_T - 1e-9){ P.actT -= ACT_T; s.outN--; st.push(d.out); G.stats.harvest++; fx('pick', d, P); sfx('pick'); } return true; }
+    return false; }
+  return false;
+}
+function payChunk(M, D, j){ var d = D.spots[j], s = M.spots[j], rem = d.price - s.paid; if (rem <= 0){ build(M, D, j); return; } var chunk = Math.max(5, Math.ceil(d.price / 20)), pay = Math.min(chunk, rem, Math.floor(G.cash)); if (pay <= 0) return; G.cash -= pay; s.paid += pay; fx('bill', G.player, d); sfx('pay'); if (s.paid >= d.price) build(M, D, j); }
+function build(M, D, j){ var d = D.spots[j], s = M.spots[j]; s.built = true; s.paid = d.price; s.pop = 1; G.lastBuilt = j; if (d.k === 'src') s.stock = d.cap; if (d.k === 'hire') spawnWorker(M, D, j); M.next = nextSpot(M); sfx('build'); if (M.next < 0 && !M.done){ M.done = true; martDone(M); } if (!G.headless) save(); }
+function martDone(M){ if (M.i + 1 < MARTS.length && G.unlocked < M.i + 2){ G.unlocked = M.i + 2; G.truckT = 14; G.msg = 'newMart'; G.msgT = 4; if (!G.headless) showBanner(t('newMart'), MARTS[G.unlocked - 1][G.lang]); sfx('unlock'); } }
+function collectPile(M){ var a = M.pile; if (a <= 0) return; M.pile = 0; G.cash += a; G.stats.earned += a; fx('collect', a, M); sfx('cash'); }
+function goMart(i){ if (i < 0 || i >= G.unlocked) return false; G.mart = i; var P = G.player; P.x = START.x; P.y = START.y; P.goal = null; P.actT = 0; G.bot.job = null; G.cam && (G.cam.snap = true); if (!G.headless) save(); return true; }
+
+/* ---------- customers ---------- */
+function spawnCustomers(M, D, T){
+  M.spawnT -= T; if (M.spawnT > 0 || M.customers.length >= MAX_CUST) return;
+  if (D.cidx < 0 || !M.spots[D.cidx].built){ M.spawnT = 1; return; }
+  var j = chooseShelf(M, D); if (j < 0){ M.spawnT = 1; return; }
+  M.spawnT = lerp(D.ci[0], D.ci[1], builtFrac(M)) * (.75 + rnd() * .5);
+  var d = D.spots[j], pr = ITEMS[d.item].p, want = pr > 50 ? 1 + Math.floor(rnd() * 2) : 1 + Math.floor(rnd() * 3);
+  var c = { x:GATE.x + (rnd() - .5) * 60, y:GATE.y - 70, tx:d.fx + (rnd() - .5) * 50, ty:d.fy + rnd() * 10, st:'toShelf', shelf:j, item:d.item, want:want, have:0, takeT:0, waitT:0, serveT:0, happy:0, sad:0, col:Math.floor(rnd() * CUSTCOL.length), bird:rnd() < .14, acc:Math.floor(rnd() * 3), phase:rnd() * 6, dir:1, moving:true, id:++G.cid };
+  M.customers.push(c);
+}
+function chooseShelf(M, D){ var cnt = 0, stocked = 0, j; for (j = 0; j < D.spots.length; j++){ if (D.spots[j].k === 'shelf' && M.spots[j].built){ cnt++; if (M.spots[j].stock > 0) stocked++; } }
+  if (!cnt) return -1; var ws = stocked > 0 && rnd() < .85, pn = Math.floor(rnd() * (ws ? stocked : cnt)), k = 0;
+  for (j = 0; j < D.spots.length; j++){ if (D.spots[j].k === 'shelf' && M.spots[j].built && (!ws || M.spots[j].stock > 0)){ if (k === pn) return j; k++; } } return -1; }
+function custThink(M, D, c, T, idx){
+  if (c.happy > 0) c.happy -= T; if (c.sad > 0) c.sad -= T;
+  if (c.st === 'toShelf'){ if (arrived(c)){ c.st = 'take'; c.takeT = 0; c.waitT = 0; } else if (c.moving) collide(c, M, D,40); }
+  else if (c.st === 'take'){ var s = M.spots[c.shelf];
+    if (c.have >= c.want) toQueue(M, c);
+    else if (s.stock > 0){ c.takeT += T; c.waitT = 0; if (c.takeT >= TAKE_T - 1e-9){ c.takeT = 0; s.stock--; c.have++; } }
+    else { c.waitT += T; if (c.waitT >= PATIENCE){ if (c.have > 0) toQueue(M, c); else { c.st = 'leave'; c.sad = 2.5; setTarget(c, GATE.x + (rnd() - .5) * 80, GATE.y - 90); } } } }
+  else if (c.st === 'queue'){ var qi = M.queue.indexOf(c), cd = D.spots[D.cidx]; setTarget(c, cd.qx - qi * 48, cd.qy + qi * 4); if (c.moving) collide(c, M, D, 40);
+    if (qi === 0 && arrived(c) && serverPresent(M, D)){ c.serveT += T; if (c.serveT >= SERVE_T - 1e-9) payCust(M, D, c); } else c.serveT = Math.max(0, c.serveT - T * .5); }
+  else if (c.st === 'leave'){ if (arrived(c)) M.customers.splice(idx, 1); else if (c.moving) collide(c, M, D, 40); }
+}
+function toQueue(M, c){ c.st = 'queue'; c.serveT = 0; M.queue.push(c); }
+function payCust(M, D, c){ var amt = ITEMS[c.item].p * c.have; M.pile += amt; G.stats.sold += c.have; G.stats.served++; var qi = M.queue.indexOf(c); if (qi >= 0) M.queue.splice(qi, 1); c.st = 'leave'; c.happy = 1.6; setTarget(c, GATE.x + (rnd() - .5) * 80, GATE.y - 90);
+  if (!G.player.serving){ var w = cashierAt(M); if (w) drain(w, 3, M); } fx('pay', c, amt); sfx('pay'); }
+function serverPresent(M, D){ return G.player.serving || !!cashierAt(M); }
+function cashierAt(M){ for (var w = 0; w < M.workers.length; w++){ var k = M.workers[w]; if (k.t === 'cashier' && !k.asleep && k.atPost) return k; } return null; }
+
+/* ---------- workers ---------- */
+function spawnWorker(M, D, j){ var d = D.spots[j], w = { t:d.wt, x:d.cx, y:d.cy, tx:d.cx, ty:d.cy, st:'idle', job:null, stack:[], stam:100, asleep:false, sleepT:0, actT:0, atPost:false, phase:0, dir:1, moving:false, idleT:0, id:++G.cid }; M.workers.push(w); G.stats.hires++; return w; }
+function sleepWorker(w, M){ w.stam = 0; w.asleep = true; w.sleepT = SLEEP_T; w.atPost = false; w.moving = false; releaseJob(w, M); fx('sleep', w); }
+function wakeWorker(w, M){ if (!w.asleep) return false; w.asleep = false; w.stam = 100; w.sleepT = 0; w.st = 'idle'; w.idleT = 9; fx('wake', w); sfx('wake'); return true; }
+function reserve(M, job, sign){ var s = M.spots[job.dst]; if (job.q >= 0) s.incs[job.q] = Math.max(0, s.incs[job.q] + sign * job.n); else s.inc = Math.max(0, s.inc + sign * job.n); }
+function releaseJob(w, M){ if (w.job){ reserve(M, w.job, -1); w.job = null; } w.st = 'idle'; }
+function drain(w, n, M){ w.stam -= n * wdrain(w.t); if (w.stam <= 0) sleepWorker(w, M); }
+function workerThink(M, D, w, T){
+  if (w.asleep){ w.sleepT -= T; if (w.sleepT <= 0) wakeWorker(w, M); return; }
+  var cd = D.spots[D.cidx];
+  if (w.t === 'cashier'){ setTarget(w, cd.px, cd.py); w.atPost = arrived(w); return; }
+  if (w.moving) collide(w, M, D, 40);
+  if (w.st === 'idle'){ var job = findJob(M, D, w.t, wcap(w.t), w.stack); if (job){ w.job = job; reserve(M, job, 1); w.st = w.stack.length ? 'toDst' : 'toSrc'; var sd = D.spots[w.st === 'toSrc' ? job.src : job.dst]; setTarget(w, sd.fx + (w.t === 'chef' ? 26 : -26), sd.fy); w.actT = 0; }
+    else { if (w.stack.length) w.stack.length = 0; w.idleT += T; if (w.idleT > 3){ w.idleT = 0; setTarget(w, cd.x + 120 + rnd() * 260, cd.y + cd.d + 140 + rnd() * 120); } } return; }
+  if (w.st === 'toSrc'){ if (arrived(w)){ w.st = 'harvest'; w.actT = 0; } return; }
+  if (w.st === 'harvest'){ var s = M.spots[w.job.src], d = D.spots[w.job.src], av = d.k === 'src' ? s.stock : s.outN;
+    if (w.stack.length >= w.job.n || av <= 0 || w.stack.length >= wcap(w.t)){ if (!w.stack.length) releaseJob(w, M); else { w.st = 'toDst'; var dd = D.spots[w.job.dst]; setTarget(w, dd.fx + (w.t === 'chef' ? 26 : -26), dd.fy); } return; }
+    w.actT += T; if (w.actT >= ACT_T - 1e-9){ w.actT -= ACT_T; if (d.k === 'src') s.stock--; else s.outN--; w.stack.push(w.job.item); G.stats.harvest++; fx('pick', d, w); drain(w, 1, M); } return; }
+  if (w.st === 'toDst'){ if (arrived(w)){ w.st = 'unload'; w.actT = 0; } return; }
+  if (w.st === 'unload'){ var s2 = M.spots[w.job.dst], d2 = D.spots[w.job.dst], q = w.job.q, room = d2.k === 'shelf' ? SHELF_CAP - s2.stock : IN_CAP - s2.ins[q];
+    if (!w.stack.length || room <= 0){ var item = w.job.item; releaseJob(w, M); if (w.stack.length){ var alt = findDst(M, D, item, w.t, w.job ? -1 : -1); if (alt >= 0){ var aq = D.spots[alt].k === 'shelf' ? -1 : D.spots[alt].inp.indexOf(item); w.job = { src:-1, dst:alt, item:item, n:Math.min(w.stack.length, roomAt(M, D, alt, aq)), q:aq }; reserve(M, w.job, 1); w.st = 'toDst'; setTarget(w, D.spots[alt].fx, D.spots[alt].fy); } else w.stack.length = 0; } return; }
+    w.actT += T; if (w.actT >= ACT_T - 1e-9){ w.actT -= ACT_T; w.stack.pop(); if (d2.k === 'shelf'){ s2.stock++; s2.inc = Math.max(0, s2.inc - 1); } else { s2.ins[q]++; s2.incs[q] = Math.max(0, s2.incs[q] - 1); } w.job.n--; fx('put', w, d2); drain(w, 1, M); } return; }
+}
+function roomAt(M, D, j, q){ var s = M.spots[j], d = D.spots[j]; return d.k === 'shelf' ? SHELF_CAP - s.stock - s.inc : IN_CAP - s.ins[q] - s.incs[q]; }
+function allowDst(type, kind){ return type === 'assistant' ? kind === 'shelf' : true; }
+function allowSrc(type, kind){ return type === 'farmer' ? kind === 'src' : true; }
+function findSrc(M, D, item, type){ var best = -1, bestA = 0; for (var j = 0; j < D.spots.length; j++){ var s = M.spots[j]; if (!s.built) continue; var d = D.spots[j], a = d.k === 'src' && d.item === item ? s.stock : (d.k === 'mach' || d.k === 'animal') && d.out === item ? s.outN : 0; if (a > bestA && allowSrc(type, d.k === 'src' ? 'src' : 'mach')){ bestA = a; best = j; } } return best; }
+function avail(M, D, j){ var d = D.spots[j], s = M.spots[j]; return d.k === 'src' ? s.stock : s.outN; }
+function findDst(M, D, item, type){ var best = -1, bestR = 0; for (var k = 0; k < D.spots.length; k++){ var s = M.spots[k]; if (!s.built) continue; var d = D.spots[k], r = 0;
+    if (d.k === 'shelf' && d.item === item && allowDst(type, 'shelf')) r = roomAt(M, D, k, -1);
+    else if ((d.k === 'mach' || d.k === 'animal') && allowDst(type, 'mach')){ var q = d.inp.indexOf(item); if (q >= 0) r = roomAt(M, D, k, q) + (s.ins[q] < d.need[q] ? 4 : 0); }
+    if (r > bestR){ bestR = r; best = k; } } return best; }
+function findJob(M, D, type, cap, stack){
+  if (stack && stack.length){ var alt = findDst(M, D, stack[0], type); if (alt < 0) return null; var aq = D.spots[alt].k === 'shelf' ? -1 : D.spots[alt].inp.indexOf(stack[0]); return { src:-1, dst:alt, item:stack[0], n:Math.min(stack.length, Math.max(1, roomAt(M, D, alt, aq))), q:aq }; }
+  var best = null, bestScore = 0;
+  for (var k = 0; k < D.spots.length; k++){ var sd = M.spots[k]; if (!sd.built) continue; var dd = D.spots[k];
+    if (dd.k === 'shelf'){ if (!allowDst(type, 'shelf')) continue; var rm = SHELF_CAP - sd.stock - sd.inc; if (rm <= 0) continue; var sj = findSrc(M, D, dd.item, type); if (sj < 0) continue; var n = Math.min(cap, rm, avail(M, D, sj)); if (n <= 0) continue;
+      var score = rm / SHELF_CAP * 2 + ITEMS[dd.item].p / 100 + n / cap * .6 + (sd.stock === 0 ? 1.5 : 0) + (type === 'chef' && D.spots[sj].k !== 'src' ? 1 : 0);
+      if (score > bestScore){ bestScore = score; best = { src:sj, dst:k, item:dd.item, n:n, q:-1 }; } }
+    else if (dd.k === 'mach' || dd.k === 'animal'){ if (!allowDst(type, 'mach')) continue; if (sd.outN >= OUT_CAP) continue;
+      for (var q = 0; q < dd.inp.length; q++){ var rm2 = IN_CAP - sd.ins[q] - sd.incs[q]; if (rm2 <= 0) continue; var sj2 = findSrc(M, D, dd.inp[q], type); if (sj2 < 0) continue; var n2 = Math.min(cap, rm2, avail(M, D, sj2)); if (n2 <= 0) continue;
+        var sc2 = rm2 / IN_CAP * 2 + ITEMS[dd.out].p / 100 + n2 / cap * .6 + (sd.ins[q] < dd.need[q] ? 1.5 : 0) + (type === 'farmer' ? 1 : 0);
+        if (sc2 > bestScore){ bestScore = sc2; best = { src:sj2, dst:k, item:dd.inp[q], n:n2, q:q }; } } } }
+  return best;
+}
+
+/* ---------- economy / passive / daily / shop ---------- */
+function passiveRate(i){ var M = G.marts[i], D = MARTS[i]; if (!hasWorker(M, 'cashier')) return 0; var rest = hasWorker(M, 'assistant') || hasWorker(M, 'farmer') || hasWorker(M, 'chef'); if (!rest) return 0; var r = 0; for (var j = 0; j < D.spots.length; j++) if (D.spots[j].k === 'shelf' && M.spots[j].built) r += ITEMS[D.spots[j].item].p * .12; return r; }
+function passive(T){ var r = 0; for (var i = 0; i < G.unlocked; i++) if (i !== G.mart) r += passiveRate(i); if (r > 0){ G.passAcc += r * T; if (G.passAcc >= 1){ var a = Math.floor(G.passAcc); G.passAcc -= a; G.cash += a; G.stats.earned += a; } } }
+function checkDaily(){ var k = dayKey(nowMs()); if (!G.daily || G.daily.day !== k) G.daily = { day:k, base:{ harvest:G.stats.harvest, sold:G.stats.sold, served:G.stats.served, earned:G.stats.earned, hires:G.stats.hires }, done:[0, 0, 0, 0, 0], offers:[0, 0, 0, 0], bonus:false }; }
+function taskGoal(i){ return TASKS[i].goal * G.unlocked; }
+function taskProg(i){ var id = TASKS[i].id, b = G.daily.base, S = G.stats, v = id === 'harvest' ? S.harvest - b.harvest : id === 'sell' ? S.sold - b.sold : id === 'serve' ? S.served - b.served : id === 'earn' ? S.earned - b.earned : S.hires - b.hires; return Math.max(0, Math.min(v, taskGoal(i))); }
+function checkTasks(){ var all = true, got = 0; for (var i = 0; i < 5; i++){ if (!G.daily.done[i]){ if (taskProg(i) >= taskGoal(i)){ G.daily.done[i] = 1; G.dia += 2; got += 2; } else all = false; } } if (all && !G.daily.bonus){ G.daily.bonus = true; G.dia += 10; got += 10; } if (got && !G.headless){ toast(t(got >= 10 ? 'bonus' : 'taskDone') + ' +' + got + ' 💎'); sfx('gem'); } return got; }
+function nextOffer(){ for (var i = 0; i < 4; i++) if (!G.daily.offers[i]) return i; return -1; }
+function claimOffer(){ var i = nextOffer(); if (i < 0) return false; G.daily.offers[i] = 1; G.dia += OFFERS[i]; sfx('gem'); save(); return true; }
+function buyPack(i){ var pk = PACKS[i]; if (!pk || G.dia < pk.dia) return false; G.dia -= pk.dia; G.cash += packCash(i); sfx('cash'); save(); return true; }
+function packCash(i){ return PACKS[i].cash * PACK_MULT[G.unlocked - 1]; }
+function buyHat(id){ var h = hatById(id); if (!h) return false; if (G.hats.indexOf(id) < 0){ if (G.dia < h.price) return false; G.dia -= h.price; G.hats.push(id); } G.hat = id; sfx('buy'); save(); return true; }
+function buyUpgrade(who, k, type){ var lv = who === 'player' ? G.up[k] : G.wup[type][k]; if (lv >= 4) return false; var p = UPG[who][k].price[lv - 1]; if (G.cash < p) return false; G.cash -= p; if (who === 'player') G.up[k]++; else G.wup[type][k]++; G.stats.hires++; sfx('buy'); if (!G.headless) save(); return true; }
+function resetTime(){ var d = new Date(nowMs()); var nx = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime(); return Math.max(0, nx - d.getTime()); }
+
+/* ---------- tutorial ---------- */
+var TUT = { key:null, tx:0, ty:0, ui:null, on:false, side:false };
+function tutorialTick(){
+  var M = G.marts[G.mart], D = MARTS[G.mart], P = G.player, u = TUT; u.key = null; u.ui = null; u.on = false; u.side = false;
+  function at(x, y){ u.tx = x; u.ty = y; u.on = true; }
+  function atSpot(j){ var d = D.spots[j]; at(d.cx, M.spots[j].built ? d.y + d.d / 2 - d.h : d.cy); }
+  if (G.mart === 0){
+    if (!G.tut.moved){ if (P.moved > 140) G.tut.moved = true; else { u.key = Math.floor(G.t / 2.5) % 2 ? 'tutTap' : 'tutMove'; return; } }
+    var cd = D.spots[D.cidx], sc = M.spots[D.cidx], d1 = D.spots[1], s1 = M.spots[1];
+    if (!sc.built){ u.key = 'tutCash'; at(cd.cx, cd.cy); return; }
+    if (!s1.built){ u.key = 'tutStand'; at(d1.cx, d1.cy); return; }
+    var top = P.stack.length ? P.stack[P.stack.length - 1] : null;
+    if (M.queue.length && !cashierAt(M)){ u.key = 'tutServe'; at(cd.px, cd.py); return; }
+    if (top === 'banana' && s1.stock < SHELF_CAP){ u.key = 'tutStock'; atSpot(1); return; }
+    if (M.pile > 0 && !M.queue.length){ u.key = 'tutCollect'; at(cd.lx, cd.ly); return; }
+    if (s1.stock === 0 && !P.stack.length && !hasWorker(M, 'assistant')){ var sj = findSrc(M, D, 'banana', 'player'); if (sj >= 0){ u.key = 'tutHarvest'; at(D.spots[sj].cx, D.spots[sj].cy - 60); return; } }
+    if (!G.tut.stack && G.up.stack === 1 && M.spots[4].built && G.cash >= UPG.player.stack.price[0]){ u.key = 'tutStack'; u.ui = 'upg'; return; }
+    if (!G.tut.hat && G.stats.served >= 2 && !P.stack.length){ u.key = 'tutHat'; u.ui = 'hats'; return; }
+    if (M.next === 4){ u.key = 'tutHire'; at(D.spots[4].bx + D.spots[4].bw + 44, D.spots[4].cy + 16); u.side = true; return; }
+  }
+  if (M.next >= 0){ var nd = D.spots[M.next], ns = M.spots[M.next]; at(nd.bx + nd.bw + 44, nd.cy + 16); u.side = true; if (G.cash >= nd.price - ns.paid) u.key = 'tutBuild'; return; }
+  if (G.unlocked > G.mart + 1){ u.key = 'truckHint'; u.ui = 'truck'; }
+}
+
+/* ---------- step / tick ---------- */
+function tick(T){
+  var M = G.marts[G.mart], D = MARTS[G.mart], j;
+  for (j = 0; j < D.spots.length; j++){ var s = M.spots[j]; if (!s.built) continue; var d = D.spots[j];
+    if (s.pop > 0) s.pop = Math.max(0, s.pop - T * 2.5);
+    if (d.k === 'src'){ if (s.stock < d.cap){ s.timer += T; if (s.timer >= d.regrow - 1e-9){ s.timer = 0; s.stock++; } } else s.timer = 0; }
+    else if (d.k === 'mach' || d.k === 'animal'){ if (s.outN < OUT_CAP && hasInputs(s, d)){ s.prog += T; if (s.prog >= d.t - 1e-9){ s.prog = 0; for (var q = 0; q < d.inp.length; q++) s.ins[q] -= d.need[q]; s.outN++; fx('made', d); } } else if (!hasInputs(s, d)) s.prog = 0; } }
+  spawnCustomers(M, D, T);
+  for (var c = M.customers.length - 1; c >= 0; c--) custThink(M, D, M.customers[c], T, c);
+  for (var w = 0; w < M.workers.length; w++) workerThink(M, D, M.workers[w], T);
+  playerAct(M, D, T);
+  var B = G.boots; if (B.on && G.t >= B.until) B.on = false; if (!B.here){ B.spawnT -= T; if (B.spawnT <= 0){ B.here = true; B.x = FLOOR.x + 300 + rnd() * (FLOOR.w - 600); B.y = FLOOR.y + 300 + rnd() * (FLOOR.h - 450); } }
+  passive(T);
+  if (G.truckT > 0) G.truckT -= T; if (G.msgT > 0) G.msgT -= T;
+  G.dayT += T; if (G.dayT >= 1 - 1e-9){ G.dayT = 0; checkDaily(); checkTasks(); }
+  tutorialTick();
+  if (!G.headless){ G.saveT += T; if (G.saveT >= 2){ G.saveT = 0; save(); } }
+}
+function step(dt){
+  G.t += dt; G.n++; movePlayer(dt);
+  var M = G.marts[G.mart];
+  for (var c = 0; c < M.customers.length; c++) moveEnt(M.customers[c], CSPEED, dt);
+  for (var w = 0; w < M.workers.length; w++){ var k = M.workers[w]; if (!k.asleep) moveEnt(k, wspeed(k.t), dt); }
+  if (G.n % TPS === 0) tick(TICK);
+}
+
+/* ---------- save / load ---------- */
+function serialize(){
+  var o = { v:1, at:nowMs(), cash:Math.floor(G.cash), dia:G.dia, lang:G.lang, sound:G.sound, hat:G.hat, hats:G.hats.slice(), up:{ speed:G.up.speed, stack:G.up.stack, stamina:G.up.stamina }, wup:{}, mart:G.mart, unlocked:G.unlocked, stats:{ harvest:G.stats.harvest, sold:G.stats.sold, served:G.stats.served, earned:G.stats.earned, hires:G.stats.hires }, tut:{ moved:G.tut.moved, hat:G.tut.hat, stack:G.tut.stack }, daily:G.daily, boots:{ left:G.boots.on ? Math.max(0, G.boots.until - G.t) : 0, spawnT:Math.round(G.boots.spawnT * 10) / 10, here:G.boots.here, x:Math.round(G.boots.x), y:Math.round(G.boots.y) }, player:{ x:Math.round(G.player.x), y:Math.round(G.player.y), stack:G.player.stack.slice() }, marts:[] };
+  for (var w = 0; w < WTYPES.length; w++){ var u = G.wup[WTYPES[w]]; o.wup[WTYPES[w]] = { speed:u.speed, stack:u.stack, stamina:u.stamina }; }
+  for (var i = 0; i < G.marts.length; i++){ var M = G.marts[i]; o.marts.push({ spots:M.spots.map(function(s){ return { paid:s.paid, built:s.built, stock:s.stock, timer:Math.round(s.timer * 100) / 100, ins:s.ins ? s.ins.slice() : null, outN:s.outN, prog:Math.round(s.prog * 100) / 100 }; }), workers:M.workers.map(function(k){ return { t:k.t, x:Math.round(k.x), y:Math.round(k.y), stam:Math.round(k.stam), asleep:k.asleep, sleepT:Math.round(k.sleepT) }; }), pile:M.pile, done:M.done }); }
+  return o;
+}
+function save(){ if (!G || NOSAVE) return; try { localStorage.setItem(KEY, JSON.stringify(serialize())); } catch(e){} G.savedAt = nowMs(); }
+function load(raw){ var o = raw || null; if (!o){ try { o = JSON.parse(localStorage.getItem(KEY)); } catch(e){ o = null; } } if (!o || o.v !== 1 || !o.marts) return false; restore(o); return true; }
+function restore(o){
+  newGame(); G.cash = Math.max(0, +o.cash || 0); G.dia = Math.max(0, +o.dia || 0); G.lang = o.lang === 'en' ? 'en' : 'he'; G.sound = o.sound !== false; G.hat = hatById(o.hat) ? o.hat : 'none'; G.hats = Array.isArray(o.hats) ? o.hats.filter(hatById) : ['none']; if (G.hats.indexOf('none') < 0) G.hats.unshift('none'); if (G.hats.indexOf(G.hat) < 0) G.hats.push(G.hat);
+  var k; if (o.up) for (k in G.up) G.up[k] = clamp(o.up[k] | 0, 1, 4); if (o.wup) for (var w = 0; w < WTYPES.length; w++){ var u = o.wup[WTYPES[w]]; if (u) for (k in G.wup[WTYPES[w]]) G.wup[WTYPES[w]][k] = clamp(u[k] | 0, 1, 4); }
+  G.unlocked = clamp(o.unlocked | 0, 1, MARTS.length); G.mart = clamp(o.mart | 0, 0, G.unlocked - 1);
+  if (o.stats) for (k in G.stats) G.stats[k] = Math.max(0, o.stats[k] | 0); if (o.tut) for (k in G.tut) G.tut[k] = !!o.tut[k];
+  if (o.daily && o.daily.day && o.daily.base && o.daily.done && o.daily.offers) G.daily = o.daily;
+  if (o.boots){ G.boots.spawnT = isFinite(+o.boots.spawnT) ? +o.boots.spawnT : BOOT_EVERY; G.boots.here = !!o.boots.here; G.boots.x = +o.boots.x || 0; G.boots.y = +o.boots.y || 0; if (o.boots.left > 0){ G.boots.on = true; G.boots.until = +o.boots.left; } }
+  if (o.player){ G.player.x = +o.player.x || START.x; G.player.y = +o.player.y || START.y; if (Array.isArray(o.player.stack)) G.player.stack = o.player.stack.filter(function(i){ return !!ITEMS[i]; }); }
+  for (var i = 0; i < G.marts.length && i < o.marts.length; i++){ var M = G.marts[i], D = MARTS[i], om = o.marts[i]; if (!om || !om.spots) continue;
+    for (var j = 0; j < M.spots.length && j < om.spots.length; j++){ var s = M.spots[j], os = om.spots[j], d = D.spots[j]; if (!os) continue; s.paid = clamp(+os.paid || 0, 0, d.price); s.built = !!os.built || !!d.pre; s.stock = Math.max(0, os.stock | 0); s.timer = +os.timer || 0; s.outN = Math.max(0, os.outN | 0); s.prog = +os.prog || 0; if (s.ins && Array.isArray(os.ins)) for (var q = 0; q < s.ins.length; q++) s.ins[q] = Math.max(0, os.ins[q] | 0); }
+    M.next = nextSpot(M); M.done = !!om.done || M.next < 0; M.pile = Math.max(0, +om.pile || 0);
+    if (Array.isArray(om.workers)) for (var x = 0; x < om.workers.length; x++){ var ow = om.workers[x]; if (!ow || WTYPES.indexOf(ow.t) < 0) continue; var wk = { t:ow.t, x:+ow.x || 300, y:+ow.y || 400, tx:+ow.x || 300, ty:+ow.y || 400, st:'idle', job:null, stack:[], stam:clamp(+ow.stam || 0, 0, 100), asleep:!!ow.asleep, sleepT:+ow.sleepT || 0, actT:0, atPost:false, phase:0, dir:1, moving:false, idleT:0, id:++G.cid }; if (wk.asleep && wk.sleepT <= 0) wk.sleepT = 5; M.workers.push(wk); } }
+  checkDaily(); offline(+o.at || nowMs());
+}
+function offline(at){ var secs = clamp((nowMs() - at) / 1000, 0, OFFLINE_CAP); G.offlineAmt = 0; G.offlineSecs = 0; if (secs < 60) return 0; var r = 0; for (var i = 0; i < G.unlocked; i++) r += passiveRate(i); var amt = Math.floor(r * OFFLINE_RATE * secs); if (amt > 0){ G.cash += amt; G.stats.earned += amt; G.offlineAmt = amt; G.offlineSecs = secs; } return amt; }
+
+/* ---------- bot (auto-player) ---------- */
+function goal(x, y){ var P = G.player; if (!P.goal || Math.abs(P.goal.x - x) > 1 || Math.abs(P.goal.y - y) > 1) P.goal = { x:x, y:y }; }
+function botUpgrades(){
+  var M = G.marts[G.mart];
+  if (G.up.stack < 4 && hasWorker(G.marts[0], 'cashier') && G.cash >= upPrice('player', 'stack') * 1.4) buyUpgrade('player', 'stack');
+  if (G.up.speed < 4 && G.up.stack >= 2 && G.cash >= upPrice('player', 'speed') * 1.8) buyUpgrade('player', 'speed');
+  if (G.up.stamina < 4 && G.up.stack >= 3 && G.cash >= upPrice('player', 'stamina') * 3) buyUpgrade('player', 'stamina');
+  for (var w = 0; w < WTYPES.length; w++){ var ty = WTYPES[w]; if (!hasWorker(M, ty)) continue; if (G.wup[ty].stack < 4 && G.cash >= upPrice('worker', 'stack', ty) * 3) buyUpgrade('worker', 'stack', ty); if (G.wup[ty].speed < 4 && G.cash >= upPrice('worker', 'speed', ty) * 3.5) buyUpgrade('worker', 'speed', ty); if (G.wup[ty].stamina < 4 && G.cash >= upPrice('worker', 'stamina', ty) * 4) buyUpgrade('worker', 'stamina', ty); }
+}
+function botThink(){
+  var M = G.marts[G.mart], D = MARTS[G.mart], P = G.player, cd = D.spots[D.cidx], B = G.bot, cap = stackCap();
+  if (M.done && G.unlocked > G.mart + 1){ goMart(G.mart + 1); return; }
+  botUpgrades();
+  for (var w = 0; w < M.workers.length; w++) if (M.workers[w].asleep) wakeWorker(M.workers[w], M);
+  if (M.spots[D.cidx].built){
+    if (M.pile >= 60 || (M.pile > 0 && !M.queue.length && !P.stack.length && M.next < 0)){ goal(cd.lx, cd.ly); return; }
+    if (M.queue.length && !cashierAt(M)){ goal(cd.px, cd.py); return; } }
+  var j = M.next; if (j >= 0){ var d = D.spots[j], s = M.spots[j], rem = d.price - s.paid; if (G.cash >= Math.min(rem, 40)){ goal(d.cx, d.cy); return; } }
+  if (P.stack.length){ var dst = findDst(M, D, P.stack[0], 'player'); if (dst >= 0){ goal(D.spots[dst].fx, D.spots[dst].fy); return; } P.stack.length = 0; }
+  var job = B.job; if (job && !(P.stack.length < cap && avail(M, D, job.src) > 0 && roomAt(M, D, job.dst, job.q) > 0)) job = null;
+  if (!job) job = findJob(M, D, 'player', cap, null);
+  B.job = job;
+  if (job){ goal(D.spots[job.src].fx, D.spots[job.src].fy); return; }
+  if (M.spots[D.cidx].built){ if (M.pile > 0){ goal(cd.lx, cd.ly); return; } goal(cd.px, cd.py); }
+}
+function auto(secs, opts){ var steps = Math.round(secs * HZ), was = G.headless; G.headless = true; for (var k = 0; k < steps; k++){ if (G.n % TPS === 0) botThink(); step(DT); if (opts && opts.until && opts.until()) break; } G.headless = was; return k / HZ; }
+
+/* ---------- rendering ---------- */
+var cv = $('cv'), ctx = cv.getContext('2d'), VW = 1000, VH = 620, DPR = 1, SC = 1, HU = 1, FXON = true, REALT = 0;
+var CAM = { x:GATE.x, y:GATE.y + 320, snap:true };
+var OUTL = '#3E2415', PINK = '#E27A86', PINKD = '#B9505F', PINKO = '#6E2F3A', CREAM = '#FFF6D8', BROWN = '#6E4A2E', SAND = '#F2E4A4', GRASS = '#49C64A';
+function fit(){ DPR = Math.min(2, window.devicePixelRatio || 1); VW = Math.max(200, window.innerWidth); VH = Math.max(200, window.innerHeight); cv.width = Math.round(VW * DPR); cv.height = Math.round(VH * DPR); cv.style.width = VW + 'px'; cv.style.height = VH + 'px'; SC = clamp(Math.sqrt(VW * VH) / 880, .62, 1.25); var zq = /[?&]zoom=([\d.]+)/.exec(location.search); if (zq) SC = +zq[1]; HU = clamp(Math.min(VW, VH) / 620, .8, 1.25); CAM.snap = true; }
+function worldX(sx){ return (sx - VW / 2) / SC + CAM.x; } function worldY(sy){ return (sy - VH / 2) / SC + CAM.y; }
+function scrX(wx){ return (wx - CAM.x) * SC + VW / 2; } function scrY(wy){ return (wy - CAM.y) * SC + VH / 2; }
+function rr(x, y, w, h, r){ r = Math.min(r, w / 2, h / 2); ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function fillRR(x, y, w, h, r, c, o, lw){ rr(x, y, w, h, r); ctx.fillStyle = c; ctx.fill(); if (o){ ctx.strokeStyle = o; ctx.lineWidth = lw || 2.5; ctx.stroke(); } }
+function circ(x, y, r, c, o, lw){ ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fillStyle = c; ctx.fill(); if (o){ ctx.strokeStyle = o; ctx.lineWidth = lw || 2.5; ctx.stroke(); } }
+function ell(x, y, rx, ry, c, o, lw){ ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, 6.2832); ctx.fillStyle = c; ctx.fill(); if (o){ ctx.strokeStyle = o; ctx.lineWidth = lw || 2.5; ctx.stroke(); } }
+function txt(s, x, y, size, c, align, o, lw, weight){ ctx.font = (weight || 900) + ' ' + size + 'px ' + FONT; ctx.textAlign = align || 'center'; ctx.textBaseline = 'middle'; if (o){ ctx.lineJoin = 'round'; ctx.strokeStyle = o; ctx.lineWidth = lw || 4; ctx.strokeText(s, x, y); } ctx.fillStyle = c; ctx.fillText(s, x, y); }
+function shadow(x, y, rx, ry){ ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, 6.2832); ctx.fillStyle = 'rgba(60,40,10,.18)'; ctx.fill(); }
+function box3d(x, y, w, d, h, top, side, o){ fillRR(x, y + d - h, w, h, 6, side, o, 3); fillRR(x, y - h, w, d, 8, top, o, 3); }
+
+/* ---- items ---- */
+function drawItem(id, x, y, s){
+  s = s || 1; ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.lineWidth = 2; ctx.strokeStyle = OUTL; ctx.lineJoin = 'round';
+  switch (id){
+    case 'banana': ctx.beginPath(); ctx.moveTo(-11, -4); ctx.quadraticCurveTo(0, 9, 11, -2); ctx.quadraticCurveTo(2, 4, -11, -4); ctx.closePath(); ctx.fillStyle = '#FFD93D'; ctx.fill(); ctx.stroke(); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-11, -4); ctx.quadraticCurveTo(0, 9, 11, -2); ctx.strokeStyle = '#E0A800'; ctx.lineWidth = 2; ctx.stroke(); circ(11, -2, 1.6, '#5B3A1E'); break;
+    case 'corn': ell(0, 0, 6, 11, '#FFD23F', OUTL, 2); ctx.beginPath(); ctx.moveTo(-6, 4); ctx.quadraticCurveTo(-14, -6, -4, -12); ctx.quadraticCurveTo(-8, -2, -4, 6); ctx.fillStyle = '#5CC25C'; ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(6, 4); ctx.quadraticCurveTo(14, -6, 4, -12); ctx.quadraticCurveTo(8, -2, 4, 6); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#E8A800'; for (var i = -1; i <= 1; i++){ circ(i * 3, -5, 1.1, '#E8A800'); circ(i * 3, 0, 1.1, '#E8A800'); circ(i * 3, 5, 1.1, '#E8A800'); } break;
+    case 'yogurt': fillRR(-8, -6, 16, 14, 4, '#F7F3E8', OUTL, 2); fillRR(-10, -10, 20, 6, 3, '#F08AC6', OUTL, 2); break;
+    case 'popcorn': fillRR(-9, -4, 18, 14, 3, '#F0506E', OUTL, 2); ctx.fillStyle = '#fff'; ctx.fillRect(-5, -4, 3, 14); ctx.fillRect(2, -4, 3, 14); circ(-5, -8, 4, '#FFF5D6', OUTL, 2); circ(2, -10, 4, '#FFF5D6', OUTL, 2); circ(7, -6, 3.5, '#FFF5D6', OUTL, 2); break;
+    case 'feed': fillRR(-8, -8, 16, 18, 5, '#C9A46B', OUTL, 2); ctx.fillStyle = '#8B6A3A'; ctx.fillRect(-5, -8, 10, 3); txt('✕', 0, 2, 9, '#8B6A3A'); break;
+    case 'milk': fillRR(-7, -6, 14, 16, 2, '#fff', OUTL, 2); ctx.beginPath(); ctx.moveTo(-7, -6); ctx.lineTo(0, -12); ctx.lineTo(7, -6); ctx.closePath(); ctx.fillStyle = '#E8F0FF'; ctx.fill(); ctx.stroke(); ctx.fillStyle = '#4FA3F0'; ctx.fillRect(-7, 0, 14, 4); break;
+    case 'egg': ell(0, 0, 7, 9.5, '#FFF7E6', OUTL, 2); break;
+    case 'cocoa': ell(0, 0, 6.5, 10.5, '#B8692E', OUTL, 2); ctx.beginPath(); ctx.moveTo(0, -9); ctx.lineTo(0, 9); ctx.strokeStyle = '#7A3F18'; ctx.stroke(); break;
+    case 'chocolate': fillRR(-11, -7, 22, 14, 2, '#5B3222', OUTL, 2); ctx.strokeStyle = '#3B1E12'; ctx.lineWidth = 1.5; for (var cx2 = -5.5; cx2 <= 5.5; cx2 += 5.5){ ctx.beginPath(); ctx.moveTo(cx2, -7); ctx.lineTo(cx2, 7); ctx.stroke(); } ctx.beginPath(); ctx.moveTo(-11, 0); ctx.lineTo(11, 0); ctx.stroke(); break;
+    case 'wheat': ctx.strokeStyle = '#B98A2E'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(0, 11); ctx.lineTo(0, -8); ctx.stroke(); for (var k = 0; k < 4; k++){ ell(-4 + (k % 2) * 8, -9 + k * 3, 3, 4.5, '#E9C46A', OUTL, 1.5); } ell(0, -11, 3, 4.5, '#E9C46A', OUTL, 1.5); break;
+    case 'flour': fillRR(-8, -7, 16, 17, 5, '#F4ECDC', OUTL, 2); fillRR(-5, -11, 10, 5, 2, '#D9C7A8', OUTL, 2); txt('F', 0, 2, 9, '#B59C70'); break;
+    case 'muffin': ctx.beginPath(); ctx.moveTo(-8, 0); ctx.lineTo(-6, 10); ctx.lineTo(6, 10); ctx.lineTo(8, 0); ctx.closePath(); ctx.fillStyle = '#F0C070'; ctx.fill(); ctx.stroke(); ell(0, -2, 10, 7, '#7A4B2A', OUTL, 2); circ(-3, -4, 1.5, '#3B1E12'); circ(3, -2, 1.5, '#3B1E12'); break;
+    case 'coffeebean': ell(0, 0, 7, 10, '#6B4423', OUTL, 2); ctx.beginPath(); ctx.moveTo(0, -8); ctx.quadraticCurveTo(3, 0, 0, 8); ctx.strokeStyle = '#3B2210'; ctx.stroke(); break;
+    case 'coffee': fillRR(-8, -6, 16, 14, 3, '#fff', OUTL, 2); ctx.fillStyle = '#7A4B2A'; ctx.fillRect(-6, -4, 12, 4); ctx.beginPath(); ctx.arc(9, 1, 4, -1.5, 1.5); ctx.strokeStyle = OUTL; ctx.stroke(); break;
+    case 'fish': ell(-2, 0, 9, 6, '#6EC1F0', OUTL, 2); ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(12, -5); ctx.lineTo(12, 5); ctx.closePath(); ctx.fillStyle = '#4FA3F0'; ctx.fill(); ctx.stroke(); circ(-6, -1.5, 1.4, '#222'); break;
+    case 'icecream': ctx.beginPath(); ctx.moveTo(-6, 0); ctx.lineTo(0, 12); ctx.lineTo(6, 0); ctx.closePath(); ctx.fillStyle = '#E8B06A'; ctx.fill(); ctx.stroke(); circ(0, -4, 7.5, '#FFB6C8', OUTL, 2); break;
+    case 'apple': circ(0, 1, 9, '#E53935', OUTL, 2); ctx.beginPath(); ctx.moveTo(0, -7); ctx.lineTo(0, -12); ctx.strokeStyle = '#5B3A1E'; ctx.lineWidth = 2; ctx.stroke(); ell(4, -10, 4, 2.2, '#5CC25C', OUTL, 1.5); break;
+    case 'juice': fillRR(-6, -5, 12, 15, 3, '#F5B041', OUTL, 2); fillRR(-3, -11, 6, 6, 1.5, '#F0506E', OUTL, 2); ctx.fillStyle = '#fff'; ctx.fillRect(-4, 0, 8, 5); break;
+    case 'peanut': ell(-3.5, 0, 5, 6.5, '#D8A05A', OUTL, 2); ell(4, 0, 5, 6.5, '#D8A05A', OUTL, 2); break;
+    case 'pbutter': fillRR(-8, -5, 16, 14, 4, '#C47A2C', OUTL, 2); fillRR(-9, -10, 18, 6, 2, '#F0506E', OUTL, 2); break;
+    case 'coconut': circ(0, 0, 9.5, '#7B5230', OUTL, 2); circ(-3, -3, 1.6, '#3B2210'); circ(3, -3, 1.6, '#3B2210'); circ(0, 2, 1.6, '#3B2210'); break;
+    case 'cocodrink': fillRR(-7, -6, 14, 16, 3, '#E8F6F0', OUTL, 2); ctx.fillStyle = '#5CC25C'; ctx.fillRect(-7, 2, 14, 4); ctx.beginPath(); ctx.moveTo(3, -6); ctx.lineTo(6, -14); ctx.strokeStyle = '#F0506E'; ctx.lineWidth = 2.5; ctx.stroke(); break;
+    default: circ(0, 0, 8, ITEMS[id] ? ITEMS[id].c : '#ccc', OUTL, 2);
+  }
+  ctx.restore();
+}
+/* ---- hats (x,y = top centre of the head, drawn upwards) ---- */
+function drawHat(id, x, y, s){
+  if (!id || id === 'none') return; s = s || 1; ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.lineWidth = 2.5; ctx.strokeStyle = OUTL; ctx.lineJoin = 'round';
+  switch (id){
+    case 'straw': case 'strawsun': ell(0, 2, 25, 7, '#F2D27A', OUTL); fillRR(-14, -14, 28, 16, 5, '#F2D27A', OUTL); ctx.fillStyle = '#3F7FE0'; ctx.fillRect(-14, -4, 28, 5); if (id === 'strawsun'){ fillRR(-13, 6, 11, 7, 3, '#222', OUTL, 1.5); fillRR(2, 6, 11, 7, 3, '#222', OUTL, 1.5); } break;
+    case 'bucket': ctx.beginPath(); ctx.moveTo(-14, -14); ctx.lineTo(14, -14); ctx.lineTo(22, 4); ctx.lineTo(-22, 4); ctx.closePath(); ctx.fillStyle = '#3EC24A'; ctx.fill(); ctx.stroke(); ell(0, 4, 24, 6, '#35A83F', OUTL); break;
+    case 'redhat': ctx.beginPath(); ctx.arc(0, 2, 16, 3.1416, 0); ctx.closePath(); ctx.fillStyle = '#E84A3C'; ctx.fill(); ctx.stroke(); ell(0, 3, 24, 6, '#C93A2E', OUTL); break;
+    case 'bow': ctx.translate(12, -2); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-14, -9); ctx.lineTo(-14, 9); ctx.closePath(); ctx.moveTo(0, 0); ctx.lineTo(14, -9); ctx.lineTo(14, 9); ctx.closePath(); ctx.fillStyle = '#F0506E'; ctx.fill(); ctx.stroke(); circ(0, 0, 4, '#C93A2E', OUTL); break;
+    case 'fedora': fillRR(-14, -16, 28, 18, 6, '#F4F1EA', OUTL); ctx.fillStyle = '#222'; ctx.fillRect(-14, -5, 28, 5); ell(0, 2, 25, 6, '#F4F1EA', OUTL); break;
+    case 'cap': ctx.beginPath(); ctx.arc(0, 2, 17, 3.1416, 0); ctx.closePath(); ctx.fillStyle = '#3F9FE0'; ctx.fill(); ctx.stroke(); fillRR(-2, 0, 24, 7, 3, '#2E7FC0', OUTL); circ(0, -14, 3, '#2E7FC0', OUTL, 1.5); break;
+    case 'helmet': ctx.beginPath(); ctx.arc(0, 4, 20, 3.1416, 0); ctx.closePath(); ctx.fillStyle = '#5CC25C'; ctx.fill(); ctx.stroke(); circ(-8, -6, 3.5, '#fff'); circ(6, -9, 3.5, '#fff'); circ(10, 0, 3, '#fff'); circ(-3, 0, 2.5, '#fff'); ctx.fillStyle = '#35A83F'; ctx.fillRect(-20, 3, 40, 4); break;
+    case 'pirate': ctx.beginPath(); ctx.moveTo(-26, 2); ctx.quadraticCurveTo(0, -24, 26, 2); ctx.lineTo(18, 4); ctx.lineTo(-18, 4); ctx.closePath(); ctx.fillStyle = '#222'; ctx.fill(); ctx.stroke(); circ(0, -6, 4, '#fff'); ctx.fillStyle = '#222'; ctx.fillRect(-1.5, -7, 3, 1.5); break;
+    case 'crown': ctx.beginPath(); ctx.moveTo(-16, 4); ctx.lineTo(-16, -12); ctx.lineTo(-8, -3); ctx.lineTo(0, -16); ctx.lineTo(8, -3); ctx.lineTo(16, -12); ctx.lineTo(16, 4); ctx.closePath(); ctx.fillStyle = '#FFD23F'; ctx.fill(); ctx.stroke(); circ(0, -2, 2.5, '#F0506E'); circ(-10, 0, 2, '#3F9FE0'); circ(10, 0, 2, '#3F9FE0'); break;
+    case 'chef': fillRR(-13, -8, 26, 12, 3, '#fff', OUTL); circ(-9, -12, 8, '#fff', OUTL); circ(9, -12, 8, '#fff', OUTL); circ(0, -16, 9, '#fff', OUTL); ctx.fillStyle = '#fff'; ctx.fillRect(-12, -14, 24, 8); break;
+    case 'party': ctx.beginPath(); ctx.moveTo(-13, 4); ctx.lineTo(0, -26); ctx.lineTo(13, 4); ctx.closePath(); ctx.fillStyle = '#F0506E'; ctx.fill(); ctx.stroke(); ctx.fillStyle = '#FFD23F'; ctx.beginPath(); ctx.moveTo(-8, -8); ctx.lineTo(8, -8); ctx.lineTo(10, -3); ctx.lineTo(-10, -3); ctx.closePath(); ctx.fill(); circ(0, -26, 4, '#3F9FE0', OUTL, 1.5); break;
+    case 'viking': ctx.beginPath(); ctx.arc(0, 2, 17, 3.1416, 0); ctx.closePath(); ctx.fillStyle = '#9EA6B5'; ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-14, -2); ctx.quadraticCurveTo(-26, -8, -22, -22); ctx.quadraticCurveTo(-16, -10, -10, -8); ctx.closePath(); ctx.moveTo(14, -2); ctx.quadraticCurveTo(26, -8, 22, -22); ctx.quadraticCurveTo(16, -10, 10, -8); ctx.closePath(); ctx.fillStyle = '#F4ECDC'; ctx.fill(); ctx.stroke(); ctx.fillStyle = '#6B7280'; ctx.fillRect(-17, 0, 34, 4); break;
+    case 'cowboy': ell(0, 3, 27, 7, '#A0682E', OUTL); ctx.beginPath(); ctx.moveTo(-12, 3); ctx.lineTo(-10, -14); ctx.quadraticCurveTo(0, -18, 10, -14); ctx.lineTo(12, 3); ctx.closePath(); ctx.fillStyle = '#B8782E'; ctx.fill(); ctx.stroke(); ctx.fillStyle = '#5B3A1E'; ctx.fillRect(-12, -2, 24, 4); break;
+    case 'beanie': ctx.beginPath(); ctx.arc(0, 4, 18, 3.1416, 0); ctx.closePath(); ctx.fillStyle = '#F0506E'; ctx.fill(); ctx.stroke(); fillRR(-18, 0, 36, 7, 3, '#C93A2E', OUTL); circ(0, -16, 5, '#fff', OUTL); break;
+    case 'headphones': ctx.beginPath(); ctx.arc(0, 6, 21, 3.1416, 0); ctx.strokeStyle = OUTL; ctx.lineWidth = 6; ctx.stroke(); ctx.lineWidth = 2.5; fillRR(-25, 0, 10, 14, 4, '#F0506E', OUTL); fillRR(15, 0, 10, 14, 4, '#F0506E', OUTL); break;
+    case 'flower': for (var f = 0; f < 7; f++){ var fx2 = -18 + f * 6, fy2 = 2 - Math.sin(f / 6 * 3.1416) * 6; circ(fx2, fy2, 4.5, f % 2 ? '#FFD23F' : '#F08AC6', OUTL, 1.5); circ(fx2, fy2, 1.5, '#fff'); } break;
+    case 'wizard': ctx.beginPath(); ctx.moveTo(-14, 2); ctx.lineTo(2, -30); ctx.lineTo(14, 2); ctx.closePath(); ctx.fillStyle = '#7B4FD6'; ctx.fill(); ctx.stroke(); ell(0, 3, 24, 6, '#5E3BB0', OUTL); txt('★', 0, -8, 9, '#FFD23F'); break;
+    case 'halo': ctx.beginPath(); ctx.ellipse(0, -12, 18, 6, 0, 0, 6.2832); ctx.strokeStyle = '#FFD23F'; ctx.lineWidth = 5; ctx.stroke(); ctx.strokeStyle = '#E0A800'; ctx.lineWidth = 1.5; ctx.stroke(); break;
+    case 'catears': ctx.beginPath(); ctx.moveTo(-18, 6); ctx.lineTo(-14, -14); ctx.lineTo(-2, 2); ctx.closePath(); ctx.moveTo(18, 6); ctx.lineTo(14, -14); ctx.lineTo(2, 2); ctx.closePath(); ctx.fillStyle = '#3B3B4A'; ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-14, 3); ctx.lineTo(-12, -7); ctx.lineTo(-6, 1); ctx.closePath(); ctx.moveTo(14, 3); ctx.lineTo(12, -7); ctx.lineTo(6, 1); ctx.closePath(); ctx.fillStyle = '#F08AC6'; ctx.fill(); break;
+    case 'tophat': fillRR(-13, -26, 26, 30, 3, '#222', OUTL); ctx.fillStyle = '#F0506E'; ctx.fillRect(-13, -4, 26, 5); ell(0, 3, 24, 5, '#222', OUTL); break;
+  }
+  ctx.restore();
+}
+/* ---- monkey ---- */
+function drawMonkey(x, y, o){
+  var s = o.scale || 1, ph = o.phase || 0, mv = o.moving ? 1 : 0, sw = Math.sin(ph) * mv, bob = Math.abs(Math.sin(ph)) * 3 * mv;
+  ctx.save(); ctx.translate(x, y - bob); ctx.scale(s * (o.dir < 0 ? -1 : 1), s); ctx.lineWidth = 2.5; ctx.strokeStyle = OUTL; ctx.lineJoin = 'round';
+  var body = o.body || '#8B5A2B', face = o.face || '#F3D29A', shorts = o.shorts || '#3F7FE0';
+  if (o.asleep){ ctx.rotate(-1.2); ctx.translate(-20, 20); }
+  ctx.beginPath(); ctx.moveTo(-12, -34); ctx.quadraticCurveTo(-30, -36, -26, -52); ctx.strokeStyle = body; ctx.lineWidth = 5; ctx.stroke(); ctx.strokeStyle = OUTL; ctx.lineWidth = 2.5;
+  fillRR(-13, -16 + sw * 3, 10, 16, 4, body, OUTL); fillRR(3, -16 - sw * 3, 10, 16, 4, body, OUTL);
+  fillRR(-15, -32, 30, 18, 6, shorts, OUTL);
+  fillRR(-15, -52, 30, 24, 10, body, OUTL); ell(0, -40, 9, 7, face);
+  fillRR(-24, -50 - sw * 2, 9, 20, 4, body, OUTL); fillRR(15, -50 + sw * 2, 9, 20, 4, body, OUTL); circ(-19.5, -30 - sw * 2, 5.5, '#fff', OUTL); circ(19.5, -30 + sw * 2, 5.5, '#fff', OUTL);
+  if (o.apron){ fillRR(-12, -50, 24, 20, 5, o.apron, OUTL, 2); }
+  circ(-19, -70, 8, body, OUTL); circ(19, -70, 8, body, OUTL); circ(-19, -70, 3.5, face); circ(19, -70, 3.5, face);
+  circ(0, -68, 19, body, OUTL);
+  ctx.beginPath(); ctx.ellipse(0, -63, 14.5, 11, 0, 0, 6.2832); ctx.fillStyle = face; ctx.fill(); circ(-7.5, -71, 7.5, face); circ(7.5, -71, 7.5, face);
+  if (o.asleep){ ctx.strokeStyle = OUTL; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(-6, -69, 3, .2, 2.9); ctx.stroke(); ctx.beginPath(); ctx.arc(6, -69, 3, .2, 2.9); ctx.stroke(); }
+  else { circ(-6, -70, 4.2, '#fff', OUTL, 1.5); circ(6, -70, 4.2, '#fff', OUTL, 1.5); circ(-5, -70, 2.2, '#222'); circ(7, -70, 2.2, '#222'); }
+  circ(-2.5, -62, 1.2, '#5B3A1E'); circ(2.5, -62, 1.2, '#5B3A1E');
+  ctx.beginPath(); ctx.arc(0, -59, 5, .3, 2.84); ctx.strokeStyle = OUTL; ctx.lineWidth = 2; ctx.stroke();
+  if (o.acc === 1){ ctx.beginPath(); ctx.arc(0, -82, 14, 3.1416, 0); ctx.closePath(); ctx.fillStyle = o.accCol || '#3F9FE0'; ctx.fill(); ctx.strokeStyle = OUTL; ctx.lineWidth = 2.5; ctx.stroke(); fillRR(-2, -84, 20, 6, 3, o.accCol || '#3F9FE0', OUTL); }
+  else if (o.acc === 2){ ctx.save(); ctx.translate(12, -84); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-11, -7); ctx.lineTo(-11, 7); ctx.closePath(); ctx.moveTo(0, 0); ctx.lineTo(11, -7); ctx.lineTo(11, 7); ctx.closePath(); ctx.fillStyle = '#F0506E'; ctx.fill(); ctx.stroke(); circ(0, 0, 3, '#C93A2E', OUTL); ctx.restore(); }
+  if (o.hat && o.hat !== 'none') drawHat(o.hat, 0, -86, .95);
+  ctx.restore();
+  if (o.stack && o.stack.length){ var top = y - bob - 94 * s - (o.hat && o.hat !== 'none' ? 12 : 0); for (var i = 0; i < o.stack.length; i++) drawItem(o.stack[i], x + Math.sin(ph * .7 + i * .8) * 2 * mv, top - i * 9 * s, .8 * s); }
+}
+function drawBird(x, y, o){
+  var ph = o.phase || 0, mv = o.moving ? 1 : 0, bob = Math.abs(Math.sin(ph)) * 3 * mv;
+  ctx.save(); ctx.translate(x, y - bob); ctx.scale(o.dir < 0 ? -1 : 1, 1); ctx.lineWidth = 2.5; ctx.strokeStyle = OUTL;
+  ctx.strokeStyle = '#E0A800'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-6, -8); ctx.lineTo(-7, 0); ctx.moveTo(6, -8); ctx.lineTo(7, 0); ctx.stroke(); ctx.strokeStyle = OUTL; ctx.lineWidth = 2.5;
+  ell(0, -34, 20, 26, '#E8394A', OUTL); ell(-14, -30, 9, 16, '#C92A3A', OUTL); ctx.beginPath(); ctx.moveTo(14, -36); ctx.lineTo(30, -30); ctx.lineTo(14, -26); ctx.closePath(); ctx.fillStyle = '#FFB020'; ctx.fill(); ctx.stroke();
+  circ(7, -44, 6, '#fff', OUTL, 2); circ(8.5, -44, 3, '#222'); ctx.beginPath(); ctx.moveTo(-4, -58); ctx.lineTo(0, -70); ctx.moveTo(2, -58); ctx.lineTo(8, -68); ctx.strokeStyle = '#C92A3A'; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
+  if (o.stack && o.stack.length) for (var i = 0; i < o.stack.length; i++) drawItem(o.stack[i], x, y - bob - 66 - i * 10, .9);
+}
+/* ---- furniture ---- */
+function drawBrackets(x, y, w, d){ ctx.strokeStyle = 'rgba(80,50,20,.35)'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; var L = clamp(Math.min(w, d) * .36, 26, 44); for (var p = 0; p < 2; p++){ ctx.strokeStyle = p ? '#FFF6D8' : 'rgba(80,50,20,.35)'; ctx.lineWidth = p ? 8 : 12; ctx.beginPath(); ctx.moveTo(x, y + L); ctx.lineTo(x, y); ctx.lineTo(x + L, y); ctx.moveTo(x + w - L, y); ctx.lineTo(x + w, y); ctx.lineTo(x + w, y + L); ctx.moveTo(x + w, y + d - L); ctx.lineTo(x + w, y + d); ctx.lineTo(x + w - L, y + d); ctx.moveTo(x + L, y + d); ctx.lineTo(x, y + d); ctx.lineTo(x, y + d - L); ctx.stroke(); } ctx.lineCap = 'butt'; }
+function drawBills(x, y, n, s){ s = s || 1; for (var i = 0; i < n; i++){ fillRR(x - 11 * s, y - 4 * s - i * 3.2 * s, 22 * s, 8 * s, 2 * s, '#4CC24A', '#2F8F2F', 1.5); } if (n) fillRR(x - 7 * s, y - 2.5 * s - (n - 1) * 3.2 * s, 14 * s, 5 * s, 1.5 * s, '#7BE07B'); }
+function drawGem(x, y, s){ s = s || 1; ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.beginPath(); ctx.moveTo(-12, -4); ctx.lineTo(-6, -11); ctx.lineTo(6, -11); ctx.lineTo(12, -4); ctx.lineTo(0, 11); ctx.closePath(); ctx.fillStyle = '#4FB1FF'; ctx.fill(); ctx.strokeStyle = '#1E6FC0'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke(); ctx.beginPath(); ctx.moveTo(-6, -11); ctx.lineTo(-3, -4); ctx.lineTo(0, 11); ctx.moveTo(6, -11); ctx.lineTo(3, -4); ctx.lineTo(0, 11); ctx.moveTo(-12, -4); ctx.lineTo(12, -4); ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore(); }
+function drawRegister(x, y, s){ s = s || 1; ctx.save(); ctx.translate(x, y); ctx.scale(s, s); fillRR(-16, -10, 32, 22, 4, '#6B7280', OUTL, 2.5); fillRR(-14, -24, 24, 16, 3, '#9EA6B5', OUTL, 2.5); fillRR(-11, -21, 18, 10, 2, '#5CE07B', OUTL, 1.5); ctx.fillStyle = '#D9DEE8'; for (var i = 0; i < 3; i++) for (var k = 0; k < 2; k++) ctx.fillRect(-12 + i * 8, -6 + k * 7, 5, 4); ctx.restore(); }
+/* checkout: long cream plank top on a pink/red wooden body, grey register at the right end, the cash pile (stacked bills) at the left end */
+function drawCounter(d, s, M){
+  var x = d.x, y = d.y, w = d.w, dd = d.d, h = d.h, i;
+  fillRR(x, y + dd - h, w, h, 7, '#D65A6C', PINKO, 3); ctx.fillStyle = '#B9505F'; rr(x + 3, y + dd - 13, w - 6, 10, 3); ctx.fill();
+  ctx.strokeStyle = 'rgba(110,47,58,.35)'; ctx.lineWidth = 2; for (i = 1; i < 6; i++){ ctx.beginPath(); ctx.moveTo(x + i * w / 6, y + dd - h + 5); ctx.lineTo(x + i * w / 6, y + dd - 15); ctx.stroke(); }
+  fillRR(x, y - h, w, dd, 9, '#F3E3C3', PINKO, 3); ctx.strokeStyle = '#D9C7A0'; ctx.lineWidth = 2.5; for (i = 1; i < 4; i++){ ctx.beginPath(); ctx.moveTo(x + 10, y - h + i * dd / 4); ctx.lineTo(x + w - 10, y - h + i * dd / 4); ctx.stroke(); }
+  ctx.fillStyle = 'rgba(255,255,255,.35)'; rr(x + 6, y - h + 5, w - 12, 8, 4); ctx.fill();
+  drawRegister(x + w - 54, y - h + dd / 2 - 4, 1.15);
+  var n = Math.min(MAX_PILES, Math.ceil(M.pile / PILE_UNIT)), px = x + 34, py = y - h + dd / 2 + 10; for (var p = 0; p < n; p++){ var col = p % 6, row = Math.floor(p / 6); drawBills(px + col * 26 - (row % 2) * 6, py - row * 3, 2 + Math.min(6, row * 2), .95); }
+}
+function drawSign(x, y, item, w){ w = w || 68; ctx.strokeStyle = PINKO; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x, y + 30); ctx.lineTo(x, y); ctx.stroke(); ctx.strokeStyle = '#D9666F'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x, y + 28); ctx.lineTo(x, y + 2); ctx.stroke(); fillRR(x - w / 2, y - 52, w, 52, 9, PINK, PINKO, 3); ctx.fillStyle = 'rgba(255,255,255,.18)'; rr(x - w / 2 + 4, y - 48, w - 8, 12, 4); ctx.fill(); drawItem(item, x, y - 26, 1.7); }
+/* the banana stand: a slanted pink display board (wider at the bottom) with a lip, bananas in two rows, sign post on top */
+function drawStand(d, s){
+  var x = d.x, y = d.y, w = d.w, dd = d.d, h = d.h, top = y + dd - h, bot = y + dd, i;
+  ctx.lineJoin = 'round'; ctx.beginPath(); ctx.moveTo(x + 20, top); ctx.lineTo(x + w - 20, top); ctx.lineTo(x + w, bot); ctx.lineTo(x, bot); ctx.closePath(); ctx.fillStyle = '#E27A86'; ctx.fill(); ctx.strokeStyle = PINKO; ctx.lineWidth = 3; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x + 32, top + 12); ctx.lineTo(x + w - 32, top + 12); ctx.lineTo(x + w - 14, bot - 14); ctx.lineTo(x + 14, bot - 14); ctx.closePath(); ctx.fillStyle = '#EC8E99'; ctx.fill();
+  ctx.strokeStyle = 'rgba(110,47,58,.16)'; ctx.lineWidth = 2; for (i = 1; i < 5; i++){ var t = i / 5, yy = top + 12 + (bot - 26 - top) * t; ctx.beginPath(); ctx.moveTo(lerp(x + 32, x + 14, t), yy); ctx.lineTo(lerp(x + w - 32, x + w - 14, t), yy); ctx.stroke(); }
+  for (i = 0; i < Math.min(SHELF_CAP, s.stock); i++){ var row = Math.floor(i / 6), col = i % 6, ry = row ? bot - 56 : bot - 22, x0 = row ? x + 34 : x + 20, x1 = row ? x + w - 34 : x + w - 20; drawItem(d.item, x0 + (x1 - x0) * (col + .5) / 6, ry, 1.35); }
+  fillRR(x - 4, bot - 10, w + 8, 14, 5, PINKD, PINKO, 3);
+  drawSign(x + w / 2, top - 30, d.item);
+}
+/* the two-tier pink shelf (corn, yogurt, popcorn…) with side posts and the sign post on top */
+function drawShelf(d, s){
+  if (d.item === 'banana') return drawStand(d, s);
+  var x = d.x, y = d.y, w = d.w, dd = d.d, h = d.h, top = y + dd - h - 12, i;
+  fillRR(x + 6, top, w - 12, h + 6, 6, '#D96B78', PINKO, 3);
+  ctx.strokeStyle = 'rgba(110,47,58,.2)'; ctx.lineWidth = 2; for (var p = 1; p < 5; p++){ ctx.beginPath(); ctx.moveTo(x + 6 + p * (w - 12) / 5, top + 4); ctx.lineTo(x + 6 + p * (w - 12) / 5, top + h); ctx.stroke(); }
+  var tiers = [top + 32, top + 80];
+  for (var tI = 0; tI < 2; tI++){ var ty = tiers[tI]; fillRR(x - 4, ty + 10, w + 8, 12, 4, PINKD, PINKO, 3); fillRR(x - 4, ty, w + 8, 14, 5, PINK, PINKO, 3); var cnt = Math.max(0, Math.min(6, s.stock - tI * 6)); for (i = 0; i < cnt; i++) drawItem(d.item, x + 20 + i * (w - 40) / 5, ty - 10, 1.3); }
+  fillRR(x - 8, top - 2, 14, h + 14, 4, PINKD, PINKO, 2.5); fillRR(x + w - 6, top - 2, 14, h + 14, 4, PINKD, PINKO, 2.5);
+  drawSign(x + w / 2, top - 30, d.item);
+}
+function drawSoil(x, y, rx, ry){ ell(x, y, rx, ry, '#8B5A3C', '#5E3A24', 3); ell(x - rx * .2, y - ry * .2, rx * .5, ry * .45, '#9C6A48'); }
+function drawTree(d, s, pop){
+  var x = d.cx, y = d.y + d.d, st = s.stock, kind = d.kind, item = d.item, i;
+  ctx.save(); if (pop){ ctx.translate(x, y); ctx.scale(pop, pop); ctx.translate(-x, -y); }
+  if (kind === 'bush'){ ell(x, y - 24, 36, 28, '#3FA544', OUTL, 3); ell(x - 12, y - 32, 18, 14, '#5CC25C'); for (i = 0; i < st; i++) circ(x - 18 + i * 18, y - 20 + (i % 2) * 8, 5, '#E53935', OUTL, 2); ctx.restore(); return; }
+  if (kind === 'palm'){ ctx.beginPath(); ctx.moveTo(x - 8, y); ctx.quadraticCurveTo(x + 2, y - 50, x + 10, y - 86); ctx.lineTo(x + 20, y - 84); ctx.quadraticCurveTo(x + 14, y - 50, x + 8, y); ctx.closePath(); ctx.fillStyle = '#9C6A48'; ctx.fill(); ctx.strokeStyle = OUTL; ctx.lineWidth = 2.5; ctx.stroke();
+    for (i = 0; i < 6; i++){ var a = -2.6 + i * .52; ctx.save(); ctx.translate(x + 15, y - 86); ctx.rotate(a); ell(28, 0, 30, 9, i % 2 ? '#3FA544' : '#5CC25C', OUTL, 2.5); ctx.restore(); }
+    for (i = 0; i < st; i++) drawItem('coconut', x + 4 + i * 11, y - 74 + (i % 2) * 6, .9); ctx.restore(); return; }
+  fillRR(x - 8, y - 46, 16, 46, 5, '#9C6A48', OUTL, 2.5);
+  if (kind === 'tree' && item === 'banana'){ for (i = 0; i < 5; i++){ var ang = -2.9 + i * .7; ctx.save(); ctx.translate(x, y - 46); ctx.rotate(ang); ell(26, 0, 28, 11, i % 2 ? '#3FA544' : '#5CC25C', OUTL, 2.5); ctx.restore(); } for (i = 0; i < st; i++) drawItem('banana', x - 10 + i * 11, y - 34 + (i % 2) * 7, 1); }
+  else { circ(x, y - 66, 34, '#3FA544', OUTL, 3); circ(x - 18, y - 56, 20, '#5CC25C', OUTL, 2.5); circ(x + 16, y - 58, 20, '#5CC25C', OUTL, 2.5); for (i = 0; i < st; i++) drawItem(item, x - 18 + i * 18, y - 62 + (i % 2) * 12, .9); }
+  ctx.restore();
+}
+function drawBed(d, s, pop){
+  var x = d.x, y = d.y, w = d.w, dd = d.d; ctx.save(); if (pop){ ctx.translate(d.cx, d.cy); ctx.scale(pop, pop); ctx.translate(-d.cx, -d.cy); }
+  box3d(x, y, w, dd, d.h, PINK, PINKD, PINKO); fillRR(x + 12, y - d.h + 10, w - 24, dd - 20, 6, '#6B3F26', '#4A2A18', 2.5);
+  for (var i = 0; i < 3; i++){ var px = x + 40 + i * (w - 80) / 2, py = y - d.h + dd / 2 + 4, grown = i < s.stock;
+    if (!grown){ ell(px, py, 6, 3, '#5CC25C', OUTL, 1.5); continue; }
+    if (d.item === 'corn'){ ctx.strokeStyle = '#3FA544'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py - 54); ctx.stroke(); ell(px - 12, py - 22, 13, 5, '#5CC25C', OUTL, 2); ell(px + 12, py - 34, 13, 5, '#5CC25C', OUTL, 2); drawItem('corn', px + 2, py - 46, 1.2); }
+    else if (d.item === 'wheat'){ for (var k = -1; k <= 1; k++){ ctx.save(); ctx.translate(px + k * 9, py - 10); ctx.scale(1.3, 1.6); drawItem('wheat', 0, 0, 1); ctx.restore(); } }
+    else { ell(px, py - 8, 16, 12, '#5CC25C', OUTL, 2); ell(px - 8, py - 16, 8, 6, '#3FA544', OUTL, 1.5); ell(px + 8, py - 16, 8, 6, '#3FA544', OUTL, 1.5); drawItem('peanut', px, py - 2, .9); } }
+  ctx.restore();
+}
+function drawTank(d, s, pop){ ctx.save(); if (pop){ ctx.translate(d.cx, d.cy); ctx.scale(pop, pop); ctx.translate(-d.cx, -d.cy); } box3d(d.x, d.y, d.w, d.d, 14, PINK, PINKD, PINKO); fillRR(d.x + 6, d.y - 14 - 56, d.w - 12, 56 + d.d - 10, 6, 'rgba(110,200,245,.8)', '#2E7FC0', 3); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(d.x + 12, d.y - 64, d.w - 24, 8); for (var i = 0; i < s.stock; i++) drawItem('fish', d.x + 30 + i * 32, d.y - 30 + (i % 2) * 22, 1.1); ctx.restore(); }
+var MACHCOL = { yogurt:'#F08AC6', popcorn:'#F0506E', feed:'#C9A46B', chocolate:'#7A4B2A', mill:'#D9B36A', oven:'#5B5B66', brewer:'#9C6A48', icecream:'#FFB6C8', juice:'#F5B041', pbutter:'#D8A05A', cocodrink:'#5CC25C' };
+function drawMach(d, s, pop){
+  var x = d.x, y = d.y, w = d.w, dd = d.d, h = d.h, col = MACHCOL[d.name] || '#9EA6B5', i, q, k = 0; ctx.save(); if (pop){ ctx.translate(d.cx, d.cy); ctx.scale(pop, pop); ctx.translate(-d.cx, -d.cy); }
+  box3d(x, y, w, dd, h, '#F3E3C3', col, OUTL);
+  fillRR(x + 14, y + dd - h + 12, w - 28, 34, 6, '#2B2B34', OUTL, 2.5); fillRR(x + 20, y + dd - h + 18, w - 40, 22, 4, '#9EA6B5');
+  var busy = hasInputs(s, d) && s.outN < OUT_CAP; ctx.fillStyle = busy ? '#5CE07B' : '#7B8494'; ctx.fillRect(x + 22, y + dd - h + 20, (w - 44) * (busy ? clamp(s.prog / d.t, 0, 1) : 1), 18);
+  var hx = x + w - 46, hy = y - h + dd / 2 + 6; ctx.beginPath(); ctx.moveTo(hx - 26, hy - 44); ctx.lineTo(hx + 26, hy - 44); ctx.lineTo(hx + 12, hy); ctx.lineTo(hx - 12, hy); ctx.closePath(); ctx.fillStyle = '#7B8494'; ctx.fill(); ctx.strokeStyle = OUTL; ctx.lineWidth = 2.5; ctx.stroke(); ell(hx, hy - 44, 26, 8, '#9EA6B5', OUTL, 2.5);
+  for (q = 0; q < d.inp.length; q++) for (i = 0; i < Math.min(s.ins[q], 6); i++){ drawItem(d.inp[q], hx - 12 + (k % 3) * 12, hy - 52 - Math.floor(k / 3) * 9, .8); k++; }
+  fillRR(x + 10, y - h + 8, w - 84, dd - 16, 6, '#F8EEDC', '#C9B98F', 2); for (i = 0; i < Math.min(s.outN, 8); i++) drawItem(d.out, x + 24 + (i % 4) * (w - 110) / 3, y - h + dd / 2 + (i < 4 ? -8 : 10), .95);
+  drawSign(x + w / 2 - 24, y - h - 30, d.out); ctx.restore();
+}
+function drawAnimal(d, s, pop){
+  var x = d.x, y = d.y, w = d.w, dd = d.d, i; ctx.save(); if (pop){ ctx.translate(d.cx, d.cy); ctx.scale(pop, pop); ctx.translate(-d.cx, -d.cy); }
+  fillRR(x, y, w, dd, 10, '#8FD48F', '#5CA85C', 2); ctx.fillStyle = '#F2D27A'; ctx.fillRect(x + 14, y + 16, w - 28, dd - 36);
+  function fence(fx, fy, fw){ fillRR(fx, fy - 22, fw, 8, 3, '#E8A0A6', PINKO, 2); fillRR(fx, fy - 8, fw, 8, 3, '#E8A0A6', PINKO, 2); for (var p = 0; p <= fw; p += 40) fillRR(fx + p - 4, fy - 30, 8, 32, 3, '#D9666F', PINKO, 2); }
+  fence(x, y + 6, w);
+  if (d.name === 'cow'){ var cx3 = x + w / 2, cy3 = y + dd / 2 + 10; ell(cx3, cy3 - 20, 36, 24, '#fff', OUTL, 3); ell(cx3 - 14, cy3 - 24, 12, 9, '#222'); ell(cx3 + 10, cy3 - 12, 10, 7, '#222'); circ(cx3 + 30, cy3 - 30, 15, '#fff', OUTL, 3); ell(cx3 + 32, cy3 - 24, 10, 6, '#F4A6B0', OUTL, 2); circ(cx3 + 26, cy3 - 36, 2.5, '#222'); circ(cx3 + 36, cy3 - 36, 2.5, '#222'); ell(cx3 + 20, cy3 - 44, 6, 3, '#F4A6B0', OUTL, 1.5); ell(cx3 + 42, cy3 - 44, 6, 3, '#F4A6B0', OUTL, 1.5); for (i = 0; i < 4; i++) fillRR(cx3 - 28 + i * 16, cy3 - 2, 8, 14, 3, '#fff', OUTL, 2); }
+  else { for (i = 0; i < 3; i++){ var hx = x + 50 + i * 55, hy = y + dd / 2 + 14 - (i % 2) * 20; ell(hx, hy - 14, 17, 14, '#fff', OUTL, 2.5); circ(hx + 12, hy - 26, 9, '#fff', OUTL, 2.5); ctx.beginPath(); ctx.moveTo(hx + 20, hy - 26); ctx.lineTo(hx + 30, hy - 23); ctx.lineTo(hx + 20, hy - 20); ctx.closePath(); ctx.fillStyle = '#FFB020'; ctx.fill(); ctx.stroke(); circ(hx + 12, hy - 36, 4, '#E8394A', OUTL, 1.5); circ(hx + 14, hy - 28, 2, '#222'); } }
+  fence(x, y + dd, w);
+  fillRR(x + 10, y + dd - 10, 60, 22, 6, '#9C6A48', OUTL, 2.5); for (i = 0; i < Math.min(s.ins[0], 4); i++) drawItem('feed', x + 22 + i * 12, y + dd - 8, .6);
+  fillRR(x + w - 80, y + dd - 12, 70, 26, 6, '#F3E3C3', '#C9B98F', 2.5); for (i = 0; i < Math.min(s.outN, 4); i++) drawItem(d.out, x + w - 68 + i * 16, y + dd, .8);
+  drawSign(x + w / 2, y - 26, d.out); ctx.restore();
+}
+/* fixed scenery pieces; (x, y) is the point on the floor they stand on */
+function drawScenery(o){
+  var x = o.x, y = o.y, i;
+  if (o.k === 'plant'){ fillRR(x - 20, y - 38, 40, 38, 9, '#F7F3EA', '#BBB', 2.5); ctx.fillStyle = '#E3DCCB'; ctx.fillRect(x - 20, y - 38, 40, 7); for (i = 0; i < 7; i++){ ctx.save(); ctx.translate(x, y - 36); ctx.rotate(-2.2 + i * .37); ell(24, 0, 26, 7, i % 2 ? '#3FA544' : '#5CC25C', OUTL, 2.5); ctx.restore(); } }
+  else if (o.k === 'barrels'){ for (var b = 0; b < 3; b++){ var bx = x - 22 + (b % 2) * 44 - (b === 2 ? 22 : 0), by = y - (b === 2 ? 44 : 0); fillRR(bx - 20, by - 48, 40, 48, 10, '#5CC25C', OUTL, 2.5); ctx.fillStyle = '#3FA544'; ctx.fillRect(bx - 20, by - 38, 40, 6); ctx.fillRect(bx - 20, by - 18, 40, 6); ell(bx, by - 48, 20, 7, '#7BE07B', OUTL, 2.5); } }
+  else if (o.k === 'trash'){ fillRR(x - 20, y - 48, 40, 48, 6, '#2E7FC0', OUTL, 2.5); ctx.fillStyle = '#1E6FC0'; ctx.fillRect(x - 20, y - 12, 40, 10); fillRR(x - 25, y - 56, 50, 12, 4, '#9EA6B5', OUTL, 2.5); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(x, y - 28, 9, .6, 5.7); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x + 6, y - 38); ctx.lineTo(x + 10, y - 30); ctx.lineTo(x + 2, y - 30); ctx.closePath(); ctx.fillStyle = '#fff'; ctx.fill(); }
+  else if (o.k === 'crate'){ fillRR(x - 28, y - 46, 56, 46, 5, '#C58B4C', OUTL, 2.5); ctx.strokeStyle = '#8B5A2B'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(x - 28, y - 32); ctx.lineTo(x + 28, y - 32); ctx.moveTo(x - 28, y - 16); ctx.lineTo(x + 28, y - 16); ctx.moveTo(x - 6, y - 46); ctx.lineTo(x - 6, y); ctx.moveTo(x + 8, y - 46); ctx.lineTo(x + 8, y); ctx.stroke(); fillRR(x - 30, y - 54, 60, 12, 4, '#D9A063', OUTL, 2.5); }
+  else if (o.k === 'wfence') drawWoodFence(x, y, o.w, 0);
+}
+/* low pink/red wooden fence: horizontal (rails along x, standing on the line y) or vertical (a strip from y to y+w at x) */
+function drawWoodFence(x, y, w, vert){
+  var p;
+  if (vert){ fillRR(x - 9, y, 7, w, 3, '#E8A0A6', PINKO, 2); fillRR(x + 2, y, 7, w, 3, '#E8A0A6', PINKO, 2); for (p = 0; p <= w; p += 60) fillRR(x - 8, y + p - 5, 16, 11, 3, '#D9666F', PINKO, 2.5); return; }
+  fillRR(x, y - 30, w, 9, 3, '#E8A0A6', PINKO, 2.5); fillRR(x, y - 14, w, 9, 3, '#E8A0A6', PINKO, 2.5); for (p = 0; p <= w; p += 60) fillRR(x + Math.min(p, w) - 5, y - 40, 10, 40, 3, '#D9666F', PINKO, 2.5);
+}
+/* green garden trellis: a 70-high lattice panel standing on the line y (horizontal) or a narrow strip from y to y+w (vertical) */
+function drawTrellis(x, y, w, vert){
+  var k;
+  if (vert){ fillRR(x - 9, y, 18, w, 3, '#2E8B36', OUTL, 2); ctx.strokeStyle = '#5CC25C'; ctx.lineWidth = 3; ctx.beginPath(); for (k = 0; k < w; k += 16){ ctx.moveTo(x - 7, y + k); ctx.lineTo(x + 7, y + k + 9); ctx.moveTo(x + 7, y + k); ctx.lineTo(x - 7, y + k + 9); } ctx.stroke(); for (k = 0; k <= w; k += 100) fillRR(x - 10, y + k - 6, 20, 12, 3, '#2E8B36', OUTL, 2); return; }
+  var top = y - 70; ctx.fillStyle = 'rgba(36,118,46,.45)'; ctx.fillRect(x, top, w, 70);
+  ctx.save(); ctx.beginPath(); ctx.rect(x, top, w, 70); ctx.clip(); ctx.strokeStyle = '#4FBF55'; ctx.lineWidth = 5; ctx.beginPath(); for (k = -70; k <= w; k += 26){ ctx.moveTo(x + k, y); ctx.lineTo(x + k + 70, top); ctx.moveTo(x + k + 70, y); ctx.lineTo(x + k, top); } ctx.stroke(); ctx.restore();
+  ctx.strokeStyle = '#2E8B36'; ctx.lineWidth = 7; ctx.strokeRect(x, top, w, 70); ctx.strokeStyle = OUTL; ctx.lineWidth = 1.5; ctx.strokeRect(x - 3.5, top - 3.5, w + 7, 77);
+  for (k = 0; k <= w; k += 200) fillRR(x + Math.min(k, w) - 8, top - 8, 16, 84, 3, '#2E8B36', OUTL, 2.5);
+}
+/* entrance gate: two red posts, an arched red board with yellow MONKEY MART letters, vines along the arch, bananas at the ends */
+function drawGateSign(){
+  var x = GATE.x, y = GATE.y + 6, R = 160, i;
+  fillRR(x - R - 12, y - 100, 24, 100, 5, '#D2495A', PINKO, 3); fillRR(x + R - 12, y - 100, 24, 100, 5, '#D2495A', PINKO, 3);
+  ctx.fillStyle = '#B9505F'; ctx.fillRect(x - R - 12, y - 10, 24, 8); ctx.fillRect(x + R - 12, y - 10, 24, 8);
+  ctx.lineJoin = 'round'; ctx.beginPath(); ctx.moveTo(x - R - 12, y - 74); ctx.quadraticCurveTo(x, y - 130, x + R + 12, y - 74); ctx.lineTo(x + R + 12, y - 104); ctx.quadraticCurveTo(x, y - 168, x - R - 12, y - 104); ctx.closePath(); ctx.fillStyle = '#D2495A'; ctx.fill(); ctx.strokeStyle = PINKO; ctx.lineWidth = 3.5; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x - R, y - 100); ctx.quadraticCurveTo(x, y - 158, x + R, y - 100); ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 4; ctx.stroke();
+  for (i = 0; i < 11; i++){ var t = i / 10, lx = x - R - 12 + (2 * R + 24) * t, ly = (1 - t) * (1 - t) * (y - 104) + 2 * (1 - t) * t * (y - 168) + t * t * (y - 104); ctx.save(); ctx.translate(lx, ly - 2); ctx.rotate((t - .5) * 1.2 + (i % 2 ? .5 : -.5)); ell(0, -8, 11, 6, i % 2 ? '#3FA544' : '#5CC25C', OUTL, 2); ctx.restore(); }
+  txt('MONKEY MART', x, y - 118, 27, '#FFD23F', 'center', PINKO, 6);
+  drawItem('banana', x - R + 2, y - 88, 1.3); drawItem('banana', x + R - 2, y - 88, 1.3);
+}
+function drawBoots(x, y){ var tt = REALT; ctx.beginPath(); ctx.ellipse(x, y, 42 + Math.sin(tt * 4) * 3, 16, 0, 0, 6.2832); ctx.strokeStyle = 'rgba(94,224,123,.9)'; ctx.lineWidth = 5; ctx.stroke(); ctx.fillStyle = 'rgba(94,224,123,.25)'; ctx.fill(); var b = Math.sin(tt * 3) * 4; for (var k = 0; k < 2; k++){ var bx = x - 14 + k * 26; fillRR(bx - 10, y - 40 - b, 20, 34, 6, '#E8394A', OUTL, 2.5); fillRR(bx - 12, y - 14 - b, 30, 12, 5, '#C92A3A', OUTL, 2.5); ctx.fillStyle = '#FFD23F'; ctx.fillRect(bx - 6, y - 36 - b, 12, 4); } txt('⚡', x + 2, y - 44 - b, 18, '#FFD23F', 'center', OUTL, 3); }
+function drawTruck(x, y){ fillRR(x - 90, y - 90, 130, 80, 8, '#F4F1EA', OUTL, 3); fillRR(x + 40, y - 70, 56, 60, 8, '#3F9FE0', OUTL, 3); fillRR(x + 50, y - 62, 36, 24, 4, '#BFE7FF', OUTL, 2); circ(x - 60, y - 6, 16, '#222', OUTL, 2.5); circ(x + 60, y - 6, 16, '#222', OUTL, 2.5); circ(x - 60, y - 6, 6, '#9EA6B5'); circ(x + 60, y - 6, 6, '#9EA6B5'); drawItem('banana', x - 25, y - 50, 1.6); }
+function drawJoy(){ var J = INP.joy; if (!J.on) return; ctx.beginPath(); ctx.arc(J.ox, J.oy, 56, 0, 6.2832); ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 3; ctx.stroke(); circ(J.ox + G.input.x * 44, J.oy + G.input.y * 44, 24, 'rgba(255,255,255,.55)', 'rgba(255,255,255,.8)', 2); }
+/* ---- bubbles ---- */
+function bubble(x, y, w, h, o, cream){ var r = 12; fillRR(x - w / 2, y - h, w, h, r, cream || CREAM, o || '#5ED36B', 3.5); ctx.beginPath(); ctx.moveTo(x - 9, y - 1); ctx.lineTo(x, y + 10); ctx.lineTo(x + 9, y - 1); ctx.closePath(); ctx.fillStyle = cream || CREAM; ctx.fill(); ctx.strokeStyle = o || '#5ED36B'; ctx.lineWidth = 3.5; ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 10, y - 3); ctx.lineTo(x + 10, y - 3); ctx.fillStyle = cream || CREAM; ctx.fillRect(x - 10, y - 6, 20, 6); }
+function face(x, y, r, happy){ circ(x, y, r, '#FFD23F', '#D9A400', 2.5); circ(x - r * .35, y - r * .25, r * .14, '#222'); circ(x + r * .35, y - r * .25, r * .14, '#222'); ctx.beginPath(); if (happy){ ctx.arc(x, y + r * .1, r * .5, .2, 2.94); ctx.fillStyle = '#5B2A0A'; ctx.fill(); } else { ctx.arc(x, y + r * .65, r * .4, 3.5, 5.9); ctx.strokeStyle = '#5B2A0A'; ctx.lineWidth = 3; ctx.stroke(); } }
+function drawCustBubble(c){ var x = c.x, y = c.y - 108; if (c.happy > 0){ bubble(x, y, 56, 56); face(x, y - 28, 20, true); return; } if (c.sad > 0){ bubble(x, y, 56, 56, '#F0506E'); face(x, y - 28, 20, false); return; }
+  if (c.st === 'queue'){ bubble(x, y, 60, 60); drawRegister(x, y - 24, 1.1); return; }
+  if (c.st === 'toShelf' || c.st === 'take'){ bubble(x, y, 100, 44); drawItem(c.item, x - 28, y - 22, 1.1); txt(c.have + '/' + c.want, x + 12, y - 22, 20, '#4A3728', 'center'); } }
+function drawWorkerBubble(w){ if (!w.asleep) return; var x = w.x, y = w.y - 92; bubble(x, y, 70, 50, '#5ED36B'); fillRR(x - 20, y - 30, 40, 16, 3, '#3F9FE0', OUTL, 2); fillRR(x - 20, y - 36, 14, 10, 3, '#fff', OUTL, 2); txt('Z', x + 24, y - 36 - Math.sin(REALT * 3) * 4, 14, '#4A3728', 'center'); txt('z', x + 34, y - 48 - Math.sin(REALT * 3 + 1) * 4, 12, '#4A3728', 'center'); }
+function drawSpotBubble(d, s){ var rem = d.price - s.paid, x = d.cx, y = d.by - 10 - Math.sin(REALT * 3) * 3, w = Math.max(96, 44 + String(rem).length * 15); bubble(x, y, w, 72); drawBills(x, y - 42, 3, 1.3); txt(fmt(rem), x, y - 16, 22, '#4A3728', 'center');
+  if (d.k === 'hire'){ ctx.save(); ctx.translate(x, y - 82); ctx.scale(.6, .6); drawMonkey(0, 0, { body:'#F28C28', face:'#FFD8A8', shorts:'#F0506E', dir:1, hat:WHAT[d.wt] }); ctx.restore(); } }
+function drawArrow(x, y){ var b = Math.sin(REALT * 5) * 8; ctx.save(); ctx.translate(x, y + b); ctx.beginPath(); ctx.moveTo(-14, -50); ctx.lineTo(14, -50); ctx.lineTo(14, -22); ctx.lineTo(30, -22); ctx.lineTo(0, 10); ctx.lineTo(-30, -22); ctx.lineTo(-14, -22); ctx.closePath(); ctx.fillStyle = '#35D16A'; ctx.fill(); ctx.strokeStyle = '#1E8F45'; ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.stroke(); ctx.restore(); }
+/* ---- FX ---- */
+var FX = [], FXN = 120, FT = [], FTN = 24;
+for (var fi = 0; fi < FXN; fi++) FX.push({ on:false, k:'', x:0, y:0, tx:0, ty:0, t:0, life:0, item:'', scr:false, vx:0, vy:0 });
+for (var fj = 0; fj < FTN; fj++) FT.push({ on:false, x:0, y:0, s:'', t:0, scr:false, c:'' });
+function fxGet(){ for (var i = 0; i < FXN; i++) if (!FX[i].on){ FX[i].on = true; FX[i].t = 0; return FX[i]; } return null; }
+function ftPush(x, y, s, scr, c){ for (var i = 0; i < FTN; i++) if (!FT[i].on){ var f = FT[i]; f.on = true; f.x = x; f.y = y; f.s = s; f.t = 0; f.scr = !!scr; f.c = c || '#2F8F2F'; return; } }
+function fx(kind, a, b){
+  if (G.headless || !FXON) return; var f;
+  if (kind === 'pick'){ f = fxGet(); if (!f) return; f.k = 'item'; f.item = a.k === 'src' ? a.item : a.out; f.x = a.cx; f.y = a.cy - 40; f.tx = b.x; f.ty = b.y - 100; f.life = .25; f.scr = false; }
+  else if (kind === 'put'){ f = fxGet(); if (!f) return; f.k = 'item'; f.item = b.k === 'shelf' ? b.item : (a.stack.length ? a.stack[a.stack.length - 1] : b.inp[0]); f.x = a.x; f.y = a.y - 100; f.tx = b.cx; f.ty = b.cy - 40; f.life = .25; f.scr = false; }
+  else if (kind === 'bill'){ f = fxGet(); if (!f) return; f.k = 'bill'; f.x = a.x; f.y = a.y - 60; f.tx = b.cx + (Math.random() - .5) * 30; f.ty = b.y - 40; f.life = .35; f.scr = false; }
+  else if (kind === 'collect'){ var cd = MARTS[b.i].spots[MARTS[b.i].cidx]; for (var i = 0; i < 6; i++){ f = fxGet(); if (!f) break; f.k = 'billscr'; f.x = scrX(cd.x + 60); f.y = scrY(cd.y + 10); f.tx = HUDL.cashX; f.ty = HUDL.cashY; f.life = .5 + i * .06; f.scr = true; } ftPush(cd.x + 70, cd.y - 40, '+' + fmt(a), false, '#2F8F2F'); }
+  else if (kind === 'pay'){ ftPush(a.x, a.y - 120, '+' + b, false, '#2F8F2F'); }
+  else if (kind === 'made'){ f = fxGet(); if (!f) return; f.k = 'spark'; f.x = a.cx; f.y = a.y; f.life = .5; f.scr = false; }
+  else if (kind === 'wake'){ f = fxGet(); if (!f) return; f.k = 'pop'; f.x = a.x; f.y = a.y - 100; f.life = .5; f.scr = false; }
+  else if (kind === 'boots'){ f = fxGet(); if (!f) return; f.k = 'ring'; f.x = a.x; f.y = a.y; f.life = .5; f.scr = false; }
+  else if (kind === 'dust'){ f = fxGet(); if (!f) return; f.k = 'dust'; f.x = a.x + (Math.random() - .5) * 16; f.y = a.y + 2; f.vx = -b * 30; f.vy = -20; f.life = .45; f.scr = false; }
+}
+function updFX(dt){ var i, f; for (i = 0; i < FXN; i++){ f = FX[i]; if (!f.on) continue; f.t += dt; if (f.t >= f.life) f.on = false; } for (i = 0; i < FTN; i++){ f = FT[i]; if (!f.on) continue; f.t += dt; if (f.t >= 1.2) f.on = false; } }
+function drawFX(scr){ var i, f, p; for (i = 0; i < FXN; i++){ f = FX[i]; if (!f.on || f.scr !== scr) continue; p = f.t / f.life;
+    if (f.k === 'item'){ var ax = lerp(f.x, f.tx, p), ay = lerp(f.y, f.ty, p) - Math.sin(p * 3.1416) * 50; drawItem(f.item, ax, ay, 1); }
+    else if (f.k === 'bill'){ drawBills(lerp(f.x, f.tx, p), lerp(f.y, f.ty, p) - Math.sin(p * 3.1416) * 40, 1, 1); }
+    else if (f.k === 'billscr'){ var q = p * p; drawBills(lerp(f.x, f.tx, q), lerp(f.y, f.ty, q) - Math.sin(p * 3.1416) * 60, 1, HU); }
+    else if (f.k === 'spark'){ ctx.globalAlpha = 1 - p; txt('✦', f.x + Math.sin(p * 9) * 10, f.y - 110 - p * 30, 22, '#FFD23F', 'center'); ctx.globalAlpha = 1; }
+    else if (f.k === 'pop'){ ctx.globalAlpha = 1 - p; txt('!', f.x, f.y - p * 30, 30, '#F0506E', 'center', '#fff', 5); ctx.globalAlpha = 1; }
+    else if (f.k === 'ring'){ ctx.beginPath(); ctx.ellipse(f.x, f.y, 30 + p * 60, 12 + p * 24, 0, 0, 6.2832); ctx.strokeStyle = 'rgba(94,224,123,' + (1 - p) + ')'; ctx.lineWidth = 5; ctx.stroke(); }
+    else if (f.k === 'dust'){ ctx.globalAlpha = (1 - p) * .8; circ(f.x + f.vx * f.t, f.y + f.vy * f.t, 5 + p * 8, '#fff'); ctx.globalAlpha = 1; } }
+  for (i = 0; i < FTN; i++){ f = FT[i]; if (!f.on || f.scr !== scr) continue; ctx.globalAlpha = f.t < .9 ? 1 : (1.2 - f.t) / .3; txt(f.s, f.x, f.y - f.t * 50, scr ? 20 * HU : 24, f.c, 'center', '#fff', 5); ctx.globalAlpha = 1; } }
+/* ---- draw list ---- */
+var DL = [], DLN = 0; for (var di = 0; di < 400; di++) DL.push({ y:0, k:0, a:null, b:null });
+function dl(y, k, a, b){ if (DLN >= DL.length) return; var e = DL[DLN++]; e.y = y; e.k = k; e.a = a; e.b = b; }
+function dlCmp(a, b){ return a.y - b.y; }
+/* the boundary: trellis along the top (gap = the gate) and down the right side, low wooden fence along the bottom and the left side */
+var FENCES = [];
+(function(){ var i, n; FENCES.push({ t:1, x:FLOOR.x, y:FLOOR.y, w:GATE.x - 155 - FLOOR.x, v:0 }); FENCES.push({ t:1, x:GATE.x + 155, y:FLOOR.y, w:FLOOR.x + FLOOR.w - GATE.x - 155, v:0 });
+  n = Math.ceil(FLOOR.h / 100); for (i = 0; i < n; i++) FENCES.push({ t:1, x:FLOOR.x + FLOOR.w, y:FLOOR.y + i * 100, w:Math.min(100, FLOOR.h - i * 100), v:1 });
+  n = Math.ceil(FLOOR.w / 180); for (i = 0; i < n; i++) FENCES.push({ t:2, x:FLOOR.x + i * 180, y:FLOOR.y + FLOOR.h, w:Math.min(180, FLOOR.w - i * 180), v:0 });
+  n = Math.ceil(FLOOR.h / 100); for (i = 0; i < n; i++) FENCES.push({ t:2, x:FLOOR.x, y:FLOOR.y + i * 100, w:Math.min(100, FLOOR.h - i * 100), v:1 }); })();
+/* sand blotches inside, grass blades (light) and tufts (dark) outside */
+var BLOTS = [], BLADES = [], TUFTS = []; (function(){ var r = { s:777 }; function q(){ r.s = (r.s * 1664525 + 1013904223) >>> 0; return r.s / 4294967296; } function outside(bx, by){ return !(bx > FLOOR.x && bx < FLOOR.x + FLOOR.w && by > FLOOR.y && by < FLOOR.y + FLOOR.h); } for (var i = 0; i < 40; i++) BLOTS.push({ x:FLOOR.x + q() * FLOOR.w, y:FLOOR.y + q() * FLOOR.h, r:40 + q() * 70 }); for (var k = 0; k < 220; k++){ var bx = FLOOR.x - MARGIN + q() * (FLOOR.w + 2 * MARGIN), by = FLOOR.y - MARGIN + q() * (FLOOR.h + 2 * MARGIN); if (!outside(bx, by)) continue; (k % 4 ? BLADES : TUFTS).push({ x:bx, y:by }); } })();
+var HUDL = { u:1, fs:16, pillX:0, pillY:0, pillW:0, pillH:0, gemX:0, gemY:0, cashX:0, cashY:0, numY:0, btn:[], bs:0, tasksX:0, tasksY:0, truckX:0, truckY:0, truckW:0, chipY:0 };
+for (var bi = 0; bi < 4; bi++) HUDL.btn.push({ x:0, y:0, id:['shop', 'upg', 'hats', 'settings'][bi] });
+function hudLayout(W, H){ var u = clamp(Math.min(W, H) / 620, .8, 1.25), L = HUDL; L.u = u; L.fs = Math.max(16, Math.round(16 * u)); var bs = Math.round(56 * u), gap = Math.round(8 * u); L.bs = bs; L.pillX = 10; L.pillY = 10; L.pillW = Math.round(140 * u); L.pillH = Math.max(bs, 54); L.gemX = L.pillX + Math.round(38 * u); L.gemY = L.pillY + 17; L.cashX = L.pillX + Math.round(102 * u); L.cashY = L.gemY; L.numY = L.pillY + L.pillH - 14; for (var i = 0; i < 4; i++){ L.btn[i].x = W - 10 - bs - (3 - i) * (bs + gap); L.btn[i].y = 10; } L.tasksX = 10; L.tasksY = L.pillY + L.pillH + gap; L.chipY = L.tasksY + bs + gap; L.truckW = Math.round(96 * u); L.truckX = Math.round(W / 2 - L.truckW / 2); L.truckY = 10; return L; }
+function hudButton(x, y, s, on){ fillRR(x, y + 4, s, s, 12 * HU, 'rgba(0,0,0,.18)'); fillRR(x, y, s, s, 12 * HU, on ? '#FFE27A' : CREAM, BROWN, 3); }
+function drawCart(x, y, s){ ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = '#3FA544'; ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.beginPath(); ctx.moveTo(-18, -14); ctx.lineTo(-10, -14); ctx.lineTo(-4, 6); ctx.lineTo(14, 6); ctx.lineTo(18, -8); ctx.lineTo(-8, -8); ctx.stroke(); ctx.fillStyle = '#5CC25C'; ctx.beginPath(); ctx.moveTo(-6, -8); ctx.lineTo(18, -8); ctx.lineTo(14, 6); ctx.lineTo(-3, 6); ctx.closePath(); ctx.fill(); circ(-1, 13, 3.5, '#3FA544'); circ(11, 13, 3.5, '#3FA544'); ctx.restore(); }
+function drawGear(x, y, s){ ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#3F9FE0'; ctx.strokeStyle = '#1E6FC0'; ctx.lineWidth = 2; for (var i = 0; i < 8; i++){ ctx.save(); ctx.rotate(i * 3.1416 / 4); fillRR(-4, -20, 8, 10, 2, '#3F9FE0', '#1E6FC0', 2); ctx.restore(); } circ(0, 0, 14, '#3F9FE0', '#1E6FC0', 2); circ(0, 0, 6, CREAM, '#1E6FC0', 2); ctx.restore(); }
+function drawMini(x, y, s, hat, arrow){ ctx.save(); ctx.translate(x, y); ctx.scale(s, s); drawMonkey(0, 40, { body:'#C97A2B', face:'#FFD8A8', shorts:'#F0506E', dir:1, hat:hat, scale:.85 }); if (arrow){ ctx.translate(26, 10); ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(16, -12); ctx.lineTo(7, -12); ctx.lineTo(7, 14); ctx.lineTo(-7, 14); ctx.lineTo(-7, -12); ctx.lineTo(-16, -12); ctx.closePath(); ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = OUTL; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke(); } ctx.restore(); }
+function drawClip(x, y, s){ ctx.save(); ctx.translate(x, y); ctx.scale(s, s); fillRR(-16, -18, 32, 38, 4, '#F2D27A', BROWN, 2.5); fillRR(-8, -23, 16, 10, 3, '#9EA6B5', OUTL, 2); ctx.fillStyle = '#fff'; ctx.fillRect(-12, -8, 24, 24); ctx.strokeStyle = '#3FA544'; ctx.lineWidth = 2.5; for (var i = 0; i < 3; i++){ ctx.beginPath(); ctx.moveTo(-9, -3 + i * 8); ctx.lineTo(-6, 0 + i * 8); ctx.lineTo(-2, -5 + i * 8); ctx.stroke(); ctx.fillStyle = '#9EA6B5'; ctx.fillRect(1, -4 + i * 8, 9, 2.5); } ctx.restore(); }
+function drawHUD(){
+  var L = hudLayout(VW, VH), u = L.u, i;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  fillRR(L.pillX, L.pillY + 4, L.pillW, L.pillH, 16 * u, 'rgba(0,0,0,.18)'); fillRR(L.pillX, L.pillY, L.pillW, L.pillH, 16 * u, CREAM, BROWN, 3);
+  drawGem(L.gemX, L.gemY, .9 * u); txt('+', L.gemX + 14 * u, L.gemY - 8 * u, 15 * u, '#4A3728', 'center'); txt(fmt(G.dia), L.gemX, L.numY, L.fs, '#4A3728', 'center');
+  drawBills(L.cashX, L.cashY + 2 * u, 3, u); txt('+', L.cashX + 16 * u, L.cashY - 8 * u, 15 * u, '#4A3728', 'center'); txt(fmt(G.cash), L.cashX, L.numY, L.fs, '#4A3728', 'center');
+  for (i = 0; i < 4; i++){ var b = L.btn[i], cx = b.x + L.bs / 2, cy = b.y + L.bs / 2; hudButton(b.x, b.y, L.bs, false);
+    if (b.id === 'shop'){ drawCart(cx, cy, .95 * u); if (nextOffer() >= 0){ circ(b.x + L.bs - 6 * u, b.y + 6 * u, 11 * u, '#F0506E', '#fff', 2.5); txt('!', b.x + L.bs - 6 * u, b.y + 6 * u, 15 * u, '#fff', 'center'); } }
+    else if (b.id === 'upg') drawMini(cx - 8 * u, cy - 6 * u, .62 * u, 'none', true);
+    else if (b.id === 'hats') drawMini(cx, cy - 2 * u, .62 * u, 'straw', false);
+    else drawGear(cx, cy, .9 * u); }
+  hudButton(L.tasksX, L.tasksY, L.bs, false); drawClip(L.tasksX + L.bs / 2, L.tasksY + L.bs / 2, .85 * u); var td = 0; for (i = 0; i < 5; i++) if (G.daily.done[i]) td++; if (td < 5){ circ(L.tasksX + L.bs - 6 * u, L.tasksY + 6 * u, 11 * u, '#3F9FE0', '#fff', 2.5); txt(String(5 - td), L.tasksX + L.bs - 6 * u, L.tasksY + 6 * u, 14 * u, '#fff', 'center'); }
+  if (G.unlocked > 1){ var tw = L.truckW, tx2 = L.truckX, ty2 = L.truckY; fillRR(tx2, ty2 + 4, tw, L.bs, 14 * u, 'rgba(0,0,0,.18)'); fillRR(tx2, ty2, tw, L.bs, 14 * u, CREAM, BROWN, 3); ctx.save(); ctx.translate(tx2 + 30 * u, ty2 + L.bs * .74); ctx.scale(.28 * u, .28 * u); drawTruck(0, 0); ctx.restore(); txt((G.mart + 1) + '/' + G.unlocked, tx2 + tw - 24 * u, ty2 + L.bs / 2, L.fs, '#4A3728', 'center'); if (G.marts[G.mart].done && G.mart + 1 < G.unlocked){ circ(tx2 + tw - 6 * u, ty2 + 6 * u, 11 * u, '#F0506E', '#fff', 2.5); txt('!', tx2 + tw - 6 * u, ty2 + 6 * u, 15 * u, '#fff', 'center'); } }
+  if (G.boots.on){ var left = Math.max(0, G.boots.until - G.t), mm = Math.floor(left / 60), ss = Math.floor(left % 60); fillRR(10, L.chipY, 100 * u, 34, 12, '#FFE27A', BROWN, 2.5); txt('⚡ ' + mm + ':' + (ss < 10 ? '0' : '') + ss, 10 + 50 * u, L.chipY + 17, L.fs, '#4A3728', 'center'); }
+  if (G.player.tired){ var cy2 = L.chipY + (G.boots.on ? 40 : 0); fillRR(10, cy2, 100 * u, 34, 12, '#F0506E', BROWN, 2.5); txt('🥵 ' + Math.round(G.player.stam), 10 + 50 * u, cy2 + 17, L.fs, '#fff', 'center'); }
+  if (G.msgT > 0 && G.msg === 'newMart'){ var bw = Math.min(VW - 40, 420 * u); fillRR(VW / 2 - bw / 2, VH * .22, bw, 64 * u, 18 * u, CREAM, '#3ED26B', 4); txt(t('newMart'), VW / 2, VH * .22 + 32 * u, Math.max(18, 24 * u), '#1E8F45', 'center'); }
+  var U = TUT, tf = Math.max(17, Math.round(18 * u)); if (U.key || U.on){ var ax, ay; if (U.ui){ var bb = U.ui === 'hats' ? L.btn[2] : U.ui === 'upg' ? L.btn[1] : null; ax = bb ? bb.x + L.bs / 2 : L.truckX + L.truckW / 2; ay = bb ? bb.y + L.bs + 70 * u : L.truckY + L.bs + 70 * u; ctx.save(); ctx.translate(ax, ay); ctx.scale(-u, -u); drawArrow(0, 0); ctx.restore(); if (U.key){ var s0 = t(U.key); ctx.font = '900 ' + tf + 'px ' + FONT; var tw2 = Math.min(VW - 16, ctx.measureText(s0).width + 44 * u), tx3 = clamp(ax, tw2 / 2 + 8, VW - tw2 / 2 - 8), ty3 = ay + 60 * u; fillRR(tx3 - tw2 / 2, ty3 - 24 * u, tw2, 48 * u, 16 * u, CREAM, '#3ED26B', 4); txt(s0, tx3, ty3, tf, '#4A3728', 'center'); } }
+    else if (U.on){ ax = scrX(U.tx); ay = scrY(U.ty) - 70 * SC; if (ax < 20 || ax > VW - 20 || ay < 20 || ay > VH - 20){ ax = clamp(ax, 40, VW - 40); ay = clamp(ay, 100, VH - 60); } ctx.save(); ctx.translate(ax, ay); ctx.scale(SC, SC); drawArrow(0, 0); ctx.restore();
+      if (U.key){ var s1 = t(U.key); ctx.font = '900 ' + tf + 'px ' + FONT; var tw4 = Math.min(VW - 16, ctx.measureText(s1).width + 44 * u), tx5 = clamp(U.side ? ax + 36 * SC + tw4 / 2 : ax, tw4 / 2 + 8, VW - tw4 / 2 - 8), ty5 = clamp(U.side ? ay - 22 * SC : ay - 90 * SC, 40 + 70 * u, VH - 40); fillRR(tx5 - tw4 / 2, ty5 - 24 * u, tw4, 48 * u, 16 * u, CREAM, '#3ED26B', 4); txt(s1, tx5, ty5, tf, '#4A3728', 'center'); } }
+    else if (U.key){ var s2 = t(U.key); ctx.font = '900 ' + tf + 'px ' + FONT; var tw6 = Math.min(VW - 16, ctx.measureText(s2).width + 44 * u); fillRR(VW / 2 - tw6 / 2, VH * .72, tw6, 48 * u, 16 * u, CREAM, '#3ED26B', 4); txt(s2, VW / 2, VH * .72 + 24 * u, tf, '#4A3728', 'center'); } }
+  drawJoy(); drawFX(true);
+}
+function updCam(dt){ var P = G.player, hw = VW / 2 / SC, hh = VH / 2 / SC, x0 = FLOOR.x - MARGIN + hw, x1 = FLOOR.x + FLOOR.w + MARGIN - hw, y0 = FLOOR.y - MARGIN + hh, y1 = FLOOR.y + FLOOR.h + MARGIN - hh; var tx = x1 < x0 ? (x0 + x1) / 2 : clamp(P.x, x0, x1), ty = y1 < y0 ? (y0 + y1) / 2 : clamp(P.y - 90, y0, y1); if (CAM.snap){ CAM.x = tx; CAM.y = ty; CAM.snap = false; } else { var k = 1 - Math.exp(-6 * dt); CAM.x += (tx - CAM.x) * k; CAM.y += (ty - CAM.y) * k; } }
+function render(){
+  var M = G.marts[G.mart], D = MARTS[G.mart], P = G.player, i, j, d, s, e;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = GRASS; ctx.fillRect(0, 0, VW, VH);
+  ctx.setTransform(DPR * SC, 0, 0, DPR * SC, DPR * (VW / 2 - CAM.x * SC), DPR * (VH / 2 - CAM.y * SC));
+  var vx0 = CAM.x - VW / 2 / SC - 120, vx1 = CAM.x + VW / 2 / SC + 120, vy0 = CAM.y - VH / 2 / SC - 200, vy1 = CAM.y + VH / 2 / SC + 120;
+  ctx.strokeStyle = '#6AD66A'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); for (i = 0; i < BLADES.length; i++){ var bl = BLADES[i]; if (bl.x < vx0 || bl.x > vx1 || bl.y < vy0 || bl.y > vy1) continue; ctx.moveTo(bl.x, bl.y); ctx.lineTo(bl.x - 5, bl.y - 12); ctx.moveTo(bl.x + 4, bl.y); ctx.lineTo(bl.x + 7, bl.y - 11); } ctx.stroke();
+  ctx.strokeStyle = '#3FA544'; ctx.lineWidth = 3.5; ctx.beginPath(); for (i = 0; i < TUFTS.length; i++){ var tu = TUFTS[i]; if (tu.x < vx0 || tu.x > vx1 || tu.y < vy0 || tu.y > vy1) continue; ctx.moveTo(tu.x - 9, tu.y); ctx.lineTo(tu.x - 5, tu.y - 13); ctx.moveTo(tu.x, tu.y); ctx.lineTo(tu.x + 1, tu.y - 17); ctx.moveTo(tu.x + 9, tu.y); ctx.lineTo(tu.x + 7, tu.y - 12); } ctx.stroke(); ctx.lineCap = 'butt';
+  fillRR(FLOOR.x, FLOOR.y, FLOOR.w, FLOOR.h, 40, SAND, '#E6D28F', 6); ctx.fillStyle = '#EEDE9B'; for (i = 0; i < BLOTS.length; i++){ var bo = BLOTS[i]; if (bo.x < vx0 || bo.x > vx1 || bo.y < vy0 || bo.y > vy1) continue; ctx.beginPath(); ctx.ellipse(bo.x, bo.y, bo.r, bo.r * .55, 0, 0, 6.2832); ctx.fill(); }
+  /* floor layer: build brackets, soil mounds and the soft shadow under every object */
+  for (j = 0; j < D.spots.length; j++){ d = D.spots[j]; s = M.spots[j]; if (d.cx < vx0 || d.cx > vx1 || d.cy < vy0 || d.cy > vy1) continue;
+    if (!s.built){ if (j === M.next) drawBrackets(d.bx, d.by, d.bw, d.bd); continue; }
+    if (d.k === 'hire') continue;
+    if (d.k === 'src' && d.kind !== 'bed' && d.kind !== 'tank'){ shadow(d.cx, d.y + d.d + 4, d.kind === 'bush' ? 66 : 62, 20); drawSoil(d.cx, d.y + d.d, d.kind === 'bush' ? 60 : 58, 24); }
+    else shadow(d.cx, d.y + d.d + 6, d.w / 2 + 8, 14 + d.d * .08); }
+  for (i = 0; i < SCENERY.length; i++){ var so = SCENERY[i]; if (so.x > vx0 && so.x < vx1 && so.y > vy0 && so.y < vy1) shadow(so.x + (so.k === 'wfence' ? so.w / 2 : 0), so.y + 3, so.k === 'wfence' ? so.w / 2 + 6 : so.k === 'barrels' ? 50 : 28, so.k === 'wfence' ? 8 : 11); }
+  if (G.boots.here) drawBoots(G.boots.x, G.boots.y);
+  for (i = 0; i < M.customers.length; i++){ e = M.customers[i]; shadow(e.x, e.y + 2, 20, 8); }
+  for (i = 0; i < M.workers.length; i++){ e = M.workers[i]; shadow(e.x, e.y + 2, 20, 8); }
+  shadow(P.x, P.y + 2, 22, 9);
+  /* sorted layer */
+  DLN = 0;
+  for (i = 0; i < FENCES.length; i++){ var fe = FENCES[i]; if (fe.y + (fe.v ? fe.w : 0) < vy0 || fe.y > vy1 + 100 || fe.x + (fe.v ? 0 : fe.w) < vx0 || fe.x > vx1) continue; dl(fe.y + (fe.v ? fe.w : 0), 7, fe, null); }
+  dl(GATE.y + 9, 8, null, null);
+  for (i = 0; i < SCENERY.length; i++){ var sc = SCENERY[i]; if (sc.x > vx0 && sc.x < vx1 && sc.y > vy0 && sc.y < vy1) dl(sc.y, 9, sc, null); }
+  for (j = 0; j < D.spots.length; j++){ d = D.spots[j]; s = M.spots[j]; if (!s.built || d.cx < vx0 || d.cx > vx1 || d.cy < vy0 || d.cy > vy1) continue; dl(d.y + d.d - (d.k === 'src' && d.kind !== 'bed' && d.kind !== 'tank' ? 10 : 0), 1, d, s); }
+  for (i = 0; i < M.customers.length; i++){ e = M.customers[i]; if (e.x > vx0 && e.x < vx1 && e.y > vy0 && e.y < vy1) dl(e.y, 3, e, null); }
+  for (i = 0; i < M.workers.length; i++){ e = M.workers[i]; dl(e.y, 4, e, null); }
+  dl(P.y, 2, P, null);
+  if (G.truckT > 0) dl(GATE.y - 60, 6, null, null);
+  for (i = 1; i < DLN; i++){ var ins = DL[i], ij = i - 1; while (ij >= 0 && DL[ij].y > ins.y){ DL[ij + 1] = DL[ij]; ij--; } DL[ij + 1] = ins; }
+  for (i = 0; i < DLN; i++){ e = DL[i]; var k = e.k;
+    if (k === 1){ d = e.a; s = e.b; var pop = s.pop > 0 ? 1 + Math.sin(s.pop * 3.1416) * .18 : 0;
+      if (d.k === 'counter') drawCounter(d, s, M); else if (d.k === 'shelf'){ ctx.save(); if (pop){ ctx.translate(d.cx, d.cy); ctx.scale(pop, pop); ctx.translate(-d.cx, -d.cy); } drawShelf(d, s); ctx.restore(); }
+      else if (d.k === 'src'){ if (d.kind === 'bed') drawBed(d, s, pop); else if (d.kind === 'tank') drawTank(d, s, pop); else drawTree(d, s, pop); }
+      else if (d.k === 'mach') drawMach(d, s, pop); else if (d.k === 'animal') drawAnimal(d, s, pop); }
+    else if (k === 2) drawMonkey(P.x, P.y, { body:'#8B5A2B', face:'#F3D29A', shorts:'#3F7FE0', dir:P.dir, phase:P.phase, moving:P.moving, stack:P.stack, hat:G.hat });
+    else if (k === 3){ e = e.a; if (e.bird) drawBird(e.x, e.y, e); else drawMonkey(e.x, e.y, { body:CUSTCOL[e.col], face:'#FFE6C7', shorts:e.col % 2 ? '#F0506E' : '#3F7FE0', dir:e.dir, phase:e.phase, moving:e.moving, stack:null, acc:e.acc, accCol:e.col === 1 ? '#F0506E' : '#3F9FE0' }); if (e.have) for (var h = 0; h < e.have; h++) drawItem(e.item, e.x + 4, e.y - 92 - h * 10, .9); }
+    else if (k === 4){ e = e.a; drawMonkey(e.x, e.y, { body:WCOL[e.t], face:'#E8C9A0', shorts:'#3F7FE0', dir:e.dir, phase:e.phase, moving:e.moving, stack:e.stack, hat:WHAT[e.t], asleep:e.asleep, apron:e.t === 'chef' ? '#fff' : e.t === 'farmer' ? '#5CC25C' : null }); }
+    else if (k === 6) drawTruck(GATE.x + 230, GATE.y - 70);
+    else if (k === 7){ var fz = e.a; if (fz.t === 1) drawTrellis(fz.x, fz.y, fz.w, fz.v); else drawWoodFence(fz.x, fz.y, fz.w, fz.v); }
+    else if (k === 8) drawGateSign();
+    else if (k === 9) drawScenery(e.a); }
+  /* overlay layer */
+  for (j = 0; j < D.spots.length; j++){ d = D.spots[j]; s = M.spots[j]; if (!s.built && j === M.next && d.cx > vx0 && d.cx < vx1 && d.cy > vy0 && d.cy < vy1) drawSpotBubble(d, s); }
+  if (G.boots.here){ bubble(G.boots.x, G.boots.y - 62, 90, 60, '#E8C45A', '#FFE27A'); txt('2 ' + t('mins'), G.boots.x, G.boots.y - 102, 18, '#4A3728', 'center'); fillRR(G.boots.x - 14, G.boots.y - 92, 28, 18, 5, '#fff', '#4A3728', 2); ctx.beginPath(); ctx.moveTo(G.boots.x - 4, G.boots.y - 88); ctx.lineTo(G.boots.x + 5, G.boots.y - 83); ctx.lineTo(G.boots.x - 4, G.boots.y - 78); ctx.closePath(); ctx.fillStyle = '#4A3728'; ctx.fill(); }
+  for (i = 0; i < M.customers.length; i++){ e = M.customers[i]; if (e.x > vx0 && e.x < vx1 && e.y > vy0 && e.y < vy1) drawCustBubble(e); }
+  for (i = 0; i < M.workers.length; i++) drawWorkerBubble(M.workers[i]);
+  drawFX(false);
+  drawHUD();
+}
+
+/* ---------- sound ---------- */
+var AC = null, SFXT = {};
+function sfx(k){ if (!G || !G.sound || G.headless || TEST) return; var now = performance.now(); if (SFXT[k] && now - SFXT[k] < 70) return; SFXT[k] = now;
+  try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); var o = AC.createOscillator(), g = AC.createGain(), t0 = AC.currentTime, f = k === 'pick' ? 660 : k === 'put' ? 520 : k === 'cash' ? 880 : k === 'pay' ? 740 : k === 'build' ? 330 : k === 'unlock' ? 440 : k === 'gem' ? 990 : k === 'buy' ? 600 : k === 'wake' ? 500 : k === 'boots' ? 700 : 480, lg = k === 'unlock' ? .6 : k === 'build' ? .3 : .14;
+    o.type = k === 'build' || k === 'unlock' ? 'triangle' : 'sine'; o.frequency.setValueAtTime(f, t0); if (k === 'cash' || k === 'gem' || k === 'unlock' || k === 'build') o.frequency.exponentialRampToValueAtTime(f * 1.5, t0 + lg * .8);
+    g.gain.setValueAtTime(.0001, t0); g.gain.exponentialRampToValueAtTime(.1, t0 + .01); g.gain.exponentialRampToValueAtTime(.0001, t0 + lg); o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0 + lg + .02); } catch(e){} }
+
+/* ---------- input ---------- */
+var KEYS = {}, INP = { joy:{ on:false, ox:0, oy:0, id:-1, t0:0, moved:false } }, NOSAVE = false;
+function hudHit(x, y){ var L = hudLayout(VW, VH), i; for (i = 0; i < 4; i++){ var b = L.btn[i]; if (x >= b.x && x <= b.x + L.bs && y >= b.y && y <= b.y + L.bs){ openPanel(b.id); return true; } }
+  if (x >= L.tasksX && x <= L.tasksX + L.bs && y >= L.tasksY && y <= L.tasksY + L.bs){ openPanel('tasks'); return true; }
+  if (G.unlocked > 1 && x >= L.truckX && x <= L.truckX + L.truckW && y >= L.truckY && y <= L.truckY + L.bs){ openPanel('travel'); return true; }
+  return false; }
+function tap(sx, sy){ var wx = worldX(sx), wy = worldY(sy), M = G.marts[G.mart]; for (var w = 0; w < M.workers.length; w++){ var k = M.workers[w]; if (k.asleep && dist(wx, wy + 40, k.x, k.y) < 70){ wakeWorker(k, M); toast(t('wake')); return 'wake'; } } walkTo(wx, wy); return 'walk'; }
+function bind(){
+  window.addEventListener('resize', fit);
+  window.addEventListener('keydown', function(e){ if (G.panel){ if (e.code === 'Escape') closePanel(); return; } KEYS[e.code] = true; if (/^(Arrow|Space)/.test(e.code)) e.preventDefault(); });
+  window.addEventListener('keyup', function(e){ KEYS[e.code] = false; });
+  window.addEventListener('blur', function(){ KEYS = {}; });
+  cv.addEventListener('pointerdown', function(e){ e.preventDefault(); if (G.panel) return; var x = e.clientX, y = e.clientY; if (hudHit(x, y)) return; var J = INP.joy; if (J.on) return; J.on = true; J.ox = x; J.oy = y; J.id = e.pointerId; J.t0 = performance.now(); J.moved = false; try { cv.setPointerCapture(e.pointerId); } catch(err){} });
+  cv.addEventListener('pointermove', function(e){ var J = INP.joy; if (!J.on || e.pointerId !== J.id) return; var dx = e.clientX - J.ox, dy = e.clientY - J.oy, d = Math.sqrt(dx * dx + dy * dy); if (d > 12) J.moved = true; if (J.moved && d > 0){ var m = Math.min(1, d / 60); setInput(dx / d * m, dy / d * m); } });
+  function up(e){ var J = INP.joy; if (!J.on || e.pointerId !== J.id) return; J.on = false; setInput(0, 0); if (!J.moved && performance.now() - J.t0 < 400) tap(e.clientX, e.clientY); }
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+  cv.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  $('ov').addEventListener('click', function(e){ if (e.target === $('ov')) closePanel(); });
+}
+
+/* ---------- DOM UI ---------- */
+function toast(s){ var el = $('toast'); el.textContent = s; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(function(){ el.classList.remove('on'); }, 1800); }
+function showBanner(a, b){ var el = $('banner'); el.innerHTML = '<span></span><small></small>'; el.firstChild.textContent = a; el.lastChild.textContent = b || ''; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(function(){ el.classList.remove('on'); }, 3200); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+function gemHTML(){ return '<canvas data-icon="gem" width="48" height="48"></canvas>'; }
+function iconCanvas(id, kind){ return '<canvas data-' + kind + '="' + id + '" width="120" height="120"></canvas>'; }
+function panelHTML(kind){
+  var h = '', i, k;
+  var head = function(title, icon){ return '<div class="ttl">' + (icon ? '<canvas data-icon="' + icon + '" width="72" height="72"></canvas>' : '') + '<span>' + esc(title) + '</span></div><button class="x" data-act="close" aria-label="close">✕</button>'; };
+  if (kind === 'shop'){ h += head(t('shop'), 'cart') + '<div class="body"><div class="grid3">';
+    for (i = 0; i < 3; i++){ var can = G.dia >= PACKS[i].dia; h += '<div class="card" data-act="pack" data-i="' + i + '"><div class="big">' + fmt(packCash(i)) + '</div><div class="ic pack">' + iconCanvas('pack' + i, 'icon') + '</div><div class="pill' + (can ? '' : ' max') + '">' + gemHTML() + '<span>' + PACKS[i].dia + '</span></div></div>'; }
+    var rt = resetTime(), rh = Math.floor(rt / 3600000), rm = Math.floor(rt % 3600000 / 60000), no = nextOffer();
+    h += '</div><div class="ribbon">' + esc(t('daily')) + '</div><div class="box"><div class="hd">' + esc(t('reset')) + ' ' + rh + 'h ' + rm + 'm</div><div class="row4">';
+    for (i = 0; i < 4; i++) h += '<div class="gem' + (G.daily.offers[i] ? ' done' : '') + '"><div>' + OFFERS[i] + '</div><canvas data-icon="gems' + i + '" width="140" height="92"></canvas>' + (G.daily.offers[i] ? '<span class="ok">✓</span>' : '') + '</div>';
+    h += '</div><button class="btn g" data-act="offer"' + (no < 0 ? ' disabled' : '') + '>▶ ' + esc(no < 0 ? t('claimed') : t('free')) + (no >= 0 ? '<span class="badge">!</span>' : '') + '</button></div></div>'; }
+  else if (kind === 'hats'){ h += head(t('hats'), 'hat') + '<div class="body"><div class="grid3">';
+    for (i = 0; i < HATS.length; i++){ var ht = HATS[i], own = G.hats.indexOf(ht.id) >= 0, sel = G.hat === ht.id; h += '<div class="card" data-act="hat" data-id="' + ht.id + '">' + (own && !sel ? '<span class="tick">✓</span>' : '') + '<div class="ic">' + iconCanvas(ht.id, 'hat') + '</div><div class="nm">' + esc(ht[G.lang]) + '</div>' + (sel ? '<div class="pill sel">' + esc(t('selected')) + '</div>' : own ? '<div class="pill own">✓</div>' : ht.price === 0 ? '<div class="pill">' + esc(t('free')) + '</div>' : '<div class="pill">' + gemHTML() + '<span>' + ht.price + '</span></div>') + '</div>'; }
+    h += '</div></div>'; }
+  else if (kind === 'upg'){ h += head(t('upgrades'), 'up') + '<div class="body">';
+    var sec = function(title, who, type){ var s = '<div class="ribbon">' + esc(title) + '</div><div class="grid3">'; ['speed', 'stack', 'stamina'].forEach(function(kk){ var lv = who === 'player' ? G.up[kk] : G.wup[type][kk], pr = upPrice(who, kk, type), can = lv < 4 && G.cash >= pr; s += '<div class="card" data-act="up" data-who="' + who + '" data-k="' + kk + '" data-type="' + (type || '') + '"><div class="ic">' + iconCanvas('up-' + kk, 'icon') + '</div><div class="nm">' + esc(t(kk)) + '</div><div class="lv">' + esc(t('lv')) + ' ' + lv + '/4</div>' + (lv >= 4 ? '<div class="pill max">' + esc(t('max')) + '</div>' : '<div class="pill' + (can ? '' : ' max') + '"><canvas data-icon="bills" width="48" height="48"></canvas><span>' + fmt(pr) + '</span></div>') + '</div>'; }); return s + '</div>'; };
+    h += sec(t('player'), 'player', null); for (i = 0; i < WTYPES.length; i++){ var any = false; for (k = 0; k < G.unlocked; k++) if (hasWorker(G.marts[k], WTYPES[i])) any = true; if (any || G.unlocked > 1) h += sec(t(WTYPES[i]), 'worker', WTYPES[i]); }
+    h += '</div>'; }
+  else if (kind === 'tasks'){ h += head(t('tasks'), 'clip') + '<div class="body"><p style="text-align:center;margin:0 0 10px;font-weight:800">' + esc(t('tTasks')) + ' · ' + esc(t('reset')) + ' ' + Math.floor(resetTime() / 3600000) + 'h ' + Math.floor(resetTime() % 3600000 / 60000) + 'm</p>';
+    var allD = true; for (i = 0; i < 5; i++){ var g = taskGoal(i), p = taskProg(i), dn = !!G.daily.done[i]; if (!dn) allD = false; h += '<div class="task' + (dn ? ' done' : '') + '"><div class="tx"><b>' + esc(t('tk_' + TASKS[i].id).replace('{n}', fmt(g))) + '</b><div class="bar"><i style="width:' + Math.round(p / g * 100) + '%"></i></div></div><div class="rw">' + (dn ? '✓' : p + '/' + g) + ' &nbsp;' + gemHTML() + '2</div></div>'; }
+    h += '<div class="task' + (G.daily.bonus ? ' done' : '') + '"><div class="tx"><b>' + esc(t('bonus')) + '</b><div class="bar"><i style="width:' + (allD ? 100 : 0) + '%"></i></div></div><div class="rw">' + gemHTML() + '10</div></div></div>'; }
+  else if (kind === 'settings'){ h += head(t('settings'), 'gear') + '<div class="body">';
+    h += '<div class="srow"><span>🔊 ' + esc(t('sound')) + '</span><button class="sw' + (G.sound ? ' on' : '') + '" data-act="sound" aria-label="sound"><i></i></button></div>';
+    h += '<div class="srow"><span>🌐 ' + esc(t('lang')) + '</span><button class="btn w" data-act="lang">' + (G.lang === 'he' ? 'English' : 'עברית') + '</button></div>';
+    h += '<div class="srow"><span>📲</span><button class="btn w" data-act="install">' + esc(t('install')) + '</button></div>';
+    h += '<div class="srow"><span>🗑️ ' + esc(t('resetAll')) + '</span><button class="btn r" data-act="reset1">' + esc(t('resetAll')) + '</button></div>';
+    h += '<div id="reset-box"></div><footer><a href="./">' + esc(t('more')) + '</a></footer></div>'; }
+  else if (kind === 'travel'){ h += head(t('travel'), 'truck') + '<div class="body"><div class="grid2">'; for (i = 0; i < G.unlocked; i++) h += '<button class="btn ' + (i === G.mart ? 'g' : 'w') + '" data-act="go" data-i="' + i + '" style="min-height:64px;width:100%">' + (i + 1) + '. ' + esc(MARTS[i][G.lang]) + (G.marts[i].done ? ' ✓' : '') + '</button>'; h += '</div></div>'; }
+  else if (kind === 'welcome'){ var mn = Math.round(G.offlineSecs / 60); h += head(t('welcome'), 'bills') + '<div class="body" style="text-align:center"><p style="font-weight:800;margin:6px 0">' + esc(t('offline')) + '</p><p style="font-size:34px;font-weight:900;color:#2F8F2F;margin:6px 0">+' + fmt(G.offlineAmt) + '</p><p style="margin:0 0 10px">' + mn + ' ' + esc(t('mins')) + '</p><button class="btn g" data-act="close">' + esc(t('ok')) + '</button></div>'; }
+  return h;
+}
+function drawIcon(c, id){ var cx = c.getContext('2d'), w = c.width, h = c.height; cx.clearRect(0, 0, w, h); var saved = ctx; ctx = cx; ctx.lineJoin = 'round';
+  if (id === 'gem') drawGem(w / 2, h / 2, w / 26); else if (id === 'bills') drawBills(w / 2, h / 2 + 4, 3, w / 26); else if (id === 'cart') drawCart(w / 2, h / 2, w / 40); else if (id === 'gear') drawGear(w / 2, h / 2, w / 50); else if (id === 'hat') drawMini(w / 2, h / 2 - 4, w / 72 * .7, 'straw', false); else if (id === 'up') drawMini(w / 2 - 8, h / 2 - 6, w / 72 * .7, 'none', true); else if (id === 'clip') drawClip(w / 2, h / 2, w / 72); else if (id === 'truck'){ ctx.save(); ctx.translate(w / 2, h * .8); ctx.scale(w / 240, w / 240); drawTruck(0, 0); ctx.restore(); }
+  else if (id === 'pack0'){ drawBills(w / 2, h / 2 + 10, 5, w / 40); } else if (id === 'pack1'){ ell(w / 2, h / 2 + 6, w * .3, h * .22, '#F6A0C8', OUTL, 3); circ(w / 2 + w * .28, h / 2, w * .1, '#F6A0C8', OUTL, 3); circ(w / 2 + w * .3, h / 2 + 2, w * .035, '#C93A2E'); circ(w / 2 + w * .2, h / 2 - 8, 3, '#222'); fillRR(w / 2 - 6, h / 2 - h * .28, 12, 10, 2, '#4CC24A', '#2F8F2F', 2); drawBills(w / 2 - w * .3, h / 2 + 20, 2, w / 50); } else if (id === 'pack2'){ fillRR(w * .15, h * .4, w * .7, h * .4, 8, '#9C6A48', OUTL, 3); fillRR(w * .15, h * .3, w * .7, h * .15, 6, '#7A4B2A', OUTL, 3); drawBills(w * .4, h * .42, 4, w / 44); drawBills(w * .62, h * .4, 4, w / 44); }
+  else if (/^gems/.test(id)){ var n = +id.slice(4) + 1; for (var i = 0; i < n; i++) drawGem(w / 2 + (i - (n - 1) / 2) * 24 + (i % 2) * 6, h / 2 + (i % 2) * 10 - 4, w / 100 + .4); }
+  else if (id === 'up-speed'){ ctx.save(); ctx.translate(w / 2, h / 2 + 16); ctx.scale(w / 110, w / 110); fillRR(-10, -40, 20, 34, 6, '#E8394A', OUTL, 2.5); fillRR(-12, -14, 30, 12, 5, '#C92A3A', OUTL, 2.5); txt('⚡', 2, -24, 18, '#FFD23F', 'center', OUTL, 3); ctx.restore(); }
+  else if (id === 'up-stack'){ for (var s = 0; s < 4; s++) drawItem('banana', w / 2, h / 2 + 22 - s * 14, w / 44); }
+  else if (id === 'up-stamina'){ ctx.save(); ctx.translate(w / 2, h / 2); ctx.scale(w / 110, w / 110); ctx.beginPath(); ctx.moveTo(0, 22); ctx.bezierCurveTo(-34, -4, -22, -30, 0, -14); ctx.bezierCurveTo(22, -30, 34, -4, 0, 22); ctx.fillStyle = '#F0506E'; ctx.fill(); ctx.strokeStyle = OUTL; ctx.lineWidth = 2.5; ctx.stroke(); txt('⚡', 0, 0, 20, '#FFD23F', 'center', OUTL, 3); ctx.restore(); }
+  ctx = saved; }
+function drawHatIcon(c, id){ var cx = c.getContext('2d'), w = c.width, h = c.height; cx.clearRect(0, 0, w, h); var saved = ctx; ctx = cx; if (id === 'none'){ ctx.save(); ctx.translate(w / 2, h / 2); ctx.beginPath(); ctx.arc(0, 0, w * .3, 0, 6.2832); ctx.strokeStyle = '#E8394A'; ctx.lineWidth = 8; ctx.stroke(); ctx.beginPath(); ctx.moveTo(-w * .2, -w * .2); ctx.lineTo(w * .2, w * .2); ctx.stroke(); ctx.restore(); } else drawHat(id, w / 2, h / 2 + 8, w / 60); ctx = saved; }
+function paintIcons(root){ var cs = root.querySelectorAll('canvas[data-icon]'), i; for (i = 0; i < cs.length; i++) drawIcon(cs[i], cs[i].getAttribute('data-icon')); cs = root.querySelectorAll('canvas[data-hat]'); for (i = 0; i < cs.length; i++) drawHatIcon(cs[i], cs[i].getAttribute('data-hat')); }
+function openPanel(kind){ var p = $('panel'); p.innerHTML = panelHTML(kind); p.setAttribute('dir', G.lang === 'en' ? 'ltr' : 'rtl'); paintIcons(p); $('ov').classList.add('on'); G.panel = kind; INP.joy.on = false; setInput(0, 0); if (kind === 'hats') G.tut.hat = true; if (kind === 'upg') G.tut.stack = true; p.onclick = panelClick; return kind; }
+function closePanel(){ $('ov').classList.remove('on'); G.panel = null; }
+function refreshPanel(){ if (G.panel) openPanel(G.panel); }
+function panelClick(e){ var el = e.target.closest('[data-act]'); if (!el) return; var act = el.getAttribute('data-act');
+  if (act === 'close') closePanel();
+  else if (act === 'pack'){ if (buyPack(+el.getAttribute('data-i'))) refreshPanel(); else toast(t('notEnough')); }
+  else if (act === 'offer'){ if (claimOffer()) refreshPanel(); }
+  else if (act === 'hat'){ var id = el.getAttribute('data-id'); if (buyHat(id)) refreshPanel(); else toast(t('notEnough')); }
+  else if (act === 'up'){ if (buyUpgrade(el.getAttribute('data-who'), el.getAttribute('data-k'), el.getAttribute('data-type') || null)) refreshPanel(); else toast(t('notCash')); }
+  else if (act === 'sound'){ G.sound = !G.sound; save(); refreshPanel(); }
+  else if (act === 'lang'){ setLang(G.lang === 'he' ? 'en' : 'he'); refreshPanel(); }
+  else if (act === 'install'){ var b = $('pwa-install'); if (b && b.classList.contains('on')) b.click(); else toast(G.lang === 'he' ? 'הדפדפן לא מציע התקנה כרגע' : 'The browser does not offer install right now'); }
+  else if (act === 'reset1'){ $('reset-box').innerHTML = '<div class="srow"><span>' + esc(t('resetQ')) + '</span><button class="btn r" data-act="reset2">' + esc(t('yes')) + '</button><button class="btn w" data-act="resetno">' + esc(t('no')) + '</button></div>'; }
+  else if (act === 'reset2'){ $('reset-box').innerHTML = '<div class="srow"><span>' + esc(t('resetQ2')) + '</span><button class="btn r" data-act="reset3">' + esc(t('yes')) + '</button><button class="btn w" data-act="resetno">' + esc(t('no')) + '</button></div>'; }
+  else if (act === 'reset3'){ try { localStorage.removeItem(KEY); } catch(err){} newGame(); setLang(G.lang); CAM.snap = true; closePanel(); save(); }
+  else if (act === 'resetno'){ $('reset-box').innerHTML = ''; }
+  else if (act === 'go'){ goMart(+el.getAttribute('data-i')); closePanel(); } }
+function setLang(l){ G.lang = l === 'en' ? 'en' : 'he'; document.documentElement.lang = G.lang; document.documentElement.dir = G.lang === 'en' ? 'ltr' : 'rtl'; document.title = G.lang === 'en' ? 'Monkey Mart 🍌 – run a monkey supermarket (like Monkey Mart) – Lupu\'s game' : 'מונקי מארט 🍌 – נהלו סופרמרקט של קופים (כמו Monkey Mart) – המשחק של לופו'; var pb = $('pwa-install'); if (pb) pb.textContent = t('install'); save(); }
+
+/* ---------- main loop / init / routes ---------- */
+var lastT = 0, acc = 0, lastDust = 0;
+function frame(now){ var dt = Math.min(.1, (now - lastT) / 1000) || 0; lastT = now; REALT += dt;
+  if (!G.frozen){ if (!INP.joy.on && !G.panel){ var x = 0, y = 0; if (KEYS.ArrowLeft || KEYS.KeyA) x -= 1; if (KEYS.ArrowRight || KEYS.KeyD) x += 1; if (KEYS.ArrowUp || KEYS.KeyW) y -= 1; if (KEYS.ArrowDown || KEYS.KeyS) y += 1; if (x || y || G.keyWas){ setInput(x, y); G.keyWas = !!(x || y); } }
+    acc += dt; var n = 0; while (acc >= DT && n < 6){ if (G.autoplay && G.n % TPS === 0) botThink(); step(DT); acc -= DT; n++; } if (n === 6) acc = 0;
+    if (G.player.moving && REALT - lastDust > .12){ lastDust = REALT; fx('dust', G.player, G.player.dir); } }
+  updFX(dt); updCam(dt); render(); requestAnimationFrame(frame); }
+function prepDemo(n){
+  NOSAVE = true; newGame(); G.headless = true; var M, D, j;
+  if (n === 1){ M = G.marts[0]; D = MARTS[0]; build(M, D, 2); build(M, D, 4); M.spots[1].stock = 7; G.cash = 190; G.dia = 3; G.tut.moved = true; G.stats.served = 1;
+    for (var k = 0; k < HZ * 17.5; k++) step(DT); M.pile = 120; M.spots[1].stock = 7; M.spots[0].stock = 2; var P = G.player; P.x = 920; P.y = 300; P.stack = ['banana', 'banana', 'banana']; P.dir = -1; P.goal = null; G.boots.here = true; G.boots.x = 1250; G.boots.y = 470; G.boots.spawnT = BOOT_EVERY; }
+  else if (n === 2){ G.unlocked = 2; G.mart = 1; M = G.marts[1]; D = MARTS[1]; G.marts[0].done = true; for (j = 1; j <= 13; j++) build(M, D, j); M.spots[2].stock = 9; M.spots[6].stock = 4; M.spots[10].stock = 5; M.spots[13].stock = 6; M.spots[5].ins[0] = 3; M.spots[5].outN = 2; M.spots[8].ins[0] = 2; M.spots[9].ins[0] = 1; M.spots[9].outN = 2; M.spots[12].outN = 1; G.cash = 1240; G.dia = 12; G.tut.moved = true;
+    for (var k2 = 0; k2 < HZ * 14; k2++) step(DT); var P2 = G.player; P2.x = 1000; P2.y = 700; P2.stack = ['corn', 'corn', 'corn', 'corn']; P2.dir = -1; P2.goal = null; }
+  for (var q = 0; q < M.spots.length; q++) M.spots[q].pop = 0;
+  G.headless = false; tutorialTick(); CAM.snap = true; G.frozen = true;
+}
+function bench(hours){ NOSAVE = true; newGame(); G.headless = true; var out = [], tStart = performance.now(), last = 0; for (var m = 0; m < MARTS.length; m++){ var M = G.marts[m]; auto(hours * 3600 - G.t, { until:function(){ return M.done; } }); out.push(MARTS[m].id + ':' + (M.done ? Math.round((G.t - last) / 60) + 'min' : 'NOT DONE') + ' cash=' + Math.floor(G.cash)); last = G.t; if (!M.done) break; } G.headless = false; return 'total ' + Math.round(G.t / 60) + ' min, real ' + Math.round(performance.now() - tStart) + ' ms | ' + out.join(' | '); }
+function init(){ fit(); bind(); if (!load()) newGame(); setLang(G.lang);
+  var h = location.hash.replace(/-en$/, ''), mm; if (/-en$/.test(location.hash)) setLang('en');
+  if (h === '#demo1' || h === '#demo-shop' || h === '#demo-hats' || h === '#demo-upgrades' || h === '#demo-tasks' || h === '#demo-settings'){ prepDemo(1); if (h === '#demo-shop') openPanel('shop'); else if (h === '#demo-hats'){ G.hats = ['none', 'straw']; G.hat = 'straw'; openPanel('hats'); } else if (h === '#demo-upgrades'){ G.unlocked = 2; openPanel('upg'); } else if (h === '#demo-tasks'){ G.stats.harvest += 23; G.stats.sold += 30; openPanel('tasks'); } else if (h === '#demo-settings') openPanel('settings'); }
+  else if (h === '#demo2') prepDemo(2);
+  else if (h === '#demo-travel'){ prepDemo(2); openPanel('travel'); }
+  else if (h === '#auto'){ G.autoplay = true; }
+  else if ((mm = /^#bench(\d*)$/.exec(h))){ var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = bench(mm[1] ? +mm[1] : 3); }
+  else if ((mm = /^#trace(\d+)(?:x(\d+))?$/.exec(h))){ NOSAVE = true; newGame(); var rows = [], every = mm[2] ? +mm[2] : 20, lim = +mm[1]; while (G.t < lim){ auto(every); var Mq = G.marts[G.mart], Dq = MARTS[G.mart], Pq = G.player, nx = Mq.next; rows.push(Math.round(G.t) + 's mart' + G.mart + ' cash=' + Math.floor(G.cash) + ' next=' + nx + (nx >= 0 ? '(' + Dq.spots[nx].k + ' ' + Mq.spots[nx].paid + '/' + Dq.spots[nx].price + ')' : '') + ' P=' + Math.round(Pq.x) + ',' + Math.round(Pq.y) + ' st=' + Pq.stack.join(',') + ' goal=' + (Pq.goal ? Math.round(Pq.goal.x) + ',' + Math.round(Pq.goal.y) : '-') + ' job=' + (G.bot.job ? G.bot.job.src + '>' + G.bot.job.dst + 'x' + G.bot.job.n : '-') + ' cust=' + Mq.customers.length + ' q=' + Mq.queue.length + ' pile=' + Mq.pile + ' w=' + Mq.workers.map(function(w){ return w.t[0] + (w.asleep ? 'z' : w.st[0]); }).join('') + ' shelves=' + Dq.spots.map(function(d, j){ return d.k === 'shelf' && Mq.spots[j].built ? Mq.spots[j].stock : (d.k === 'src' && Mq.spots[j].built ? 's' + Mq.spots[j].stock : (d.k === 'mach' || d.k === 'animal') && Mq.spots[j].built ? 'm' + Mq.spots[j].ins.join('+') + '>' + Mq.spots[j].outN : null); }).filter(function(v){ return v !== null; }).join('/') + ' tired=' + Pq.tired + ' stam=' + Math.round(Pq.stam)); } var pre3 = $('test-log'); pre3.removeAttribute('class'); pre3.textContent = rows.join('\n'); }
+  else if (h === '#welcome'){ NOSAVE = true; G.offlineAmt = 1234; G.offlineSecs = 3600; openPanel('welcome'); }
+  else if (G.offlineAmt > 0 && !TEST) openPanel('welcome');
+  tutorialTick(); CAM.snap = true; requestAnimationFrame(function(now){ lastT = now; requestAnimationFrame(frame); }); }
+window.MM = { newGame:newGame, load:load, save:save, step:step, get state(){ return G; }, DATA:{ MARTS:MARTS, ITEMS:ITEMS, HATS:HATS, UPG:UPG, TASKS:TASKS, PACKS:PACKS, OFFERS:OFFERS, SZ:SZ, FLOOR:FLOOR, GATE:GATE }, setInput:setInput, walkTo:walkTo, auto:auto, goMart:goMart, render:render, serialize:serialize, restore:restore, offline:offline, t:t, bench:bench, TUT:TUT,
+  ui:{ open:openPanel, close:closePanel, setLang:setLang, buyHat:buyHat, buyPack:buyPack, claimOffer:claimOffer, buyUpgrade:buyUpgrade, wake:wakeWorker, hudLayout:hudLayout, tap:tap, fit:fit, hudHit:hudHit, toast:toast },
+  fn:{ findJob:findJob, findDst:findDst, findSrc:findSrc, build:build, payChunk:payChunk, tick:tick, checkTasks:checkTasks, checkDaily:checkDaily, passiveRate:passiveRate, spawnWorker:spawnWorker, taskProg:taskProg, taskGoal:taskGoal, nextOffer:nextOffer, botThink:botThink, packCash:packCash, upPrice:upPrice, stackCap:stackCap, nowMs:nowMs, cashierAt:cashierAt, collectPile:collectPile, sleepWorker:sleepWorker, resetTime:resetTime, nextSpot:nextSpot, prepDemo:prepDemo, dayKey:dayKey } };
+if (TEST){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } } else init();
+
+/* ---------- tests (#test) ---------- */
+if (TEST){
+  (function(){
+    var log = [], errs = ERRS;
+    function ok(name, cond, info){ log.push([name, cond ? 'PASS' : 'FAIL']); if (!cond) errs.push(name + (info !== undefined ? ': ' + info : '')); }
+    function done(){ var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = JSON.stringify({ errs:errs, log:log }); }
+    function run(secs){ var n = Math.round(secs * HZ), was = G.headless; G.headless = true; for (var i = 0; i < n; i++) step(DT); G.headless = was; }
+    function put(x, y){ G.player.x = x; G.player.y = y; G.player.goal = null; G.input.x = G.input.y = 0; G.player.actT = 0; }
+    function valid(){ var bad = []; if (!isFinite(G.cash) || G.cash < 0) bad.push('cash=' + G.cash); if (!isFinite(G.dia) || G.dia < 0) bad.push('dia=' + G.dia); for (var i = 0; i < G.marts.length; i++){ var M = G.marts[i]; if (M.pile < 0 || !isFinite(M.pile)) bad.push('pile'); for (var j = 0; j < M.spots.length; j++){ var s = M.spots[j]; if (s.stock < 0 || s.outN < 0 || s.paid < 0 || !isFinite(s.stock)) bad.push('spot' + i + '/' + j); if (s.ins) for (var q = 0; q < s.ins.length; q++) if (s.ins[q] < 0) bad.push('ins' + i + '/' + j); } for (var w = 0; w < M.workers.length; w++) if (M.workers[w].stam < 0 || !isFinite(M.workers[w].x)) bad.push('worker'); } if (!isFinite(G.player.x) || !isFinite(G.player.y)) bad.push('player'); return bad; }
+    (async function(){
+      try {
+        var I = window.MM, M, D, P, s, i, c, w, cd;
+        await new Promise(function(r){ setTimeout(r, 40); });
+        try { localStorage.removeItem(KEY); } catch(e){}
+        NOSAVE = true; FXON = false;
+        ok('viewport ' + window.innerWidth + 'x' + window.innerHeight, true);
+        /* --- data --- */
+        ok('DATA: 6 marts, 22 hats (none + straw free first), 22 items, 5 daily tasks, 3 packs, 4 offers', I.DATA.MARTS.length === 6 && I.DATA.HATS.length === 22 && I.DATA.HATS[0].id === 'none' && I.DATA.HATS[1].price === 0 && Object.keys(I.DATA.ITEMS).length === 22 && I.DATA.TASKS.length === 5 && I.DATA.PACKS.length === 3 && I.DATA.OFFERS.join() === '3,5,7,10');
+        ok('every mart: one prebuilt source (mart 1 also starts with its banana stand), a counter spot, a cashier hire, ≥ 1 shelf and ≥ 1 machine/animal; spot prices > 0 except the prebuilt ones', I.DATA.MARTS.every(function(m, mi){ var pre = m.spots.filter(function(d){ return d.pre; }); return pre.length === (mi === 0 ? 2 : 1) && pre[0].k === 'src' && (mi !== 0 || (pre[1].k === 'shelf' && pre[1].item === 'banana')) && m.cidx >= 0 && m.ci.length === 2 && m.spots.some(function(d){ return d.k === 'hire' && d.wt === 'cashier'; }) && m.spots.some(function(d){ return d.k === 'shelf'; }) && m.spots.some(function(d){ return d.k === 'mach' || d.k === 'animal'; }) && m.spots.every(function(d){ return d.pre ? d.price === 0 : d.price > 0; }); }));
+        ok('raw items sell for 10–20, processed for ≥ 3× their raw input', ['banana', 'corn', 'cocoa', 'wheat', 'fish', 'apple', 'peanut', 'coconut', 'coffeebean'].every(function(k){ return ITEMS[k].p >= 10 && ITEMS[k].p <= 20; }) && ITEMS.yogurt.p >= 3 * ITEMS.banana.p && ITEMS.popcorn.p >= 3 * ITEMS.corn.p && ITEMS.chocolate.p >= 3 * ITEMS.cocoa.p && ITEMS.juice.p >= 3 * ITEMS.apple.p && ITEMS.cocodrink.p >= 3 * ITEMS.coconut.p);
+        ok('mart build costs climb: total of each mart is higher than the previous (hundreds → tens of thousands)', (function(){ var prev = 0; for (var m = 0; m < 6; m++){ var tot = 0; MARTS[m].spots.forEach(function(d){ tot += d.price; }); if (tot <= prev) return false; prev = tot; } return prev > 50000 && MARTS[0].spots.reduce(function(a, d){ return a + d.price; }, 0) < 5000; })());
+        ok('every spot has a footprint, a front point inside the floor, build brackets ≥ 120×90 and no two furniture footprints overlap', I.DATA.MARTS.every(function(m){ return m.spots.every(function(d, j){ if (!(d.w > 0 && d.d > 0 && d.bw >= 120 && d.bd >= 90 && d.fx > FLOOR.x && d.fx < FLOOR.x + FLOOR.w && d.fy > FLOOR.y && d.fy < FLOOR.y + FLOOR.h + 40)) return false; for (var k = 0; k < j; k++){ var e = m.spots[k]; if (d.x < e.x + e.w && e.x < d.x + d.w && d.y < e.y + e.d && e.y < d.y + d.d) return false; } return true; }); }));
+        ok('the gate is the gap in the top trellis; fixed scenery (crate, plant, trash can, barrels) stands clear of every spot and the counter is fully inside the opening camera at 1000×620', (function(){ var gap = FENCES.filter(function(f){ return f.t === 1 && !f.v && f.y === FLOOR.y; }); if (gap.length !== 2 || gap[0].x + gap[0].w >= GATE.x || gap[1].x <= GATE.x) return false; var cd = MARTS[0].spots[MARTS[0].cidx], hw = 500 / .895, hh = 310 / .895, cy = START.y - 90; if (!(cd.x > START.x - hw && cd.x + cd.w < START.x + hw && cd.y - cd.h > cy - hh && cd.y + cd.d < cy + hh)) return false; return SCENERY.every(function(o){ return MARTS.every(function(m){ return m.spots.every(function(d){ return o.x < d.x - 30 || o.x > d.x + d.w + 30 || o.y < d.y - 60 || o.y > d.y + d.d + 60; }); }); }); })());
+        /* --- new game & building --- */
+        I.newGame(); M = G.marts[0]; D = MARTS[0]; P = G.player;
+        ok('new game: 350 cash, 0 diamonds, mart 1, banana tree built with 3 bananas, empty banana stand built, next spot = cash register', G.cash === 350 && G.dia === 0 && G.mart === 0 && G.unlocked === 1 && M.spots[0].built && M.spots[0].stock === 3 && M.spots[1].built && M.spots[1].stock === 0 && D.spots[1].k === 'shelf' && M.next === 2 && D.spots[2].k === 'counter' && G.hat === 'none' && G.up.stack === 1 && Math.abs(P.x - GATE.x) < 1 && P.y > GATE.y);
+        ok('tutorial at start: "use arrows / tap" text, no arrow target yet; no customers before the register is built', (I.TUT.key === 'tutMove' || I.TUT.key === 'tutTap') && !I.TUT.on && (run(3), I.TUT.key === 'tutMove' || I.TUT.key === 'tutTap') && M.customers.length === 0);
+        I.setInput(1, 0); run(1); var mx = P.x - GATE.x; I.setInput(0, 0);
+        ok('setInput(1,0) walks right at ' + Math.round(mx) + ' wu/s (base 260), tutorial moves on to "go to the cash machine" with the arrow on the register spot', mx > 230 && mx < 290 && G.tut.moved && I.TUT.key === 'tutCash' && I.TUT.on && Math.abs(I.TUT.tx - D.spots[2].cx) < 1);
+        cd = D.spots[2]; put(cd.cx, cd.cy); run(.1);
+        ok('register costs 100 and is paid in chunks of 5 per 0.1 s while standing in the brackets', cd.price === 100 && M.spots[2].paid === 5 && G.cash === 345 && !M.spots[2].built);
+        run(2.2); ok('after ~2 s the register is fully paid and built, cash 250, next spot = 2nd banana tree (150); tutorial says "harvest bananas" at the tree', M.spots[2].built && M.spots[2].paid === 100 && G.cash === 250 && M.next === 3 && D.spots[3].k === 'src' && D.spots[3].price === 150 && M.spots[2].pop > 0 && I.TUT.key === 'tutHarvest' && Math.abs(I.TUT.tx - D.spots[0].cx) < 1);
+        G.cash = 30; put(D.spots[3].cx, D.spots[3].cy); run(1.5);
+        ok('insufficient cash: pays only what you have (30), spot stays unbuilt, cash never negative', M.spots[3].paid === 30 && G.cash === 0 && !M.spots[3].built);
+        var snap = I.serialize(); I.restore(snap); M = G.marts[0]; P = G.player;
+        ok('partial payment persists through save→load', M.spots[3].paid === 30 && !M.spots[3].built && M.next === 3);
+        G.cash = 170; put(D.spots[3].cx, D.spots[3].cy); run(2.5);
+        ok('coming back later finishes the payment (120 remaining) and builds the tree with 3 bananas (already being picked by the monkey standing there), 50 cash left', M.spots[3].built && G.cash === 50 && M.next === 4 && M.spots[3].stock + P.stack.length === 3, 'built=' + M.spots[3].built + ' paid=' + M.spots[3].paid + ' cash=' + G.cash + ' next=' + M.next + ' stock=' + M.spots[3].stock + ' stack=' + P.stack.length);
+        /* --- harvest / stock --- */
+        M.spawnT = 1e9; M.customers.length = 0; M.queue.length = 0; P.stack.length = 0; G.stats.harvest = 0;
+        var tr = D.spots[0]; put(tr.fx, tr.fy); run(1.2);
+        ok('standing by the tree: bananas fly onto the head one per 0.25 s (3 after 1.2 s), tree empties and starts regrowing', P.stack.length === 3 && M.spots[0].stock === 0 && M.spots[0].timer > 0 && G.stats.harvest === 3, 'stack=' + P.stack.join(',') + ' stock=' + M.spots[0].stock + ' timer=' + M.spots[0].timer + ' harvest=' + G.stats.harvest + ' P=' + Math.round(P.x) + ',' + Math.round(P.y));
+        run(6); ok('stack limit: carries at most 4 (Stack Lv 1) even though the tree regrew', P.stack.length === 4 && M.spots[0].stock >= 1 && I.fn.stackCap() === 4);
+        ok('with bananas on the head the tutorial points "stock the shelf" at the stand', I.TUT.key === 'tutStock' && I.TUT.on && Math.abs(I.TUT.tx - D.spots[1].cx) < 1);
+        var sh = D.spots[1]; put(sh.fx, sh.fy); run(1.3);
+        ok('at the stand the bananas unload one by one onto the shelf (4), hands empty', M.spots[1].stock === 4 && P.stack.length === 0);
+        M.spots[1].stock = 11; P.stack = ['banana', 'banana']; run(.6);
+        ok('shelf capacity 12: only one more fits, one banana stays on the head', M.spots[1].stock === 12 && P.stack.length === 1);
+        P.stack = []; put(1500, 1000);
+        /* --- customers --- */
+        M.spawnT = 0; run(.2); c = M.customers[0];
+        ok('a customer enters through the gate wanting 1–3 bananas with a thought bubble "0/n"', M.customers.length === 1 && c.st === 'toShelf' && c.item === 'banana' && c.want >= 1 && c.want <= 3 && c.have === 0 && c.y < 100);
+        M.spawnT = 1e9; run(12); ok('the customer walked to the stand, took its items (one per 0.3 s) and is now waiting in the checkout queue in front of the register', c.have === c.want && c.st === 'queue' && M.queue.indexOf(c) === 0 && M.spots[1].stock === 12 - c.want && M.pile === 0 && Math.abs(c.x - cd.qx) < 8 && c.y > cd.y + cd.d && I.TUT.key === 'tutServe', c.st + ' ' + c.have + '/' + c.want + ' x=' + c.x);
+        put(cd.px, cd.py); run(1.3);
+        ok('player behind the register serves the first customer in ~1 s: it pays, leaves happy, cash lands on the counter pile', c.st === 'leave' && c.happy > 0 && M.pile === ITEMS.banana.p * c.want && G.stats.served === 1 && G.stats.sold === c.want && M.queue.length === 0, M.pile);
+        var cashBefore = G.cash, pile = M.pile; put(1500, 1000); run(.2); var collectHint = I.TUT.key === 'tutCollect' && Math.abs(I.TUT.tx - cd.lx) < 1; put(cd.lx, cd.ly); run(.2);
+        ok('tutorial says "collect the cash" at the pile; walking to the counter end collects it (+' + pile + ')', collectHint && G.cash === cashBefore + pile && M.pile === 0 && G.stats.earned === pile);
+        run(.2); ok('then the tutorial points at the next build spot (hire a cashier, 300)', M.next === 4 && D.spots[4].k === 'hire' && I.TUT.on && I.TUT.side && I.TUT.tx > D.spots[4].bx + D.spots[4].bw);
+        /* --- empty shelf --- */
+        put(1500, 1000); M.customers.length = 0; M.queue.length = 0; M.spots[1].stock = 0; M.spawnT = 0; run(.2); c = M.customers[0]; M.spawnT = 1e9; run(7);
+        ok('empty shelf: the customer waits at the stand with 0/n', c && c.st === 'take' && c.have === 0 && c.waitT > 0, c && c.st);
+        run(11); ok('after ~12 s of waiting it gives up and leaves sad', c.have === 0 && (c.st === 'leave' || M.customers.indexOf(c) < 0) && G.stats.served === 1, c.st);
+        /* --- cashier --- */
+        G.cash = 1000; I.fn.build(M, D, 4); w = M.workers[0];
+        ok('hire cashier spot (300) spawns a cashier worker; hires counted', M.workers.length === 1 && w.t === 'cashier' && G.stats.hires === 1 && D.spots[4].price === 300);
+        run(6); ok('the cashier walks behind the register and stands at the post', w.atPost && Math.abs(w.x - cd.px) < 8 && Math.abs(w.y - cd.py) < 8, w.x + ',' + w.y);
+        M.customers.length = 0; M.queue.length = 0; M.spots[1].stock = 12; M.spawnT = 0; put(1500, 1000); var served0 = G.stats.served; run(14);
+        ok('a hired cashier serves the queue without the player (pile grows)', G.stats.served > served0 && M.pile > 0, G.stats.served + ' pile=' + M.pile);
+        M.customers.length = 0; M.queue.length = 0; M.spawnT = 1e9; I.fn.collectPile(M);
+        /* --- machine, chef, assistant --- */
+        I.fn.build(M, D, 5); I.fn.build(M, D, 6); var ym = D.spots[5], ys = M.spots[5];
+        ok('yogurt machine spot (600): 2 bananas → 1 yogurt in 4 s, outputs onto its tray', ym.k === 'mach' && ym.price === 600 && ym.inp[0] === 'banana' && ym.need[0] === 2 && ym.out === 'yogurt' && ym.t === 4);
+        P.stack = ['banana', 'banana']; put(ym.fx, ym.fy); run(.6);
+        ok('player feeds the machine from the head stack (2 bananas in)', ys.ins[0] === 2 && P.stack.length === 0);
+        put(1500, 1000); run(4.2); ok('4 s later: 1 yogurt on the tray, inputs consumed', ys.outN === 1 && ys.ins[0] === 0, ys.outN + '/' + ys.ins[0]);
+        put(ym.fx, ym.fy); run(.4); ok('player picks the yogurt from the tray', P.stack.length === 1 && P.stack[0] === 'yogurt' && ys.outN === 0);
+        P.stack = []; put(1500, 1000); ys.ins[0] = 6; ys.outN = 0; I.fn.spawnWorker(M, MARTS[1], 17); var chef = M.workers[1];
+        ok('a chef worker can be spawned (mart 2 hire spot)', chef.t === 'chef' && M.workers.length === 2);
+        run(30); ok('the chef moves yogurt from the machine tray to the yogurt shelf', M.spots[6].stock >= 1, M.spots[6].stock + ' tray=' + ys.outN + ' chef=' + chef.st);
+        I.fn.build(M, D, 7); var asst = M.workers[2]; M.spots[1].stock = 0; M.customers.length = 0; M.queue.length = 0; M.spawnT = 1e9; run(25);
+        ok('assistant hire (500): harvests bananas and restocks the empty banana stand', asst.t === 'assistant' && M.spots[1].stock > 0, M.spots[1].stock + ' ' + asst.st);
+        /* --- stamina --- */
+        M.spots[1].stock = 0; M.spots[0].stock = 3; asst.stam = 1.5; var st0 = asst.stam; run(15);
+        ok('worker stamina drains while working and the worker falls asleep at 0 (Zzz)', asst.asleep === true && asst.stam === 0 && asst.job === null, asst.stam + ' ' + asst.asleep);
+        ok('tapping a sleeping worker wakes it instantly with full stamina', I.ui.wake(asst, M) === true && !asst.asleep && asst.stam === 100);
+        I.fn.sleepWorker(asst, M); run(21); ok('a sleeping worker wakes alone after ~20 s', !asst.asleep && asst.stam === 100);
+        /* --- upgrades --- */
+        G.cash = 20000; var p0 = I.fn.upPrice('player', 'stack');
+        ok('Stack upgrade: Lv1→Lv2 costs ' + p0 + ', capacity 4→6, cash deducted, counts as a task action', I.ui.buyUpgrade('player', 'stack') && G.up.stack === 2 && I.fn.stackCap() === 6 && G.cash === 20000 - p0);
+        put(1000, 700); I.setInput(1, 0); run(1); var v1 = P.x - 1000; I.setInput(0, 0); I.ui.buyUpgrade('player', 'speed'); put(1000, 700); I.setInput(1, 0); run(1); var v2 = P.x - 1000; I.setInput(0, 0);
+        ok('Speed upgrade: walk speed ×1.2 (' + Math.round(v1) + ' → ' + Math.round(v2) + ' wu/s)', G.up.speed === 2 && v2 > v1 * 1.15 && v2 < v1 * 1.25);
+        ok('upgrades stop at Lv 4 (MAX) and refuse without cash', (I.ui.buyUpgrade('player', 'speed'), I.ui.buyUpgrade('player', 'speed'), G.up.speed === 4 && !I.ui.buyUpgrade('player', 'speed') && I.fn.upPrice('player', 'speed') === 0) && (G.cash = 0, !I.ui.buyUpgrade('player', 'stamina')));
+        G.cash = 20000; ok('worker upgrades: assistant Stack Lv2 carries 5, Speed Lv2 walks ×1.25', I.ui.buyUpgrade('worker', 'stack', 'assistant') && wcap('assistant') === 5 && I.ui.buyUpgrade('worker', 'speed', 'assistant') && Math.abs(wspeed('assistant') - WSPEED * 1.25) < 1e-9);
+        P.stam = 100; P.tired = false; put(400, 1000); I.setInput(1, 0); run(12); I.setInput(-1, 0); run(12); var tiredNow = P.tired; I.setInput(0, 0);
+        ok('Stamina: the player tires after a long walk at Lv 1 (slower until recovered)', tiredNow && P.stam < 40 && (G.up.stamina === 1), P.tired + ' ' + P.stam);
+        G.cash = 20000; I.ui.buyUpgrade('player', 'stamina'); I.ui.buyUpgrade('player', 'stamina'); I.ui.buyUpgrade('player', 'stamina'); P.stam = 100; P.tired = false; put(400, 1000); I.setInput(1, 0); run(12); I.setInput(-1, 0); run(12); var tired4 = P.tired; I.setInput(0, 0);
+        ok('Stamina Lv 4: never tires', G.up.stamina === 4 && !tired4 && P.stam === 100);
+        /* --- speed boots --- */
+        G.boots.on = false; put(1000, 700); G.boots.here = true; G.boots.x = 1000; G.boots.y = 700; run(.2);
+        ok('walking into the speed boots: 2-minute boost, pickup gone, next spawn in 180 s', G.boots.on && !G.boots.here && Math.abs(G.boots.until - G.t - BOOT_T) < .2 && G.boots.spawnT > BOOT_EVERY - 1, G.boots.on + ' ' + G.boots.here + ' ' + G.boots.spawnT);
+        put(400, 1000); I.setInput(1, 0); run(1); var vb = P.x - 400; I.setInput(0, 0); run(118); var onAt118 = G.boots.on; run(2.5);
+        ok('boost = ×1.5 speed (' + Math.round(vb) + ' wu/s), lasts 120 s then ends', vb > 260 * 1.6 * 1.5 * .95 && onAt118 && !G.boots.on);
+        run(181); ok('new boots spawn on the floor every ~3 minutes', G.boots.here && G.boots.x > FLOOR.x && G.boots.x < FLOOR.x + FLOOR.w);
+        /* --- daily tasks --- */
+        G.fakeNow = new Date(2026, 10, 4, 12, 0, 0).getTime(); G.daily = null; I.fn.checkDaily(); G.dia = 0;
+        ok('daily: 5 tasks with goals scaled by unlocked marts, none done, 4 offers unclaimed', G.daily.day === I.fn.dayKey(G.fakeNow) && I.fn.taskGoal(0) === 50 && I.fn.taskGoal(3) === 1000 && G.daily.done.join() === '0,0,0,0,0' && I.fn.nextOffer() === 0);
+        G.stats.harvest += 50; var got = I.fn.checkTasks();
+        ok('harvest 50 → task 1 complete, +2 diamonds', got === 2 && G.daily.done[0] === 1 && G.dia === 2 && I.fn.taskProg(0) === 50);
+        G.stats.sold += 30; G.stats.served += 20; G.stats.earned += 1000; G.stats.hires += 1; got = I.fn.checkTasks();
+        ok('all five tasks → +8 more and the 10-diamond bonus (20 total)', got === 18 && G.dia === 20 && G.daily.bonus === true && G.daily.done.join() === '1,1,1,1,1');
+        G.fakeNow += 86400000; I.fn.checkDaily();
+        ok('next day: tasks and offers reset at local midnight', G.daily.done.join() === '0,0,0,0,0' && !G.daily.bonus && I.fn.nextOffer() === 0 && I.fn.taskProg(0) === 0);
+        /* --- shop --- */
+        G.dia = 10; var cash0 = G.cash;
+        ok('shop: 250-cash pack costs 10 diamonds (×' + PACK_MULT[G.unlocked - 1] + ' for the current mart)', I.fn.packCash(0) === 250 * PACK_MULT[G.unlocked - 1] && I.ui.buyPack(0) && G.dia === 0 && G.cash === cash0 + 250 * PACK_MULT[G.unlocked - 1] && !I.ui.buyPack(1));
+        ok('daily offer: FREE claims 3, 5, 7, 10 diamonds once each per day', I.ui.claimOffer() && G.dia === 3 && I.ui.claimOffer() && I.ui.claimOffer() && I.ui.claimOffer() && G.dia === 25 && !I.ui.claimOffer() && I.fn.nextOffer() === -1);
+        /* --- hats --- */
+        G.dia = 100;
+        ok('hats: straw hat is free, green bucket hat costs 30 and gets selected, halo (250) refused', I.ui.buyHat('straw') && G.hat === 'straw' && G.dia === 100 && I.ui.buyHat('bucket') && G.hat === 'bucket' && G.dia === 70 && G.hats.indexOf('bucket') >= 0 && !I.ui.buyHat('halo') && G.hat === 'bucket');
+        ok('owned hats re-select for free', I.ui.buyHat('straw') && G.hat === 'straw' && G.dia === 70);
+        /* --- save / load --- */
+        G.fakeNow = null; I.fn.checkDaily(); var a = I.serialize(); I.restore(a); var b = I.serialize(); a.at = b.at = 0;
+        ok('save→load round trip: serialized state identical (cash, hats, upgrades, marts, workers, boots, daily)', JSON.stringify(a) === JSON.stringify(b) && G.hat === 'straw' && G.up.speed === 4 && G.marts[0].workers.length === 3 && G.marts[0].spots[6].built, (function(){ var sa = JSON.stringify(a), sb = JSON.stringify(b); for (var q = 0; q < sa.length; q++) if (sa[q] !== sb[q]) return sa.slice(Math.max(0, q - 60), q + 60) + ' <> ' + sb.slice(Math.max(0, q - 60), q + 60); return ''; })());
+        NOSAVE = false; I.save(); var stored = null; try { stored = JSON.parse(localStorage.getItem(KEY)); } catch(e){} NOSAVE = true;
+        ok('save() writes mart.v1 to localStorage with a timestamp', !!stored && stored.v === 1 && stored.at > 0 && stored.marts.length === 6);
+        /* --- offline --- */
+        M = G.marts[0]; var rate = I.fn.passiveRate(0); a = I.serialize(); a.at = Date.now() - 10 * 3600 * 1000; I.restore(a);
+        ok('offline earnings: cashier + restocker give a passive rate (' + rate.toFixed(1) + '/s); after 10 h away the welcome-back amount is capped at 2 h × 20% = ' + Math.floor(rate * .2 * 7200), rate > 0 && G.offlineAmt === Math.floor(rate * OFFLINE_RATE * OFFLINE_CAP) && G.offlineSecs === OFFLINE_CAP);
+        a = I.serialize(); a.at = Date.now() - 20000; I.restore(a); ok('away < 1 minute: no offline box', G.offlineAmt === 0);
+        /* --- unlock --- */
+        M = G.marts[0]; D = MARTS[0]; for (i = 0; i < M.spots.length; i++) if (!M.spots[i].built) I.fn.build(M, D, i);
+        ok('all spots bought → mart done, delivery truck at the gate, "NEW MART UNLOCKED", mart 2 unlocked', M.done && M.next === -1 && G.unlocked === 2 && G.truckT > 0 && G.msg === 'newMart');
+        ok('goMart: travel to mart 2 (player at its gate), mart 3 still locked', I.goMart(1) && G.mart === 1 && Math.abs(G.player.x - GATE.x) < 1 && !I.goMart(2) && G.mart === 1);
+        var cashP = G.cash; run(10); ok('earlier mart keeps earning off-screen (cashier + assistant): +' + Math.floor(G.cash - cashP) + ' in 10 s', G.cash > cashP);
+        ok('tutorial in a new mart points the arrow beside its first build spot (the counter)', I.TUT.on && I.TUT.side && Math.abs(I.TUT.tx - (MARTS[1].spots[1].bx + MARTS[1].spots[1].bw + 44)) < 1 && Math.abs(I.TUT.ty - (MARTS[1].spots[1].cy + 16)) < 1);
+        /* --- customers cap --- */
+        I.goMart(0); M = G.marts[0]; D = MARTS[0]; for (i = 0; i < M.workers.length; i++) M.workers[i].t === 'cashier' && (M.workers[i].t = 'chef'); M.spots[1].stock = 12; put(1500, 1000); run(90);
+        ok('never more than 12 customers in a mart', M.customers.length <= MAX_CUST && M.customers.length >= 8, M.customers.length);
+        /* --- collision --- */
+        I.newGame(); M = G.marts[0]; D = MARTS[0]; P = G.player; sh = D.spots[1]; put(sh.cx, sh.y + sh.d + 60); I.setInput(0, -1); run(1); I.setInput(0, 0);
+        ok('furniture is solid: walking up into the stand stops at its front edge', P.y >= sh.y + sh.d + 10 && P.y < sh.y + sh.d + 20, P.y);
+        I.walkTo(sh.cx, sh.y - 80); run(4); ok('tap-to-walk slides around the stand and reaches the other side', Math.abs(P.y - (sh.y - 80)) < 10 && Math.abs(P.x - sh.cx) < 10 && P.goal === null, P.x + ',' + P.y);
+        I.fn.build(M, D, 2); var cq = { x:D.spots[2].qx, y:D.spots[2].qy, tx:GATE.x + 20, ty:GATE.y - 90, dir:1, moving:true, phase:0 }; for (i = 0; i < 60 * 6; i++){ moveEnt(cq, CSPEED, DT); if (i % TPS === 0) collide(cq, M, D, 40); if (arrived(cq)) break; }
+        ok('a customer leaving the queue head walks around the counter to the gate (never stuck on it)', arrived(cq) && i < 60 * 6, Math.round(cq.x) + ',' + Math.round(cq.y));
+        /* --- bot --- */
+        I.newGame(); var t0 = performance.now(), m1 = -1, times = [], lastT2 = 0;
+        for (var mi = 0; mi < 6; mi++){ var MM2 = G.marts[mi]; I.auto(3 * 3600 - G.t, { until:function(){ return MM2.done; } }); if (!MM2.done) break; times.push(Math.round((G.t - lastT2) / 60)); lastT2 = G.t; if (mi === 0) m1 = G.t / 60; }
+        var realMs = performance.now() - t0;
+        ok('the bot completes Mart 1 within 25 virtual minutes (' + m1.toFixed(1) + ' min)', m1 > 0 && m1 <= 25);
+        ok('the bot completes ALL SIX marts within 3 virtual hours (' + Math.round(G.t / 60) + ' min: ' + times.join('/') + ' min per mart)', G.unlocked === 6 && G.marts[5].done && G.t <= 3 * 3600, times.join('/'));
+        ok('headless 60 Hz run of ' + Math.round(G.t / 60) + ' virtual minutes took ' + Math.round(realMs) + ' ms real time (≤ 12 s)', realMs <= 12000);
+        var badV = valid(); ok('no NaN / negative cash, stocks or positions anywhere after the bot run', badV.length === 0, badV.join(','));
+        ok('the bot bought upgrades, hired every worker type and earned a lot', G.up.stack >= 2 && G.stats.hires >= 10 && G.stats.earned > 100000 && WTYPES.every(function(ty){ return G.marts.some(function(m){ return hasWorker(m, ty); }); }));
+        /* --- language / UI --- */
+        I.ui.setLang('en'); ok('setLang(en): ltr, English texts, English title', document.documentElement.dir === 'ltr' && I.t('shop') === 'SHOP' && I.t('tutCash') === 'GO TO THE CASH MACHINE' && document.title.indexOf('Monkey Mart') === 0);
+        I.ui.setLang('he'); ok('setLang(he): rtl, Hebrew texts and title "מונקי מארט"', document.documentElement.dir === 'rtl' && I.t('shop') === 'חנות' && document.title.indexOf('מונקי מארט') === 0 && I.t('tutCash') === 'לכו לקופה');
+        I.ui.open('shop'); ok('SHOP modal: title, 3 cash packs with diamond prices, Daily Offer ribbon, reset timer, 4 rewards, FREE button, close X', $('ov').classList.contains('on') && $('panel').querySelectorAll('.card').length === 3 && $('panel').querySelector('.ribbon') !== null && /\d+h \d+m/.test($('panel').querySelector('.box .hd').textContent) && $('panel').querySelectorAll('.gem').length === 4 && $('panel').querySelector('[data-act="offer"]') !== null && $('panel').querySelector('.x') !== null);
+        I.ui.open('hats'); ok('ACCESSORIES modal: 22 hat cards in a 3-column grid, SELECTED label on the worn hat, FREE on the straw hat, diamond prices', $('panel').querySelectorAll('.grid3 .card').length === 22 && $('panel').querySelector('.pill.sel') !== null && $('panel').textContent.indexOf(I.t('free')) >= 0 && $('panel').querySelectorAll('canvas[data-hat]').length === 22 && getComputedStyle($('panel').querySelector('.grid3')).gridTemplateColumns.split(' ').length === 3);
+        I.ui.open('upg'); ok('UPGRADES modal: player + worker cards with Lv x/4 and prices', $('panel').querySelectorAll('.card').length >= 15 && $('panel').textContent.indexOf('/4') > 0 && $('panel').querySelectorAll('[data-act="up"]').length >= 15);
+        I.ui.open('tasks'); ok('DAILY TASKS panel: 5 tasks with progress bars + bonus row', $('panel').querySelectorAll('.task').length === 6 && $('panel').querySelectorAll('.bar').length === 6);
+        I.ui.open('settings'); ok('SETTINGS: sound switch, language, install, reset (double confirm) and the "more games" footer link', $('panel').querySelector('[data-act="sound"]') !== null && $('panel').querySelector('[data-act="lang"]') !== null && $('panel').querySelector('[data-act="install"]') !== null && $('panel').querySelector('[data-act="reset1"]') !== null && !!document.querySelector('footer a[href="./"]'));
+        $('panel').querySelector('[data-act="reset1"]').click(); var q1 = !!$('panel').querySelector('[data-act="reset2"]'); $('panel').querySelector('[data-act="reset2"]').click(); var q2 = !!$('panel').querySelector('[data-act="reset3"]');
+        ok('reset asks twice before wiping', q1 && q2);
+        ok('modal buttons ≥ 44 px and inside the viewport', [].slice.call($('panel').querySelectorAll('button')).every(function(bt){ var rc = bt.getBoundingClientRect(); return rc.height >= 44 && rc.right <= window.innerWidth + 1; }));
+        I.ui.close(); ok('close() hides the modal', !$('ov').classList.contains('on') && G.panel === null);
+        ok('HUD buttons open panels by hit-test (shop / upgrades / hats / settings / tasks)', (function(){ var L = I.ui.hudLayout(VW, VH), ids = []; for (var k = 0; k < 4; k++){ I.ui.hudHit(L.btn[k].x + 5, L.btn[k].y + 5); ids.push(G.panel); } I.ui.hudHit(L.tasksX + 5, L.tasksY + 5); ids.push(G.panel); I.ui.close(); return ids.join() === 'shop,upg,hats,settings,tasks'; })());
+        var lay = [[360, 640], [1000, 620], [1920, 1080]].map(function(p){ var L = I.ui.hudLayout(p[0], p[1]), c = {}; for (var kk in L) c[kk] = L[kk]; c.btn = L.btn.map(function(b){ return { x:b.x, y:b.y, id:b.id }; }); return c; });
+        ok('canvas HUD layout fits at 360×640, 1000×620 and 1920×1080: tap targets ≥ 44 px, text ≥ 16 px, nothing overlaps or overflows', lay.every(function(L, k){ var W = [360, 1000, 1920][k]; return L.bs >= 44 && L.fs >= 16 && L.btn.every(function(b){ return b.x >= 0 && b.x + L.bs <= W; }) && L.pillX + L.pillW < L.btn[0].x && (W < 500 || L.truckX > L.pillX + L.pillW) && L.btn[0].x > L.truckX + L.truckW - (W < 500 ? 999 : 0); }));
+        /* --- render & demos --- */
+        I.fn.prepDemo(1); VW = 360; VH = 640; cv.width = 360; cv.height = 640; SC = .62; CAM.snap = true; updCam(1); I.render(); var r1 = true;
+        ok('#demo1 renders at 360×640 without errors (tutorial bubble, customers, worker, pile, next spot = 2nd tree with its price bubble)', r1 && G.marts[0].customers.length >= 2 && G.marts[0].workers.length === 1 && G.marts[0].pile === 120 && I.TUT.key === 'tutStock' && G.marts[0].next === 3);
+        VW = 1920; VH = 1080; cv.width = 1920; cv.height = 1080; SC = 1.25; CAM.snap = true; updCam(1); I.render(); I.fn.prepDemo(2); I.render();
+        ok('#demo2 renders at 1920×1080 (mart 2: corn beds, machines, animals, 4 workers)', G.mart === 1 && G.marts[1].spots[9].built && MARTS[1].spots[9].k === 'animal' && G.marts[1].workers.length === 3);
+        I.ui.fit();
+        ok('pwa install snippet present (hidden unless the browser offers install)', !!$('pwa-install') && (getComputedStyle($('pwa-install')).display === 'none' || $('pwa-install').classList.contains('on')));
+        ok('JSON-LD VideoGame present; manifest + apple-touch-icon + canonical + OG image linked', (function(){ try { return JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@type'] === 'VideoGame'; } catch(e){ return false; } })() && !!document.querySelector('link[rel="manifest"][href="mart.webmanifest"]') && !!document.querySelector('link[rel="apple-touch-icon"][href="art/mart-180.png"]') && !!document.querySelector('link[rel="canonical"][href="https://lupulior.github.io/game-lab/mart.html"]') && !!document.querySelector('meta[property="og:image"][content$="art/mart-og.png"]'));
+        ok('public API on window.MM', ['newGame', 'load', 'save', 'step', 'state', 'DATA', 'setInput', 'auto', 'ui', 'render'].every(function(k){ return k in I; }) && I.DATA.MARTS && I.DATA.ITEMS && I.DATA.HATS && I.DATA.UPG);
+        ok('canvas fills the viewport, touch-action none, no page scroll', cv.getBoundingClientRect().width >= window.innerWidth - 1 && getComputedStyle(cv).touchAction === 'none' && document.documentElement.scrollWidth <= window.innerWidth + 1);
+        try { localStorage.removeItem(KEY); } catch(e){}
+        ok('no runtime errors', errs.filter(function(x){ return x.indexOf('onerror') === 0 || x.indexOf('init') === 0; }).length === 0);
+      } catch(e){ errs.push('exception: ' + (e && e.stack || e)); }
+      done();
+    })();
+  })();
+}
+
+})();
+</script>
+<!-- install button: shows only when the browser offers to install THIS game as an app -->
+<style>#pwa-install{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9999;display:none;font-family:"Varela Round","Arial Rounded MT Bold",Arial,sans-serif;font-weight:900;font-size:16px;color:#fff;background:#1B2A4E;border:0;border-radius:999px;padding:10px 18px;box-shadow:0 6px 0 rgba(0,0,0,.25),0 8px 18px rgba(0,0,0,.25);cursor:pointer}#pwa-install.on{display:block}</style>
+<button id="pwa-install" type="button">📲 התקן את המשחק בטלפון</button>
+<script>(function(){ var d=null, b=document.getElementById('pwa-install'); if(!b) return; try{ if(localStorage.getItem('pwa.hide')==='1') return; }catch(e){} window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); d=e; b.classList.add('on'); }); window.addEventListener('appinstalled', function(){ b.classList.remove('on'); try{ localStorage.setItem('pwa.hide','1'); }catch(e){} }); b.addEventListener('click', function(){ if(!d) return; var p=d; d=null; b.classList.remove('on'); p.prompt(); }); })();</script>
+</body>
+</html>
