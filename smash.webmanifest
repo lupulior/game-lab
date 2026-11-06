@@ -1,0 +1,19 @@
+{
+  "name": "חדר הניפוץ 💥",
+  "short_name": "חדר הניפוץ",
+  "description": "שוברים, מפוצצים ומנפצים 24 חפצים מקוביות עם 14 כלי נשק: מחבט, רקטות, ברק, לייזר, פצצות, אש, קרח וחרב אור.",
+  "start_url": "./smash.html?src=pwa",
+  "id": "/game-lab/smash.html",
+  "scope": "./smash.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#3B82F6",
+  "theme_color": "#3B82F6",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/smash-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/smash-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/smash-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
