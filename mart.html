@@ -110,6 +110,24 @@ footer a{color:#2C6FB0;text-decoration:none;font-weight:900}
 .hidden{display:none!important}
 #test-log{position:fixed;left:0;top:0;white-space:pre-wrap;font-family:monospace;font-size:12px;color:#fff;background:#000;padding:8px;direction:ltr;z-index:99;max-height:100%;overflow:auto}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* Game Lab shared 🔑 code button + dialog (paste verbatim into every game's <style>) */
+.gl-key{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.38;font-size:16px;line-height:1;padding:8px 14px;cursor:pointer;border-radius:10px;min-height:44px;min-width:44px}
+.gl-key:hover,.gl-key:focus-visible{opacity:.95}
+.gl-ov{position:fixed;inset:0;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;z-index:99999;padding:12px;box-sizing:border-box}
+.gl-card{background:#fff;color:#1f2430;border-radius:18px;padding:16px;width:100%;max-width:380px;max-height:88vh;overflow:auto;box-sizing:border-box;text-align:start;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.gl-card h3{margin:0 0 10px;font-size:22px;color:#1f2430}.gl-card h4{margin:14px 0 6px;font-size:16px;color:#1f2430}.gl-card p{margin:6px 0;color:#1f2430}
+.gl-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0}
+.gl-in{flex:1 1 120px;min-width:0;min-height:44px;border:2px solid #cfd6e4;border-radius:10px;padding:0 10px;font-size:16px;color:#1f2430;background:#fff;box-sizing:border-box;font-family:inherit}
+.gl-n{flex:0 0 96px}
+.gl-b{min-height:44px;border:0;border-radius:12px;padding:0 16px;font:700 16px system-ui,-apple-system,'Segoe UI',Arial,sans-serif;background:#2563eb;color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+.gl-ghost{background:#eef1f7;color:#1f2430;width:100%;margin-top:10px}
+.gl-wa{background:#25d366}
+.gl-msg{min-height:22px;font-weight:700}.gl-msg.ok{color:#15803d}.gl-msg.bad{color:#b91c1c}
+.gl-tb{width:100%;border-collapse:collapse;font-size:14px}.gl-tb td{padding:4px 6px;border-bottom:1px solid #e6eaf2;color:#1f2430}.gl-tb td:last-child{text-align:end;font-weight:700}.gl-tot td{font-weight:900;border-bottom:0}
+.gl-code{font:700 18px/1.3 ui-monospace,Consolas,monospace;background:#f3f5fa;border:2px dashed #94a3b8;border-radius:10px;padding:10px;margin:8px 0;word-break:break-all;direction:ltr;text-align:center;user-select:all;color:#1f2430}
+.gl-adm{border-top:2px solid #e6eaf2;margin-top:12px;padding-top:6px}
+#gl-foot{position:fixed;left:0;right:0;bottom:0;z-index:15;text-align:center;pointer-events:none}
+#gl-foot .gl-key{pointer-events:auto;margin:0 auto}
 </style>
 </head>
 <body>
@@ -117,8 +135,71 @@ footer a{color:#2C6FB0;text-decoration:none;font-weight:900}
 <div id="ov"><div class="panel" id="panel"></div></div>
 <div id="banner"></div>
 <div class="toast" id="toast"></div>
+<div id="gl-foot"></div>
 <pre id="test-log" class="hidden"></pre>
 <script>
+/* ===== Game Lab shared block – paste VERBATIM into every game (and index.html). =====
+   🔑 code button at the bottom of the home screen: the admin code turns on admin mode in ALL games
+   (shared localStorage on lupulior.github.io: infinite money, play counters, gift codes); gift codes
+   (GL-<GAME>-<amount>-<nonce>-<sig>) give money to a player in one game. No server – everything is local.
+   API: GL.mount({ game, container, lang:fn->'he'|'en', money:{ add:fn(n) }|null, refresh:fn, toast:fn })
+        GL.isAdmin()  GL.played(id)  GL.plays(id)  GL.makeGift(game, amount)  GL.parseGift(code)  GL.submit(code)  GL.open()  GL.close()
+   Canonical copy: shared/gl-admin.js (+ shared/gl-admin.css). */
+var GL = (function(){
+  'use strict';
+  var ADMIN = '528963 ליאור לופו המלך יש', MO = null, UI = null;
+  /* id, Hebrew name, English name, has money (gift codes possible) */
+  var GAMES = [['game1', '⚽ כוכב הכדורגל', 'Football Star', 1], ['hook', '🪝 סטיקמן הוק', 'Stickman Hook', 1], ['neon', '💜 אתגר הניאון', 'Neon Challenge', 1], ['drivemad', '🚗 נהיגה משוגעת', 'Drive Mad', 0], ['snake', '🐍 נחש נגד תולעים', 'Snake vs Worms', 1], ['carcircle', '🔁 מעגל המכוניות', 'Car Circle', 0], ['survivor', '🏃 איש שורד', 'Survivor', 0], ['xo', '❌ איקס עיגול', 'Tic Tac Toe', 0], ['basketball', '🏀 כדורסל 1 על 1', 'Basketball 1v1', 0], ['impostor', '🕵️ אימפוסטר', 'Impostor', 0], ['mart', '🐵 מונקי מארט', 'Monkey Mart', 1], ['wreck', '🔨 שוד הבלוקים', 'Voxel Wreck', 1], ['smash', '💥 חדר הניפוץ', 'Smash Room', 0], ['obby', '🌈 אובי בצבעי הקשת', 'Rainbow Obby', 1]];
+  var T = {
+    he:{ title:'🔑 קוד', ph:'הקלידו קוד…', ok:'אישור', close:'סגור', bad:'❌ קוד לא נכון', usedMsg:'⚠️ הקוד הזה כבר נוצל במכשיר הזה', other:'הקוד הזה שייך למשחק {g} – הקלידו אותו שם', got:'🎁 קיבלתם {n} כסף!', adminOn:'👑 ברוך הבא, המלך! מצב אדמין פעיל בכל המשחקים', adminOff:'מצב אדמין כבוי', adminTitle:'👑 מצב אדמין', inf:'∞ כסף בלי סוף בכל המשחקים', plays:'כמה שיחקו בכל משחק (במכשיר הזה)', total:'סה״כ', gift:'🎁 שליחת כסף לשחקן', make:'צור קוד', copy:'📋 העתק', copied:'✅ הועתק!', wa:'וואטסאפ', off:'יציאה ממצב אדמין', share:'🎁 קוד מתנה ל{g}: {c} – לוחצים 🔑 למטה במסך הבית של המשחק ומקלידים אותו' },
+    en:{ title:'🔑 Code', ph:'Type a code…', ok:'OK', close:'Close', bad:'❌ Wrong code', usedMsg:'⚠️ This code was already used on this device', other:'This code belongs to {g} – type it there', got:'🎁 You got {n} money!', adminOn:'👑 Welcome, King! Admin mode is on in every game', adminOff:'Admin mode off', adminTitle:'👑 Admin mode', inf:'∞ Infinite money in every game', plays:'Plays per game (on this device)', total:'Total', gift:'🎁 Send money to a player', make:'Make code', copy:'📋 Copy', copied:'✅ Copied!', wa:'WhatsApp', off:'Leave admin mode', share:'🎁 Gift code for {g}: {c} – tap 🔑 at the bottom of the game\'s home screen and type it' } };
+  function L(){ var l = null; try { l = MO && MO.lang ? MO.lang() : null; } catch(e){} return l === 'en' ? 'en' : 'he'; }
+  function t(k){ return T[L()][k] || T.he[k] || k; }
+  function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e){} return null; }
+  function norm(s){ return String(s || '').replace(/\s+/g, ' ').trim(); }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  function isAdmin(){ return ls('gl.admin') === '1'; }
+  function setAdmin(on){ ls('gl.admin', on ? '1' : null); if (MO && MO.refresh){ try { MO.refresh(); } catch(e){} } }
+  function plays(id){ return +(ls('gl.plays.' + id) || 0) || 0; }
+  function played(id){ id = id || (MO && MO.game); if (!id) return; ls('gl.plays.' + id, String(plays(id) + 1)); }
+  function fnv(s){ var h = 2166136261; for (var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36).toUpperCase(); }
+  function sig(g, n, nonce){ return ('000000' + fnv(ADMIN + '|' + g + '|' + n + '|' + nonce)).slice(-6); }
+  function makeGift(game, amount){ game = String(game).toUpperCase(); amount = Math.max(1, Math.floor(+amount || 0)); var A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', nonce = '', i; for (i = 0; i < 4; i++) nonce += A[Math.floor(Math.random() * A.length)]; return 'GL-' + game + '-' + amount + '-' + nonce + '-' + sig(game, amount, nonce); }
+  function parseGift(code){ var m = /^GL-([A-Z0-9]+)-(\d{1,9})-([A-Z0-9]{4})-([A-Z0-9]{6})$/.exec(norm(code).toUpperCase().replace(/\s/g, '')); if (!m || sig(m[1], +m[2], m[3]) !== m[4]) return null; return { game:m[1].toLowerCase(), amount:+m[2], code:m[0] }; }
+  function usedList(){ return (ls('gl.used') || '').split(',').filter(Boolean); }
+  function isUsed(code){ return usedList().indexOf(code) >= 0; }
+  function markUsed(code){ var u = usedList(); u.push(code); ls('gl.used', u.slice(-300).join(',')); }
+  function gameName(id){ for (var i = 0; i < GAMES.length; i++) if (GAMES[i][0] === id) return L() === 'en' ? GAMES[i][2] : GAMES[i][1]; return id; }
+  /* applies a typed code (admin code or gift code); returns { ok, msg, admin?, gift? } or null for an empty string */
+  function submit(v){ v = norm(v); if (!v) return null;
+    if (v === ADMIN){ setAdmin(true); return { ok:true, admin:true, msg:t('adminOn') }; }
+    var g = parseGift(v); if (!g) return { ok:false, msg:t('bad') };
+    if (!MO || !MO.game || g.game !== MO.game) return { ok:false, msg:t('other').replace('{g}', gameName(g.game)) };
+    if (!MO.money || !MO.money.add) return { ok:false, msg:t('bad') };
+    if (isUsed(g.code)) return { ok:false, msg:t('usedMsg') };
+    markUsed(g.code); try { MO.money.add(g.amount); } catch(e){} if (MO.refresh){ try { MO.refresh(); } catch(e){} }
+    return { ok:true, gift:g, msg:t('got').replace('{n}', String(g.amount)) }; }
+  function open(){ close(); var ov = document.createElement('div'); ov.className = 'gl-ov'; ov.innerHTML = '<div class="gl-card" role="dialog" aria-label="code"></div>'; document.body.appendChild(ov); UI = ov;
+    ov.addEventListener('click', function(e){ if (e.target === ov) close(); }); ov.addEventListener('keydown', function(e){ e.stopPropagation(); if (e.key === 'Escape') close(); }); ov.addEventListener('keyup', function(e){ e.stopPropagation(); }); ov.addEventListener('keypress', function(e){ e.stopPropagation(); });
+    render(''); }
+  function close(){ if (UI && UI.parentNode) UI.parentNode.removeChild(UI); UI = null; }
+  function render(msg, cls){ if (!UI) return; var c = UI.firstChild, adm = isAdmin(), h = '', i;
+    h += '<h3>' + t('title') + '</h3><div class="gl-row"><input class="gl-in" id="gl-in" type="text" autocomplete="off" autocapitalize="off" placeholder="' + esc(t('ph')) + '" aria-label="code"><button type="button" class="gl-b" id="gl-ok">' + t('ok') + '</button></div><p class="gl-msg' + (cls ? ' ' + cls : '') + '" id="gl-msg">' + esc(msg || '') + '</p>';
+    if (adm){ h += '<div class="gl-adm"><h4>' + t('adminTitle') + '</h4><p>' + t('inf') + '</p><h4>' + t('plays') + '</h4><table class="gl-tb">'; var tot = 0; for (i = 0; i < GAMES.length; i++){ var n = plays(GAMES[i][0]); tot += n; h += '<tr><td>' + esc(L() === 'en' ? GAMES[i][2] : GAMES[i][1]) + '</td><td>' + n + '</td></tr>'; } h += '<tr class="gl-tot"><td>' + t('total') + '</td><td>' + tot + '</td></tr></table>';
+      h += '<h4>' + t('gift') + '</h4><div class="gl-row"><select class="gl-in" id="gl-g" aria-label="game">'; for (i = 0; i < GAMES.length; i++) if (GAMES[i][3]) h += '<option value="' + GAMES[i][0] + '"' + (MO && MO.game === GAMES[i][0] ? ' selected' : '') + '>' + esc(L() === 'en' ? GAMES[i][2] : GAMES[i][1]) + '</option>'; h += '</select><input class="gl-in gl-n" id="gl-n" type="number" min="1" step="1" value="1000" aria-label="amount"><button type="button" class="gl-b" id="gl-make">' + t('make') + '</button></div><div id="gl-out"></div><button type="button" class="gl-b gl-ghost" id="gl-off">' + t('off') + '</button></div>'; }
+    h += '<button type="button" class="gl-b gl-ghost" id="gl-close">' + t('close') + '</button>';
+    c.innerHTML = h;
+    var inp = c.querySelector('#gl-in'); function go(){ var r = submit(inp.value); if (!r) return; if (r.ok && MO && MO.toast){ try { MO.toast(r.msg); } catch(e){} } render(r.msg, r.ok ? 'ok' : 'bad'); }
+    c.querySelector('#gl-ok').onclick = go; inp.onkeydown = function(e){ if (e.key === 'Enter'){ e.preventDefault(); go(); } }; c.querySelector('#gl-close').onclick = close;
+    if (adm){ c.querySelector('#gl-off').onclick = function(){ setAdmin(false); render(t('adminOff')); };
+      c.querySelector('#gl-make').onclick = function(){ var g = c.querySelector('#gl-g').value, n = +c.querySelector('#gl-n').value; if (!(n > 0)) return; var code = makeGift(g, n), out = c.querySelector('#gl-out'), txt = t('share').replace('{g}', gameName(g)).replace('{c}', code);
+        out.innerHTML = '<div class="gl-code" id="gl-code">' + code + '</div><div class="gl-row"><button type="button" class="gl-b" id="gl-copy">' + t('copy') + '</button><a class="gl-b gl-wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(txt) + '">' + t('wa') + '</a></div>';
+        out.querySelector('#gl-copy').onclick = function(){ var b = this, done = function(){ b.textContent = t('copied'); }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, done); else { try { var r = document.createRange(); r.selectNodeContents(out.querySelector('#gl-code')); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); } catch(e){} done(); } }; }; }
+    setTimeout(function(){ try { inp.focus(); } catch(e){} }, 50); }
+  /* the small 🔑 button; container = the bottom of the home screen */
+  function mount(o){ MO = o || {}; var b = document.createElement('button'); b.type = 'button'; b.className = 'gl-key'; b.setAttribute('aria-label', 'code'); b.textContent = '🔑'; b.onclick = function(e){ if (e) e.stopPropagation(); open(); }; (MO.container || document.body).appendChild(b); MO.btn = b; return b; }
+  return { mount:mount, open:open, close:close, isAdmin:isAdmin, setAdmin:setAdmin, played:played, plays:plays, makeGift:makeGift, parseGift:parseGift, submit:submit, GAMES:GAMES, ADMIN:ADMIN };
+})();
 (function(){
 'use strict';
 var TEST = location.hash === '#test', ERRS = [];
@@ -408,7 +489,7 @@ function actOn(M, D, j, P, T){
     return false; }
   return false;
 }
-function payChunk(M, D, j){ var d = D.spots[j], s = M.spots[j], rem = d.price - s.paid; if (rem <= 0){ build(M, D, j); return; } var chunk = Math.max(5, Math.ceil(d.price / 20)), pay = Math.min(chunk, rem, Math.floor(G.cash)); if (pay <= 0) return; G.cash -= pay; s.paid += pay; fx('bill', G.player, d); sfx('pay'); if (s.paid >= d.price) build(M, D, j); }
+function payChunk(M, D, j){ var d = D.spots[j], s = M.spots[j], rem = d.price - s.paid; if (rem <= 0){ build(M, D, j); return; } var chunk = Math.max(5, Math.ceil(d.price / 20)), pay = Math.min(chunk, rem, GL.isAdmin() ? rem : Math.floor(G.cash)); if (pay <= 0) return; if (!GL.isAdmin()) G.cash -= pay; s.paid += pay; fx('bill', G.player, d); sfx('pay'); if (s.paid >= d.price) build(M, D, j); }
 function build(M, D, j){ var d = D.spots[j], s = M.spots[j]; s.built = true; s.paid = d.price; s.pop = 1; G.lastBuilt = j; if (d.k === 'src') s.stock = d.cap; if (d.k === 'hire') spawnWorker(M, D, j); M.next = nextSpot(M); sfx('build'); if (M.next < 0 && !M.done){ M.done = true; martDone(M); } if (!G.headless) save(); }
 function martDone(M){ if (M.i + 1 < MARTS.length && G.unlocked < M.i + 2){ G.unlocked = M.i + 2; G.truckT = 14; G.msg = 'newMart'; G.msgT = 4; if (!G.headless) showBanner(t('newMart'), MARTS[G.unlocked - 1][G.lang]); sfx('unlock'); } }
 function collectPile(M){ var a = M.pile; if (a <= 0) return; M.pile = 0; G.cash += a; G.stats.earned += a; fx('collect', a, M); sfx('cash'); }
@@ -499,10 +580,10 @@ function taskProg(i){ var id = TASKS[i].id, b = G.daily.base, S = G.stats, v = i
 function checkTasks(){ var all = true, got = 0; for (var i = 0; i < 5; i++){ if (!G.daily.done[i]){ if (taskProg(i) >= taskGoal(i)){ G.daily.done[i] = 1; G.dia += 2; got += 2; } else all = false; } } if (all && !G.daily.bonus){ G.daily.bonus = true; G.dia += 10; got += 10; } if (got && !G.headless){ toast(t(got >= 10 ? 'bonus' : 'taskDone') + ' +' + got + ' 💎'); sfx('gem'); } return got; }
 function nextOffer(){ for (var i = 0; i < 4; i++) if (!G.daily.offers[i]) return i; return -1; }
 function claimOffer(){ var i = nextOffer(); if (i < 0) return false; G.daily.offers[i] = 1; G.dia += OFFERS[i]; sfx('gem'); save(); return true; }
-function buyPack(i){ var pk = PACKS[i]; if (!pk || G.dia < pk.dia) return false; G.dia -= pk.dia; G.cash += packCash(i); sfx('cash'); save(); return true; }
+function buyPack(i){ var pk = PACKS[i]; if (!pk || (!GL.isAdmin() && G.dia < pk.dia)) return false; if (!GL.isAdmin()) G.dia -= pk.dia; G.cash += packCash(i); sfx('cash'); save(); return true; }
 function packCash(i){ return PACKS[i].cash * PACK_MULT[G.unlocked - 1]; }
-function buyHat(id){ var h = hatById(id); if (!h) return false; if (G.hats.indexOf(id) < 0){ if (G.dia < h.price) return false; G.dia -= h.price; G.hats.push(id); } G.hat = id; sfx('buy'); save(); return true; }
-function buyUpgrade(who, k, type){ var lv = who === 'player' ? G.up[k] : G.wup[type][k]; if (lv >= 4) return false; var p = UPG[who][k].price[lv - 1]; if (G.cash < p) return false; G.cash -= p; if (who === 'player') G.up[k]++; else G.wup[type][k]++; G.stats.hires++; sfx('buy'); if (!G.headless) save(); return true; }
+function buyHat(id){ var h = hatById(id); if (!h) return false; if (G.hats.indexOf(id) < 0){ if (!GL.isAdmin()){ if (G.dia < h.price) return false; G.dia -= h.price; } G.hats.push(id); } G.hat = id; sfx('buy'); save(); return true; }
+function buyUpgrade(who, k, type){ var lv = who === 'player' ? G.up[k] : G.wup[type][k]; if (lv >= 4) return false; var p = UPG[who][k].price[lv - 1]; if (!GL.isAdmin()){ if (G.cash < p) return false; G.cash -= p; } if (who === 'player') G.up[k]++; else G.wup[type][k]++; G.stats.hires++; sfx('buy'); if (!G.headless) save(); return true; }
 function resetTime(){ var d = new Date(nowMs()); var nx = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime(); return Math.max(0, nx - d.getTime()); }
 
 /* ---------- tutorial ---------- */
@@ -896,8 +977,8 @@ function drawHUD(){
   var L = hudLayout(VW, VH), u = L.u, i;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   fillRR(L.pillX, L.pillY + 4, L.pillW, L.pillH, 16 * u, 'rgba(0,0,0,.18)'); fillRR(L.pillX, L.pillY, L.pillW, L.pillH, 16 * u, CREAM, BROWN, 3);
-  drawGem(L.gemX, L.gemY, .9 * u); txt('+', L.gemX + 14 * u, L.gemY - 8 * u, 15 * u, '#4A3728', 'center'); txt(fmt(G.dia), L.gemX, L.numY, L.fs, '#4A3728', 'center');
-  drawBills(L.cashX, L.cashY + 2 * u, 3, u); txt('+', L.cashX + 16 * u, L.cashY - 8 * u, 15 * u, '#4A3728', 'center'); txt(fmt(G.cash), L.cashX, L.numY, L.fs, '#4A3728', 'center');
+  drawGem(L.gemX, L.gemY, .9 * u); txt('+', L.gemX + 14 * u, L.gemY - 8 * u, 15 * u, '#4A3728', 'center'); txt(GL.isAdmin() ? '∞' : fmt(G.dia), L.gemX, L.numY, L.fs, '#4A3728', 'center');
+  drawBills(L.cashX, L.cashY + 2 * u, 3, u); txt('+', L.cashX + 16 * u, L.cashY - 8 * u, 15 * u, '#4A3728', 'center'); txt(GL.isAdmin() ? '∞' : fmt(G.cash), L.cashX, L.numY, L.fs, '#4A3728', 'center');
   for (i = 0; i < 4; i++){ var b = L.btn[i], cx = b.x + L.bs / 2, cy = b.y + L.bs / 2; hudButton(b.x, b.y, L.bs, false);
     if (b.id === 'shop'){ drawCart(cx, cy, .95 * u); if (nextOffer() >= 0){ circ(b.x + L.bs - 6 * u, b.y + 6 * u, 11 * u, '#F0506E', '#fff', 2.5); txt('!', b.x + L.bs - 6 * u, b.y + 6 * u, 15 * u, '#fff', 'center'); } }
     else if (b.id === 'upg') drawMini(cx - 8 * u, cy - 6 * u, .62 * u, 'none', true);
@@ -1003,7 +1084,7 @@ function panelHTML(kind){
   var h = '', i, k;
   var head = function(title, icon){ return '<div class="ttl">' + (icon ? '<canvas data-icon="' + icon + '" width="72" height="72"></canvas>' : '') + '<span>' + esc(title) + '</span></div><button class="x" data-act="close" aria-label="close">✕</button>'; };
   if (kind === 'shop'){ h += head(t('shop'), 'cart') + '<div class="body"><div class="grid3">';
-    for (i = 0; i < 3; i++){ var can = G.dia >= PACKS[i].dia; h += '<div class="card" data-act="pack" data-i="' + i + '"><div class="big">' + fmt(packCash(i)) + '</div><div class="ic pack">' + iconCanvas('pack' + i, 'icon') + '</div><div class="pill' + (can ? '' : ' max') + '">' + gemHTML() + '<span>' + PACKS[i].dia + '</span></div></div>'; }
+    for (i = 0; i < 3; i++){ var can = GL.isAdmin() || G.dia >= PACKS[i].dia; h += '<div class="card" data-act="pack" data-i="' + i + '"><div class="big">' + fmt(packCash(i)) + '</div><div class="ic pack">' + iconCanvas('pack' + i, 'icon') + '</div><div class="pill' + (can ? '' : ' max') + '">' + gemHTML() + '<span>' + PACKS[i].dia + '</span></div></div>'; }
     var rt = resetTime(), rh = Math.floor(rt / 3600000), rm = Math.floor(rt % 3600000 / 60000), no = nextOffer();
     h += '</div><div class="ribbon">' + esc(t('daily')) + '</div><div class="box"><div class="hd">' + esc(t('reset')) + ' ' + rh + 'h ' + rm + 'm</div><div class="row4">';
     for (i = 0; i < 4; i++) h += '<div class="gem' + (G.daily.offers[i] ? ' done' : '') + '"><div>' + OFFERS[i] + '</div><canvas data-icon="gems' + i + '" width="140" height="92"></canvas>' + (G.daily.offers[i] ? '<span class="ok">✓</span>' : '') + '</div>';
@@ -1012,7 +1093,7 @@ function panelHTML(kind){
     for (i = 0; i < HATS.length; i++){ var ht = HATS[i], own = G.hats.indexOf(ht.id) >= 0, sel = G.hat === ht.id; h += '<div class="card" data-act="hat" data-id="' + ht.id + '">' + (own && !sel ? '<span class="tick">✓</span>' : '') + '<div class="ic">' + iconCanvas(ht.id, 'hat') + '</div><div class="nm">' + esc(ht[G.lang]) + '</div>' + (sel ? '<div class="pill sel">' + esc(t('selected')) + '</div>' : own ? '<div class="pill own">✓</div>' : ht.price === 0 ? '<div class="pill">' + esc(t('free')) + '</div>' : '<div class="pill">' + gemHTML() + '<span>' + ht.price + '</span></div>') + '</div>'; }
     h += '</div></div>'; }
   else if (kind === 'upg'){ h += head(t('upgrades'), 'up') + '<div class="body">';
-    var sec = function(title, who, type){ var s = '<div class="ribbon">' + esc(title) + '</div><div class="grid3">'; ['speed', 'stack', 'stamina'].forEach(function(kk){ var lv = who === 'player' ? G.up[kk] : G.wup[type][kk], pr = upPrice(who, kk, type), can = lv < 4 && G.cash >= pr; s += '<div class="card" data-act="up" data-who="' + who + '" data-k="' + kk + '" data-type="' + (type || '') + '"><div class="ic">' + iconCanvas('up-' + kk, 'icon') + '</div><div class="nm">' + esc(t(kk)) + '</div><div class="lv">' + esc(t('lv')) + ' ' + lv + '/4</div>' + (lv >= 4 ? '<div class="pill max">' + esc(t('max')) + '</div>' : '<div class="pill' + (can ? '' : ' max') + '"><canvas data-icon="bills" width="48" height="48"></canvas><span>' + fmt(pr) + '</span></div>') + '</div>'; }); return s + '</div>'; };
+    var sec = function(title, who, type){ var s = '<div class="ribbon">' + esc(title) + '</div><div class="grid3">'; ['speed', 'stack', 'stamina'].forEach(function(kk){ var lv = who === 'player' ? G.up[kk] : G.wup[type][kk], pr = upPrice(who, kk, type), can = lv < 4 && (GL.isAdmin() || G.cash >= pr); s += '<div class="card" data-act="up" data-who="' + who + '" data-k="' + kk + '" data-type="' + (type || '') + '"><div class="ic">' + iconCanvas('up-' + kk, 'icon') + '</div><div class="nm">' + esc(t(kk)) + '</div><div class="lv">' + esc(t('lv')) + ' ' + lv + '/4</div>' + (lv >= 4 ? '<div class="pill max">' + esc(t('max')) + '</div>' : '<div class="pill' + (can ? '' : ' max') + '"><canvas data-icon="bills" width="48" height="48"></canvas><span>' + fmt(pr) + '</span></div>') + '</div>'; }); return s + '</div>'; };
     h += sec(t('player'), 'player', null); for (i = 0; i < WTYPES.length; i++){ var any = false; for (k = 0; k < G.unlocked; k++) if (hasWorker(G.marts[k], WTYPES[i])) any = true; if (any || G.unlocked > 1) h += sec(t(WTYPES[i]), 'worker', WTYPES[i]); }
     h += '</div>'; }
   else if (kind === 'tasks'){ h += head(t('tasks'), 'clip') + '<div class="body"><p style="text-align:center;margin:0 0 10px;font-weight:800">' + esc(t('tTasks')) + ' · ' + esc(t('reset')) + ' ' + Math.floor(resetTime() / 3600000) + 'h ' + Math.floor(resetTime() % 3600000 / 60000) + 'm</p>';
@@ -1041,7 +1122,7 @@ function drawHatIcon(c, id){ var cx = c.getContext('2d'), w = c.width, h = c.hei
 function paintIcons(root){ var cs = root.querySelectorAll('canvas[data-icon]'), i; for (i = 0; i < cs.length; i++) drawIcon(cs[i], cs[i].getAttribute('data-icon')); cs = root.querySelectorAll('canvas[data-hat]'); for (i = 0; i < cs.length; i++) drawHatIcon(cs[i], cs[i].getAttribute('data-hat')); }
 function openPanel(kind){ var p = $('panel'); p.innerHTML = panelHTML(kind); p.setAttribute('dir', G.lang === 'en' ? 'ltr' : 'rtl'); paintIcons(p); $('ov').classList.add('on'); G.panel = kind; INP.joy.on = false; setInput(0, 0); if (kind === 'hats') G.tut.hat = true; if (kind === 'upg') G.tut.stack = true; p.onclick = panelClick; return kind; }
 function closePanel(){ if (G.ad) return; $('ov').classList.remove('on'); G.panel = null; }
-function showAd(cb){ if (G.ad) return false; var i = Math.floor(rnd() * ADS.length); if (ADS.length > 1 && i === G.adLast) i = (i + 1) % ADS.length; G.adLast = i; G.ad = { i:i, t:0, cb:cb }; openPanel('ad'); return true; }
+function showAd(cb){ if (G.ad) return false; if (GL.isAdmin()){ if (cb) cb(); return true; } var i = Math.floor(rnd() * ADS.length); if (ADS.length > 1 && i === G.adLast) i = (i + 1) % ADS.length; G.adLast = i; G.ad = { i:i, t:0, cb:cb }; openPanel('ad'); return true; }
 function adTick(dt){ var A = G.ad; if (!A) return; A.t += dt; var left = String(Math.max(0, Math.ceil(AD_T - A.t))), c = $('ad-cnt'), b = $('ad-bar'), s = $('ad-skip'); if (c && c.textContent !== left) c.textContent = left; if (b) b.style.width = Math.min(100, A.t / AD_T * 100).toFixed(1) + '%';
   if (s){ if (A.t >= AD_SKIP){ if (s.disabled){ s.disabled = false; s.textContent = t('adSkip'); } } else { var want = t('adSkipIn').replace('{n}', String(Math.ceil(AD_SKIP - A.t))); if (s.textContent !== want) s.textContent = want; } }
   if (A.t >= AD_T) finishAd(); }
@@ -1084,6 +1165,7 @@ function prepDemo(n){
 }
 function bench(hours){ NOSAVE = true; newGame(); G.headless = true; var out = [], tStart = performance.now(), last = 0; for (var m = 0; m < MARTS.length; m++){ var M = G.marts[m]; auto(hours * 3600 - G.t, { until:function(){ return M.done; } }); out.push(MARTS[m].id + ':' + (M.done ? Math.round((G.t - last) / 60) + 'min' : 'NOT DONE') + ' cash=' + Math.floor(G.cash)); last = G.t; if (!M.done) break; } G.headless = false; return 'total ' + Math.round(G.t / 60) + ' min, real ' + Math.round(performance.now() - tStart) + ' ms | ' + out.join(' | '); }
 function init(){ fit(); bind(); if (!load()) newGame(); setLang(G.lang);
+  GL.mount({ game:'mart', container:$('gl-foot'), lang:function(){ return G.lang; }, money:{ add:function(n){ G.cash += n; save(); } }, refresh:function(){}, toast:toast }); GL.played('mart');
   var h = location.hash.replace(/-en$/, ''), mm; if (/-en$/.test(location.hash)) setLang('en');
   if (h === '#demo1' || h === '#demo-shop' || h === '#demo-hats' || h === '#demo-upgrades' || h === '#demo-tasks' || h === '#demo-settings'){ prepDemo(1); if (h === '#demo-shop') openPanel('shop'); else if (h === '#demo-hats'){ G.hats = ['none', 'straw']; G.hat = 'straw'; openPanel('hats'); } else if (h === '#demo-upgrades'){ G.unlocked = 2; openPanel('upg'); } else if (h === '#demo-tasks'){ G.stats.harvest += 23; G.stats.sold += 30; openPanel('tasks'); } else if (h === '#demo-settings') openPanel('settings'); }
   else if (h === '#demo2') prepDemo(2);
@@ -1295,6 +1377,16 @@ if (TEST){
         ok('public API on window.MM', ['newGame', 'load', 'save', 'step', 'state', 'DATA', 'setInput', 'auto', 'ui', 'render'].every(function(k){ return k in I; }) && I.DATA.MARTS && I.DATA.ITEMS && I.DATA.HATS && I.DATA.UPG);
         ok('canvas fills the viewport, touch-action none, no page scroll', cv.getBoundingClientRect().width >= window.innerWidth - 1 && getComputedStyle(cv).touchAction === 'none' && document.documentElement.scrollWidth <= window.innerWidth + 1);
         try { localStorage.removeItem(KEY); } catch(e){}
+        /* --- 🔑 shared code button (GL): fixed bottom bar (the mart has no menu screen) --- */
+        var glk = $('gl-foot').querySelector('.gl-key');
+        ok('🔑 code button: last element of the bottom bar, ≥ 32 px tall, inside the viewport', !!glk && $('gl-foot').lastElementChild === glk && glk.offsetHeight >= 32 && glk.getBoundingClientRect().bottom <= window.innerHeight + 1, glk && glk.offsetHeight);
+        var glc0 = G.cash, gld0 = G.dia, gla = GL.submit(GL.ADMIN); G.cash = 0; G.dia = 0; G.ad = null; var glp = buyPack(0), glAd = false; showAd(function(){ glAd = true; });
+        ok('🔑 admin code: gl.admin=1, a cash pack is free with 0 💎 (nothing deducted) and the ad gate pays out at once', !!gla && gla.ok === true && localStorage.getItem('gl.admin') === '1' && glp === true && G.dia === 0 && G.cash === packCash(0) && glAd && !G.ad, G.cash + '/' + G.dia);
+        GL.setAdmin(false); G.cash = glc0; G.dia = gld0;
+        var glg = GL.makeGift('mart', 500), glr1 = GL.submit(glg), glr2 = GL.submit(glg);
+        ok('🔑 gift code adds exactly 500 cash once; the same code again is refused as used', !!glr1 && glr1.ok === true && G.cash === glc0 + 500 && !!glr2 && glr2.ok === false && /כבר|already/.test(glr2.msg), G.cash + ' ' + (glr2 && glr2.msg));
+        var glx = GL.submit('nonsense'); ok('🔑 a wrong code is refused', !!glx && glx.ok === false);
+        G.cash = glc0; GL.setAdmin(false); try { localStorage.removeItem('gl.used'); localStorage.removeItem('gl.plays.mart'); } catch(e){}
         ok('no runtime errors', errs.filter(function(x){ return x.indexOf('onerror') === 0 || x.indexOf('init') === 0; }).length === 0);
       } catch(e){ errs.push('exception: ' + (e && e.stack || e)); }
       done();

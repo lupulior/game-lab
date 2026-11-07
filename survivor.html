@@ -151,6 +151,22 @@ body.touch.ingame #touch{display:block}
 @media (max-width:420px){ .grid{gap:6px} .lv{min-height:58px;padding:6px 2px 4px} .lv .n{font-size:18px} .hud{font-size:13px} .hud .pill{padding:2px 7px} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 html.still *{animation-duration:0s!important;animation-delay:0s!important;transition:none!important}
+/* Game Lab shared 🔑 code button + dialog (paste verbatim into every game's <style>) */
+.gl-key{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.38;font-size:16px;line-height:1;padding:8px 14px;cursor:pointer;border-radius:10px;min-height:44px;min-width:44px}
+.gl-key:hover,.gl-key:focus-visible{opacity:.95}
+.gl-ov{position:fixed;inset:0;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;z-index:99999;padding:12px;box-sizing:border-box}
+.gl-card{background:#fff;color:#1f2430;border-radius:18px;padding:16px;width:100%;max-width:380px;max-height:88vh;overflow:auto;box-sizing:border-box;text-align:start;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.gl-card h3{margin:0 0 10px;font-size:22px;color:#1f2430}.gl-card h4{margin:14px 0 6px;font-size:16px;color:#1f2430}.gl-card p{margin:6px 0;color:#1f2430}
+.gl-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0}
+.gl-in{flex:1 1 120px;min-width:0;min-height:44px;border:2px solid #cfd6e4;border-radius:10px;padding:0 10px;font-size:16px;color:#1f2430;background:#fff;box-sizing:border-box;font-family:inherit}
+.gl-n{flex:0 0 96px}
+.gl-b{min-height:44px;border:0;border-radius:12px;padding:0 16px;font:700 16px system-ui,-apple-system,'Segoe UI',Arial,sans-serif;background:#2563eb;color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+.gl-ghost{background:#eef1f7;color:#1f2430;width:100%;margin-top:10px}
+.gl-wa{background:#25d366}
+.gl-msg{min-height:22px;font-weight:700}.gl-msg.ok{color:#15803d}.gl-msg.bad{color:#b91c1c}
+.gl-tb{width:100%;border-collapse:collapse;font-size:14px}.gl-tb td{padding:4px 6px;border-bottom:1px solid #e6eaf2;color:#1f2430}.gl-tb td:last-child{text-align:end;font-weight:700}.gl-tot td{font-weight:900;border-bottom:0}
+.gl-code{font:700 18px/1.3 ui-monospace,Consolas,monospace;background:#f3f5fa;border:2px dashed #94a3b8;border-radius:10px;padding:10px;margin:8px 0;word-break:break-all;direction:ltr;text-align:center;user-select:all;color:#1f2430}
+.gl-adm{border-top:2px solid #e6eaf2;margin-top:12px;padding-top:6px}
 </style>
 </head>
 <body>
@@ -716,6 +732,68 @@ html.still *{animation-duration:0s!important;animation-delay:0s!important;transi
 {"c":6,"l":1,"m":".442s.13#2.3#2.5#2.3#3.5P.6#2.3#2.5#2.7D.2#3.4#8.5#15.4#8.5#12","n":["מתג נסתר בהילוך גבוה","Hidden switch in high gear"],"q":["משהו מסתתר כאן.","Something hides here."],"s":[[26,15,"🔒","🔒"]],"sol":"RJ*89 R*5 RJ*19 R*44 RJ*1 R*40 RJ*36 R*54 RJ*119","t":[{"do":{"a":"dark","r":1.9},"on":{"t":"enter"}},{"do":[{"a":"open"},{"a":"msg","en":"🔓 Click!","he":"🔓 קליק!"}],"on":{"t":"switch"}},{"do":[{"a":"ball","vx":-10.1,"x":29,"y":12},{"a":"later","do":{"a":"ball","vx":-10.6,"x":29,"y":12},"s":0.7},{"a":"later","do":{"a":"ball","home":true,"max":5,"vx":-11.1,"x":29,"y":12},"s":1.4},{"a":"msg","en":"⚽","he":"⚽"}],"on":{"d":10,"t":"near"}},{"do":[{"a":"kill"},{"a":"msg","en":"😈 Too slow!","he":"😈 לאט מדי!"}],"on":{"s":6,"t":"after"}}],"v":[{"h":18,"mode":"once","speed":6.03,"w":1,"x1":-1,"x2":26,"y1":0,"y2":0}],"w":49},
 ];</script>
 <script>
+/* ===== Game Lab shared block – paste VERBATIM into every game (and index.html). =====
+   🔑 code button at the bottom of the home screen: the admin code turns on admin mode in ALL games
+   (shared localStorage on lupulior.github.io: infinite money, play counters, gift codes); gift codes
+   (GL-<GAME>-<amount>-<nonce>-<sig>) give money to a player in one game. No server – everything is local.
+   API: GL.mount({ game, container, lang:fn->'he'|'en', money:{ add:fn(n) }|null, refresh:fn, toast:fn })
+        GL.isAdmin()  GL.played(id)  GL.plays(id)  GL.makeGift(game, amount)  GL.parseGift(code)  GL.submit(code)  GL.open()  GL.close()
+   Canonical copy: shared/gl-admin.js (+ shared/gl-admin.css). */
+var GL = (function(){
+  'use strict';
+  var ADMIN = '528963 ליאור לופו המלך יש', MO = null, UI = null;
+  /* id, Hebrew name, English name, has money (gift codes possible) */
+  var GAMES = [['game1', '⚽ כוכב הכדורגל', 'Football Star', 1], ['hook', '🪝 סטיקמן הוק', 'Stickman Hook', 1], ['neon', '💜 אתגר הניאון', 'Neon Challenge', 1], ['drivemad', '🚗 נהיגה משוגעת', 'Drive Mad', 0], ['snake', '🐍 נחש נגד תולעים', 'Snake vs Worms', 1], ['carcircle', '🔁 מעגל המכוניות', 'Car Circle', 0], ['survivor', '🏃 איש שורד', 'Survivor', 0], ['xo', '❌ איקס עיגול', 'Tic Tac Toe', 0], ['basketball', '🏀 כדורסל 1 על 1', 'Basketball 1v1', 0], ['impostor', '🕵️ אימפוסטר', 'Impostor', 0], ['mart', '🐵 מונקי מארט', 'Monkey Mart', 1], ['wreck', '🔨 שוד הבלוקים', 'Voxel Wreck', 1], ['smash', '💥 חדר הניפוץ', 'Smash Room', 0], ['obby', '🌈 אובי בצבעי הקשת', 'Rainbow Obby', 1]];
+  var T = {
+    he:{ title:'🔑 קוד', ph:'הקלידו קוד…', ok:'אישור', close:'סגור', bad:'❌ קוד לא נכון', usedMsg:'⚠️ הקוד הזה כבר נוצל במכשיר הזה', other:'הקוד הזה שייך למשחק {g} – הקלידו אותו שם', got:'🎁 קיבלתם {n} כסף!', adminOn:'👑 ברוך הבא, המלך! מצב אדמין פעיל בכל המשחקים', adminOff:'מצב אדמין כבוי', adminTitle:'👑 מצב אדמין', inf:'∞ כסף בלי סוף בכל המשחקים', plays:'כמה שיחקו בכל משחק (במכשיר הזה)', total:'סה״כ', gift:'🎁 שליחת כסף לשחקן', make:'צור קוד', copy:'📋 העתק', copied:'✅ הועתק!', wa:'וואטסאפ', off:'יציאה ממצב אדמין', share:'🎁 קוד מתנה ל{g}: {c} – לוחצים 🔑 למטה במסך הבית של המשחק ומקלידים אותו' },
+    en:{ title:'🔑 Code', ph:'Type a code…', ok:'OK', close:'Close', bad:'❌ Wrong code', usedMsg:'⚠️ This code was already used on this device', other:'This code belongs to {g} – type it there', got:'🎁 You got {n} money!', adminOn:'👑 Welcome, King! Admin mode is on in every game', adminOff:'Admin mode off', adminTitle:'👑 Admin mode', inf:'∞ Infinite money in every game', plays:'Plays per game (on this device)', total:'Total', gift:'🎁 Send money to a player', make:'Make code', copy:'📋 Copy', copied:'✅ Copied!', wa:'WhatsApp', off:'Leave admin mode', share:'🎁 Gift code for {g}: {c} – tap 🔑 at the bottom of the game\'s home screen and type it' } };
+  function L(){ var l = null; try { l = MO && MO.lang ? MO.lang() : null; } catch(e){} return l === 'en' ? 'en' : 'he'; }
+  function t(k){ return T[L()][k] || T.he[k] || k; }
+  function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e){} return null; }
+  function norm(s){ return String(s || '').replace(/\s+/g, ' ').trim(); }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  function isAdmin(){ return ls('gl.admin') === '1'; }
+  function setAdmin(on){ ls('gl.admin', on ? '1' : null); if (MO && MO.refresh){ try { MO.refresh(); } catch(e){} } }
+  function plays(id){ return +(ls('gl.plays.' + id) || 0) || 0; }
+  function played(id){ id = id || (MO && MO.game); if (!id) return; ls('gl.plays.' + id, String(plays(id) + 1)); }
+  function fnv(s){ var h = 2166136261; for (var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36).toUpperCase(); }
+  function sig(g, n, nonce){ return ('000000' + fnv(ADMIN + '|' + g + '|' + n + '|' + nonce)).slice(-6); }
+  function makeGift(game, amount){ game = String(game).toUpperCase(); amount = Math.max(1, Math.floor(+amount || 0)); var A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', nonce = '', i; for (i = 0; i < 4; i++) nonce += A[Math.floor(Math.random() * A.length)]; return 'GL-' + game + '-' + amount + '-' + nonce + '-' + sig(game, amount, nonce); }
+  function parseGift(code){ var m = /^GL-([A-Z0-9]+)-(\d{1,9})-([A-Z0-9]{4})-([A-Z0-9]{6})$/.exec(norm(code).toUpperCase().replace(/\s/g, '')); if (!m || sig(m[1], +m[2], m[3]) !== m[4]) return null; return { game:m[1].toLowerCase(), amount:+m[2], code:m[0] }; }
+  function usedList(){ return (ls('gl.used') || '').split(',').filter(Boolean); }
+  function isUsed(code){ return usedList().indexOf(code) >= 0; }
+  function markUsed(code){ var u = usedList(); u.push(code); ls('gl.used', u.slice(-300).join(',')); }
+  function gameName(id){ for (var i = 0; i < GAMES.length; i++) if (GAMES[i][0] === id) return L() === 'en' ? GAMES[i][2] : GAMES[i][1]; return id; }
+  /* applies a typed code (admin code or gift code); returns { ok, msg, admin?, gift? } or null for an empty string */
+  function submit(v){ v = norm(v); if (!v) return null;
+    if (v === ADMIN){ setAdmin(true); return { ok:true, admin:true, msg:t('adminOn') }; }
+    var g = parseGift(v); if (!g) return { ok:false, msg:t('bad') };
+    if (!MO || !MO.game || g.game !== MO.game) return { ok:false, msg:t('other').replace('{g}', gameName(g.game)) };
+    if (!MO.money || !MO.money.add) return { ok:false, msg:t('bad') };
+    if (isUsed(g.code)) return { ok:false, msg:t('usedMsg') };
+    markUsed(g.code); try { MO.money.add(g.amount); } catch(e){} if (MO.refresh){ try { MO.refresh(); } catch(e){} }
+    return { ok:true, gift:g, msg:t('got').replace('{n}', String(g.amount)) }; }
+  function open(){ close(); var ov = document.createElement('div'); ov.className = 'gl-ov'; ov.innerHTML = '<div class="gl-card" role="dialog" aria-label="code"></div>'; document.body.appendChild(ov); UI = ov;
+    ov.addEventListener('click', function(e){ if (e.target === ov) close(); }); ov.addEventListener('keydown', function(e){ e.stopPropagation(); if (e.key === 'Escape') close(); }); ov.addEventListener('keyup', function(e){ e.stopPropagation(); }); ov.addEventListener('keypress', function(e){ e.stopPropagation(); });
+    render(''); }
+  function close(){ if (UI && UI.parentNode) UI.parentNode.removeChild(UI); UI = null; }
+  function render(msg, cls){ if (!UI) return; var c = UI.firstChild, adm = isAdmin(), h = '', i;
+    h += '<h3>' + t('title') + '</h3><div class="gl-row"><input class="gl-in" id="gl-in" type="text" autocomplete="off" autocapitalize="off" placeholder="' + esc(t('ph')) + '" aria-label="code"><button type="button" class="gl-b" id="gl-ok">' + t('ok') + '</button></div><p class="gl-msg' + (cls ? ' ' + cls : '') + '" id="gl-msg">' + esc(msg || '') + '</p>';
+    if (adm){ h += '<div class="gl-adm"><h4>' + t('adminTitle') + '</h4><p>' + t('inf') + '</p><h4>' + t('plays') + '</h4><table class="gl-tb">'; var tot = 0; for (i = 0; i < GAMES.length; i++){ var n = plays(GAMES[i][0]); tot += n; h += '<tr><td>' + esc(L() === 'en' ? GAMES[i][2] : GAMES[i][1]) + '</td><td>' + n + '</td></tr>'; } h += '<tr class="gl-tot"><td>' + t('total') + '</td><td>' + tot + '</td></tr></table>';
+      h += '<h4>' + t('gift') + '</h4><div class="gl-row"><select class="gl-in" id="gl-g" aria-label="game">'; for (i = 0; i < GAMES.length; i++) if (GAMES[i][3]) h += '<option value="' + GAMES[i][0] + '"' + (MO && MO.game === GAMES[i][0] ? ' selected' : '') + '>' + esc(L() === 'en' ? GAMES[i][2] : GAMES[i][1]) + '</option>'; h += '</select><input class="gl-in gl-n" id="gl-n" type="number" min="1" step="1" value="1000" aria-label="amount"><button type="button" class="gl-b" id="gl-make">' + t('make') + '</button></div><div id="gl-out"></div><button type="button" class="gl-b gl-ghost" id="gl-off">' + t('off') + '</button></div>'; }
+    h += '<button type="button" class="gl-b gl-ghost" id="gl-close">' + t('close') + '</button>';
+    c.innerHTML = h;
+    var inp = c.querySelector('#gl-in'); function go(){ var r = submit(inp.value); if (!r) return; if (r.ok && MO && MO.toast){ try { MO.toast(r.msg); } catch(e){} } render(r.msg, r.ok ? 'ok' : 'bad'); }
+    c.querySelector('#gl-ok').onclick = go; inp.onkeydown = function(e){ if (e.key === 'Enter'){ e.preventDefault(); go(); } }; c.querySelector('#gl-close').onclick = close;
+    if (adm){ c.querySelector('#gl-off').onclick = function(){ setAdmin(false); render(t('adminOff')); };
+      c.querySelector('#gl-make').onclick = function(){ var g = c.querySelector('#gl-g').value, n = +c.querySelector('#gl-n').value; if (!(n > 0)) return; var code = makeGift(g, n), out = c.querySelector('#gl-out'), txt = t('share').replace('{g}', gameName(g)).replace('{c}', code);
+        out.innerHTML = '<div class="gl-code" id="gl-code">' + code + '</div><div class="gl-row"><button type="button" class="gl-b" id="gl-copy">' + t('copy') + '</button><a class="gl-b gl-wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(txt) + '">' + t('wa') + '</a></div>';
+        out.querySelector('#gl-copy').onclick = function(){ var b = this, done = function(){ b.textContent = t('copied'); }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, done); else { try { var r = document.createRange(); r.selectNodeContents(out.querySelector('#gl-code')); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); } catch(e){} done(); } }; }; }
+    setTimeout(function(){ try { inp.focus(); } catch(e){} }, 50); }
+  /* the small 🔑 button; container = the bottom of the home screen */
+  function mount(o){ MO = o || {}; var b = document.createElement('button'); b.type = 'button'; b.className = 'gl-key'; b.setAttribute('aria-label', 'code'); b.textContent = '🔑'; b.onclick = function(e){ if (e) e.stopPropagation(); open(); }; (MO.container || document.body).appendChild(b); MO.btn = b; return b; }
+  return { mount:mount, open:open, close:close, isAdmin:isAdmin, setAdmin:setAdmin, played:played, plays:plays, makeGift:makeGift, parseGift:parseGift, submit:submit, GAMES:GAMES, ADMIN:ADMIN };
+})();
 (function(){
 'use strict';
 var TEST = location.hash === '#test', ERRS = [];
@@ -1621,7 +1699,7 @@ function levelBtn(i){
 }
 function hudName(){ var L = LEVELS[G.level]; $('h-name').textContent = WORLDS[L.world][0] + ' ' + (G.level + 1) + '. ' + li(L.name); }
 function start(i){
-  i = Math.max(0, Math.min(LEVELS.length - 1, i | 0));
+  i = Math.max(0, Math.min(LEVELS.length - 1, i | 0)); GL.played('survivor');
   loadLevel(i, G); G.fx.length = 0; G.over = false; G.paused = false; G.lvStartMs = 0; G.selWorld = LEVELS[i].world;
   R.parts.length = 0; R.shakeT = 0; R.flash = 0;
   $('over').classList.remove('on'); $('msg').classList.remove('on');
@@ -1749,6 +1827,7 @@ function demoProgress(){ G.demo = true; G.unlocked = Math.min(LEVELS.length, 357
 function init(){
   if (!TEST) load();
   bind(); setLang(G.lang); setMute(G.mute); renderTitle();
+  GL.mount({ game:'survivor', container:$('s-title'), lang:function(){ return G.lang; }, money:null, refresh:function(){} });
   var raw = location.hash, h = raw.replace(/-still\b/, '').replace(/-en$/, '');
   if (/-en$/.test(raw.replace(/-still\b/, ''))) setLang('en');
   if (raw.indexOf('-still') > 0) document.documentElement.classList.add('still');
@@ -2179,6 +2258,12 @@ if (TEST){
         ok('no horizontal overflow', document.documentElement.scrollWidth <= window.innerWidth + 1, document.documentElement.scrollWidth + '>' + window.innerWidth);
         I.show('s-title');
         ok('title stats card reflects progress', $('st-done').textContent.indexOf('/500') > 0 && +$('st-deaths').textContent === G.totalDeaths, $('st-done').textContent);
+        /* --- 🔑 shared code button (GL) --- */
+        var glk = $('s-title').querySelector('.gl-key');
+        ok('🔑 code button: last element of the title screen, ≥ 32 px tall', !!glk && $('s-title').lastElementChild === glk && glk.offsetHeight >= 32, glk && glk.offsetHeight);
+        var gla = GL.submit(GL.ADMIN); ok('🔑 admin code turns on admin mode (gl.admin=1)', !!gla && gla.ok === true && localStorage.getItem('gl.admin') === '1');
+        var glx = GL.submit('nonsense'); ok('🔑 a wrong code is refused', !!glx && glx.ok === false);
+        GL.setAdmin(false); try { localStorage.removeItem('gl.used'); localStorage.removeItem('gl.plays.survivor'); } catch(e){}
         ok('no runtime errors', errs.filter(function(x){ return x.indexOf('onerror') === 0 || x.indexOf('init') === 0; }).length === 0);
       } catch(e){ errs.push('exception: ' + (e && e.stack || e)); }
       done();
