@@ -1682,7 +1682,7 @@ body:not(.touch) #ctrl-labels .cl-kick,body:not(.touch) #ctrl-labels .cl-jump,bo
 
 /* ===== 97-gladmin.css ===== */
 /* Game Lab shared 🔑 code button + dialog (paste verbatim into every game's <style>) */
-.gl-key{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.38;font-size:16px;line-height:1;padding:8px 14px;cursor:pointer;border-radius:10px;min-height:44px;min-width:44px}
+.gl-key{display:block;margin:12px auto 0;background:rgba(0,0,0,.1);border:2px solid rgba(0,0,0,.22);color:inherit;opacity:.85;font-weight:700;font-size:16px;line-height:1;font-family:inherit;padding:0 18px;cursor:pointer;border-radius:999px;min-height:44px;min-width:44px;white-space:nowrap}
 .gl-key:hover,.gl-key:focus-visible{opacity:.95}
 .gl-ov{position:fixed;inset:0;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;z-index:99999;padding:12px;box-sizing:border-box}
 .gl-card{background:#fff;color:#1f2430;border-radius:18px;padding:16px;width:100%;max-width:380px;max-height:88vh;overflow:auto;box-sizing:border-box;text-align:start;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.4)}
@@ -2511,7 +2511,7 @@ window.__errs=[]; window.addEventListener('error', e=>{ window.__errs.push((e.me
 /* Optional server (Firebase Realtime Database URL, e.g. 'https://xxxx-default-rtdb.europe-west1.firebasedatabase.app').
    With it: a world leaderboard and 'this player does not exist'. Leave empty to run purely peer-to-peer. */
 const FB_URL='https://football-star-cc849-default-rtdb.europe-west1.firebasedatabase.app';
-const GAME_VERSION='2026-11-07.1';   // bump on every release: open pages notice a new version and offer to reload
+const GAME_VERSION='2026-11-07.2';   // bump on every release: open pages notice a new version and offer to reload
 /* =========================================================
    Football Star – single-file game
    ========================================================= */
@@ -12302,7 +12302,7 @@ var GL = (function(){
         out.querySelector('#gl-copy').onclick = function(){ var b = this, done = function(){ b.textContent = t('copied'); }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, done); else { try { var r = document.createRange(); r.selectNodeContents(out.querySelector('#gl-code')); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); } catch(e){} done(); } }; }; }
     setTimeout(function(){ try { inp.focus(); } catch(e){} }, 50); }
   /* the small 🔑 button; container = the bottom of the home screen */
-  function mount(o){ MO = o || {}; var b = document.createElement('button'); b.type = 'button'; b.className = 'gl-key'; b.setAttribute('aria-label', 'code'); b.textContent = '🔑'; b.onclick = function(e){ if (e) e.stopPropagation(); open(); }; (MO.container || document.body).appendChild(b); MO.btn = b; return b; }
+  function mount(o){ MO = o || {}; var b = document.createElement('button'); b.type = 'button'; b.className = 'gl-key'; b.setAttribute('aria-label', 'code'); b.textContent = '🔑 ' + (L() === 'en' ? 'Code' : 'קוד'); b.onclick = function(e){ if (e) e.stopPropagation(); open(); }; (MO.container || document.body).appendChild(b); MO.btn = b; return b; }
   return { mount:mount, open:open, close:close, isAdmin:isAdmin, setAdmin:setAdmin, played:played, plays:plays, makeGift:makeGift, parseGift:parseGift, submit:submit, GAMES:GAMES, ADMIN:ADMIN };
 })();
 /* ===== 97-gladmin wiring for Football Star (everything below is this game's own glue) =====
