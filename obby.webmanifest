@@ -1,0 +1,19 @@
+{
+  "name": "אובי בצבעי הקשת 🌈",
+  "short_name": "אובי",
+  "description": "קופצים בין פלטפורמות צבעוניות בשמיים: 5 מצבי משחק (קלאסי, מכונית, אופניים, נוקאאוט, טרול), 500 שלבים בכל מצב, צ׳קפוינטים, מטבעות, חנות סקינים ובוטים.",
+  "start_url": "./obby.html?src=pwa",
+  "id": "/game-lab/obby.html",
+  "scope": "./obby.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#4FB8FF",
+  "theme_color": "#4FB8FF",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/obby-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/obby-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/obby-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
