@@ -748,7 +748,7 @@ var HATS = { hatCap:function(x, y, z, yaw){ inst(x, y, z, yaw, 0.95, 0.3, 0.95, 
 function skinCols(sk){ return { head:(skin(sk.head) || SKINS[0]).col, body:(skin(sk.body) || SKINS[4]).col, legs:(skin(sk.legs) || SKINS[10]).col, hat:sk.hat }; }
 function drawChar(E, sk, alpha){ var x = E.x, y = E.y, z = E.z, yaw = E.yaw, c = skinCols(sk), air = !E.grounded && !E.climb, sw = E.moving && E.grounded ? Math.sin(E.anim * 8) * 0.75 : (air ? 0.35 : 0), sw2 = E.climb ? Math.sin(S.t * 10) * 0.6 : sw, a = alpha === undefined ? 1 : alpha;
   if (E.dead > 0 && S.mode !== 'knockout') return; var hands = [c.head[0], c.head[1], c.head[2]];
-  inst(x, y, z, yaw, 0.46, 1.0, 0.55, sw2, -0.26, -0.5, 0, a, c.legs); inst(x, y, z, yaw, 0.46, 1.0, 0.55, -sw2, 0.26, -0.5, 0, a, c.legs);
+  inst(x, y + 1, z, yaw, 0.46, 1.0, 0.55, sw2, -0.26, -0.5, 0, a, c.legs); inst(x, y + 1, z, yaw, 0.46, 1.0, 0.55, -sw2, 0.26, -0.5, 0, a, c.legs);
   /* legs pivot at the hip (y+1): use offset below the pivot */
   inst(x, y + 1, z, yaw, 1.0, 1.0, 0.55, 0, 0, 0.5, 0, a, c.body);
   inst(x, y + 2, z, yaw, 0.34, 1.0, 0.4, air ? -2.6 : -sw, -0.7, -0.5, 0, a, hands); inst(x, y + 2, z, yaw, 0.34, 1.0, 0.4, air ? -2.6 : sw, 0.7, -0.5, 0, a, hands);
