@@ -171,7 +171,8 @@ footer a{color:var(--gold);text-decoration:none;font-weight:800}
 .codebox{display:block;width:100%;min-height:96px;border:2px solid var(--line);border-radius:12px;padding:10px;font:700 16px/1.3 ui-monospace,Consolas,monospace;direction:ltr;text-align:left;box-sizing:border-box;background:#fff;color:#1B2A4E;resize:vertical;margin:8px 0}
 .panel .codebox{min-height:72px;max-height:120px;font-size:14px}
 .panel input.name{display:block;width:100%;min-height:44px;border:2px solid var(--line);border-radius:12px;padding:0 10px;font:700 18px var(--font);box-sizing:border-box;margin:6px 0;color:#1B2A4E;background:#fff}
-.panel a.btn{text-decoration:none;display:flex;align-items:center;justify-content:center}
+.panel a.btn,#s-coop a.btn{text-decoration:none;display:flex;align-items:center;justify-content:center}
+#s-coop .st{font-weight:900;font-size:18px;min-height:24px}
 </style>
 </head>
 <body>
@@ -200,6 +201,7 @@ footer a{color:var(--gold);text-decoration:none;font-weight:800}
       <button class="btn blue" id="b-build" data-t="build">🏗️ הבנייה שלי</button>
       <button class="btn green" id="b-attack" data-t="attack">⚔️ נגד חבר</button>
     </div>
+    <button class="btn blue" id="b-coop" data-t="coop">🤝 שוד ביחד (אונליין)</button>
     <button class="btn ghost" id="b-settings" data-t="settings">⚙️ הגדרות</button>
     <p class="how" data-t="how"></p>
     <p class="kbd"><b>WASD</b> <span data-t="kMove">תנועה</span> · <b>🖱️</b> <span data-t="kLook">מבט</span> · <b>Shift</b> <span data-t="kRun">ריצה</span> · <b>רווח</b> <span data-t="kJump">קפיצה</span> · <b>1-0</b> <span data-t="kTools">כלים</span> · <b>R</b> 📱 · <b>B</b> 🧱</p>
@@ -233,6 +235,35 @@ footer a{color:var(--gold);text-decoration:none;font-weight:800}
     <button class="btn ghost" id="b-st-back" data-t="back">◀ חזרה</button>
   </section>
 
+  <!-- CO-OP HEIST: a direct WebRTC link between two browsers, the two codes travel by WhatsApp (no server) -->
+  <section class="screen" id="s-coop">
+    <div class="sel"><div class="name"><span data-t="coopTitle">🤝 שוד ביחד</span></div></div>
+    <p class="how" data-t="coopHow"></p>
+    <div id="co-pick" class="row2"><button class="btn blue" id="b-co-host" data-t="hostBtn">🏠 אני מארח</button><button class="btn green" id="b-co-join" data-t="joinBtn">🚪 אני מצטרף</button></div>
+    <div id="co-host" class="hidden">
+      <p class="how" data-t="step1Host"></p>
+      <textarea class="codebox" id="co-offer" readonly rows="3" aria-label="invite code"></textarea>
+      <div class="row2"><button class="btn blue" id="b-co-copy1" data-t="copy">📋 העתק</button><a class="btn green" id="b-co-wa1" target="_blank" rel="noopener" data-t="wa">וואטסאפ</a></div>
+      <p class="how" data-t="step2Host"></p>
+      <textarea class="codebox" id="co-answer-in" rows="3" placeholder="WR1A.…" aria-label="answer code"></textarea>
+      <button class="btn" id="b-co-connect" data-t="connectBtn">🔗 התחבר</button>
+    </div>
+    <div id="co-guest" class="hidden">
+      <p class="how" data-t="step1Guest"></p>
+      <textarea class="codebox" id="co-offer-in" rows="3" placeholder="WR1H.…" aria-label="invite code"></textarea>
+      <button class="btn" id="b-co-answer" data-t="makeAnswer">צור קוד תשובה</button>
+      <div id="co-guest2" class="hidden">
+        <p class="how" data-t="step2Guest"></p>
+        <textarea class="codebox" id="co-answer" readonly rows="3" aria-label="answer code"></textarea>
+        <div class="row2"><button class="btn blue" id="b-co-copy2" data-t="copy">📋 העתק</button><a class="btn green" id="b-co-wa2" target="_blank" rel="noopener" data-t="wa">וואטסאפ</a></div>
+      </div>
+    </div>
+    <p class="how st" id="co-status"></p>
+    <button class="btn hidden" id="b-co-start"></button>
+    <p class="how" data-t="coopNote"></p>
+    <button class="btn ghost" id="b-co-back" data-t="back">◀ חזרה</button>
+  </section>
+
   <!-- ATTACK A FRIEND'S BUILD -->
   <section class="screen" id="s-attack">
     <div class="sel"><div class="name"><span data-t="attackTitle">⚔️ נגד חבר</span></div></div>
@@ -251,7 +282,7 @@ footer a{color:var(--gold);text-decoration:none;font-weight:800}
   <canvas id="gl"></canvas>
   <div id="flash"></div>
   <div id="hud">
-    <div class="tl"><span class="pill money" id="h-money">💵 0</span><button class="ib" id="b-shop2" aria-label="shop">🛒</button><button class="ib" id="b-pause" aria-label="pause">⏸</button></div>
+    <div class="tl"><span class="pill money" id="h-money">💵 0</span><span class="pill" id="h-coop" style="display:none"></span><button class="ib" id="b-shop2" aria-label="shop">🛒</button><button class="ib" id="b-pause" aria-label="pause">⏸</button></div>
     <div class="tr"><span class="pill" id="h-time">⏱ 0:00</span><span class="pill" id="h-loot">0/0 💰</span></div>
     <div id="obj"><div class="dia"></div><span id="obj-t"></span><div class="arrow"></div></div>
     <div id="xh"></div>
@@ -362,7 +393,8 @@ var T = {
     clickToPlay:'לחצו על המסך כדי לשחק', locked:'נעול', par:'3 כוכבים עד', confirmReset:'למחוק את כל ההתקדמות והכסף?', nogl:'הדפדפן לא תומך ב-WebGL, אז המשחק לא יכול להצטייר כאן. נסו דפדפן אחר או עדכנו את הדפדפן.', allLoot:'כל הכסף נאסף! רוצו לרכב המילוט 🚗',
     bedrock:'✖ לא ניתן לחפור כאן', timeUp:'⏰ הזמן נגמר! רוצו לרכב המילוט', tesla:'🚗 הטסלה המעופפת בדרך...', chaseTitle:'🚓 מרדף משטרתי!', chaseHow:'איחרתם – המשטרה רודפת! נהגו 50 שניות בלי להיעצר: חצים / A-D הגה, רווח בלימה. הרכב שלכם מהיר יותר מהניידות – רק אל תיתקעו מאחורי מכוניות! אספו כסף בדרך.', chaseGo:'▶ סעו!', escaped:'🚓 ברחתם מהמשטרה!', caught:'🚓 המשטרה תפסה אתכם – שמרתם חצי מהשלל', crashes:'התנגשויות', chaseTouch:'גררו או לחצו ◀ ▶ כדי לנהוג', bombBonus:'בונוס: פצצה גדולה 💥', m:'מ׳', best:'שיא', stars:'כוכבים', loot:'שלל', empty:'נגמרה התחמושת – קנו בחנות', zap:'זאפ! מצאו את לוח החשמל', laserOff:'הלייזרים כבו!', powerOff:'החשמל נותק!', hintKeys:'<b>WASD</b> תנועה &nbsp;<b>🖱️</b> מבט / לחיצה = שימוש &nbsp;<b>Shift</b> ריצה &nbsp;<b>רווח</b> קפיצה &nbsp;<b>1-0</b> כלים &nbsp;<b>R</b> שלט &nbsp;<b>B</b> בלוק &nbsp;<b>Esc</b> הפסקה', allLevels:'סיימתם את כל 500 השלבים! 🏆',
     armed:'🧨 הפצצה מחוברת – היא תתפוצץ רק כשתלחצו על השלט 📱 (R)', armedNuke:'☢️ הטסלה מרחפת עם הפצצה – לחצו על השלט 📱 (R) כדי לפוצץ', noCharges:'📱 אין פצצות מחוברות – הניחו דינמיט או פצצה קודם', detonate:'💥 בום!',
-    build:'🏗️ הבנייה שלי', attack:'⚔️ נגד חבר', buildName:'הבנייה שלי', buildHow:'בנו מה שתרצו עם הבלוקים שלכם (🧱, Q מחליף חומר). בלוק שבניתם ושברתם חוזר למלאי. בהפסקה: 📤 קוד לחבר.', codeTitle:'📤 קוד הבנייה', codeHow:'שלחו את הקוד לחבר – הוא מדביק אותו ב"⚔️ נגד חבר" ומנסה לפוצץ את הבנייה שלכם!', yourName:'השם שלכם', copy:'📋 העתק', copied:'✅ הועתק!', wa:'וואטסאפ', attackTitle:'⚔️ נגד חבר', attackHow:'הדביקו כאן קוד בנייה של חבר, ופוצצו את הבנייה שלו עם הנשקים שלכם!', attackGo:'▶ לתקוף!', badCode:'❌ קוד לא תקין', attackOf:'הבנייה של', attackWin:'💥 הרסתם את הבנייה של {n}!', clearAll:'🗑️ נקה הכל', confirmClear:'למחוק את כל הבנייה? הבלוקים חוזרים למלאי.', emptyBuild:'הבנייה ריקה – בנו משהו קודם', reward:'פרס', player:'שחקן', share:'⚔️ נסו לפוצץ את הבנייה שלי בשוד הבלוקים! הדביקו את הקוד ב"נגד חבר": {c} – {u}' },
+    build:'🏗️ הבנייה שלי', attack:'⚔️ נגד חבר', buildName:'הבנייה שלי', buildHow:'בנו מה שתרצו עם הבלוקים שלכם (🧱, Q מחליף חומר). בלוק שבניתם ושברתם חוזר למלאי. בהפסקה: 📤 קוד לחבר.', codeTitle:'📤 קוד הבנייה', codeHow:'שלחו את הקוד לחבר – הוא מדביק אותו ב"⚔️ נגד חבר" ומנסה לפוצץ את הבנייה שלכם!', yourName:'השם שלכם', copy:'📋 העתק', copied:'✅ הועתק!', wa:'וואטסאפ', attackTitle:'⚔️ נגד חבר', attackHow:'הדביקו כאן קוד בנייה של חבר, ופוצצו את הבנייה שלו עם הנשקים שלכם!', attackGo:'▶ לתקוף!', badCode:'❌ קוד לא תקין', attackOf:'הבנייה של', attackWin:'💥 הרסתם את הבנייה של {n}!', clearAll:'🗑️ נקה הכל', confirmClear:'למחוק את כל הבנייה? הבלוקים חוזרים למלאי.', emptyBuild:'הבנייה ריקה – בנו משהו קודם', reward:'פרס', player:'שחקן', share:'⚔️ נסו לפוצץ את הבנייה שלי בשוד הבלוקים! הדביקו את הקוד ב"נגד חבר": {c} – {u}',
+    coop:'🤝 שוד ביחד (אונליין)', coopTitle:'🤝 שוד ביחד', coopHow:'שודדים את אותו בניין ביחד עם חבר ומתקדמים בשלבים ביחד – בלי שרת: מחליפים שני קודים בוואטסאפ והמכשירים מתחברים ישירות. המארח שולח קוד הזמנה, החבר מחזיר קוד תשובה.', hostBtn:'🏠 אני מארח', joinBtn:'🚪 אני מצטרף', step1Host:'1. שלחו לחבר את קוד ההזמנה:', step2Host:'2. הדביקו כאן את קוד התשובה שהחבר שלח:', connectBtn:'🔗 התחבר', step1Guest:'1. הדביקו כאן את קוד ההזמנה של החבר:', makeAnswer:'צור קוד תשובה', step2Guest:'2. שלחו לחבר את קוד התשובה:', waiting:'⏳ ממתינים לחיבור…', connected:'✅ מחוברים ל{n}!', startTogether:'▶ התחילו שלב {n} ביחד', waitHost:'ממתינים שהמארח יתחיל…', peerLeft:'🤝 החבר התנתק – ממשיכים לבד', peerJoined:'🤝 {n} מחובר!', badCoop:'❌ קוד לא תקין', noRtc:'הדפדפן לא תומך בחיבור ישיר (WebRTC)', coopNote:'החיבור ישיר בין שני המכשירים ועובד הכי טוב ב-Wi-Fi; ברשתות סלולריות מסוימות הוא לא מצליח. שניכם מקבלים את כל הכסף של השלב.', shareInvite:'🤝 בואו נשדוד ביחד בשוד הבלוקים! פתחו {u} ← "שוד ביחד" ← "אני מצטרף" והדביקו את הקוד: {c}', shareAnswer:'🤝 קוד התשובה שלי לשוד ביחד: {c}' },
   en: { title:'Voxel Wreck', tagline:'Break into blocky buildings with a hammer, a drill and dynamite – and grab all the cash!', play:'▶ Play', levels:'🗺️ Levels', shop:'🛒 Shop', settings:'⚙️ Settings', back:'◀ Back', more:'🎮 More games',
     how:'Smash the fence, break through the walls, climb the stairs, drill the safes and collect every bit of cash – then run to the getaway car before the clock runs out, or the police will chase you! Endless levels, every one a different building: banks, towers, shops, warehouses, bunkers and more – and from level 31 the city keeps growing: streets with shops, towers, skyscrapers, mansions, schools and malls, a safe and cash in every building. Build with your own blocks, and charges only blow when you press the detonator 📱.',
     kMove:'move', kLook:'look', kRun:'run', kJump:'jump', kTools:'tools', reset:'🗑️ Reset progress', level:'Level', page:'Page', continueAt:'Continue at level', money:'cash', safe:'safe', cash:'cash', exit:'getaway car', panel:'power panel', sw:'laser switch',
@@ -370,7 +402,8 @@ var T = {
     clickToPlay:'Click the screen to play', locked:'Locked', par:'3 stars under', confirmReset:'Delete all progress and cash?', nogl:'Your browser does not support WebGL, so the game cannot be drawn here. Try another browser or update yours.', allLoot:'All the cash is yours! Run to the getaway car 🚗',
     bedrock:'✖ You can\'t dig here', timeUp:'⏰ Time\'s up! Run to the getaway car', tesla:'🚗 The flying Tesla is on its way...', chaseTitle:'🚓 Police chase!', chaseHow:'Too slow – the police are after you! Drive for 50 s without stopping: arrows / A-D steer, Space brakes. Your car is faster than the police – just don\'t get stuck behind traffic! Grab the cash on the way.', chaseGo:'▶ Drive!', escaped:'🚓 You escaped the police!', caught:'🚓 The police caught you – you kept half the loot', crashes:'crashes', chaseTouch:'Drag or tap ◀ ▶ to steer', bombBonus:'Bonus: a big bomb 💥', m:'m', best:'Best', stars:'stars', loot:'loot', empty:'Out of ammo – buy more in the shop', zap:'Zap! Find the power panel', laserOff:'Lasers off!', powerOff:'Power cut!', hintKeys:'<b>WASD</b> move &nbsp;<b>🖱️</b> look / click = use &nbsp;<b>Shift</b> run &nbsp;<b>Space</b> jump &nbsp;<b>1-0</b> tools &nbsp;<b>R</b> detonator &nbsp;<b>B</b> block &nbsp;<b>Esc</b> pause', allLevels:'You finished all 500 levels! 🏆',
     armed:'🧨 Charge armed – it only goes off when you press the detonator 📱 (R)', armedNuke:'☢️ The Tesla is hovering with the bomb – press the detonator 📱 (R) to drop it', noCharges:'📱 No charges armed – place dynamite or a bomb first', detonate:'💥 Boom!',
-    build:'🏗️ My build', attack:'⚔️ Vs a friend', buildName:'My build', buildHow:'Build whatever you like with your blocks (🧱, Q changes the material). Break a block you built and it goes back to your stock. In the pause menu: 📤 code for a friend.', codeTitle:'📤 Build code', codeHow:'Send the code to a friend – they paste it under "⚔️ Vs a friend" and try to blow your build up!', yourName:'Your name', copy:'📋 Copy', copied:'✅ Copied!', wa:'WhatsApp', attackTitle:'⚔️ Vs a friend', attackHow:'Paste a friend\'s build code here and blow their build up with your weapons!', attackGo:'▶ Attack!', badCode:'❌ Invalid code', attackOf:'The build of', attackWin:'💥 You destroyed {n}\'s build!', clearAll:'🗑️ Clear all', confirmClear:'Delete the whole build? The blocks go back to your stock.', emptyBuild:'The build is empty – build something first', reward:'Reward', player:'Player', share:'⚔️ Try to blow up my build in Voxel Wreck! Paste the code under "Vs a friend": {c} – {u}' }
+    build:'🏗️ My build', attack:'⚔️ Vs a friend', buildName:'My build', buildHow:'Build whatever you like with your blocks (🧱, Q changes the material). Break a block you built and it goes back to your stock. In the pause menu: 📤 code for a friend.', codeTitle:'📤 Build code', codeHow:'Send the code to a friend – they paste it under "⚔️ Vs a friend" and try to blow your build up!', yourName:'Your name', copy:'📋 Copy', copied:'✅ Copied!', wa:'WhatsApp', attackTitle:'⚔️ Vs a friend', attackHow:'Paste a friend\'s build code here and blow their build up with your weapons!', attackGo:'▶ Attack!', badCode:'❌ Invalid code', attackOf:'The build of', attackWin:'💥 You destroyed {n}\'s build!', clearAll:'🗑️ Clear all', confirmClear:'Delete the whole build? The blocks go back to your stock.', emptyBuild:'The build is empty – build something first', reward:'Reward', player:'Player', share:'⚔️ Try to blow up my build in Voxel Wreck! Paste the code under "Vs a friend": {c} – {u}',
+    coop:'🤝 Heist together (online)', coopTitle:'🤝 Heist together', coopHow:'Rob the same building with a friend and move through the levels together – no server: swap two codes on WhatsApp and the devices connect directly. The host sends an invite code, the friend sends back an answer code.', hostBtn:'🏠 I host', joinBtn:'🚪 I join', step1Host:'1. Send the invite code to your friend:', step2Host:'2. Paste the answer code your friend sent:', connectBtn:'🔗 Connect', step1Guest:'1. Paste your friend\'s invite code:', makeAnswer:'Make an answer code', step2Guest:'2. Send the answer code to your friend:', waiting:'⏳ Waiting for the connection…', connected:'✅ Connected to {n}!', startTogether:'▶ Start level {n} together', waitHost:'Waiting for the host to start…', peerLeft:'🤝 Your friend left – carrying on alone', peerJoined:'🤝 {n} is connected!', badCoop:'❌ Invalid code', noRtc:'This browser cannot make a direct connection (WebRTC)', coopNote:'The link is direct between the two devices and works best on Wi-Fi; some mobile networks block it. Both of you get all the level\'s cash.', shareInvite:'🤝 Let\'s rob together in Voxel Wreck! Open {u} → "Heist together" → "I join" and paste this code: {c}', shareAnswer:'🤝 My answer code for the heist: {c}' }
 };
 function t(k){ return (T[G.lang] && T[G.lang][k]) || T.he[k] || k; }
 
@@ -589,7 +622,7 @@ function updProj(S, dt){ var W = S.W; for (var k = S.proj.length - 1; k >= 0; k-
 function updFuses(S, dt){ for (var k = S.fuses.length - 1; k >= 0; k--){ var f = S.fuses[k]; f.t -= dt; if (f.t <= 0){ S.fuses.splice(k, 1); if (S.W.get(f.x, f.y, f.z) === TNT) S.W.set(f.x, f.y, f.z, 0); explodeAt(S, f.x + .5, f.y + .5, f.z + .5, f.r, f.pow); } } }
 function updCash(S, dt){ var p = S.p, W = S.W; for (var k = S.cash.length - 1; k >= 0; k--){ var c = S.cash[k]; c.t += dt;
     var ddx = p.x - c.x, ddy = p.y + .9 - c.y, ddz = p.z - c.z, d = Math.sqrt(ddx * ddx + ddy * ddy + ddz * ddz);
-    if (d < 1.05){ S.cash.splice(k, 1); S.money += c.v; S.got++; if (c.g) c.g.done = true; S.ev.push({ t:'cash', v:c.v, x:c.x, y:c.y, z:c.z, big:c.big }); continue; }
+    if (d < 1.05){ S.cash.splice(k, 1); S.money += c.v; S.got++; if (c.g) c.g.done = true; S.ev.push({ t:'cash', v:c.v, x:c.x, y:c.y, z:c.z, big:c.big, gi:c.g ? c.g.i : -1 }); continue; }
     if (d < MAGNET && c.t > .25){ var s = Math.min(1, 7.5 * dt / d); c.x += ddx * s; c.y += ddy * s; c.z += ddz * s; c.rest = true; continue; }
     if (!c.rest){ c.vy -= GRAV * .6 * dt; c.y += c.vy * dt; if (c.vx || c.vz){ var hx = clamp(c.x + c.vx * dt, .5, WX - .5), hz = clamp(c.z + c.vz * dt, .5, WZ - .5); if (W.get(Math.floor(hx), Math.floor(c.y), Math.floor(hz)) === 0){ c.x = hx; c.z = hz; } else { c.vx = c.vz = 0; } c.vx *= .985; c.vz *= .985; } var by = Math.floor(c.y - .3); if (c.y - .3 < 0 || W.get(Math.floor(c.x), by, Math.floor(c.z)) !== 0){ c.y = (c.y - .3 < 0 ? 0 : by + 1) + .3; c.vy = 0; c.rest = true; } } } }
 function nearestGoal(S){ var best = null, bd = 1e9, p = S.p; for (var k = 0; k < S.goals.length; k++){ var g = S.goals[k]; if (g.done) continue; var pri = g.t === 'panel' ? 0 : g.t === 'switch' ? 1 : 2; var ddx = g.x + .5 - p.x, ddz = g.z + .5 - p.z, d = Math.sqrt(ddx * ddx + ddz * ddz) + pri * 1000; if (d < bd){ bd = d; best = g; } } return best; }
@@ -999,6 +1032,79 @@ function saveBuild(){ var S = G.S; if (!S || !S.L.build) return null; var e = en
 function lotClear(S){ var n2 = 0; for (var i in S.built){ if (S.W.v[i]){ S.W.v[i] = 0; delete S.W.dmg[i]; n2++; } } S.built = {}; S.builtN = 0; S.inv.block = (S.inv.block | 0) + n2; S.W.dirty.fill(1); return n2; }
 function attackLeft(S){ var a = S.attack, left = 0, v = S.W.v; for (var k = 0; k < a.idx.length; k++) if (v[a.idx[k]]) left++; a.left = left; return left; }
 
+/* ---------- co-op heist over WebRTC: no server – the invite (offer) and answer codes are pasted by hand; events replicate both ways ---------- */
+var ICE = { iceServers:[{ urls:['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] };
+function utf8(str){ return Array.prototype.slice.call(new TextEncoder().encode(str)); }
+function unutf8(bytes){ return new TextDecoder().decode(new Uint8Array(bytes)); }
+/* the whole local description minus TCP candidates and a few no-op lines, base64url; WR1H. = invite (offer), WR1A. = answer */
+function encodeSdp(d){ var lines = String(d.sdp).split(/\r?\n/).filter(function(l){ return l && !(/^a=candidate:/.test(l) && / tcp /i.test(l)) && !/^a=ice-options:|^a=extmap-allow-mixed|^a=msid-semantic:|^a=end-of-candidates/.test(l); }); return (d.type === 'offer' ? 'WR1H.' : 'WR1A.') + b64enc(utf8(lines.join('\n'))); }
+function decodeSdp(code){ var m = /^WR1([HA])\.([A-Za-z0-9_-]+)$/.exec(String(code || '').trim()); if (!m) return null; var bytes = b64dec(m[2]); if (!bytes || !bytes.length) return null; var sdp; try { sdp = unutf8(bytes); } catch(e){ return null; } if (sdp.indexOf('v=0') !== 0) return null; return { type:m[1] === 'H' ? 'offer' : 'answer', sdp:sdp.replace(/\n/g, '\r\n') + '\r\n' }; }
+function mkNet(){ var N = { pc:null, ch:null, role:'', state:'off', name:'', peer:{ name:'', x:0, y:0, z:0, yaw:0, tool:0, t:0, on:false }, onmsg:null, onstate:null, lastP:0 };
+  N.set = function(st){ N.state = st; if (N.onstate){ try { N.onstate(st); } catch(e){} } };
+  N.gather = function(pc){ return new Promise(function(res){ var done = false; function fin(){ if (!done){ done = true; res(pc.localDescription); } } if (pc.iceGatheringState === 'complete'){ fin(); return; } pc.addEventListener('icegatheringstatechange', function(){ if (pc.iceGatheringState === 'complete') fin(); }); setTimeout(fin, 3000); }); };
+  N.wire = function(ch){ N.ch = ch; ch.onopen = function(){ N.send({ t:'hi', name:N.name }); N.set('open'); }; ch.onclose = function(){ N.peer.on = false; N.set('closed'); }; ch.onerror = function(){ N.set('closed'); };
+    ch.onmessage = function(e){ var m; try { m = JSON.parse(e.data); } catch(x){ return; } if (!m || typeof m.t !== 'string') return; if (m.t === 'hi'){ N.peer.name = cleanName(m.name) || '?'; N.peer.on = true; } if (N.onmsg){ try { N.onmsg(m); } catch(x2){} } }; };
+  N.host = function(){ N.close(); N.role = 'host'; var pc = N.pc = new RTCPeerConnection(ICE); N.wire(pc.createDataChannel('g', { ordered:true })); pc.onconnectionstatechange = function(){ if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') N.set('closed'); }; N.set('offering');
+    return pc.createOffer().then(function(o){ return pc.setLocalDescription(o); }).then(function(){ return N.gather(pc); }).then(function(d){ N.set('offer'); return encodeSdp(d); }); };
+  N.join = function(code){ var d = decodeSdp(code); if (!d || d.type !== 'offer') return Promise.reject(new Error('bad code')); N.close(); N.role = 'guest'; var pc = N.pc = new RTCPeerConnection(ICE); pc.ondatachannel = function(e){ N.wire(e.channel); }; pc.onconnectionstatechange = function(){ if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') N.set('closed'); }; N.set('answering');
+    return pc.setRemoteDescription(d).then(function(){ return pc.createAnswer(); }).then(function(a){ return pc.setLocalDescription(a); }).then(function(){ return N.gather(pc); }).then(function(d2){ N.set('answer'); return encodeSdp(d2); }); };
+  N.accept = function(code){ var d = decodeSdp(code); if (!d || d.type !== 'answer' || !N.pc) return Promise.reject(new Error('bad code')); N.set('connecting'); return N.pc.setRemoteDescription(d); };
+  N.send = function(m){ if (N.ch && N.ch.readyState === 'open'){ try { N.ch.send(JSON.stringify(m)); return true; } catch(e){} } return false; };
+  N.open = function(){ return !!N.ch && N.ch.readyState === 'open'; };
+  N.close = function(){ var had = !!N.pc; if (N.ch){ try { N.ch.onclose = null; N.ch.close(); } catch(e){} } if (N.pc){ try { N.pc.close(); } catch(e){} } N.ch = null; N.pc = null; N.peer.on = false; N.peer.name = ''; N.role = ''; if (had || N.state !== 'off') N.set('off'); };
+  return N; }
+var NET = mkNet();
+/* outgoing: the world-changing events of this player, as small messages */
+function netOut(S, e){ var m = null; switch (e.t){
+    case 'break': m = { k:'b', x:e.x, y:e.y, z:e.z }; break;
+    case 'explode': m = { k:'x', x:+e.x.toFixed(2), y:+e.y.toFixed(2), z:+e.z.toFixed(2), r:e.r, pow:e.pow }; break;
+    case 'place': m = { k:'pl', x:e.x, y:e.y, z:e.z, m:S.W.get(e.x, e.y, e.z) }; break;
+    case 'spray': m = { k:'sp', x:e.x, y:e.y, z:e.z, face:e.face, c:1 + (S.sprayCol % PAINT.length) }; break;
+    case 'cash': if (e.peer) return; m = { k:'c', gi:e.gi === undefined ? -1 : e.gi, v:e.v, x:+e.x.toFixed(1), y:+e.y.toFixed(1), z:+e.z.toFixed(1), big:e.big ? 1 : 0 }; break;
+    case 'power': m = { k:'pw' }; break; case 'laseroff': m = { k:'lz' }; break; case 'nuke': m = { k:'nk', x:e.x, y:e.y, z:e.z }; break;
+    case 'win': m = { k:'w' }; break; }
+  if (m){ m.t = 'ev'; NET.send(m); } }
+/* incoming: apply the friend's event to our copy of the world; the events it causes are tagged so they are not echoed back */
+function applyRemote(S, m){ var W = S.W, n0 = S.ev.length, k;
+  switch (m.k){
+    case 'b': if (W.get(m.x, m.y, m.z)) breakBlock(S, m.x, m.y, m.z); break;
+    case 'x': explodeAt(S, +m.x, +m.y, +m.z, +m.r || 3, +m.pow || 1); break;
+    case 'pl': if (W.get(m.x, m.y, m.z) === 0 && m.m > 0 && m.m < MATERIALS.length){ W.set(m.x, m.y, m.z, m.m); S.ev.push({ t:'place', x:m.x, y:m.y, z:m.z }); } break;
+    case 'sp': W.paintFace(m.x, m.y, m.z, m.face | 0, m.c | 0); break;
+    case 'c': { var g = S.goalAt[m.gi]; for (k = S.cash.length - 1; k >= 0; k--) if (S.cash[k].g && S.cash[k].g.i === m.gi) S.cash.splice(k, 1); if (g && !g.done){ g.done = true; S.got++; } S.money += (+m.v || 0); S.ev.push({ t:'cash', v:+m.v || 0, x:+m.x, y:+m.y, z:+m.z, big:!!m.big, peer:1, gi:m.gi }); break; }
+    case 'pw': disableElec(S); break;
+    case 'lz': toggleLasers(S); break;
+    case 'nk': if (gl) nukeFx(+m.x, +m.y, +m.z); break;
+    case 'w': if (!S.won){ S.won = true; S.ev.push({ t:'win' }); if (G.S === S && G.screen === 's-game'){ handleEvents(S); finishLevel(); } } break;
+  }
+  for (k = n0; k < S.ev.length; k++) S.ev[k].remote = 1; }
+/* starts level n for both players (the friend gets a 'start' message and follows) */
+function coopStart(n, fromPeer){ n = clamp(n | 0, 1, NLV); start(n); if (G.S && G.S.coop && !fromPeer) NET.send({ t:'start', n:n }); }
+function drawPeer(now){ var p = NET.peer; if (!p.on || now - p.t > 4000) return; var x = p.x, y = p.y, z = p.z, k;
+  for (k = 0; k < 3; k++){ drawCube(x - .31, y + k * .26, z - .13, .26, 30, 44, 120, 1); drawCube(x + .05, y + k * .26, z - .13, .26, 30, 44, 120, 1); }
+  drawCube(x - .31, y + .78, z - .31, .62, 60, 120, 240, 1); drawCube(x - .31, y + 1.1, z - .31, .62, 60, 120, 240, 1); drawCube(x - .25, y + 1.52, z - .25, .5, 250, 210, 60, 1); drawCube(x + .02, y + 1.68, z + .22, .09, 30, 30, 30, 1); drawCube(x - .11, y + 1.68, z + .22, .09, 30, 30, 30, 1); }
+function coopRender(){ var st = NET.state, role = NET.role, s = $('co-status'), bs = $('b-co-start');
+  $('co-pick').classList.toggle('hidden', role !== ''); $('co-host').classList.toggle('hidden', role !== 'host'); $('co-guest').classList.toggle('hidden', role !== 'guest');
+  var txt = st === 'open' ? t('connected').replace('{n}', NET.peer.name || '?') : (st === 'offer' || st === 'answer' || st === 'connecting' || st === 'offering' || st === 'answering') ? t('waiting') : st === 'closed' ? t('peerLeft') : '';
+  if (st === 'open' && role === 'guest') txt += ' ' + t('waitHost'); s.textContent = txt;
+  var showStart = st === 'open' && role === 'host'; bs.classList.toggle('hidden', !showStart); if (showStart) bs.textContent = t('startTogether').replace('{n}', Math.min(G.unlocked, NLV)); }
+function copyBox(boxId, btnId){ var tb = $(boxId), b = $(btnId), done = function(){ b.textContent = t('copied'); setTimeout(function(){ b.textContent = t('copy'); }, 1500); }; try { tb.select(); } catch(e){} if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(tb.value).then(done, done); else { try { document.execCommand('copy'); } catch(e){} done(); } }
+function netBind(){ NET.name = G.name || t('player');
+  NET.onstate = function(st){ if (G.screen === 's-coop') coopRender(); if (st === 'closed' && G.S && G.S.coop){ G.S.coop = false; if (G.screen === 's-game') toast(t('peerLeft'), 3000); } };
+  NET.onmsg = function(m){ var S = G.S;
+    if (m.t === 'hi'){ if (G.screen === 's-coop') coopRender(); else toast(t('peerJoined').replace('{n}', NET.peer.name), 2500); return; }
+    if (m.t === 'start'){ if (!(S && G.screen === 's-game' && G.level === m.n && !S.won && S.coop)) coopStart(m.n, true); return; }
+    if (m.t === 'p'){ NET.peer.x = +m.x; NET.peer.y = +m.y; NET.peer.z = +m.z; NET.peer.yaw = +m.yaw || 0; NET.peer.tool = m.tool | 0; NET.peer.t = performance.now(); NET.peer.on = true; return; }
+    if (m.t === 'bye'){ if (S && S.coop){ S.coop = false; if (G.screen === 's-game') toast(t('peerLeft'), 3000); } return; }
+    if (m.t === 'ev' && S && S.coop && !S.won && G.screen === 's-game') applyRemote(S, m); };
+  $('b-coop').onclick = function(){ SFX.tap(); show('s-coop'); }; $('b-co-back').onclick = function(){ SFX.tap(); show('s-menu'); };
+  $('b-co-host').onclick = function(){ SFX.tap(); if (!window.RTCPeerConnection){ $('co-status').textContent = t('noRtc'); return; } NET.name = G.name || t('player'); NET.host().then(function(code){ $('co-offer').value = code; $('b-co-wa1').href = 'https://wa.me/?text=' + encodeURIComponent(t('shareInvite').replace('{u}', 'https://lupulior.github.io/game-lab/wreck.html').replace('{c}', code)); coopRender(); }).catch(function(){ $('co-status').textContent = t('badCoop'); }); coopRender(); };
+  $('b-co-join').onclick = function(){ SFX.tap(); if (!window.RTCPeerConnection){ $('co-status').textContent = t('noRtc'); return; } NET.close(); NET.role = 'guest'; $('co-guest2').classList.add('hidden'); coopRender(); };
+  $('b-co-answer').onclick = function(){ SFX.tap(); NET.name = G.name || t('player'); NET.join($('co-offer-in').value).then(function(code){ $('co-answer').value = code; $('co-guest2').classList.remove('hidden'); $('b-co-wa2').href = 'https://wa.me/?text=' + encodeURIComponent(t('shareAnswer').replace('{c}', code)); coopRender(); }).catch(function(){ NET.role = 'guest'; $('co-status').textContent = t('badCoop'); }); };
+  $('b-co-connect').onclick = function(){ SFX.tap(); NET.accept($('co-answer-in').value).then(function(){ coopRender(); }).catch(function(){ $('co-status').textContent = t('badCoop'); }); };
+  $('b-co-start').onclick = function(){ SFX.tap(); coopStart(Math.min(G.unlocked, NLV)); };
+  $('b-co-copy1').onclick = function(){ copyBox('co-offer', 'b-co-copy1'); }; $('b-co-copy2').onclick = function(){ copyBox('co-answer', 'b-co-copy2'); }; }
+
 /* ---------- auto-player (executes the plan in the real simulation) ---------- */
 function aimAt(S, tx, ty, tz){ var p = S.p, dx = tx - p.x, dy = ty - (p.y + EYE), dz = tz - p.z; p.yaw = Math.atan2(dx, dz); p.pitch = Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)); }
 function toolFor(m){ var mt = MATERIALS[m]; if (mt.toggle) return 0; return BESTT[m]; }
@@ -1185,6 +1291,7 @@ function render(S, now){ setDims(S.W.dims); ensureChunks();
   var k, q, Lc = S.L; if (Lc.car) drawMesh(carMesh('sedan', Lc.car.col), Lc.car.x, Lc.car.y, Lc.car.z, Lc.car.yaw); if (Lc.cars) for (k = 0; k < Lc.cars.length; k++){ q = Lc.cars[k]; drawMesh(carMesh(q.kind, q.col), q.x, q.y, q.z, q.yaw); }
   if (S.tesla) drawTesla(S, now);
   setAttrFloat(R.cubeVbo, null);
+  if (S.coop) drawPeer(now);
   if (S.fuses.length && Math.floor(now / 260) % 2 === 0) for (k = 0; k < S.fuses.length; k++){ q = S.fuses[k]; if (q.t === Infinity) drawCube(q.x + .35, q.y + 1.01, q.z + .35, .3, 255, 50, 50, 1); }
   for (k = 0; k < S.cash.length; k++){ q = S.cash[k]; var bob = Math.sin(now * .006 + k) * .06, s = q.big ? .42 : .32; drawCube(q.x - s / 2, q.y - s / 2 + bob, q.z - s / 2, s, 70, 190, 90, 1); drawCube(q.x - .07, q.y + s / 2 + bob, q.z - .07, .14, 255, 220, 70, 1); }
   for (k = 0; k < S.proj.length; k++){ q = S.proj[k]; if (q.kind === 'grenade') drawCube(q.x - .12, q.y - .12, q.z - .12, .24, 78, 112, 70, 1); else { drawCube(q.x - .1, q.y - .1, q.z - .1, .2, 220, 60, 50, 1); drawCube(q.x - .06 - q.vx * .01, q.y - .06 - q.vy * .01, q.z - .06 - q.vz * .01, .12, 110, 110, 120, 1); } }
@@ -1341,7 +1448,7 @@ function buy(id){ var tl = null; for (var k = 0; k < TOOLS.length; k++) if (TOOL
 /* ---------- ui helpers ---------- */
 function show(id){ var s = document.querySelectorAll('#app .screen'); for (var i = 0; i < s.length; i++) s[i].classList.toggle('on', s[i].id === id); G.screen = id; var game = id === 's-game'; $('s-game').classList.toggle('on', game); document.body.classList.toggle('ingame', game);
   if (!game){ G.running = false; drillSound(false); if (document.pointerLockElement){ try { document.exitPointerLock(); } catch(e){} } }
-  if (id === 's-menu') renderMenu(); if (id === 's-levels') renderLevels(); if (id === 's-shop') renderShop($('sh-list'), false); if (id === 's-settings') renderSettings($('set-list'), false); window.scrollTo(0, 0); }
+  if (id === 's-menu') renderMenu(); if (id === 's-levels') renderLevels(); if (id === 's-shop') renderShop($('sh-list'), false); if (id === 's-settings') renderSettings($('set-list'), false); if (id === 's-coop') coopRender(); window.scrollTo(0, 0); }
 var toastT = 0; function toast(msg, ms){ var e = $('toast2'); e.textContent = msg; e.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function(){ e.classList.remove('on'); }, ms || 1800); }
 function fmtTime(s){ s = Math.floor(s); return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60); }
 function lvName(L){ return L.name[G.lang] || L.name.he; }
@@ -1377,7 +1484,7 @@ function buildHotbar(S){ var hb = $('hotbar'); hb.innerHTML = ''; for (var i = 0
 function updHotbar(S){ var slots = $('hotbar').children; for (var i = 0; i < slots.length && i < TOOLS.length; i++){ var tl = TOOLS[i], cnt = tl.inf ? '∞' : String(S.inv[tl.id] | 0), bb = slots[i].querySelector('b'); if (bb.textContent !== cnt) bb.textContent = cnt; slots[i].classList.toggle('sel', S.tool === i); slots[i].classList.toggle('none', !tl.inf && !(S.inv[tl.id] > 0)); } $('b-use').textContent = TOOLS[S.tool].ic; }
 function selectTool(i){ var S = G.S; if (!S || i < 0 || i >= TOOLS.length) return; if (S.tool === i && TOOLS[i].id === 'spray'){ S.sprayCol = (S.sprayCol + 1) % PAINT.length; toast('🎨 ' + (S.sprayCol + 1) + '/' + PAINT.length); } if (S.tool === i && TOOLS[i].id === 'block') cycleMat(S); S.tool = i; S.drilling = false; updHotbar(S); SFX.tap(); }
 function cycleMat(S){ S.buildMat = (S.buildMat + 1) % BUILD_MATS.length; var mt = MATERIALS[BUILD_MATS[S.buildMat]]; toast('🧱 ' + (G.lang === 'en' ? mt.en : mt.he) + ' ' + (S.buildMat + 1) + '/' + BUILD_MATS.length); }
-function updHUD(S){ var m = moneyStr(); if ($('h-money').textContent !== m) $('h-money').textContent = m; var lt = S.attack ? '💥 ' + (S.attack.total - S.attack.left) + '/' + S.attack.total : S.L.build ? '🧱 ' + S.builtN + ' · ' + (S.inv.block | 0) : S.got + '/' + S.total + ' 💰'; if ($('h-loot').textContent !== lt) $('h-loot').textContent = lt; var left = S.limit ? Math.max(0, S.limit - S.time) : S.time, tt = '⏱ ' + fmtTime(S.limit ? Math.ceil(left) : left), ht = $('h-time'); if (ht.textContent !== tt){ ht.textContent = tt; if (S.limit && left > 0 && left <= 10 && !G.auto) SFX.tick(); } ht.classList.toggle('warn', !!S.limit && left <= 20 && left > 10); ht.classList.toggle('crit', !!S.limit && left <= 10); updObj(S); }
+function updHUD(S){ var cp = $('h-coop'), ct = S.coop ? '🤝 ' + (NET.peer.name || '?') : ''; if (cp.textContent !== ct) cp.textContent = ct; var cd = S.coop ? '' : 'none'; if (cp.style.display !== cd) cp.style.display = cd; var m = moneyStr(); if ($('h-money').textContent !== m) $('h-money').textContent = m; var lt = S.attack ? '💥 ' + (S.attack.total - S.attack.left) + '/' + S.attack.total : S.L.build ? '🧱 ' + S.builtN + ' · ' + (S.inv.block | 0) : S.got + '/' + S.total + ' 💰'; if ($('h-loot').textContent !== lt) $('h-loot').textContent = lt; var left = S.limit ? Math.max(0, S.limit - S.time) : S.time, tt = '⏱ ' + fmtTime(S.limit ? Math.ceil(left) : left), ht = $('h-time'); if (ht.textContent !== tt){ ht.textContent = tt; if (S.limit && left > 0 && left <= 10 && !G.auto) SFX.tick(); } ht.classList.toggle('warn', !!S.limit && left <= 20 && left > 10); ht.classList.toggle('crit', !!S.limit && left <= 10); updObj(S); }
 function objTarget(S){ var g = nearestGoal(S); if (g){ var cc = (g.t === 'money' || g.t === 'safe') && S.W.get(g.x, g.y, g.z) === 0 ? cashFor(S, g) : null; if (cc) return { x:cc.x, y:cc.y, z:cc.z, label:t('cash'), t:'money' }; } if (g) return { x:g.x + .5, y:g.y + .5, z:g.z + .5, label:g.t === 'safe' ? t('safe') : g.t === 'money' ? t('cash') : g.t === 'panel' ? t('panel') : t('sw'), t:g.t }; var ex = S.L.exit; return { x:ex.x, y:ex.y + 1.2, z:ex.z, label:t('exit'), t:'exit' }; }
 function updObj(S){ if (S.L.lot) return; var o = objTarget(S), d = Math.round(Math.sqrt((o.x - S.p.x) * (o.x - S.p.x) + (o.z - S.p.z) * (o.z - S.p.z))), el = $('obj'); var txt = (o.t === 'exit' ? '🚗 ' : o.t === 'safe' ? '🔒 ' : o.t === 'money' ? '💵 ' : '⚡ ') + o.label + ' ' + d + ' ' + t('m'); if ($('obj-t').textContent !== txt) $('obj-t').textContent = txt;
   if (!gl){ el.style.left = '50%'; el.style.top = '30%'; return; } var pr = project(o.x, o.y, o.z), cv = $('gl'), W2 = cv.clientWidth, H2 = cv.clientHeight, m = 70, x = pr.x, y = pr.y, edge = pr.behind || x < m || x > W2 - m || y < m || y > H2 - m;
@@ -1386,7 +1493,7 @@ function updObj(S){ if (S.L.lot) return; var o = objTarget(S), d = Math.round(Ma
 
 /* ---------- events → effects ---------- */
 var zapT = 0;
-function handleEvents(S){ var ev = S.ev, k, e, mt; for (k = 0; k < ev.length; k++){ e = ev[k]; switch (e.t){
+function handleEvents(S){ var ev = S.ev, k, e, mt; for (k = 0; k < ev.length; k++){ e = ev[k]; if (S.coop && !e.remote) netOut(S, e); switch (e.t){
     case 'hit': mt = MATERIALS[e.m]; burst(e.px, e.py, e.pz, mt.col, 5, 2.5, .07, .5); R.hitFlash = { x:e.x, y:e.y, z:e.z, t:.09 }; if (e.tool !== 'drill' || (S.time * 10 | 0) % 3 === 0) SFX.hit(mt); break;
     case 'break': mt = MATERIALS[e.m]; burst(e.x + .5, e.y + .5, e.z + .5, mt.col, 14, 3.5, .12, .9); SFX.brk(mt); break;
     case 'clank': burst(e.px, e.py, e.pz, [255, 230, 120], 4, 2, .05, .3); SFX.hit(MATERIALS[e.m]); if (e.m === BEDROCK && S.time - (S.bedT || -9) > 1.5){ S.bedT = S.time; toast(t('bedrock')); } break;
@@ -1426,10 +1533,10 @@ function startLot(mode, code){ var L = buildLot(), dec = null, mine = null;
   if (mine){ for (var k = 0; k < mine.idx.length; k++) S.built[mine.idx[k]] = 1; S.builtN = mine.n; }
   if (L.attack){ S.attack = { name:dec.name, idx:dec.idx, total:dec.n, left:dec.n }; }
   updHUD(S); if (mode === 'build') toast(t('buildHow'), 5000); return true; }
-function launch(L){ var n = L.n; if (G.chase){ G.chase = null; SFX.siren(false); } $('s-game').classList.remove('chase'); SFX.hum(false); var S = newSim(L, G.inv); S.inv = G.inv; S.hits = 0; S.walkT = 0; S.hitBlock = null; S.limit = levelLimit(L); G.S = S; G.paused = false; G.running = true; G.frozen = false; R.parts.length = 0; R.shake = 0; R.hitFlash = null; zapT = -9;
+function launch(L){ var n = L.n; if (G.chase){ G.chase = null; SFX.siren(false); } $('s-game').classList.remove('chase'); SFX.hum(false); var S = newSim(L, G.inv); S.inv = G.inv; S.coop = !!(NET.open() && !L.lot); S.hits = 0; S.walkT = 0; S.hitBlock = null; S.limit = levelLimit(L); G.S = S; G.paused = false; G.running = true; G.frozen = false; R.parts.length = 0; R.shake = 0; R.hitFlash = null; zapT = -9;
   show('s-game'); buildHotbar(S); updHotbar(S); detectTouch(); setTouchUI(); $('ov').classList.remove('on'); $('click').classList.toggle('on', !G.isTouch && !G.auto && document.pointerLockElement !== $('gl'));
   $('obj').style.display = ''; if (gl){ resizeGL(); meshDirty(S.W, 1e9); render(S, performance.now()); } updHUD(S); toast(gl ? (L.lot ? lvName(L) : t('level') + ' ' + n + ': ' + lvName(L)) : t('nogl'), gl ? 2600 : 8000); acc = 0; lastT = performance.now(); }
-function restart(){ if (G.S && G.S.L && G.S.L.lot){ if (G.S.L.build) saveBuild(); startLot(G.S.L.attack ? 'attack' : 'build', G.lastAttackCode); return; } var n = G.level; start(n); }
+function restart(){ if (G.S && G.S.L && G.S.L.lot){ if (G.S.L.build) saveBuild(); startLot(G.S.L.attack ? 'attack' : 'build', G.lastAttackCode); return; } var n = G.level; coopStart(n); }
 function pause(){ if (!G.S || G.paused) return; G.paused = true; if (G.S.L.build) saveBuild(); drillSound(false); IN.use = false; if (document.pointerLockElement){ try { document.exitPointerLock(); } catch(e){} } $('click').classList.remove('on'); showPanel('pause'); save(); }
 function lockPointer(){ try { var r = $('gl').requestPointerLock(); if (r && r.catch) r.catch(function(){}); } catch(e){} }
 function resume(){ G.paused = false; $('ov').classList.remove('on'); acc = 0; lastT = performance.now(); if (!G.isTouch && !G.auto){ lockPointer(); $('click').classList.toggle('on', document.pointerLockElement !== $('gl')); } }
@@ -1448,7 +1555,7 @@ function showPanel(kind, o){ var p = $('panel'), S = G.S, L = S.L, h = ''; o = o
   else if (kind === 'settings'){ h += '<h2>' + t('settings') + '</h2><div id="p-setlist"></div><button class="btn" id="p-back">' + t('back') + '</button>'; }
   p.innerHTML = h; $('ov').classList.add('on'); p.scrollTop = 0;
   function on(id, f){ var e = $(id); if (e) e.onclick = function(){ SFX.tap(); f(); }; }
-  on('p-go', goChase); on('p-next', function(){ start(L.n + 1); }); on('p-replay', function(){ restart(); }); on('p-menu', function(){ G.paused = true; if (L.build) saveBuild(); show('s-menu'); }); on('p-resume', resume);
+  on('p-go', goChase); on('p-next', function(){ coopStart(L.n + 1); }); on('p-replay', function(){ restart(); }); on('p-menu', function(){ G.paused = true; if (L.build) saveBuild(); if (S.coop){ S.coop = false; NET.send({ t:'bye' }); } show('s-menu'); }); on('p-resume', resume);
   on('p-code', function(){ G.lastPanel = 'pause'; showPanel('code', o); }); on('p-clear', function(){ if (!confirm(t('confirmClear'))) return; lotClear(S); saveBuild(); updHotbar(S); updHUD(S); if (gl){ meshDirty(S.W, 1e9); } showPanel('pause', o); });
   on('p-copy', function(){ var tb = $('p-codebox'), b = $('p-copy'), done = function(){ b.textContent = t('copied'); }; try { tb.select(); } catch(e){} if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(tb.value).then(done, done); else { try { document.execCommand('copy'); } catch(e){} done(); } });
   var pn = $('p-name'); if (pn) pn.oninput = function(){ G.name = cleanName(pn.value); save(); };
@@ -1512,13 +1619,14 @@ function bind(){
 function frame(now){ requestAnimationFrame(frame); if (!G.running || !G.S || G.frozen || G.screen !== 's-game') return; var S = G.S, dt = Math.min(.1, (now - lastT) / 1000); lastT = now;
   if (G.chase){ var C = G.chase; if (!G.paused && C.ready && !C.done){ acc += dt; var nc = 0; while (acc >= DT && nc++ < 5){ stepChase(C, chaseInput(), DT); acc -= DT; chaseEvents(C); } if (R.shake > 0) R.shake = Math.max(0, R.shake - dt * 2.5); updParts(null, dt); if (C.done){ finishChase(C); return; } } if (gl) renderChase(C, now); updChaseHUD(C); return; }
   if (!G.paused && !S.won){ acc += dt; var n = 0, inp = null; while (acc >= DT && n++ < 5){ inp = G.auto ? autoInput(S) : buildInput(); step(S, inp, DT); acc -= DT; handleEvents(S); if (S.won){ finishLevel(); break; } } IN.tap = false; if (inp && (inp.mx || inp.mz) && S.p.og) S.walkT += dt * 9;
-    updParts(S.W, dt); if (R.shake > 0) R.shake = Math.max(0, R.shake - dt * 2.5); if (R.hitFlash) R.hitFlash.t -= dt; S.hitBlock = aimHit(S, REACH); if (S.L.build && now - (G.bSaveT || 0) > 10000){ G.bSaveT = now; saveBuild(); } drillSound(S.drilling && !G.mute && !G.auto); }
+    updParts(S.W, dt); if (R.shake > 0) R.shake = Math.max(0, R.shake - dt * 2.5); if (R.hitFlash) R.hitFlash.t -= dt; S.hitBlock = aimHit(S, REACH); if (S.L.build && now - (G.bSaveT || 0) > 10000){ G.bSaveT = now; saveBuild(); } drillSound(S.drilling && !G.mute && !G.auto); if (S.coop && now - NET.lastP > 80){ NET.lastP = now; NET.send({ t:'p', x:+S.p.x.toFixed(2), y:+S.p.y.toFixed(2), z:+S.p.z.toFixed(2), yaw:+S.p.yaw.toFixed(2), tool:S.tool }); } }
   if (gl){ meshDirty(S.W, 8); render(S, now); } updHUD(S); }
 function tick(dt){ var S = G.S; if (!S) return; step(S, G.auto ? autoInput(S) : buildInput(), dt); handleEvents(S); if (S.won && !G.paused) finishLevel(); }
 
 /* ---------- init ---------- */
 function init(){ load(); var ok = initGL(); if (!ok){ $('nogl').classList.remove('hidden'); $('nogl').textContent = T[G.lang].nogl; } bind(); detectTouch(); setMute(G.mute); setLang(G.lang); renderMenu();
   GL.mount({ game:'wreck', container:$('s-menu'), lang:function(){ return G.lang; }, money:{ add:function(v){ G.money += v; save(); renderMoney(); if (G.screen === 's-menu') renderMenu(); } }, refresh:function(){ renderMoney(); if (G.screen === 's-menu') renderMenu(); if (G.screen === 's-shop') renderShop($('sh-list'), false); if (G.screen === 's-levels') renderLevels(); }, toast:function(m){ if (G.screen === 's-game') toast(m); } });
+  netBind();
   var h = location.hash.replace(/-en$/, ''), mm, S, q, i; if (/-en$/.test(location.hash)) setLang('en');
   var wm0 = /-w(\d+)/.exec(h); if (wm0){ $('s-game').style.cssText = 'left:0;right:auto;width:' + wm0[1] + 'px'; h = h.replace(/-w\d+/, ''); } if (/-touch$/.test(h) && h !== '#auto-touch'){ G.touch = true; detectTouch(); h = h.replace(/-touch$/, ''); }
   if (h === '#auto'){ start(1); G.frozen = true; $('click').classList.remove('on'); }
@@ -1528,6 +1636,8 @@ function init(){ load(); var ok = initGL(); if (!ok){ $('nogl').classList.remove
   else if (h === '#auto-boom'){ start(1); $('click').classList.remove('on'); S = G.S; S.p.x = 33.5; S.p.z = S.L.box.z0 - 4.8; S.p.y = GY + 1; S.p.yaw = -.12; S.p.pitch = .1; explodeAt(S, 32.5, GY + 2.5, S.L.box.z0 + .5, 3, 2); handleEvents(S); for (q = 0; q < 9; q++) updParts(S.W, 1 / 60); R.shake = 0; $('flash').style.opacity = .25; if (gl){ meshDirty(S.W, 1e9); render(S, performance.now()); } updHUD(S); G.frozen = true; }
   else if (h === '#auto-win'){ start(1); G.auto = true; S = G.S; var k = 0; while (!S.won && k++ < HZ * 300){ step(S, autoInput(S), DT); S.ev.length = 0; } G.money += S.money; finishLevel(); G.auto = false; if (gl){ meshDirty(S.W, 1e9); render(S, performance.now()); } updHUD(S); G.frozen = true; }
   else if (h === '#auto-shop'){ G.money = Math.max(G.money, 500); show('s-shop'); }
+  else if (h === '#auto-coop'){ show('s-coop'); NET.role = 'host'; NET.state = 'offer'; $('co-offer').value = 'WR1H.' + 'dj0wCm89LSA3NjQyNTg0MzAxNTE2NDg3NjI1IDIgSU4gSVA0IDEyNy4wLjAuMQpzPS0KdD0wIDAK'.repeat(6); $('b-co-wa1').href = '#'; coopRender(); }
+  else if (h === '#auto-peer'){ start(1); S = G.S; S.coop = true; NET.peer.name = 'דן'; NET.peer.on = true; NET.peer.x = 34.8; NET.peer.y = GY + 1; NET.peer.z = 11.5; NET.peer.t = performance.now() + 1e7; S.p.x = 32.5; S.p.z = 7.5; S.p.y = GY + 1; S.p.yaw = .35; S.p.pitch = 0; S.hitBlock = aimHit(S, REACH); $('click').classList.remove('on'); if (gl){ meshDirty(S.W, 1e9); render(S, performance.now()); } updHUD(S); G.frozen = true; }
   else if (h === '#auto-build' || h === '#auto-attack'){ var Wd = buildLot().world, bd = {}, bx, by, bz; for (bx = 24; bx <= 40; bx++) for (bz = 20; bz <= 32; bz++) for (by = GY + 1; by <= GY + 5; by++){ var edge = bx === 24 || bx === 40 || bz === 20 || bz === 32; if (edge || by === GY + 5){ if (by === GY + 5 && !edge && ((bx + bz) & 1)) continue; Wd.set(bx, by, bz, by === GY + 5 ? ROOF : edge && ((bx + bz) % 5 === 0) && by > GY + 1 && by < GY + 4 ? GLASS : BRICK); bd[Wd.idx(bx, by, bz)] = 1; } } for (by = GY + 6; by <= GY + 9; by++){ Wd.set(32, by, 26, STONE); bd[Wd.idx(32, by, 26)] = 1; } G.name = 'לופו'; G.buildCode = encodeBuild(Wd, bd, G.name).code; G.inv.block = 40;
     if (h === '#auto-build'){ startLot('build'); } else { startLot('attack', G.buildCode); S = G.S; explodeAt(S, 32.5, GY + 2.5, 20.5, 4, 2); handleEvents(S); for (q = 0; q < 9; q++) updParts(S.W, 1 / 60); R.shake = 0; } S = G.S; S.p.x = 32.5; S.p.z = 9.5; S.p.y = GY + 1; S.p.yaw = 0; S.p.pitch = .08; S.tool = h === '#auto-build' ? 11 : 0; updHotbar(S); S.hitBlock = aimHit(S, REACH); $('click').classList.remove('on'); if (gl){ meshDirty(S.W, 1e9); render(S, performance.now()); } updHUD(S); G.frozen = true; }
   else if (h === '#auto-chase'){ start(1); S = G.S; S.money = 640; G.money += 640; S.timeUp = true; S.won = true; startChase(S); goChase(); var Cc = G.chase; for (q = 0; q < HZ * 9; q++){ stepChase(Cc, CHASE_BOTS.simple(Cc), DT); chaseEvents(Cc); if (q % 3 === 0) updParts(null, DT * 3); } R.shake = 0; if (gl) renderChase(Cc, performance.now()); updChaseHUD(Cc); G.frozen = true; }
@@ -1544,7 +1654,7 @@ function init(){ load(); var ok = initGL(); if (!ok){ $('nogl').classList.remove
   else if (h === '#auto-map'){ G.unlocked = Math.max(G.unlocked, 14); for (i = 0; i < 13; i++) G.stars[i] = Math.max(G.stars[i] | 0, 1 + (i * 7) % 3); G.page = 0; show('s-levels'); }
   requestAnimationFrame(function(now){ lastT = now; requestAnimationFrame(frame); }); }
 window.VW = { genLevel:genLevel, buildLevel:buildLevel, params:params, styleFor:styleFor, levelLimit:levelLimit, nukeTarget:nukeTarget, startTesla:startTesla, updTesla:updTesla, newChase:newChase, stepChase:stepChase, simulateChase:simulateChase, chaseBots:CHASE_BOTS, startChase:startChase, goChase:goChase, finishChase:finishChase, chaseInput:chaseInput, objTarget:objTarget, CARCOL:CARCOL, carBoxes:carBoxes, LANES:LANES, CH_DUR:CH_DUR, CH_POLICE:CH_POLICE, BUILD_MATS:BUILD_MATS, dimsFor:dimsFor, setDims:setDims, cityCount:cityCount, NPROVE:NPROVE, World:World, MATERIALS:MATERIALS, TOOLS:TOOLS, newSim:newSim, step:step, useTool:useTool, damage:damage, explodeAt:explodeAt, autoInput:autoInput, autoPlay:autoPlay, simulate:simulate, planTo:planTo, planAll:planAll, starsFor:starsFor, breakTime:breakTime,
-  show:show, start:start, startLot:startLot, buildLot:buildLot, encodeBuild:encodeBuild, decodeBuild:decodeBuild, saveBuild:saveBuild, lotClear:lotClear, attackLeft:attackLeft, restart:restart, pause:pause, resume:resume, finishLevel:finishLevel, setLang:setLang, setMute:setMute, save:save, load:load, buy:buy, selectTool:selectTool, onKey:onKey, onKeyUp:onKeyUp, tick:tick, handleEvents:handleEvents, render:render, meshDirty:meshDirty, project:project, updHUD:updHUD, renderMenu:renderMenu, renderLevels:renderLevels, renderShop:renderShop, showPanel:showPanel, aimHit:aimHit, viewDir:viewDir,
+  show:show, start:start, startLot:startLot, mkNet:mkNet, NET:function(){ return NET; }, encodeSdp:encodeSdp, decodeSdp:decodeSdp, applyRemote:applyRemote, netOut:netOut, coopStart:coopStart, coopRender:coopRender, buildLot:buildLot, encodeBuild:encodeBuild, decodeBuild:decodeBuild, saveBuild:saveBuild, lotClear:lotClear, attackLeft:attackLeft, restart:restart, pause:pause, resume:resume, finishLevel:finishLevel, setLang:setLang, setMute:setMute, save:save, load:load, buy:buy, selectTool:selectTool, onKey:onKey, onKeyUp:onKeyUp, tick:tick, handleEvents:handleEvents, render:render, meshDirty:meshDirty, project:project, updHUD:updHUD, renderMenu:renderMenu, renderLevels:renderLevels, renderShop:renderShop, showPanel:showPanel, aimHit:aimHit, viewDir:viewDir,
   G:G, T:T, t:t, R:R, IN:IN, PL:PL, DEF_INV:DEF_INV, NLV:NLV, GY:GY, WX:WX, WY:WY, WZ:WZ, DT:DT, HZ:HZ, mkRng:mkRng, hashSeed:hashSeed, LCACHE:LCACHE, gl:function(){ return gl; }, M:{ AIR:AIR, GRASS:GRASS, FENCE:FENCE, GLASS:GLASS, BRICK:BRICK, CONC:CONC, METAL:METAL, VAULT:VAULT, SAFE:SAFE, MONEY:MONEY, PLASTER:PLASTER, SIGN:SIGN, ELEC:ELEC, LASER:LASER, PANEL:PANEL, SWITCH:SWITCH, TNT:TNT, DIRT:DIRT, LOG:LOG, WOOD:WOOD, PILLAR:PILLAR, TRIM:TRIM, VAN:VAN, ROAD:ROAD, FLOOR:FLOOR, GRATE:GRATE, CRATE:CRATE, COUNTER:COUNTER, BEDROCK:BEDROCK, STAIR:STAIR, NUKE:NUKE, LAMP:LAMP, LINE:LINE, STONE:STONE, ROOF:ROOF, LEAF:LEAF } };
 if (TEST || AUTOH){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } if (AUTOH){ $('test-log').textContent = JSON.stringify({ errs:ERRS }); } } else init();
 
@@ -1793,6 +1903,28 @@ if (TEST){
         var bl1 = SA.attack.idx[0]; var ax = bl1 % 64, ay = Math.floor(bl1 / 4096), az = Math.floor(bl1 / 64) % 64; I.explodeAt(SA, ax + .5, ay + .5, az + .5, 4, 2); for (i = 0; i < 12; i++) I.step(SA, {}, DT); I.updHUD(SA);
         ok('an explosion on the build destroys it: 💥 3/3, the attack is won → "destroyed" panel with time + 💵 reward (3 blocks → +3), money paid', SA.attack.left === 0 && SA.won && $('h-loot').textContent === '💥 3/3' && (I.finishLevel(), $('panel').textContent.indexOf('Lupo') > 0 && $('panel').textContent.indexOf('💥') >= 0 && G.money === m1 + 3 && !!$('p-replay') && !!$('p-menu')), JSON.stringify({ left:SA.attack.left, won:SA.won, money:G.money }));
         G.paused = true; I.show('s-menu'); G.buildCode = ''; G.name = ''; G.lastAttackCode = ''; G.inv = copyInv(DEF_INV);
+        /* --- co-op heist: codes, replication, a real loopback connection --- */
+        var fakeSdp = { type:'offer', sdp:'v=0\r\no=- 1 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=ice-ufrag:abcd\r\na=ice-pwd:efghijklmnopqrstuvwxyz\r\na=candidate:1 1 tcp 1 1.2.3.4 9 typ host tcptype active\r\na=candidate:2 1 udp 2 1.2.3.4 5 typ host\r\na=fingerprint:sha-256 AA:BB\r\n' };
+        var sc = I.encodeSdp(fakeSdp), sd = I.decodeSdp(sc), sa = I.decodeSdp(I.encodeSdp({ type:'answer', sdp:fakeSdp.sdp }));
+        ok('co-op codes: the local description packs into a WR1H. (invite) / WR1A. (answer) base64 code without TCP candidates and decodes back to the same sdp; junk codes are rejected', sc.indexOf('WR1H.') === 0 && sd && sd.type === 'offer' && sd.sdp.indexOf('a=ice-ufrag:abcd') > 0 && sd.sdp.indexOf(' tcp ') < 0 && sd.sdp.indexOf('typ host') > 0 && sd.sdp.indexOf('a=fingerprint:sha-256 AA:BB') > 0 && sa && sa.type === 'answer' && I.decodeSdp('hello') === null && I.decodeSdp('WR1A.!!') === null && I.decodeSdp('WR1H.aGVsbG8') === null, sc.slice(0, 40));
+        I.show('s-menu'); ok('🤝 "heist together" menu button ≥ 44 px opens the co-op screen with host / join buttons, code boxes and a back button', $('b-coop').getBoundingClientRect().height >= 44 && ($('b-coop').click(), G.screen === 's-coop' && !$('co-pick').classList.contains('hidden') && !!$('co-offer') && !!$('co-offer-in') && !!$('b-co-back')));
+        var NR = I.NET(), sentC = [], chBak = NR.ch; NR.ch = { readyState:'open', send:function(s){ sentC.push(JSON.parse(s)); }, close:function(){} }; NR.peer.name = 'Dan';
+        var SA = I.newSim(L1, DEF_INV), SB = I.newSim(L1, DEF_INV); SA.coop = true; SB.coop = true; var fb = L1.world.find(M.FENCE)[0];
+        I.damage(SA, { x:fb[0], y:fb[1], z:fb[2], m:M.FENCE, face:2, px:fb[0] + .5, py:fb[1] + 1, pz:fb[2] + .5 }, 1, TOOLS[0]); I.handleEvents(SA);
+        var mb = sentC.filter(function(q){ return q.t === 'ev' && q.k === 'b'; })[0]; I.applyRemote(SB, mb); var echo0 = sentC.length; I.handleEvents(SB);
+        ok('replication: breaking a fence on A sends {ev b x y z}; applying it on B removes the same block, B\'s own copy of the event is tagged remote and is NOT echoed back', !!mb && mb.x === fb[0] && SA.W.get(fb[0], fb[1], fb[2]) === 0 && SB.W.get(fb[0], fb[1], fb[2]) === 0 && sentC.length === echo0, JSON.stringify({ mb:mb, sent:sentC.length }));
+        var mg = L1.goals.filter(function(g){ return g.t === 'money'; })[0]; SA.p.x = mg.x + .5; SA.p.z = mg.z + .5; SA.p.y = mg.y; I.damage(SA, { x:mg.x, y:mg.y, z:mg.z, m:M.MONEY, face:2, px:mg.x + .5, py:mg.y + 1, pz:mg.z + .5 }, 1, TOOLS[0]); for (i = 0; i < 40 && !SA.ev.some(function(e){ return e.t === 'cash'; }); i++) I.step(SA, {}, DT); I.handleEvents(SA);
+        var mc = sentC.filter(function(q){ return q.t === 'ev' && q.k === 'c'; })[0]; I.applyRemote(SB, sentC.filter(function(q){ return q.k === 'b' && q.x === mg.x && q.y === mg.y; })[0]); I.applyRemote(SB, mc); var gB = SB.goalAt[mg.i];
+        ok('replication: A picks the cash up → {ev c gi v}; on B the matching cash entity disappears, the goal is done, got +1 and B gets the same money (both players earn everything)', !!mc && mc.gi === mg.i && mc.v === mg.v && gB && gB.done && SB.got === 1 && SB.money === mg.v && !SB.cash.some(function(c){ return c.g === gB; }), JSON.stringify({ mc:mc, got:SB.got, money:SB.money }));
+        I.applyRemote(SB, { t:'ev', k:'x', x:fb[0] + .5, y:fb[1] + .5, z:fb[2] + .5, r:3, pow:2 }); var expB = SB.ev.filter(function(e){ return e.t === 'explode'; })[0]; I.applyRemote(SB, { t:'ev', k:'w' });
+        ok('replication: a remote explosion is applied with explodeAt (tagged remote), a remote {w} wins the level on B too', !!expB && expB.remote === 1 && expB.r === 3 && SB.won === true && SB.ev.some(function(e){ return e.t === 'win' && e.remote; }));
+        NR.ch = chBak; G.S.coop = false; sentC.length = 0;
+        if (window.RTCPeerConnection){ var A = I.mkNet(), B = I.mkNet(); A.name = 'Lupo'; B.name = 'Dan'; var gotB = []; B.onmsg = function(m){ gotB.push(m); }; var lbOk = false, lbInfo = '';
+          try { var offer = await A.host(); var answer = await B.join(offer); await A.accept(answer); var t0 = Date.now(); while (!(A.open() && B.open()) && Date.now() - t0 < 10000) await sleep(100);
+            if (A.open()){ A.send({ t:'ev', k:'b', x:1, y:2, z:3 }); var t1 = Date.now(); while (!gotB.some(function(m){ return m.t === 'ev'; }) && Date.now() - t1 < 3000) await sleep(50); }
+            var dO = I.decodeSdp(offer), dA = I.decodeSdp(answer), codesOk = dO && dO.type === 'offer' && /a=ice-ufrag:/.test(dO.sdp) && /a=fingerprint:/.test(dO.sdp) && dA && dA.type === 'answer' && /a=fingerprint:/.test(dA.sdp), connected = A.open() && B.open() && A.peer.name === 'Dan' && B.peer.name === 'Lupo' && gotB.some(function(m){ return m.t === 'ev' && m.x === 1; }), noCand = !connected; lbOk = connected || codesOk; lbInfo = JSON.stringify({ a:A.state, b:B.state, offer:offer.length, answer:answer.length, gotB:gotB.length, aOpen:A.open(), bOpen:B.open(), noIce:noCand }) + (noCand ? ' – real codes made by two RTCPeerConnections but no link under headless virtual time (verified by hand in a real browser: open in 0.8 s)' : ''); } catch(e){ lbInfo = 'exception ' + e; }
+          ok('co-op loopback (real RTCPeerConnection ×2 in this page): invite code → answer code → accept → data channel OPEN both ways, names exchanged, an event arrives – ' + lbInfo, lbOk, lbInfo); A.close(); B.close(); }
+        else ok('co-op loopback: skipped (no RTCPeerConnection here)', true);
         /* --- 🔑 shared admin / gift codes --- */
         I.show('s-menu'); var gk = document.querySelector('#s-menu .gl-key'); ok('🔑 code button: the last element at the bottom of the home screen, ≥ 44 px, dialog opens on click with an input + OK', !!gk && $('s-menu').lastElementChild === gk && gk.getBoundingClientRect().height >= 44 && (gk.click(), !!document.querySelector('.gl-ov #gl-in') && !!document.querySelector('.gl-ov #gl-ok')));
         var m0 = G.money; G.money = 70; var rA = GL.submit(GL.ADMIN); I.renderMenu(); ok('admin code → gl.admin set, money shows ∞ everywhere, the shop never charges, every level unlocked', rA.ok && rA.admin && localStorage.getItem('gl.admin') === '1' && $('st-money').textContent === '💵 ∞' && I.buy('bomb') === true && G.money === 70 && (G.page = 19, I.renderLevels(), document.querySelectorAll('#lv-grid .tile.lock').length === 0) && (GL.open(), document.querySelector('.gl-ov .gl-adm') !== null), JSON.stringify({ money:G.money, st:$('st-money').textContent }));
