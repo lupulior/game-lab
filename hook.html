@@ -274,7 +274,7 @@ var GL = (function(){
 var TEST = location.hash === '#test', ERRS = [];
 if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
 var $ = function(id){ return document.getElementById(id); };
-var KEY = 'hook.v1', W = 960, H = 540, HZ = 60, DT = 1 / HZ, NLV = 500, GRAV = 1600, PR = 12, VMAX = 1700, SHRINK = 90, MINF = .6, BOOST = 900, PULL = 3800, GSHRINK = 600, GMIN = 90, PADV = 980, REST = .28, GRAPPLE_AT = 30, SIMMAX = 20, DEATHY = 430, STUCK = 1.2;
+var KEY = 'hook.v1', W = 960, H = 540, HZ = 60, DT = 1 / HZ, NLV = 500, GRAV = 1600, PR = 12, VMAX = 1700, SHRINK = 90, MINF = .6, BOOST = 900, PULL = 3800, GSHRINK = 600, GMIN = 90, PADV = 980, GRAB = 440, TGAIN = 1.08, REST = .28, GRAPPLE_AT = 30, SIMMAX = 20, DEATHY = 430, STUCK = 1.2;
 function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
 function lerp(a, b, t){ return a + (b - a) * t; }
 
@@ -283,13 +283,13 @@ var T = {
 he:{ title:'סטיקמן הוק', sub:'איש מקל על חבל', tagline:'לחצו כדי לתפוס וו, שחררו כדי לעוף – וצברו תנופה בכל נדנדה!', play:'▶ שחק', cont:'▶ שלב {n}', classic:'קלאסי', grapple:'גראפל', classicSub:'שלב {n} / 500 · נדנדה קלאסית', grappleSub:'שלב {n} / 500 · הוו מושך אתכם',
   lockGrapple:'סיימו 30 שלבים קלאסיים', done:'{n} שלבים', streak:'רצף {n}', skins:'סקינים', allSkins:'כל הסקינים ▶', weekly:'⭐ סקין השבוע', half:'50% הנחה!', buy:'קנה', equip:'בחר', equipped:'✓ נבחר', locked:'נעול', lockLvl:'נפתח אחרי {n} שלבים', free:'חינם',
   skinsHow:'סקינים קלאסיים נפתחים לפי התקדמות · סקינים מיוחדים נקנים במטבעות',
-  how:'החזיקו את האצבע על המסך (או רווח / עכבר) כדי להיתפס לוו הקרוב, ושחררו כדי לעוף קדימה. שחררו לפני שיא הנדנדה כדי לעוף רחוק, דלגו על ווים כשיש לכם תנופה, קפצו על הקפיצים – והגיעו לקו הסיום המשובץ! נפילה או קוצים = התחלה מחדש מיידית.',
+  how:'החזיקו את האצבע על המסך (או רווח / עכבר) – החבל נתפס תמיד לוו הכי קרוב אליכם, לא משנה איפה אתם – ושחררו כדי לעוף קדימה. שחררו לפני שיא הנדנדה כדי לעוף רחוק, דלגו על ווים כשיש לכם תנופה, הטרמפולינות הצהובות מקפיצות אתכם בכוח מכל צד – והגיעו לקו הסיום המשובץ! נפילה או קוצים = התחלה מחדש מיידית.',
   kSpace:'רווח', kMouse:'עכבר', kHold:'החזקה = תפיסה', kRestart:'מחדש', kMenu:'תפריט', more:'🎮 עוד משחקים', rotate:'🔄 סובבו את המכשיר למסך גדול יותר', back:'◀ חזרה', level:'שלב {n}', done1:'שלב {n} ✔', next:'הבא ▶', again:'שוב ↻', menu:'🏠 תפריט', resume:'▶ המשך', paused:'הפסקה',
   coinsEarned:'+{n} 🪙', flawless:'בלי נפילות! 🌟', nextSkin:'הסקין הבא: {n}', skinUnlocked:'נפתח סקין חדש: {n}! 🎉', allDone:'סיימתם את כל 500 השלבים! 🏆', noCoins:'אין מספיק מטבעות', bought:'קניתם את {n}!', allSkinsOwn:'כל הסקינים פתוחים! 🏆', tapToStart:'לחצו כדי לתפוס' },
 en:{ title:'Stickman Hook', sub:'Stickman on a rope', tagline:'Press to grab a hook, release to fly – build momentum with every swing!', play:'▶ PLAY', cont:'▶ Level {n}', classic:'CLASSIC', grapple:'GRAPPLE', classicSub:'Level {n} / 500 · classic swing', grappleSub:'Level {n} / 500 · the hook pulls you',
   lockGrapple:'Finish 30 classic levels', done:'{n} levels', streak:'streak {n}', skins:'SKINS', allSkins:'All skins ▶', weekly:'⭐ Skin of the week', half:'50% off!', buy:'Buy', equip:'Equip', equipped:'✓ Equipped', locked:'Locked', lockLvl:'Unlocks after {n} levels', free:'Free',
   skinsHow:'Classic skins unlock with progress · special skins cost coins',
-  how:'Hold your finger on the screen (or Space / mouse) to grab the nearest hook, release to launch forward. Release before the top of the swing to fly far, skip hooks when you already have momentum, bounce on the jump pads – and reach the checkered finish line! Falling or spikes = instant restart.',
+  how:'Hold your finger on the screen (or Space / mouse) – the rope always grabs the hook nearest to you, wherever you are – and release to launch forward. Release before the top of the swing to fly far, skip hooks when you already have momentum, the yellow trampolines fling you back hard from any side – and reach the checkered finish line! Falling or spikes = instant restart.',
   kSpace:'Space', kMouse:'mouse', kHold:'hold = grab', kRestart:'restart', kMenu:'menu', more:'🎮 More games', rotate:'🔄 Rotate your device for a bigger screen', back:'◀ Back', level:'Level {n}', done1:'Level {n} ✔', next:'Next ▶', again:'Again ↻', menu:'🏠 Menu', resume:'▶ Resume', paused:'PAUSED',
   coinsEarned:'+{n} 🪙', flawless:'Flawless! 🌟', nextSkin:'Next skin: {n}', skinUnlocked:'New skin unlocked: {n}! 🎉', allDone:'You finished all 500 levels! 🏆', noCoins:'Not enough coins', bought:'You bought {n}!', allSkinsOwn:'All skins unlocked! 🏆', tapToStart:'Press to grab' } };
 function t(k, o){ var s = T[G.lang][k]; if (s == null) s = T.he[k]; if (s == null) return k; if (o) for (var p in o) s = s.split('{' + p + '}').join(o[p]); return s; }
@@ -348,14 +348,15 @@ var HUES = [268, 222, 190, 24, 335, 300, 205, 160, 42, 350, 250, 12];
 var YMIN = -470, YMAX = -70, LCACHE = {};
 function build(n, tr){
   var rng = mkRng((n * 7919 + tr * 104729 + 13) >>> 0), d = (n - 1) / (NLV - 1), rx = Math.min(1, tr / 8);
-  var hooks = [], blocks = [], spikes = [], pads = [], i;
-  var gap = 250 + 120 * d * (1 - .5 * rx), hv = 50 + 80 * d * (1 - .4 * rx), R = 190 - 40 * d * (1 - .5 * rx);
+  var hooks = [], blocks = [], spikes = [], tramps = [], i;
+  var gap = 250 + 130 * d * (1 - .5 * rx), hv = 50 + 90 * d * (1 - .4 * rx), R = 190 - 40 * d * (1 - .5 * rx);
   blocks.push({ x:-230, y:0, w:290, h:90 });
   var cx = 125 + rng() * 25, cy = -(105 + rng() * 25);
   hooks.push({ x:cx, y:cy, r:R + 12 });
   var nseg = 4 + Math.round(d * 3) + Math.floor(rng() * 2);
   var hz = tr >= 30 ? 0 : 1 - .7 * rx, gw = tr >= 30 ? .2 : 1;
-  var wts = { chain:3, gap:(n >= 4 ? (.6 + 2 * d) * gw : 0), plat:Math.max(.2, 1.6 - d), spike:(n >= 8 ? 2.2 * d * hz : 0), pad:(n >= 6 ? (.6 + d) * gw : 0), wall:(n >= 12 ? 2 * d * hz : 0), ceil:(n >= 20 ? 1.6 * d * hz : 0), corr:(n >= 60 ? 1.6 * d * hz : 0) };
+  /* trampolines like the original's bouncy blocks: bouncy floors from level 5, bouncy walls from level 25 – more of them, narrower and taller as the levels go up */
+  var wts = { chain:3, gap:(n >= 4 ? (.6 + 2 * d) * gw : 0), plat:Math.max(.2, 1.6 - d), spike:(n >= 8 ? 2.2 * d * hz : 0), tramp:(n >= 5 ? (1.4 + 1.8 * d) * gw : 0), twall:(n >= 25 ? (.9 + 1.8 * d) * gw * (.5 + .5 * hz) : 0), wall:(n >= 12 ? 2 * d * hz : 0), ceil:(n >= 20 ? 1.6 * d * hz : 0), corr:(n >= 60 ? 1.6 * d * hz : 0) };
   function nextY(bias){ var y = cy + (rng() * 2 - 1) * hv + (bias || 0); y += (-270 - y) * .15; return clamp(y, YMIN, YMAX); }
   function hook(x, y, rr){ hooks.push({ x:x, y:y, r:rr || R }); cx = x; cy = y; }
   var kinds = [];
@@ -364,7 +365,12 @@ function build(n, tr){
     if (k === 'chain'){ var m = 2 + Math.floor(rng() * 2); for (var j = 0; j < m; j++){ if (i === 0 && j === 0) hook(cx + 245 + rng() * 25, clamp(cy - 10 - rng() * 40, YMIN, YMAX), R + 8); else hook(cx + gap * (.85 + .3 * rng()), nextY()); } }
     else if (k === 'gap'){ hook(cx + gap * (1.25 + .15 * d), nextY(-20), R + 15); }
     else if (k === 'plat'){ var pg = Math.max(g, 260); hook(cx + pg, nextY(40), R + 8); var pr = R + 8, pdy = 112, pa = Math.min(pg - 130, Math.sqrt(Math.max(0, (pr * .93) * (pr * .93) - (pdy - PR) * (pdy - PR)))), pw = Math.max(70, pa - 70); blocks.push({ x:cx - 70 - pw, y:cy + pdy, w:pw, h:56 }); }
-    else if (k === 'pad'){ var up = rng() < .5, bx0 = cx + 150, btop = cy + 130; blocks.push({ x:bx0, y:btop, w:170, h:56 }); pads.push({ x:bx0 + 20, y:btop - 14, w:130, h:14, dir:up ? 'up' : 'fwd' }); hook(cx + (up ? 470 : 560), clamp(cy - (up ? 170 : 90) - 40 * rng(), YMIN, YMAX), R + 10); }
+    else if (k === 'tramp'){ /* bouncy floor: the next hook sits too high and far for a plain swing – drop onto the trampoline and let it fling you up; it gets narrower and the hook higher with the level */
+      var tw = 170 - 90 * d * (1 - .5 * rx), tx0 = cx + 225 + 50 * rng(), ttop = cy + 200 + 60 * d; tramps.push({ x:tx0, y:ttop, w:tw, h:36, dir:'y' });
+      hook(tx0 + tw / 2 + 110 + 90 * d * (1 - .5 * rx), clamp(cy - 140 - 110 * d * (1 - .5 * rx) - 40 * rng(), YMIN, YMAX), R + 10); }
+    else if (k === 'twall'){ /* bouncy wall: flying into it flings you back up; the hook above it lets you swing over, the next one waits behind it */
+      var wx2 = cx + 340 + 50 * rng(), wtop2 = cy - 100 - 90 * d * (1 - .5 * rx), wh = 300 + 160 * d; tramps.push({ x:wx2, y:wtop2, w:40, h:wh, dir:'x' });
+      hook(wx2 - 130 - 40 * rng(), clamp(wtop2 - 120 - 40 * rng(), YMIN, YMAX), R + 10); hook(wx2 + 240 + 60 * rng(), nextY(), R + 10); }
     else if (k === 'spike'){ hook(cx + g, nextY(), R); var sfy = cy + R + 64, sx0 = cx - 40 - rng() * 40, sw = 220 + rng() * 80; blocks.push({ x:sx0, y:sfy, w:sw, h:56 }); spikes.push({ x:sx0 + 8, y:sfy - 18, w:sw - 16, h:18 }); }
     else if (k === 'wall'){ var wx = cx + g * .55, wtop = cy + 150 - 110 * d * (1 - .5 * rx); blocks.push({ x:wx, y:wtop, w:50 + 30 * rng(), h:900 }); hook(cx + g * 1.15, nextY(-30)); }
     else if (k === 'ceil'){ var c0 = cx + 40; hook(cx + g, nextY(30)); blocks.push({ x:c0, y:cy - 470, w:cx - c0 + 100, h:410 - 30 * d }); }
@@ -372,7 +378,7 @@ function build(n, tr){
   }
   var fx = cx + 270 + rng() * 60, ftop = cy + 170; blocks.push({ x:fx - 120, y:ftop, w:380, h:90 });
   for (i = 1; i < hooks.length; i++) if (hooks[i].x <= hooks[i - 1].x) hooks[i].x = hooks[i - 1].x + 40;
-  return { n:n, seed:tr, hue:HUES[(n - 1) % HUES.length], hooks:hooks, blocks:blocks, spikes:spikes, pads:pads, finish:{ x:fx, y:ftop - 180, h:180 }, startX:0, startY:-PR, deathY:DEATHY, len:fx, kinds:kinds, tries:tr + 1 };
+  return { n:n, seed:tr, hue:HUES[(n - 1) % HUES.length], hooks:hooks, blocks:blocks, spikes:spikes, tramps:tramps, finish:{ x:fx, y:ftop - 180, h:180 }, startX:0, startY:-PR, deathY:DEATHY, len:fx, kinds:kinds, tries:tr + 1 };
 }
 function genLevel(n){ n = clamp(n | 0 || 1, 1, NLV); if (LCACHE[n]) return LCACHE[n]; var L = null;
   var maxT = n <= 30 ? 10 : 16; /* early levels must also play quickly */
@@ -381,11 +387,10 @@ function genLevel(n){ n = clamp(n | 0 || 1, 1, NLV); if (LCACHE[n]) return LCACH
 
 /* ---------- physics engine (pure, deterministic) ---------- */
 function newRun(L, mode){ return { L:L, mode:mode === 'grapple' ? 'grapple' : 'classic', x:L.startX, y:L.startY, vx:0, vy:0, hook:-1, rope:0, rope0:0, attachT:0, lastHook:-1, cool:0, t:0, dead:false, won:false, over:false, standing:true, wasSt:true, stillT:0, padCool:0, squash:0, winT:0, ev:[] }; }
-/* the rope always goes to the NEAREST hook in range (pure distance from the head, no direction bias); the hook just released is skipped during its 0.3 s cooldown */
-function findHook(S){ var L = S.L, hs = L.hooks, best = -1, bd = 1e9, i;
-  for (i = 0; i < hs.length; i++){ var h = hs[i]; if (i === S.lastHook && S.cool > 0) continue; var dx = h.x - S.x; if (dx > 260 || dx < -260) continue; var dy = h.y - S.y, d = Math.sqrt(dx * dx + dy * dy); if (d > h.r) continue; if (d < bd){ bd = d; best = i; } }
-  return best; }
-function hitBlock(S, b){ var cx = clamp(S.x, b.x, b.x + b.w), cy = clamp(S.y, b.y, b.y + b.h), dx = S.x - cx, dy = S.y - cy, d2 = dx * dx + dy * dy, nx, ny, pen;
+/* like the original: the rope always goes to the NEAREST hook anywhere within GRAB px (pure distance from the head, no per-hook circle, no direction bias); the hook just released is skipped during its 0.3 s cooldown */
+function findHook(S){ var L = S.L, hs = L.hooks, best = -1, bd = GRAB * GRAB, i;
+  for (i = 0; i < hs.length; i++){ var h = hs[i]; if (i === S.lastHook && S.cool > 0) continue; var dx = h.x - S.x; if (dx > GRAB || dx < -GRAB) continue; var dy = h.y - S.y, d2 = dx * dx + dy * dy; if (d2 < bd){ bd = d2; best = i; } }
+  return best; }function hitBlock(S, b){ var cx = clamp(S.x, b.x, b.x + b.w), cy = clamp(S.y, b.y, b.y + b.h), dx = S.x - cx, dy = S.y - cy, d2 = dx * dx + dy * dy, nx, ny, pen;
   if (d2 >= PR * PR) return false;
   if (S.y < b.y + PR * 1.6 && S.y > b.y - PR && S.vy > -200 && ((S.x < b.x && S.vx > 0) || (S.x > b.x + b.w && S.vx < 0))){ S.y = b.y - PR; if (S.vy > 0) S.vy = 0; S.standing = true; if (!S.wasSt){ S.ev.push('land'); S.squash = Math.max(S.squash, .5); } return true; }
   if (d2 > 1e-6){ var d = Math.sqrt(d2); nx = dx / d; ny = dy / d; pen = PR - d; }
@@ -397,6 +402,20 @@ function hitBlock(S, b){ var cx = clamp(S.x, b.x, b.x + b.w), cy = clamp(S.y, b.
     if (ny < -.7) S.vx *= (S.hook >= 0 ? .995 : .82); else S.vy *= .9; }
   else if (ny < -.7 && S.vy >= 0 && S.vy < 40){ S.vy = 0; S.standing = true; }
   return true; }
+/* trampolines (the original's bouncy blocks): from whichever side you hit one you are flung straight back out along its face – at least PADV fast, faster (×TGAIN) if you came in fast – and the rope lets go */
+function hitTramp(S, b, idx){ var cx = clamp(S.x, b.x, b.x + b.w), cy = clamp(S.y, b.y, b.y + b.h), dx = S.x - cx, dy = S.y - cy, d2 = dx * dx + dy * dy, nx, ny, pen;
+  if (d2 >= PR * PR) return false;
+  if (d2 > 1e-6){ var dd = Math.sqrt(d2); nx = dx / dd; ny = dy / dd; pen = PR - dd; }
+  else { var l = S.x - b.x, r = b.x + b.w - S.x, tp = S.y - b.y, bt = b.y + b.h - S.y, m = Math.min(l, r, tp, bt); if (m === tp){ nx = 0; ny = -1; } else if (m === bt){ nx = 0; ny = 1; } else if (m === l){ nx = -1; ny = 0; } else { nx = 1; ny = 0; } pen = m + PR; }
+  if (Math.abs(nx) >= Math.abs(ny)){ nx = nx < 0 ? -1 : 1; ny = 0; } else { ny = ny < 0 ? -1 : 1; nx = 0; }
+  S.x += nx * pen; S.y += ny * pen;
+  if (S.padCool > 0) return true;
+  var vn = S.vx * nx + S.vy * ny; if (vn > 30) return true; /* resting or grazing contact still gets flung */
+  var out = Math.min(VMAX, Math.max(-vn * TGAIN, PADV));
+  S.vx += (out - vn) * nx; S.vy += (out - vn) * ny;
+  S.padCool = .2; S.standing = false; S.squash = 1; S.lastTramp = idx;
+  if (S.hook >= 0){ S.lastHook = S.hook; S.hook = -1; S.cool = .4; }
+  S.ev.push('pad'); return true; }
 function overlap(S, b, sh){ sh = sh || 0; var cx = clamp(S.x, b.x + sh, b.x + b.w - sh), cy = clamp(S.y, b.y + sh, b.y + b.h - sh), dx = S.x - cx, dy = S.y - cy; return dx * dx + dy * dy < PR * PR; }
 function step(S, hold, dt){ if (S.dead || (S.won && S.winT > 1.2)) return; var L = S.L, i, b;
   S.t += dt; S.cool -= dt; S.padCool -= dt; if (S.squash > 0) S.squash = Math.max(0, S.squash - 4 * dt);
@@ -421,7 +440,7 @@ function step(S, hold, dt){ if (S.dead || (S.won && S.winT > 1.2)) return; var L
   for (i = 0; i < L.blocks.length; i++){ b = L.blocks[i]; if (b.x > S.x + PR + 2 || b.x + b.w < S.x - PR - 2) continue; hitBlock(S, b); }
   if (S.standing && S.hook < 0 && Math.abs(S.vx) > 0){ S.vx *= Math.max(0, 1 - 6 * dt); if (Math.abs(S.vx) < 4) S.vx = 0; }
   if (S.won) return;
-  for (i = 0; i < L.pads.length; i++){ b = L.pads[i]; if (S.padCool <= 0 && overlap(S, b, -2)){ S.padCool = .35; S.standing = false; S.y = Math.min(S.y, b.y - PR + 2); if (S.hook >= 0){ S.lastHook = S.hook; S.hook = -1; S.cool = .4; } if (b.dir === 'fwd'){ S.vx = Math.max(S.vx, 620); S.vy = Math.min(S.vy, -700); } else { S.vy = -PADV; S.vx = Math.max(S.vx, 160); } S.squash = 1; S.ev.push('pad'); } }
+  for (i = 0; i < L.tramps.length; i++){ b = L.tramps[i]; if (b.x > S.x + PR + 2 || b.x + b.w < S.x - PR - 2 || b.y > S.y + PR + 2 || b.y + b.h < S.y - PR - 2) continue; hitTramp(S, b, i); }
   for (i = 0; i < L.spikes.length; i++){ b = L.spikes[i]; if (overlap(S, b, 3)){ S.dead = true; S.over = true; S.hook = -1; S.ev.push('die'); return; } }
   if (S.y > L.deathY){ S.dead = true; S.over = true; S.hook = -1; S.ev.push('die'); return; }
   if (S.standing && Math.abs(S.vx) < 5 && S.hook < 0){ S.stillT += dt; if (S.stillT > STUCK && findHook(S) < 0 && !(hold && S.t < .5)){ S.dead = true; S.over = true; S.ev.push('die'); S.ev.push('stuck'); return; } } else S.stillT = 0;
@@ -441,9 +460,10 @@ function autoInput(S){ var L = S.L, hk;
   if (S.mode === 'grapple'){ var gx = hk.x - S.x, gy = S.y - hk.y; return gx > 20 && gx > .45 * gy && (gy > -120 || S.standing); }
   if (S.standing) return true;
   if (hk.x > S.x + 20 && hk.y < S.y + 30){ if (S.vy < -380 && S.vx > 520) return false; return true; }
-  if (S.vy > 150 && hk.y < S.y) return true;
+  if (S.vy > 150 && hk.y < S.y) return !trampAhead(S); /* falling: grab anything above – unless a trampoline below is about to fling us up anyway */
   return false; }
-function simulate(L, mode){ var S = newRun(L, mode), n = 0, maxN = Math.round(SIMMAX * HZ), hold = false, held = 0;
+/* is the falling stickman going to land on a bouncy floor? (ballistic landing spot vs the trampoline's top) */
+function trampAhead(S){ var L = S.L, i; for (i = 0; i < L.tramps.length; i++){ var b = L.tramps[i]; if (b.dir !== 'y' || b.y < S.y) continue; var h = b.y - PR - S.y, tf = (-S.vy + Math.sqrt(S.vy * S.vy + 2 * GRAV * h)) / GRAV, lx = S.x + S.vx * tf; if (lx > b.x - 6 && lx < b.x + b.w + 6) return true; } return false; }function simulate(L, mode){ var S = newRun(L, mode), n = 0, maxN = Math.round(SIMMAX * HZ), hold = false, held = 0;
   while (!S.over && n < maxN){ hold = autoInput(S); step(S, hold, DT); if (hold) held++; S.ev.length = 0; n++; }
   return { won:S.won, time:S.t, dead:S.dead, x:S.x }; }
 
@@ -465,7 +485,7 @@ function vibrate(ms){ try { if (navigator.vibrate) navigator.vibrate(ms); } catc
 
 /* ---------- rendering ---------- */
 var cv, ctx, BGS = {}, lastT = 0, acc = 0, NOW = 0;
-var FX = { shake:0, flash:0, parts:[], trail:[] };
+var FX = { shake:0, flash:0, parts:[], trail:[], tramp:{} };
 function mkCanvas(w, h){ var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 function bgCanvas(hue){ if (BGS[hue]) return BGS[hue]; var c = mkCanvas(W, H), x = c.getContext('2d'), g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'hsl(' + hue + ',62%,52%)'); g.addColorStop(.5, 'hsl(' + ((hue + 350) % 360) + ',60%,44%)'); g.addColorStop(1, 'hsl(' + ((hue + 335) % 360) + ',64%,34%)'); x.fillStyle = g; x.fillRect(0, 0, W, H);
   x.globalAlpha = .035; x.fillStyle = '#fff'; for (var i = 0; i < 9; i++){ var r = 50 + (i * 37) % 90; x.beginPath(); x.arc((i * 211 + 60) % W, (i * 137 + 40) % H, r, 0, 6.2832); x.fill(); } x.globalAlpha = 1; BGS[hue] = c; return c; }
@@ -519,13 +539,17 @@ function render(){ var S = G.S; if (!S || !ctx) return; var L = S.L, c = ctx, i,
   for (i = 0; i < L.blocks.length; i++){ var b = L.blocks[i]; if (b.x + b.w < camx - 20 || b.x > camx + W + 20 || b.y > camy + H + 20 || b.y + b.h < camy - 20) continue; c.fillStyle = '#17151F'; rrect(c, b.x, b.y, b.w, Math.min(b.h, camy + H + 60 - b.y), 10); c.fill(); c.strokeStyle = 'rgba(255,255,255,.14)'; c.lineWidth = 2; c.beginPath(); c.moveTo(b.x + 10, b.y + 1.5); c.lineTo(b.x + b.w - 10, b.y + 1.5); c.stroke(); }
   /* spikes */
   c.fillStyle = '#F4F1FF'; for (i = 0; i < L.spikes.length; i++){ var s = L.spikes[i]; if (s.x + s.w < camx || s.x > camx + W) continue; var n = Math.max(1, Math.round(s.w / 14)), sw = s.w / n; c.beginPath(); for (var j = 0; j < n; j++){ c.moveTo(s.x + j * sw, s.y + s.h); c.lineTo(s.x + j * sw + sw / 2, s.y); c.lineTo(s.x + (j + 1) * sw, s.y + s.h); } c.closePath(); c.fill(); }
-  /* pads */
-  for (i = 0; i < L.pads.length; i++){ var p = L.pads[i]; if (p.x + p.w < camx || p.x > camx + W) continue; c.fillStyle = '#2B2838'; rrect(c, p.x - 4, p.y + 4, p.w + 8, p.h + 4, 4); c.fill(); c.fillStyle = p.dir === 'fwd' ? '#7EE8FF' : '#FFD23F'; rrect(c, p.x, p.y, p.w, 9, 4); c.fill(); c.strokeStyle = '#17151F'; c.lineWidth = 2; c.beginPath(); if (p.dir === 'fwd'){ c.moveTo(p.x + p.w * .35, p.y + 2); c.lineTo(p.x + p.w * .5, p.y + 4.5); c.lineTo(p.x + p.w * .35, p.y + 7); c.moveTo(p.x + p.w * .55, p.y + 2); c.lineTo(p.x + p.w * .7, p.y + 4.5); c.lineTo(p.x + p.w * .55, p.y + 7); } else { c.moveTo(p.x + p.w * .4, p.y + 7); c.lineTo(p.x + p.w * .5, p.y + 2); c.lineTo(p.x + p.w * .6, p.y + 7); } c.stroke(); }
-  /* finish line: black & white checkers */
+  /* trampolines: yellow bouncy blocks with an orange core and stripes, squashing for 0.3 s after a bounce */
+  for (i = 0; i < L.tramps.length; i++){ var p = L.tramps[i]; if (p.x + p.w < camx || p.x > camx + W || p.y > camy + H || p.y + p.h < camy) continue; var ht = FX.tramp[i], sq = ht != null ? Math.max(0, 1 - (NOW - ht) / .3) : 0, k2 = Math.sin(sq * Math.PI) * .22, px = p.x, py = p.y, pw = p.w, ph = p.h;
+    if (p.dir === 'y'){ py += ph * k2; ph -= ph * k2; px -= pw * k2 * .5; pw += pw * k2; } else { px += pw * k2 * .5; pw -= pw * k2; py -= ph * k2 * .5; ph += ph * k2; }
+    c.fillStyle = '#17151F'; rrect(c, px - 3, py - 3, pw + 6, ph + 6, 9); c.fill(); c.fillStyle = '#FFD23F'; rrect(c, px, py, pw, ph, 7); c.fill();
+    if (pw > 16 && ph > 16){ c.save(); rrect(c, px + 6, py + 6, pw - 12, ph - 12, 5); c.clip(); c.fillStyle = '#FF9A3C'; c.fillRect(px, py, pw, ph); c.strokeStyle = 'rgba(23,21,31,.3)'; c.lineWidth = 4; c.beginPath(); for (var q2 = -ph; q2 < pw + ph; q2 += 18){ c.moveTo(px + q2, py + ph); c.lineTo(px + q2 + ph, py); } c.stroke(); c.restore(); } }  /* finish line: black & white checkers */
   var f = L.finish; if (f.x + 30 > camx && f.x - 30 < camx + W){ var sq = 12, cols = 2, rows = Math.round(f.h / sq); for (i = 0; i < rows; i++) for (var q = 0; q < cols; q++){ c.fillStyle = (i + q) % 2 ? '#F7F7FF' : '#17151F'; c.fillRect(f.x - sq + q * sq, f.y + i * sq, sq, sq); } c.fillStyle = '#17151F'; c.fillRect(f.x - 3, f.y - 16, 6, 16); c.fillStyle = '#FF4B4B'; c.beginPath(); c.moveTo(f.x + 3, f.y - 16); c.lineTo(f.x + 28, f.y - 9); c.lineTo(f.x + 3, f.y - 2); c.closePath(); c.fill(); }
-  /* hooks: node + dashed grab radius */
-  for (i = 0; i < L.hooks.length; i++){ var h = L.hooks[i]; if (h.x + h.r < camx || h.x - h.r > camx + W) continue; var on = S.hook === i; c.setLineDash([7, 7]); c.lineWidth = on ? 2 : 1.5; c.strokeStyle = on ? 'rgba(255,255,255,.75)' : 'rgba(255,255,255,.32)'; c.beginPath(); c.arc(h.x, h.y, h.r, 0, 6.2832); c.stroke(); c.setLineDash([]); c.fillStyle = '#C9CBD6'; c.beginPath(); c.arc(h.x, h.y, 9, 0, 6.2832); c.fill(); c.fillStyle = '#6B6E80'; c.beginPath(); c.arc(h.x, h.y, 4, 0, 6.2832); c.fill(); }
-  /* speed trail */
+  /* hooks: grey pulleys like the original – no range circles; the one the rope would grab right now glows */
+  var nh = S.over ? -1 : findHook(S);
+  for (i = 0; i < L.hooks.length; i++){ var h = L.hooks[i]; if (h.x + 30 < camx || h.x - 30 > camx + W) continue; var on = S.hook === i, nxh = nh === i && !on;
+    if (on || nxh){ c.fillStyle = on ? 'rgba(255,255,255,.22)' : 'rgba(255,255,255,.12)'; c.beginPath(); c.arc(h.x, h.y, on ? 19 : 16, 0, 6.2832); c.fill(); }
+    c.fillStyle = '#4A4D5E'; c.beginPath(); c.arc(h.x, h.y, 12, 0, 6.2832); c.fill(); c.fillStyle = on ? '#FFFFFF' : nxh ? '#E9EBF4' : '#C9CBD6'; c.beginPath(); c.arc(h.x, h.y, 9.5, 0, 6.2832); c.fill(); c.fillStyle = '#6B6E80'; c.beginPath(); c.arc(h.x, h.y, 4, 0, 6.2832); c.fill(); }  /* speed trail */
   var tr = FX.trail; if (tr.length > 2){ c.lineCap = 'round'; c.lineJoin = 'round'; for (i = 1; i < tr.length; i++){ var a = i / tr.length; c.strokeStyle = 'rgba(150,230,255,' + (a * .55).toFixed(2) + ')'; c.lineWidth = 2 + a * 9; c.beginPath(); c.moveTo(tr[i - 1].x, tr[i - 1].y); c.lineTo(tr[i].x, tr[i].y); c.stroke(); } }
   /* rope + stickman */
   var hp = S.hook >= 0 ? L.hooks[S.hook] : null;
@@ -551,7 +575,7 @@ function show(id){ document.querySelectorAll('.screen').forEach(function(e){ e.c
   if (id === 's-menu') renderMenu(); else if (id === 's-skins') renderSkins(); window.scrollTo(0, 0); }
 function camReset(S){ G.cam.x = S.x - W * .4; G.cam.y = S.y - H * .56; }
 function start(mode, n){ G.mode = mode === 'grapple' ? 'grapple' : 'classic'; n = clamp(n | 0 || 1, 1, NLV); G.level = n; GL.played('hook'); var L = genLevel(n);
-  G.S = newRun(L, G.mode); G.deaths = 0; G.overT = -1; G.frozen = false; G.paused = false; FX.parts.length = 0; FX.trail.length = 0; FX.shake = 0; FX.flash = 0; camReset(G.S); $('ov').classList.remove('on'); show('s-game'); hud(); render(); }
+  G.S = newRun(L, G.mode); G.deaths = 0; G.overT = -1; G.frozen = false; G.paused = false; FX.parts.length = 0; FX.trail.length = 0; FX.tramp = {}; FX.shake = 0; FX.flash = 0; camReset(G.S); $('ov').classList.remove('on'); show('s-game'); hud(); render(); }
 function restart(){ if (!G.S) return; G.S = newRun(G.S.L, G.mode); G.overT = -1; G.frozen = false; G.paused = false; FX.trail.length = 0; FX.shake = 0; FX.flash = 0; camReset(G.S); $('ov').classList.remove('on'); hud(); }
 function camUpdate(S, dt){ var tx = S.x + clamp(S.vx * .28, -100, 280) - W * .4, ty = S.y + clamp(S.vy * .12, -70, 120) - H * .56; ty = Math.min(ty, S.L.deathY - H + 70); var k = 1 - Math.exp(-5 * dt); G.cam.x += (tx - G.cam.x) * k; G.cam.y += (ty - G.cam.y) * k; }
 function tick(dt){ var S = G.S; if (!S || G.paused) return;
@@ -564,7 +588,7 @@ function handleEvents(){ var S = G.S; if (!S) return; var ev = S.ev, i, sk = ski
   for (i = 0; i < ev.length; i++){ var e = ev[i];
     if (e === 'attach') SFX.tick();
     else if (e === 'release') SFX.whoosh();
-    else if (e === 'pad'){ SFX.boing(); burst(S.x, S.y + PR, '#FFD23F', 8, 180); }
+    else if (e === 'pad'){ SFX.boing(); burst(S.x, S.y, '#FFD23F', 10, 220); FX.tramp[S.lastTramp] = NOW; FX.shake = Math.max(FX.shake, .2); }
     else if (e === 'thud'){ SFX.thud(); FX.shake = Math.max(FX.shake, .35); burst(S.x, S.y, '#fff', 5, 140); }
     else if (e === 'land'){ SFX.thud(); }
     else if (e === 'die'){ SFX.pop(); vibrate(50); burst(S.x, Math.min(S.y, S.L.deathY + 10), sk.c1, 18, 360); burst(S.x, Math.min(S.y, S.L.deathY + 10), '#fff', 8, 240); FX.shake = .8; FX.flash = .7; G.deaths++; G.streak = 0; save(); G.overT = .45; }
@@ -650,7 +674,7 @@ function init(){ load(); bind(); setMute(G.mute); setLang(G.lang);
   else if (h === '#auto-grapple'){ G.classicLevel = Math.max(G.classicLevel, GRAPPLE_AT + 1); runAuto('grapple', 1, 6, true); }
   else if (h === '#auto-win'){ G.auto = true; start('classic', 1); var k = 0; while (!G.S.won && k++ < HZ * 40){ tick(DT); if (G.overT >= 0){ G.overT = -1; afterOver(); } } for (var j = 0; j < 20; j++){ tick(DT); updFX(1 / 60); } G.frozen = true; render(); }
   else if (h === '#auto-skins'){ G.coins = Math.max(G.coins, 350); G.classicLevel = Math.max(G.classicLevel, 10); if (G.owned.indexOf('dragon') < 0) G.owned.push('dragon'); show('s-skins'); }
-  else if ((mm = /^#sim(\d+)(g?)(?:s(\d+))?$/.exec(h))){ var SL = build(+mm[1], mm[3] ? +mm[3] : 0), SS = newRun(SL, mm[2] ? 'grapple' : 'classic'), rows = [], si = 0; while (!SS.over && si < 900){ var hh = autoInput(SS); step(SS, hh, DT); if (si % 5 === 0 || SS.ev.length) rows.push(si + ':' + (hh ? 'H' : '-') + ' x' + SS.x.toFixed(0) + ' y' + SS.y.toFixed(0) + ' v' + SS.vx.toFixed(0) + ',' + SS.vy.toFixed(0) + ' hk' + SS.hook + (SS.standing ? ' st' : '') + ' r' + SS.rope.toFixed(0) + (SS.ev.length ? ' [' + SS.ev.join(',') + ']' : '')); SS.ev.length = 0; si++; } var pre2 = $('test-log'); pre2.removeAttribute('class'); pre2.textContent = 'hooks=' + JSON.stringify(SL.hooks.map(function(q){ return [Math.round(q.x), Math.round(q.y), Math.round(q.r)]; })) + ' blocks=' + JSON.stringify(SL.blocks) + ' finish=' + Math.round(SL.finish.x) + '\n' + rows.join('\n'); }
+  else if ((mm = /^#sim(\d+)(g?)(?:s(\d+))?$/.exec(h))){ var SL = build(+mm[1], mm[3] ? +mm[3] : 0), SS = newRun(SL, mm[2] ? 'grapple' : 'classic'), rows = [], si = 0; while (!SS.over && si < 900){ var hh = autoInput(SS); step(SS, hh, DT); if (si % 5 === 0 || SS.ev.length) rows.push(si + ':' + (hh ? 'H' : '-') + ' x' + SS.x.toFixed(0) + ' y' + SS.y.toFixed(0) + ' v' + SS.vx.toFixed(0) + ',' + SS.vy.toFixed(0) + ' hk' + SS.hook + (SS.standing ? ' st' : '') + ' r' + SS.rope.toFixed(0) + (SS.ev.length ? ' [' + SS.ev.join(',') + ']' : '')); SS.ev.length = 0; si++; } var pre2 = $('test-log'); pre2.removeAttribute('class'); pre2.textContent = 'hooks=' + JSON.stringify(SL.hooks.map(function(q){ return [Math.round(q.x), Math.round(q.y), Math.round(q.r)]; })) + ' blocks=' + JSON.stringify(SL.blocks) + ' tramps=' + JSON.stringify(SL.tramps) + ' finish=' + Math.round(SL.finish.x) + '\n' + rows.join('\n'); }
   else if ((mm = /^#bench(\d+)-(\d+)$/.exec(h))){ var a0 = +mm[1], b0 = +mm[2], out = [], tb = performance.now(), bad = [], hist = [0, 0, 0, 0, 0], mxT = 0, mxTG = 0, sumTr = 0; for (var bi = a0; bi <= b0; bi++){ var BL = genLevel(bi); sumTr += BL.tries; if (BL.unsolved) bad.push(bi); hist[BL.tries <= 1 ? 0 : BL.tries <= 3 ? 1 : BL.tries <= 10 ? 2 : BL.tries <= 30 ? 3 : 4]++; mxT = Math.max(mxT, BL.simT || 0); mxTG = Math.max(mxTG, BL.simTG || 0); out.push(bi + ':' + BL.tries + (BL.unsolved ? 'X' : '') + ':' + (BL.simT ? BL.simT.toFixed(1) : '-') + '/' + (BL.simTG ? BL.simTG.toFixed(1) : '-') + ':' + BL.kinds.join('')); } var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = 'ms=' + Math.round(performance.now() - tb) + ' unsolved=' + bad.join(',') + ' tries[1,2-3,4-10,11-30,31+]=' + hist.join('/') + ' avgTries=' + (sumTr / (b0 - a0 + 1)).toFixed(1) + ' maxT=' + mxT.toFixed(1) + ' maxTG=' + mxTG.toFixed(1) + (b0 - a0 < 60 ? ' ' + out.join(' ') : ''); }
   else if (h === '#auto-menu'){ G.classicLevel = Math.max(G.classicLevel, 37); G.coins = Math.max(G.coins, 120); G.bestStreak = Math.max(G.bestStreak, 5); show('s-menu'); }
   requestAnimationFrame(function(now){ lastT = now; requestAnimationFrame(frame); }); }
@@ -676,10 +700,13 @@ if (TEST){
         ok('genLevel(1) is deterministic (same seed → identical geometry) and cached', JSON.stringify(L1.hooks) === JSON.stringify(L1b.hooks) && JSON.stringify(L1.blocks) === JSON.stringify(L1b.blocks) && I.genLevel(1) === L1);
         ok('different levels have different geometry and hues', JSON.stringify(I.genLevel(7).hooks) !== JSON.stringify(I.genLevel(8).hooks) && I.genLevel(1).hue !== I.genLevel(2).hue);
         ok('level 1: start block under the player, ≥ 5 hooks sorted by x inside the band, finish after the last hook', L1.blocks[0].x < 0 && L1.blocks[0].y === 0 && L1.hooks.length >= 5 && L1.hooks.every(function(h, j){ return (j === 0 || h.x > L1.hooks[j - 1].x) && h.y >= YMIN && h.y <= YMAX && h.r > 100; }) && L1.finish.x > L1.hooks[L1.hooks.length - 1].x, L1.hooks.length);
-        ok('level 1: first hook is within grab range from the start, no hazards (spikes/walls/ceilings) in levels 1–3', (function(){ var h = L1.hooks[0]; return Math.hypot(h.x - L1.startX, h.y - L1.startY) <= h.r; })() && [1, 2, 3].every(function(k){ var l = I.genLevel(k); return l.spikes.length === 0 && !l.kinds.some(function(q){ return q === 'wall' || q === 'ceil' || q === 'corr' || q === 'spike'; }); }));
+        ok('level 1: first hook is within grab range (GRAB px) from the start, no hazards (spikes/walls/ceilings) in levels 1–3', (function(){ var h = L1.hooks[0]; return Math.hypot(h.x - L1.startX, h.y - L1.startY) <= GRAB; })() && [1, 2, 3].every(function(k){ var l = I.genLevel(k); return l.spikes.length === 0 && !l.kinds.some(function(q){ return q === 'wall' || q === 'ceil' || q === 'corr' || q === 'spike'; }); }));
         var L500 = I.genLevel(500), L250 = I.genLevel(250);
-        ok('difficulty ramps: level 500 is longer with more hooks and a smaller grab radius than level 1', L500.len > L1.len && L500.hooks.length > L1.hooks.length && L500.hooks[2].r < L1.hooks[2].r && L250.len > L1.len, [L1.len, L250.len, L500.len].join(','));
-        ok('hazards appear with level: spikes, walls, ceilings, corridors and pads all occur in levels 100–200', (function(){ var has = {}; for (var k = 100; k <= 200; k++) I.genLevel(k).kinds.forEach(function(q){ has[q] = 1; }); return has.spike && has.wall && has.ceil && has.corr && has.pad && has.gap; })());
+        var avgGap = function(l){ var sum = 0; for (var q = 1; q < l.hooks.length; q++) sum += l.hooks[q].x - l.hooks[q - 1].x; return sum / (l.hooks.length - 1); };
+        var hard = function(l){ return l.kinds.filter(function(q){ return q !== 'chain' && q !== 'plat'; }).length; };
+        ok('difficulty ramps: level 500 is longer, its hooks are spaced wider apart and it has more hazard sections (gaps, trampolines, spikes, walls…) than level 1', L500.len > L1.len && avgGap(L500) > avgGap(L1) + 60 && hard(L500) > hard(L1) && hard(L500) >= 3 && L250.len > L1.len, [L1.len, L250.len, L500.len, avgGap(L1).toFixed(0), avgGap(L500).toFixed(0), hard(L1), hard(L500)].join(','));
+        ok('hazards appear with level: spikes, walls, ceilings, corridors, bouncy floors and bouncy walls all occur in levels 100–200; trampolines already from level 5', (function(){ var has = {}, early = false; for (var k = 100; k <= 200; k++) I.genLevel(k).kinds.forEach(function(q){ has[q] = 1; }); for (k = 5; k <= 30; k++) if (I.genLevel(k).tramps.length) early = true; return has.spike && has.wall && has.ceil && has.corr && has.tramp && has.twall && has.gap && early; })());
+        ok('trampolines get narrower with the level: average bouncy-floor width in levels 400–500 < levels 5–60', (function(){ var w1 = 0, n1 = 0, w2 = 0, n2 = 0, k; for (k = 5; k <= 60; k++) I.genLevel(k).tramps.forEach(function(q){ if (q.dir === 'y'){ w1 += q.w; n1++; } }); for (k = 400; k <= 500; k++) I.genLevel(k).tramps.forEach(function(q){ if (q.dir === 'y'){ w2 += q.w; n2++; } }); return n1 > 0 && n2 > 0 && w2 / n2 < w1 / n1; })());
         /* --- the big sweep: every level completable in both modes --- */
         var t0 = performance.now(), fails = [], failsG = [], tBad = [], tries = 0, maxT = 0, sumT = 0;
         for (n = 1; n <= NLV; n++){ L = I.genLevel(n); if (L.unsolved) fails.push(n); var rc = I.simulate(L, 'classic'), rg = I.simulate(L, 'grapple'); if (!rc.won) fails.push(n); if (!rg.won) failsG.push(n); if (rc.time < 2.5 || rc.time > 18) tBad.push(n + ':' + rc.time.toFixed(1)); tries += L.tries; maxT = Math.max(maxT, rc.time); sumT += rc.time; }
@@ -691,7 +718,7 @@ if (TEST){
         ok('≥ 40% of the levels pass within their first 3 generated layouts; average rerolls ≤ 10', (function(){ var c = 0; for (var k = 1; k <= NLV; k++) if (I.genLevel(k).tries <= 3) c++; return c >= 200 && tries / NLV <= 10; })(), tries / NLV);
         /* --- physics --- */
         S = I.newRun(L1, 'classic'); ok('newRun: starts standing at the start, no hook, alive, classic mode', S.x === 0 && S.y === -I.PR && S.hook === -1 && !S.over && S.standing && S.mode === 'classic');
-        var LF = { n:0, hue:0, hooks:[{ x:300, y:-200, r:180 }], blocks:[], spikes:[], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        var LF = { n:0, hue:0, hooks:[{ x:300, y:-200, r:180 }], blocks:[], spikes:[], tramps:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
         S = I.newRun(LF, 'classic'); S.standing = false; I.step(S, false, I.DT); I.step(S, false, I.DT); ok('gravity: free fall accelerates downward (vy grows, y grows)', S.vy > 0 && S.y > -12 && Math.abs(S.vy - 2 * I.GRAV * I.DT) < 1e-6, S.vy);
         S = I.newRun(LF, 'classic'); S.x = 200; S.y = -100; S.standing = false; var hi0 = I.findHook(S); I.step(S, true, I.DT);
         ok('hold with a hook in range → attaches (hook index, rope = distance, attach event)', hi0 === 0 && S.hook === 0 && Math.abs(S.rope0 - Math.hypot(200 - 300, -100 + 200)) < 1e-6 && S.ev.indexOf('attach') >= 0);
@@ -699,24 +726,31 @@ if (TEST){
         ok('pendulum constraint: distance never exceeds the rope, the rope shortens while swinging (momentum) but never below 45% of its length', okRope && S.rope < S.rope0 && S.rope >= S.rope0 * .45 - 1e-9, S.rope + '/' + S.rope0);
         var vx0 = S.vx, vy0 = S.vy; I.step(S, false, I.DT); ok('release keeps the velocity (launch) and fires a release event', S.hook === -1 && Math.abs(S.vx - vx0) < 1e-6 && Math.abs(S.vy - (vy0 + I.GRAV * I.DT)) < 1e-6 && S.ev.indexOf('release') >= 0);
         var reat = false; for (i = 0; i < 6; i++){ I.step(S, true, I.DT); if (S.hook >= 0) reat = true; } ok('no instant re-attach to the hook just released (cooldown)', !reat && S.cool > 0);
-        var L2 = { n:0, hue:0, hooks:[{ x:200, y:-200, r:190 }, { x:420, y:-200, r:190 }], blocks:[], spikes:[], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        var L2 = { n:0, hue:0, hooks:[{ x:200, y:-200, r:190 }, { x:420, y:-200, r:190 }], blocks:[], spikes:[], tramps:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
         S = I.newRun(L2, 'classic'); S.x = 300; S.y = -100; S.vx = 600; S.standing = false; var nearBehind = I.findHook(S); I.step(S, true, I.DT);
         ok('two hooks in range: the NEARER one is attached even though it is behind the player (no direction bias)', nearBehind === 0 && S.hook === 0 && (S.x = 330, S.hook = -1, S.lastHook = -1, I.findHook(S) === 1), nearBehind + '/' + S.hook);
         S = I.newRun(L2, 'classic'); S.x = 300; S.y = -100; S.hook = 0; S.standing = false; I.step(S, false, I.DT); var afterRel = I.findHook(S);
         ok('during the cooldown of the just-released nearer hook the other hook in range is chosen; after it the nearest wins again', afterRel === 1 && (S.cool = 0, I.findHook(S) === 0));
         S = I.newRun(LF, 'grapple'); S.x = 200; S.y = -100; S.standing = false; I.step(S, true, I.DT); var d0 = Math.hypot(S.x - 300, S.y + 200); for (i = 0; i < 12; i++) I.step(S, true, I.DT); var d1 = Math.hypot(S.x - 300, S.y + 200);
         ok('grapple mode: attaching pulls the stickman toward the hook fast (distance shrinks, speed > 600 within 0.2 s)', S.mode === 'grapple' && d1 < d0 - 40 && Math.hypot(S.vx, S.vy) > 600, d0 + '→' + d1);
-        var LB = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }, { x:400, y:-200, w:60, h:400 }], spikes:[], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        var LB = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }, { x:400, y:-200, w:60, h:400 }], spikes:[], tramps:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
         S = I.newRun(LB, 'classic'); S.x = 100; S.y = 0; S.vy = 500; S.standing = false; for (i = 0; i < 30; i++) I.step(S, false, I.DT);
         ok('landing on a block: stands on top (y = top − R), vy = 0, land/thud event, squash', S.standing && Math.abs(S.y - (100 - I.PR)) < .5 && S.vy === 0 && S.ev.indexOf('land') + S.ev.indexOf('thud') > -2 && S.squash >= 0);
         S = I.newRun(LB, 'classic'); S.x = 370; S.y = 0; S.vx = 600; S.standing = false; I.step(S, false, I.DT); I.step(S, false, I.DT);
         ok('hitting a wall from the side: pushed out and bounced back (vx < 0), not dead', S.x <= 400 - I.PR + .01 && S.vx < 0 && !S.dead && S.ev.indexOf('thud') >= 0, S.x + ',' + S.vx);
-        var LP = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }], spikes:[], pads:[{ x:100, y:86, w:70, h:14, dir:'up' }, { x:200, y:86, w:70, h:14, dir:'fwd' }], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
-        S = I.newRun(LP, 'classic'); S.x = 135; S.y = 70; S.vy = 300; S.standing = false; for (i = 0; i < 4; i++) I.step(S, false, I.DT);
-        ok('jump pad (up) launches the stickman up (vy = −PADV) with a pad event', S.vy < -I.PADV + 200 && S.ev.indexOf('pad') >= 0, S.vy);
-        S = I.newRun(LP, 'classic'); S.x = 235; S.y = 70; S.vy = 300; S.standing = false; for (i = 0; i < 4; i++) I.step(S, false, I.DT);
-        ok('forward pad adds forward speed (vx ≥ 600) and some lift', S.vx >= 600 && S.vy < -400, S.vx + ',' + S.vy);
-        var LS = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }], spikes:[{ x:100, y:82, w:80, h:18 }], pads:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        var LG = { n:0, hue:0, hooks:[{ x:350, y:-12, r:190 }], blocks:[], spikes:[], tramps:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        S = I.newRun(LG, 'classic'); S.standing = false; var g1 = I.findHook(S); S.x = -100; var g2 = I.findHook(S);
+        ok('like the original: the rope grabs the nearest hook anywhere within ' + GRAB + ' px – no per-hook circle: 350 px away yes, 450 px away no', g1 === 0 && g2 === -1, g1 + '/' + g2);
+        var LP = { n:0, hue:0, hooks:[{ x:160, y:-200, r:190 }], blocks:[], spikes:[], tramps:[{ x:100, y:100, w:120, h:36, dir:'y' }, { x:400, y:-300, w:40, h:400, dir:'x' }], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
+        S = I.newRun(LP, 'classic'); S.x = 160; S.y = 70; S.vy = 300; S.standing = false; for (i = 0; i < 4; i++) I.step(S, false, I.DT);
+        ok('trampoline floor: a slow fall is flung straight up at PADV (pad event, pushed out to the top of the block)', S.vy <= -I.PADV + 1 && S.ev.indexOf('pad') >= 0 && S.y <= 100 - I.PR + .01, S.vy + ',' + S.y);
+        S = I.newRun(LP, 'classic'); S.x = 160; S.y = 70; S.vy = 1300; S.standing = false; for (i = 0; i < 4; i++) I.step(S, false, I.DT);
+        ok('trampoline floor: a fast fall bounces back faster than it came (×1.08, capped at VMAX)', S.vy < -1300 && S.vy >= -1700, S.vy);
+        S = I.newRun(LP, 'classic'); S.x = 380; S.y = -100; S.vx = 700; S.vy = -50; S.standing = false; for (i = 0; i < 4; i++) I.step(S, false, I.DT);
+        ok('trampoline wall: flying into it flings the stickman back (vx ≤ −PADV), vertical speed kept, not dead', S.vx <= -I.PADV + 1 && S.vy < 100 && !S.dead && S.ev.indexOf('pad') >= 0, S.vx + ',' + S.vy);
+        S = I.newRun(LP, "classic"); S.x = 160; S.y = 90; S.vy = 300; S.hook = 0; S.rope = S.rope0 = 300; S.standing = false; for (i = 0; i < 4; i++) I.step(S, true, I.DT);
+        ok('a bounce lets go of the rope (hook released with a cooldown even while holding)', S.hook === -1 && S.cool > 0 && S.vy < 0, S.hook + ',' + S.vy);
+        var LS = { n:0, hue:0, hooks:[], blocks:[{ x:0, y:100, w:300, h:60 }], spikes:[{ x:100, y:82, w:80, h:18 }], tramps:[], finish:{ x:5000, y:-200, h:180 }, startX:0, startY:-12, deathY:430, len:5000, kinds:[] };
         S = I.newRun(LS, 'classic'); S.x = 140; S.y = 60; S.vy = 300; S.standing = false; for (i = 0; i < 10 && !S.over; i++) I.step(S, false, I.DT);
         ok('spikes = death (dead, over, die event)', S.dead && S.over && !S.won && S.ev.indexOf('die') >= 0);
         S = I.newRun(LF, 'classic'); S.y = 420; S.vy = 400; S.standing = false; for (i = 0; i < 10 && !S.over; i++) I.step(S, false, I.DT); ok('falling below the level = death', S.dead && S.over && S.ev.indexOf('die') >= 0);
