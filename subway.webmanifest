@@ -1,0 +1,19 @@
+{
+  "name": "גולשי הרכבת 🚇",
+  "short_name": "גולשי הרכבת",
+  "description": "ריצה אינסופית על פסי הרכבת: קופצים מעל מחסומים, מתגלגלים מתחת לקורות, רצים על גגות רכבות ובורחים מהשומר והכלב. מטבעות, ג׳טפק, מגנט, הוברבורד, 8 דמויות, משימות ומילת היום.",
+  "start_url": "./subway.html?src=pwa",
+  "id": "/game-lab/subway.html",
+  "scope": "./subway.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2E3A8C",
+  "theme_color": "#2E3A8C",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/subway-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/subway-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/subway-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
