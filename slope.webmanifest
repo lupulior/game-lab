@@ -1,0 +1,19 @@
+{
+  "name": "המדרון 🟢",
+  "short_name": "המדרון",
+  "description": "כדור זוהר מתגלגל במורד מדרון ניאון אינסופי שמאיץ בלי סוף: בלוקים אדומים, בורות, גשרים צרים, קירות זזים ומדרגות תעופה. שיאים, מטבעות וחנות סקינים לכדור.",
+  "start_url": "./slope.html?src=pwa",
+  "id": "/game-lab/slope.html",
+  "scope": "./slope.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0F1A",
+  "theme_color": "#39FF88",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/slope-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/slope-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/slope-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
