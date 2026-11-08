@@ -1,0 +1,19 @@
+{
+  "name": "שד השלבים 😈",
+  "short_name": "שד השלבים",
+  "description": "פלטפורמר מלכודות שובב: הרצפה משקרת, התקרה נופלת והדלת בורחת. 500 שלבים ב-25 פרקים.",
+  "start_url": "./devil.html?src=pwa",
+  "id": "/game-lab/devil.html",
+  "scope": "./devil.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2B1B4D",
+  "theme_color": "#FFB341",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    { "src": "art/devil-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/devil-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/devil-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
