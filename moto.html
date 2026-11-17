@@ -115,6 +115,9 @@ body.phone .panel{max-width:366px}
 body.phone .toast{max-width:360px}
 body.phone .sgrid{grid-template-columns:repeat(2,1fr)}
 body.phone .sk canvas{width:100px;height:60px}
+#tip{position:fixed;left:50%;top:calc(72px + env(safe-area-inset-top));transform:translateX(-50%);background:#141414;color:#fff;border:3px solid var(--gold);border-radius:16px;padding:8px 16px;font:900 20px/1.25 var(--font);z-index:6;width:max-content;max-width:92vw;text-align:center;pointer-events:none;opacity:0;transition:opacity .25s;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+#tip.on{opacity:1}
+body.phone #tip{max-width:360px;font-size:17px}
 #test-log{white-space:pre-wrap;font-family:monospace;font-size:12px;color:#fff;background:#000;padding:8px;direction:ltr}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 /* Game Lab shared 🔑 code button + dialog (paste verbatim into every game's <style>) */
@@ -185,6 +188,7 @@ body.phone .sk canvas{width:100px;height:60px}
     <div class="tg"><button class="tb" id="t-left" aria-label="lean back">◀</button><button class="tb" id="t-right" aria-label="lean forward">▶</button></div>
     <div class="tg"><button class="tb" id="t-brake" aria-label="brake">⬇</button><button class="tb" id="t-gas" aria-label="gas">⬆</button></div>
   </div>
+  <div id="tip" role="status"></div>
   <div id="rotate" data-t="rotate">🔄 סובבו את המכשיר למסך גדול יותר</div>
   <div id="ov"><div class="panel" id="panel"></div></div>
 </section>
@@ -257,7 +261,7 @@ var GL = (function(){
 var TEST = location.hash === '#test', ERRS = [];
 if (TEST) window.onerror = function(m, s, l, c){ ERRS.push('onerror: ' + m + ' @' + l + ':' + c); };
 var $ = function(id){ return document.getElementById(id); };
-var KEY = 'moto.v1', W = 960, H = 540, HZ = 60, DT = 1 / HZ, NLV = 500, GRAV = 1900, R = 22, WL = 70, VMAX = 520, DRIVE = 1400, BRAKE = 2200, REV = 150, LEANW = 280 * Math.PI / 180, LEANACC = 24, HEADH = 50, HEADR = 13, PADV = 1100, CRASHCOS = Math.cos(100 * Math.PI / 180), FLIPBONUS = .5, RESPAWN = .6, STUCKT = 2.2, SIMMAX = 60, DX = 10, BRIDGE_T = .4, PI = Math.PI, TAU = Math.PI * 2;
+var KEY = 'moto.v1', W = 960, H = 540, HZ = 60, DT = 1 / HZ, NLV = 500, GRAV = 1900, R = 22, WL = 70, VMAX = 560, DRIVE = 1400, BRAKE = 750, REV = 160, LEANW = 320 * Math.PI / 180, LEANACC = 24, AIRDAMP = 7, HEADH = 50, HEADR = 13, PADV = 1100, CRASHCOS = Math.cos(100 * Math.PI / 180), LANDMAX = 45 * Math.PI / 180, LANDT = .12, ENDOA = 25 * Math.PI / 180, ENDOV = 400, WHEELA = 55 * Math.PI / 180, WHEELT = .25, FSUP = .25, WGAS = .75 * 1900 * Math.cos(35 * Math.PI / 180), FLIPBONUS = .5, RESPAWN = .6, STUCKT = 2.2, SIMMAX = 70, DX = 10, BRIDGE_T = .4, PI = Math.PI, TAU = Math.PI * 2;
 function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
 function lerp(a, b, t){ return a + (b - a) * t; }
 function wrapA(a){ while (a > PI) a -= TAU; while (a < -PI) a += TAU; return a; }
@@ -265,17 +269,19 @@ function wrapA(a){ while (a > PI) a -= TAU; while (a < -PI) a += TAU; return a; 
 /* ---------- strings ---------- */
 var T = {
 he:{ title:'אופנוע הפעלולים', sub:'משחק אופנוע פעלולים', play:'▶ שחק', cont:'▶ שלב {n}', map:'מפת השלבים', shop:'חנות האופנועים', mapSub:'{n} / 500 שלבים', shopSub:'{n} אופנועים', stars:'{n} כוכבים', done:'{n} שלבים', back:'◀ חזרה', level:'שלב {n}',
-  how:'גז קדימה, ועופו מעל המסורים, ה-TNT והמים! באוויר הטו את האופנוע עם החצים כדי לנחות ישר – וסלטה שלמה באוויר מורידה חצי שנייה מהשעון. 3 כוכבים למי שמסיים מהר. נפילה = חזרה מיידית לדגל האחרון.',
+  how:'מי שרק מחזיק גז – נופל! זה משחק של תזמון, שליטה במהירות והטיה: עצרו וחכו למסורים, לפטישים ולבוכנות, האטו לפני קפיצות קצרות, הטו קדימה (→) בעליות ובנחיתות תלולות, והטו באוויר כדי לנחות ישר על הגלגלים. סלטה שלמה באוויר מורידה חצי שנייה מהשעון, ו-3 כוכבים למי שמסיים מהר. נפילה = חזרה מיידית לדגל האחרון.',
   kGas:'גז', kBrake:'בלם / אחורה', kLean:'הטיה / סלטה', kRestart:'מחדש', kPause:'הפסקה', more:'🎮 עוד משחקים', rotate:'🔄 סובבו את המכשיר למסך גדול יותר', hint:'השתמשו בחצים', paused:'הפסקה', resume:'▶ המשך', again:'שוב ↻', menu:'🏠 תפריט', mapBtn:'🗺️ מפה', next:'הבא ▶',
   finished:'שלב {n} הושלם!', time:'זמן: {t}', best:'שיא: {t}', newBest:'שיא חדש! 🎉', coinsEarned:'+{n} 🪙', flips:'{n} סלטות', crashes:'{n} נפילות', allDone:'סיימתם את כל 500 השלבים! 🏆', par:'3 כוכבים עד {t}',
   shopHow:'כל האופנועים נוסעים אותו דבר – רק הצבע משתנה. קונים במטבעות שמרוויחים מכוכבים (10 לכוכב).', buy:'קנה', equip:'בחר', equipped:'✓ נבחר', noCoins:'אין מספיק מטבעות', bought:'קניתם את {n}!', free:'חינם', locked:'🔒 נעול', lockMsg:'סיימו קודם את שלב {n}',
-  themes:['חוף', 'מדבר', 'שלג', 'מסיבת בריכה', 'עיר בלילה', 'ג׳ונגל'], page:'שלבים {a}–{b} · {th}', cp:'נקודת ביניים ✔' },
+  themes:['חוף', 'מדבר', 'שלג', 'מסיבת בריכה', 'עיר בלילה', 'ג׳ונגל'], page:'שלבים {a}–{b} · {th}', cp:'נקודת ביניים ✔',
+  tips:{ saws:'⚠️ מסור נע – עצרו וחכו לרגע הנכון', hammers:'🔨 פטישים – עצרו, חכו שהפטיש עובר, ורק אז סעו', speedgap:'🏁 קפיצת מהירות – האטו לפני המקפצה', steep:'↘ נחיתה תלולה – הטו קדימה (→) עד שהאופנוע מקביל למדרון', climb:'⬆ עלייה תלולה – אל תחזיקו גז מלא לבד: הטו קדימה (→), אחרת תתהפכו אחורה', tunnel:'🕳️ מנהרה נמוכה – סעו לאט לאט, בלי לקפוץ', pistons:'⬆⬇ בוכנות – עצרו וחכו שהן יורדות', elevator:'🛗 מעלית – עלו לאט, עצרו עליה וחכו שתגיע', tnt:'🧨 קפיצת TNT – בלימה קצרה לפני המקפצה, לא גז מלא', bridge:'🌉 גשר מתמוטט – מהר על הגשר, ומיד לבלום מול השער!', loopsaw:'🔁 לולאה – גז מלא בפנים, ואחריה לבלום מול המסורים', boulders:'🪨 סלעים מתגלגלים – חכו על המדרגה עד שיעברו' } },
 en:{ title:'Stunt Moto', sub:'a stunt bike game', play:'▶ PLAY', cont:'▶ Level {n}', map:'Level map', shop:'Bike shop', mapSub:'{n} / 500 levels', shopSub:'{n} bikes', stars:'{n} stars', done:'{n} levels', back:'◀ Back', level:'Level {n}',
-  how:'Hit the gas and fly over the saws, the TNT and the water! In the air lean with the arrows to land flat – and a full flip takes half a second off the clock. 3 stars for finishing fast. A crash = instant return to the last flag.',
+  how:'Just holding the gas gets you crashed! This is a game of timing, speed control and leaning: stop and wait for the saws, hammers and pistons, slow down before short jumps, lean forward (→) on steep climbs and steep landings, and lean in the air to land flat on your wheels. A full flip takes half a second off the clock, and 3 stars go to fast finishers. A crash = instant return to the last flag.',
   kGas:'gas', kBrake:'brake / reverse', kLean:'lean / flip', kRestart:'restart', kPause:'pause', more:'🎮 More games', rotate:'🔄 Rotate your device for a bigger screen', hint:'Use the arrows', paused:'PAUSED', resume:'▶ Resume', again:'Again ↻', menu:'🏠 Menu', mapBtn:'🗺️ Map', next:'Next ▶',
   finished:'Level {n} complete!', time:'Time: {t}', best:'Best: {t}', newBest:'New best! 🎉', coinsEarned:'+{n} 🪙', flips:'{n} flips', crashes:'{n} crashes', allDone:'You finished all 500 levels! 🏆', par:'3 stars under {t}',
   shopHow:'Every bike rides the same – only the colours change. Buy them with the coins you earn from stars (10 per star).', buy:'Buy', equip:'Equip', equipped:'✓ Equipped', noCoins:'Not enough coins', bought:'You bought {n}!', free:'Free', locked:'🔒 Locked', lockMsg:'Finish level {n} first',
-  themes:['Beach', 'Desert', 'Snow', 'Pool Party', 'Night City', 'Jungle'], page:'Levels {a}–{b} · {th}', cp:'Checkpoint ✔' } };
+  themes:['Beach', 'Desert', 'Snow', 'Pool Party', 'Night City', 'Jungle'], page:'Levels {a}–{b} · {th}', cp:'Checkpoint ✔',
+  tips:{ saws:'⚠️ Moving saw – stop and wait for the gap', hammers:'🔨 Hammers – stop, let the hammer swing past, then go', speedgap:'🏁 Speed jump – slow down before the ramp', steep:'↘ Steep landing – lean forward (→) until the bike matches the slope', climb:'⬆ Steep climb – full gas alone flips you backwards: lean forward (→)', tunnel:'🕳️ Low tunnel – crawl through, no hopping', pistons:'⬆⬇ Pistons – stop and wait until they drop', elevator:'🛗 Elevator – roll on slowly, stop on it and ride', tnt:'🧨 TNT hop – tap the brake before the bump, not full gas', bridge:'🌉 Collapsing bridge – fast across, then brake for the gate!', loopsaw:'🔁 Loop – full gas inside, then brake for the saws', boulders:'🪨 Rolling boulders – wait on the ledge until they pass' } } };
 function t(k, o){ var s = T[G.lang][k]; if (s == null) s = T.he[k]; if (s == null) return k; if (o) for (var p in o) s = s.split('{' + p + '}').join(o[p]); return s; }
 
 /* ---------- bikes (cosmetic colour sets) ---------- */
@@ -291,12 +297,13 @@ var BIKES = [
 function bikeById(id){ for (var i = 0; i < BIKES.length; i++) if (BIKES[i].id === id) return BIKES[i]; return BIKES[0]; }
 
 /* ---------- global state + storage ---------- */
-var G = { lang:'he', mute:false, level:1, unlocked:1, stars:{}, best:{}, coins:0, owned:[], bike:'red', screen:'s-menu', S:null, inp:{ g:false, b:false, l:false, r:false }, auto:false, frozen:false, paused:false, k:1, cam:{ x:0, y:0 }, page:0, flipTexts:[], finishT:-1, demo:null };
+var G = { lang:'he', mute:false, level:1, unlocked:1, stars:{}, best:{}, coins:0, owned:[], bike:'red', screen:'s-menu', S:null, inp:{ g:false, b:false, l:false, r:false }, auto:false, rider:null, frozen:false, paused:false, k:1, cam:{ x:0, y:0 }, page:0, flipTexts:[], finishT:-1, demo:null, tips:{}, tip:null };
 function totalStars(){ var s = 0; for (var k in G.stars) s += G.stars[k]; return s; }
 function levelsDone(){ var c = 0; for (var k in G.stars) if (G.stars[k] > 0) c++; return c; }
 function bikeOwned(b){ return b.price === 0 || G.owned.indexOf(b.id) >= 0 || GL.isAdmin(); }
-function save(){ try { localStorage.setItem(KEY, JSON.stringify({ unlocked:G.unlocked, stars:G.stars, best:G.best, coins:G.coins, owned:G.owned, bike:G.bike, lang:G.lang, mute:G.mute })); } catch(e){} }
-function restore(d){ if (!d || typeof d !== 'object') return false; G.unlocked = clamp(d.unlocked | 0 || 1, 1, NLV); G.stars = {}; G.best = {}; var k;
+function save(){ try { localStorage.setItem(KEY, JSON.stringify({ unlocked:G.unlocked, stars:G.stars, best:G.best, coins:G.coins, owned:G.owned, bike:G.bike, lang:G.lang, mute:G.mute, tips:G.tips })); } catch(e){} }
+function restore(d){ if (!d || typeof d !== 'object') return false; G.unlocked = clamp(d.unlocked | 0 || 1, 1, NLV); G.stars = {}; G.best = {}; G.tips = {}; var k;
+  if (d.tips && typeof d.tips === 'object') for (k = 0; k < SKILLS.length; k++) if (d.tips[SKILLS[k]]) G.tips[SKILLS[k]] = 1;
   if (d.stars && typeof d.stars === 'object') for (k in d.stars){ var n = +k, v = d.stars[k] | 0; if (n >= 1 && n <= NLV && v >= 1 && v <= 3) G.stars[n] = v; }
   if (d.best && typeof d.best === 'object') for (k in d.best){ var n2 = +k, b = +d.best[k]; if (n2 >= 1 && n2 <= NLV && b > 0 && b < 1e5) G.best[n2] = Math.round(b * 100) / 100; }
   G.coins = Math.max(0, d.coins | 0); G.owned = Array.isArray(d.owned) ? d.owned.filter(function(id){ return BIKES.some(function(b){ return b.id === id && b.price > 0; }); }) : [];
@@ -323,72 +330,169 @@ var THEMES = [
 function themeOf(n){ return Math.floor((n - 1) / 25) % 6; }
 
 /* ---------- level generator ---------- */
-var LCACHE = {};
-function build(n, tr){
-  var rng = mkRng((n * 7919 + tr * 104729 + 17) >>> 0), d = (n - 1) / (NLV - 1), rx = Math.min(1, tr / 8), ease = 1 - .45 * rx, slow = 1 + .4 * rx;
-  var pts = [], haz = [], plats = [], loops = [], fans = [], cps = [], deco = [], kinds = [], gaps = [], pid = 0;
+/* Twelve SKILL sections (each one kills a rider who just holds the gas) are stitched together with calm connective sections.
+   genLevel() rerolls the layout until the difficulty contract holds: the naive rider (full gas) fails from level 4, the naive-with-lean rider from level 15,
+   and the smart auto-rider finishes without a crash (its time × 1.15 = par). */
+var LCACHE = {}, SKILLS = ['saws', 'hammers', 'speedgap', 'steep', 'climb', 'tunnel', 'pistons', 'elevator', 'tnt', 'bridge', 'loopsaw', 'boulders'],
+  SKILL_FROM = { speedgap:4, saws:4, climb:5, steep:6, tunnel:8, tnt:9, pistons:12, hammers:14, bridge:15, elevator:20, boulders:25, loopsaw:60 },
+  CALM_W = { flat:[1, .5], hills:[1, 1.3], scaffold:[2, 1], drop:[3, .9], gap:[4, 1.3], water:[6, 1], spikes:[7, .9], bouncers:[10, .9], downhill:[10, .8], dive:[16, .9], double:[35, .7], wind:[120, .6] };
+var SK_IS = {}; SKILLS.forEach(function(k){ SK_IS[k] = 1; });
+function needSkills(n){ return n < 4 ? 0 : n < 30 ? 1 : n < 100 ? 2 : n < 250 ? 3 : n < 400 ? 4 : 5; }
+/* ballistic range of a point launched at speed v, angle th above the horizon, landing D px below the launch point */
+function jumpRange(v, th, D){ var vy = v * Math.sin(th); return v * Math.cos(th) * (vy + Math.sqrt(vy * vy + 2 * GRAV * D)) / GRAV; }
+function build(n, tr, only){
+  var rng = mkRng((n * 7919 + tr * 104729 + 17) >>> 0), d = (n - 1) / (NLV - 1), rx = Math.min(1, tr / 8), ease = 1 - .45 * rx, slow = 1 + .3 * rx;
+  var pts = [], haz = [], plats = [], loops = [], fans = [], cps = [], deco = [], kinds = [], gaps = [], secs = [], fast = [], pid = 0, tgid = 0;
   var cx = -300, cy = -600, lastCp = 0;
   function pt(x, y, ty, g){ pts.push({ x:x, y:y, t:ty || 0, g:g == null ? y : g }); cx = x; cy = y; }
   function to(dx, dy, ty, g){ pt(cx + dx, cy + dy, ty, g); }
   function flat(len, ty, g){ to(len, 0, ty, g); }
   function cliff(dy, ty, g){ to(.5, dy, ty, g); }
   function endFloor(){ pts[pts.length - 1].t = 0; }
-  function hills(len, amp){ var k = 3 + Math.floor(len / 220), xs = [], ys = [], i, x0 = cx, y0 = cy; for (i = 0; i <= k; i++){ xs.push(x0 + len * i / k); ys.push(i === 0 || i === k ? y0 : y0 + (rng() * 2 - 1) * amp); }
+  function ramp(len, ang, ty, g){ to(len * Math.cos(ang), len * Math.sin(ang), ty, g); }
+  /* a circular arc from tangent angle a0 to a1 (y points down: a negative angle climbs) */
+  function arc(a0, a1, r, ty, g){ var k = Math.max(2, Math.ceil(Math.abs(a1 - a0) * r / 14)), ds = Math.abs(a1 - a0) * r / k, i; for (i = 0; i < k; i++){ var a = a0 + (a1 - a0) * (i + .5) / k; to(ds * Math.cos(a), ds * Math.sin(a), ty, g); } }
+  function hills(len, amp){ var k = Math.max(3, Math.round(len / 170)), xs = [], ys = [], i, x0 = cx, y0 = cy; amp = Math.min(amp, 48); for (i = 0; i <= k; i++){ xs.push(x0 + len * i / k); ys.push(i === 0 || i === k ? y0 : y0 + (rng() * 2 - 1) * amp); }
     for (i = 0; i < k; i++){ var p0 = ys[Math.max(0, i - 1)], p1 = ys[i], p2 = ys[i + 1], p3 = ys[Math.min(k, i + 2)], segs = Math.max(2, Math.round((xs[i + 1] - xs[i]) / 20)); for (var s = 1; s <= segs; s++){ var u = s / segs, u2 = u * u, u3 = u2 * u; var y = .5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u2 + (-p0 + 3 * p1 - 3 * p2 + p3) * u3); pt(xs[i] + (xs[i + 1] - xs[i]) * u, y, 0); } } }
   function addDeco(x){ var th = THEMES[themeOf(n)]; deco.push({ k:th.deco[Math.floor(rng() * th.deco.length)], x:x, y:null, s:.8 + rng() * .5, f:rng() < .5 ? -1 : 1 }); }
   function sprinkle(x0, x1){ for (var x = x0 + 40 + rng() * 120; x < x1 - 40; x += 160 + rng() * 220) if (rng() < .75) addDeco(x); }
   function checkpoint(){ flat(70); cps.push(cx - 25); flat(70); lastCp = cx; }
-  /* kicker ramp + pit + landing; floor: spikes / water / ground with TNT barrels */
-  function jump(kind){ var g0 = cy, rl = 150 + rng() * 30, rh = 56 + 40 * d, gw = (kind === 'tnt' ? 90 + 110 * d : 100 + 130 * d) * ease + rng() * 20, drop = 80 + 100 * d, depth = kind === 'water' ? 110 : kind === 'tnt' ? 90 : 150, ft = kind === 'water' ? 3 : kind === 'spikes' ? 2 : 0;
-    flat(110); var x0 = cx; to(rl, -rh, 1, g0); flat(16, 1, g0); cliff(depth + rh, ft, g0 + depth); var gy = cy;
-    if (kind === 'tnt'){ var k = 2 + Math.floor(gw / 70); for (var i = 0; i < k; i++) haz.push({ k:'tnt', x:cx + 24 + (gw - 48) * (k === 1 ? .5 : i / (k - 1)), y:gy, w:40, h:50, gy:gy }); }
-    flat(gw, ft, gy); endFloor(); cliff(-(depth + rh) + drop, 0); flat(130 + 50 * rng()); sprinkle(x0 - 80, x0); gaps.push(gw); }
-  function sawSec(){ var k = 2 + Math.floor(rng() * 1.5 + 1.2 * d); flat(120); for (var i = 0; i < k; i++){ var sp = 360 + rng() * 50; flat(sp); var kind = (i % 2 === 0) ? 'hang' : 'pop', per = (2.3 - .4 * d) * slow * (.9 + .2 * rng()); haz.push({ k:'saw', kind:kind, x:cx - sp * .45, gy:cy, r:kind === 'hang' ? 40 : 36, mid:kind === 'hang' ? cy - 122 : cy + 26, amp:kind === 'hang' ? 82 : 48, per:per, ph:rng() * TAU, timed:true }); } flat(140); }
-  function hammerSec(){ var k = 1 + Math.floor(rng() * 2 + d); flat(120); for (var i = 0; i < k; i++){ flat(420); haz.push({ k:'ham', x:cx - 210, gy:cy, py:cy - 290, len:230, r:34, amp:1.15, per:(2.6 - .3 * d) * slow * (.9 + .2 * rng()), ph:rng() * TAU, timed:true }); } flat(140); }
+  /* every skill section starts right after a checkpoint flag, so a failure costs seconds */
+  function begin(k){ if (cx - lastCp > 150) checkpoint(); var s = { k:k, skill:true, x0:cx, x1:cx }; secs.push(s); return s; }
+  function end(s){ s.x1 = cx; lastCp = Math.max(lastCp, s.x0); }
+
+  /* ----- calm sections (connective tissue) ----- */
+  /* kicker ramp + pit + landing; floor: spikes / water */
+  function jump(kind){ var g0 = cy, rl = 150 + rng() * 30, rh = 56 + 40 * d, gw = (100 + 110 * d) * ease + rng() * 20, drop = 80 + 100 * d, depth = kind === 'water' ? 110 : 150, ft = kind === 'water' ? 3 : 2;
+    flat(130); var x0 = cx; to(rl, -rh, 1, g0); flat(16, 1, g0); cliff(depth + rh, ft, g0 + depth); var gy = cy;
+    flat(gw, ft, gy); endFloor(); cliff(-(depth + rh) + drop, 0); flat(150 + 50 * rng()); sprinkle(x0 - 80, x0); gaps.push(gw); }
   function scaffold(){ var g0 = cy, k = 2 + Math.floor(rng() * 1.6 + d), i, x0 = cx; flat(60); for (i = 0; i < k; i++){ to(150 + rng() * 40, -(56 + 26 * d), 1, g0); flat(70 + rng() * 40, 1, g0); }
-    flat(50, 1, g0); if (rng() < .5){ to(240 + 60 * d, (g0 - cy) * .55, 1, g0); flat(30, 1, g0); cliff(g0 - cy, 0, g0); } else { cliff(g0 - cy, 0, g0); } flat(170); sprinkle(x0, x0 + 60); }
-  function drop(){ flat(120); cliff(110 + 150 * d + rng() * 40, 0); flat(180 + 40 * rng()); }
-  function bridgeSec(){ var g0 = cy, k = 4 + Math.floor(rng() * 3 + 3 * d), i; flat(100); var x0 = cx; cliff(90, 3, g0 + 90); for (i = 0; i < k; i++){ plats.push({ kind:'bridge', id:pid++, x0:x0 + i * 60, x1:x0 + (i + 1) * 60, y:g0, gy:g0 }); } flat(k * 60, 3, g0 + 90); endFloor(); cliff(-90, 0); flat(160); }
-  function moverSec(){ var g0 = cy, horiz = rng() < .5, pw = 160, gw = horiz ? 260 + 140 * d * ease : pw + 40, per = 3 - .5 * d; flat(140); var x0 = cx; cliff(200, 3, g0 + 200); flat(gw, 3, g0 + 200); endFloor();
-    if (horiz){ cliff(-200, 0); plats.push({ kind:'mover', id:pid++, axis:'x', x0:x0 + 2, x1:x0 + 2 + pw, y:g0, amp:gw - pw - 4, per:per, ph:rng() * TAU, timed:true, gy:g0 }); }
-    else { var up = 150 + 40 * d; cliff(-200 - up, 0); plats.push({ kind:'mover', id:pid++, axis:'y', x0:x0 + 20, x1:x0 + 20 + pw, y:g0, amp:up, per:per, ph:rng() * TAU, timed:true, gy:g0 }); }
-    flat(220); }
-  function loopSec(){ var r = 100 + 30 * d, g0 = cy, dropH = 340 + 150 * d, len = 700, k = 20, i; flat(60); var x0 = cx; for (i = 1; i <= k; i++){ var u = i / k; pt(x0 + len * u, g0 + dropH * (.5 - .5 * Math.cos(u * PI)), 0); } flat(120); loops.push({ x:cx + r + 6, y:cy - r, r:r, gy:cy }); flat(2 * r + 12); flat(200); sprinkle(x0 - 60, x0); }
-  function bouncerSec(){ var k = 1 + Math.floor(rng() * 1.3 + d * .8), i; flat(120); for (i = 0; i < k; i++){ var h = 140 + 60 * d * ease + rng() * 25, dist = 120 + rng() * 50; flat(90, 4); flat(dist); cliff(-h, 0); flat(190); } flat(60); }
+    flat(50, 1, g0); if (rng() < .5){ to(240 + 60 * d, (g0 - cy) * .55, 1, g0); flat(30, 1, g0); cliff(g0 - cy, 0, g0); } else { cliff(g0 - cy, 0, g0); } flat(190); sprinkle(x0, x0 + 60); }
+  function drop(){ flat(120); cliff(110 + 150 * d + rng() * 40, 0); flat(200 + 40 * rng()); }
+  function bouncerSec(){ var k = 1 + Math.floor(rng() * 1.3 + d * .8), i; flat(120); for (i = 0; i < k; i++){ var h = 140 + 60 * d * ease + rng() * 25, dist = 120 + rng() * 50; flat(90, 4); flat(dist); cliff(-h, 0); flat(210); } flat(60); }
   function windSec(){ var g0 = cy, len = 460 + rng() * 120, tail = rng() < .5; flat(60); fans.push({ x0:cx, x1:cx + len, y0:g0 - 200, y1:g0 + 10, ax:tail ? 420 : -380, gy:g0 }); flat(len); if (tail) jump('water'); else flat(120); }
   function downhill(){ var g0 = cy, dropH = 200 + 180 * d, len = 600 + rng() * 150, k = 10, i, x0 = cx; for (i = 1; i <= k; i++){ var u = i / k; pt(x0 + len * u, g0 + dropH * (.5 - .5 * Math.cos(u * PI)), 0); } flat(100);
-    var rl = 150, rh = 60 + 20 * d, gw = (250 + 220 * d) * ease + rng() * 50, dd = 90 + 50 * d, gb = cy; to(rl, -rh, 1, gb); flat(16, 1, gb); cliff(130 + rh, 3, gb + 130); flat(gw, 3, gb + 130); endFloor(); cliff(-130 - rh + dd, 0); flat(220); }
-  function boulderSec(){ var k = 1 + Math.floor(rng() * 1.2 + d), i; flat(200); for (i = 0; i < k; i++){ flat(230); haz.push({ k:'boulder', x:cx, y:cy - 430, r:30, trig:cx - 140, gy:cy }); flat(230); } flat(80); }
-  function spikeFlat(){ flat(120); var g0 = cy; to(120, -50, 1, g0); flat(10, 1, g0); cliff(50, 2); flat((50 + 50 * d) * ease, 2); endFloor(); flat(220); }
+    var rl = 150, rh = 60 + 20 * d, gw = (250 + 220 * d) * ease + rng() * 50, dd = 90 + 50 * d, gb = cy; to(rl, -rh, 1, gb); flat(16, 1, gb); cliff(130 + rh, 3, gb + 130); flat(gw, 3, gb + 130); endFloor(); cliff(-130 - rh + dd, 0); flat(120); fast.push([x0, cx]); flat(420); }
+  function spikeFlat(){ flat(130); var g0 = cy; to(120, -50, 1, g0); flat(10, 1, g0); cliff(50, 2); flat((50 + 50 * d) * ease, 2); endFloor(); flat(240); }
   /* dive: a bouncy pad on the edge of a cliff flings the bike high over a deep water canyon – the long air time is where backflips pay off */
-  function dive(){ var g0 = cy, deep = 700 + 160 * d, gw = (300 + 160 * d) * ease + rng() * 40; flat(160); flat(90, 4); flat(50); cliff(deep, 3, g0 + deep); flat(gw, 3, g0 + deep); endFloor(); cliff(-120, 0); flat(260); gaps.push(gw); }
+  function dive(){ var g0 = cy, deep = 700 + 160 * d, gw = (300 + 160 * d) * ease + rng() * 40; flat(160); flat(90, 4); flat(50); cliff(deep, 3, g0 + deep); flat(gw, 3, g0 + deep); endFloor(); cliff(-120, 0); flat(280); gaps.push(gw); }
+
+  /* ----- skill sections ----- */
+  /* K saws sliding up and down a track across the path; each is down (blocking) most of the cycle, and consecutive saws are half a cycle apart
+     in the frame of a rider at full speed – whoever clears one at full gas meets the next one down */
+  function sawRow(K, per){ var ph0 = rng() * TAU, xf = 0, i; for (i = 0; i < K; i++){ if (i) flat(490 + rng() * 50); var sx = [-40, 0, 40][Math.floor(rng() * 3)], x = cx, gy = cy; if (!i) xf = x;
+      haz.push({ k:'saw', kind:'slide', x:x, xa:x + sx, ya:gy - 198, yb:gy - 34, r:36, per:per, ph:ph0 + i * PI - TAU * (x - xf) / (VMAX * per), A:.85, b:.15, timed:true, gy:gy, wx:x + Math.min(0, sx) - 120, px:x + Math.max(0, sx) + 112, vc:380 }); } }
+  function sawSec(){ var s = begin('saws'), K = 2 + (d > .3 && rng() < .3 + .4 * d ? 1 : 0); flat(250); sawRow(K, (3.3 - .9 * d) * slow * (.95 + .1 * rng())); flat(230); end(s); }
+  /* pendulum hammers a quarter cycle apart (in the full-speed rider's frame): when one is up out of the way the next one is sweeping the path */
+  function hammerSec(){ var s = begin('hammers'), K = 2, per = (2.7 - .5 * d) * slow * (.95 + .1 * rng()), ph = rng() * TAU, i; flat(290);
+    for (i = 0; i < K; i++){ if (i){ var sp = 770 + rng() * 40; flat(sp); ph += PI / 2 - TAU * sp / (VMAX * per); } haz.push({ k:'ham', x:cx, gy:cy, py:cy - 262, len:200, r:34, amp:1.2, per:per, ph:ph, timed:true, wx:cx - 224, px:cx + 216 }); }
+    flat(290); end(s); }
+  /* speed gap: kicker → spike pit → a short landing zone with a hanging spike block right behind it at flight height.
+     Full gas is still in the air at the block; too slow drops into the pit; the right speed lands in the zone and rides under the block */
+  function speedGap(){ var s = begin('speedgap'), g0 = cy, th = Math.atan2(84, 150), gap = 86 + 80 * d + rng() * 14, zone = 250 - 105 * d, bo = 34 + 50 * d, D = 280, X; while ((X = jumpRange(VMAX, th, D)) - bo - gap < zone && D < 400) D += 20;
+    flat(330); s.xs0 = cx; to(150, -84, 1, g0); flat(14, 1, g0); s.xs1 = cx; var xl = cx, yp = cy + D; cliff(D + 60, 2, yp + 60); flat(gap, 2, yp + 60); endFloor(); cliff(-60, 0);
+    var xb = xl + X - bo; haz.push({ k:'blk', x0:xb, x1:xb + 64, y0:yp - 108 - 250, y1:yp - 108, x:xb + 32, rx:240, sp:'lb', hang:1 }); flat(xb + 64 - cx + 260);
+    s.cands = [560, 520, 480, 440, 400, 370, 340, 310, 280, 250, 220]; s.xe = xb + 150; gaps.push(gap); end(s); }
+  /* steep landing: a kicker throws the bike over a water pit onto the far side of a hill – a 52–62° downhill. Level (or nose-up) = crash; lean forward in the air */
+  function steepSec(){ var s = begin('steep'), g0 = cy, th = .35, v = VMAX, vx = v * Math.cos(th), vy = -v * Math.sin(th); flat(320); s.xs0 = cx; s.vin = 610; var f0 = cx; to(120 * Math.cos(th), -120 * Math.sin(th), 1, g0); flat(12, 1, g0);
+    var xl = cx, yl = cy, traj = function(x){ return (vy / vx) * x + GRAV * x * x / (2 * vx * vx); }, xp = 235 + 30 * rng(), yp = traj(xp) + 85, phi = (52 + 6 * rng() + 4 * d) * PI / 180, tn = Math.tan(phi), x, xland = xp + 400;
+    for (x = xp + 20; x < xp + 900; x += 5) if (traj(x) >= yp + tn * (x - xp)){ xland = x; break; }
+    var H = tn * (xland - xp) + 120; cliff(260, 3, yl + 260); flat(xp - 40, 3, yl + 260); endFloor(); cliff(yp - 260, 0); flat(40); ramp(H / Math.sin(phi), phi); arc(phi, 0, 280); flat(60); fast.push([f0, cx]); flat(520); gaps.push(xp); end(s); }
+  /* wheelie climb: a long 43–48° ramp. Full gas lifts the front wheel until the bike goes over backwards – lean forward (→) or feather the gas */
+  function climbSec(){ var s = begin('climb'), ang = (44 + 4 * rng()) * PI / 180, len = 620 + 140 * rng(); flat(240); s.xs0 = cx; s.vin = 610; ramp(len, -ang); arc(-ang, 0, 240); flat(220); end(s); }
+  /* low tunnel: a spiked ceiling just above head height over little kickers – anything faster than a crawl hops into the spikes */
+  function tunnelSec(){ var s = begin('tunnel'), g0 = cy, bh = 24, B = 3 + Math.floor(rng() * 1.5 + 1.5 * d), i; flat(350); var x0c = cx + 40; s.xs0 = x0c - 30; flat(120);
+    for (i = 0; i < B; i++){ to(40, -bh); flat(12); to(46, bh); flat(110 + rng() * 50); }
+    var x1c = cx - 20, yc = g0 - (85 + bh + 9); haz.push({ k:'blk', x0:x0c, x1:x1c, y0:yc - 46, y1:yc, x:(x0c + x1c) / 2, rx:(x1c - x0c) / 2 + 180, sp:'b', roof:1 });
+    s.xs1 = x1c; s.cands = [340, 300, 260, 220, 190, 160]; s.xe = x1c + 70; flat(250); end(s); }
+  /* piston pit: blocks that shoot up from the floor (up 40% of the cycle), consecutive ones half a cycle apart for a rider at full speed */
+  function pistonSec(){ var s = begin('pistons'), K = 2 + Math.floor(rng() * 1.4 + .9 * d), per = 2 * slow, off = rng() * per, xf = 0, i; flat(250);
+    for (i = 0; i < K; i++){ if (i) flat(490 + rng() * 30); var x = cx; if (!i) xf = x; haz.push({ k:'pist', x:x, gy:cy, w:70, h:130, per:per, up:.4 * per, ph:off + (x - xf) / VMAX + i * per / 2, timed:true, wx:x - 119, px:x + 111, vc:460 }); }
+    flat(230); end(s); }
+  /* elevator: a platform that carries the bike across a water chasm, or up a cliff whose face is a spike wall – full gas rides off the far edge / into the spikes */
+  function elevatorSec(){ var s = begin('elevator'), g0 = cy, horiz = rng() < .5, per = (4.8 - .6 * d) * slow; flat(250); var xa = cx;
+    if (horiz){ var gw = 560 + 40 * rng(), pw = 190; cliff(220, 3, g0 + 220); flat(gw, 3, g0 + 220); endFloor(); cliff(-220, 0); plats.push({ kind:'mover', id:pid++, axis:'x', x0:xa + 4, x1:xa + 4 + pw, y:g0, amp:Math.min(400, gw - pw - 8), per:per, ph:rng() * TAU, dw:1, timed:true, gy:g0, wx:xa - 100, px:xa + 70, vc:300 }); }
+    else { var up = 150 + 50 * rng(), pw2 = 200, pitw = 244; cliff(220, 3, g0 + 220); flat(pitw, 3, g0 + 220); endFloor(); cliff(-220 - up, 0); plats.push({ kind:'mover', id:pid++, axis:'y', x0:xa + 14, x1:xa + 14 + pw2, y:g0, amp:up, per:per, ph:rng() * TAU, dw:1, timed:true, gy:g0, wx:xa - 100, px:xa + 70, vc:300 });
+      haz.push({ k:'blk', x0:xa + pitw - 14, x1:xa + pitw + 4, y0:g0 - up + 36, y1:g0 + 220, x:xa + pitw - 5, rx:200, sp:'l' }); }
+    flat(250); end(s); }
+  /* TNT hop: a bump, a row of barrels below it and a fixed saw beyond the landing spot – too slow lands on the barrels, too fast flies into the saw */
+  function tntSec(){ var s = begin('tnt'), g0 = cy, th = Math.atan2(60, 96), TP = { b0:30, sr:24, sm:160, sx:10 }, K = 2 + (rng() < .25 + .5 * d ? 1 : 0), e = TP.b0 - 20 + K * 46, D = 180, X, i; while ((X = jumpRange(VMAX, th, D)) - (e + 70) < 170 - 30 * d && D < 380) D += 20;
+    flat(320); s.xs0 = cx; to(96, -60, 1, g0); flat(12, 1, g0); s.xs1 = cx; var xl = cx; cliff(D, 0); var gy = cy; for (i = 0; i < K; i++) haz.push({ k:'tnt', x:xl + TP.b0 + i * 46, y:gy, w:40, h:50, gy:gy });
+    flat(X - TP.sx); haz.push({ k:"saw", kind:"fix", x:cx, gy:gy, r:TP.sr, mid:gy - TP.sm, amp:0, per:2, ph:0 }); s.cands = [560, 530, 500, 470, 440, 410, 380, 350, 320, 290]; s.xe = cx + 130; flat(270); gaps.push(e); end(s); }
+  /* collapsing bridge + gate: the planks drop 0.4 s after a wheel touches them, and the spiked gate behind the bridge only lifts a moment after a full-gas rider would reach it */
+  function bridgeSec(){ var s = begin('bridge'), g0 = cy, K = 5 + Math.floor(rng() * 3 + 2 * d), Z = 430 - 90 * d + rng() * 30, i; flat(200); var xb = cx; cliff(90, 2, g0 + 90);
+    for (i = 0; i < K; i++) plats.push({ kind:'bridge', id:pid++, x0:xb + i * 60, x1:xb + (i + 1) * 60, y:g0, gy:g0 }); flat(K * 60, 2, g0 + 90); endFloor(); cliff(-90, 0); flat(Z);
+    haz.push({ k:'gate', x:cx, gy:g0, w:40, h:190, rise:210, tg:tgid++, trig:xb + 10, delay:(K * 60 + Z) / VMAX + .85, timed:true, wx:cx - 122, px:cx + 96, rx:cx - xb + 200 }); flat(250); end(s); }
+  /* loop + exit saws: a downhill run-in, the loop, a climb back out – and two sliding saws on the flat behind it */
+  function loopSec(){ var s = begin('loopsaw'), r = 100 + 30 * d, g0 = cy, dropH = 340 + 150 * d, len = 700, k = 20, i; flat(60); var x0 = cx; for (i = 1; i <= k; i++){ var u = i / k; pt(x0 + len * u, g0 + dropH * (.5 - .5 * Math.cos(u * PI)), 0); } flat(120); loops.push({ x:cx + r + 6, y:cy - r, r:r, gy:cy }); flat(2 * r + 12); flat(100);
+    var a = .44, hc = dropH * .5; arc(0, -a, 300); ramp((hc - 300 * (1 - Math.cos(a)) - 420 * (1 - Math.cos(a))) / Math.sin(a), -a); arc(-a, 0, 420); fast.push([x0, cx]); flat(620); sawRow(2, (3.2 - .7 * d) * slow); flat(280); end(s); }
+  /* rolling boulders: a pressure plate releases a salvo that rolls down the slope ahead and smashes into the ledge wall – wait on top of the ledge until they are gone */
+  function boulderSec(){ var s = begin('boulders'), g0 = cy, ang = (24 + 4 * rng()) * PI / 180, K = 2 + (rng() < .2 + .5 * d ? 1 : 0), vb = 380 + 60 * d, gp = .85, tg = tgid++, j; flat(240); var xt = cx; flat(170); var xl = cx; cliff(96, 0); flat(190); arc(0, -ang, 160); ramp(430 + 90 * rng(), -ang); arc(-ang, 0, 260); flat(150); var xs = cx, xe = xl + 34; flat(280);
+    for (j = 0; j < K; j++){ var xj = xs + j * 64, b = { k:'roll', x:(xe + xj) / 2, rx:(xj - xe) / 2 + (xl - xt) + 220, xs:xj, xe:xe, vx:vb, r:30, tg:tg, trig:xt, delay:.15 + j * gp, gy:g0, j:j }; if (j === K - 1){ b.timed = true; b.wx = xl - 74; b.px = xl - 40; b.tclr = b.delay + (xj - xe) / vb + .05; } haz.push(b); }
+    s.plate = xt; end(s); }
+
+  var SK = { saws:sawSec, hammers:hammerSec, speedgap:speedGap, steep:steepSec, climb:climbSec, tunnel:tunnelSec, pistons:pistonSec, elevator:elevatorSec, tnt:tntSec, bridge:bridgeSec, loopsaw:loopSec, boulders:boulderSec };
+  function calm(k){ var sx = cx; kinds.push(k);
+    if (k === 'flat') flat(180 + rng() * 220); else if (k === 'hills') hills(340 + rng() * 340, 30 + 25 * d); else if (k === 'gap') jump('spikes'); else if (k === 'water') jump('water'); else if (k === 'spikes') spikeFlat(); else if (k === 'scaffold') scaffold(); else if (k === 'drop') drop();
+    else if (k === 'bouncers') bouncerSec(); else if (k === 'wind') windSec(); else if (k === 'double'){ jump('spikes'); jump('water'); } else if (k === 'downhill') downhill(); else if (k === 'dive') dive();
+    if (k === 'flat' || k === 'hills') sprinkle(sx, cx);
+    if (cx - lastCp > 900) checkpoint(); }
+  var prev = '';
+  function calmPick(){ var w = {}, k; for (k in CALM_W) if (n >= CALM_W[k][0]) w[k] = CALM_W[k][1]; k = pick(rng, w); if (k === prev && k !== 'hills' && k !== 'flat') k = 'hills'; prev = k; return k; }
+  function skill(k){ kinds.push(k); prev = k; SK[k](); }
+
   /* start: scaffold platform + plank ramp down, like the original's level 1 */
   pt(-300, -600, 1, 0); pt(-292, -100, 1, 0); flat(480, 1, 0); to(230, 100, 1, 0); flat(140); deco.push({ k:'sign', x:-20, y:-100, s:1, f:1 });
-  var target = 2600 + 3400 * d * (.9 + .2 * rng()), nsec = 0, minSec = 4 + Math.round(2 * d);
-  var wts = { flat:.6, hills:1.4, gap:n >= 4 ? 1.4 + d : 0, scaffold:n >= 2 ? 1.1 : 0, drop:n >= 3 ? .9 : 0, saws:n >= 8 ? 1 + 2 * d : 0, hammers:n >= 20 ? .8 + 1.4 * d : 0, tnt:n >= 10 ? .8 + d : 0, bridge:n >= 15 ? 1 : 0, mover:n >= 30 ? .8 : 0, loop:n >= 60 ? .9 : 0, bouncers:n >= 12 ? 1 : 0, water:n >= 7 ? 1 : 0, spikes:n >= 9 ? 1 : 0, wind:n >= 150 ? .9 : 0, double:n >= 40 ? .8 + d : 0, downhill:n >= 10 ? 1 : 0, boulders:n >= 25 ? .8 : 0, dive:n >= 18 ? 1 + .5 * d : 0 };
-  var prev = '';
-  while ((cx < target || nsec < minSec) && nsec < 18){ var k = pick(rng, wts); if (k === prev && k !== 'hills' && k !== 'flat') k = 'hills'; if (cx > target - 500) k = rng() < .5 ? 'flat' : 'hills'; prev = k; kinds.push(k); nsec++;
-    var sx = cx;
-    if (k === 'flat') flat(180 + rng() * 220); else if (k === 'hills') hills(300 + rng() * 300, (40 + 80 * d) * (.7 + .3 * ease)); else if (k === 'gap') jump('spikes'); else if (k === 'water') jump('water'); else if (k === 'spikes') spikeFlat(); else if (k === 'tnt') jump('tnt');
-    else if (k === 'scaffold') scaffold(); else if (k === 'drop') drop(); else if (k === 'saws') sawSec(); else if (k === 'hammers') hammerSec(); else if (k === 'bridge') bridgeSec(); else if (k === 'mover') moverSec(); else if (k === 'loop') loopSec(); else if (k === 'bouncers') bouncerSec(); else if (k === 'wind') windSec(); else if (k === 'double'){ jump('spikes'); jump('water'); } else if (k === 'downhill') downhill(); else if (k === 'boulders') boulderSec(); else if (k === 'dive') dive();
-    if (k === 'flat' || k === 'hills') sprinkle(sx, cx);
-    if (cx - lastCp > 900 && nsec < 17) checkpoint(); }
+  var i, j;
+  if (only){ flat(120); if (SK[only]) skill(only); else calm(only); }
+  else if (n <= 3){ var target = 2600 + 400 * rng(), nsec = 0; while ((cx < target || nsec < 4) && nsec < 10){ var ck = calmPick(); if (cx > target - 500) ck = rng() < .5 ? 'flat' : 'hills'; calm(ck); nsec++; } }
+  else { var ns = needSkills(n), pool = SKILLS.filter(function(k){ return n >= SKILL_FROM[k]; }), order = [], w = {};
+    /* the first skill section is the gate: it must also stop a rider who levels the bike in the air (from level 15), and it comes early */
+    for (i = 0; i < pool.length; i++) if (!(n >= 15 && pool[i] === 'steep') && !(n >= 30 && (pool[i] === 'loopsaw' || (pool[i] === 'hammers' && n >= 100)))) w[pool[i]] = 1;
+    order.push(pick(rng, w));
+    while (order.length < ns){ w = {}; var any = false; for (i = 0; i < pool.length; i++) if (order.indexOf(pool[i]) < 0){ w[pool[i]] = 1; any = true; } if (!any) for (i = 0; i < pool.length; i++) if (pool[i] !== order[order.length - 1]) w[pool[i]] = 1; order.push(pick(rng, w)); }
+    for (i = 0; i < ns; i++){ var nc = i === 0 ? (n < 30 ? 1 : 0) : n >= 250 ? (rng() < .6 ? 1 : 0) : 1 + (n < 100 && rng() < .25 ? 1 : 0); for (j = 0; j < nc; j++) calm(calmPick()); skill(order[i]); }
+    nc = 1 + (n < 100 && rng() < .5 ? 1 : 0); for (j = 0; j < nc; j++) calm(j === nc - 1 && rng() < .6 ? (rng() < .5 ? 'flat' : 'hills') : calmPick()); }
   flat(200); var fx = cx; flat(260); sprinkle(fx + 30, cx); var ex0 = cx, ey0 = cy; for (var ei = 1; ei <= 10; ei++) pt(ex0 + 50 * ei, ey0 - 420 * (.5 - .5 * Math.cos(ei / 10 * PI)), 0); flat(1200);
-  return finishBuild(pts, { n:n, seed:tr, theme:themeOf(n), haz:haz, plats:plats, loops:loops, fans:fans, cps:cps, deco:deco, kinds:kinds, tries:tr + 1, fx:fx, gaps:gaps }); }
+  return finishBuild(pts, { n:only ? 0 : n, seed:tr, theme:themeOf(n), haz:haz, plats:plats, loops:loops, fans:fans, cps:cps, deco:deco, kinds:kinds, tries:tr + 1, fx:fx, gaps:gaps, secs:secs, fast:fast }); }
+/* a level that is just the start ramp + one section (demos, isolated tests): skillLevel('saws', 40) */
+function skillLevel(kind, n, tr){ return build(n || 60, tr || 0, kind); }
 /* resample a control polyline to the uniform heightfield (hy = surface, ht = type, gb = ground under wooden structures) and finish the level object */
 function finishBuild(pts, o){ var cx = pts[pts.length - 1].x, haz = o.haz, plats = o.plats, deco = o.deco, fx = o.fx;
   var x0 = pts[0].x, nx = Math.ceil((cx - x0) / DX) + 1, hy = new Float32Array(nx), ht = new Uint8Array(nx), gb = new Float32Array(nx), j = 0, i;
   for (i = 0; i < nx; i++){ var x = x0 + i * DX; while (j < pts.length - 2 && pts[j + 1].x <= x) j++; var a = pts[j], b = pts[j + 1], u = b.x > a.x ? clamp((x - a.x) / (b.x - a.x), 0, 1) : 1; hy[i] = a.y + (b.y - a.y) * u; ht[i] = a.t; gb[i] = a.g + (b.g - a.g) * u; }
   /* a sample segment's type comes from the control segment under its midpoint; steep walls (pit sides) are plain dirt – never deadly */
   j = 0; for (i = 0; i < nx - 1; i++){ var xm = x0 + i * DX + DX / 2; while (j < pts.length - 2 && pts[j + 1].x <= xm) j++; ht[i] = Math.abs(hy[i + 1] - hy[i]) > 2.5 * DX ? (pts[j].t === 1 ? 1 : 0) : pts[j].t; }
-  var L = { n:o.n, seed:o.seed, theme:o.theme, x0:x0, nx:nx, hy:hy, ht:ht, gb:gb, len:fx, haz:haz, plats:plats, loops:o.loops, fans:o.fans, cps:o.cps, deco:deco, kinds:o.kinds, tries:o.tries, finish:{ x:fx }, startX:o.startX || 80, endX:cx, par:o.par || 30, gaps:o.gaps || [] };
+  var L = { n:o.n, seed:o.seed, theme:o.theme, x0:x0, nx:nx, hy:hy, ht:ht, gb:gb, len:fx, haz:haz, plats:plats, loops:o.loops, fans:o.fans, cps:o.cps, deco:deco, kinds:o.kinds, tries:o.tries, finish:{ x:fx }, startX:o.startX || 80, endX:cx, par:o.par || 30, gaps:o.gaps || [], secs:o.secs || [], fast:o.fast || [], skills:[], hzR:320 };
   for (i = 0; i < deco.length; i++) if (deco[i].y == null) deco[i].y = sY(L, deco[i].x);
-  haz.sort(function(p, q){ return p.x - q.x; }); plats.sort(function(p, q){ return p.x0 - q.x0; });
-  L.timed = []; for (i = 0; i < haz.length; i++) if (haz[i].timed) L.timed.push(haz[i]); for (i = 0; i < plats.length; i++) if (plats[i].timed) L.timed.push(plats[i]); L.timed.sort(function(p, q){ return (p.x != null ? p.x : p.x0) - (q.x != null ? q.x : q.x0); });
+  for (i = 0; i < L.secs.length; i++) if (L.skills.indexOf(L.secs[i].k) < 0) L.skills.push(L.secs[i].k);
+  haz.sort(function(p, q){ return p.x - q.x; }); plats.sort(function(p, q){ return p.x0 - q.x0; }); for (i = 0; i < haz.length; i++) if (haz[i].rx > L.hzR) L.hzR = haz[i].rx;
+  /* timed hazards in riding order, each with a wait point (wx: the bike's centre is safe there) and a passed point (px) */
+  L.timed = []; for (i = 0; i < haz.length; i++) if (haz[i].timed) L.timed.push(haz[i]); for (i = 0; i < plats.length; i++) if (plats[i].timed) L.timed.push(plats[i]);
+  for (i = 0; i < L.timed.length; i++){ var h = L.timed[i]; if (h.wx == null){ var hx = h.x != null ? h.x : h.x0, z = h.k === 'ham' ? Math.max(110, h.len * Math.sin(Math.min(h.amp, PI / 2)) * .9 + 48) : h.k === 'saw' ? 165 : 100; h.wx = hx - z; h.px = hx + (h.k === 'ham' ? z : h.k === 'saw' ? 100 : 70); } }
+  L.timed.sort(function(p, q){ return p.wx - q.wx; });
   return L; }
-function genLevel(n){ n = clamp(n | 0 || 1, 1, NLV); if (LCACHE[n]) return LCACHE[n]; var L = null, best = null;
-  for (var tr = 0; tr < 60; tr++){ L = build(n, tr); var a = simulate(L); if (a.won && a.crashes === 0 && a.time <= SIMMAX){ L.simT = a.time; L.simFlips = a.flips; L.par = Math.round(a.time * 1.15 * 100) / 100; LCACHE[n] = L; return L; } if (!best || (a.won && !best.won)) best = L; }
-  L = best || L; L.unsolved = true; L.par = 30; L.simT = 0; LCACHE[n] = L; return L; }
+/* shift every periodic hazard / platform of a level by tau seconds */
+function shiftPhase(L, tau){ var i, h, any = false; for (i = 0; i < L.haz.length; i++){ h = L.haz[i]; if (h.per && h.amp !== 0){ any = true; if (h.k === 'pist') h.ph += tau; else h.ph += TAU * tau / h.per; } } for (i = 0; i < L.plats.length; i++){ h = L.plats[i]; if (h.per){ any = true; h.ph += TAU * tau / h.per; } } return any; }
+/* the difficulty contract of level n – returns '' when the layout passes, else the reason it was rejected. The periodic hazards are phased against
+   the full-gas riders: up to 10 time shifts are tried until both naive riders fail (early enough), then the smart rider must finish cleanly */
+function verify(L, n){ var maxT = n <= 3 ? 40 : n < 15 ? 60 : 70, a, k, why = '';
+  if (n >= 4 && L.secs.length < needSkills(n)) return 'skills';
+  for (k = 0; k < 10; k++){ if (k && !shiftPhase(L, .27)) break; why = ''; L.pshift = k;
+    if (n >= 4){ a = simulate(L, maxT, naiveInput, true); L.naiveDist = Math.round(a.x); L.naiveWhy = a.won ? 'won' : a.why || 'timeout'; if (a.won) why = 'naive'; else if (n >= 30 && a.x > L.finish.x * (n >= 100 ? 1 / 3 : .5)) why = 'late'; }
+    if (!why && n >= 15){ a = simulate(L, maxT, leanInput, true); L.leanDist = Math.round(a.x); L.leanWhy = a.won ? 'won' : a.why || 'timeout'; if (a.won) why = 'lean'; }
+    if (!why) break; }
+  if (why) return why;
+  a = simulate(L, maxT, autoInput, true); if (!a.won || a.crashes){ L.smartWhy = (a.why || 'timeout') + '@' + Math.round(a.x); return 'smart'; }
+  if (fromCheckpoints(L)) return 'cp';
+  L.simT = a.time; L.simFlips = a.flips; L.par = Math.round(a.time * 1.15 * 100) / 100; return ''; }
+/* a crash puts the player back at the last flag with no speed, so every stretch must also be rideable from its checkpoint: returns 0, or the number of the first flag that fails */
+function fromCheckpoints(L){ for (var c = 0; c < L.cps.length; c++){ var S = newRun(L), k = 0, xEnd = c + 1 < L.cps.length ? L.cps[c + 1] + 40 : L.finish.x; S.cp = c; S.t = 2.3 + c * 1.7; respawn(S); S.ev.length = 0;
+    while (!S.over && (S.rx + S.fx) / 2 < xEnd && k++ < 2400){ step(S, autoInput(S), DT); S.ev.length = 0; if (S.crashes) return c + 1; } if (k >= 2400) return c + 1; }
+  return 0; }
+function genLevel(n){ n = clamp(n | 0 || 1, 1, NLV); if (LCACHE[n]) return LCACHE[n]; var L = null, rej = [];
+  for (var tr = 0; tr < 60; tr++){ L = build(n, tr); var why = verify(L, n); if (!why){ L.rej = rej; LCACHE[n] = L; return L; } rej.push(why); }
+  L.unsolved = true; L.rej = rej; L.par = 30; L.simT = 0; LCACHE[n] = L; return L; }
 
 /* ---------- heightfield helpers ---------- */
 function sY(L, x){ var f = (x - L.x0) / DX, i = Math.floor(f); if (i < 0) return L.hy[0]; if (i >= L.nx - 1) return L.hy[L.nx - 1]; var u = f - i; return L.hy[i] + (L.hy[i + 1] - L.hy[i]) * u; }
@@ -405,10 +509,11 @@ function hfContact(L, px, py, r){ var i0 = Math.floor((px - r - L.x0) / DX), i1 
     else if (d2 < (r + SK) * (r + SK)){ var dd = Math.sqrt(d2); if (dd > 1e-6){ nx = ex / dd; ny = ey / dd; pen = r - dd; } else { nx = dy / sl; ny = -DX / sl; pen = r; } }
     else continue;
     if (pen > C.pen) cSet(nx, ny, pen, L.ht[i], null, 0, 0, null); } }
-function moverOff(p, tm){ return p.amp * (1 - Math.cos(TAU * tm / p.per + p.ph)) / 2; }
-function moverVel(p, tm){ return p.amp * PI / p.per * Math.sin(TAU * tm / p.per + p.ph); }
+/* moving platforms: a plain cosine shuttle, or (dw) one that rests at both ends for about a third of the period each */
+function moverOff(p, tm){ var c = Math.cos(TAU * tm / p.per + p.ph); if (!p.dw) return p.amp * (1 - c) / 2; var u = clamp(.5 - .75 * c, 0, 1); return p.amp * u * u * (3 - 2 * u); }
+function moverVel(p, tm){ var ph = TAU * tm / p.per + p.ph; if (!p.dw) return p.amp * PI / p.per * Math.sin(ph); var u = .5 - .75 * Math.cos(ph); return u <= 0 || u >= 1 ? 0 : p.amp * 6 * u * (1 - u) * .75 * Math.sin(ph) * TAU / p.per; }
 function moverPos(p, tm){ var o = moverOff(p, tm); return p.axis === 'x' ? { x:p.x0 + o, y:p.y } : { x:p.x0, y:p.y - o }; }
-function platContact(S, px, py, r){ var L = S.L, ps = L.plats, j; for (j = S.pi; j < ps.length; j++){ var p = ps[j]; if (p.x0 - 300 > px) break; if (p.x1 + 300 < px) continue;
+function platContact(S, px, py, r){ var L = S.L, ps = L.plats, j; for (j = S.pi; j < ps.length; j++){ var p = ps[j]; if (p.x0 - 440 > px) break; if (p.x1 + 440 < px) continue;
     var ox = 0, oy = 0, vx = 0, vy = 0; if (p.kind === 'mover'){ var o = moverOff(p, S.t), v = moverVel(p, S.t); if (p.axis === 'x'){ ox = o; vx = v; } else { oy = -o; vy = -v; } } else if (S.br[p.id] != null && S.t - S.br[p.id] > BRIDGE_T) continue;
     var x0 = p.x0 + ox, x1 = p.x1 + ox, y = p.y + oy; if (px + r < x0 || px - r > x1 || py > y + r * .55) continue; var qx = px < x0 ? x0 : px > x1 ? x1 : px, ex = px - qx, ey = py - y, d2 = ex * ex + ey * ey; if (d2 >= (r + SK) * (r + SK)) continue;
     var dd = Math.sqrt(d2), nx, ny, pen; if (dd > 1e-6){ nx = ex / dd; ny = ey / dd; pen = r - dd; } else { nx = 0; ny = -1; pen = r; } if (ny > -.25) continue;
@@ -420,11 +525,23 @@ function loopContact(S, px, py, r){ var L = S.L, ls = L.loops, j; for (j = 0; j 
     if (pen > -SK && pen > C.pen) cSet(nx, ny, pen, 1, null, 0, 0, lp); } }
 
 /* ---------- physics (pure, deterministic): two wheel mass points + a rigid rod ---------- */
-function newRun(L){ var y = sY(L, L.startX) - R, S = { L:L, t:0, rx:L.startX, ry:y, fx:L.startX + WL, fy:y, rvx:0, rvy:0, fvx:0, fvy:0, a:0, w:0, onR:false, onF:false, nrx:0, nry:-1, nfx:0, nfy:-1, prvx:0, prvy:0, pfvx:0, pfvy:0, airT:0, airRot:0, flips:0, bonus:0, crashes:0, cp:-1, dead:false, deadT:0, why:'', won:false, over:false, ev:[], br:{}, bo:{}, ld:{}, hi:0, pi:0, stuckT:0, padCool:0, spin:0, lean:0, maxX:L.startX, lastMy:y, crashX:0, crashY:0, inLoop:false }; return S; }
-function placeAt(S, x){ var y = sY(S.L, x) - R; S.rx = x; S.ry = y; S.fx = x + WL; S.fy = y; S.rvx = S.rvy = S.fvx = S.fvy = 0; S.a = 0; S.w = 0; S.airT = 0; S.airRot = 0; S.onR = S.onF = false; S.padCool = 0; S.stuckT = 0; S.maxX = x; S.lastMy = y; }
+function newRun(L){ var y = sY(L, L.startX) - R, S = { L:L, t:0, rx:L.startX, ry:y, fx:L.startX + WL, fy:y, rvx:0, rvy:0, fvx:0, fvy:0, a:0, w:0, onR:false, onF:false, nrx:0, nry:-1, nfx:0, nfy:-1, prvx:0, prvy:0, pfvx:0, pfvy:0, crk:0, cfk:0, airT:0, airRot:0, flips:0, bonus:0, crashes:0, cp:-1, dead:false, deadT:0, why:'', won:false, over:false, ev:[], br:{}, bo:{}, ld:{}, tr:{}, hi:0, pi:0, stuckT:0, padCool:0, whT:0, landA:0, spin:0, lean:0, maxX:L.startX, lastMy:y, crashX:0, crashY:0, inLoop:false, gasOn:false, ai:null }; return S; }
+function placeAt(S, x){ var y = sY(S.L, x) - R; S.rx = x; S.ry = y; S.fx = x + WL; S.fy = y; S.rvx = S.rvy = S.fvx = S.fvy = 0; S.a = 0; S.w = 0; S.airT = 0; S.airRot = 0; S.onR = S.onF = false; S.padCool = 0; S.stuckT = 0; S.whT = 0; S.maxX = x; S.lastMy = y; }
 function crash(S, why){ if (S.dead) return; S.dead = true; S.deadT = 0; S.why = why; S.crashes++; S.crashX = (S.rx + S.fx) / 2; S.crashY = (S.ry + S.fy) / 2; S.ev.push('crash'); }
-function respawn(S){ var L = S.L, x = S.cp >= 0 ? L.cps[S.cp] : L.startX; placeAt(S, x); S.dead = false; S.br = {}; S.bo = {}; S.ld = {}; S.hi = 0; S.pi = 0; S.ev.push('respawn'); }
+function respawn(S){ var L = S.L, x = S.cp >= 0 ? L.cps[S.cp] : L.startX; placeAt(S, x); S.dead = false; S.br = {}; S.bo = {}; S.ld = {}; S.tr = {}; S.ai = null; S.hi = 0; S.pi = 0; S.ev.push('respawn'); }
+/* a copy of a run that can be stepped on its own (the smart rider's what-if look-ahead) */
+var RUNKEYS = ['t', 'rx', 'ry', 'fx', 'fy', 'rvx', 'rvy', 'fvx', 'fvy', 'a', 'w', 'onR', 'onF', 'nrx', 'nry', 'nfx', 'nfy', 'prvx', 'prvy', 'pfvx', 'pfvy', 'crk', 'cfk', 'airT', 'airRot', 'flips', 'bonus', 'crashes', 'cp', 'dead', 'deadT', 'why', 'won', 'over', 'hi', 'pi', 'stuckT', 'padCool', 'whT', 'landA', 'spin', 'lean', 'maxX', 'lastMy', 'crashX', 'crashY', 'inLoop', 'gasOn'];
+function cloneRun(S){ var c = newRun(S.L), k, i; for (i = 0; i < RUNKEYS.length; i++) c[RUNKEYS[i]] = S[RUNKEYS[i]]; for (k in S.br) c.br[k] = S.br[k]; for (k in S.ld) c.ld[k] = S.ld[k]; for (k in S.tr) c.tr[k] = S.tr[k]; for (k in S.bo){ var b = S.bo[k]; c.bo[k] = { y:b.y, vy:b.vy, gone:b.gone }; } return c; }
 var INP0 = { g:false, b:false, l:false, r:false };
+/* hazard kinematics – closed-form in time, shared by the physics, the renderer and the smart rider */
+var HC = { x:0, y:0, r:0 };
+function sawS(h, tm){ return clamp(.5 + h.A * (Math.sin(TAU * tm / h.per + h.ph) + h.b), 0, 1); } /* 0 = parked high, 1 = down on the path */
+function hazCircle(h, tm){ if (h.k === 'saw'){ if (h.kind === 'slide'){ var s = sawS(h, tm); HC.x = h.xa + (h.x - h.xa) * s; HC.y = h.ya + (h.yb - h.ya) * s; } else { HC.x = h.x; HC.y = h.mid + h.amp * Math.sin(TAU * tm / h.per + h.ph); } HC.r = h.r; } else { var th = h.amp * Math.sin(TAU * tm / h.per + h.ph); HC.x = h.x + h.len * Math.sin(th); HC.y = h.py + h.len * Math.cos(th); HC.r = h.r; } }
+function pistExt(h, tm){ var u = (tm - h.ph) % h.per; if (u < 0) u += h.per; return u < .1 ? u / .1 : u < h.up - .1 ? 1 : u < h.up ? (h.up - u) / .1 : 0; } /* 0 = flush with the floor, 1 = fully up */
+function gateLift(h, S){ var t0 = S.tr[h.tg]; return t0 == null ? 0 : clamp((S.t - t0 - h.delay) / .35, 0, 1) * h.rise; }
+function rollX(h, S){ var t0 = S.tr[h.tg]; if (t0 == null) return h.xs; var tt = S.t - t0 - h.delay; return tt <= 0 ? h.xs : h.xs - h.vx * tt; }
+function circRect(px, py, r, x0, y0, x1, y1){ var qx = px < x0 ? x0 : px > x1 ? x1 : px, qy = py < y0 ? y0 : py > y1 ? y1 : py; return (px - qx) * (px - qx) + (py - qy) * (py - qy) < r * r; }
+function bikeRect(S, hx, hy, x0, y0, x1, y1){ return circRect(S.rx, S.ry, R, x0, y0, x1, y1) || circRect(S.fx, S.fy, R, x0, y0, x1, y1) || circRect(hx, hy, HEADR, x0, y0, x1, y1); }
 function resolveWheel(S, k, dt){ var px = k ? S.fx : S.rx, py = k ? S.fy : S.ry, L = S.L; cReset(); hfContact(L, px, py, R); platContact(S, px, py, R); loopContact(S, px, py, R); if (!C.hit) return false;
   var nx = C.nx, ny = C.ny, pen = C.pen > 0 ? C.pen : 0; px += nx * pen; py += ny * pen; var vx = k ? S.fvx : S.rvx, vy = k ? S.fvy : S.rvy, relx = vx - C.mvx, rely = vy - C.mvy, vn = relx * nx + rely * ny;
   if (vn < 0){ var sp = Math.sqrt(relx * relx + rely * rely);
@@ -432,14 +549,24 @@ function resolveWheel(S, k, dt){ var px = k ? S.fx : S.rx, py = k ? S.fy : S.ry,
     if (-vn < .42 * sp){ var tx = -ny, ty = nx, vt = relx * tx + rely * ty, sg = vt >= 0 ? 1 : -1; vx = C.mvx + tx * sg * sp; vy = C.mvy + ty * sg * sp; } else { vx -= nx * vn; vy -= ny * vn; } }
   /* a horizontal mover carries a wheel that is (nearly) at rest relative to it and not driven – static friction; a rolling wheel is not yanked */
   if (C.plat && C.plat.kind === 'mover' && C.plat.axis === 'x' && !S.gasOn && Math.abs(vx - C.mvx) < 80) vx = C.mvx;
-  if (k){ S.fx = px; S.fy = py; S.fvx = vx; S.fvy = vy; S.nfx = nx; S.nfy = ny; S.onF = true; S.pfvx = C.mvx; S.pfvy = C.mvy; } else { S.rx = px; S.ry = py; S.rvx = vx; S.rvy = vy; S.nrx = nx; S.nry = ny; S.onR = true; S.prvx = C.mvx; S.prvy = C.mvy; }
+  var ck = C.loop ? 2 : C.plat ? 1 : 0;
+  if (k){ S.fx = px; S.fy = py; S.fvx = vx; S.fvy = vy; S.nfx = nx; S.nfy = ny; S.onF = true; S.pfvx = C.mvx; S.pfvy = C.mvy; S.cfk = ck; } else { S.rx = px; S.ry = py; S.rvx = vx; S.rvy = vy; S.nrx = nx; S.nry = ny; S.onR = true; S.prvx = C.mvx; S.prvy = C.mvy; S.crk = ck; }
   if (C.loop) S.inLoop = true;
-  var ty = C.type; if (ty === 2) crash(S, 'spikes'); else if (ty === 3){ S.dbg = [k, px.toFixed(1), py.toFixed(1), nx.toFixed(2), ny.toFixed(2), pen.toFixed(1), C.plat ? C.plat.kind : '-']; crash(S, 'water'); } else if (ty === 4 && S.padCool <= 0){ S.padCool = .3; S.ev.push('pad'); var q; for (q = 0; q < 2; q++){ var wvx = q ? S.fvx : S.rvx, wvy = q ? S.fvy : S.rvy, wn = wvx * nx + wvy * ny; wvx += nx * (PADV - wn); wvy += ny * (PADV - wn); if (q){ S.fvx = wvx; S.fvy = wvy; } else { S.rvx = wvx; S.rvy = wvy; } } }
+  var ty = C.type; if (ty === 2) crash(S, 'spikes'); else if (ty === 3) crash(S, 'water'); else if (ty === 4 && S.padCool <= 0){ S.padCool = .3; S.ev.push('pad'); var q; for (q = 0; q < 2; q++){ var wvx = q ? S.fvx : S.rvx, wvy = q ? S.fvy : S.rvy, wn = wvx * nx + wvy * ny; wvx += nx * (PADV - wn); wvy += ny * (PADV - wn); if (q){ S.fvx = wvx; S.fvy = wvy; } else { S.rvx = wvx; S.rvy = wvy; } } }
   if (C.plat && C.plat.kind === 'bridge' && S.br[C.plat.id] == null){ S.br[C.plat.id] = S.t; S.ev.push('creak'); }
-  /* landing with the bike's up vector more than 100° from the contact normal = flipped = crash */
+  /* the bike's up vector more than 100° from the contact normal = lying on its back = crash */
   var ux = S.fx - S.rx, uy = S.fy - S.ry, ul = Math.sqrt(ux * ux + uy * uy) || 1; if ((uy / ul) * nx + (-ux / ul) * ny < CRASHCOS) crash(S, 'flip');
   return true; }
 function rod(S){ var dx = S.fx - S.rx, dy = S.fy - S.ry, dl = Math.sqrt(dx * dx + dy * dy) || 1, cr = (dl - WL) / dl * .5; S.rx += dx * cr; S.ry += dy * cr; S.fx -= dx * cr; S.fy -= dy * cr; var nx = dx / dl, ny = dy / dl, rel = (S.fvx - S.rvx) * nx + (S.fvy - S.rvy) * ny; S.rvx += nx * rel / 2; S.rvy += ny * rel / 2; S.fvx -= nx * rel / 2; S.fvy -= ny * rel / 2; }
+function slope1(L, x){ return Math.atan2(sY(L, x + 10) - sY(L, x - 10), 20); }
+/* touchdown: the angle between the bike's frame and the surface it lands on (+ = nose-down, − = nose-up). The frame angle is the one just before the contact; the surface angle is read at the wheel
+   that touched (its contact normal, and the ground 30 px before / under / after it – a landing next to an edge takes the kinder reading) */
+function landRel(S, a){ var L = S.L, best = 9, k, q, r;
+  for (k = 0; k < 2; k++){ if (!(k ? S.onF : S.onR)) continue; var nx = k ? S.nfx : S.nrx, ny = k ? S.nfy : S.nry, kind = k ? S.cfk : S.crk, wx = k ? S.fx : S.rx;
+    r = wrapA(a - Math.atan2(nx, -ny)); if (Math.abs(r) < Math.abs(best)) best = r;
+    if (kind === 1){ r = wrapA(a); if (Math.abs(r) < Math.abs(best)) best = r; }
+    else if (kind === 0) for (q = -1; q <= 1; q++){ r = wrapA(a - slope1(L, wx + q * 30)); if (Math.abs(r) < Math.abs(best)) best = r; } }
+  return best; }
 function step(S, inp, dt){ if (S.over) return; var L = S.L, i; inp = inp || INP0;
   S.t += dt; if (S.padCool > 0) S.padCool -= dt; S.gasOn = !!inp.g;
   if (S.dead){ S.deadT += dt; if (S.deadT >= RESPAWN) respawn(S); return; }
@@ -449,16 +576,27 @@ function step(S, inp, dt){ if (S.over) return; var L = S.L, i; inp = inp || INP0
   var gn; if (S.onR && (gn = GRAV * S.nry) < 0){ S.rvx -= S.nrx * gn * dt; S.rvy += (GRAV - S.nry * gn) * dt; } else S.rvy += GRAV * dt;
   if (S.onF && (gn = GRAV * S.nfy) < 0){ S.fvx -= S.nfx * gn * dt; S.fvy += (GRAV - S.nfy * gn) * dt; } else S.fvy += GRAV * dt;
   var dr = 1 - .06 * dt; S.rvx *= dr; S.fvx *= dr; S.rvy *= dr; S.fvy *= dr;
-  /* rider lean: drive the angular velocity toward ±LEANW (in the air it slowly damps when not leaning) */
+  /* rider lean: drive the angular velocity toward ±LEANW. Nothing levels the bike by itself – with no lean pressed the spin only fades slowly in the air */
   var w = ((S.fvx - S.rvx) * ppx + (S.fvy - S.rvy) * ppy) / WL, wt = inp.r ? LEANW : inp.l ? -LEANW : 0, air = !S.onR && !S.onF, dw = 0;
-  if (wt !== 0) dw = clamp(wt - w, -LEANACC * dt, LEANACC * dt); else if (air) dw = -w * Math.min(1, 1.4 * dt);
-  if (dw !== 0){ var imp = dw * WL / 2; S.fvx += ppx * imp; S.fvy += ppy * imp; S.rvx -= ppx * imp; S.rvy -= ppy * imp; }
+  if (wt !== 0) dw = clamp(wt - w, -LEANACC * dt, LEANACC * dt); else if (air) dw = -w * Math.min(1, AIRDAMP * dt);
+  var upF = -dw * WL / 2, upR = dw * WL / 2; /* pushes on the front / rear wheel along the frame's "up" */
   S.lean = inp.r ? 1 : inp.l ? -1 : 0;
-  /* drive / brake along the contact tangent (the rear wheel drives; the brake works on any contact) */
+  /* weight transfer with the rear wheel on the ground: the chassis carries part of the front wheel's weight and the gas adds the rear wheel's torque reaction.
+     Together they beat gravity on the front wheel only on slopes steeper than 35° → full gas on a steep climb is a wheelie that keeps growing (lean forward to hold it down);
+     off a lip under power the bike takes off level, rolling off an edge without gas it nose-dives. A wheel standing on the ground only lifts when the push beats its weight */
+  if (S.onR && !S.inLoop){ var wg = inp.g ? WGAS : 0, wsl = -S.nrx; /* wsl = sine of the climb under the rear wheel */
+    if (wg && wsl > .5736) wg *= 1 + .4 * Math.min(1, (wsl - .5736) / .1335); /* beyond 35° the engine pulls at full load: the reaction grows (×1.4 at 45°) and the flip is quick */
+    if (wg && !S.onF){ /* on flat or gentle ground the reaction fades as the frame rears up, so a wheelie there only climbs while ← is held; on a steep climb (15° → 35°) it does not fade */
+      var gtx = -S.nry, gty = S.nrx; if (gtx * ux + gty * uy < 0){ gtx = -gtx; gty = -gty; } var gp = Math.cos(1.6 * Math.atan2(gtx * uy - gty * ux, gtx * ux + gty * uy)), gs = clamp((wsl - .2588) / .3148, 0, 1); if (gp < 0) gp = 0; wg *= gp + (1 - gp) * gs; }
+    upF += (FSUP * GRAV * (ux > 0 ? ux : 0) + wg) * dt; }
+  if (S.onF && upF > 0 && S.nfy < 0) upF = Math.max(0, upF + GRAV * S.nfy * dt);
+  if (S.onR && upR > 0 && S.nry < 0) upR = Math.max(0, upR + GRAV * S.nry * dt);
+  if (upF !== 0){ S.fvx -= ppx * upF; S.fvy -= ppy * upF; } if (upR !== 0){ S.rvx -= ppx * upR; S.rvy -= ppy * upR; }
+  /* drive / brake along the contact tangent (the rear wheel drives; the brake works on any contact and bites harder above the top speed) */
   if (S.onR || S.onF){ var nx = S.onR ? S.nrx : S.nfx, ny = S.onR ? S.nry : S.nfy, tx = -ny, ty = nx, pvx = S.onR ? S.prvx : S.pfvx, pvy = S.onR ? S.prvy : S.pfvy; if (tx * ux + ty * uy < 0){ tx = -tx; ty = -ty; }
     var vt = (mvx - pvx) * tx + (mvy - pvy) * ty, dv = 0; /* speed relative to what the wheel stands on (moving platforms) */
     if (inp.g && S.onR && vt < VMAX) dv = Math.min(DRIVE * dt, VMAX - vt);
-    else if (inp.b){ if (vt > 8) dv = -Math.min(BRAKE * dt, vt); else dv = -Math.min(500 * dt, Math.max(0, vt + REV)); }
+    else if (inp.b){ if (vt > 8) dv = -Math.min(BRAKE * (vt > VMAX ? vt * vt / (VMAX * VMAX) : 1) * dt, vt); else dv = -Math.min(500 * dt, Math.max(0, vt + REV)); }
     else if (!inp.g){ dv = -(vt > 0 ? 1 : vt < 0 ? -1 : 0) * Math.min(70 * dt, Math.abs(vt)); }
     if (dv !== 0){ S.rvx += tx * dv; S.rvy += ty * dv; S.fvx += tx * dv; S.fvy += ty * dv; } }
   /* wind */
@@ -466,8 +604,8 @@ function step(S, inp, dt){ if (S.over) return; var L = S.L, i; inp = inp || INP0
   /* integrate + rigid frame */
   S.rx += S.rvx * dt; S.ry += S.rvy * dt; S.fx += S.fvx * dt; S.fy += S.fvy * dt; rod(S);
   /* contacts */
-  var wasAir = air, prevA = S.a; S.onR = false; S.onF = false; S.inLoop = false;
-  while (S.pi < L.plats.length && L.plats[S.pi].x1 + 320 < mx) S.pi++;
+  var wasAir = air, prevA = S.a, aPre = Math.atan2(S.fy - S.ry, S.fx - S.rx), vImp = Math.sqrt((S.rvx + S.fvx) * (S.rvx + S.fvx) + (S.rvy + S.fvy) * (S.rvy + S.fvy)) / 2; S.onR = false; S.onF = false; S.inLoop = false;
+  while (S.pi < L.plats.length && L.plats[S.pi].x1 + 460 < mx) S.pi++;
   resolveWheel(S, 0, dt); resolveWheel(S, 1, dt); rod(S); if (S.onR || S.onF){ resolveWheel(S, 0, dt); resolveWheel(S, 1, dt); rod(S); }
   if (S.dead) return;
   ux = S.fx - S.rx; uy = S.fy - S.ry; ul = Math.sqrt(ux * ux + uy * uy) || 1; ux /= ul; uy /= ul; mx = (S.rx + S.fx) / 2; my = (S.ry + S.fy) / 2;
@@ -475,20 +613,28 @@ function step(S, inp, dt){ if (S.over) return; var L = S.L, i; inp = inp || INP0
   var da = wrapA(S.a - prevA); S.spin += ((S.rvx * ux + S.rvy * uy) * dt) / R;
   air = !S.onR && !S.onF;
   if (air){ S.airT += dt; S.airRot += da; if (S.airRot <= -(TAU - .35)){ S.airRot += TAU; S.flips++; S.bonus += FLIPBONUS; S.ev.push('flip'); } else if (S.airRot >= TAU - .35){ S.airRot -= TAU; S.flips++; S.bonus += FLIPBONUS; S.ev.push('flip'); } }
-  else { if (wasAir && S.airT > .12) S.ev.push('land'); S.airT = 0; S.airRot = 0; }
+  else { if (wasAir && S.airT > LANDT){ S.ev.push('land');
+      /* strict landing: the frame must be within ±45° of the surface; nose-first (front wheel only, > 25° nose-down) at speed = over the bars */
+      if (!S.inLoop){ var rel = landRel(S, aPre); S.landA = rel; if (rel > LANDMAX || rel < -LANDMAX){ crash(S, 'land'); return; } if (S.onF && !S.onR && rel > ENDOA && vImp > ENDOV){ crash(S, 'endo'); return; } } }
+    S.airT = 0; S.airRot = 0; }
+  /* wheelie: rear wheel down, front wheel up, gas held with the frame more than 55° above the surface for 0.25 s = over backwards */
+  if (S.onR && !S.onF && !S.inLoop && inp.g){ var wtx = -S.nry, wty = S.nrx; if (wtx * ux + wty * uy < 0){ wtx = -wtx; wty = -wty; } S.whT = Math.atan2(wtx * uy - wty * ux, wtx * ux + wty * uy) < -WHEELA ? S.whT + dt : 0; if (S.whT >= WHEELT){ crash(S, 'wheelie'); return; } } else S.whT = 0;
   /* the rider's head vs the terrain */
   var upx = uy, upy = -ux, hx = mx + upx * HEADH, hy = my + upy * HEADH;
   if (!S.inLoop && hy + HEADR > sY(L, hx) + 1){ crash(S, 'head'); return; }
-  /* hazards */
-  var hz = L.haz; while (S.hi < hz.length && hz[S.hi].x + 320 < mx) S.hi++;
-  for (i = S.hi; i < hz.length; i++){ var h = hz[i]; if (h.x - 320 > mx) break; var cxh, cyh, rr;
-    if (h.k === 'saw'){ cxh = h.x; cyh = h.mid + h.amp * Math.sin(TAU * S.t / h.per + h.ph); rr = h.r; }
-    else if (h.k === 'ham'){ var th = h.amp * Math.sin(TAU * S.t / h.per + h.ph); cxh = h.x + h.len * Math.sin(th); cyh = h.py + h.len * Math.cos(th); rr = h.r; }
-    else if (h.k === 'tnt'){ var hitT = false, q; for (q = 0; q < 3 && !hitT; q++){ var wx = q === 0 ? S.rx : q === 1 ? S.fx : hx, wy = q === 0 ? S.ry : q === 1 ? S.fy : hy, wr = q === 2 ? HEADR : R, qx = clamp(wx, h.x - h.w / 2, h.x + h.w / 2), qy = clamp(wy, h.y - h.h, h.y); if ((wx - qx) * (wx - qx) + (wy - qy) * (wy - qy) < wr * wr) hitT = true; } if (hitT){ crash(S, 'tnt'); S.crashX = h.x; S.crashY = h.y - h.h / 2; return; } continue; }
-    else if (h.k === 'boulder'){ var bo = S.bo[i]; if (!bo){ if (mx > h.trig){ S.bo[i] = { y:h.y, vy:0, gone:false }; S.ev.push('rumble'); } continue; } if (bo.gone) continue; bo.vy += GRAV * dt; bo.y += bo.vy * dt; if (bo.y + h.r >= sY(L, h.x)){ bo.gone = true; bo.y = sY(L, h.x) - h.r; S.ev.push('thud'); continue; } cxh = h.x; cyh = bo.y; rr = h.r; }
+  /* hazards (wheels and helmet): saws, hammers, TNT, spiked blocks, pistons, gates, boulders */
+  var hz = L.haz, hzR = L.hzR; while (S.hi < hz.length && hz[S.hi].x + (hz[S.hi].rx || 320) < mx) S.hi++;
+  for (i = S.hi; i < hz.length; i++){ var h = hz[i]; if (h.x - hzR > mx) break; var hrx = h.rx || 320; if (h.x - hrx > mx || h.x + hrx < mx) continue; var cxh, cyh, rr, hk = h.k;
+    if (hk === 'saw' || hk === 'ham'){ hazCircle(h, S.t); cxh = HC.x; cyh = HC.y; rr = HC.r; }
+    else if (hk === 'tnt'){ if (bikeRect(S, hx, hy, h.x - h.w / 2, h.y - h.h, h.x + h.w / 2, h.y)){ crash(S, 'tnt'); S.crashX = h.x; S.crashY = h.y - h.h / 2; return; } continue; }
+    else if (hk === 'blk'){ if (bikeRect(S, hx, hy, h.x0, h.y0, h.x1, h.y1)){ crash(S, 'spikes'); return; } continue; }
+    else if (hk === 'pist'){ var pe = pistExt(h, S.t); if (pe > 0 && bikeRect(S, hx, hy, h.x - h.w / 2, h.gy - h.h * pe, h.x + h.w / 2, h.gy + 12)){ crash(S, 'piston'); return; } continue; }
+    else if (hk === 'gate'){ if (S.tr[h.tg] == null && mx > h.trig){ S.tr[h.tg] = S.t; S.ev.push('creak'); } var gl = gateLift(h, S); if (bikeRect(S, hx, hy, h.x - h.w / 2, h.gy - h.h - gl, h.x + h.w / 2, h.gy - gl)){ crash(S, 'gate'); return; } continue; }
+    else if (hk === 'roll'){ if (S.tr[h.tg] == null && mx > h.trig){ S.tr[h.tg] = S.t; S.ev.push('rumble'); } var bx = rollX(h, S); if (bx <= h.xe){ if (!S.bo[i]){ S.bo[i] = { y:0, vy:0, gone:true }; S.ev.push('thud'); } continue; } cxh = bx; cyh = sY(L, bx) - h.r; rr = h.r; }
+    else if (hk === 'boulder'){ var bo = S.bo[i]; if (!bo){ if (mx > h.trig){ S.bo[i] = { y:h.y, vy:0, gone:false }; S.ev.push('rumble'); } continue; } if (bo.gone) continue; bo.vy += GRAV * dt; bo.y += bo.vy * dt; if (bo.y + h.r >= sY(L, h.x)){ bo.gone = true; bo.y = sY(L, h.x) - h.r; S.ev.push('thud'); continue; } cxh = h.x; cyh = bo.y; rr = h.r; }
     else continue;
     var d1 = (S.rx - cxh) * (S.rx - cxh) + (S.ry - cyh) * (S.ry - cyh), d2 = (S.fx - cxh) * (S.fx - cxh) + (S.fy - cyh) * (S.fy - cyh), d3 = (hx - cxh) * (hx - cxh) + (hy - cyh) * (hy - cyh);
-    if (d1 < (rr + R) * (rr + R) || d2 < (rr + R) * (rr + R) || d3 < (rr + HEADR) * (rr + HEADR)){ crash(S, h.k); S.crashX = mx; S.crashY = my; return; } }
+    if (d1 < (rr + R) * (rr + R) || d2 < (rr + R) * (rr + R) || d3 < (rr + HEADR) * (rr + HEADR)){ crash(S, hk === 'roll' ? 'boulder' : hk); S.crashX = mx; S.crashY = my; return; } }
   /* checkpoints, finish, stuck (gas pressed, no progress, not in the air) */
   while (S.cp + 1 < L.cps.length && mx > L.cps[S.cp + 1]){ S.cp++; S.ev.push('cp'); }
   if (mx >= L.finish.x){ S.won = true; S.over = true; S.ev.push('win'); return; }
@@ -496,38 +642,76 @@ function step(S, inp, dt){ if (S.over) return; var L = S.L, i; inp = inp || INP0
   if (inp.g && mx < S.maxX + .5 && dyv < .5 && !air){ S.stuckT += dt; if (S.stuckT > STUCKT){ crash(S, 'stuck'); return; } } else S.stuckT = 0;
   if (mx > S.maxX) S.maxX = mx; }
 
-/* ---------- auto-rider ---------- */
-var AI = { g:true, b:false, l:false, r:false }, AACC = 1350;
-/* arrival model: full gas from speed v0 (accelerate to VMAX, then cruise; downhill momentum above VMAX is kept) */
-function tArr(d, v0){ if (d <= 0) return 0; var a = AACC, vm = VMAX; if (v0 >= vm) return d / v0; var dv = (vm * vm - v0 * v0) / (2 * a); if (d < dv) return (-v0 + Math.sqrt(v0 * v0 + 2 * a * d)) / a; return (vm - v0) / a + (d - dv) / vm; }
-function xAt(tau, v0, mx){ var a = AACC, vm = VMAX; if (v0 >= vm) return mx + v0 * tau; var tv = (vm - v0) / a; if (tau < tv) return mx + v0 * tau + a * tau * tau / 2; return mx + v0 * tv + a * tv * tv / 2 + vm * (tau - tv); }
-var HC = { x:0, y:0, r:0 };
-function hazCircle(h, tm){ if (h.k === 'saw'){ HC.x = h.x; HC.y = h.mid + h.amp * Math.sin(TAU * tm / h.per + h.ph); HC.r = h.r; } else { var th = h.amp * Math.sin(TAU * tm / h.per + h.ph); HC.x = h.x + h.len * Math.sin(th); HC.y = h.py + h.len * Math.cos(th); HC.r = h.r; } }
-/* would the hazard overlap the bike's silhouette box if the bike were at bx at time tm? */
-function blocked1(h, tm, bx){ hazCircle(h, tm); var x0 = bx - 62, x1 = bx + 62, y0 = h.gy - 94, y1 = h.gy - 2, qx = clamp(HC.x, x0, x1), qy = clamp(HC.y, y0, y1), dx = HC.x - qx, dy = HC.y - qy; return dx * dx + dy * dy < (HC.r + 10) * (HC.r + 10); }
-function blocked(h, tm, bx){ return blocked1(h, tm, bx) || blocked1(h, tm - .07, bx) || blocked1(h, tm + .07, bx); } /* ±70 ms of timing slack */
-function passedX(h){ return (h.x != null ? h.x : h.x0) + (h.k ? 100 : 60); }
-function waitX(h){ var hx = h.x != null ? h.x : h.x0; return h.k === 'ham' ? hx - 205 : h.k === 'saw' ? hx - 165 : hx - 95; }
-/* can the bike go now? checks the next timed hazard and every following one that is too close to stop in between (coupled) */
-function goOK(S, mx, v0){ var L = S.L, tm = S.t, i, tau, lastPass = -1e9; for (i = 0; i < L.timed.length; i++){ var h = L.timed[i], hx = h.x != null ? h.x : h.x0; if (passedX(h) < mx) continue; if (hx - mx > 700) break; if (lastPass > -1e9 && waitX(h) > lastPass + 75) break; lastPass = passedX(h);
-    if (h.k === 'saw' || h.k === 'ham'){ var t0 = tArr(hx - 220 - mx, v0), t1 = tArr(hx + 150 - mx, v0); for (tau = t0; tau <= t1 + .02; tau += .03) if (blocked(h, tm + tau, xAt(tau, v0, mx))) return false; }
-    else if (h.kind === 'mover'){ var ta = tArr(h.x0 - 30 - mx, v0); for (tau = ta; tau <= ta + .5; tau += .1) if (moverOff(h, tm + tau) > 16) return false; } }
+/* ---------- riders: naive (full gas), naiveLean (full gas + levelling in the air) and the smart auto-rider – all drive the same step() ---------- */
+var AI = { g:true, b:false, l:false, r:false }, NV = { g:true, b:false, l:false, r:false }, NL = { g:true, b:false, l:false, r:false }, AACC = 1350, AIM = 9, AIS = .1;
+function naiveInput(){ return NV; }
+function leanInput(S){ NL.l = NL.r = false; if (!S.dead && !S.over && !S.onR && !S.onF && S.airT > .04) airLean(S, NL, false); return NL; }
+/* the slope the bike will land on: the ground under the predicted touchdown, looking past cliff edges */
+function landSlope(L, x){ var s = slope1(L, x); if (Math.abs(s) < 1.2) return s; s = slope1(L, x + 40); if (Math.abs(s) < 1.2) return s; s = slope1(L, x - 40); return Math.abs(s) < 1.2 ? s : 0; }
+/* in the air: predict the touchdown (ballistic centre vs the ground) and lean toward the landing slope – or backflip first when there is plenty of air */
+function airLean(S, o, flips){ var L = S.L, mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2, vx = (S.rvx + S.fvx) / 2, vy = (S.rvy + S.fvy) / 2, i, tau = 0, lx = mx, ly = my, hit = false;
+  for (i = 1; i <= 64 && !hit; i++){ tau = i * .04; lx = mx + vx * tau; ly = my + vy * tau + .5 * GRAV * tau * tau; if (ly + 26 >= sY(L, lx)) hit = true; }
+  var ta = hit ? landSlope(L, lx) : 0, Trem = hit ? tau : 2.6, a = S.a;
+  if (flips){ var committed = S.airRot < -.25, need = Math.abs(wrapA(ta - a) - TAU) / LEANW + (committed ? .04 : .3); if (Trem > need && (committed || (Trem >= 1.2 && my < sY(L, lx) - 60))){ o.l = true; return; } }
+  var d2 = wrapA(ta - (a + S.w * .13)); if (d2 > .06) o.r = true; else if (d2 < -.06) o.l = true; }
+/* arrival model on flat ground: accelerate from v0 to the cruise speed vm, then hold it */
+function tArr(d, v0, vm){ if (d <= 0) return 0; var a = AACC; vm = vm || VMAX; if (v0 >= vm) return d / v0; var dv = (vm * vm - v0 * v0) / (2 * a); if (d < dv) return (-v0 + Math.sqrt(v0 * v0 + 2 * a * d)) / a; return (vm - v0) / a + (d - dv) / vm; }
+function xAt(tau, v0, mx, vm){ var a = AACC; vm = vm || VMAX; if (v0 >= vm) return mx + v0 * tau; var tv = (vm - v0) / a; if (tau < tv) return mx + v0 * tau + a * tau * tau / 2; return mx + v0 * tv + a * tv * tv / 2 + vm * (tau - tv); }
+/* would the hazard touch the bike (two wheels + helmet, level on the ground, with a safety margin) if its centre were at bx at time tm? */
+function blocked1(h, tm, bx){ if (h.k === 'pist') return pistExt(h, tm) > 0 && bx + 66 > h.x - h.w / 2 && bx - 66 < h.x + h.w / 2;
+  hazCircle(h, tm); var gy = h.gy, m = AIM, dx = HC.x - bx, dy = HC.y - (gy - 22), rr = HC.r + R + m; if ((dx + 35) * (dx + 35) + dy * dy < rr * rr || (dx - 35) * (dx - 35) + dy * dy < rr * rr) return true;
+  dy = HC.y - (gy - 72); rr = HC.r + HEADR + m + 4; return dx * dx + dy * dy < rr * rr; }
+function blocked(h, tm, bx){ return blocked1(h, tm, bx) || blocked1(h, tm - AIS, bx) || blocked1(h, tm + AIS, bx); } /* ± timing slack */
+function stopDist(v){ return v * v / (2 * .75 * BRAKE) + 44; }
+/* can the bike set off now (from mx at speed v0) and get through timed hazard i0 – and every following one it could not stop in front of? */
+function goOK(S, i0, mx, v0){ var L = S.L, tm = S.t, i, tau, lastPass = -1e9, vm = L.timed[i0].vc || VMAX; v0 = clamp(v0, 0, vm);
+  for (i = i0; i < L.timed.length; i++){ var h = L.timed[i]; if (h.px < mx) continue; if (h.wx - mx > 1200) break; if (lastPass > -1e9 && h.wx > lastPass + stopDist(vm)) break; lastPass = h.px;
+    if (h.k === 'gate'){ var t0 = S.tr[h.tg]; if (t0 == null) t0 = tm + tArr(h.trig - mx, v0, vm); if (tm + tArr(h.wx - mx, v0, vm) < t0 + h.delay + .4) return false; }
+    else if (h.k === 'roll'){ if (S.tr[h.tg] == null || tm < S.tr[h.tg] + h.tclr) return false; }
+    else if (h.kind === 'mover'){ var ta = tArr(h.x0 - 34 - mx, v0, vm); for (tau = ta; tau <= ta + .62; tau += .1) if (moverOff(h, tm + tau) > 8) return false; }
+    else { var ta2 = tArr(h.wx - mx, v0, vm), tb = tArr(h.px - mx, v0, vm); for (tau = ta2; tau <= tb + .14; tau += .03) if (blocked(h, tm + tau, xAt(tau, v0, mx, vm))) return false; } }
   return true; }
-function autoInput(S){ var L = S.L; AI.g = true; AI.b = false; AI.l = false; AI.r = false; if (S.over || S.dead){ AI.g = false; return AI; }
-  var mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2, vx = (S.rvx + S.fvx) / 2, vy = (S.rvy + S.fvy) / 2, air = !S.onR && !S.onF, i;
-  if (air && S.airT > .04){ /* predict the landing (ballistic centre vs the surface), level out – or backflip when there is time */
-    var tau = 0, lx = mx, ly = my, hit = false; for (i = 1; i <= 50 && !hit; i++){ tau = i * .05; lx = mx + vx * tau; ly = my + vy * tau + .5 * GRAV * tau * tau; if (ly + 30 >= sY(L, lx)) hit = true; }
-    var ta = hit ? sSlope(L, lx) : 0, Trem = hit ? tau : 2.5, a = S.a, diff = wrapA(ta - a), committed = S.airRot < -.25, need = Math.abs(diff - TAU) / LEANW + (committed ? .02 : .1);
-    if (Trem > need && (committed || my < sY(L, lx) - 60)){ AI.l = true; return AI; }
-    var d2 = wrapA(ta - (a + S.w * .13)); if (d2 > .06) AI.r = true; else if (d2 < -.06) AI.l = true; return AI; }
-  /* standing on a moving platform: brake to a stop, wait, and set off just before it reaches the far end */
-  for (i = S.pi; i < L.plats.length; i++){ var p = L.plats[i]; if (p.x0 - 300 > mx) break; if (p.kind !== 'mover') continue; var o = moverOff(p, S.t), ox = p.axis === 'x' ? o : 0, oy = p.axis === 'y' ? o : 0;
-    if (S.rx > p.x0 + ox + 4 && S.fx < p.x1 + ox + 10 && Math.abs(my + R - (p.y - oy)) < 30){ var toEnd = p.amp - o, pv = moverVel(p, S.t), commit = toEnd < 70 && S.fx > p.x1 + ox - 30; if (!commit && !(toEnd < 18 || (toEnd < 60 && pv > 0))){ AI.g = false; AI.b = vx > 5; } return AI; } }
-  /* timed hazards ahead: stop at the wait point until the way is clear */
-  for (i = 0; i < L.timed.length; i++){ var h = L.timed[i], xw = waitX(h); if (passedX(h) < mx) continue; if (xw - mx > 200) break;
-    if (mx < xw && !goOK(S, mx, Math.max(0, vx))){ AI.g = false; AI.b = vx > 2; } break; }
-  return AI; }
-function simulate(L, maxT){ var S = newRun(L), n = 0, maxN = Math.round((maxT || SIMMAX) * HZ); while (!S.over && n < maxN){ step(S, autoInput(S), DT); S.ev.length = 0; n++; } return { won:S.won, time:Math.round(Math.max(0, S.t - S.bonus) * 100) / 100, raw:S.t, crashes:S.crashes, flips:S.flips, x:(S.rx + S.fx) / 2, dead:S.dead, why:S.why }; }
+/* drive to a point `dist` px ahead and stop there (never reverses) */
+function aiStop(o, dist, v, cap){ var vok = dist > 22 ? Math.sqrt(2 * .75 * BRAKE * (dist - 22)) : 0; if (cap && vok > cap) vok = cap;
+  if (v > vok + 4){ o.g = false; o.b = v > 4; } else o.g = v < vok - 45 || (dist > 40 && v < 60); }
+function aiCap(o, v, vc){ if (v > vc + 30){ o.g = false; o.b = true; } else if (v > vc - 6) o.g = false; }
+/* what-if: clone the run, ride the section with each candidate speed, keep the fastest one that survives */
+function aiSearch(S, m, sec){ var c = sec.cands, i, pick = c[c.length - 1];
+  for (i = 0; i < c.length; i++){ var S2 = cloneRun(S), k = 0; S2.ai = { si:m.si, ti:m.ti, fi:m.fi, go:m.go, vt:{} }; S2.ai.vt[m.si] = c[i];
+    while (!S2.dead && !S2.over && (S2.rx + S2.fx) / 2 < sec.xe && k++ < 540){ step(S2, autoInput(S2), DT); S2.ev.length = 0; }
+    if (!S2.dead && k < 540){ pick = c[i]; break; } }
+  return pick; }
+function autoInput(S){ var L = S.L, o = AI; o.g = true; o.b = false; o.l = false; o.r = false; if (S.over || S.dead){ o.g = false; return o; }
+  var mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2, vx = (S.rvx + S.fvx) / 2, vy = (S.rvy + S.fvy) / 2, air = !S.onR && !S.onF, i, m = S.ai || (S.ai = { si:0, ti:0, fi:0, go:-1, vt:{} });
+  if (air){ if (S.airT > .04) airLean(S, o, true); return o; }
+  var ux = (S.fx - S.rx) / WL, uy = (S.fy - S.ry) / WL, v = vx * ux + vy * uy;
+  while (m.si < L.secs.length && mx > L.secs[m.si].x1) m.si++; while (m.fi < L.fast.length && mx > L.fast[m.fi][1]) m.fi++;
+  var sec = m.si < L.secs.length ? L.secs[m.si] : null, fast = m.fi < L.fast.length && mx >= L.fast[m.fi][0];
+  /* a section whose answer is a speed (speed gap, TNT hop, low tunnel): find it once by riding ahead in a copy of the run */
+  if (sec && sec.cands && mx >= sec.x0 - 110 && mx < sec.xs0 && m.vt[m.si] == null){ m.vt[m.si] = 0; m.vt[m.si] = aiSearch(S, m, sec); o.g = true; o.b = false; o.l = false; o.r = false; }
+  /* one wheel up: keep the frame along the ground (a lip → lean back as the nose drops; a wheelie → lean forward, and shut the gas when it gets high) */
+  if (S.onR && !S.onF){ var tx = -S.nry, ty = S.nrx; if (tx * ux + ty * uy < 0){ tx = -tx; ty = -ty; } var pit = Math.atan2(tx * uy - ty * ux, tx * ux + ty * uy); if (pit < -.2) o.r = true; else if (pit > .12) o.l = true; if (pit < -.6) o.g = false; }
+  /* a steep climb under or just ahead of the bike: lean forward so the front wheel stays down */
+  if (sSlope(L, mx + 30) < -.5) o.r = true;
+  /* never carry silly speed out of a fast section */
+  if (!fast && v > 660){ o.g = false; o.b = true; }
+  if (sec && mx >= sec.x0 - 110){
+    if (sec.cands && m.vt[m.si] && mx < sec.xs1){ var vt = m.vt[m.si]; if (v > vt + 6){ if (mx >= sec.xs0 || (v * v - vt * vt) / (2 * .85 * BRAKE) >= sec.xs0 - mx - 10){ o.g = false; o.b = true; } } else if (v > vt - 6) o.g = false; }
+    else if (sec.vin && mx < sec.xs0 && v > sec.vin){ o.g = false; o.b = true; } }
+  /* standing on a moving platform: stop in its middle, set off when it docks at the far end */
+  for (i = S.pi; i < L.plats.length; i++){ var p = L.plats[i]; if (p.x0 - 460 > mx) break; if (p.kind !== 'mover') continue; var off = moverOff(p, S.t), ox = p.axis === 'x' ? off : 0, oy = p.axis === 'y' ? off : 0;
+    if (S.rx > p.x0 + ox - 8 && S.fx < p.x1 + ox + 14 && Math.abs(my + R - (p.y - oy)) < 34){ var toEnd = p.amp - off, pv = moverVel(p, S.t), rel = v - (p.axis === 'x' ? pv : 0), dist = (p.x0 + p.x1) / 2 + ox - (p.axis === 'y' ? 14 : 0) - mx;
+      if (toEnd < 3 || (toEnd < 26 && pv > 0)){ o.g = true; o.b = false; } else aiStop(o, dist, rel, 240);
+      return o; } }
+  /* timed / triggered hazards ahead: go when the way through is clear, otherwise stop at the wait point */
+  for (i = m.ti; i < L.timed.length; i++){ var h = L.timed[i]; if (h.px < mx){ m.ti = i + 1; continue; } var vm = h.vc || VMAX, d = h.wx - mx;
+    if (d > stopDist(Math.max(v, vm)) + 40) break;
+    if (d > 0){ if (m.go !== i && v <= vm + 40 && goOK(S, i, mx, Math.max(0, v))) m.go = i; if (m.go !== i) aiStop(o, d, v, vm); else if (h.vc) aiCap(o, v, h.vc); }
+    else if (h.vc) aiCap(o, v, h.vc);
+    break; }
+  return o; }
+function simulate(L, maxT, rider, stopOnCrash){ var S = newRun(L), n = 0, maxN = Math.round((maxT || SIMMAX) * HZ), f = rider || autoInput; while (!S.over && n < maxN){ step(S, f(S), DT); S.ev.length = 0; n++; if (stopOnCrash && S.crashes) break; }
+  return { won:S.won, time:Math.round(Math.max(0, S.t - S.bonus) * 100) / 100, raw:S.t, crashes:S.crashes, flips:S.flips, x:(S.rx + S.fx) / 2, dead:S.dead, why:S.why }; }
 
 /* ---------- rendering (thick outlines, flat cartoon colours) ---------- */
 var cv, ctx, lastT = 0, acc = 0, NOW = 0, OUT = '#1B1B1B', SKYC = {}, FONT = '"Varela Round","Arial Rounded MT Bold",Arial,sans-serif';
@@ -623,14 +807,34 @@ function drawPlats(c, S, th){ var L = S.L, i, p; for (i = 0; i < L.plats.length;
     if (p.kind === 'bridge'){ var ft = S.br[p.id], fall = ft != null ? Math.max(0, S.t - ft - BRIDGE_T) : 0; c.save(); if (fall > 0){ c.globalAlpha = Math.max(0, 1 - fall * 1.2); c.translate((p.x0 + p.x1) / 2, p.y + .5 * GRAV * fall * fall); c.rotate(fall * 2.5 * (p.id % 2 ? 1 : -1)); c.translate(-(p.x0 + p.x1) / 2, -p.y); } else if (ft != null){ c.translate(0, Math.sin((S.t - ft) * 40) * 2); } drawPlank(c, p.x0 + 2, p.y, p.x1 - 2, p.y, th, 14); c.restore(); }
     else { var mp = moverPos(p, S.t), w = p.x1 - p.x0; if (p.axis === 'y'){ line(c, p.x0 + w / 2, p.y + 10, p.x0 + w / 2, p.y - p.amp - 10, '#3A3F55', 8, 3); } else { line(c, p.x0 - 6, p.y + 22, p.x0 + p.amp + w + 6, p.y + 22, '#3A3F55', 8, 3); circ(c, mp.x + 20, p.y + 22, 8, '#5A6070', 3); circ(c, mp.x + w - 20, p.y + 22, 8, '#5A6070', 3); }
       rrect(c, mp.x, mp.y, w, 18, 5); fs(c, '#8B93A5', 4); c.save(); rrect(c, mp.x + 3, mp.y + 3, w - 6, 12, 3); c.clip(); c.fillStyle = '#FFD23F'; for (var x = mp.x - 12; x < mp.x + w; x += 24){ c.beginPath(); c.moveTo(x, mp.y + 18); c.lineTo(x + 12, mp.y); c.lineTo(x + 22, mp.y); c.lineTo(x + 10, mp.y + 18); c.closePath(); c.fill(); } c.restore(); } } }
-function drawHazards(c, S, th){ var L = S.L, i, h, camx = G.cam.x; for (i = 0; i < L.haz.length; i++){ h = L.haz[i]; if (h.x + 300 < camx || h.x - 300 > camx + W) continue;
-    if (h.k === 'saw'){ var y = h.mid + h.amp * Math.sin(TAU * S.t / h.per + h.ph); if (h.kind === 'hang'){ line(c, h.x, h.gy - 460, h.x, y, '#5A6070', 6, 3); for (var cy = y - 20; cy > h.gy - 460; cy -= 16) circ(c, h.x, cy, 5, '#8B93A5', 2); drawSaw(c, h.x, y, h.r, NOW * 9); }
-      else { c.save(); c.beginPath(); c.rect(h.x - 70, h.gy - 320, 140, 322); c.clip(); drawSaw(c, h.x, y, h.r, -NOW * 9); c.restore(); rrect(c, h.x - 14, h.gy - 3, 28, 10, 3); fs(c, '#2B2B2B', 3); } }
+/* a row of spikes along the segment (x0,y0)–(x1,y1), tips pointing along (nx,ny) */
+function spikeRow(c, x0, y0, x1, y1, nx, ny){ var len = Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)), n = Math.max(1, Math.round(len / 14)), ux = (x1 - x0) / n, uy = (y1 - y0) / n, i; c.beginPath(); for (i = 0; i < n; i++){ var ax = x0 + ux * i, ay = y0 + uy * i; c.moveTo(ax, ay); c.lineTo(ax + ux / 2 + nx * 18, ay + uy / 2 + ny * 18); c.lineTo(ax + ux, ay + uy); c.closePath(); } fs(c, '#C9CED6', 3); }
+function hazStripes(c, x, y, w, h, r){ c.save(); rrect(c, x, y, w, h, r); c.clip(); c.fillStyle = '#FFD23F'; c.fillRect(x, y, w, h); c.fillStyle = OUT; for (var q = x - h; q < x + w; q += 22){ c.beginPath(); c.moveTo(q, y + h); c.lineTo(q + h, y); c.lineTo(q + h + 10, y); c.lineTo(q + 10, y + h); c.closePath(); c.fill(); } c.restore(); rrect(c, x, y, w, h, r); ol(c, 4); c.stroke(); }
+function drawHazards(c, S, th){ var L = S.L, i, h, camx = G.cam.x; for (i = 0; i < L.haz.length; i++){ h = L.haz[i]; var hr = (h.rx || 300) + 60; if (h.x + hr < camx || h.x - hr > camx + W) continue;
+    if (h.k === 'saw'){ hazCircle(h, S.t); var y = HC.y;
+      if (h.kind === 'slide'){ var dx = h.x - h.xa, dy = h.yb - h.ya, dl = Math.sqrt(dx * dx + dy * dy) || 1, ex = dx / dl, ey = dy / dl; line(c, h.xa, h.ya - 380, h.xa, h.ya, th.wood, 10, 3); line(c, h.xa - ex * 26, h.ya - ey * 26, h.x + ex * 8, h.yb + ey * 8, '#3A3F55', 9, 3); line(c, h.xa - ex * 26, h.ya - ey * 26, h.x + ex * 8, h.yb + ey * 8, '#8B93A5', 3, 0); circ(c, h.xa - ex * 26, h.ya - ey * 26, 8, '#5A6070', 3); drawSaw(c, HC.x, HC.y, h.r, NOW * 9); circ(c, HC.x, HC.y, 6, '#2B2B2B', 0); }
+      else if (h.kind === 'pop'){ c.save(); c.beginPath(); c.rect(h.x - 70, h.gy - 320, 140, 322); c.clip(); drawSaw(c, h.x, y, h.r, -NOW * 9); c.restore(); rrect(c, h.x - 14, h.gy - 3, 28, 10, 3); fs(c, '#2B2B2B', 3); }
+      else { line(c, h.x, h.gy - 460, h.x, y, '#5A6070', 6, 3); for (var cy = y - 20; cy > h.gy - 460; cy -= 16) circ(c, h.x, cy, 5, '#8B93A5', 2); drawSaw(c, h.x, y, h.r, NOW * 9); } }
     else if (h.k === 'ham'){ var th2 = h.amp * Math.sin(TAU * S.t / h.per + h.ph), hx = h.x + h.len * Math.sin(th2), hy = h.py + h.len * Math.cos(th2); line(c, h.x - 70, h.gy + 6, h.x - 70, h.py - 14, th.wood, 12, 3); line(c, h.x + 70, h.gy + 6, h.x + 70, h.py - 14, th.wood, 12, 3); line(c, h.x - 80, h.py - 14, h.x + 80, h.py - 14, th.wood, 14, 3); line(c, h.x, h.py, hx, hy, '#8B93A5', 10, 3); circ(c, h.x, h.py, 12, '#5A6070', 4); c.save(); c.translate(hx, hy); c.rotate(-th2); rrect(c, -h.r - 10, -h.r + 4, 2 * h.r + 20, 2 * h.r - 8, 10); fs(c, '#9AA3B5', 4); c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(-h.r - 4, -h.r + 10, 10, 2 * h.r - 20); c.fillRect(h.r - 6, -h.r + 10, 10, 2 * h.r - 20); c.restore(); }
     else if (h.k === 'tnt') drawTNT(c, h.x, h.y, h.w, h.h);
-    else if (h.k === 'boulder'){ var bo = S.bo[i]; if (bo && bo.gone) continue; var by = bo ? bo.y : h.y; if (!bo){ line(c, h.x, h.y - 460, h.x, h.y - h.r, '#6B4A2E', 5, 2); c.strokeStyle = '#6B4A2E'; c.lineWidth = 3; c.beginPath(); c.moveTo(h.x - h.r, by); c.quadraticCurveTo(h.x, by + h.r * 1.4, h.x + h.r, by); c.stroke(); } drawRock(c, h.x, by, h.r); } }
+    else if (h.k === 'blk'){ var bw = h.x1 - h.x0, bh = h.y1 - h.y0;
+      if (h.roof){ line(c, h.x0 + 6, h.y0 + 10, h.x0 + 6, sY(L, h.x0 + 6) + 4, th.wood, 10, 3); line(c, h.x1 - 6, h.y0 + 10, h.x1 - 6, sY(L, h.x1 - 6) + 4, th.wood, 10, 3); }
+      if (h.hang){ line(c, h.x0 + 14, h.y0 - 420, h.x0 + 14, h.y0 + 6, '#5A6070', 6, 3); line(c, h.x1 - 14, h.y0 - 420, h.x1 - 14, h.y0 + 6, '#5A6070', 6, 3); }
+      if (h.sp.indexOf('b') >= 0) spikeRow(c, h.x0 + 2, h.y1 - 2, h.x1 - 2, h.y1 - 2, 0, 1); if (h.sp.indexOf('l') >= 0) spikeRow(c, h.x0 + 2, h.y1 - 2, h.x0 + 2, h.y0 + 2, -1, 0);
+      rrect(c, h.x0, h.y0, bw, bh, 6); fs(c, '#4A4F5E', 4); c.fillStyle = 'rgba(255,255,255,.14)'; c.fillRect(h.x0 + 5, h.y0 + 5, Math.max(2, bw - 10), 5); if (bw > 40 && bh > 40){ circ(c, h.x0 + 12, h.y0 + 14, 4, '#8B93A5', 2); circ(c, h.x1 - 12, h.y0 + 14, 4, '#8B93A5', 2); } }
+    else if (h.k === 'pist'){ var pe = pistExt(h, S.t), px0 = h.x - h.w / 2, ph = h.h * pe; if (pe > 0){ rrect(c, h.x - 12, h.gy - ph, 24, ph, 3); fs(c, '#8B93A5', 3); rrect(c, px0, h.gy - ph, h.w, Math.min(ph, 56), 6); fs(c, '#6B7386', 4); hazStripes(c, px0 + 4, h.gy - ph + 5, h.w - 8, 14, 4); if (ph > 30){ circ(c, px0 + 14, h.gy - ph + 36, 4, '#C9CED6', 2); circ(c, px0 + h.w - 14, h.gy - ph + 36, 4, '#C9CED6', 2); } }
+      hazStripes(c, px0 - 6, h.gy - 5, h.w + 12, 12, 4); }
+    else if (h.k === 'gate'){ var gl = gateLift(h, S), top = h.gy - h.h - h.rise - 34, open = S.tr[h.tg] != null && S.t - S.tr[h.tg] >= h.delay; line(c, h.x - 34, h.gy + 6, h.x - 34, top, th.wood, 12, 3); line(c, h.x + 34, h.gy + 6, h.x + 34, top, th.wood, 12, 3); line(c, h.x - 46, top, h.x + 46, top, th.wood, 14, 3);
+      spikeRow(c, h.x - h.w / 2 + 2, h.gy - gl - 4, h.x - h.w / 2 + 2, h.gy - h.h - gl + 4, -1, 0); spikeRow(c, h.x - h.w / 2 + 2, h.gy - gl - 2, h.x + h.w / 2 - 2, h.gy - gl - 2, 0, 1); rrect(c, h.x - h.w / 2, h.gy - h.h - gl, h.w, h.h, 6); fs(c, '#B23A30', 4); hazStripes(c, h.x - h.w / 2 + 5, h.gy - h.h - gl + 8, h.w - 10, 14, 3); hazStripes(c, h.x - h.w / 2 + 5, h.gy - gl - 26, h.w - 10, 14, 3);
+      var ly = h.gy - h.h - 44; line(c, h.x - 34, ly, h.x - 62, ly, th.wood, 8, 3); rrect(c, h.x - 84, ly - 17, 34, 34, 8); fs(c, '#23232B', 3); c.globalAlpha = .35; circ(c, h.x - 67, ly, 22, open ? '#2ECC71' : '#FF3B30', 0); c.globalAlpha = 1; circ(c, h.x - 67, ly, 10, open ? '#2ECC71' : '#FF3B30', 2); }
+    else if (h.k === 'roll'){ var bx = rollX(h, S), trg = S.tr[h.tg] != null; if (h.j === 0){ rrect(c, h.trig - 34, h.gy - (trg ? 3 : 9), 68, 12, 4); fs(c, trg ? '#7A1F18' : '#E8362B', 4); if (!trg || bx >= h.xs){ var wy = sY(L, h.xs); poly(c, [h.xs - 58, wy, h.xs - 30, wy, h.xs - 30, wy - 22], th.wood, 4); } }
+      if (bx > h.xe){ var by = sY(L, bx) - h.r; c.save(); c.translate(bx, by); c.rotate((bx - h.xs) / h.r); drawRock(c, 0, 0, h.r); c.restore(); } }
+    else if (h.k === 'boulder'){ var bo = S.bo[i]; if (bo && bo.gone) continue; var by2 = bo ? bo.y : h.y; if (!bo){ line(c, h.x, h.y - 460, h.x, h.y - h.r, '#6B4A2E', 5, 2); c.strokeStyle = '#6B4A2E'; c.lineWidth = 3; c.beginPath(); c.moveTo(h.x - h.r, by2); c.quadraticCurveTo(h.x, by2 + h.r * 1.4, h.x + h.r, by2); c.stroke(); } drawRock(c, h.x, by2, h.r); } }
   for (i = 0; i < L.fans.length; i++){ var f = L.fans[i]; if (f.x1 < camx || f.x0 > camx + W) continue; var fx = f.ax > 0 ? f.x0 - 10 : f.x1 + 10, dir = f.ax > 0 ? 1 : -1; rrect(c, fx - 26, f.gy - 60, 52, 60, 8); fs(c, '#8B93A5', 4); c.save(); c.translate(fx, f.gy - 32); c.rotate(NOW * 14); for (var b = 0; b < 3; b++){ c.rotate(TAU / 3); c.beginPath(); c.ellipse(0, -11, 6, 12, 0, 0, TAU); fs(c, '#D9DDE3', 2); } c.restore(); c.strokeStyle = 'rgba(255,255,255,.75)'; c.lineWidth = 3; for (var s = 0; s < 6; s++){ var off = ((NOW * 300 + s * 50) % 120), lx = f.ax > 0 ? f.x0 + 40 + off + s * 70 : f.x1 - 40 - off - s * 70, ly = f.gy - 30 - (s % 3) * 45; if (lx > f.x0 && lx < f.x1){ c.beginPath(); c.moveTo(lx, ly); c.lineTo(lx + dir * 40, ly); c.stroke(); } } } }
+/* a yellow warning sign at the start of every skill section */
+function drawWarn(c, x, y){ line(c, x, y, x, y - 64, '#5A6070', 6, 2); c.save(); c.translate(x, y - 84); c.rotate(PI / 4); rrect(c, -20, -20, 40, 40, 6); fs(c, '#FFD23F', 4); c.restore(); txt(c, '!', x, y - 83, 30, OUT, 'center', 0); }
 function drawFlags(c, S){ var L = S.L, i; for (i = 0; i < L.cps.length; i++){ var x = L.cps[i]; if (x + 100 < G.cam.x || x - 100 > G.cam.x + W) continue; var y = sY(L, x), on = i <= S.cp; splat(c, x - 22, y - 10, 44, 16, i, 'rgba(0,0,0,.35)'); line(c, x, y, x, y - 86, '#D9DDE3', 6, 2); poly(c, [3, -86, 46, -72, 3, -58], on ? '#2ECC71' : '#E8362B', 4, x, y); }
+  for (i = 0; i < L.secs.length; i++){ var wsx = L.secs[i].x0 + 40; if (wsx > G.cam.x - 80 && wsx < G.cam.x + W + 80) drawWarn(c, wsx, sY(L, wsx)); }
   var fx = L.finish.x, fy = sY(L, fx), q; line(c, fx - 50, fy, fx - 50, fy - 150, '#D9DDE3', 8, 3); line(c, fx + 50, fy, fx + 50, fy - 150, '#D9DDE3', 8, 3); for (q = 0; q < 14; q++) for (var r = 0; r < 3; r++){ c.fillStyle = (q + r) % 2 ? '#FFFFFF' : OUT; c.fillRect(fx - 56 + q * 8, fy - 150 + r * 10, 8, 10); } ol(c, 3); c.strokeRect(fx - 56, fy - 150, 112, 30); for (q = 0; q < 12; q++){ c.fillStyle = q % 2 ? 'rgba(255,255,255,.8)' : 'rgba(0,0,0,.6)'; c.fillRect(fx - 3, fy - 120 + q * 10, 6, 10); } }
 /* the bike + rider; sil = silhouette (all black) */
 function drawBike(c, mx, my, a, spin, bike, lean, sil, sc){ sc = sc || 1; c.save(); c.translate(mx, my); c.rotate(a); c.scale(sc, sc); var c1 = sil ? OUT : bike.c1, c2 = sil ? OUT : bike.c2, suit = sil ? OUT : bike.suit, hel = sil ? OUT : bike.helmet, grey = sil ? OUT : '#8B93A5', dark = sil ? OUT : '#2B2B2B', i, lw = sil ? 0 : 4;
@@ -744,22 +948,30 @@ function demoLevel(kind){ var pts = [], haz = [], x = -300, y = 0; function P(dx
 /* ---------- game flow ---------- */
 function fit(){ if (!cv) return; var vw = G.vw || window.innerWidth, vh = G.vh || (window.visualViewport && window.visualViewport.height) || window.innerHeight, k = Math.min(vw / W, vh / H), dpr = Math.min(2, window.devicePixelRatio || 1), st = $('stage');
   G.k = k; st.style.width = Math.round(W * k) + 'px'; st.style.height = Math.round(H * k) + 'px'; var bw = Math.round(W * k * dpr), bh = Math.round(H * k * dpr); if (cv.width !== bw || cv.height !== bh){ cv.width = bw; cv.height = bh; }
-  document.body.classList.toggle('portrait', vh > vw * 1.15); if (G.S && G.screen === 's-game') render(); }
+  document.body.classList.toggle('portrait', vh > vw * 1.15); var tpe = $('tip'); if (tpe) tpe.style.top = vh > vw * 1.15 ? '' : Math.round(Math.max(0, (vh - H * k) / 2) + 100 * k) + 'px'; /* the tip sits just under the stopwatch (above the stage on a portrait phone) */
+  if (G.S && G.screen === 's-game') render(); }
 function show(id){ document.querySelectorAll('.screen').forEach(function(e){ e.classList.toggle('on', e.id === id); }); G.screen = id; document.body.classList.toggle('ingame', id === 's-game');
-  if (id === 's-game') fit(); else { G.inp.g = G.inp.b = G.inp.l = G.inp.r = false; G.paused = false; $('ov').classList.remove('on'); engine(0, false, false); }
+  if (id === 's-game') fit(); else { G.inp.g = G.inp.b = G.inp.l = G.inp.r = false; G.paused = false; $('ov').classList.remove('on'); setTip(null); engine(0, false, false); }
   if (id === 's-menu') renderMenu(); else if (id === 's-map') renderMap(); else if (id === 's-shop') renderShop(); window.scrollTo(0, 0); }
-function camReset(S){ var mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2; G.cam.x = mx - W * .38; G.cam.y = my - H * .6; }
-function camUpdate(S, dt){ var mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2, vx = (S.rvx + S.fvx) / 2, vy = (S.rvy + S.fvy) / 2; if (S.dead){ mx = S.crashX; my = S.crashY; vx = vy = 0; } var tx = mx + clamp(vx * .25, -60, 200) - W * .38, ty = my + clamp(vy * .1, -60, 90) - H * .6, k = 1 - Math.exp(-6 * dt); G.cam.x += (tx - G.cam.x) * k; G.cam.y += (ty - G.cam.y) * k; }
-function startLevel(L, n){ G.level = n; G.S = newRun(L); G.finishT = -1; G.frozen = false; G.paused = false; FX.parts.length = 0; FX.stars.length = 0; FX.puffs.length = 0; FX.texts.length = 0; FX.boom.length = 0; FX.dust.length = 0; FX.crash = null; FX.shake = 0; camReset(G.S); $('ov').classList.remove('on'); show('s-game'); render(); }
-function start(n){ n = clamp(n | 0 || 1, 1, NLV); GL.played('moto'); startLevel(genLevel(n), n); }
+/* the camera looks where the track goes: it leans down toward a drop ahead (so the landing of a jump is on screen before take-off) and up toward a climb */
+function camLook(S, mx, my){ var L = S.L, g = (sY(L, mx + 220) + sY(L, mx + 360) + sY(L, mx + 500)) / 3 - R; return clamp((g - my) * .5, -110, 170); }
+function camReset(S){ var mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2; G.cam.x = mx - W * .38; G.cam.y = my + camLook(S, mx, my) - H * .6; }
+function camUpdate(S, dt){ var mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2, vx = (S.rvx + S.fvx) / 2, vy = (S.rvy + S.fvy) / 2; if (S.dead){ mx = S.crashX; my = S.crashY; vx = vy = 0; } var tx = mx + clamp(vx * .25, -60, 200) - W * .38, ty = my + clamp(vy * .1, -60, 90) + camLook(S, mx, my) - H * .6, k = 1 - Math.exp(-6 * dt), ky = 1 - Math.exp(-4 * dt); G.cam.x += (tx - G.cam.x) * k; G.cam.y += (ty - G.cam.y) * ky; }
+function startLevel(L, n){ G.level = n; G.S = newRun(L); G.finishT = -1; G.frozen = false; G.paused = false; FX.parts.length = 0; FX.stars.length = 0; FX.puffs.length = 0; FX.texts.length = 0; FX.boom.length = 0; FX.dust.length = 0; FX.crash = null; FX.shake = 0; setTip(null); camReset(G.S); $('ov').classList.remove('on'); show('s-game'); render(); }
+function start(n){ n = clamp(n | 0 || 1, 1, NLV); GL.played('moto'); G.auto = false; G.rider = null; startLevel(genLevel(n), n); }
+/* a one-time tip the first time each kind of skill section comes up (from level 4; remembered in moto.v1). It stays 5 s and comes back after a crash in that section */
+function setTip(tp){ G.tip = tp; var e = $('tip'); if (!e) return; if (tp){ e.textContent = t('tips')[tp.k] || ''; e.setAttribute('dir', G.lang === 'en' ? 'ltr' : 'rtl'); } e.classList.toggle('on', !!tp); }
+function tipCheck(S, dt){ var L = S.L, mx = (S.rx + S.fx) / 2, tp = G.tip, i; if (G.auto || L.n < 4) return;
+  if (tp){ tp.t += dt; if (mx > tp.x1) setTip(null); else if (tp.t > 5 && $('tip').classList.contains('on')) $('tip').classList.remove('on'); return; }
+  for (i = 0; i < L.secs.length; i++){ var s = L.secs[i]; if (mx > s.x0 - 230 && mx < s.x1 && !G.tips[s.k]){ G.tips[s.k] = 1; save(); setTip({ k:s.k, t:0, x1:s.x1 }); return; } } }
 function restart(){ if (!G.S) return; startLevel(G.S.L, G.level); }
 function tick(dt){ var S = G.S; if (!S || G.paused) return;
   if (S.over){ if (G.finishT >= 0){ G.finishT -= dt; if (G.finishT < 0){ G.finishT = -1; showPanel('done'); } } return; }
-  var inp = G.auto ? autoInput(S) : G.inp; step(S, inp, dt); camUpdate(S, dt); handleEvents(); }
+  var inp = G.auto ? (G.rider || autoInput)(S) : G.inp; step(S, inp, dt); camUpdate(S, dt); handleEvents(); tipCheck(S, dt); }
 function handleEvents(){ var S = G.S; if (!S) return; var ev = S.ev, i, bike = bikeById(G.bike); S.ev = [];
   for (i = 0; i < ev.length; i++){ var e = ev[i], mx = (S.rx + S.fx) / 2, my = (S.ry + S.fy) / 2;
     if (e === 'crash'){ crashFX(S, bike); if (S.why === 'tnt') SFX.boom(); else SFX.crash(); vibrate(60); }
-    else if (e === 'respawn'){ camReset(S); FX.crash = null; }
+    else if (e === 'respawn'){ camReset(S); FX.crash = null; if (G.tip){ G.tip.t = 0; $('tip').classList.add('on'); } }
     else if (e === 'flip'){ SFX.flip(); FX.texts.push({ x:mx, y:my - 90, s:'−' + FLIPBONUS.toFixed(1) + 's', t:0 }); for (var k = 0; k < 6; k++) FX.stars.push({ x:mx, y:my - 40, vx:Math.cos(k / 6 * TAU) * 160, vy:Math.sin(k / 6 * TAU) * 160 - 100, t:0, life:.7, rot:k }); }
     else if (e === 'land'){ SFX.land(); burst(mx, my + 22, 'rgba(255,255,255,.7)', 5, 120); }
     else if (e === 'pad'){ SFX.pad(); burst(mx, my + 22, '#FFD23F', 8, 200); }
@@ -827,8 +1039,24 @@ function bind(){ cv = $('cv'); ctx = cv.getContext('2d');
   $('b-sound').onclick = $('b-mute2').onclick = function(){ setMute(!G.mute); SFX.tap(); };
   try { if (window.matchMedia && matchMedia('(pointer:coarse)').matches) document.body.classList.add('touch'); } catch(e){} }
 /* runs the auto-rider live (visible) for secs seconds, or until cond(S) holds, then freezes the frame */
-function runAuto(L, n, secs, cond){ G.auto = true; startLevel(L, n); var S = G.S, k = 0, max = Math.round(secs * HZ); while (k++ < max){ tick(DT); updFX(DT, G.S); S = G.S; if (cond && cond(S)) break; } G.frozen = true; render(); return S; }
+function runAuto(L, n, secs, cond, rider){ G.auto = true; G.rider = rider || null; startLevel(L, n); var S = G.S, k = 0, max = Math.round(secs * HZ); while (k++ < max){ tick(DT); updFX(DT, G.S); S = G.S; if (cond && cond(S)) break; } G.frozen = true; render(); return S; }
 function freezeShot(){ G.frozen = true; render(); }
+/* #demo-<skill>: the smart rider (the naive one for the wheelie) rides a level that is just that section and freezes at a telling moment */
+function skillDemo(kind){ var k = kind === 'wheelie' ? 'climb' : kind, L = skillLevel(k, 60, k === 'elevator' ? 1 : 0), sec = L.secs[0], t0 = L.timed[0], mid = function(S){ return (S.rx + S.fx) / 2; }, air = function(S){ return !S.onR && !S.onF; }, cond;
+  if (kind === 'saws') cond = function(S){ return mid(S) > t0.wx - 40 && sawS(t0, S.t) > .9; };
+  else if (kind === 'hammers') cond = function(S){ return mid(S) > t0.wx - 40 && Math.abs(Math.sin(TAU * S.t / t0.per + t0.ph)) < .2; };
+  else if (kind === 'speedgap') cond = function(S){ return air(S) && mid(S) > sec.xs1 + 90; };
+  else if (kind === 'steep') cond = function(S){ return air(S) && mid(S) > sec.xs0 + 420; };
+  else if (kind === 'wheelie') cond = function(S){ return S.whT > .05 || S.dead; };
+  else if (kind === 'climb') cond = function(S){ return mid(S) > sec.xs0 + 260; };
+  else if (kind === 'tunnel') cond = function(S){ return mid(S) > sec.xs0 + 330; };
+  else if (kind === 'pistons') cond = function(S){ return mid(S) > t0.wx - 40 && pistExt(t0, S.t) >= 1; };
+  else if (kind === 'elevator') cond = function(S){ var p = L.plats[0], u = moverOff(p, S.t) / p.amp; return mid(S) > p.x0 + 40 && u > .4 && u < .7; };
+  else if (kind === 'tnt') cond = function(S){ return air(S) && mid(S) > sec.xs1 + 70; };
+  else if (kind === 'bridge') cond = function(S){ return mid(S) > t0.wx - 60 && Math.abs((S.rvx + S.fvx) / 2) < 30; };
+  else if (kind === 'loopsaw') cond = function(S){ return S.inLoop && (S.ry + S.fy) / 2 < L.loops[0].y - 20; };
+  else cond = function(S){ var b = L.haz.filter(function(q){ return q.k === 'roll'; })[0]; return mid(S) > t0.wx - 40 && rollX(b, S) < mid(S) + 330; };
+  return runAuto(L, 0, 30, cond, kind === 'wheelie' ? naiveInput : null); }
 function init(){ load(); bind(); setMute(G.mute); setLang(G.lang);
   GL.mount({ game:'moto', container:$('s-menu'), lang:function(){ return G.lang; }, money:{ add:function(n){ G.coins += n; save(); renderMenu(); if (G.screen === 's-shop') renderShop(); } }, refresh:function(){ renderMenu(); if (G.screen === 's-shop') renderShop(); if (G.screen === 's-map') renderMap(); }, toast:toast });
   var h = location.hash, mm, phone = /-phone/.test(h); h = h.replace(/-en/g, '').replace(/-phone/g, ''); if (/-en/.test(location.hash)) setLang('en');
@@ -843,17 +1071,21 @@ function init(){ load(); bind(); setMute(G.mute); setLang(G.lang);
   else if (h === '#demo-saw'){ var DS = runAuto(demoLevel('saw'), 0, 12, function(S){ return (S.rx + S.fx) / 2 > S.L.haz[0].x - 300; }); DS.L.haz[0].ph = PI / 2 - TAU * DS.t / DS.L.haz[0].per; DS.L.haz[1].ph = -PI / 2 - TAU * DS.t / DS.L.haz[1].per; render(); }
   else if (h === '#demo-crash'){ G.auto = false; startLevel(demoLevel('crash'), 0); G.inp.g = true; var kc = 0; while (kc++ < 900 && !G.S.dead){ tick(DT); updFX(DT, G.S); } for (var k2 = 0; k2 < 16; k2++){ tick(DT); updFX(DT, G.S); } G.inp.g = false; freezeShot(); }
   else if (h === '#demo-finish'){ runAuto(genLevel(1), 1, 60, function(S){ return S.won; }); for (var k3 = 0; k3 < 80; k3++){ tick(DT); updFX(DT, G.S); } freezeShot(); }
+  else if ((mm = /^#demo-(saws|hammers|speedgap|steep|wheelie|climb|tunnel|pistons|elevator|tnt|bridge|loopsaw|boulders)$/.exec(h))) skillDemo(mm[1]);
+  else if (h === '#demo-tip'){ G.tips = {}; $('tip').style.transition = 'none'; startLevel(genLevel(4), 4); G.inp.g = true; var kt = 0; while (kt++ < 600 && !G.tip) tick(DT); G.inp.g = false; for (kt = 0; kt < 8; kt++){ tick(DT); updFX(DT, G.S); } freezeShot(); }
   else if (h === '#auto'){ runAuto(genLevel(1), 1, 4); }
   else if ((mm = /^#auto(\d+)(?:x(\d+))?$/.exec(h))){ var an = clamp(+mm[1], 1, NLV); G.unlocked = Math.max(G.unlocked, an); runAuto(genLevel(an), an, mm[2] ? +mm[2] : 4); }
-  else if ((mm = /^#bench(\d+)-(\d+)$/.exec(h))){ var a0 = +mm[1], b0 = +mm[2], out = [], tb = performance.now(), bad = [], hist = [0, 0, 0, 0, 0], mxT = 0, sumTr = 0, sumT = 0, kinds = {}; for (var bi = a0; bi <= b0; bi++){ var BL = genLevel(bi); sumTr += BL.tries; if (BL.unsolved) bad.push(bi); hist[BL.tries <= 1 ? 0 : BL.tries <= 3 ? 1 : BL.tries <= 10 ? 2 : BL.tries <= 30 ? 3 : 4]++; mxT = Math.max(mxT, BL.simT || 0); sumT += BL.simT || 0; BL.kinds.forEach(function(k){ kinds[k] = (kinds[k] || 0) + 1; }); out.push(bi + ':' + BL.tries + (BL.unsolved ? 'X' : '') + ':' + (BL.simT ? BL.simT.toFixed(1) : '-') + ':' + Math.round(BL.len) + ':' + BL.kinds.map(function(k){ return k.slice(0, 3); }).join(',')); }
-    var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = 'ms=' + Math.round(performance.now() - tb) + ' unsolved=' + bad.join(',') + ' tries[1,2-3,4-10,11-30,31+]=' + hist.join('/') + ' avgTries=' + (sumTr / (b0 - a0 + 1)).toFixed(1) + ' maxT=' + mxT.toFixed(1) + ' avgT=' + (sumT / (b0 - a0 + 1)).toFixed(1) + ' kinds=' + JSON.stringify(kinds) + (b0 - a0 < 80 ? '\n' + out.join('\n') : ''); }
-  else if ((mm = /^#kinds(\d+)$/.exec(h))){ var rows0 = []; for (var ks = 0; ks < 24; ks++){ var KL = build(+mm[1], ks), KR = simulate(KL); rows0.push(ks + ': ' + KL.kinds.join(',') + ' => ' + JSON.stringify(KR)); } var pre0 = $('test-log'); pre0.removeAttribute('class'); pre0.textContent = rows0.join('\n'); }
+  else if ((mm = /^#bench(\d+)-(\d+)$/.exec(h))){ var a0 = +mm[1], b0 = +mm[2], out = [], tb = performance.now(), bad = [], hist = [0, 0, 0, 0, 0], mxT = 0, sumTr = 0, sumT = 0, kinds = {}, rejs = {}, kills = {}, nvW = 0, lnW = 0, fr = 0, frN = 0; for (var bi = a0; bi <= b0; bi++){ var BL = genLevel(bi); sumTr += BL.tries; if (BL.unsolved) bad.push(bi); hist[BL.tries <= 1 ? 0 : BL.tries <= 3 ? 1 : BL.tries <= 10 ? 2 : BL.tries <= 30 ? 3 : 4]++; mxT = Math.max(mxT, BL.simT || 0); sumT += BL.simT || 0; BL.kinds.forEach(function(k){ kinds[k] = (kinds[k] || 0) + 1; }); BL.rej.forEach(function(k){ rejs[k] = (rejs[k] || 0) + 1; });
+      var BN = simulate(BL, 70, naiveInput, true), BE = simulate(BL, 70, leanInput, true); if (BN.won) nvW++; else { kills[BN.why || 'timeout'] = (kills[BN.why || 'timeout'] || 0) + 1; fr += BN.x / BL.finish.x; frN++; } if (BE.won) lnW++;
+      out.push(bi + ':' + BL.tries + (BL.unsolved ? 'X' : '') + ':' + (BL.simT ? BL.simT.toFixed(1) : '-') + 's:' + Math.round(BL.len) + 'px:naive ' + (BN.won ? 'WON' : (BN.why || 'timeout') + '@' + Math.round(BN.x)) + ':lean ' + (BE.won ? 'WON' : (BE.why || 'timeout') + '@' + Math.round(BE.x)) + ':' + BL.kinds.map(function(k){ return SK_IS[k] ? k.toUpperCase() : k.slice(0, 3); }).join(',')); }
+    var pre = $('test-log'); pre.removeAttribute('class'); pre.textContent = 'ms=' + Math.round(performance.now() - tb) + ' unsolved=' + bad.join(',') + ' tries[1,2-3,4-10,11-30,31+]=' + hist.join('/') + ' avgTries=' + (sumTr / (b0 - a0 + 1)).toFixed(2) + ' rejected=' + JSON.stringify(rejs) + ' smart maxT=' + mxT.toFixed(1) + ' avgT=' + (sumT / (b0 - a0 + 1)).toFixed(1) + ' | naive wins=' + nvW + ' naiveLean wins=' + lnW + ' naive dies at ' + (frN ? (100 * fr / frN).toFixed(0) : '-') + '% on average, by ' + JSON.stringify(kills) + ' | kinds=' + JSON.stringify(kinds) + (b0 - a0 < 80 ? '\n' + out.join('\n') : ''); }
+  else if ((mm = /^#kinds(\d+)$/.exec(h))){ var rows0 = []; for (var ks = 0; ks < 24; ks++){ var KL = build(+mm[1], ks), KV = verify(KL, +mm[1]), KR = simulate(KL); rows0.push(ks + ': ' + KL.kinds.join(',') + ' => ' + (KV || 'OK') + ' naive ' + KL.naiveWhy + '@' + KL.naiveDist + ' smart ' + JSON.stringify(KR)); } var pre0 = $('test-log'); pre0.removeAttribute('class'); pre0.textContent = rows0.join('\n'); }
   else if ((mm = /^#sim(\d+)(?:s(\d+))?$/.exec(h))){ var SL = build(+mm[1], mm[2] ? +mm[2] : 0), SS = newRun(SL), rows = [], si = 0; while (!SS.over && si < 3600){ var ii = autoInput(SS); step(SS, ii, DT); if (si % 6 === 0 || SS.ev.length) rows.push(si + ':' + (ii.g ? 'G' : '-') + (ii.b ? 'B' : '-') + (ii.l ? 'L' : '-') + (ii.r ? 'R' : '-') + ' x' + ((SS.rx + SS.fx) / 2).toFixed(0) + ' y' + ((SS.ry + SS.fy) / 2).toFixed(0) + ' v' + ((SS.rvx + SS.fvx) / 2).toFixed(0) + ',' + ((SS.rvy + SS.fvy) / 2).toFixed(0) + ' a' + (SS.a * 180 / PI).toFixed(0) + (SS.onR ? ' R' : '') + (SS.onF ? ' F' : '') + ' ar' + SS.airRot.toFixed(1) + (SS.ev.length ? ' [' + SS.ev.join(',') + ']' : '') + (SS.dead ? ' DEAD:' + SS.why : '')); SS.ev.length = 0; si++; } var pre2 = $('test-log'); pre2.removeAttribute('class'); pre2.textContent = 'kinds=' + SL.kinds.join(',') + ' len=' + SL.len + ' haz=' + JSON.stringify(SL.haz.map(function(q){ return [q.k, Math.round(q.x), q.kind || '']; })) + ' plats=' + JSON.stringify(SL.plats.map(function(q){ return [q.kind, Math.round(q.x0), q.axis || '', Math.round(q.amp || 0)]; })) + ' loops=' + JSON.stringify(SL.loops) + ' cps=' + JSON.stringify(SL.cps.map(Math.round)) + '\n' + rows.join('\n'); }
   else if ((mm = /^#(icon|og)(\d+)?$/.exec(h))){ var isIcon = mm[1] === 'icon', isz = isIcon ? (+mm[2] || 512) : 0, ic = document.createElement('canvas'), iw = isIcon ? isz : 1200, ih = isIcon ? isz : 630; ic.width = iw; ic.height = ih; ic.style.cssText = 'position:fixed;left:0;top:0;width:' + iw + 'px;height:' + ih + 'px;z-index:99'; document.body.appendChild(ic); var ix = ic.getContext('2d');
     if (isIcon){ ix.scale(isz / 512, isz / 512); drawHero(ix, 1280 * (512 / 560), 512, G.lang, 'icon'); ix.save(); ix.translate(256, 300); ix.rotate(-.6); ix.scale(1.9, 1.9); drawBike(ix, 0, 0, 0, 0, BIKES[0], -1, false, 1); ix.restore(); splat(ix, 60, 24, 392, 110, 5); txt(ix, G.lang === 'en' ? 'STUNT MOTO' : 'אופנוע הפעלולים', 256, 80, G.lang === 'en' ? 56 : 46, '#FFD23F', 'center', 0); }
     else { drawHero(ix, 1200, 630, G.lang, 'og'); ix.save(); ix.translate(640, 330); ix.rotate(-.6); ix.scale(2.4, 2.4); drawBike(ix, 0, 0, 0, 0, BIKES[0], -1, false, 1); ix.restore(); } }
   requestAnimationFrame(function(now){ lastT = now; requestAnimationFrame(frame); }); }
-window.MX = { genLevel:genLevel, build:build, finishBuild:finishBuild, demoLevel:demoLevel, newRun:newRun, step:step, autoInput:autoInput, simulate:simulate, sY:sY, sT:sT, hfContact:hfContact, resolveWheel:resolveWheel, moverOff:moverOff, goOK:goOK, tArr:tArr, placeAt:placeAt, respawn:respawn, crash:crash, starsFor:starsFor, fmtT:fmtT, themeOf:themeOf,
+window.MX = { genLevel:genLevel, build:build, finishBuild:finishBuild, demoLevel:demoLevel, skillLevel:skillLevel, skillDemo:skillDemo, tipCheck:tipCheck, setTip:setTip, shiftPhase:shiftPhase, fromCheckpoints:fromCheckpoints, verify:verify, needSkills:needSkills, newRun:newRun, cloneRun:cloneRun, step:step, autoInput:autoInput, naiveInput:naiveInput, leanInput:leanInput, simulate:simulate, landRel:landRel, jumpRange:jumpRange, pistExt:pistExt, hazCircle:hazCircle, HC:HC, moverVel:moverVel, SKILLS:SKILLS, SKILL_FROM:SKILL_FROM, sSlope:sSlope, sY:sY, sT:sT, hfContact:hfContact, resolveWheel:resolveWheel, moverOff:moverOff, goOK:goOK, tArr:tArr, placeAt:placeAt, respawn:respawn, crash:crash, starsFor:starsFor, fmtT:fmtT, themeOf:themeOf,
   save:save, load:load, restore:restore, buyBike:buyBike, equipBike:equipBike, bikeOwned:bikeOwned, levelOpen:levelOpen, totalStars:totalStars, levelsDone:levelsDone, show:show, start:start, startLevel:startLevel, restart:restart, setLang:setLang, setMute:setMute, onKey:onKey, onKeyUp:onKeyUp, press:press, tick:tick, handleEvents:handleEvents, finishLevel:finishLevel, showPanel:showPanel, togglePause:togglePause, render:render, fit:fit, renderMenu:renderMenu, renderMap:renderMap, renderShop:renderShop, mapClick:mapClick, drawMap:drawMap, drawHero:drawHero, drawBike:drawBike, runAuto:runAuto, camReset:camReset,
   BIKES:BIKES, THEMES:THEMES, G:G, T:T, t:t, FX:FX, C:C, NLV:NLV, GRAV:GRAV, R:R, WL:WL, VMAX:VMAX, DT:DT, HZ:HZ, PADV:PADV, LEANW:LEANW, FLIPBONUS:FLIPBONUS, RESPAWN:RESPAWN, BRIDGE_T:BRIDGE_T, KEY:KEY, mkRng:mkRng, LCACHE:LCACHE };
 if (TEST){ try { init(); } catch(e){ ERRS.push('init: ' + (e && e.stack || e)); } } else init();
@@ -885,23 +1117,45 @@ if (TEST){
         ok('levels 1–3 have no hazards at all (no saws/TNT/hammers/boulders, no spikes/water, no platforms or loops)', [1, 2, 3].every(function(k){ var l = I.genLevel(k), bad = false; for (var q = 0; q < l.nx; q++) if (l.ht[q] === 2 || l.ht[q] === 3) bad = true; return l.haz.length === 0 && l.plats.length === 0 && l.loops.length === 0 && !bad; }));
         ok('heightfield sanity: 10 px samples, finite heights, types 0–4, ground-below array present', L1.nx > 100 && DX === 10 && L1.gb.length === L1.nx && [].every.call(L1.hy, function(v){ return isFinite(v); }) && [].every.call(L1.ht, function(v){ return v >= 0 && v <= 4; }));
         ok('themes: 6 themes with palette + decorations, cycling every 25 levels (1→beach, 26→desert, 51→snow, 76→pool, 101→night city, 126→jungle, 151→beach)', I.THEMES.length === 6 && I.THEMES.every(function(th){ return th.sky && th.top && th.dirt && th.deco.length >= 3; }) && [1, 26, 51, 76, 101, 126, 151].map(I.themeOf).join() === '0,1,2,3,4,5,0' && I.genLevel(30).theme === 1);
-        /* --- the big sweep: every level completable by the auto-rider --- */
-        var t0 = performance.now(), fails = [], crashed = [], tBad = [], tries = 0, maxT = 0, sumT = 0, kinds = {}, flips = 0, early = [], tri3 = 0, first = 0;
-        for (n = 1; n <= NLV; n++){ L = I.genLevel(n); if (L.unsolved) fails.push(n); var rs = I.simulate(L); if (!rs.won) fails.push(n); if (rs.crashes) crashed.push(n); if (rs.time < 2 || rs.time > 60) tBad.push(n + ':' + rs.time); if (Math.abs(L.par - Math.round(rs.time * 1.15 * 100) / 100) > .02) tBad.push(n + ':par'); tries += L.tries; if (L.tries <= 3) tri3++; if (L.tries === 1) first++; maxT = Math.max(maxT, rs.time); sumT += rs.time; flips += rs.flips; L.kinds.forEach(function(k){ kinds[k] = (kinds[k] || 0) + 1; if ((k === 'saws' && n < 8) || (k === 'loop' && n < 60) || (k === 'mover' && n < 30) || (k === 'hammers' && n < 20) || (k === 'wind' && n < 150)) early.push(n + k); }); }
+        /* --- the big sweep: the difficulty contract over ALL 500 levels (naive fails, naive-lean fails, smart passes) --- */
+        var t0 = performance.now(), tries = 0, tri3 = 0, first = 0, unsolved = [];
+        for (n = 1; n <= NLV; n++){ L = I.genLevel(n); tries += L.tries; if (L.tries <= 3) tri3++; if (L.tries === 1) first++; if (L.unsolved) unsolved.push(n); }
         var sweepMs = performance.now() - t0;
-        ok('ALL 500 levels are completed by the deterministic auto-rider', fails.length === 0, 'fails: ' + fails.slice(0, 20).join(','));
-        ok('…without a single crash (par times are clean runs)', crashed.length === 0, crashed.slice(0, 20).join(','));
-        ok('sweep of 500 levels (generate + verify + re-verify) took ≤ 8000 ms: ' + Math.round(sweepMs) + ' ms, avg tries ' + (tries / NLV).toFixed(2), sweepMs <= 8000);
-        ok('every level takes 2–60 s for the auto-rider and par = auto time × 1.15 (avg ' + (sumT / NLV).toFixed(1) + ' s, max ' + maxT.toFixed(1) + ' s)', tBad.length === 0, tBad.slice(0, 10).join(','));
-        ok('average rerolls ≤ 10 and ≥ 50% of the levels pass within their first 3 layouts (' + tri3 + ' / 500, first try ' + first + ')', tries / NLV <= 10 && tri3 >= 250, tries / NLV);
-        ok('all 19 section kinds occur across the 500 levels', ['flat', 'hills', 'gap', 'scaffold', 'drop', 'saws', 'hammers', 'tnt', 'bridge', 'mover', 'loop', 'bouncers', 'water', 'spikes', 'wind', 'double', 'downhill', 'boulders', 'dive'].every(function(k){ return kinds[k] > 0; }), JSON.stringify(kinds));
-        ok('sections unlock with the level: no saws before 8, hammers before 20, movers before 30, loops before 60, wind before 150', early.length === 0, early.slice(0, 8).join(','));
-        ok('the auto-rider performs backflips on the long dive jumps (≥ 10 flips over the 500 par runs: ' + flips + ')', flips >= 10);
+        ok('all 500 levels are generated within the contract (no unsolved layout)', unsolved.length === 0, unsolved.slice(0, 20).join(','));
+        ok('the 500-level sweep (layouts + naive / naive-lean / smart runs + checkpoint runs, cached afterwards) took ≤ 8000 ms: ' + Math.round(sweepMs) + ' ms, avg tries ' + (tries / NLV).toFixed(2), sweepMs <= 8000);
+        ok('average rerolls ≤ 4 and ≥ 80% of the levels pass within their first 3 layouts (' + tri3 + ' / 500, first try ' + first + ')', tries / NLV <= 4 && tri3 >= 400, tries / NLV);
+        /* fresh simulations of the three riders on every cached level */
+        var nvWin = [], nvLate = [], lnWin = [], lnWin414 = 0, smFail = [], smCrash = [], tBad = [], distBad = [], skBad = [], cpBad = [], cpSkill = [], kinds = {}, early = [], flips = 0, maxT = 0, sumT = 0, sumFrac = 0, inSkill = 0, nvCnt = 0, why = {};
+        for (n = 1; n <= NLV; n++){ L = I.genLevel(n); var lim = n <= 3 ? 40 : n < 15 ? 60 : 70, ra = I.simulate(L, lim, I.naiveInput, true), rb = I.simulate(L, lim, I.leanInput, true), rs = I.simulate(L, lim);
+          if (ra.won) nvWin.push(n); if (rb.won){ if (n >= 15) lnWin.push(n); else if (n >= 4) lnWin414++; }
+          if (n >= 4){ nvCnt++; sumFrac += ra.x / L.finish.x; why[ra.why] = (why[ra.why] || 0) + 1; if (L.secs.some(function(s){ return ra.x >= s.x0 - 150 && ra.x <= s.x1; })) inSkill++; if (Math.abs(L.naiveDist - Math.round(ra.x)) > 1) distBad.push(n); if (n >= 30 && ra.x > L.finish.x * (n >= 100 ? 1 / 3 : .5)) nvLate.push(n); }
+          if (!rs.won) smFail.push(n); if (rs.crashes) smCrash.push(n); if (rs.time < 2 || rs.time > lim) tBad.push(n + ':' + rs.time); if (Math.abs(L.par - Math.round(rs.time * 1.15 * 100) / 100) > .02 || L.simT !== rs.time) tBad.push(n + ':par');
+          maxT = Math.max(maxT, rs.time); sumT += rs.time; flips += rs.flips;
+          var need = I.needSkills(n), uniq = {}; L.secs.forEach(function(s){ uniq[s.k] = 1; }); if (L.secs.length < need || Object.keys(uniq).length < need || L.skills.length !== Object.keys(uniq).length || (n <= 3 && L.secs.length)) skBad.push(n);
+          L.secs.forEach(function(s){ if (!L.cps.some(function(x){ return x > s.x0 - 150 && x < s.x0; })) cpSkill.push(n + s.k); if (n < I.SKILL_FROM[s.k]) early.push(n + s.k); });
+          if (I.fromCheckpoints(L)) cpBad.push(n);
+          L.kinds.forEach(function(k){ kinds[k] = (kinds[k] || 0) + 1; }); }
+        ok('NAIVE rider (full gas every frame, no brake, no lean) finishes ' + nvWin.length + ' of the 500 levels [' + nvWin.join(',') + '] – at most the 3 tutorial levels', nvWin.length <= 3 && nvWin.every(function(k){ return k <= 3; }), nvWin.join(','));
+        ok('…and fails on EVERY level from 4 to 500 – on average after ' + (100 * sumFrac / nvCnt).toFixed(0) + '% of the level, ' + inSkill + ' / ' + nvCnt + ' times inside a skill section ' + JSON.stringify(why), nvWin.filter(function(k){ return k >= 4; }).length === 0 && inSkill >= nvCnt * .9);
+        ok('…within the first half of the level from level 30 and within the first third from level 100', nvLate.length === 0, nvLate.slice(0, 20).join(','));
+        ok('NAIVE-LEAN rider (full gas + levels the bike in the air) fails on every level from 15 to 500 (on levels 4–14, where only the naive rider must fail, it finishes ' + lnWin414 + ')', lnWin.length === 0, lnWin.slice(0, 20).join(','));
+        ok('SMART rider finishes ALL 500 levels', smFail.length === 0, 'fails: ' + smFail.slice(0, 20).join(','));
+        ok('…without a single crash (par times are clean runs)', smCrash.length === 0, smCrash.slice(0, 20).join(','));
+        ok('…in ≤ 40 s on levels 1–3, ≤ 60 s on 4–14 and ≤ 70 s from 15, and par = smart time × 1.15 is recorded on the level (avg ' + (sumT / NLV).toFixed(1) + ' s, max ' + maxT.toFixed(1) + ' s)', tBad.length === 0, tBad.slice(0, 10).join(','));
+        ok('L.naiveDist (how far the naive rider gets) is recorded and matches a fresh naive run', distBad.length === 0 && I.genLevel(40).naiveDist > 0, distBad.slice(0, 10).join(','));
+        ok('skill sections per level: none on 1–3, ≥ 1 from 4, ≥ 2 from 30, ≥ 3 from 100, ≥ 4 from 250, ≥ 5 from 400 – always of different kinds, listed in L.skills', skBad.length === 0 && I.needSkills(3) === 0 && I.needSkills(4) === 1 && I.needSkills(30) === 2 && I.needSkills(100) === 3 && I.needSkills(250) === 4 && I.needSkills(400) === 5 && I.genLevel(400).skills.length >= 5, skBad.slice(0, 10).join(','));
+        ok('a checkpoint flag stands right before every skill section (a failure costs seconds, not the level)', cpSkill.length === 0, cpSkill.slice(0, 10).join(','));
+        ok('every level can also be finished from each of its checkpoints (a respawn has no speed)', cpBad.length === 0, cpBad.slice(0, 20).join(','));
+        ok('all 12 skill kinds and all 12 calm kinds occur across the 500 levels', I.SKILLS.length === 12 && I.SKILLS.concat(['flat', 'hills', 'gap', 'scaffold', 'drop', 'bouncers', 'water', 'spikes', 'wind', 'double', 'downhill', 'dive']).every(function(k){ return kinds[k] > 0; }), JSON.stringify(kinds));
+        ok('skill kinds unlock with the level: speed gap + saws 4, climb 5, steep landing 6, tunnel 8, TNT 9, pistons 12, hammers 14, bridge 15, elevator 20, boulders 25, loop 60', early.length === 0 && I.SKILL_FROM.speedgap === 4 && I.SKILL_FROM.saws === 4 && I.SKILL_FROM.hammers === 14 && I.SKILL_FROM.elevator === 20 && I.SKILL_FROM.loopsaw === 60 && I.genLevel(4).skills.length === 1, early.slice(0, 8).join(','));
+        ok('the smart rider performs backflips on the long airs (≥ 10 flips over the 500 par runs: ' + flips + ')', flips >= 10);
+        var Lc = I.genLevel(37), c37 = [Lc.seed, Lc.pshift, Lc.simT, Lc.naiveDist, Lc.nx, Lc.haz.map(function(h){ return h.ph; }).join()].join('|'); delete I.LCACHE[37]; var Ld = I.genLevel(37), d37 = [Ld.seed, Ld.pshift, Ld.simT, Ld.naiveDist, Ld.nx, Ld.haz.map(function(h){ return h.ph; }).join()].join('|');
+        ok('genLevel is deterministic and cached: regenerating level 37 from scratch gives the same layout seed, hazard phases, naive distance and par; a second call returns the cached object; the rejected tries are recorded', Ld !== Lc && c37 === d37 && I.genLevel(37) === Ld && Array.isArray(Ld.rej) && Ld.rej.length === Ld.tries - 1, c37 + ' vs ' + d37);
         var L500 = I.genLevel(500), L250 = I.genLevel(250), hz = function(a, b){ var s = 0; for (var k = a; k <= b; k++){ var l = I.genLevel(k); s += l.haz.length + l.plats.length + l.loops.length; } return s / (b - a + 1); }, gw = function(a, b){ var s = 0, c = 0; for (var k = a; k <= b; k++) I.genLevel(k).gaps.forEach(function(g){ s += g; c++; }); return c ? s / c : 0; };
         ok('difficulty ramps: level 500 is longer than level 1, levels 450–500 have more hazards per level than 10–60 and wider jump gaps', L500.finish.x > L1.finish.x * 1.6 && L250.finish.x > L1.finish.x && hz(450, 500) > hz(10, 60) + 2 && gw(450, 500) > gw(4, 60) + 40, [L1.finish.x, L500.finish.x, hz(10, 60), hz(450, 500), gw(4, 60), gw(450, 500)].map(Math.round).join(','));
-        ok('lengths stay within 2200–8500 px', (function(){ var mn = 1e9, mx = 0; for (var k = 1; k <= NLV; k++){ var f = I.genLevel(k).finish.x; mn = Math.min(mn, f); mx = Math.max(mx, f); } return mn >= 2200 && mx <= 8500; })(), (function(){ var mn = 1e9, mx = 0; for (var k = 1; k <= NLV; k++){ var f = I.genLevel(k).finish.x; mn = Math.min(mn, f); mx = Math.max(mx, f); } return mn + '..' + mx; })());
+        ok('lengths stay within 2200–17000 px', (function(){ var mn = 1e9, mx = 0; for (var k = 1; k <= NLV; k++){ var f = I.genLevel(k).finish.x; mn = Math.min(mn, f); mx = Math.max(mx, f); } return mn >= 2200 && mx <= 17000; })(), (function(){ var mn = 1e9, mx = 0; for (var k = 1; k <= NLV; k++){ var f = I.genLevel(k).finish.x; mn = Math.min(mn, f); mx = Math.max(mx, f); } return mn + '..' + mx; })());
         ok('checkpoints: every level longer than 2000 px has ≥ 1 checkpoint flag, sorted by x, each standing on flat safe ground', (function(){ for (var k = 1; k <= NLV; k++){ var l = I.genLevel(k); if (l.finish.x > 2000 && l.cps.length < 1) return false; for (var q = 0; q < l.cps.length; q++){ var x = l.cps[q]; if (q && x <= l.cps[q - 1]) return false; if (I.sT(l, x) !== 0 || Math.abs(I.sY(l, x + 30) - I.sY(l, x - 30)) > 1) return false; } } return true; })());
-        ok('hazards and timed hazards are sorted by x; saws alternate hanging / popping', (function(){ for (var k = 8; k <= 120; k++){ var l = I.genLevel(k); for (var q = 1; q < l.haz.length; q++) if (l.haz[q].x < l.haz[q - 1].x) return false; for (q = 1; q < l.timed.length; q++) if ((l.timed[q].x != null ? l.timed[q].x : l.timed[q].x0) < (l.timed[q - 1].x != null ? l.timed[q - 1].x : l.timed[q - 1].x0)) return false; } return true; })());
+        ok('hazards are sorted by x and the timed hazards by their wait point, each with a wait point before its passed point', (function(){ for (var k = 4; k <= 500; k += 3){ var l = I.genLevel(k); for (var q = 1; q < l.haz.length; q++) if (l.haz[q].x < l.haz[q - 1].x) return false; for (q = 0; q < l.timed.length; q++){ if (!(l.timed[q].wx < l.timed[q].px)) return false; if (q && l.timed[q].wx < l.timed[q - 1].wx) return false; } } return true; })());
         /* --- physics --- */
         var LF = mk(4000); S = I.newRun(LF);
         ok('newRun: both wheels resting on the ground at the start (y = −R), frame length 70, angle 0, alive', Math.abs(S.ry + R) < .01 && Math.abs(S.fy + R) < .01 && Math.abs(S.fx - S.rx - WL) < .01 && S.a === 0 && !S.dead && !S.over);
@@ -909,18 +1163,74 @@ if (TEST){
         ok('gravity: a bike in the air falls (vy ≈ g·t with light drag, y grows)', m.vy > GRAV * .5 * .9 && m.vy < GRAV * .5 * 1.01 && m.y > -300 + 200, m.vy);
         run(S, NONE, 60); m = mid(S); ok('landing: comes to rest on the ground – both wheels in contact, y = −R, vy = 0, "land" event seen', S.onR && S.onF && Math.abs(m.y + R) < .5 && Math.abs(m.vy) < 1, m.y + ',' + m.vy);
         S = I.newRun(LF); run(S, GAS, 60); m = mid(S); var v1 = m.vx; run(S, GAS, 60); m = mid(S);
-        ok('gas: accelerates to the top ground speed 520 px/s within a second and holds it', v1 > 480 && Math.abs(m.vx - VMAX) < 3 && S.onR, v1 + '/' + m.vx);
+        ok('gas: accelerates to the top ground speed 560 px/s within a second and holds it', VMAX === 560 && v1 > 480 && Math.abs(m.vx - VMAX) < 3 && S.onR, v1 + '/' + m.vx);
         run(S, NONE, 180); ok('no gas: rolls on with a little rolling resistance (loses 100–250 px/s in 3 s)', m.vx - mid(S).vx > 100 && m.vx - mid(S).vx < 330, mid(S).vx);
-        S = I.newRun(LF); run(S, GAS, 90); run(S, BRK, 24); m = mid(S); ok('brake: from top speed to a standstill in ≤ 0.4 s (then it starts creeping back)', m.vx < 10 && m.vx > -REV - 10, m.vx);
-        run(S, BRK, 60); m = mid(S); ok('holding the brake while stopped reverses slowly (≈ −150 px/s, never faster)', m.vx < -100 && m.vx > -REV - 10, m.vx);
-        S = I.newRun(LF); at(S, 600, -1600); run(S, LFT, 30); ok('in the air ← spins the bike backwards at ≈ 280°/s (front up, angle decreasing)', S.w < -LEANW * .9 && S.w > -LEANW * 1.05 && S.a < -.5, S.w);
-        S = I.newRun(LF); at(S, 600, -1600); run(S, RGT, 30); ok('in the air → spins it forwards at ≈ +280°/s', S.w > LEANW * .9 && S.a > .5, S.w);
-        var w0 = S.w; run(S, NONE, 30); ok('releasing the lean in the air damps the spin', Math.abs(S.w) < Math.abs(w0) * .7, S.w);
+        S = I.newRun(LF); run(S, GAS, 90); var xb0 = mid(S).x, vb0 = mid(S).vx; run(S, BRK, 36); var vb1 = mid(S).vx, nb = 36; while (mid(S).vx > 1 && nb < 120){ step(S, BRK, DT); nb++; } m = mid(S);
+        ok('brake: from the top speed to a standstill takes about 0.75 s (still rolling at ' + Math.round(vb1) + ' px/s after 0.6 s) and ' + Math.round(m.x - xb0) + ' px (190–240) – braking has to start early', Math.abs(vb0 - VMAX) < 3 && vb1 > 60 && nb >= 42 && nb <= 50 && m.x - xb0 > 190 && m.x - xb0 < 240, vb1 + '/' + nb + '/' + (m.x - xb0));
+        run(S, BRK, 60); m = mid(S); ok('holding the brake while stopped reverses slowly (≈ −160 px/s, never faster)', REV === 160 && m.vx < -100 && m.vx > -REV - 10, m.vx);
+        S = I.newRun(LF); at(S, 500, -R); S.rvx = S.fvx = 1100; run(S, BRK, 6); var fb = 1100 - mid(S).vx; S = I.newRun(LF); at(S, 500, -R); S.rvx = S.fvx = 500; run(S, BRK, 6);
+        ok('above the top speed the brake bites harder: in 0.1 s it takes ' + Math.round(fb) + ' px/s off 1100 px/s but only ' + Math.round(500 - mid(S).vx) + ' off 500', fb > 180 && 500 - mid(S).vx < 80 && 500 - mid(S).vx > 45, fb + '/' + mid(S).vx);
+        S = I.newRun(LF); at(S, 600, -1600); run(S, LFT, 30); ok('in the air ← spins the bike backwards at ≈ 320°/s (front up, angle decreasing) – a full flip takes ≈ 1.1 s of air', S.w < -LEANW * .9 && S.w > -LEANW * 1.05 && S.a < -.5, S.w);
+        S = I.newRun(LF); at(S, 600, -1600); run(S, RGT, 30); ok('in the air → spins it forwards at ≈ +320°/s', Math.abs(LEANW - 320 * PI / 180) < 1e-9 && S.w > LEANW * .9 && S.a > .5, S.w);
+        var w0 = S.w; run(S, NONE, 30); ok('releasing the lean in the air stops the spin within half a second (hold to rotate, let go to hold the angle)', Math.abs(S.w) < Math.abs(w0) * .1 && AIRDAMP === 7, S.w);
         S = I.newRun(LF); at(S, 600, -3200); run(S, LFT, 100); ok('a full 360° backwards in the air = flip: counted, −0.5 s bonus, "flip" event', S.flips === 1 && S.bonus === FLIPBONUS && S.ev.indexOf('flip') >= 0, S.flips + '/' + S.airRot);
         S = I.newRun(LF); at(S, 600, -3200); run(S, RGT, 100); ok('a frontflip counts too', S.flips === 1);
         S = I.newRun(LF); at(S, 600, -200, Math.PI); run(S, NONE, 60); ok('landing upside down = crash (the rider\'s head hits the ground)', S.why === 'head' && S.crashes === 1 && S.ev.indexOf('crash') >= 0, S.why + '/' + S.crashes + '/' + S.ev.join());
         S = I.newRun(LF); at(S, 600, -120, -1.95); run(S, NONE, 60); ok('landing with the bike more than 100° off the ground normal = crash ("flip")', S.crashes === 1 && (S.why === 'flip' || S.why === 'head'), S.why);
-        S = I.newRun(LF); at(S, 600, -120, -1.2); run(S, NONE, 60); ok('landing 70° nose-up is survivable (the bike tips back onto its wheels)', !S.dead);
+        /* --- the harder physics: strict landings, no auto-levelling, head hits, wheelies, weight transfer --- */
+        var landT = function(a, vx, h){ var s = I.newRun(LF); at(s, 600, -(h || 150), a * PI / 180); s.rvx = s.fvx = vx || 0; for (var q = 0; q < 60 && !s.crashes && !(s.onR && s.onF); q++) step(s, NONE, DT); return s; };
+        S = landT(-52); ok('strict landing: touching down 52° nose-up = crash ("land")', S.crashes === 1 && S.why === 'land' && Math.abs(S.landA + 52 * PI / 180) < .01, S.why + '/' + S.landA);
+        S = landT(-30); ok('…30° nose-up is fine: the rear wheel touches, the front drops, no crash', S.crashes === 0 && S.onR && S.onF && Math.abs(S.landA + 30 * PI / 180) < .01, S.why + '/' + S.landA);
+        ok('the landing window is ±45°: 44° nose-up lands, 46° crashes', landT(-44).crashes === 0 && landT(-46).why === 'land' && Math.abs(LANDMAX - 45 * PI / 180) < 1e-9);
+        S = landT(52); ok('52° nose-down = crash too', S.crashes === 1 && S.why === 'land', S.why);
+        S = landT(30, 500); ok('endo: landing on the front wheel only, 30° nose-down at speed (> 400 px/s) = over the bars ("endo")', S.crashes === 1 && S.why === 'endo' && S.onF && !S.onR, S.why);
+        ok('…the same 30° nose-down touch at walking pace is survivable, and 20° nose-down at 500 px/s is a normal landing', landT(30, 100, 62).crashes === 0 && landT(20, 500).crashes === 0);
+        S = I.newRun(LF); at(S, 600, -2400, -1.05); run(S, NONE, 30); ok('no auto-levelling in the air: a bike tilted 60° nose-up with no keys pressed is still at 60° half a second later', Math.abs(S.a + 1.05) < .001 && Math.abs(S.w) < .001, S.a);
+        var LBlk = mk(4000, { haz:[{ k:'blk', x0:700, x1:900, y0:-150, y1:-80, x:800, rx:300, sp:'b', roof:1 }] }); S = I.newRun(LBlk); run(S, GAS, 150);
+        ok('the head of the rider counts: a spiked block 80 px above the ground (helmet top = 85) = crash at its edge, although both wheels fit under it', S.crashes >= 1 && S.why === 'spikes' && S.crashX > 600 && S.crashX < 760, S.why + '@' + S.crashX);
+        LBlk.haz[0].y1 = -92; LBlk.haz[0].y0 = -160; S = I.newRun(LBlk); run(S, GAS, 150); ok('…the same block 92 px up is cleared', S.crashes === 0 && mid(S).x > 900, S.why);
+        var GASL = { g:true, b:false, l:true, r:false }, GASR = { g:true, b:false, l:false, r:true };
+        var LRamp = mk(3000, {}, [{ x:-300, y:-600, t:0, g:0 }, { x:-290, y:0, t:0, g:0 }, { x:600, y:0, t:0, g:0 }, { x:1300, y:-700, t:0, g:0 }, { x:3000, y:-700, t:0, g:0 }, { x:3000.5, y:-1400, t:0, g:-1400 }, { x:3900, y:-1400, t:0, g:-1400 }]);
+        S = I.newRun(LRamp); at(S, 420, -R); for (i = 0; i < 240 && !S.crashes; i++) step(S, GAS, DT);
+        ok('wheelie flip: full gas up a long 45° ramp lifts the front wheel higher and higher until the bike goes over backwards onto the rider – within the first half of the ramp (' + S.why + ' @ ' + Math.round(S.crashX) + ')', S.crashes === 1 && (S.why === 'wheelie' || S.why === 'flip' || S.why === 'head') && S.crashX > 650 && S.crashX < 950, S.why + '@' + S.crashX);
+        S = I.newRun(LF); at(S, 600, -R - 35 * Math.sin(80 * PI / 180), -80 * PI / 180); for (i = 0; i < 30 && !S.crashes; i++) step(S, GAS, DT); var whN = i; var Sw = I.newRun(LF); at(Sw, 600, -R - 35 * Math.sin(80 * PI / 180), -80 * PI / 180); run(Sw, NONE, 60);
+        ok('the wheelie rule: rear wheel down, gas held and the frame more than 55° above the ground for 0.25 s = crash ("wheelie", after ' + whN + ' frames); with the gas shut the front just drops back', S.crashes === 1 && S.why === 'wheelie' && whN >= 15 && whN <= 18 && Math.abs(WHEELA - 55 * PI / 180) < 1e-9 && WHEELT === .25 && Sw.crashes === 0 && Sw.onF && Sw.onR, S.why + '/' + whN + '/' + Sw.why);
+        var LCm = I.skillLevel('climb', 60, 0), cms = LCm.secs[0]; S = I.newRun(LCm); for (i = 0; i < 900 && !S.over && !S.crashes; i++){ var cmx = mid(S).x; step(S, I.sSlope(LCm, cmx + 30) < -.3 || I.sSlope(LCm, cmx) < -.3 ? GASR : GAS, DT); S.ev.length = 0; }
+        var Sc2 = I.newRun(LCm); for (i = 0; i < 900 && !Sc2.over && !Sc2.crashes; i++){ step(Sc2, GAS, DT); Sc2.ev.length = 0; }
+        ok('…on a generated wheelie climb (44–48°, ≥ 600 px) the same full gas + leaning forward (→) on the ramp keeps the front wheel down and gets over the top; gas alone flips at ' + Math.round(Sc2.crashX - cms.xs0) + ' px into the ramp', S.won && S.crashes === 0 && Sc2.crashes === 1 && Sc2.crashX > cms.xs0 && Sc2.crashX < cms.x1 - 300, S.why + '/' + Sc2.why + '@' + Sc2.crashX);
+        S = I.newRun(LF); run(S, GAS, 120); ok('flat ground at full gas: both wheels stay down – no wheelie by itself', S.onF && S.onR && S.crashes === 0 && Math.abs(S.a) < .02, S.a);
+        S = I.newRun(LF); run(S, GAS, 30); run(S, GASL, 14); var wa = S.a, wOnF = S.onF; run(S, GAS, 40);
+        ok('a short wheelie on the flat (gas + ← for a moment) is fine: the front comes up ' + Math.round(-wa * 180 / PI) + '° and drops back when ← is released', wa < -.15 && !wOnF && S.crashes === 0 && S.onF && Math.abs(S.a) < .05, wa + '/' + S.a);
+        S = I.newRun(LF); run(S, GAS, 30); for (i = 0; i < 120 && !S.crashes; i++) step(S, GASL, DT);
+        ok('…held, it goes past 55° and the bike lands on the rider', S.crashes === 1 && (S.why === 'wheelie' || S.why === 'flip' || S.why === 'head'), S.why);
+        var LEdge = mk(4000, {}, [{ x:-300, y:-600, t:0, g:0 }, { x:-290, y:0, t:0, g:0 }, { x:800, y:0, t:0, g:0 }, { x:800.5, y:900, t:0, g:900 }, { x:4000, y:900, t:0, g:900 }, { x:4000.5, y:0, t:0, g:0 }, { x:4900, y:0, t:0, g:0 }]);
+        var edge = function(inp, v){ var s = I.newRun(LEdge); at(s, 500, -R); s.rvx = s.fvx = v; for (var q = 0; q < 200 && (s.onR || s.onF || q < 3); q++) step(s, inp, DT); return s.w; }, eg = edge(GAS, 560), ec = edge(NONE, 560);
+        ok('take-off from an edge: under power the bike leaves almost level (spin ' + eg.toFixed(2) + ' rad/s), rolling off without gas it nose-dives (' + ec.toFixed(2) + ' rad/s) – and nothing corrects it in the air', eg > 0 && eg < .9 && ec > 2 && ec > eg * 3, eg + '/' + ec);
+        var LSG = I.skillLevel('speedgap', 40, 0), sg = LSG.secs[0], lands = [240, 300, 360, 420].map(function(vt){ var s = I.newRun(LSG), q = 0, lx = 0; s.ai = { si:0, ti:0, fi:0, go:-1, vt:{ 0:vt } }; while (!s.over && !s.crashes && q++ < 900){ step(s, I.autoInput(s), DT); if (!lx && mid(s).x > sg.xs1 + 30 && (s.onR || s.onF)) lx = mid(s).x; s.ev.length = 0; } return s.crashes ? 0 : Math.round(lx - sg.xs1); });
+        ok('speed decides the landing spot: off the same kicker, target speeds 240 / 300 / 360 / 420 px/s land ' + lands.join(' / ') + ' px past the lip (never shorter, 420 lands ≥ 40 px beyond 240)', lands[0] > 0 && lands[1] >= lands[0] - 12 && lands[2] > lands[1] && lands[3] > lands[2] && lands[3] > lands[0] + 40, lands.join());
+        /* --- the new hazard primitives --- */
+        var LPi = mk(4000, { haz:[{ k:'pist', x:700, gy:0, w:80, h:130, per:2, up:.8, ph:0 }] }); S = I.newRun(LPi); S.t = 1.75; at(S, 380, -R); run(S, GAS, 90);
+        ok('piston: a block that is up for 0.8 s of every 2 s – riding into it while it is up = crash ("piston")', I.pistExt(LPi.haz[0], .4) === 1 && I.pistExt(LPi.haz[0], 1.4) === 0 && S.crashes === 1 && S.why === 'piston', S.why + '/' + S.t);
+        S = I.newRun(LPi); S.t = .85; at(S, 420, -R); S.rvx = S.fvx = 500; run(S, GAS, 60); ok('…while it is down (flush with the floor) the bike rolls over it', S.crashes === 0 && mid(S).x > 800, S.why + '@' + mid(S).x);
+        var LG = mk(4000, { haz:[{ k:'gate', x:1000, gy:0, w:40, h:190, rise:210, tg:0, trig:300, delay:1.6, rx:900 }] }); S = I.newRun(LG); run(S, GAS, 160);
+        ok('gate: closed until 1.6 s after the bike crosses its trigger – a full-gas rider gets there first and hits it ("gate")', S.crashes === 1 && S.why === 'gate' && S.crashX > 880 && S.crashX < 1000, S.why + '@' + S.crashX);
+        S = I.newRun(LG); var sawTrig = false; for (i = 0; i < 400 && !S.crashes && mid(S).x < 1200; i++){ var gx = mid(S).x; step(S, gx < 640 || (S.tr[0] != null && S.t - S.tr[0] > 2.1) ? GAS : (mid(S).vx > 4 ? BRK : NONE), DT); if (S.tr[0] != null) sawTrig = true; }
+        ok('…braking after the trigger and waiting until it has lifted gets the bike through', sawTrig && S.crashes === 0 && mid(S).x >= 1200, S.why + '@' + mid(S).x);
+        var LRo = mk(4000, { haz:[{ k:'roll', x:1100, rx:1100, xs:1800, xe:400, vx:400, r:30, tg:0, trig:500, delay:.15, gy:0, j:0 }] }); S = I.newRun(LRo); at(S, 300, -R); run(S, GAS, 30); var rel0 = S.tr[0] == null; run(S, GAS, 200);
+        ok('rolling boulder: rests until the bike crosses the pressure plate, then rolls toward the rider along the ground – meeting it = crash ("boulder")', rel0 && S.crashes === 1 && S.why === 'boulder' && S.crashX > 600 && S.crashX < 1700, S.why + '@' + S.crashX);
+        S = I.newRun(LRo); at(S, 300, -R); S.tr[0] = -10; run(S, GAS, 200); ok('…once it has smashed into its end wall it is gone ("thud") and the way is free', S.crashes === 0 && mid(S).x > 1800 && S.bo[0] && S.bo[0].gone, S.why);
+        var LSl = mk(4000, { haz:[{ k:'saw', kind:'slide', x:700, xa:740, ya:-198, yb:-34, r:36, per:1e6, ph:PI / 2, A:.85, b:.15, gy:0 }] }); S = I.newRun(LSl); run(S, GAS, 150); var slDown = S.crashes === 1 && S.why === 'saw'; I.hazCircle(LSl.haz[0], 0); var slY = I.HC.y;
+        LSl.haz[0].ph = -PI / 2; S = I.newRun(LSl); run(S, GAS, 150); I.hazCircle(LSl.haz[0], 0);
+        ok('sliding saw: down on the path (y −34) it kills, parked at the top of its slanted track (y −198, 40 px to the side) the bike passes underneath', slDown && Math.abs(slY + 34) < .01 && S.crashes === 0 && Math.abs(I.HC.y + 198) < .01 && Math.abs(I.HC.x - 740) < .01, slDown + '/' + S.why);
+        var pdw = { amp:200, per:4, ph:0, dw:1 }; ok('elevator platform: rests at both ends (docked for ≥ 0.4 s of a 4 s cycle each) and moves smoothly in between', I.moverOff(pdw, 0) === 0 && I.moverOff(pdw, .25) === 0 && I.moverVel(pdw, .2) === 0 && Math.abs(I.moverOff(pdw, 1) - 100) < 1e-6 && I.moverOff(pdw, 2) === 200 && I.moverOff(pdw, 2.25) === 200 && I.moverVel(pdw, 1) > 100);
+        /* --- the three riders --- */
+        var nvI = I.naiveInput(I.newRun(LF)); S = I.newRun(LF); at(S, 600, -2400, -.6); S.airT = .2; var lnUp = I.leanInput(S), lnR = lnUp.r && !lnUp.l && lnUp.g && !lnUp.b; at(S, 600, -2400, .6); var lnDn = I.leanInput(S), lnL = lnDn.l && !lnDn.r; S = I.newRun(LF); var lnG = I.leanInput(S);
+        ok('riders: naive = gas only, always; naive-lean = gas + leaning toward the landing surface while in the air (nose-up → →, nose-down → ←), nothing on the ground', nvI.g && !nvI.b && !nvI.l && !nvI.r && lnR && lnL && lnG.g && !lnG.l && !lnG.r && !lnG.b);
+        var LCl = I.skillLevel('climb', 60, 0), rN = I.simulate(LCl, 60, I.naiveInput, true), rN2 = I.simulate(LCl, 60, I.naiveInput); ok('simulate(level, maxT, rider, stopOnCrash): the naive rider on a wheelie climb stops at its first crash (' + rN.why + ' @ ' + Math.round(rN.x) + '); without the stop it keeps respawning at the flag and never gets through', !rN.won && rN.crashes === 1 && rN.dead && !rN2.won && rN2.crashes > 5, JSON.stringify(rN2));
+        S = I.newRun(LSG); for (i = 0; i < 900 && !S.over && !S.crashes; i++){ step(S, I.autoInput(S), DT); S.ev.length = 0; }
+        ok('smart rider, speed gap: it rides ahead in a copy of the run to pick its approach speed (' + (S.ai && S.ai.vt[0]) + ' px/s, below the top speed) and clears the section', S.crashes === 0 && S.won && S.ai.vt[0] >= 200 && S.ai.vt[0] < VMAX, S.why);
+        var Sc = I.newRun(LF); run(Sc, GAS, 40); Sc.tr[3] = 1.5; var Sd = I.cloneRun(Sc); run(Sd, GAS, 30);
+        ok('cloneRun: an independent copy (stepping it does not move the original; triggers are copied)', Sd !== Sc && Sd.tr[3] === 1.5 && Sd.tr !== Sc.tr && mid(Sd).x > mid(Sc).x + 100 && Math.abs(Sc.t - 40 * DT) < 1e-9);
         var LS = mk(4000, {}, [{ x:-300, y:-600, t:0, g:0 }, { x:-290, y:0, t:0, g:0 }, { x:400, y:0, t:2, g:0 }, { x:520, y:0, t:0, g:0 }, { x:4000, y:0, t:0, g:0 }, { x:4000.5, y:-700, t:0, g:-700 }, { x:4900, y:-700, t:0, g:-700 }]);
         S = I.newRun(LS); run(S, GAS, 120); ok('spikes on the track = crash', S.crashes >= 1 && S.why === 'spikes' && S.crashX > 340 && S.crashX < 560, S.why + '@' + S.crashX);
         var LW = mk(4000, {}, [{ x:-300, y:-600, t:0, g:0 }, { x:-290, y:0, t:0, g:0 }, { x:400, y:0, t:0, g:0 }, { x:400.5, y:120, t:3, g:120 }, { x:900, y:120, t:3, g:120 }, { x:900.5, y:0, t:0, g:0 }, { x:4000, y:0, t:0, g:0 }, { x:4000.5, y:-700, t:0, g:-700 }, { x:4900, y:-700, t:0, g:-700 }]);
@@ -956,7 +1266,38 @@ if (TEST){
         var LWait = mk(4000, { haz:[{ k:'saw', kind:'hang', x:1400, gy:0, r:40, mid:-122, amp:82, per:2.4, ph:0, timed:true }] }); S = I.newRun(LWait); var braked = false, went = false; for (i = 0; i < 60 * 12 && !S.over; i++){ var ai = I.autoInput(S); if (!ai.g && mid(S).x < 1400 - 100 && mid(S).x > 1400 - 420) braked = true; if (braked && ai.g && mid(S).x < 1400 - 100) went = true; step(S, ai, DT); S.ev.length = 0; }
         ok('auto-rider: waits (brakes) before a hanging saw while it is low, then goes when the saw\'s phase is clear and finishes without crashing', braked && went && S.won && S.crashes === 0, braked + '/' + went + '/' + S.won + '/' + S.crashes);
         ok('auto-rider: full gas by default, no lean on the ground', (function(){ var s = I.newRun(LF); var a = I.autoInput(s); return a.g && !a.b && !a.l && !a.r; })());
-        ok('tArr/xAt arrival model: 0 for d ≤ 0, monotonic, and ≈ d / 520 when cruising', I.tArr(0, 0) === 0 && I.tArr(100, 0) < I.tArr(200, 0) && Math.abs(I.tArr(1040, 520) - 2) < 1e-9);
+        ok('tArr/xAt arrival model: 0 for d ≤ 0, monotonic, ≈ d / 560 when cruising, and slower with a speed cap', I.tArr(0, 0) === 0 && I.tArr(100, 0) < I.tArr(200, 0) && Math.abs(I.tArr(VMAX * 2, VMAX) - 2) < 1e-9 && I.tArr(600, 0, 300) > I.tArr(600, 0) + .5);
+        /* --- every skill kind in isolation: start ramp + that one section. verify() is the level contract (naive fails, naive-lean fails, smart finishes cleanly, also from the checkpoint) --- */
+        var SKTXT = { saws:'sliding saws', hammers:'hammer gate', speedgap:'speed gap', steep:'steep landing', climb:'wheelie climb', tunnel:'low tunnel', pistons:'piston pit', elevator:'elevator', tnt:'TNT hop', bridge:'collapsing bridge + gate', loopsaw:'loop + exit saws', boulders:'rolling boulders' };
+        I.SKILLS.forEach(function(k){ var all = true, info = [];
+          [Math.max(I.SKILL_FROM[k], 20), 200, 480].forEach(function(lv){ var l = I.skillLevel(k, lv, 1), sec = l.secs[0], why = I.verify(l, k === 'steep' ? 10 : 20), nv = I.simulate(l, 60, I.naiveInput, true), ln = I.simulate(l, 60, I.leanInput, true), sm = I.simulate(l, 60);
+            var good = why === '' && l.skills.join() === k && l.cps.length === 1 && l.cps[0] < sec.x0 && !nv.won && nv.crashes === 1 && nv.x >= sec.x0 - 150 && nv.x <= sec.x1 && (k === 'steep' || !ln.won) && sm.won && sm.crashes === 0; if (!good) all = false; info.push(lv + ':' + (why || 'ok') + ' naive ' + (nv.won ? 'WON' : nv.why) + ' lean ' + (ln.won ? 'won' : ln.why) + ' smart ' + (sm.won ? sm.time + 's' : 'FAIL ' + sm.why)); });
+          ok('skill "' + k + '" (' + SKTXT[k] + ') alone at three difficulties: the naive rider dies inside the section' + (k === 'steep' ? ' (a rider who levels in the air survives – this one is about leaning)' : ', so does the naive-lean rider') + ', the smart rider passes it cleanly [' + info.join(' | ') + ']', all, info.join(' | ')); });
+        var LT1 = I.skillLevel('tunnel', 100, 0), tb = LT1.haz.filter(function(h){ return h.k === 'blk'; })[0], LS1 = I.skillLevel('speedgap', 100, 0), sb = LS1.haz.filter(function(h){ return h.k === 'blk'; })[0], LB1 = I.skillLevel('bridge', 100, 0), gt = LB1.haz.filter(function(h){ return h.k === 'gate'; })[0], LE1 = I.skillLevel('elevator', 100, 0), LR1 = I.skillLevel('boulders', 100, 0), ro = LR1.haz.filter(function(h){ return h.k === 'roll'; });
+        ok('section anatomy: the tunnel ceiling hangs 1.3–1.5 bike heights (85 px) above the floor, the speed gap has a spiked block hanging at flight height over a passage of ≥ 100 px, the bridge has ≥ 5 collapsing planks and a triggered gate, the elevator is a platform that rests at its ends, the boulders (2–3) share one pressure plate', tb && (I.sY(LT1, tb.x0 + 5) - tb.y1) / 85 >= 1.3 && (I.sY(LT1, tb.x0 + 5) - tb.y1) / 85 <= 1.5 && sb && sb.hang === 1 && I.sY(LS1, sb.x0) - sb.y1 >= 100 && I.sY(LS1, sb.x0) - sb.y1 <= 120 && LB1.plats.length >= 5 && gt && gt.trig < gt.x && gt.delay > 1 && LE1.plats.length === 1 && LE1.plats[0].dw === 1 && ro.length >= 2 && ro.length <= 3 && ro.every(function(q){ return q.tg === ro[0].tg && q.trig === ro[0].trig; }));
+        var LSw = I.skillLevel('saws', 100, 0), sws = LSw.haz.filter(function(h){ return h.kind === 'slide'; }), LHm = I.skillLevel('hammers', 100, 0), hms = LHm.haz.filter(function(h){ return h.k === 'ham'; }), LPs = I.skillLevel('pistons', 300, 0), pss = LPs.haz.filter(function(h){ return h.k === 'pist'; });
+        ok('timed sections: 2–3 saws with a period of 2–3.5 s, 2 hammers, 2–4 pistons that are up 40% of their cycle – all listed in L.timed with a wait point', sws.length >= 2 && sws.length <= 3 && sws.every(function(h){ return h.per >= 2 && h.per <= 3.6; }) && hms.length === 2 && pss.length >= 2 && pss.length <= 4 && pss.every(function(h){ return Math.abs(h.up / h.per - .4) < 1e-9; }) && LSw.timed.length === sws.length && LPs.timed.every(function(h){ return h.wx < h.x && h.px > h.x; }), sws.length + '/' + hms.length + '/' + pss.length);
+        var LGo = I.skillLevel('saws', 100, 0), Sg = I.newRun(LGo), stopped = false, wentOn = false; for (i = 0; i < 1500 && !Sg.over && !Sg.crashes; i++){ var gi = I.autoInput(Sg), gv = (Sg.rvx + Sg.fvx) / 2; LGo.timed.forEach(function(h){ if (mid(Sg).x > h.wx - 60 && mid(Sg).x < h.wx && Math.abs(gv) < 5) stopped = true; }); if (stopped && mid(Sg).x > LGo.timed[LGo.timed.length - 1].px) wentOn = true; step(Sg, gi, DT); Sg.ev.length = 0; }
+        ok('smart rider, timed hazards: it brakes to a stop at the wait point in front of a saw that is down, sets off when the way is clear and stays under the section speed limit', stopped && wentOn && Sg.won && Sg.crashes === 0, stopped + '/' + wentOn + '/' + Sg.why);
+        /* --- fair for humans: nobody needs the smart rider's precision – every skill has a wide window --- */
+        function hRun(l, rider){ var s = I.newRun(l), n = 0; while (!s.over && n++ < 4200 && !s.crashes){ step(s, rider(s), DT); s.ev.length = 0; } return s.won && !s.crashes; }
+        function hAi(s){ return s.ai || (s.ai = { si:0, ti:0, fi:0, go:-1, vt:{} }); }
+        function band(arr, stp){ var best = 0, cur = 0; arr.forEach(function(b){ cur = b ? cur + 1 : 0; if (cur > best) best = cur; }); return Math.round(best * stp * 1000) / 1000; }
+        /* widest run of approach speeds (80…540 px/s in steps of 20) that gets through a speed section */
+        function spdBand(k, lv){ var l = I.skillLevel(k, lv, 1), res = [], v; for (v = 80; v <= 540; v += 20) (function(vt){ res.push(hRun(l, function(s){ var m = hAi(s), q; for (q = 0; q < l.secs.length; q++) if (l.secs[q].cands) m.vt[q] = vt; return I.autoInput(s); })); })(v); return band(res, 20); }
+        /* longest stretch of "set off now" moments (from a stop at the first wait point, sampled every 0.05 s over 4 s) that gets through a timed section */
+        function goBand(k, lv){ var l = I.skillLevel(k, lv, 1), h0 = l.timed[0], s0 = I.newRun(l), tA = -1, c = 0, res = [], T; while (!s0.over && c++ < 4200 && tA < 0){ if (h0.wx - mid(s0).x < 260) tA = s0.t; step(s0, I.autoInput(s0), DT); s0.ev.length = 0; }
+          for (T = tA + 1.2; T < tA + 5.2; T += .05) (function(T){ res.push(hRun(l, function(s){ var m = hAi(s), mx = mid(s).x, v = (s.rvx + s.fvx) / 2; if (s.t >= T && m.ti === 0) m.go = 0; var o = I.autoInput(s);
+            if (s.t < T && m.ti === 0 && m.go === 0){ m.go = -1; var d = h0.wx - mx, vok = d > 22 ? Math.sqrt(2 * .75 * BRAKE * (d - 22)) : 0, cap = h0.vc || VMAX; if (vok > cap) vok = cap; if (v > vok + 4){ o.g = false; o.b = v > 4; } else o.g = v < vok - 45 || (d > 40 && v < 60); } return o; })); })(T); return band(res, .05); }
+        /* steep landing: full gas, hold → for the first h seconds of the flight – how long is the run of h that lands? */
+        function leanBand(lv){ var l = I.skillLevel('steep', lv, 1), sec = l.secs[0], res = [], h; for (h = 0; h <= .6; h += .025) (function(h){ res.push(hRun(l, function(s){ var o = I.autoInput(s), mx = mid(s).x; if (!s.onR && !s.onF && mx > sec.xs0 && mx < sec.x1){ o.l = false; o.r = s.airT < h; o.g = true; o.b = false; } return o; })); })(h); return band(res, .025); }
+        var HLV = [20, 200, 480], bT = HLV.map(function(lv){ return spdBand('tnt', lv); }), bG = HLV.map(function(lv){ return spdBand('speedgap', lv); }), bU = HLV.map(function(lv){ return spdBand('tunnel', lv); });
+        ok('fair for humans – TNT hop: every approach speed in a band at least 200 px/s wide clears the barrels and stays under the saw (bands at levels 20/200/480: ' + bT.join('/') + ' px/s of a 560 top speed)', bT.every(function(w){ return w >= 200; }), bT.join());
+        ok('fair for humans – speed gap (bands ' + bG.join('/') + ') and low tunnel (' + bU.join('/') + '): any speed in a band ≥ 140 px/s wide works – only the full-gas end is deadly', bG.every(function(w){ return w >= 140; }) && bU.every(function(w){ return w >= 140; }), bG.join() + ' ' + bU.join());
+        var gS = HLV.map(function(lv){ return goBand('saws', lv); }), gH = HLV.map(function(lv){ return goBand('hammers', lv); }), gP = HLV.map(function(lv){ return goBand('pistons', lv); });
+        ok('fair for humans – timed hazards: setting off from the wait point works for a stretch of at least 0.4 s every cycle (saws ' + gS.join('/') + ' s, hammers ' + gH.join('/') + ' s, pistons ' + gP.join('/') + ' s at levels 20/200/480)', gS.concat(gH, gP).every(function(w){ return w >= .4; }), gS.join() + ' ' + gH.join() + ' ' + gP.join());
+        var lB = HLV.map(leanBand), LSt = I.skillLevel('steep', 200, 1), stAll = hRun(LSt, function(s){ var o = I.autoInput(s); if (!s.onR && !s.onF){ o.l = false; o.r = true; } return o; });
+        ok('fair for humans – steep landing: leaning forward for anything in a 0.15 s+ range of hold times lands it (' + lB.join('/') + ' s), while holding → for the whole flight over-rotates', lB.every(function(w){ return w >= .15; }) && !stAll, lB.join() + ' ' + stAll);
         /* --- stars, time format --- */
         var LPar = { par:10 }; ok('stars: ≤ par → 3, ≤ par × 1.4 → 2, slower → 1', I.starsFor(LPar, 9.99) === 3 && I.starsFor(LPar, 10) === 3 && I.starsFor(LPar, 13.9) === 2 && I.starsFor(LPar, 14.1) === 1);
         ok('stopwatch format "SS.ss" like the original, minutes after 100 s', I.fmtT(4.371) === '04.37' && I.fmtT(0) === '00.00' && I.fmtT(65.5) === '65.50' && I.fmtT(125.5) === '2:05.50');
@@ -1004,7 +1345,25 @@ if (TEST){
         I.onKey({ code:'Enter', preventDefault:function(){} }); ok('Enter on the finish panel starts level 2', G.level === 2 && G.S.L.n === 2 && !$('ov').classList.contains('on'));
         I.start(1); G.auto = true; for (i = 0; i < HZ * 60 && !G.S.over; i++) I.tick(DT); G.auto = false; ok('replaying level 1 with the same stars gives only the +3 completion coins (no star farming), best time not worsened', G.coins === 136 && G.stars[1] === 3 && G.best[1] <= tDone);
         G.S = I.newRun(I.genLevel(2)); G.level = 2; G.S.t = G.S.L.par * 1.3; G.S.won = true; G.S.over = true; I.finishLevel(); ok('a slower run (par × 1.3) earns 2 stars and +23 coins', G.result.stars === 2 && G.result.earned === 23 && G.stars[2] === 2 && G.unlocked === 3);
+        /* --- one-time tips, how-to text --- */
+        ok('12 tips in Hebrew and in English, one per skill kind, and the menu how-to text is about timing, speed control and leaning – not holding the gas', I.SKILLS.every(function(k){ return I.T.he.tips[k] && I.T.en.tips[k] && I.T.he.tips[k] !== I.T.en.tips[k]; }) && I.T.he.how.indexOf('תזמון') >= 0 && I.T.he.how.indexOf('מחזיק גז') >= 0 && I.T.en.how.indexOf('timing') >= 0 && I.T.en.how.indexOf('holding the gas') >= 0 && (I.show('s-menu'), document.querySelector('#s-menu .how').textContent === I.T.he.how));
+        var keepG = JSON.stringify({ unlocked:G.unlocked, stars:G.stars, best:G.best, coins:G.coins, owned:G.owned, bike:G.bike, lang:'he', mute:true });
+        G.tips = {}; G.unlocked = 10; I.start(4); var s4 = G.S.L.secs[0], tipEl = $('tip'); G.inp.g = true; for (i = 0; i < 900 && !G.tip; i++) I.tick(DT); G.inp.g = false;
+        ok('the first time a skill kind comes up (level 4: ' + s4.k + ') a tip appears just before the section: "' + tipEl.textContent + '"', !!G.tip && G.tip.k === s4.k && tipEl.classList.contains('on') && tipEl.textContent === I.T.he.tips[s4.k] && mid(G.S).x > s4.x0 - 240 && mid(G.S).x < s4.x0 + 60 && G.tips[s4.k] === 1, tipEl.textContent);
+        ok('the tip is readable (≥ 16 px, inside the viewport, below the HUD) and remembered in moto.v1', parseFloat(getComputedStyle(tipEl).fontSize) >= 16 && tipEl.getBoundingClientRect().right <= window.innerWidth + 1 && tipEl.getBoundingClientRect().left >= -1 && tipEl.getBoundingClientRect().top >= 60 && JSON.parse(localStorage.getItem(KEY)).tips[s4.k] === 1);
+        G.tip.t = 4.99; I.tick(DT); I.tick(DT); var tipOff = !tipEl.classList.contains('on'); I.crash(G.S, 'test'); for (i = 0; i < 40; i++) I.tick(DT);
+        ok('it fades after 5 s – and comes back with the respawn after a crash in that section', tipOff && !G.S.dead && tipEl.classList.contains('on') && G.tip && G.tip.t < .2);
+        I.restart(); G.inp.g = true; for (i = 0; i < 420 && !G.S.crashes; i++) I.tick(DT); G.inp.g = false;
+        ok('each kind is explained only once: on the next run of level 4 no tip appears (and holding the gas crashes there: ' + G.S.why + ')', !G.tip && !tipEl.classList.contains('on') && G.S.crashes >= 1 && mid(G.S).x < s4.x1 + 400);
+        I.restore({ unlocked:9, mute:true, tips:{ saws:1, bogus:1, tnt:0 } }); var tipsOK = G.tips.saws === 1 && !('bogus' in G.tips) && !G.tips.tnt; G.tips = {}; I.start(1); G.inp.g = true; for (i = 0; i < 240; i++) I.tick(DT); G.inp.g = false;
+        ok('restore() keeps only known tip kinds; the tutorial levels 1–3 never show a tip', tipsOK && !G.tip && !tipEl.classList.contains('on') && G.S.L.secs.length === 0);
+        I.setLang('en'); G.tips = {}; I.start(4); G.inp.g = true; for (i = 0; i < 900 && !G.tip; i++) I.tick(DT); G.inp.g = false; var tipEn = tipEl.textContent === I.T.en.tips[s4.k] && tipEl.getAttribute('dir') === 'ltr'; I.setLang('he'); I.show('s-menu');
+        ok('the tip follows the language (English: "' + I.T.en.tips[s4.k] + '") and disappears when the game screen is left', tipEn && !G.tip && !tipEl.classList.contains('on'));
+        I.restore(JSON.parse(keepG)); G.tips = {};
         /* --- demo scenes render --- */
+        ['saws', 'hammers', 'speedgap', 'steep', 'wheelie', 'tunnel', 'pistons', 'elevator', 'tnt', 'bridge', 'loopsaw', 'boulders'].forEach(function(k){ var s = I.skillDemo(k), sec = s.L.secs[0], x = mid(s).x, state = k === 'wheelie' ? (s.whT > 0 || s.why === 'wheelie' || s.why === 'flip') && s.L.skills[0] === 'climb' : !s.dead && s.crashes === 0 && s.L.skills[0] === k;
+          ok('#demo-' + k + ': the ' + (k === 'wheelie' ? 'naive rider flipping backwards on the climb' : 'smart rider inside the section') + ', frozen frame drawn', state && x > sec.x0 - 20 && x < sec.x1 && G.frozen && px(cv) >= 6, k + ' x' + Math.round(x) + ' t' + s.t.toFixed(2) + ' ' + s.why); });
+        G.auto = false; G.rider = null; G.frozen = false;
         var DJ = I.runAuto(I.demoLevel('jump'), 0, 12, function(s){ return s.airT > .2 && s.airRot < -2.6; }); ok('#demo-jump: the auto-rider is mid-backflip in the air (rotated > 150° backwards, airborne) and the canvas is drawn', DJ.airRot < -2.6 && !DJ.onR && !DJ.onF && px(cv) >= 6, DJ.airRot + '/' + DJ.t);
         var DS = I.runAuto(I.demoLevel('saw'), 0, 12, function(s){ return mid(s).x > s.L.haz[0].x - 300; }); ok('#demo-saw: a hanging + a popping saw ahead of the bike, canvas drawn', DS.L.haz.length === 2 && DS.L.haz[0].kind === 'hang' && DS.L.haz[1].kind === 'pop' && px(cv) >= 6);
         G.auto = false; I.startLevel(I.demoLevel('crash'), 0); G.inp.g = true; for (i = 0; i < 900 && !G.S.dead; i++){ I.tick(DT); } G.inp.g = false; ok('#demo-crash: driving blindly into the saws crashes (puff + parts)', G.S.dead && !!I.FX.crash);
